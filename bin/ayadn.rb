@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-$PROGRAM_NAME = "Ayadn"
+$PROGRAM_NAME = "ayadn"
 require_relative '../lib/ayadn'
 
 Ayadn::App.start ARGV

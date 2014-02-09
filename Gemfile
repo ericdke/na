@@ -4,7 +4,6 @@ platform :ruby do
 	gem "json"
 	gem "rest-client"
 	gem "thor"
-	gem "highline"
 	#gem "pinboard"
 end
 

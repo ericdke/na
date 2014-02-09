@@ -1,18 +1,21 @@
 module Ayadn
-	# Your code goes here...
-	class App < Thor
-		package_name "Ayadn"
+	require_relative "descriptions"
+	$desc = Descriptions.new
 
-		desc "unified", "Shows your Unified Stream. You may specify the number of posts to retrieve with '-c NUMBER'."
+	class App < Thor
+		package_name "ayadn"
+		require_relative "stream"
+		
+		desc "unified", "Shows your Unified Stream."
+		map "-U" => :unified
+		map "uni" => :unified
+		map "stream" => :unified
+		long_desc $desc.unified
 		option :count, aliases: "-c"
 		def unified
 			Stream.new.unified(options)
 		end
-	end
-	class Stream
-		def unified(options)
-			puts "XXX SHOW UNIFIED"
-			puts "with number: #{options[:count]}" if options[:count]
-		end
+
+		
 	end
 end
