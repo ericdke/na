@@ -9,13 +9,14 @@ Gem::Specification.new do |spec|
   spec.author       = "Eric Dejonckheere"
   spec.email         = ["eric@aya.io"]
   spec.summary       = %q{App.net command-line client.}
-  spec.description   = %q{App.net command-line client: powertool to access and manage your ADN data, show your streams, manage conversations, star/follow/repost... and many, many more.}
+  spec.description   = %q{App.net command-line client: power tool to access and manage your ADN data, show your streams, manage conversations, star/follow/repost... and many, many more.}
   spec.homepage      = "http://ayadn-app.net"
   spec.license       = "Custom"
 
   spec.bindir        = 'bin'
   spec.files         = `git ls-files`.split("\n")
-  spec.executables   << %w{ayadn}
+  spec.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  spec.executables   = %w{ayadn}
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = '>= 1.9.3'
