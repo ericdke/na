@@ -1,6 +1,6 @@
 module Ayadn
 	class Descriptions
-		def unified
+		def self.unified
 			<<-LONGDESC
 				Shows your Unified Stream.
 

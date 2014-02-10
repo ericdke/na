@@ -8,13 +8,12 @@ module Ayadn
 		require_relative "cnx"
 		require_relative "view"
 		require_relative "workers"
-		@desc = Descriptions.new
 		
 		desc "unified", "Shows your Unified Stream."
 		map "-U" => :unified
 		map "uni" => :unified
 		map "stream" => :unified
-		#long_desc @desc.unified
+		long_desc Descriptions.unified
 		option :count, aliases: "-c"
 		def unified
 			puts
