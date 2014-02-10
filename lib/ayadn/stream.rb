@@ -4,7 +4,7 @@ module Ayadn
 			puts "XXX SHOW UNIFIED"
 			puts "with number: #{options[:count]}" if options[:count]
 			puts "Calling API..."
-			@stream = API.new.get_unified
+			@stream = API.new.get_unified(options)
 			puts @stream
 		end
 	end

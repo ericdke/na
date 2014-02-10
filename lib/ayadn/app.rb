@@ -5,6 +5,7 @@ module Ayadn
 		require_relative "api"
 		require_relative "descriptions"
 		require_relative "endpoints"
+		require_relative "cnx"
 		@desc = Descriptions.new
 		
 		desc "unified", "Shows your Unified Stream."
