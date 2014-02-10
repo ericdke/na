@@ -10,6 +10,7 @@ module Ayadn
 		map "stream" => :unified
 		long_desc Descriptions.unified
 		option :count, aliases: "-c"
+		option :index, aliases: "-i"
 		def unified
 			init
 			Stream.new.unified(options)
