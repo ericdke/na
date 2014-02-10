@@ -12,10 +12,8 @@ module Ayadn
 			@stream = @api.get_unified(options)
 			posts = @workers.build_stream(@stream['data'])
 			@view.clear_line
-			ap posts
-			puts posts.class
-			#@view.show_posts_with_index(posts_array)
-			@view.show_posts(posts)
+			@view.show_posts_with_index(posts)
+			#@view.show_posts(posts)
 		end
 
 	end

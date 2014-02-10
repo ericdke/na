@@ -4,11 +4,11 @@ module Ayadn
 
 		AYADN_CLIENT_ID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
 
-		attr_accessor :options
+		attr_accessor :options, :config
 
 		def initialize
 			@user_token = IO.read(File.expand_path("../../../token", __FILE__)).chomp
-			ayadn_config
+			@home = Dir.home + "/ayadn2/data"
 			load_config
 		end
 
@@ -25,20 +25,20 @@ module Ayadn
 		private
 
 		def ayadn_config
-			home = Dir.home + "/ayadn/data"
-			@ayadn_config = {
+			{
 				paths: {
-					home: home
+					home: @home
 				}
 			}
 		end
 
 		def load_config
+			@config = ayadn_config
 			@options = defaults # temp
 			# check if installed config
 			# yes => load
 			# no => create from defaults then load
-			config_file = @ayadn_config[:paths][:home] + "/config.yml"
+			config_file = @config[:paths][:home] + "/config.yml"
 			unless File.exists?(config_file)
 				#File.open(@home, 'w') {|f| f.write @options.to_yaml }
 				puts "DEBUG: no config file"

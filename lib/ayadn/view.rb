@@ -1,18 +1,23 @@
 module Ayadn
 	class View
 
-		def show_posts_with_index(posts_array)
-			# @count = 1
-			# puts "\n"
-			# posts_array.each do |post|
-			# 	print ("%03d" % @count).to_s.color(:red) + " " + post
-			# 	@count += 1
-			# end
+		def show_posts_with_index(posts)
+			File.open($config.config[:paths][:home] + "/index", "w") { |f| f.write(posts.to_json) }
+			puts "\n"
+			posts.each do |count, pair|
+				k = pair.keys
+				puts ":#{count}".color(:red) + " (#{k[0]})".color(:cyan)
+				puts pair.values
+			end
 		end
 
 		def show_posts(posts)
-			# puts "\n"
-			# posts_array.each { |post| puts post }
+			puts "\n"
+			posts.each do |count, pair|
+				k = pair.keys
+				puts "#{k[0]}".color(:red)
+				puts pair.values
+			end
 		end
 
 		def clear_line

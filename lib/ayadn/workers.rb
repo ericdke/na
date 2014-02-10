@@ -16,7 +16,6 @@ module Ayadn
 
 		def build_header(post)
 			header = ""
-			header << post['id'] + " "
 			header << "@#{post['user']['username']}".color(:green)
 			header << " "
 			header << "\n"
