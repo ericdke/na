@@ -6,6 +6,7 @@ module Ayadn
 		require_relative "descriptions"
 		require_relative "endpoints"
 		require_relative "cnx"
+		require_relative "view"
 		@desc = Descriptions.new
 		
 		desc "unified", "Shows your Unified Stream."
@@ -15,7 +16,7 @@ module Ayadn
 		#long_desc @desc.unified
 		option :count, aliases: "-c"
 		def unified
-			Stream.new.unified(options)
+			puts Stream.new.unified(options)
 		end
 
 

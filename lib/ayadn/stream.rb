@@ -1,8 +1,14 @@
 module Ayadn
 	class Stream
+
+		def initialize
+			@view = View.new
+		end
+
 		def unified(options)
 			@stream = API.new.get_unified(options)
-			puts @stream['data']
+			@view.view_stream(@stream['data'])
 		end
+
 	end
 end
