@@ -7,7 +7,7 @@ module Ayadn
 			posts.each do |count, pair|
 				k = pair.keys
 				#puts ":#{count}".color(:red) + " (#{k[0]})".color(:cyan)
-				puts ":#{count}".color(:red)
+				puts "#{count}:".color(:red)
 				puts pair.values
 			end
 		end
@@ -16,7 +16,7 @@ module Ayadn
 			puts "\n"
 			posts.each do |count, pair|
 				k = pair.keys
-				puts "#{k[0]}".color(:red)
+				puts "#{k[0]}:".color(:red)
 				puts pair.values
 			end
 		end
