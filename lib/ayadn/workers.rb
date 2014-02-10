@@ -3,11 +3,13 @@ module Ayadn
 
 		def build_stream(data)
 			posts = {}
+			@count = 1
 			data.reverse.each do |post|
 				view = build_header(post)
 				view << build_text(post)
 				view << "\n\n"
-				posts.merge!({ post['id'].to_i => view })
+				posts.merge!({ @count => {post['id'].to_i => view} })
+				@count += 1
 			end
 			posts
 		end
