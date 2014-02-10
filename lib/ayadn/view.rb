@@ -5,8 +5,7 @@ module Ayadn
 			@count = 1
 			puts "\n"
 			posts_array.each do |post|
-				puts ("%03d" % @count).to_s.color(:red)
-				puts post
+				print ("%03d" % @count).to_s.color(:red) + " " + post
 				@count += 1
 			end
 		end
@@ -17,7 +16,7 @@ module Ayadn
 		end
 
 		def clear_line
-			print "\r                                            "
+			print "\r                                            \n"
 		end
 
 	end

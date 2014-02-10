@@ -22,6 +22,6 @@ module Ayadn
 			@cnx.check_errors(r['meta'])
 			return r
 		end
-		
+
 	end
 end

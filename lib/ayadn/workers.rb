@@ -2,22 +2,20 @@ module Ayadn
 	class Workers
 
 		def build_stream(data)
-			posts = []
-			data.each do |post|
-				view = "\n"
-				view << build_header(post)
+			posts = {}
+			data.reverse.each do |post|
+				view = build_header(post)
 				view << build_text(post)
-				view << "\n"
-				posts << view + "\n"
+				view << "\n\n"
+				posts.merge!({ post['id'].to_i => view })
 			end
 			posts
 		end
 
 		def build_header(post)
 			header = ""
-			header << post['id']
-			header << " "
-			header << "@#{post['user']['username']}"
+			header << post['id'] + " "
+			header << "@#{post['user']['username']}".color(:green)
 			header << " "
 			header << "\n"
 			header
@@ -26,6 +24,6 @@ module Ayadn
 		def build_text(post)
 			post['text'] unless post['text'].nil?
 		end
-		
+
 	end
 end
