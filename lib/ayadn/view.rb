@@ -2,14 +2,15 @@ module Ayadn
 	class View
 
 		def view_stream(data)
-			view = ""
+			posts = []
 			data.each do |post|
-				view << "\n"
+				view = "\n"
 				view << build_header(post)
 				view << build_text(post)
 				view << "\n"
+				posts << view + "\n"
 			end
-			view << "\n"
+			posts
 		end
 
 		def build_header(post)
@@ -24,6 +25,15 @@ module Ayadn
 
 		def build_text(post)
 			post['text'] unless post['text'].nil?
+		end
+
+		def show_posts_with_index(posts_array)
+			@post_index = 1
+			posts_array.each do |post|
+				puts @post_index
+				puts post
+				@post_index += 1
+			end
 		end
 
 	end
