@@ -28,11 +28,11 @@ module Ayadn
 		end
 
 		def show_posts_with_index(posts_array)
-			@post_index = 1
+			@count = 1
 			posts_array.each do |post|
-				puts @post_index
+				puts ("%03d" % @count).to_s.color(:red)
 				puts post
-				@post_index += 1
+				@count += 1
 			end
 		end
 

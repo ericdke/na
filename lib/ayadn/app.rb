@@ -16,6 +16,7 @@ module Ayadn
 		#long_desc @desc.unified
 		option :count, aliases: "-c"
 		def unified
+			puts
 			Stream.new.unified(options)
 		end
 
