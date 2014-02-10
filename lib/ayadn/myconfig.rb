@@ -8,7 +8,7 @@ module Ayadn
 			@user_token = IO.read(File.expand_path("../../../token", __FILE__)).chomp
 		end
 
-		def build_options(options)
+		def build_query_options(options)
 			count = options[:count] || 200
 			html = options[:html] || 0
 			directed = options[:directed] || 1

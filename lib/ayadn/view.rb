@@ -16,5 +16,9 @@ module Ayadn
 			posts_array.each { |post| puts post }
 		end
 
+		def clear_line
+			print "\r                                            "
+		end
+
 	end
 end

@@ -16,7 +16,7 @@ module Ayadn
 		end
 
 		def unified(options)
-			options_list = $config.build_options(options)
+			options_list = $config.build_query_options(options)
 			return POSTS_URL + "stream/unified?access_token=#{$config.user_token}#{options_list}"
 		end
 

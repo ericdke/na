@@ -2,7 +2,7 @@ module Ayadn
 	class App < Thor
 		package_name "ayadn"
 
-		%w{stream api descriptions endpoints cnx view workers myconfig}.each { |r| require_relative "#{r}" }
+		%w{stream api descriptions endpoints cnx view workers myconfig status}.each { |r| require_relative "#{r}" }
 		
 		desc "unified", "Shows your Unified Stream."
 		map "-U" => :unified
