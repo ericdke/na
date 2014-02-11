@@ -156,7 +156,13 @@ module Ayadn
 			view << build_header(content)
 			view << "\n"
 			view << content[:text]
-			view << "\n\n\n"
+			view << "\n"
+			view << "\n" if !content[:links].empty?
+			content[:links].each do |link|
+				view << link.color(:magenta)
+				view << "\n"
+			end
+			view << "\n\n"
 			view
 		end
 
