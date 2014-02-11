@@ -21,6 +21,9 @@ module Ayadn
 		def clear_line
 			print "\r                                            \n"
 		end
+		def clear_screen
+			puts "\e[H\e[2J"
+		end
 
 	end
 end

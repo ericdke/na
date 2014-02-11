@@ -8,7 +8,7 @@ module Ayadn
 				count = "%03d" % content[:count]
 				@view << count.color(:red)
 				@view << ": ".color(:red)
-				@view << content[:id].to_s.color(:green)
+				#@view << content[:id].to_s.color(:green)
 				@view << build_content(content)
 			end
 			return posts, @view
@@ -17,7 +17,7 @@ module Ayadn
 			@view = ""
 			posts = build_posts(data)
 			posts.each do |id,content|
-				@view << content[:id].to_s.color(:green)
+				@view << content[:id].to_s.color(:red) + " "
 				@view << build_content(content)
 			end
 			@view
@@ -152,7 +152,7 @@ module Ayadn
 		end
 
 		def build_content(content)
-			view = " "
+			view = ""
 			view << build_header(content)
 			view << "\n"
 			view << content[:text]
@@ -168,7 +168,7 @@ module Ayadn
 
 		def build_header(content)
 			header = ""
-			header << content[:handle].color(:red)
+			header << content[:handle].color(:green)
 			header << " "
 			header << content[:name].color(:yellow)
 			header << " "
