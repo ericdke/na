@@ -217,7 +217,7 @@ module Ayadn
 			end
 			unless content[:checkins][:checkins_country_code].empty?
 				chk << content[:checkins][:checkins_country_code]
-				chk << "\n"
+				#chk << "\n"
 			end
 			# unless content[:checkins][:checkins_phone].nil?
 			# 	chk << content[:checkins][:checkins_phone]
