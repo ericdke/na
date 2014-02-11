@@ -15,5 +15,8 @@ module Ayadn
 		def self.photos
 			%Q{Shows the Photos Stream.\nShortcut: replace 'photos' by 'pho' or '-P'}
 		end
+		def self.conversations
+			%Q{Shows the Conversations Stream.\nShortcut: replace 'conversations' by '-Q'}
+		end
 	end
 end

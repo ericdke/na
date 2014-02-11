@@ -27,10 +27,14 @@ module Ayadn
 		def get_photos(options)
 			get_explore(:photos, options)
 		end
+		def get_conversations(options)
+			get_explore(:conversations, options)
+		end
 
 		def get_explore(explore, options)
 			url = @endpoints.trending(options) if explore == :trending
 			url = @endpoints.photos(options) if explore == :photos
+			url = @endpoints.conversations(options) if explore == :conversations
 			get_parsed_response(url)
 		end
 

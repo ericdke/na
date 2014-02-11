@@ -40,6 +40,11 @@ module Ayadn
 			return POSTS_URL + "stream/explore/photos?access_token=#{$config.user_token}#{@options_list}"
 		end
 
+		def conversations(options)
+			init(options)
+			return POSTS_URL + "stream/explore/conversations?access_token=#{$config.user_token}#{@options_list}"
+		end
+
 		private
 
 		def init(options)
