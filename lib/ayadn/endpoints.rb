@@ -50,6 +50,11 @@ module Ayadn
 			USERS_URL + "#{username}/mentions/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
+		def posts(username, options)
+			init(options)
+			USERS_URL + "#{username}/posts/?access_token=#{$config.user_token}#{@options_list}"
+		end
+
 		private
 
 		def init(options)

@@ -43,6 +43,11 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
+		def get_posts(username, options)
+			url = @endpoints.posts(username, options)
+			get_parsed_response(url)
+		end
+
 		private
 
 		def get_raw_response(url)
