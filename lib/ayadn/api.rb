@@ -21,6 +21,19 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
+		def get_trending(options)
+			get_explore(:trending, options)
+		end
+		def get_photos(options)
+			get_explore(:photos, options)
+		end
+
+		def get_explore(explore, options)
+			url = @endpoints.trending(options) if explore == :trending
+			url = @endpoints.photos(options) if explore == :photos
+			get_parsed_response(url)
+		end
+
 		private
 
 		def get_raw_response(url)

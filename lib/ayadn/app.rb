@@ -38,6 +38,34 @@ module Ayadn
 			Stream.new.global(options)
 		end
 
+		desc "trending", "Shows the Trending Stream"
+		map "-T" => :trending
+		map "tre" => :trending
+		long_desc Descriptions.trending
+		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		def trending
+			init
+			Stream.new.trending(options)
+		end
+
+		desc "photos", "Shows the Photos Stream"
+		map "-P" => :photos
+		map "pho" => :photos
+		long_desc Descriptions.photos
+		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		def photos
+			init
+			Stream.new.photos(options)
+		end
+
+
+
+
+
+
+
 		private
 
 		def init

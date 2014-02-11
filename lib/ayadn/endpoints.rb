@@ -30,6 +30,16 @@ module Ayadn
 			return POSTS_URL + "stream/global?access_token=#{$config.user_token}#{@options_list}"
 		end
 
+		def trending(options)
+			init(options)
+			return POSTS_URL + "stream/explore/trending?access_token=#{$config.user_token}#{@options_list}"
+		end
+
+		def photos(options)
+			init(options)
+			return POSTS_URL + "stream/explore/photos?access_token=#{$config.user_token}#{@options_list}"
+		end
+
 		private
 
 		def init(options)
