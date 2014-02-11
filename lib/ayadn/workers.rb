@@ -31,13 +31,49 @@ module Ayadn
 					mentions << m['name']
 				end
 				directed_to = mentions.first || nil
+				has_mentions = true
+				if mentions.empty?
+					has_mentions = false
+					mentions = nil
+				end
 				tags = []
 				post['entities']['hashtags'].each do |h|
 					tags << h['name']
 				end
+				tags = nil if tags.empty?
 				links = []
 				post['entities']['links'].each do |l|
 					links << l['url']
+				end
+				links = nil if links.empty?
+				annotations_list = post['annotations']
+				if annotations_list != nil
+					xxx = 0
+					annotations_list.each do
+						annotation_type = annotations_list[xxx]['type']
+						annotation_value = annotations_list[xxx]['value']
+						if annotation_type == "net.app.core.checkin" || annotation_type == "net.app.ohai.location"
+							@checkins = true
+							@checkins_name = annotation_value['name']
+							@checkins_address = annotation_value['address']
+							@checkins_address_extended = annotation_value['address_extended']
+							@checkins_locality = annotation_value['locality']
+							@checkins_region = annotation_value['region']
+							@checkins_postcode = annotation_value['postcode']
+							@checkins_country_code = annotation_value['country_code']
+							@checkins_website = annotation_value['website']
+							@checkins_phone = annotation_value['telephone']
+							@checkins_labels = annotation_value['categories']['labels']
+							@factual_id = annotation_value['factual_id']
+							@checkins_id = annotation_value['id']
+							@longitude = annotation_value['longitude']
+							@latitude = annotation_value['latitude']
+						end
+						if annotation_type == "net.app.core.oembed"
+							@checkins_link = annotation_value['embeddable_url']
+						end
+						xxx += 1
+					end
 				end
 				
 				posts.merge!(
@@ -45,7 +81,7 @@ module Ayadn
 						post['id'].to_i => {
 							count: @count,
 							id: post['id'].to_i,
-							thread_id: thread_id,
+							thread_id: thread_id.to_i,
 							username: post['user']['username'],
 							handle: "@" + post['user']['username'],
 							name: name,
@@ -59,10 +95,29 @@ module Ayadn
 							text: text,
 							num_stars: post['num_stars'],
 							source_name: post['source']['name'],
+							has_mentions: has_mentions,
 							mentions: mentions,
 							directed_to: directed_to,
 							tags: tags,
-							links: links
+							links: links,
+							has_checkins: @checkins || false,
+							checkins: {
+								checkins_name: @checkins_name || nil,
+								checkins_address: @checkins_address || nil,
+								checkins_address_extended: @checkins_address_extended || nil,
+								checkins_locality: @checkins_locality || nil,
+								checkins_region: @checkins_region || nil,
+								checkins_postcode: @checkins_postcode || nil,
+								checkins_country_code: @checkins_country_code || nil,
+								checkins_link: @checkins_link || nil,
+								checkins_website: @checkins_website || nil,
+								checkins_phone: @checkins_phone || nil,
+								checkins_labels: @checkins_labels || nil,
+								checkins_id: @checkins_id || nil,
+								longitude: @longitude || nil,
+								latitude: @latitude || nil,
+								factual_id: @factual_id || nil
+							}
 						}
 					}
 				)
