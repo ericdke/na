@@ -1,6 +1,30 @@
 module Ayadn
 	class Workers
 
+		def build_stream_with_index(data)
+			@view = ""
+			posts = build_posts(data)
+			posts.each do |id,content|
+				count = "%03d" % content[:count]
+				@view << count.color(:red)
+				@view << ": ".color(:red)
+				@view << content[:id].to_s.color(:green)
+				@view << build_content(content)
+			end
+			return posts, @view
+		end
+		def build_stream_without_index(data)
+			@view = ""
+			posts = build_posts(data)
+			posts.each do |id,content|
+				@view << content[:id].to_s.color(:green)
+				@view << build_content(content)
+			end
+			@view
+		end
+
+		private
+
 		def build_posts(data)
 			posts = {}
 			@count = 1
@@ -127,34 +151,13 @@ module Ayadn
 			posts
 		end
 
-		def build_stream_with_index(data)
-			@view = ""
-			posts = build_posts(data)
-			posts.each do |id,content|
-				count = "%03d" % content[:count]
-				@view << count.color(:red)
-				@view << ": ".color(:red)
-				@view << content[:id].to_s.color(:green)
-				@view << " "
-				@view << build_header(content)
-				@view << "\n"
-				@view << content[:text]
-				@view << "\n\n\n"	
-			end
-			return posts, @view
-		end
-		def build_stream_without_index(data)
-			# @view = ""
-			# posts = build_posts(data)
-			# posts.each do |id,content|
-			# 	@view << content[:id].color(:green)
-			# 	@view << " "
-			# 	@view << build_header(content)
-			# 	@view << "\n"
-			# 	@view << content[:text]
-			# end
-			# view << "\n\n"	
-			# @view
+		def build_content(content)
+			view = " "
+			view << build_header(content)
+			view << "\n"
+			view << content[:text]
+			view << "\n\n\n"
+			view
 		end
 
 		def build_header(content)
