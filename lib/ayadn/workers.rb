@@ -127,22 +127,43 @@ module Ayadn
 			posts
 		end
 
-		# def build_stream(data)
+		def build_stream_with_index(data)
+			@view = ""
+			posts = build_posts(data)
+			posts.each do |id,content|
+				count = "%03d" % content[:count]
+				@view << count.color(:red)
+				@view << ": ".color(:red)
+				@view << content[:id].to_s.color(:green)
+				@view << " "
+				@view << build_header(content)
+				@view << "\n"
+				@view << content[:text]
+				@view << "\n\n\n"	
+			end
+			return posts, @view
+		end
+		def build_stream_without_index(data)
+			# @view = ""
+			# posts = build_posts(data)
+			# posts.each do |id,content|
+			# 	@view << content[:id].color(:green)
+			# 	@view << " "
+			# 	@view << build_header(content)
+			# 	@view << "\n"
+			# 	@view << content[:text]
+			# end
+			# view << "\n\n"	
+			# @view
+		end
 
-		# 	view = build_header(post)
-		# 	view << "\n"
-		# 	view << text
-		# 	view << "\n\n"
-			
-			
-		# end
-
-		def build_header(post)
+		def build_header(content)
 			header = ""
-			header << "@#{post['user']['username']}".color(:green)
+			header << content[:handle].color(:red)
 			header << " "
-			header << ("#{post['user']['name']}".color(:yellow) + " ") if post['user']['name']
-			header << parsed_time(post['created_at']).color(:cyan)
+			header << content[:name].color(:yellow)
+			header << " "
+			header << content[:date].color(:cyan)
 			header << "\n"
 			header
 		end

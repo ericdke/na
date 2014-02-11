@@ -1,30 +1,22 @@
 module Ayadn
 	class View
 
-		def show_posts_with_index(posts)
-			File.open($config.config[:paths][:home] + "/index", "w") { |f| f.write(posts.to_json) }
-			ap posts
+		def initialize
+			@workers = Workers.new
+		end
+
+		def show_posts_with_index(data)
 			# puts "\n"
-			# posts.each do |count, pair|
-			# 	k = pair.keys
-			# 	puts "#{count}:".color(:red)
-			# 	puts pair.values
-			# end
+			posts, view = @workers.build_stream_with_index(data)
+			puts view
+			File.open($config.config[:paths][:home] + "/index", "w") { |f| f.write(posts.to_json) }
 		end
 
 
-# AMELIORE TOUT CA
-# FAIS UN VRAI TABLEAU AVEC LES TRUCS DEDANS
-# SEPARE HEADERS/CORPS/LINKS/ETC
 
-
-		def show_posts(posts)
+		def show_posts(data)
 			puts "\n"
-			posts.each do |count, pair|
-				k = pair.keys
-				puts "#{k[0]}:".color(:red)
-				puts pair.values
-			end
+			# TODO
 		end
 
 		def clear_line
