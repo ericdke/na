@@ -27,6 +27,17 @@ module Ayadn
 			Stream.new.checkins(options)
 		end
 
+		desc "global", "Shows the Global Stream"
+		map "-G" => :global
+		map "glo" => :global
+		long_desc Descriptions.global
+		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		def global
+			init
+			Stream.new.global(options)
+		end
+
 		private
 
 		def init

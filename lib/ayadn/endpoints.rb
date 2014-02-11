@@ -25,6 +25,11 @@ module Ayadn
 			return POSTS_URL + "stream/explore/checkins?access_token=#{$config.user_token}#{@options_list}"
 		end
 
+		def global(options)
+			init(options)
+			return POSTS_URL + "stream/global?access_token=#{$config.user_token}#{@options_list}"
+		end
+
 		private
 
 		def init(options)
