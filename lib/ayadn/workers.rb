@@ -29,7 +29,7 @@ module Ayadn
 			posts = {}
 			@count = 1
 			data.reverse.each do |post|
-				text = post['text'] || ""
+				text = colorize_text(post['text']) || ""
 				thread_id = post['thread_id'] || nil
 				name = post['user']['name'] || ""
 				if post['repost_of']
@@ -231,6 +231,20 @@ module Ayadn
 
 		def parsed_time(string)
 			"#{string[0...10]} #{string[11...19]}"
+		end
+
+		def colorize_text(text)
+			content = Array.new
+			for word in text.split(" ") do
+				if word =~ /#\w+/
+                    content.push(word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(:cyan)))
+				elsif word =~ /@\w+/ 
+                    content.push(word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.red))
+				else
+					content.push(word)
+				end
+			end
+			content.join(" ")
 		end
 
 	end
