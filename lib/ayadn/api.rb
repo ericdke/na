@@ -11,6 +11,11 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
+		def get_checkins(options)
+			url = @endpoints.checkins(options)
+			get_parsed_response(url)
+		end
+
 		private
 
 		def get_raw_response(url)

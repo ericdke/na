@@ -78,24 +78,24 @@ module Ayadn
 						annotation_value = annotations_list[xxx]['value']
 						if annotation_type == "net.app.core.checkin" || annotation_type == "net.app.ohai.location"
 							@checkins = true
-							@checkins_name = annotation_value['name']
-							@checkins_address = annotation_value['address']
-							@checkins_address_extended = annotation_value['address_extended']
-							@checkins_locality = annotation_value['locality']
-							@checkins_region = annotation_value['region']
-							@checkins_postcode = annotation_value['postcode']
-							@checkins_country_code = annotation_value['country_code']
-							@checkins_website = annotation_value['website']
-							@checkins_phone = annotation_value['telephone']
-							@checkins_labels = annotation_value['categories']['labels']
-							@factual_id = annotation_value['factual_id']
-							@checkins_id = annotation_value['id']
-							@longitude = annotation_value['longitude']
-							@latitude = annotation_value['latitude']
+							@checkins_name = annotation_value['name'] || ""
+							@checkins_address = annotation_value['address'] || ""
+							#@checkins_address_extended = annotation_value['address_extended'] || ""
+							@checkins_locality = annotation_value['locality'] || ""
+							@checkins_region = annotation_value['region'] || ""
+							@checkins_postcode = annotation_value['postcode'] || ""
+							@checkins_country_code = annotation_value['country_code'] || ""
+							#@checkins_website = annotation_value['website'] || nil
+							#@checkins_phone = annotation_value['telephone'] || nil
+							#@checkins_labels = annotation_value['categories']['labels'] || ""
+							#@factual_id = annotation_value['factual_id'] || ""
+							#@checkins_id = annotation_value['id'] || ""
+							#@longitude = annotation_value['longitude'] || ""
+							#@latitude = annotation_value['latitude'] || ""
 						end
-						if annotation_type == "net.app.core.oembed"
-							@checkins_link = annotation_value['embeddable_url']
-						end
+						# if annotation_type == "net.app.core.oembed"
+						# 	@checkins_link = annotation_value['embeddable_url']
+						# end
 						xxx += 1
 					end
 				end
@@ -126,21 +126,21 @@ module Ayadn
 							links: links,
 							has_checkins: @checkins || false,
 							checkins: {
-								checkins_name: @checkins_name || nil,
-								checkins_address: @checkins_address || nil,
-								checkins_address_extended: @checkins_address_extended || nil,
-								checkins_locality: @checkins_locality || nil,
-								checkins_region: @checkins_region || nil,
-								checkins_postcode: @checkins_postcode || nil,
-								checkins_country_code: @checkins_country_code || nil,
-								checkins_link: @checkins_link || nil,
-								checkins_website: @checkins_website || nil,
-								checkins_phone: @checkins_phone || nil,
-								checkins_labels: @checkins_labels || nil,
-								checkins_id: @checkins_id || nil,
-								longitude: @longitude || nil,
-								latitude: @latitude || nil,
-								factual_id: @factual_id || nil
+								checkins_name: @checkins_name,
+								checkins_address: @checkins_address,
+								#checkins_address_extended: @checkins_address_extended,
+								checkins_locality: @checkins_locality,
+								checkins_region: @checkins_region,
+								checkins_postcode: @checkins_postcode,
+								checkins_country_code: @checkins_country_code,
+								#checkins_link: @checkins_link || ""
+								#checkins_website: @checkins_website,
+								#checkins_phone: @checkins_phone,
+								#checkins_labels: @checkins_labels,
+								#checkins_id: @checkins_id,
+								#longitude: @longitude,
+								#latitude: @latitude,
+								#factual_id: @factual_id
 							}
 						}
 					}
@@ -157,13 +157,25 @@ module Ayadn
 			view << "\n"
 			view << content[:text]
 			view << "\n"
-			view << "\n" if !content[:links].empty?
-			content[:links].each do |link|
-				view << link.color(:magenta)
+		begin
+			if content[:has_checkins]
+				view << build_checkins(content)
 				view << "\n"
 			end
+		rescue => e
+			puts e.inspect
+			puts view
+			jj content
+			exit
+		end
+			unless content[:links].nil?
+				view << "\n"
+				content[:links].each do |link|
+					view << link.color(:magenta)
+					view << "\n"
+				end
+			end
 			view << "\n\n"
-			view
 		end
 
 		def build_header(content)
@@ -174,11 +186,51 @@ module Ayadn
 			header << " "
 			header << content[:date].color(:cyan)
 			header << "\n"
-			header
+		end
+
+		def build_checkins(content)
+			chk = (".".color(:blue)) * (content[:checkins][:checkins_name].length || 10)
+			chk << "\n"
+			unless content[:checkins][:checkins_name].empty?
+				chk << content[:checkins][:checkins_name]
+				chk << "\n"
+			end
+			unless content[:checkins][:checkins_address].empty?
+				chk << content[:checkins][:checkins_address]
+				chk << "\n"
+			end
+			# unless content[:checkins][:checkins_address_extended].empty?
+			# 	chk << content[:checkins][:checkins_address_extended]
+			# 	chk << "\n"
+			# end
+			unless content[:checkins][:checkins_locality].empty?
+				chk << content[:checkins][:checkins_locality]
+				chk << " \n"
+			end
+			unless content[:checkins][:checkins_postcode].empty?
+				chk << content[:checkins][:checkins_postcode]
+				chk << "\n"
+			end
+			unless content[:checkins][:checkins_region].empty?
+				chk << content[:checkins][:checkins_region]
+				chk << " \n"
+			end
+			unless content[:checkins][:checkins_country_code].empty?
+				chk << content[:checkins][:checkins_country_code]
+				chk << "\n"
+			end
+			# unless content[:checkins][:checkins_phone].nil?
+			# 	chk << content[:checkins][:checkins_phone]
+			# 	chk << "\n"
+			# end
+			# unless content[:checkins][:checkins_website].nil?
+			# 	chk << content[:checkins][:checkins_website]
+			# 	chk << "\n"
+			# end
 		end
 
 		def parsed_time(string)
-			return "#{string[0...10]} #{string[11...19]}"
+			"#{string[0...10]} #{string[11...19]}"
 		end
 
 	end
