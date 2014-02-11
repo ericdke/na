@@ -30,9 +30,14 @@ module Ayadn
 				post['entities']['mentions'].each do |m|
 					mentions << m['name']
 				end
+				directed_to = mentions.first || nil
 				tags = []
 				post['entities']['hashtags'].each do |h|
 					tags << h['name']
+				end
+				links = []
+				post['entities']['links'].each do |l|
+					links << l['url']
 				end
 				
 				posts.merge!(
@@ -55,7 +60,9 @@ module Ayadn
 							num_stars: post['num_stars'],
 							source_name: post['source']['name'],
 							mentions: mentions,
-							tags: tags
+							directed_to: directed_to,
+							tags: tags,
+							links: links
 						}
 					}
 				)

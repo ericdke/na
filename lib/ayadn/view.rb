@@ -3,7 +3,7 @@ module Ayadn
 
 		def show_posts_with_index(posts)
 			File.open($config.config[:paths][:home] + "/index", "w") { |f| f.write(posts.to_json) }
-			ap posts
+			jj posts
 			# puts "\n"
 			# posts.each do |count, pair|
 			# 	k = pair.keys
