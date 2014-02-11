@@ -18,5 +18,8 @@ module Ayadn
 		def self.conversations
 			%Q{Shows the Conversations Stream.\nShortcut: replace 'conversations' by '-Q'}
 		end
+		def self.mentions
+			%Q{Shows posts containing a mention of a @username.\nShortcut: replace 'mentions' by '-M'}
+		end
 	end
 end

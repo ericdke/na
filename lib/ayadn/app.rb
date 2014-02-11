@@ -70,10 +70,23 @@ module Ayadn
 			Stream.new.conversations(options)
 		end
 
-
-
-
-
+		desc "mentions @USERNAME", "Shows posts containing a mention of a @username (ayadn -M @username)"
+		map "-M" => :mentions
+		long_desc Descriptions.mentions
+		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		def mentions(*username)
+			init
+			unless username.empty?
+				username = username.first.chars.to_a
+				unless username.first == "@"
+					username.unshift("@")
+				end
+				Stream.new.mentions(username.join, options)
+			else
+				puts Status.error_missing_username
+			end
+		end
 
 
 		private

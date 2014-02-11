@@ -38,6 +38,11 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
+		def get_mentions(username, options)
+			url = @endpoints.mentions(username, options)
+			get_parsed_response(url)
+		end
+
 		private
 
 		def get_raw_response(url)

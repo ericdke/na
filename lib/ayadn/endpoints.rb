@@ -17,32 +17,37 @@ module Ayadn
 
 		def unified(options)
 			init(options)
-			return POSTS_URL + "stream/unified?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/unified?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def checkins(options)
 			init(options)
-			return POSTS_URL + "stream/explore/checkins?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/explore/checkins?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def global(options)
 			init(options)
-			return POSTS_URL + "stream/global?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/global?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def trending(options)
 			init(options)
-			return POSTS_URL + "stream/explore/trending?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/explore/trending?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def photos(options)
 			init(options)
-			return POSTS_URL + "stream/explore/photos?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/explore/photos?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def conversations(options)
 			init(options)
-			return POSTS_URL + "stream/explore/conversations?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/explore/conversations?access_token=#{$config.user_token}#{@options_list}"
+		end
+
+		def mentions(username, options)
+			init(options)
+			USERS_URL + "#{username}/mentions/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		private
