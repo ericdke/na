@@ -25,7 +25,10 @@ module Ayadn
 			%Q{Shows @username's posts.\nShortcut: replace 'posts' by 'ps' or '-P'}
 		end
 		def self.starred
-			%Q{Shows posts starred by @username}
+			%Q{Shows posts starred by @username.\nShortcut: replace 'starred' by '-L'}
+		end
+		def self.interactions
+			%Q{Shows your recent ADN activity.\nShortcut: replace 'interactions' by '-B'}
 		end
 	end
 end

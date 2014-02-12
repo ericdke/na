@@ -18,9 +18,20 @@ module Ayadn
 			puts view
 		end
 
+		def show_simple_stream(stream)
+			puts stream
+		end
+
+		def show_interactions(stream)
+			puts "\n"
+			#ap stream
+			puts @workers.build_interactions_stream(stream)
+		end
+
 		def clear_line
 			print "\r                                            \n"
 		end
+
 		def clear_screen
 			puts "\e[H\e[2J"
 		end

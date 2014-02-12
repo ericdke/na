@@ -60,6 +60,10 @@ module Ayadn
 			USERS_URL + "#{username}/stars/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
+		def interactions
+			USERS_URL + "me/interactions?access_token=#{$config.user_token}"
+		end
+
 		private
 
 		def init(options)

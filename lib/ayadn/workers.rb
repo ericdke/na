@@ -23,6 +23,43 @@ module Ayadn
 			@view
 		end
 
+		def build_interactions_stream(data)
+			inter = ""
+			data.reverse.each do |event|
+				users_array = []
+				inter << "#{parsed_time(event['event_date'])}".color(:cyan)
+				inter << " => "
+				event['users'].each do |u|
+					users_array << "@" + u['username']
+				end
+				case event['action']
+					when "follow", "unfollow"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "#{event['action']}ed you".color(:green)
+					when "mute", "unmute"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "#{event['action']}d you".color(:green)
+					when "star", "unstar"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "#{event['action']}red post #{event['objects'][0]['id']}".color(:green)
+					when "repost", "unrepost"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "#{event['action']}ed post ".color(:green)
+						inter << "#{event['objects'][0]['id']}".color(:red)
+					when "reply"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "replied to post ".color(:green)
+						inter << "#{event['objects'][0]['id']}".color(:red)
+					when "welcome"
+						inter << "App.net ".color(:cyan)
+						inter << "welcomed ".color(:green)
+						inter << "you!".color(:yellow)
+				end
+				inter << "\n\n"
+			end
+			inter
+		end
+
 		private
 
 		def build_posts(data)

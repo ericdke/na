@@ -102,7 +102,8 @@ module Ayadn
 			end
 		end
 
-		desc "starred @USERNAME", "Shows posts starred by @username"
+		desc "starred @USERNAME", "Shows posts starred by @username (ayadn -L @username)"
+		map "-L" => :starred
 		long_desc Descriptions.starred
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -116,6 +117,13 @@ module Ayadn
 			end
 		end
 
+		desc "interactions", "Shows your recent ADN activity (ayadn -B)"
+		map "-B" => :interactions
+		long_desc Descriptions.interactions
+		def interactions
+			init
+			Stream.new.interactions
+		end
 
 
 

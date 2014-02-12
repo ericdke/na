@@ -69,19 +69,35 @@ module Ayadn
 			get_view(stream, options)
 		end
 
+		def interactions
+			@view.clear_screen
+			print Status.downloading
+			stream = get_data_from_response(@api.get_interactions)
+			@view.clear_screen
+			@view.show_interactions(stream)
+		end
+
+
+
+
 		private
 
 		def get_data_from_response(response)
 			response['data']
 		end
 
-		def get_view(stream, options)
+		def get_view(stream, options = {})
 			@view.clear_screen
 			if options[:index]
 				@view.show_posts_with_index(stream)
 			else
 				@view.show_posts(stream)
 			end
+		end
+
+		def get_simple_view(stream)
+			@view.clear_screen
+			@view.show_simple_stream(stream)
 		end
 
 	end
