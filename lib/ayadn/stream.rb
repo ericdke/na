@@ -81,7 +81,7 @@ module Ayadn
 			@view.clear_screen
 			print Status.downloading
 			list = get_data_from_response(@api.get_reposted(post_id))
-			get_list(list)
+			get_list(:reposted, list, post_id)
 		end
 
 
@@ -106,9 +106,12 @@ module Ayadn
 			@view.show_simple_stream(stream)
 		end
 
-		def get_list(list)
+		def get_list(what, list, target)
 			@view.clear_screen
-			@view.show_list(list)
+			case what
+			when :reposted
+				@view.show_list_reposted(list, target)
+			end
 		end
 
 	end

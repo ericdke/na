@@ -60,6 +60,16 @@ module Ayadn
 			inter
 		end
 
+		def build_users_list(list)
+			view = Terminal::Table.new do |t|
+				list.each_with_index do |obj, index|
+					t << [ "@#{obj['username']} ".color(:green), "#{obj['name']}" ]
+					t << :separator unless index + 1 == list.length
+				end
+			end
+			view
+		end
+
 		private
 
 		def build_posts(data)

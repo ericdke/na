@@ -7,32 +7,28 @@ module Ayadn
 
 		def show_posts_with_index(data)
 			posts, view = @workers.build_stream_with_index(data)
-			puts "\n"
+			#puts "\n"
 			puts view
 			File.open($config.config[:paths][:home] + "/index", "w") { |f| f.write(posts.to_json) }
 		end
 
 		def show_posts(data)
 			view = @workers.build_stream_without_index(data)
-			puts "\n"
+			#puts "\n"
 			puts view
 		end
 
 		def show_simple_stream(stream)
 			puts stream
 		end
-		def show_list(list)
-			users = ""
-			list.each do |obj|
-				users << "@#{obj['username']} ".color(:red)
-				users << "#{obj['name']}\n".color(:yellow)
-			end
-			puts users
+		def show_list_reposted(list, target)
+			puts "List of users who reposted post ".color(:cyan) + "#{target}\n".color(:red)
+			puts @workers.build_users_list(list)
+			puts "\n"
 		end
 
 		def show_interactions(stream)
-			puts "\n"
-			#ap stream
+			#puts "\n"
 			puts @workers.build_interactions_stream(stream)
 		end
 
