@@ -30,5 +30,8 @@ module Ayadn
 		def self.interactions
 			%Q{Shows your recent ADN activity.\nShortcut: replace 'interactions' by '-HIST'}
 		end
+		def self.reposted
+			%Q{Lists users who reposted post n° POST-ID.\nShortcut: replace 'reposted' by '-WR'}
+		end
 	end
 end

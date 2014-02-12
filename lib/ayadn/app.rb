@@ -2,7 +2,7 @@ module Ayadn
 	class App < Thor
 		package_name "ayadn"
 
-		%w{stream api descriptions endpoints cnx view workers myconfig status}.each { |r| require_relative "#{r}" }
+		%w{stream api descriptions endpoints cnx view workers myconfig status extend}.each { |r| require_relative "#{r}" }
 		
 		desc "unified", "Shows the Unified Stream, aka your App.net timeline (ayadn -U)"
 		map "-U" => :unified
@@ -123,6 +123,16 @@ module Ayadn
 			Stream.new.interactions
 		end
 
+		desc "reposted POST-ID", "Lists users who reposted post n° POST-ID"
+		map "-WR" => :reposted
+		long_desc Descriptions.reposted
+		def reposted(post_id)
+			init
+
+		end
+
+
+		#desc "starred POST-ID", "Lists users who starred post n° POST-ID"
 
 
 
