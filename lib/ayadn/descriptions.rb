@@ -24,5 +24,8 @@ module Ayadn
 		def self.posts
 			%Q{Shows @username's posts.\nShortcut: replace 'posts' by 'ps' or '-P'}
 		end
+		def self.starred
+			%Q{Shows posts starred by @username}
+		end
 	end
 end

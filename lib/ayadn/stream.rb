@@ -62,6 +62,13 @@ module Ayadn
 			get_view(stream, options)
 		end
 
+		def starred(username, options)
+			@view.clear_screen
+			print Status.downloading
+			stream = get_data_from_response(@api.get_starred(username, options))
+			get_view(stream, options)
+		end
+
 		private
 
 		def get_data_from_response(response)

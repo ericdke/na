@@ -79,8 +79,8 @@ module Ayadn
 		def mentions(*username)
 			init
 			unless username.empty?
-				username = add_arobase_if_absent(username)
-				Stream.new.mentions(username.join, options)
+				username_array = add_arobase_if_absent(username)
+				Stream.new.mentions(username_array.join, options)
 			else
 				puts Status.error_missing_username
 			end
@@ -95,12 +95,30 @@ module Ayadn
 		def posts(*username)
 			init
 			unless username.empty?
-				username = add_arobase_if_absent(username)
-				Stream.new.posts(username.join, options)
+				username_array = add_arobase_if_absent(username)
+				Stream.new.posts(username_array.join, options)
 			else
 				puts Status.error_missing_username
 			end
 		end
+
+		desc "starred @USERNAME", "Shows posts starred by @username"
+		long_desc Descriptions.starred
+		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		def starred(*username)
+			init
+			unless username.empty?
+				username_array = add_arobase_if_absent(username)
+				Stream.new.starred(username_array.join, options)
+			else
+				puts Status.error_missing_username
+			end
+		end
+
+
+
+
 
 
 		private

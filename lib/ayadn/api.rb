@@ -48,6 +48,11 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
+		def get_starred(username, options)
+			url = @endpoints.starred(username, options)
+			get_parsed_response(url)
+		end
+
 		private
 
 		def get_raw_response(url)
