@@ -22,8 +22,8 @@ module Ayadn
 			puts stream
 		end
 		def show_list_reposted(list, target)
-			puts "List of users who reposted post ".color(:cyan) + "#{target}\n".color(:red)
-			puts @workers.build_users_list(list)
+			#puts "List of users who reposted post ".color(:cyan) + "#{target}\n".color(:red)
+			puts @workers.build_users_list(list, target)
 			puts "\n"
 		end
 

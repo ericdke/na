@@ -60,8 +60,11 @@ module Ayadn
 			inter
 		end
 
-		def build_users_list(list)
+		def build_users_list(list, post_id = false)
 			view = Terminal::Table.new do |t|
+				if post_id
+					t.title = "List of users who reposted post ".color(:cyan) + "#{post_id}".color(:red) + "".color(:white)
+				end
 				list.each_with_index do |obj, index|
 					t << [ "@#{obj['username']} ".color(:green), "#{obj['name']}" ]
 					t << :separator unless index + 1 == list.length
