@@ -21,6 +21,14 @@ module Ayadn
 		def show_simple_stream(stream)
 			puts stream
 		end
+		def show_list(list)
+			users = ""
+			list.each do |obj|
+				users << "@#{obj['username']} ".color(:red)
+				users << "#{obj['name']}\n".color(:yellow)
+			end
+			puts users
+		end
 
 		def show_interactions(stream)
 			puts "\n"

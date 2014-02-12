@@ -64,6 +64,10 @@ module Ayadn
 			USERS_URL + "me/interactions?access_token=#{$config.user_token}"
 		end
 
+		def reposted(post_id)
+			POSTS_URL + "#{post_id}/reposters/?access_token=#{$config.user_token}"
+		end
+
 		private
 
 		def init(options)

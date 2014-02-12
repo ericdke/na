@@ -77,6 +77,12 @@ module Ayadn
 			@view.show_interactions(stream)
 		end
 
+		def reposted(post_id)
+			@view.clear_screen
+			print Status.downloading
+			list = get_data_from_response(@api.get_reposted(post_id))
+			get_list(list)
+		end
 
 
 
@@ -98,6 +104,11 @@ module Ayadn
 		def get_simple_view(stream)
 			@view.clear_screen
 			@view.show_simple_stream(stream)
+		end
+
+		def get_list(list)
+			@view.clear_screen
+			@view.show_list(list)
 		end
 
 	end

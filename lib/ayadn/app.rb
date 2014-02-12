@@ -123,12 +123,16 @@ module Ayadn
 			Stream.new.interactions
 		end
 
-		desc "reposted POST-ID", "Lists users who reposted post n° POST-ID"
+		desc "reposted POST-ID", "Lists users who reposted post n°POST-ID"
 		map "-WR" => :reposted
 		long_desc Descriptions.reposted
 		def reposted(post_id)
 			init
-
+			if post_id.is_integer?
+				Stream.new.reposted(post_id)
+			else
+				puts Status.error_missing_post_id
+			end
 		end
 
 
