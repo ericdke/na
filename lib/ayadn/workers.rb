@@ -61,26 +61,22 @@ module Ayadn
 		end
 
 		def build_reposted_list(list, target)
-			view = Terminal::Table.new do |t|
+			table = Terminal::Table.new do |t|
+				t.style = {:width => 80}
 				t.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
+			build_users_list(list, table)
 		end
 
 		def build_starred_list(list, target)
-			view = Terminal::Table.new do |t|
+			table = Terminal::Table.new do |t|
+				t.style = {:width => 80}
 				t.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
+			build_users_list(list, table)
 		end
 
-		# def build_users_list(list)
-		# 	view = Terminal::Table.new do |t|
-		# 		list.each_with_index do |obj, index|
-		# 			t << [ "@#{obj['username']} ".color(:green), "#{obj['name']}" ]
-		# 			t << :separator unless index + 1 == list.length
-		# 		end
-		# 	end
-		# 	view
-		# end
+
 
 		private
 
@@ -286,6 +282,14 @@ module Ayadn
 			# 	chk << content[:checkins][:checkins_website]
 			# 	chk << "\n"
 			# end
+		end
+
+		def build_users_list(list, table)
+			list.each_with_index do |obj, index|
+				table << [ "@#{obj['username']} ".color(:green), "#{obj['name']}" ]
+				table << :separator unless index + 1 == list.length
+			end
+			table
 		end
 
 		def parsed_time(string)

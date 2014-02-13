@@ -25,16 +25,16 @@ module Ayadn
 			%Q{Shows @username's posts.\nShortcut: replace 'posts' by '-PO'}
 		end
 		def self.whatstarred
-			%Q{Shows posts starred by @username.\nShortcut: replace 'what-starred' by '-WAS'}
+			%Q{Shows posts starred by @username.\nShortcut: replace 'whatstarred' by '-WAS'}
 		end
 		def self.interactions
 			%Q{Shows your recent ADN activity.\nShortcut: replace 'interactions' by '-INT'}
 		end
 		def self.whoreposted
-			%Q{Lists users who reposted post n°POST-ID.\nShortcut: replace 'who-reposted' by '-WOR'}
+			%Q{Lists users who reposted post n°POST-ID.\nShortcut: replace 'whoreposted' by '-WOR'}
 		end
 		def self.whostarred
-			%Q{Lists users who starred post n°POST-ID.\nShortcut: replace 'who-starred' by '-WOS'}
+			%Q{Lists users who starred post n°POST-ID.\nShortcut: replace 'whostarred' by '-WOS'}
 		end
 	end
 end

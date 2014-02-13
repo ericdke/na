@@ -87,7 +87,7 @@ module Ayadn
 		def whostarred(post_id)
 			@view.clear_screen
 			print Status.downloading
-			list = get_data_from_response(@api.whostarred(post_id))
+			list = get_data_from_response(@api.get_whostarred(post_id))
 			get_list(:whostarred, list, post_id)
 		end
 

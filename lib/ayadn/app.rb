@@ -100,7 +100,7 @@ module Ayadn
 			end
 		end
 
-		desc "what-starred @USERNAME", "Shows posts starred by @username (ayadn -WAS @username)"
+		desc "whatstarred @USERNAME", "Shows posts starred by @username (ayadn -WAS @username)"
 		map "-WAS" => :whatstarred
 		long_desc Descriptions.whatstarred
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
@@ -123,7 +123,7 @@ module Ayadn
 			Stream.new.interactions
 		end
 
-		desc "who-reposted POST-ID", "Lists users who reposted post n°POST-ID (ayadn -WOR POST-ID)"
+		desc "whoreposted POST-ID", "Lists users who reposted post n°POST-ID (ayadn -WOR POST-ID)"
 		map "-WOR" => :whoreposted
 		long_desc Descriptions.whoreposted
 		def whoreposted(post_id)
@@ -135,7 +135,7 @@ module Ayadn
 			end
 		end
 
-		desc "who-starred POST-ID", "Lists users who starred post n°POST-ID (ayadn -WOS POST-ID)"
+		desc "whostarred POST-ID", "Lists users who starred post n°POST-ID (ayadn -WOS POST-ID)"
 		map "-WOS" => :whostarred
 		long_desc Descriptions.whostarred
 		def whostarred(post_id)
