@@ -100,45 +100,44 @@ module Ayadn
 			end
 		end
 
-		desc "starred @USERNAME", "Shows posts starred by @username (ayadn -ST @username)"
-		map "-ST" => :starred
-		long_desc Descriptions.starred
+		desc "what-starred @USERNAME", "Shows posts starred by @username (ayadn -WAS @username)"
+		map "-WAS" => :whatstarred
+		long_desc Descriptions.whatstarred
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		def starred(*username)
+		def whatstarred(*username)
 			init
 			unless username.empty?
 				username_array = add_arobase_if_absent(username)
-				Stream.new.starred(username_array.join, options)
+				Stream.new.whatstarred(username_array.join, options)
 			else
 				puts Status.error_missing_username
 			end
 		end
 
-		desc "interactions", "Shows your recent ADN activity (ayadn -HIST)"
-		map "-HIST" => :interactions
+		desc "interactions", "Shows your recent ADN activity (ayadn -INT)"
+		map "-INT" => :interactions
 		long_desc Descriptions.interactions
 		def interactions
 			init
 			Stream.new.interactions
 		end
 
-		desc "reposted POST-ID", "Lists users who reposted post n°POST-ID"
-		map "-WR" => :reposted
-		long_desc Descriptions.reposted
-		def reposted(post_id)
+		desc "who-reposted POST-ID", "Lists users who reposted post n°POST-ID (ayadn -WOR POST-ID)"
+		map "-WOR" => :whoreposted
+		long_desc Descriptions.whoreposted
+		def whoreposted(post_id)
 			init
 			if post_id.is_integer?
-				Stream.new.reposted(post_id)
+				Stream.new.whoreposted(post_id)
 			else
 				puts Status.error_missing_post_id
 			end
 		end
 
 
-		#desc "starred POST-ID", "Lists users who starred post n° POST-ID"
-
-
+		desc "who-starred POST-ID", "Lists users who starred post n° POST-ID (ayadn -WOS POST-ID)"
+		#TODO
 
 
 		private

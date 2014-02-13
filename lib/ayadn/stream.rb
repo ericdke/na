@@ -62,10 +62,10 @@ module Ayadn
 			get_view(stream, options)
 		end
 
-		def starred(username, options)
+		def whatstarred(username, options)
 			@view.clear_screen
 			print Status.downloading
-			stream = get_data_from_response(@api.get_starred(username, options))
+			stream = get_data_from_response(@api.get_whatstarred(username, options))
 			get_view(stream, options)
 		end
 
@@ -77,11 +77,11 @@ module Ayadn
 			@view.show_interactions(stream)
 		end
 
-		def reposted(post_id)
+		def whoreposted(post_id)
 			@view.clear_screen
 			print Status.downloading
-			list = get_data_from_response(@api.get_reposted(post_id))
-			get_list(:reposted, list, post_id)
+			list = get_data_from_response(@api.get_whoreposted(post_id))
+			get_list(:whoreposted, list, post_id)
 		end
 
 
@@ -109,7 +109,7 @@ module Ayadn
 		def get_list(what, list, target)
 			@view.clear_screen
 			case what
-			when :reposted
+			when :whoreposted
 				@view.show_list_reposted(list, target)
 			end
 		end

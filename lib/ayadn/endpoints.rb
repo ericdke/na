@@ -55,7 +55,7 @@ module Ayadn
 			USERS_URL + "#{username}/posts/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
-		def starred(username, options)
+		def whatstarred(username, options)
 			init(options)
 			USERS_URL + "#{username}/stars/?access_token=#{$config.user_token}#{@options_list}"
 		end
@@ -64,7 +64,7 @@ module Ayadn
 			USERS_URL + "me/interactions?access_token=#{$config.user_token}"
 		end
 
-		def reposted(post_id)
+		def whoreposted(post_id)
 			POSTS_URL + "#{post_id}/reposters/?access_token=#{$config.user_token}"
 		end
 

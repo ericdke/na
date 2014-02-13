@@ -48,8 +48,8 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
-		def get_starred(username, options)
-			url = @endpoints.starred(username, options)
+		def get_whatstarred(username, options)
+			url = @endpoints.whatstarred(username, options)
 			get_parsed_response(url)
 		end
 
@@ -58,8 +58,8 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
-		def get_reposted(post_id)
-			url = @endpoints.reposted(post_id)
+		def get_whoreposted(post_id)
+			url = @endpoints.whoreposted(post_id)
 			get_parsed_response(url)
 		end
 
