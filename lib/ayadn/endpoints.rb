@@ -81,6 +81,10 @@ module Ayadn
 			USERS_URL + "#{username}/following/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
 		end
 
+		def followers(username, options)
+			USERS_URL + "#{username}/followers/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+		end
+
 		private
 
 		def init(options)

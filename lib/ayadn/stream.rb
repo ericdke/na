@@ -102,8 +102,16 @@ module Ayadn
 			@view.clear_screen
 			print Status.downloading
 			list = @api.get_followings(username)
-			@view.show_list_followings(list, username)
+			get_list(:followings, list, username)
 		end
+
+		def followers(username)
+			@view.clear_screen
+			print Status.downloading
+			list = @api.get_followers(username)
+			get_list(:followers, list, username)
+		end
+
 
 
 
@@ -136,6 +144,8 @@ module Ayadn
 				@view.show_list_starred(list, target)
 			when :followings
 				@view.show_list_followings(list, target)
+			when :followers
+				@view.show_list_followers(list, target)
 			end
 		end
 

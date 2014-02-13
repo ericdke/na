@@ -168,6 +168,19 @@ module Ayadn
 			end
 		end
 
+		desc "followers @USERNAME", "Lists users following @username (ayadn -FWR @username)"
+		map "-FWR" => :followers
+		long_desc Descriptions.followers
+		def followers(*username)
+			init
+			unless username.empty?
+				username_array = add_arobase_if_absent(username)
+				Stream.new.followers(username_array.join)
+			else
+				puts Status.error_missing_username
+			end
+		end
+
 
 
 

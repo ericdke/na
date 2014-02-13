@@ -42,6 +42,9 @@ module Ayadn
 		def self.followings
 			%Q{Lists users @username is following.\nShortcut: replace 'followings' by '-FWG'}
 		end
+		def self.followers
+			%Q{Lists users following @username.\nShortcut: replace 'followers' by '-FWR'}
+		end
 
 
 

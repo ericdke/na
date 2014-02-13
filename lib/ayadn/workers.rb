@@ -81,14 +81,26 @@ module Ayadn
 				t.style = {:width => 80}
 				t.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
 			end
-			users_list = []
-			list.each do |key, value|
-				username, name = value[0], value[1]
-				users_list << {'username' => username, 'name' => name}
-			end
+			users_list = build_users_hash(list)
 			build_users_list(users_list, table)
 		end
 
+		def build_followers_list(list, target)
+			table = Terminal::Table.new do |t|
+				t.style = {:width => 80}
+				t.title = "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
+			end
+			users_list = build_users_hash(list)
+			build_users_list(users_list, table)
+		end
+
+		def build_users_hash(list)
+			users_list = []
+			list.each do |key, value|
+				users_list << {'username' => value[0], 'name' => value[1]}
+			end
+			users_list
+		end
 
 
 		private
