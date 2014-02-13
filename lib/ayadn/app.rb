@@ -6,7 +6,6 @@ module Ayadn
 		
 		desc "unified", "Shows the Unified Stream, aka your App.net timeline (ayadn -U)"
 		map "-U" => :unified
-		map "uni" => :unified
 		long_desc Descriptions.unified
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -17,7 +16,6 @@ module Ayadn
 
 		desc "checkins", "Shows the Checkins Stream (ayadn -K)"
 		map "-K" => :checkins
-		map "chk" => :checkins
 		long_desc Descriptions.checkins
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -28,7 +26,6 @@ module Ayadn
 
 		desc "global", "Shows the Global Stream (ayadn -G)"
 		map "-G" => :global
-		map "glo" => :global
 		long_desc Descriptions.global
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -39,7 +36,6 @@ module Ayadn
 
 		desc "trending", "Shows the Trending Stream (ayadn -TR)"
 		map "-TR" => :trending
-		map "tre" => :trending
 		long_desc Descriptions.trending
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -50,7 +46,6 @@ module Ayadn
 
 		desc "photos", "Shows the Photos Stream (ayadn -PH)"
 		map "-PH" => :photos
-		map "pho" => :photos
 		long_desc Descriptions.photos
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -71,7 +66,6 @@ module Ayadn
 
 		desc "mentions @USERNAME", "Shows posts containing a mention of a @username (ayadn -M @username)"
 		map "-M" => :mentions
-		map "men" => :mentions
 		long_desc Descriptions.mentions
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -100,6 +94,14 @@ module Ayadn
 			end
 		end
 
+		desc "interactions", "Shows your recent ADN activity (ayadn -INT)"
+		map "-INT" => :interactions
+		long_desc Descriptions.interactions
+		def interactions
+			init
+			Stream.new.interactions
+		end
+
 		desc "whatstarred @USERNAME", "Shows posts starred by @username (ayadn -WAS @username)"
 		map "-WAS" => :whatstarred
 		long_desc Descriptions.whatstarred
@@ -113,14 +115,6 @@ module Ayadn
 			else
 				puts Status.error_missing_username
 			end
-		end
-
-		desc "interactions", "Shows your recent ADN activity (ayadn -INT)"
-		map "-INT" => :interactions
-		long_desc Descriptions.interactions
-		def interactions
-			init
-			Stream.new.interactions
 		end
 
 		desc "whoreposted POST-ID", "Lists users who reposted post n°POST-ID (ayadn -WOR POST-ID)"
