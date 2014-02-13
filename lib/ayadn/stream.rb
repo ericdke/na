@@ -101,8 +101,8 @@ module Ayadn
 		def followings(username)
 			@view.clear_screen
 			print Status.downloading
-			list = get_data_from_response(@api.get_followings(username))
-			get_list(:followings, list, username)
+			list = @api.get_followings(username)
+			@view.show_list_followings(list, username)
 		end
 
 

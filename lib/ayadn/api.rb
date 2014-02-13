@@ -74,9 +74,29 @@ module Ayadn
 		end
 
 		def get_followings(username)
-			url = @endpoints.followings(username)
-			get_parsed_response(url)
-			#TODO pagination
+			build_follow_list(username, :followings)
+		end
+
+		def get_followers(username)
+			build_follow_list(username, :followers)
+		end
+
+		def build_follow_list(username, target)
+			options = {:count => 200, :before_id => nil}
+			big_hash = {}
+			loop do
+				url = @endpoints.followings(username, options) if target == :followings
+				url = @endpoints.followers(username, options) if target == :followers
+				resp = get_parsed_response(url)
+				users_hash = {}
+				resp['data'].each do |item|
+					users_hash[item['id']] = [item['username'], item['name']]
+				end
+				big_hash.merge!(users_hash)
+				break if resp['meta']['min_id'] == nil
+				options = {:count => 200, :before_id => resp['meta']['min_id']}
+			end
+			big_hash
 		end
 
 		private

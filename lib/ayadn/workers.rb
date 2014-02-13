@@ -81,7 +81,12 @@ module Ayadn
 				t.style = {:width => 80}
 				t.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
 			end
-			build_users_list(list, table)
+			users_list = []
+			list.each do |key, value|
+				username, name = value[0], value[1]
+				users_list << {'username' => username, 'name' => name}
+			end
+			build_users_list(users_list, table)
 		end
 
 

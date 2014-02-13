@@ -73,11 +73,12 @@ module Ayadn
 		end
 
 		def convo(post_id, options)
+			init(options)
 			POSTS_URL + "#{post_id}/replies/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
-		def followings(username)
-			USERS_URL + "#{username}/following/?access_token=#{$config.user_token}"
+		def followings(username, options)
+			USERS_URL + "#{username}/following/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
 		end
 
 		private
