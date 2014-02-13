@@ -135,9 +135,25 @@ module Ayadn
 			end
 		end
 
+		desc "who-starred POST-ID", "Lists users who starred post n°POST-ID (ayadn -WOS POST-ID)"
+		map "-WOS" => :whostarred
+		long_desc Descriptions.whostarred
+		def whostarred(post_id)
+			init
+			if post_id.is_integer?
+				Stream.new.whostarred(post_id)
+			else
+				puts Status.error_missing_post_id
+			end
+		end
 
-		desc "who-starred POST-ID", "Lists users who starred post n° POST-ID (ayadn -WOS POST-ID)"
-		#TODO
+
+
+
+
+
+
+
 
 
 		private

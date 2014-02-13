@@ -31,7 +31,10 @@ module Ayadn
 			%Q{Shows your recent ADN activity.\nShortcut: replace 'interactions' by '-INT'}
 		end
 		def self.whoreposted
-			%Q{Lists users who reposted post n° POST-ID.\nShortcut: replace 'who-reposted' by '-WOR'}
+			%Q{Lists users who reposted post n°POST-ID.\nShortcut: replace 'who-reposted' by '-WOR'}
+		end
+		def self.whostarred
+			%Q{Lists users who starred post n°POST-ID.\nShortcut: replace 'who-starred' by '-WOS'}
 		end
 	end
 end

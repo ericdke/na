@@ -63,6 +63,11 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
+		def get_whostarred(post_id)
+			url = @endpoints.whostarred(post_id)
+			get_parsed_response(url)
+		end
+
 		private
 
 		def get_raw_response(url)

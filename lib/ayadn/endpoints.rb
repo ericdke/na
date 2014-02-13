@@ -68,6 +68,10 @@ module Ayadn
 			POSTS_URL + "#{post_id}/reposters/?access_token=#{$config.user_token}"
 		end
 
+		def whostarred(post_id)
+			POSTS_URL + "#{post_id}/stars/?access_token=#{$config.user_token}"
+		end
+
 		private
 
 		def init(options)

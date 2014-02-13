@@ -60,18 +60,27 @@ module Ayadn
 			inter
 		end
 
-		def build_users_list(list, post_id = false)
+		def build_reposted_list(list, target)
 			view = Terminal::Table.new do |t|
-				if post_id
-					t.title = "List of users who reposted post ".color(:cyan) + "#{post_id}".color(:red) + "".color(:white)
-				end
-				list.each_with_index do |obj, index|
-					t << [ "@#{obj['username']} ".color(:green), "#{obj['name']}" ]
-					t << :separator unless index + 1 == list.length
-				end
+				t.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
-			view
 		end
+
+		def build_starred_list(list, target)
+			view = Terminal::Table.new do |t|
+				t.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
+			end
+		end
+
+		# def build_users_list(list)
+		# 	view = Terminal::Table.new do |t|
+		# 		list.each_with_index do |obj, index|
+		# 			t << [ "@#{obj['username']} ".color(:green), "#{obj['name']}" ]
+		# 			t << :separator unless index + 1 == list.length
+		# 		end
+		# 	end
+		# 	view
+		# end
 
 		private
 

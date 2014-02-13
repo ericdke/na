@@ -21,9 +21,16 @@ module Ayadn
 		def show_simple_stream(stream)
 			puts stream
 		end
+
 		def show_list_reposted(list, target)
 			#puts "List of users who reposted post ".color(:cyan) + "#{target}\n".color(:red)
-			puts @workers.build_users_list(list, target)
+			puts @workers.build_reposted_list(list, target)
+			puts "\n"
+		end
+
+		def show_list_starred(list, target)
+			#puts "List of users who starred post ".color(:cyan) + "#{target}\n".color(:red)
+			puts @workers.build_starred_list(list, target)
 			puts "\n"
 		end
 
