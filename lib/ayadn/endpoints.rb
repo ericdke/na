@@ -72,6 +72,10 @@ module Ayadn
 			POSTS_URL + "#{post_id}/stars/?access_token=#{$config.user_token}"
 		end
 
+		def convo(post_id, options)
+			POSTS_URL + "#{post_id}/replies/?access_token=#{$config.user_token}#{@options_list}"
+		end
+
 		private
 
 		def init(options)

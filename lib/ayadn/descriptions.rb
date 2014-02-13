@@ -36,5 +36,18 @@ module Ayadn
 		def self.whostarred
 			%Q{Lists users who starred post n°POST-ID.\nShortcut: replace 'whostarred' by '-WOS'}
 		end
+		def self.convo
+			%Q{Shows the conversation thread around post n°POST_ID.\nShortcut: replace 'convo' by '-CO'}
+		end
+
+
+
+
+
+
+
+
+
+
 	end
 end

@@ -91,6 +91,13 @@ module Ayadn
 			get_list(:whostarred, list, post_id)
 		end
 
+		def convo(post_id, options)
+			@view.clear_screen
+			print Status.downloading
+			stream = get_data_from_response(@api.get_convo(post_id, options))
+			get_view(stream, options)
+		end
+
 
 
 		private

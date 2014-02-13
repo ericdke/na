@@ -141,9 +141,19 @@ module Ayadn
 			end
 		end
 
-
-
-
+		desc "convo POST-ID", "Shows the conversation thread around post n°POST_ID (ayadn -CO POST-ID)"
+		map "-CO" => :convo
+		map "thread" => :convo
+		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		long_desc Descriptions.convo
+		def convo(post_id)
+			init
+			if post_id.is_integer?
+				Stream.new.convo(post_id, options)
+			else
+				puts Status.error_missing_post_id
+			end
+		end
 
 
 
@@ -159,6 +169,7 @@ module Ayadn
 		def add_arobase_if_absent(username)
 			username = username.first.chars.to_a
 			username.unshift("@") unless username.first == "@"
+			username
 		end
 
 	end
