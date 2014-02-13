@@ -73,6 +73,12 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
+		def get_followings(username)
+			url = @endpoints.followings(username)
+			get_parsed_response(url)
+			#TODO pagination
+		end
+
 		private
 
 		def get_raw_response(url)

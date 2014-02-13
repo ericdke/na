@@ -32,6 +32,11 @@ module Ayadn
 			puts "\n"
 		end
 
+		def show_list_followings(list, target)
+			puts @workers.build_followings_list(list, target)
+			puts "\n"
+		end
+
 		def show_interactions(stream)
 			#puts "\n"
 			puts @workers.build_interactions_stream(stream)

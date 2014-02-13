@@ -39,6 +39,9 @@ module Ayadn
 		def self.convo
 			%Q{Shows the conversation thread around post n°POST_ID.\nShortcut: replace 'convo' by '-CO'}
 		end
+		def self.followings
+			%Q{Lists users @username is following.\nShortcut: replace 'followings' by '-FWG'}
+		end
 
 
 

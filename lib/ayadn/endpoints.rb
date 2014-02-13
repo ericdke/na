@@ -76,6 +76,10 @@ module Ayadn
 			POSTS_URL + "#{post_id}/replies/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
+		def followings(username)
+			USERS_URL + "#{username}/following/?access_token=#{$config.user_token}"
+		end
+
 		private
 
 		def init(options)

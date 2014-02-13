@@ -76,6 +76,14 @@ module Ayadn
 			build_users_list(list, table)
 		end
 
+		def build_followings_list(list, target)
+			table = Terminal::Table.new do |t|
+				t.style = {:width => 80}
+				t.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
+			end
+			build_users_list(list, table)
+		end
+
 
 
 		private
