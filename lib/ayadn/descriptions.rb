@@ -45,6 +45,9 @@ module Ayadn
 		def self.followers
 			%Q{Lists users following @username.\nShortcut: replace 'followers' by '-FWR'}
 		end
+		def self.muted
+			%Q{Lists the users you muted.\nShortcut: replace 'muted' by '-MTD'}
+		end
 
 
 

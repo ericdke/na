@@ -85,6 +85,10 @@ module Ayadn
 			USERS_URL + "#{username}/followers/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
 		end
 
+		def muted(options)
+			USERS_URL + "me/muted/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+		end
+
 		private
 
 		def init(options)

@@ -42,6 +42,11 @@ module Ayadn
 			puts "\n"
 		end
 
+		def show_list_muted(list)
+			puts @workers.build_muted_list(list)
+			puts "\n"
+		end
+
 		def show_interactions(stream)
 			#puts "\n"
 			puts @workers.build_interactions_stream(stream)

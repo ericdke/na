@@ -112,6 +112,13 @@ module Ayadn
 			get_list(:followers, list, username)
 		end
 
+		def muted
+			@view.clear_screen
+			print Status.downloading
+			list = @api.get_muted
+			get_list(:muted, list, nil)
+		end
+
 
 
 
@@ -146,6 +153,8 @@ module Ayadn
 				@view.show_list_followings(list, target)
 			when :followers
 				@view.show_list_followers(list, target)
+			when :muted
+				@view.show_list_muted(list)
 			end
 		end
 

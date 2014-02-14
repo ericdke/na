@@ -181,6 +181,13 @@ module Ayadn
 			end
 		end
 
+		desc "muted", "Lists the users you muted (ayadn -MTD)"
+		map "-MTD" => :muted
+		long_desc Descriptions.muted
+		def muted
+			init
+			Stream.new.muted
+		end
 
 
 

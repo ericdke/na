@@ -74,19 +74,28 @@ module Ayadn
 		end
 
 		def get_followings(username)
-			build_follow_list(username, :followings)
+			build_list(username, :followings)
 		end
 
 		def get_followers(username)
-			build_follow_list(username, :followers)
+			build_list(username, :followers)
 		end
 
-		def build_follow_list(username, target)
+		def get_muted
+			build_list(nil, :muted)
+		end
+
+		def build_list(username, target)
 			options = {:count => 200, :before_id => nil}
 			big_hash = {}
 			loop do
-				url = @endpoints.followings(username, options) if target == :followings
-				url = @endpoints.followers(username, options) if target == :followers
+				if target == :followings
+					url = @endpoints.followings(username, options)
+				elsif target == :followers
+					url = @endpoints.followers(username, options)
+				elsif target == :muted
+					url = @endpoints.muted(options)
+				end
 				resp = get_parsed_response(url)
 				users_hash = {}
 				resp['data'].each do |item|

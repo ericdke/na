@@ -94,6 +94,15 @@ module Ayadn
 			build_users_list(users_list, table)
 		end
 
+		def build_muted_list(list)
+			table = Terminal::Table.new do |t|
+				t.style = {:width => 80}
+				t.title = "List of users you muted".color(:cyan) + "".color(:white)
+			end
+			users_list = build_users_hash(list)
+			build_users_list(users_list, table)
+		end
+
 		def build_users_hash(list)
 			users_list = []
 			list.each do |key, value|
