@@ -104,6 +104,9 @@ module Ayadn
 					url = @endpoints.blocked(options)
 				end
 				resp = get_parsed_response(url)
+
+				empty_data if resp['data'].empty?
+
 				users_hash = {}
 				resp['data'].each do |item|
 					users_hash[item['id']] = [item['username'], item['name'], item['you_follow'], item['follows_you']]
@@ -125,6 +128,11 @@ module Ayadn
 			r = JSON.parse(@cnx.get_response_from(url))
 			@cnx.check_errors(r['meta'])
 			return r
+		end
+
+		def empty_data
+			puts Status.empty_list
+			exit
 		end
 
 	end

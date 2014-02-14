@@ -9,5 +9,8 @@ module Ayadn
 		def self.error_missing_post_id
 			"\nYou have to specify a post id.\n".color(:red)
 		end
+		def self.empty_list
+			"\n\nThe list is empty.\n\n".color(:red)
+		end
 	end
 end
