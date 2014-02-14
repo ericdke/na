@@ -97,13 +97,26 @@ module Ayadn
 		def build_users_hash(list)
 			users_list = []
 			list.each do |key, value|
-				users_list << {'username' => value[0], 'name' => value[1]}
+				users_list << {'username' => value[0], 'name' => value[1], 'you_follow' => value[2] , 'follows_you' => value[3]}
 			end
 			users_list
 		end
 
 
 		private
+
+		def build_users_list(list, table)
+			list.each_with_index do |obj, index|
+				# if obj['follows_you']
+				# 	fy = "follows back".color(:blue)
+				# else
+				# 	fy = nil
+				# end
+				table << [ "@#{obj['username']} ".color(:green), "#{obj['name']}" ]
+				table << :separator unless index + 1 == list.length
+			end
+			table
+		end
 
 		def build_posts(data)
 			posts = {}
@@ -307,14 +320,6 @@ module Ayadn
 			# 	chk << content[:checkins][:checkins_website]
 			# 	chk << "\n"
 			# end
-		end
-
-		def build_users_list(list, table)
-			list.each_with_index do |obj, index|
-				table << [ "@#{obj['username']} ".color(:green), "#{obj['name']}" ]
-				table << :separator unless index + 1 == list.length
-			end
-			table
 		end
 
 		def parsed_time(string)
