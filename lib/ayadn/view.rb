@@ -9,7 +9,7 @@ module Ayadn
 			posts, view = @workers.build_stream_with_index(data)
 			#puts "\n"
 			puts view
-			File.open($config.config[:paths][:home] + "/index", "w") { |f| f.write(posts.to_json) }
+			@workers.save_indexed_posts(posts)
 		end
 
 		def show_posts(data)

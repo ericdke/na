@@ -120,6 +120,9 @@ module Ayadn
 			users_list
 		end
 
+		def save_indexed_posts(posts)
+			File.open($config.config[:paths][:home] + "/index", "w") { |f| f.write(posts.to_json) }
+		end
 
 		private
 
