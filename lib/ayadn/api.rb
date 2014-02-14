@@ -73,8 +73,13 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
-		def get_hashtag(hashtag, options)
-			url = @endpoints.hashtag(hashtag, options)
+		def get_hashtag(hashtag)
+			url = @endpoints.hashtag(hashtag)
+			get_parsed_response(url)
+		end
+
+		def get_search(words, options)
+			url = @endpoints.search(words, options)
 			get_parsed_response(url)
 		end
 

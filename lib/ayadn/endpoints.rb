@@ -93,9 +93,13 @@ module Ayadn
 			USERS_URL + "me/blocked/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
 		end
 
-		def hashtag(hashtag, options)
-			init(options)
+		def hashtag(hashtag)
 			POSTS_URL + "tag/#{hashtag}"
+		end
+
+		def search(words, options)
+			init(options)
+			POSTS_URL + "search?text=#{words}&access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		private

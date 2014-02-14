@@ -98,10 +98,17 @@ module Ayadn
 			get_view(stream, options)
 		end
 
-		def hashtag(hashtag, options)
+		def hashtag(hashtag)
 			@view.clear_screen
 			print Status.downloading
-			stream = get_data_from_response(@api.get_hashtag(hashtag, options))
+			stream = get_data_from_response(@api.get_hashtag(hashtag))
+			get_view(stream)
+		end
+
+		def search(words, options)
+			@view.clear_screen
+			print Status.downloading
+			stream = get_data_from_response(@api.get_search(words, options))
 			get_view(stream, options)
 		end
 

@@ -54,6 +54,9 @@ module Ayadn
 		def self.hashtag
 			%Q{Shows recent posts containing #HASHTAG.\nShortcut: replace 'hashtag' by '-TAG'}
 		end
+		def self.search
+			%Q{Shows recents posts containing WORD(S).\nShortcut: replace 'search' by '-S'}
+		end
 
 
 

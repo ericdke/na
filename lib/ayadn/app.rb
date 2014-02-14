@@ -199,12 +199,27 @@ module Ayadn
 
 		desc "hashtag HASHTAG", "Shows recent posts containing #HASHTAG (ayadn -TAG hashtag)"
 		map "-TAG" => :hashtag
-		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
-		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		long_desc Descriptions.hashtag
 		def hashtag(hashtag)
 			init
-			Stream.new.hashtag(hashtag, options)
+			Stream.new.hashtag(hashtag)
 		end
+
+		desc "search WORD(S)", "Shows recents posts containing WORD(S) (ayadn -S word1 word2 ...)"
+		map "-S" => :search
+		long_desc Descriptions.search
+		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		def search(*words)
+			init
+			Stream.new.search(words.join(","), options)
+		end
+
+
+
+
+
+
 
 
 
