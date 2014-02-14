@@ -119,6 +119,13 @@ module Ayadn
 			get_list(:muted, list, nil)
 		end
 
+		def blocked
+			@view.clear_screen
+			print Status.downloading
+			list = @api.get_blocked
+			get_list(:blocked, list, nil)
+		end
+
 
 
 
@@ -155,6 +162,8 @@ module Ayadn
 				@view.show_list_followers(list, target)
 			when :muted
 				@view.show_list_muted(list)
+			when :blocked
+				@view.show_list_blocked(list)
 			end
 		end
 

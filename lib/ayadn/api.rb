@@ -85,16 +85,23 @@ module Ayadn
 			build_list(nil, :muted)
 		end
 
+		def get_blocked
+			build_list(nil, :blocked)
+		end
+
 		def build_list(username, target)
 			options = {:count => 200, :before_id => nil}
 			big_hash = {}
 			loop do
-				if target == :followings
+				case target
+				when :followings
 					url = @endpoints.followings(username, options)
-				elsif target == :followers
+				when :followers
 					url = @endpoints.followers(username, options)
-				elsif target == :muted
+				when :muted
 					url = @endpoints.muted(options)
+				when :blocked
+					url = @endpoints.blocked(options)
 				end
 				resp = get_parsed_response(url)
 				users_hash = {}

@@ -189,6 +189,14 @@ module Ayadn
 			Stream.new.muted
 		end
 
+		desc "blocked", "Lists the users you blocked (ayadn -BKD)"
+		map "-BKD" => :blocked
+		long_desc Descriptions.blocked
+		def blocked
+			init
+			Stream.new.blocked
+		end
+
 
 
 		private

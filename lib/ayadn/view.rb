@@ -47,6 +47,11 @@ module Ayadn
 			puts "\n"
 		end
 
+		def show_list_blocked(list)
+			puts @workers.build_blocked_list(list)
+			puts "\n"
+		end
+
 		def show_interactions(stream)
 			#puts "\n"
 			puts @workers.build_interactions_stream(stream)

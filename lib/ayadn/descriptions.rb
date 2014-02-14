@@ -48,6 +48,9 @@ module Ayadn
 		def self.muted
 			%Q{Lists the users you muted.\nShortcut: replace 'muted' by '-MTD'}
 		end
+		def self.blocked
+			%Q{Lists the users you blocked.\nShortcut: replace 'blocked' by '-BKD'}
+		end
 
 
 
