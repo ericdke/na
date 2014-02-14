@@ -197,6 +197,15 @@ module Ayadn
 			Stream.new.blocked
 		end
 
+		desc "hashtag HASHTAG", "Shows recent posts containing #HASHTAG (ayadn -TAG hashtag)"
+		map "-TAG" => :hashtag
+		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		def hashtag(hashtag)
+			init
+			Stream.new.hashtag(hashtag, options)
+		end
+
 
 
 		private
@@ -210,6 +219,12 @@ module Ayadn
 			username.unshift("@") unless username.first == "@"
 			username
 		end
+
+		# def remove_octothorpe_if_present(hashtags)
+		# 	hashtags = hashtags.first.chars.to_a
+		# 	hashtags.shift("#") if hashtags.first == "#"
+		# 	hashtags
+		# end
 
 	end
 end

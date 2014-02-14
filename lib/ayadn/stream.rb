@@ -98,6 +98,13 @@ module Ayadn
 			get_view(stream, options)
 		end
 
+		def hashtag(hashtag, options)
+			@view.clear_screen
+			print Status.downloading
+			stream = get_data_from_response(@api.get_hashtag(hashtag, options))
+			get_view(stream, options)
+		end
+
 		def followings(username)
 			@view.clear_screen
 			print Status.downloading

@@ -73,6 +73,11 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
+		def get_hashtag(hashtag, options)
+			url = @endpoints.hashtag(hashtag, options)
+			get_parsed_response(url)
+		end
+
 		def get_followings(username)
 			build_list(username, :followings)
 		end

@@ -51,6 +51,9 @@ module Ayadn
 		def self.blocked
 			%Q{Lists the users you blocked.\nShortcut: replace 'blocked' by '-BKD'}
 		end
+		def self.hashtag
+			%Q{Shows recent posts containing #HASHTAG.\nShortcut: replace 'hashtag' by '-TAG'}
+		end
 
 
 

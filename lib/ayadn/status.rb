@@ -9,6 +9,9 @@ module Ayadn
 		def self.error_missing_post_id
 			"\nYou have to specify a post id.\n".color(:red)
 		end
+		def self.error_missing_hashtag
+			"\nYou have to specify one or more hashtag(s).\n".color(:red)
+		end
 		def self.empty_list
 			"\n\nThe list is empty.\n\n".color(:red)
 		end
