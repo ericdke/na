@@ -302,7 +302,7 @@ module Ayadn
 		end
 
 		def build_checkins(content)
-			chk = (".".color(:blue)) * (content[:checkins][:checkins_name].length || 10)
+			chk = (".".color($config.options[:colors][:dots])) * (content[:checkins][:checkins_name].length || 10)
 			chk << "\n"
 			unless content[:checkins][:checkins_name].empty?
 				chk << content[:checkins][:checkins_name]
@@ -348,11 +348,14 @@ module Ayadn
 
 		def colorize_text(text)
 			content = Array.new
-			for word in text.split(" ") do
+			@hashtag_color = $config.options[:colors][:hashtags]
+			@mention_color = $config.options[:colors][:mentions]
+			#for word in text.split(" ") do
+			for word in text.split(/(\?|\!)/) do
 				if word =~ /#\w+/
-                    content.push(word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(:cyan)))
+                    content.push(word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(@hashtag_color)))
 				elsif word =~ /@\w+/ 
-                    content.push(word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.red))
+                    content.push(word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(@mention_color)))
 				else
 					content.push(word)
 				end
