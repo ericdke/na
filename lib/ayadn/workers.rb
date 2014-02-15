@@ -233,14 +233,9 @@ module Ayadn
 							unless annotation_value['categories'].nil?
 								unless annotation_value['categories'][0].nil?
 						 			@checkins.merge!({
-						 				has_categories: true,
 						 				categories: annotation_value['categories'][0]['labels'].join(", ")
 						 				})
 						 		end
-							else
-						 		@checkins.merge!({
-						 			has_categories: false
-						 			})
 							end
 							unless annotation_value['factual_id'].nil?
 								@checkins.merge!({
@@ -298,83 +293,102 @@ module Ayadn
 		end
 
 		def build_checkins(content)
-			if content[:checkins][:checkins_name]
-				num_dots = content[:checkins][:checkins_name].length
+			unless content[:checkins][:name].nil?
+				num_dots = content[:checkins][:name].length
 			else
 				num_dots = 10
 			end
-			chk = (".".color($config.options[:colors][:dots])) * num_dots
-			chk << "\n"
+			hd = (".".color($config.options[:colors][:dots])) * num_dots
+			hd << "\n"
+			formatted = { header: hd }
 			content[:checkins].each do |key, val|
 				unless val.nil? || !val
-					chk << "#{val}\n"
+					case key
+					when :name
+						formatted.merge!({
+							name: "#{val}"
+						})
+					when :address
+						formatted.merge!({
+							address: "#{val}"
+						})
+					when :address_extended
+						formatted.merge!({
+							address_extended: "#{val}"
+						})
+					when :postcode
+						formatted.merge!({
+							postcode: "#{val}"
+						})
+					when :locality
+						formatted.merge!({
+							locality: "#{val}"
+						})
+					when :country_code
+						formatted.merge!({
+							country_code: "#{val}"
+						})
+					when :website
+						formatted.merge!({
+							website: "#{val}"
+						})
+					when :telephone
+						formatted.merge!({
+							telephone: "#{val}"
+						})
+					when :categories
+						formatted.merge!({
+							categories: "#{val}"
+						})
+
+					end
 				end
 			end
 			
-				# iterate over content[:checkins]
+			chk = formatted[:header]
+			unless formatted[:name].nil?
+				chk << formatted[:name].color($config.options[:colors][:dots])
+				chk << "\n"
+			end
+			unless formatted[:address].nil?
+				chk << formatted[:address]
+				chk << "\n"
+			end
+			if formatted.has_key?(:address_extended)
+				unless formatted[:address_extended].nil?
+					chk << formatted[:address_extended]
+					chk << "\n"
+				end
+			end
+			if formatted.has_key?(:country_code)
+				cc = "(#{formatted[:country_code]})".upcase
+			else
+				cc = ""
+			end
+			if formatted.has_key?(:postcode)
+				if formatted.has_key?(:locality)
+					chk << "#{formatted[:postcode]}, #{formatted[:locality]} #{cc}"
+					chk << "\n"
+				end
+			else
+				if formatted.has_key?(:locality)
+					chk << "#{formatted[:locality]} #{cc}"
+					chk << "\n"
+				end
+			end
+			if formatted.has_key?(:website)
+				chk << "#{formatted[:website]}"
+				chk << "\n"
+			end
+			if formatted.has_key?(:telephone)
+				chk << formatted[:telephone]
+				chk << "\n"
+			end
+			if formatted.has_key?(:categories)
+				chk << formatted[:categories]
+				chk << "\n"
+			end
 
-
-			#chk = (".".color($config.options[:colors][:dots])) * (content[:checkins][:checkins_name].length || 10)
-			#chk << "\n"
-
-			#puts content.inspect
-
-			# content[:checkins].each do |k,v|
-			# 	unless v.nil?
-			# 		puts v.inspect
-			# 		# chk << "#{v}"
-			# 		# chk << "\n" 
-			# 	end
-			# end
-
-			# unless content[:checkins][:checkins_name].nil?
-			# 	chk << content[:checkins][:checkins_name]
-			# 	chk << "\n"
-			# end
-			# unless content[:checkins][:checkins_address].nil?
-			# 	chk << content[:checkins][:checkins_address]
-			# 	chk << "\n"
-			# end
-			# begin
-			# 	unless content[:checkins][:checkins_address_extended].nil?
-			# 		chk << content[:checkins][:checkins_address_extended]
-			# 		chk << "\n"
-			# 	end
-			# rescue => e
-			# 	$logger.error "No ext. address in checkin post #{content[:id]}\nERROR: #{e.inspect}"
-			# end
-			# unless content[:checkins][:checkins_locality].nil?
-			# 	chk << content[:checkins][:checkins_locality]
-			# 	chk << " \n"
-			# end
-			# unless content[:checkins][:checkins_postcode].nil?
-			# 	chk << content[:checkins][:checkins_postcode]
-			# 	chk << "\n"
-			# end
-			# unless content[:checkins][:checkins_region].nil?
-			# 	chk << content[:checkins][:checkins_region]
-			# 	chk << " \n"
-			# end
-			# unless content[:checkins][:checkins_country_code].nil?
-			# 	chk << content[:checkins][:checkins_country_code]
-			# 	#chk << "\n"
-			# end
-			# begin
-			# 	unless content[:checkins][:checkins_phone].nil?
-			# 		chk << content[:checkins][:checkins_phone]
-			# 		chk << "\n"
-			# 	end
-			# rescue => e
-			# 	$logger.error "No phone in checkin post #{content[:id]}\nERROR: #{e.inspect}"
-			# end
-			# begin
-			# 	unless content[:checkins][:checkins_website].nil?
-			# 		chk << content[:checkins][:checkins_website]
-			# 		chk << "\n"
-			# 	end
-			# rescue => e
-			# 	$logger.error "No website in checkin post #{content[:id]}\nERROR: #{e.inspect}"
-			# end
 			chk.chomp
 		end
 
@@ -388,7 +402,7 @@ module Ayadn
 				view << build_checkins(content) 
 				view << "\n"
 			end
-			unless content[:links].nil?
+			unless content[:links].empty?
 				view << "\n"
 				content[:links].each do |link|
 					view << link.color($config.options[:colors][:link])
