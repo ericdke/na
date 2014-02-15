@@ -236,8 +236,12 @@ module Ayadn
 		end
 
 		def add_arobase_if_absent(username)
-			username = username.first.chars.to_a
-			username.unshift("@") unless username.first == "@"
+			unless username.first == "me"
+				username = username.first.chars.to_a
+				username.unshift("@") unless username.first == "@"
+			else
+				username = "me".chars.to_a
+			end
 			username
 		end
 

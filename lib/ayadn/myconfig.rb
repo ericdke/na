@@ -92,9 +92,9 @@ module Ayadn
 					id: :red,
 					index: :red,
 					username: :green,
-					name: :yellow,
+					name: :magenta,
 					date: :cyan,
-					link: :magenta,
+					link: :yellow,
 					dots: :blue,
 					hashtags: :cyan,
 					mentions: :red

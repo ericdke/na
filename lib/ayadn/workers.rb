@@ -19,8 +19,8 @@ module Ayadn
 				@view << content[:id].to_s.color($config.options[:colors][:id]) + " "
 				@view << build_content(content)
 			end
-			xxx = ap posts
-			exit
+			# xxx = ap posts
+			# exit
 			@view
 		end
 
@@ -80,7 +80,11 @@ module Ayadn
 		def build_followings_list(list, target)
 			table = Terminal::Table.new do |t|
 				t.style = { :width => $config.options[:formats][:table][:width] }
-				t.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
+				if target == "me"
+					t.title = "List of users you're following".color(:cyan) + "".color(:white)
+				else
+					t.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
+				end
 			end
 			users_list = build_users_hash(list)
 			build_users_list(users_list, table)
@@ -89,7 +93,11 @@ module Ayadn
 		def build_followers_list(list, target)
 			table = Terminal::Table.new do |t|
 				t.style = { :width => $config.options[:formats][:table][:width] }
-				t.title = "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
+				if target == "me"
+					t.title = "List of your followers".color(:cyan) + "".color(:white)
+				else
+					t.title = "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
+				end
 			end
 			users_list = build_users_hash(list)
 			build_users_list(users_list, table)
