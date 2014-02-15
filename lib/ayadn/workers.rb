@@ -142,127 +142,145 @@ module Ayadn
 			posts = {}
 			@count = 1
 			data.reverse.each do |post|
-				text = colorize_text(post['text']) || ""
-				thread_id = post['thread_id'] || nil
-				name = post['user']['name'] || ""
-				if post['repost_of']
-					is_repost = true
-					repost_of = post['repost_of']['id']
-					num_reposts = post['repost_of']['num_reposts']
+				name = post['user']['name'] || "(no name)".color(:blue)
+				unless post['text'].nil? || post['text'].empty?
+					text = colorize_text(post['text'])
 				else
-					is_repost = false
-					repost_of = nil
-					num_reposts = 0
+					text = "(no text)".color(:blue)
 				end
-				if post['reply_to']
-					is_reply = true
-					reply_to = post['reply_to']
-					num_replies = post['num_replies']
-				else
-					is_reply = false
-					reply_to = nil
-					num_replies = 0
-				end
+				
+				thread_id = post['thread_id']
+				
+				username = post['user']['username']
+				handle = "@" + username
+				date = parsed_time(post['created_at'])
+
+
+				# if post['repost_of']
+				# 	is_repost = true
+				# 	repost_of = post['repost_of']['id']
+				# 	num_reposts = post['repost_of']['num_reposts']
+				# else
+				# 	is_repost = false
+				# end
+				# if post['reply_to']
+				# 	is_reply = true
+				# 	reply_to = post['reply_to']
+				# 	num_replies = post['num_replies']
+				# else
+				# 	is_reply = false
+				# 	reply_to = nil
+				# 	num_replies = 0
+				# end
 				mentions = []
 				post['entities']['mentions'].each do |m|
 					mentions << m['name']
 				end
-				directed_to = mentions.first || nil
-				has_mentions = true
-				if mentions.empty?
-					has_mentions = false
-					mentions = nil
-				end
+				directed_to = mentions.first
 				tags = []
 				post['entities']['hashtags'].each do |h|
 					tags << h['name']
 				end
-				tags = nil if tags.empty?
 				links = []
 				post['entities']['links'].each do |l|
 					links << l['url']
 				end
-				links = nil if links.empty?
-				annotations_list = post['annotations']
-				unless annotations_list.empty?
-					xxx = 0
-					annotations_list.each do
-						annotation_type = annotations_list[xxx]['type']
-						annotation_value = annotations_list[xxx]['value']
-						if annotation_type == "net.app.core.checkin" || annotation_type == "net.app.ohai.location"
-							@checkins = true
-							@checkins_name = annotation_value['name']
-							@checkins_address = annotation_value['address']
-							@checkins_address_extended = annotation_value['address_extended'] || ""
-							@checkins_locality = annotation_value['locality'] || ""
-							@checkins_region = annotation_value['region'] || ""
-							@checkins_postcode = annotation_value['postcode'] || ""
-							@checkins_country_code = annotation_value['country_code'] || ""
-							@checkins_website = annotation_value['website'] || ""
-							@checkins_phone = annotation_value['telephone'] || ""
-							# if annotation_value['categories']
-							# 	unless annotation_value['categories'].empty?
-							# 		#@checkins_labels = annotation_value['categories']['labels']
-							# 		$logger.debug annotation_value['categories']
-							# 	end
-							# end
-							@factual_id = annotation_value['factual_id'] || ""
-							@checkins_id = annotation_value['id'] || ""
-							@longitude = annotation_value['longitude'] || ""
-							@latitude = annotation_value['latitude'] || ""
-						end
-						# if annotation_type == "net.app.core.oembed"
-						# 	@checkins_link = annotation_value['embeddable_url']
-						# end
-						xxx += 1
-					end
-				end
+				# annotations_list = post['annotations']
+				# unless annotations_list.empty?
+				# 	xxx = 0
+				# 	annotations_list.each do
+				# 		annotation_type = annotations_list[xxx]['type']
+				# 		annotation_value = annotations_list[xxx]['value']
+				# 		if annotation_type == "net.app.core.checkin" || annotation_type == "net.app.ohai.location"
+				# 			# @checkins = true
+				# 			# @checkins_name = annotation_value['name']
+				# 			# @checkins_address = annotation_value['address']
+				# 			# @checkins_address_extended = annotation_value['address_extended'] || ""
+				# 			# @checkins_locality = annotation_value['locality'] || ""
+				# 			# @checkins_region = annotation_value['region'] || ""
+				# 			# @checkins_postcode = annotation_value['postcode'] || ""
+				# 			# @checkins_country_code = annotation_value['country_code'] || ""
+				# 			# @checkins_website = annotation_value['website'] || ""
+				# 			# @checkins_phone = annotation_value['telephone'] || ""
+				# 			# if annotation_value['categories']
+				# 			# 	unless annotation_value['categories'].empty?
+				# 			# 		#@checkins_labels = annotation_value['categories']['labels']
+				# 			# 		$logger.debug annotation_value['categories']
+				# 			# 	end
+				# 			# end
+				# 			# @factual_id = annotation_value['factual_id'] || ""
+				# 			# @checkins_id = annotation_value['id'] || ""
+				# 			# @longitude = annotation_value['longitude'] || ""
+				# 			# @latitude = annotation_value['latitude'] || ""
+				# 		end
+				# 		# if annotation_type == "net.app.core.oembed"
+				# 		# 	@checkins_link = annotation_value['embeddable_url']
+				# 		# end
+				# 		xxx += 1
+				# 	end
+				# end
 				
 				posts.merge!(
-					{ 
-						post['id'].to_i => {
-							count: @count,
-							id: post['id'].to_i,
-							thread_id: thread_id.to_i,
-							username: post['user']['username'],
-							handle: "@" + post['user']['username'],
-							name: name,
-							date: parsed_time(post['created_at']),
-							is_repost: is_repost,
-							repost_of: repost_of,
-							num_reposts: num_reposts,
-							is_reply: is_reply,
-							reply_to: reply_to,
-							num_replies: num_replies,
-							text: text,
-							num_stars: post['num_stars'],
-							source_name: post['source']['name'],
-							has_mentions: has_mentions,
-							mentions: mentions,
-							directed_to: directed_to,
-							tags: tags,
-							links: links,
-							has_checkins: @checkins || false,
-							checkins: {
-								checkins_name: @checkins_name,
-								checkins_address: @checkins_address,
-								checkins_address_extended: @checkins_address_extended,
-								checkins_locality: @checkins_locality,
-								checkins_region: @checkins_region,
-								checkins_postcode: @checkins_postcode,
-								checkins_country_code: @checkins_country_code,
-								checkins_link: @checkins_link,
-								checkins_website: @checkins_website,
-								checkins_phone: @checkins_phone,
-								#checkins_labels: @checkins_labels,
-								checkins_id: @checkins_id,
-								longitude: @longitude,
-								latitude: @latitude,
-								factual_id: @factual_id
-							}
-						}
+					post['id'].to_i => {
+						count: @count,
+						id: post['id'].to_i,
+						name: name,
+						username: username,
+						handle: handle,
+						date: date,
+						text: text,
+						thread_id: thread_id,
+						directed_to: directed_to,
+						mentions: mentions,
+						tags: tags,
+						links: links
 					}
 				)
+
+				# posts.merge!(
+				# 	{ 
+				# 		post['id'].to_i => {
+				# 			count: @count,
+				# 			id: post['id'].to_i,
+				# 			thread_id: thread_id.to_i,
+				# 			username: post['user']['username'],
+				# 			handle: "@" + post['user']['username'],
+				# 			name: name,
+				# 			date: parsed_time(post['created_at']),
+				# 			is_repost: is_repost,
+				# 			repost_of: repost_of,
+				# 			num_reposts: num_reposts,
+				# 			is_reply: is_reply,
+				# 			reply_to: reply_to,
+				# 			num_replies: num_replies,
+				# 			text: text,
+				# 			num_stars: post['num_stars'],
+				# 			source_name: post['source']['name'],
+				# 			has_mentions: has_mentions,
+				# 			mentions: mentions,
+				# 			directed_to: directed_to,
+				# 			tags: tags,
+				# 			links: links
+				# 			# checkins: {
+				# 			# 	checkins_name: @checkins_name,
+				# 			# 	checkins_address: @checkins_address,
+				# 			# 	checkins_address_extended: @checkins_address_extended,
+				# 			# 	checkins_locality: @checkins_locality,
+				# 			# 	checkins_region: @checkins_region,
+				# 			# 	checkins_postcode: @checkins_postcode,
+				# 			# 	checkins_country_code: @checkins_country_code,
+				# 			# 	checkins_link: @checkins_link,
+				# 			# 	checkins_website: @checkins_website,
+				# 			# 	checkins_phone: @checkins_phone,
+				# 			# 	checkins_labels: @checkins_labels,
+				# 			# 	checkins_id: @checkins_id,
+				# 			# 	longitude: @longitude,
+				# 			# 	latitude: @latitude,
+				# 			# 	factual_id: @factual_id
+				# 			# }
+				# 		}
+				# 	}
+				# )
 
 				@count += 1
 			end
@@ -270,10 +288,11 @@ module Ayadn
 		end
 
 		def build_checkins(content)
-			chk = (".".color($config.options[:colors][:dots])) * (content[:checkins][:checkins_name].length || 10)
-			chk << "\n"
 
-			puts content.inspect
+			#chk = (".".color($config.options[:colors][:dots])) * (content[:checkins][:checkins_name].length || 10)
+			#chk << "\n"
+
+			#puts content.inspect
 
 			# content[:checkins].each do |k,v|
 			# 	unless v.nil?
@@ -339,10 +358,8 @@ module Ayadn
 			view << "\n"
 			view << content[:text]
 			view << "\n"
-			# if content[:has_checkins]
-			# 	view << build_checkins(content)
-			# 	view << "\n"
-			# end
+			# view << build_checkins(content) 
+			# view << "\n"
 			unless content[:links].nil?
 				view << "\n"
 				content[:links].each do |link|
@@ -384,7 +401,7 @@ module Ayadn
 					content.push(word)
 				end
 			end
-			content.join(" ")
+			content.join()
 		end
 
 	end
