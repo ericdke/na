@@ -135,15 +135,15 @@ module Ayadn
 			table
 		end
 
-		def build_posts(data)
+		def build_posts(data) # builds a hash of hashes, each hash is a normalized post with post id as a key
 			posts = {}
 			@count = 1
 			data.reverse.each do |post|
-				name = post['user']['name'] || "(no name)".color(:blue)
+				name = post['user']['name'] || "(no name)"
 				unless post['text'].nil? || post['text'].empty?
 					text = colorize_text(post['text'])
 				else
-					text = "(no text)".color(:blue)
+					text = "(no text)"
 				end
 				
 				thread_id = post['thread_id']
@@ -152,14 +152,31 @@ module Ayadn
 				handle = "@" + username
 				date = parsed_time(post['created_at'])
 
+				if post['source']['name']
+					source = post['source']['name']
+				else
+					source = "(unknown)"
+				end
 
+				if post['you_starred']
+					you_starred = true
+				else
+					you_starred = false
+				end
+				unless post['num_stars'].nil? || post['num_stars'] == 0
+					is_starred = true
+					num_stars = post['num_stars']
+				else
+					is_starred = false
+					num_stars = 0
+				end
 				if post['repost_of']
 					is_repost = true
 					repost_of = post['repost_of']['id']
 					num_reposts = post['repost_of']['num_reposts']
 				else
 					is_repost = false
-					repost_of = false
+					repost_of = nil
 					num_reposts = 0
 				end
 				if post['reply_to']
@@ -168,7 +185,7 @@ module Ayadn
 					num_replies = post['num_replies']
 				else
 					is_reply = false
-					reply_to = false
+					reply_to = nil
 					num_replies = 0
 				end
 				mentions = []
@@ -186,13 +203,14 @@ module Ayadn
 				end
 				annotations_list = post['annotations']
 				@has_checkins = false
+				@checkins = {}
 				unless annotations_list.nil?
 					xxx = 0
 					annotations_list.each do
 						annotation_type = annotations_list[xxx]['type']
 						annotation_value = annotations_list[xxx]['value']
 						case annotation_type
-						when "net.app.core.checkin", "net.app.ohai.location", "net.app.core.oembed"
+						when "net.app.core.checkin", "net.app.ohai.location"
 							@has_checkins = true
 							@checkins = {
 								name: annotation_value['name'],
@@ -202,29 +220,37 @@ module Ayadn
 								postcode: annotation_value['postcode'],
 								country_code: annotation_value['country_code'],
 								website: annotation_value['website'],
-								telephone: annotation_value['telephone'],
-								test: annotation_value['categories'].nil?
+								telephone: annotation_value['telephone']
 							}
 							unless annotation_value['categories'].nil?
-							# 	unless annotation_value['categories']['labels'].empty?
-							 		@checkins.merge!({
-							 			has_categories: true,
-							 			categories: annotation_value['categories'][0]['labels'].join(", ")
-							 			})
-							# 	end
+								unless annotation_value['categories'][0].nil?
+						 			@checkins.merge!({
+						 				has_categories: true,
+						 				categories: annotation_value['categories'][0]['labels'].join(", ")
+						 				})
+						 		end
 							else
-							 		@checkins.merge!({
-							 			has_categories: false
-							 			})
+						 		@checkins.merge!({
+						 			has_categories: false
+						 			})
 							end
-				# 			# @factual_id = annotation_value['factual_id'] || ""
-				# 			# @checkins_id = annotation_value['id'] || ""
-				# 			# @longitude = annotation_value['longitude'] || ""
-				# 			# @latitude = annotation_value['latitude'] || ""
+							unless annotation_value['factual_id'].nil?
+								@checkins.merge!({
+						 			factual_id: annotation_value['factual_id']
+						 			})
+							end
+							unless annotation_value['longitude'].nil?
+								@checkins.merge!({
+						 			longitude: annotation_value['longitude'],
+						 			latitude: annotation_value['latitude']
+						 			})
+							end
+						when "net.app.core.oembed"
+							@checkins.merge!({
+						 			embeddable_url: annotation_value['embeddable_url']
+						 			})
 				 		end
-				# 		# if annotation_type == "net.app.core.oembed"
-				# 		# 	@checkins_link = annotation_value['embeddable_url']
-				# 		# end
+
 				 		xxx += 1
 					end
 				end
@@ -249,55 +275,14 @@ module Ayadn
 						is_reply: is_reply,
 						reply_to: reply_to,
 						num_replies: num_replies,
+						is_starred: is_starred,
+						you_starred: you_starred,
+						num_stars: num_stars,
+						source_name: source,
 						has_checkins: @has_checkins,
 						checkins: @checkins
 					}
 				)
-
-				# posts.merge!(
-				# 	{ 
-				# 		post['id'].to_i => {
-				# 			count: @count,
-				# 			id: post['id'].to_i,
-				# 			thread_id: thread_id.to_i,
-				# 			username: post['user']['username'],
-				# 			handle: "@" + post['user']['username'],
-				# 			name: name,
-				# 			date: parsed_time(post['created_at']),
-				# 			is_repost: is_repost,
-				# 			repost_of: repost_of,
-				# 			num_reposts: num_reposts,
-				# 			is_reply: is_reply,
-				# 			reply_to: reply_to,
-				# 			num_replies: num_replies,
-				# 			text: text,
-				# 			num_stars: post['num_stars'],
-				# 			source_name: post['source']['name'],
-				# 			has_mentions: has_mentions,
-				# 			mentions: mentions,
-				# 			directed_to: directed_to,
-				# 			tags: tags,
-				# 			links: links
-				# 			# checkins: {
-				# 			# 	checkins_name: @checkins_name,
-				# 			# 	checkins_address: @checkins_address,
-				# 			# 	checkins_address_extended: @checkins_address_extended,
-				# 			# 	checkins_locality: @checkins_locality,
-				# 			# 	checkins_region: @checkins_region,
-				# 			# 	checkins_postcode: @checkins_postcode,
-				# 			# 	checkins_country_code: @checkins_country_code,
-				# 			# 	checkins_link: @checkins_link,
-				# 			# 	checkins_website: @checkins_website,
-				# 			# 	checkins_phone: @checkins_phone,
-				# 			# 	checkins_labels: @checkins_labels,
-				# 			# 	checkins_id: @checkins_id,
-				# 			# 	longitude: @longitude,
-				# 			# 	latitude: @latitude,
-				# 			# 	factual_id: @factual_id
-				# 			# }
-				# 		}
-				# 	}
-				# )
 
 				@count += 1
 			end
