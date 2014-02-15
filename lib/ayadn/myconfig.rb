@@ -39,7 +39,8 @@ module Ayadn
 					posts: "#{home}/backup/posts",
 					messages: "#{home}/backup/messages",
 					lists: "#{home}/backup/lists"
-				}
+				},
+				version: VERSION
 			}
 			unless Dir.exists?(@config[:paths][:home])
 				begin
@@ -74,6 +75,10 @@ module Ayadn
 					$logger.error "#{e}\n(in myconfig/create config.yml from defaults)"
 				end
 			end
+			version_file = @config[:paths][:config] + "/version.yml"
+			vf = File.new(version_file, "w")
+				vf.write({version: @config[:version]}.to_yaml)
+			vf.close
 		end
 
 		def write_config_file(config_file, options)
