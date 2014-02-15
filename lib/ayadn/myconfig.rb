@@ -42,26 +42,56 @@ module Ayadn
 				}
 			}
 			unless Dir.exists?(@config[:paths][:home])
-				Dir.mkdir(@config[:paths][:home])
+				begin
+					Dir.mkdir(@config[:paths][:home])
+				rescue Exception => e
+					$logger.fatal "#{e}\n(in myconfig/create home data folder)"
+				end
 			else
-				Dir.mkdir(@config[:paths][:log]) unless Dir.exists?(@config[:paths][:log])
-				Dir.mkdir(@config[:paths][:pagination]) unless Dir.exists?(@config[:paths][:pagination])
-				Dir.mkdir(@config[:paths][:config]) unless Dir.exists?(@config[:paths][:config])
-				Dir.mkdir(@config[:paths][:auth]) unless Dir.exists?(@config[:paths][:auth])
-				Dir.mkdir(@config[:paths][:downloads]) unless Dir.exists?(@config[:paths][:downloads])
-				Dir.mkdir(@config[:paths][:backup]) unless Dir.exists?(@config[:paths][:backup])
-				Dir.mkdir(@config[:paths][:posts]) unless Dir.exists?(@config[:paths][:posts])
-				Dir.mkdir(@config[:paths][:messages]) unless Dir.exists?(@config[:paths][:messages])
-				Dir.mkdir(@config[:paths][:lists]) unless Dir.exists?(@config[:paths][:lists])
+				begin
+					Dir.mkdir(@config[:paths][:log]) unless Dir.exists?(@config[:paths][:log])
+					Dir.mkdir(@config[:paths][:pagination]) unless Dir.exists?(@config[:paths][:pagination])
+					Dir.mkdir(@config[:paths][:config]) unless Dir.exists?(@config[:paths][:config])
+					Dir.mkdir(@config[:paths][:auth]) unless Dir.exists?(@config[:paths][:auth])
+					Dir.mkdir(@config[:paths][:downloads]) unless Dir.exists?(@config[:paths][:downloads])
+					Dir.mkdir(@config[:paths][:backup]) unless Dir.exists?(@config[:paths][:backup])
+					Dir.mkdir(@config[:paths][:posts]) unless Dir.exists?(@config[:paths][:posts])
+					Dir.mkdir(@config[:paths][:messages]) unless Dir.exists?(@config[:paths][:messages])
+					Dir.mkdir(@config[:paths][:lists]) unless Dir.exists?(@config[:paths][:lists])
+				rescue Exception => e
+					$logger.fatal "#{e}\n(in myconfig/create ayadn folders)"
+				end
 			end
 			config_file = @config[:paths][:config] + "/config.yml"
 			if File.exists?(config_file)
-				#load
+				@options = YAML.load(IO.read(config_file))
+				# Utility code for debug:
+				#loaded = YAML.load(IO.read(config_file))
+				# unless loaded == @options
+				# 	@options = loaded
+				# 	begin
+				# 		write_config_file(config_file, @options)
+				# 	rescue Exception => e
+				# 		$logger.error "#{e}\n(in myconfig/create config.yml from defaults)"
+				# 	end
+				# end
+				# puts loaded.inspect
+				# puts "\n\n"
+				# puts @options.inspect
+				# exit
 			else
-				puts "DEBUG: no config file at #{config_file}"
-				puts "creating one from defaults"
-				# if no file, create from defaults
+				begin
+					write_config_file(config_file, @options)
+				rescue Exception => e
+					$logger.error "#{e}\n(in myconfig/create config.yml from defaults)"
+				end
 			end
+		end
+
+		def write_config_file(config_file, options)
+			f = File.new(config_file, "w")
+				f.write(options.to_yaml)
+			f.close
 		end
 
 		private
@@ -123,7 +153,14 @@ module Ayadn
 				},
 				identity: {
 					prefix: "me"
-				} 
+				},
+				skipped: {
+					source: [],
+					mentions: [],
+					hashtags: [],
+					repost_of: [],
+					words: []
+				}
 			}
 		end
 

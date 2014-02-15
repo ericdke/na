@@ -130,7 +130,11 @@ module Ayadn
 		end
 
 		def save_indexed_posts(posts)
-			File.open($config.config[:paths][:pagination] + "/index", "w") { |f| f.write(posts.to_json) }
+			begin
+				File.open($config.config[:paths][:pagination] + "/index", "w") { |f| f.write(posts.to_json) }	
+			rescue Exception => e
+				$logger.error "#{e}\n(in workers/save_indexed_posts)"
+			end
 		end
 
 		private
