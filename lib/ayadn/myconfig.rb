@@ -65,20 +65,8 @@ module Ayadn
 			config_file = @config[:paths][:config] + "/config.yml"
 			if File.exists?(config_file)
 				@options = YAML.load(IO.read(config_file))
-				# Utility code for debug:
-				#loaded = YAML.load(IO.read(config_file))
-				# unless loaded == @options
-				# 	@options = loaded
-				# 	begin
-				# 		write_config_file(config_file, @options)
-				# 	rescue Exception => e
-				# 		$logger.error "#{e}\n(in myconfig/create config.yml from defaults)"
-				# 	end
-				# end
-				# puts loaded.inspect
-				# puts "\n\n"
-				# puts @options.inspect
-				# exit
+				#ap @options
+				#exit
 			else
 				begin
 					write_config_file(config_file, @options)
