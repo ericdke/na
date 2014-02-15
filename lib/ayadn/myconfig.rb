@@ -53,8 +53,6 @@ module Ayadn
 			}
 		end
 
-		
-
 		def defaults
 			{
 				timeline: {
@@ -87,7 +85,7 @@ module Ayadn
 				},
 				formats: {
 					table: {
-						width: 80
+						width: 75
 					}
 				},
 				colors: {
@@ -102,8 +100,8 @@ module Ayadn
 					mentions: :red
 				},
 				pinboard: {
-					login: "",
-					password: ""
+					login: nil,
+					password: nil
 				},
 				backup: {
 					auto_save_sent_posts: false,

@@ -60,17 +60,17 @@ module Ayadn
 		def settings			
 			table = Terminal::Table.new do |t|
 				t.style = { :width => $config.options[:formats][:table][:width] }
-				t.title = "Current Ayadn settings"
-				t.headings = [ "Category", "Parameter", "Value(s)" ]
+				t.title = "Current Ayadn settings".color(:cyan)
+				t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
 				@iter = 0
 				$config.options.each do |k,v|
 					v.each do |x,y|
 						t << :separator if @iter >= 1
 						unless y.is_a?(Hash)
-							t << [ k, x, y ]
+							t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), y.to_s.color(:green) ]
 						else
 							y.each do |c|
-								t << [ k, x, "#{c[0]} = #{c[1]}" ]
+								t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), "#{c[0]} = #{c[1]}".color(:green) ]
 							end
 						end
 						@iter += 1
