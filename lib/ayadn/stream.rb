@@ -140,6 +140,10 @@ module Ayadn
 			get_list(:blocked, list, nil)
 		end
 
+		def view_settings
+			@view.clear_screen
+			@view.settings
+		end
 
 
 

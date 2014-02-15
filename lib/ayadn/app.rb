@@ -215,8 +215,13 @@ module Ayadn
 			Stream.new.search(words.join(","), options)
 		end
 
-
-
+		desc "settings", "Lists current Ayadn settings (ayadn -OPT)"
+		map "-OPT" => :settings
+		long_desc Descriptions.settings
+		def settings
+			init
+			Stream.new.view_settings
+		end
 
 
 

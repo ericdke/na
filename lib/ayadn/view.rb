@@ -57,6 +57,29 @@ module Ayadn
 			puts @workers.build_interactions_stream(stream)
 		end
 
+		def settings			
+			table = Terminal::Table.new do |t|
+				t.style = { :width => $config.options[:formats][:table][:width] }
+				t.title = "Current Ayadn settings"
+				t.headings = [ "Category", "Parameter", "Value(s)" ]
+				@iter = 0
+				$config.options.each do |k,v|
+					v.each do |x,y|
+						t << :separator if @iter >= 1
+						unless y.is_a?(Hash)
+							t << [ k, x, y ]
+						else
+							y.each do |c|
+								t << [ k, x, "#{c[0]} = #{c[1]}" ]
+							end
+						end
+						@iter += 1
+					end
+				end
+			end
+			puts table
+		end
+
 		def clear_line
 			print "\r                                            \n"
 		end

@@ -4,12 +4,10 @@ module Ayadn
 
 		AYADN_CLIENT_ID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
 
-		attr_accessor :options, :config, :id_prefix
+		attr_accessor :options, :config
 
 		def initialize
 			@user_token = IO.read(File.expand_path("../../../token", __FILE__)).chomp
-			@id_prefix = "me"
-			@home = Dir.home + "/ayadn2/data/#{@id_prefix}"
 			load_config
 		end
 
@@ -26,19 +24,9 @@ module Ayadn
 			@user_token
 		end
 
-		private
-
-		def ayadn_config
-			{
-				paths: {
-					home: @home
-				}
-			}
-		end
-
 		def load_config
+			@options = defaults # to be overridden later in the method by the loaded file
 			@config = ayadn_config
-			@options = defaults # temp
 			# check if installed config
 			# yes => load
 			# no => create from defaults then load
@@ -55,6 +43,18 @@ module Ayadn
 			end
 		end
 
+		private
+
+		def ayadn_config
+			{
+				paths: {
+					home: Dir.home + "/ayadn2/data/#{@options[:identity][:prefix]}" #temp, will be /ayadn/data in v1
+				}
+			}
+		end
+
+		
+
 		def defaults
 			{
 				timeline: {
@@ -65,7 +65,9 @@ module Ayadn
 					show_clients: true,
 					show_symbols: true,
 					show_reposters: true,
-					show_original_post: false
+					show_original_post: false,
+					show_real_name: true,
+					show_date: true
 				},
 				counts: {
 					default: 50,
@@ -98,7 +100,19 @@ module Ayadn
 					dots: :blue,
 					hashtags: :cyan,
 					mentions: :red
-				}
+				},
+				pinboard: {
+					login: "",
+					password: ""
+				},
+				backup: {
+					auto_save_sent_posts: false,
+					auto_save_sent_messages: false,
+					auto_save_lists: false
+				},
+				identity: {
+					prefix: "me"
+				} 
 			}
 		end
 

@@ -57,6 +57,9 @@ module Ayadn
 		def self.search
 			%Q{Shows recents posts containing WORD(S).\nShortcut: replace 'search' by '-S'}
 		end
+		def self.settings
+			%Q{Lists current Ayadn settings.\nShortcut: replace 'settings' by '-OPT'}
+		end
 
 
 
