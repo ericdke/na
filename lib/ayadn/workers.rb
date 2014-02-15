@@ -298,7 +298,18 @@ module Ayadn
 		end
 
 		def build_checkins(content)
-			""
+			if content[:checkins][:checkins_name]
+				num_dots = content[:checkins][:checkins_name].length
+			else
+				num_dots = 10
+			end
+			chk = (".".color($config.options[:colors][:dots])) * num_dots
+			chk << "\n"
+			content[:checkins].each do |key, val|
+				unless val.nil? || !val
+					chk << "#{val}\n"
+				end
+			end
 			
 				# iterate over content[:checkins]
 
@@ -364,6 +375,7 @@ module Ayadn
 			# rescue => e
 			# 	$logger.error "No website in checkin post #{content[:id]}\nERROR: #{e.inspect}"
 			# end
+			chk.chomp
 		end
 
 		def build_content(content)
