@@ -19,6 +19,8 @@ module Ayadn
 				@view << content[:id].to_s.color($config.options[:colors][:id]) + " "
 				@view << build_content(content)
 			end
+			xxx = ap posts
+			exit
 			@view
 		end
 
@@ -127,11 +129,6 @@ module Ayadn
 
 		def build_users_list(list, table)
 			list.each_with_index do |obj, index|
-				# if obj['follows_you']
-				# 	fy = "follows back".color(:blue)
-				# else
-				# 	fy = nil
-				# end
 				table << [ "@#{obj[:username]} ".color($config.options[:colors][:username]), "#{obj[:name]}" ]
 				table << :separator unless index + 1 == list.length
 			end
@@ -156,27 +153,29 @@ module Ayadn
 				date = parsed_time(post['created_at'])
 
 
-				# if post['repost_of']
-				# 	is_repost = true
-				# 	repost_of = post['repost_of']['id']
-				# 	num_reposts = post['repost_of']['num_reposts']
-				# else
-				# 	is_repost = false
-				# end
-				# if post['reply_to']
-				# 	is_reply = true
-				# 	reply_to = post['reply_to']
-				# 	num_replies = post['num_replies']
-				# else
-				# 	is_reply = false
-				# 	reply_to = nil
-				# 	num_replies = 0
-				# end
+				if post['repost_of']
+					is_repost = true
+					repost_of = post['repost_of']['id']
+					num_reposts = post['repost_of']['num_reposts']
+				else
+					is_repost = false
+					repost_of = false
+					num_reposts = 0
+				end
+				if post['reply_to']
+					is_reply = true
+					reply_to = post['reply_to']
+					num_replies = post['num_replies']
+				else
+					is_reply = false
+					reply_to = false
+					num_replies = 0
+				end
 				mentions = []
 				post['entities']['mentions'].each do |m|
 					mentions << m['name']
 				end
-				directed_to = mentions.first
+				directed_to = mentions.first || false
 				tags = []
 				post['entities']['hashtags'].each do |h|
 					tags << h['name']
@@ -185,40 +184,50 @@ module Ayadn
 				post['entities']['links'].each do |l|
 					links << l['url']
 				end
-				# annotations_list = post['annotations']
-				# unless annotations_list.empty?
-				# 	xxx = 0
-				# 	annotations_list.each do
-				# 		annotation_type = annotations_list[xxx]['type']
-				# 		annotation_value = annotations_list[xxx]['value']
-				# 		if annotation_type == "net.app.core.checkin" || annotation_type == "net.app.ohai.location"
-				# 			# @checkins = true
-				# 			# @checkins_name = annotation_value['name']
-				# 			# @checkins_address = annotation_value['address']
-				# 			# @checkins_address_extended = annotation_value['address_extended'] || ""
-				# 			# @checkins_locality = annotation_value['locality'] || ""
-				# 			# @checkins_region = annotation_value['region'] || ""
-				# 			# @checkins_postcode = annotation_value['postcode'] || ""
-				# 			# @checkins_country_code = annotation_value['country_code'] || ""
-				# 			# @checkins_website = annotation_value['website'] || ""
-				# 			# @checkins_phone = annotation_value['telephone'] || ""
-				# 			# if annotation_value['categories']
-				# 			# 	unless annotation_value['categories'].empty?
-				# 			# 		#@checkins_labels = annotation_value['categories']['labels']
-				# 			# 		$logger.debug annotation_value['categories']
-				# 			# 	end
-				# 			# end
+				annotations_list = post['annotations']
+				@has_checkins = false
+				unless annotations_list.nil?
+					xxx = 0
+					annotations_list.each do
+						annotation_type = annotations_list[xxx]['type']
+						annotation_value = annotations_list[xxx]['value']
+						case annotation_type
+						when "net.app.core.checkin", "net.app.ohai.location", "net.app.core.oembed"
+							@has_checkins = true
+							@checkins = {
+								name: annotation_value['name'],
+								address: annotation_value['address'],
+								address_extended: annotation_value['address_extended'],
+								locality: annotation_value['locality'],
+								postcode: annotation_value['postcode'],
+								country_code: annotation_value['country_code'],
+								website: annotation_value['website'],
+								telephone: annotation_value['telephone'],
+								test: annotation_value['categories'].nil?
+							}
+							unless annotation_value['categories'].nil?
+							# 	unless annotation_value['categories']['labels'].empty?
+							 		@checkins.merge!({
+							 			has_categories: true,
+							 			categories: annotation_value['categories'][0]['labels'].join(", ")
+							 			})
+							# 	end
+							else
+							 		@checkins.merge!({
+							 			has_categories: false
+							 			})
+							end
 				# 			# @factual_id = annotation_value['factual_id'] || ""
 				# 			# @checkins_id = annotation_value['id'] || ""
 				# 			# @longitude = annotation_value['longitude'] || ""
 				# 			# @latitude = annotation_value['latitude'] || ""
-				# 		end
+				 		end
 				# 		# if annotation_type == "net.app.core.oembed"
 				# 		# 	@checkins_link = annotation_value['embeddable_url']
 				# 		# end
-				# 		xxx += 1
-				# 	end
-				# end
+				 		xxx += 1
+					end
+				end
 				
 				posts.merge!(
 					post['id'].to_i => {
@@ -233,7 +242,15 @@ module Ayadn
 						directed_to: directed_to,
 						mentions: mentions,
 						tags: tags,
-						links: links
+						links: links,
+						is_repost: is_repost,
+						repost_of: repost_of,
+						num_reposts: num_reposts,
+						is_reply: is_reply,
+						reply_to: reply_to,
+						num_replies: num_replies,
+						has_checkins: @has_checkins,
+						checkins: @checkins
 					}
 				)
 
@@ -288,6 +305,10 @@ module Ayadn
 		end
 
 		def build_checkins(content)
+			""
+			
+				# iterate over content[:checkins]
+
 
 			#chk = (".".color($config.options[:colors][:dots])) * (content[:checkins][:checkins_name].length || 10)
 			#chk << "\n"
@@ -358,8 +379,10 @@ module Ayadn
 			view << "\n"
 			view << content[:text]
 			view << "\n"
-			# view << build_checkins(content) 
-			# view << "\n"
+			if content[:has_checkins]
+				view << build_checkins(content) 
+				view << "\n"
+			end
 			unless content[:links].nil?
 				view << "\n"
 				content[:links].each do |link|
