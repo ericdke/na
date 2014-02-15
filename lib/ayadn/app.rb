@@ -1,7 +1,6 @@
 module Ayadn
 	class App < Thor
 		package_name "ayadn"
-		$logger = Logger.new(Dir.home + '/Sandbox/ayadn.log', 'weekly')
 
 		%w{stream api descriptions endpoints cnx view workers myconfig status extend}.each { |r| require_relative "#{r}" }
 		
@@ -233,6 +232,7 @@ module Ayadn
 
 		def init
 			$config = MyConfig.new
+			$logger = Logger.new($config.config[:paths][:log] + "/ayadn.log", 'monthly')
 		end
 
 		def add_arobase_if_absent(username)

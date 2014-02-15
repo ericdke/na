@@ -130,7 +130,7 @@ module Ayadn
 		end
 
 		def save_indexed_posts(posts)
-			File.open($config.config[:paths][:home] + "/index", "w") { |f| f.write(posts.to_json) }
+			File.open($config.config[:paths][:pagination] + "/index", "w") { |f| f.write(posts.to_json) }
 		end
 
 		private

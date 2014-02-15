@@ -26,14 +26,35 @@ module Ayadn
 
 		def load_config
 			@options = defaults # to be overridden later in the method by the loaded file
-			@config = ayadn_config
-			# check if installed config
-			# yes => load
-			# no => create from defaults then load
-			config_file = @config[:paths][:home] + "/config.yml"
+			home = Dir.home + "/ayadn2/data/#{@options[:identity][:prefix]}" #temp, will be /ayadn/data in v1
+			@config = {
+				paths: {
+					home: home,
+					log: "#{home}/log",
+					pagination: "#{home}/pagination",
+					config: "#{home}/config",
+					auth: "#{home}/auth",
+					downloads: "#{home}/downloads",
+					backup: "#{home}/backup",
+					posts: "#{home}/backup/posts",
+					messages: "#{home}/backup/messages",
+					lists: "#{home}/backup/lists"
+				}
+			}
 			unless Dir.exists?(@config[:paths][:home])
 				Dir.mkdir(@config[:paths][:home])
+			else
+				Dir.mkdir(@config[:paths][:log]) unless Dir.exists?(@config[:paths][:log])
+				Dir.mkdir(@config[:paths][:pagination]) unless Dir.exists?(@config[:paths][:pagination])
+				Dir.mkdir(@config[:paths][:config]) unless Dir.exists?(@config[:paths][:config])
+				Dir.mkdir(@config[:paths][:auth]) unless Dir.exists?(@config[:paths][:auth])
+				Dir.mkdir(@config[:paths][:downloads]) unless Dir.exists?(@config[:paths][:downloads])
+				Dir.mkdir(@config[:paths][:backup]) unless Dir.exists?(@config[:paths][:backup])
+				Dir.mkdir(@config[:paths][:posts]) unless Dir.exists?(@config[:paths][:posts])
+				Dir.mkdir(@config[:paths][:messages]) unless Dir.exists?(@config[:paths][:messages])
+				Dir.mkdir(@config[:paths][:lists]) unless Dir.exists?(@config[:paths][:lists])
 			end
+			config_file = @config[:paths][:config] + "/config.yml"
 			if File.exists?(config_file)
 				#load
 			else
@@ -44,14 +65,6 @@ module Ayadn
 		end
 
 		private
-
-		def ayadn_config
-			{
-				paths: {
-					home: Dir.home + "/ayadn2/data/#{@options[:identity][:prefix]}" #temp, will be /ayadn/data in v1
-				}
-			}
-		end
 
 		def defaults
 			{
