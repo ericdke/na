@@ -1,6 +1,7 @@
 module Ayadn
 	class App < Thor
 		package_name "ayadn"
+		$logger = Logger.new(Dir.home + '/Sandbox/ayadn.log', 'weekly')
 
 		%w{stream api descriptions endpoints cnx view workers myconfig status extend}.each { |r| require_relative "#{r}" }
 		

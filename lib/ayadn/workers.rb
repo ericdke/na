@@ -184,27 +184,32 @@ module Ayadn
 				end
 				links = nil if links.empty?
 				annotations_list = post['annotations']
-				if annotations_list != nil
+				unless annotations_list.empty?
 					xxx = 0
 					annotations_list.each do
 						annotation_type = annotations_list[xxx]['type']
 						annotation_value = annotations_list[xxx]['value']
 						if annotation_type == "net.app.core.checkin" || annotation_type == "net.app.ohai.location"
 							@checkins = true
-							@checkins_name = annotation_value['name'] || ""
-							@checkins_address = annotation_value['address'] || ""
-							#@checkins_address_extended = annotation_value['address_extended'] || ""
+							@checkins_name = annotation_value['name']
+							@checkins_address = annotation_value['address']
+							@checkins_address_extended = annotation_value['address_extended'] || ""
 							@checkins_locality = annotation_value['locality'] || ""
 							@checkins_region = annotation_value['region'] || ""
 							@checkins_postcode = annotation_value['postcode'] || ""
 							@checkins_country_code = annotation_value['country_code'] || ""
-							#@checkins_website = annotation_value['website'] || nil
-							#@checkins_phone = annotation_value['telephone'] || nil
-							#@checkins_labels = annotation_value['categories']['labels'] || ""
-							#@factual_id = annotation_value['factual_id'] || ""
-							#@checkins_id = annotation_value['id'] || ""
-							#@longitude = annotation_value['longitude'] || ""
-							#@latitude = annotation_value['latitude'] || ""
+							@checkins_website = annotation_value['website'] || ""
+							@checkins_phone = annotation_value['telephone'] || ""
+							# if annotation_value['categories']
+							# 	unless annotation_value['categories'].empty?
+							# 		#@checkins_labels = annotation_value['categories']['labels']
+							# 		$logger.debug annotation_value['categories']
+							# 	end
+							# end
+							@factual_id = annotation_value['factual_id'] || ""
+							@checkins_id = annotation_value['id'] || ""
+							@longitude = annotation_value['longitude'] || ""
+							@latitude = annotation_value['latitude'] || ""
 						end
 						# if annotation_type == "net.app.core.oembed"
 						# 	@checkins_link = annotation_value['embeddable_url']
@@ -241,19 +246,19 @@ module Ayadn
 							checkins: {
 								checkins_name: @checkins_name,
 								checkins_address: @checkins_address,
-								#checkins_address_extended: @checkins_address_extended,
+								checkins_address_extended: @checkins_address_extended,
 								checkins_locality: @checkins_locality,
 								checkins_region: @checkins_region,
 								checkins_postcode: @checkins_postcode,
 								checkins_country_code: @checkins_country_code,
-								#checkins_link: @checkins_link || ""
-								#checkins_website: @checkins_website,
-								#checkins_phone: @checkins_phone,
+								checkins_link: @checkins_link,
+								checkins_website: @checkins_website,
+								checkins_phone: @checkins_phone,
 								#checkins_labels: @checkins_labels,
-								#checkins_id: @checkins_id,
-								#longitude: @longitude,
-								#latitude: @latitude,
-								#factual_id: @factual_id
+								checkins_id: @checkins_id,
+								longitude: @longitude,
+								latitude: @latitude,
+								factual_id: @factual_id
 							}
 						}
 					}
@@ -264,23 +269,80 @@ module Ayadn
 			posts
 		end
 
+		def build_checkins(content)
+			chk = (".".color($config.options[:colors][:dots])) * (content[:checkins][:checkins_name].length || 10)
+			chk << "\n"
+
+			puts content.inspect
+
+			# content[:checkins].each do |k,v|
+			# 	unless v.nil?
+			# 		puts v.inspect
+			# 		# chk << "#{v}"
+			# 		# chk << "\n" 
+			# 	end
+			# end
+
+			# unless content[:checkins][:checkins_name].nil?
+			# 	chk << content[:checkins][:checkins_name]
+			# 	chk << "\n"
+			# end
+			# unless content[:checkins][:checkins_address].nil?
+			# 	chk << content[:checkins][:checkins_address]
+			# 	chk << "\n"
+			# end
+			# begin
+			# 	unless content[:checkins][:checkins_address_extended].nil?
+			# 		chk << content[:checkins][:checkins_address_extended]
+			# 		chk << "\n"
+			# 	end
+			# rescue => e
+			# 	$logger.error "No ext. address in checkin post #{content[:id]}\nERROR: #{e.inspect}"
+			# end
+			# unless content[:checkins][:checkins_locality].nil?
+			# 	chk << content[:checkins][:checkins_locality]
+			# 	chk << " \n"
+			# end
+			# unless content[:checkins][:checkins_postcode].nil?
+			# 	chk << content[:checkins][:checkins_postcode]
+			# 	chk << "\n"
+			# end
+			# unless content[:checkins][:checkins_region].nil?
+			# 	chk << content[:checkins][:checkins_region]
+			# 	chk << " \n"
+			# end
+			# unless content[:checkins][:checkins_country_code].nil?
+			# 	chk << content[:checkins][:checkins_country_code]
+			# 	#chk << "\n"
+			# end
+			# begin
+			# 	unless content[:checkins][:checkins_phone].nil?
+			# 		chk << content[:checkins][:checkins_phone]
+			# 		chk << "\n"
+			# 	end
+			# rescue => e
+			# 	$logger.error "No phone in checkin post #{content[:id]}\nERROR: #{e.inspect}"
+			# end
+			# begin
+			# 	unless content[:checkins][:checkins_website].nil?
+			# 		chk << content[:checkins][:checkins_website]
+			# 		chk << "\n"
+			# 	end
+			# rescue => e
+			# 	$logger.error "No website in checkin post #{content[:id]}\nERROR: #{e.inspect}"
+			# end
+		end
+
 		def build_content(content)
 			view = ""
 			view << build_header(content)
 			view << "\n"
 			view << content[:text]
 			view << "\n"
-		begin
-			if content[:has_checkins]
-				view << build_checkins(content)
-				view << "\n"
-			end
-		rescue => e
-			puts e.inspect
-			puts view
-			jj content
-			exit
-		end
+			# if content[:has_checkins]
+			# 	view << build_checkins(content)
+			# 	view << "\n"
+			# end
 			unless content[:links].nil?
 				view << "\n"
 				content[:links].each do |link|
@@ -301,46 +363,7 @@ module Ayadn
 			header << "\n"
 		end
 
-		def build_checkins(content)
-			chk = (".".color($config.options[:colors][:dots])) * (content[:checkins][:checkins_name].length || 10)
-			chk << "\n"
-			unless content[:checkins][:checkins_name].empty?
-				chk << content[:checkins][:checkins_name]
-				chk << "\n"
-			end
-			unless content[:checkins][:checkins_address].empty?
-				chk << content[:checkins][:checkins_address]
-				chk << "\n"
-			end
-			# unless content[:checkins][:checkins_address_extended].empty?
-			# 	chk << content[:checkins][:checkins_address_extended]
-			# 	chk << "\n"
-			# end
-			unless content[:checkins][:checkins_locality].empty?
-				chk << content[:checkins][:checkins_locality]
-				chk << " \n"
-			end
-			unless content[:checkins][:checkins_postcode].empty?
-				chk << content[:checkins][:checkins_postcode]
-				chk << "\n"
-			end
-			unless content[:checkins][:checkins_region].empty?
-				chk << content[:checkins][:checkins_region]
-				chk << " \n"
-			end
-			unless content[:checkins][:checkins_country_code].empty?
-				chk << content[:checkins][:checkins_country_code]
-				#chk << "\n"
-			end
-			# unless content[:checkins][:checkins_phone].nil?
-			# 	chk << content[:checkins][:checkins_phone]
-			# 	chk << "\n"
-			# end
-			# unless content[:checkins][:checkins_website].nil?
-			# 	chk << content[:checkins][:checkins_website]
-			# 	chk << "\n"
-			# end
-		end
+		
 
 		def parsed_time(string)
 			"#{string[0...10]} #{string[11...19]}"
@@ -351,7 +374,8 @@ module Ayadn
 			@hashtag_color = $config.options[:colors][:hashtags]
 			@mention_color = $config.options[:colors][:mentions]
 			#for word in text.split(" ") do
-			for word in text.split(/(\?|\!)/) do
+			#for word in text.split(/(\?|\!)/) do
+			for word in text.scan(/^.+[\r\n]*/) do
 				if word =~ /#\w+/
                     content.push(word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(@hashtag_color)))
 				elsif word =~ /@\w+/ 
