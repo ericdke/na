@@ -26,7 +26,7 @@ module Ayadn
 			inter = ""
 			data.reverse.each do |event|
 				users_array = []
-				inter << "#{parsed_time(event['event_date'])}".color(:cyan)
+				inter << "#{parsed_time(event['event_date'])}".color($config.options[:colors][:date])
 				inter << " => "
 				event['users'].each do |u|
 					users_array << "@" + u['username']
@@ -132,7 +132,7 @@ module Ayadn
 				# else
 				# 	fy = nil
 				# end
-				table << [ "@#{obj[:username]} ".color(:green), "#{obj[:name]}" ]
+				table << [ "@#{obj[:username]} ".color($config.options[:colors][:username]), "#{obj[:name]}" ]
 				table << :separator unless index + 1 == list.length
 			end
 			table
@@ -284,7 +284,7 @@ module Ayadn
 			unless content[:links].nil?
 				view << "\n"
 				content[:links].each do |link|
-					view << link.color(:magenta)
+					view << link.color($config.options[:colors][:link])
 					view << "\n"
 				end
 			end
@@ -293,11 +293,11 @@ module Ayadn
 
 		def build_header(content)
 			header = ""
-			header << content[:handle].color(:green)
+			header << content[:handle].color($config.options[:colors][:username])
 			header << " "
-			header << content[:name].color(:yellow)
+			header << content[:name].color($config.options[:colors][:name])
 			header << " "
-			header << content[:date].color(:cyan)
+			header << content[:date].color($config.options[:colors][:date])
 			header << "\n"
 		end
 

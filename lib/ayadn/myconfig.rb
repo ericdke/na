@@ -94,7 +94,6 @@ module Ayadn
 					username: :green,
 					name: :yellow,
 					date: :cyan,
-					text: :white,
 					link: :magenta
 				}
 			}
