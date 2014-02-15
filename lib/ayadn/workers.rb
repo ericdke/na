@@ -6,9 +6,8 @@ module Ayadn
 			posts = build_posts(data)
 			posts.each do |id,content|
 				count = "%03d" % content[:count]
-				@view << count.color(:red)
-				@view << ": ".color(:red)
-				#@view << content[:id].to_s.color(:green)
+				@view << count.color($config.options[:colors][:index])
+				@view << ": ".color($config.options[:colors][:index])
 				@view << build_content(content)
 			end
 			return posts, @view
@@ -17,7 +16,7 @@ module Ayadn
 			@view = ""
 			posts = build_posts(data)
 			posts.each do |id,content|
-				@view << content[:id].to_s.color(:red) + " "
+				@view << content[:id].to_s.color($config.options[:colors][:id]) + " "
 				@view << build_content(content)
 			end
 			@view
@@ -62,7 +61,7 @@ module Ayadn
 
 		def build_reposted_list(list, target)
 			table = Terminal::Table.new do |t|
-				t.style = {:width => 80}
+				t.style = { :width => $config.options[:formats][:table][:width] }
 				t.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
 			build_users_list(list, table)
@@ -70,7 +69,7 @@ module Ayadn
 
 		def build_starred_list(list, target)
 			table = Terminal::Table.new do |t|
-				t.style = {:width => 80}
+				t.style = { :width => $config.options[:formats][:table][:width] }
 				t.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
 			build_users_list(list, table)
@@ -78,7 +77,7 @@ module Ayadn
 
 		def build_followings_list(list, target)
 			table = Terminal::Table.new do |t|
-				t.style = {:width => 80}
+				t.style = { :width => $config.options[:formats][:table][:width] }
 				t.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
 			end
 			users_list = build_users_hash(list)
@@ -87,7 +86,7 @@ module Ayadn
 
 		def build_followers_list(list, target)
 			table = Terminal::Table.new do |t|
-				t.style = {:width => 80}
+				t.style = { :width => $config.options[:formats][:table][:width] }
 				t.title = "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
 			users_list = build_users_hash(list)
@@ -96,7 +95,7 @@ module Ayadn
 
 		def build_muted_list(list)
 			table = Terminal::Table.new do |t|
-				t.style = {:width => 80}
+				t.style = { :width => $config.options[:formats][:table][:width] }
 				t.title = "List of users you muted".color(:cyan) + "".color(:white)
 			end
 			users_list = build_users_hash(list)
@@ -105,7 +104,7 @@ module Ayadn
 
 		def build_blocked_list(list)
 			table = Terminal::Table.new do |t|
-				t.style = {:width => 80}
+				t.style = { :width => $config.options[:formats][:table][:width] }
 				t.title = "List of users you blocked".color(:cyan) + "".color(:white)
 			end
 			users_list = build_users_hash(list)
@@ -115,7 +114,7 @@ module Ayadn
 		def build_users_hash(list)
 			users_list = []
 			list.each do |key, value|
-				users_list << {'username' => value[0], 'name' => value[1], 'you_follow' => value[2] , 'follows_you' => value[3]}
+				users_list << {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3]}
 			end
 			users_list
 		end
@@ -133,7 +132,7 @@ module Ayadn
 				# else
 				# 	fy = nil
 				# end
-				table << [ "@#{obj['username']} ".color(:green), "#{obj['name']}" ]
+				table << [ "@#{obj[:username]} ".color(:green), "#{obj[:name]}" ]
 				table << :separator unless index + 1 == list.length
 			end
 			table

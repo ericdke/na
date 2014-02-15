@@ -115,7 +115,7 @@ module Ayadn
 				end
 				resp = get_parsed_response(url)
 
-				empty_data if resp['data'].empty?
+				#empty_data if resp['data'].empty?
 
 				users_hash = {}
 				resp['data'].each do |item|
