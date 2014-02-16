@@ -96,7 +96,7 @@ module Ayadn
 					deleted: 0,
 					html: 0,
 					annotations: 1,
-					show_clients: true,
+					show_source: true,
 					show_symbols: true,
 					show_reposters: true,
 					show_original_post: false,
@@ -133,7 +133,8 @@ module Ayadn
 					link: :yellow,
 					dots: :blue,
 					hashtags: :cyan,
-					mentions: :red
+					mentions: :red,
+					source: :blue
 				},
 				pinboard: {
 					login: nil,

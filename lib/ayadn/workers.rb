@@ -423,6 +423,10 @@ module Ayadn
 			header << content[:name].color($config.options[:colors][:name])
 			header << " "
 			header << content[:date].color($config.options[:colors][:date])
+			if $config.options[:timeline][:show_source]
+				header << " "
+				header << "[#{content[:source_name]}]".color($config.options[:colors][:source])
+			end
 			header << "\n"
 		end
 
