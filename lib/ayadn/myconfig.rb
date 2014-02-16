@@ -134,7 +134,8 @@ module Ayadn
 					dots: :blue,
 					hashtags: :cyan,
 					mentions: :red,
-					source: :blue
+					source: :blue,
+					symbols: :green
 				},
 				pinboard: {
 					login: nil,

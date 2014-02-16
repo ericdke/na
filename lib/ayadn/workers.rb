@@ -419,13 +419,23 @@ module Ayadn
 		def build_header(content)
 			header = ""
 			header << content[:handle].color($config.options[:colors][:username])
-			header << " "
-			header << content[:name].color($config.options[:colors][:name])
-			header << " "
-			header << content[:date].color($config.options[:colors][:date])
+			if $config.options[:timeline][:show_real_name]
+				header << " "
+				header << content[:name].color($config.options[:colors][:name])
+			end
+			if $config.options[:timeline][:show_date]
+				header << " "
+				header << content[:date].color($config.options[:colors][:date])
+			end
 			if $config.options[:timeline][:show_source]
 				header << " "
 				header << "[#{content[:source_name]}]".color($config.options[:colors][:source])
+			end
+			if $config.options[:timeline][:show_symbols]
+				header << " <".color($config.options[:colors][:symbols]) if content[:is_reply]
+				header << " #{content[:num_stars]}*".color($config.options[:colors][:symbols]) if content[:is_starred]
+				header << " >".color($config.options[:colors][:symbols]) if content[:num_replies] > 0
+				header << " #{content[:num_reposts]}x".color($config.options[:colors][:symbols]) if content[:is_repost]
 			end
 			header << "\n"
 		end
