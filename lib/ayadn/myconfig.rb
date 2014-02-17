@@ -25,12 +25,13 @@ module Ayadn
 		end
 
 		def load_config
-			@options = defaults # to be overridden later in the method by the loaded file
+			@options = defaults # overridden later in the method by the loaded file
 			home = Dir.home + "/ayadn2/data/#{@options[:identity][:prefix]}" #temp, will be /ayadn/data in v1
 			@config = {
 				paths: {
 					home: home,
 					log: "#{home}/log",
+					db: "#{home}/db",
 					pagination: "#{home}/pagination",
 					config: "#{home}/config",
 					auth: "#{home}/auth",
@@ -51,6 +52,7 @@ module Ayadn
 			else
 				begin
 					Dir.mkdir(@config[:paths][:log]) unless Dir.exists?(@config[:paths][:log])
+					Dir.mkdir(@config[:paths][:db]) unless Dir.exists?(@config[:paths][:db])
 					Dir.mkdir(@config[:paths][:pagination]) unless Dir.exists?(@config[:paths][:pagination])
 					Dir.mkdir(@config[:paths][:config]) unless Dir.exists?(@config[:paths][:config])
 					Dir.mkdir(@config[:paths][:auth]) unless Dir.exists?(@config[:paths][:auth])
@@ -65,9 +67,14 @@ module Ayadn
 			end
 			config_file = @config[:paths][:config] + "/config.yml"
 			if File.exists?(config_file)
-				@options = YAML.load(IO.read(config_file))
-				#ap @options
-				#exit
+				# TODO: system to merge existing config file when future category are added
+				begin
+					@options = YAML.load(IO.read(config_file))
+					#ap @options
+					#exit
+				rescue Exception => e
+					$logger.error "#{e}\n(in myconfig/load config.yml)"
+				end
 			else
 				begin
 					write_config_file(config_file, @options)
@@ -75,8 +82,7 @@ module Ayadn
 					$logger.error "#{e}\n(in myconfig/create config.yml from defaults)"
 				end
 			end
-			version_file = @config[:paths][:config] + "/version.yml"
-			vf = File.new(version_file, "w")
+			vf = File.new(@config[:paths][:config] + "/version.yml", "w")
 				vf.write({version: @config[:version]}.to_yaml)
 			vf.close
 		end
@@ -98,8 +104,6 @@ module Ayadn
 					annotations: 1,
 					show_source: true,
 					show_symbols: true,
-					show_reposters: true,
-					show_original_post: false,
 					show_real_name: true,
 					show_date: true
 				},
@@ -137,7 +141,7 @@ module Ayadn
 					source: :blue,
 					symbols: :green
 				},
-				pinboard: {
+				pinboard: { #move this elsewhere
 					login: nil,
 					password: nil
 				},

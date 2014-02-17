@@ -224,10 +224,6 @@ module Ayadn
 		end
 
 
-
-
-
-
 		private
 
 		def init

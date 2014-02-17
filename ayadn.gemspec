@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rest-client", "~> 1.6"
   spec.add_dependency "rainbow", "~> 2.0"
   spec.add_dependency "terminal-table"
+  spec.add_dependency "daybreak"
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake", "~> 10.1"
 
