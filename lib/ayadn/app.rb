@@ -2,7 +2,7 @@ module Ayadn
 	class App < Thor
 		package_name "ayadn"
 
-		%w{stream api descriptions endpoints cnx view workers myconfig status extend}.each { |r| require_relative "#{r}" }
+		%w{stream api descriptions endpoints cnx view workers myconfig status extend db}.each { |r| require_relative "#{r}" }
 		
 		desc "unified", "Shows the Unified Stream, aka your App.net timeline (ayadn -U)"
 		map "-U" => :unified
@@ -11,7 +11,13 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def unified
 			init
-			Stream.new.unified(options)
+			begin
+				Stream.new.unified(options)
+			rescue Exception => e
+				$logger.error "\n(in stream/unified) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "checkins", "Shows the Checkins Stream (ayadn -K)"
@@ -21,7 +27,13 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def checkins
 			init
-			Stream.new.checkins(options)
+			begin
+				Stream.new.checkins(options)
+			rescue Exception => e
+				$logger.error "\n(in stream/checkins) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "global", "Shows the Global Stream (ayadn -G)"
@@ -31,7 +43,13 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def global
 			init
-			Stream.new.global(options)
+			begin
+				Stream.new.global(options)
+			rescue Exception => e
+				$logger.error "\n(in stream/global) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "trending", "Shows the Trending Stream (ayadn -TR)"
@@ -41,7 +59,13 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def trending
 			init
-			Stream.new.trending(options)
+			begin
+				Stream.new.trending(options)
+			rescue Exception => e
+				$logger.error "\n(in stream/trending) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "photos", "Shows the Photos Stream (ayadn -PH)"
@@ -51,7 +75,13 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def photos
 			init
-			Stream.new.photos(options)
+			begin
+				Stream.new.photos(options)
+			rescue Exception => e
+				$logger.error "\n(in stream/photos) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "conversations", "Shows the Conversations Stream (ayadn -CQ)"
@@ -61,7 +91,13 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def conversations
 			init
-			Stream.new.conversations(options)
+			begin
+				Stream.new.conversations(options)
+			rescue Exception => e
+				$logger.error "\n(in stream/conversations) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "mentions @USERNAME", "Shows posts containing a mention of a @username (ayadn -M @username)"
@@ -71,12 +107,19 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def mentions(*username)
 			init
-			unless username.empty?
-				username_array = add_arobase_if_absent(username)
-				Stream.new.mentions(username_array.join, options)
-			else
-				puts Status.error_missing_username
+			begin
+				unless username.empty?
+					username_array = add_arobase_if_absent(username)
+					Stream.new.mentions(username_array.join, options)
+				else
+					puts Status.error_missing_username
+				end
+			rescue Exception => e
+				$logger.error "\n(in stream/mentions) =>\n\n#{e}"
+			ensure
+				$db.close_all
 			end
+			
 		end
 
 		desc "posts @USERNAME", "Shows posts of @username (ayadn -PO @username)"
@@ -86,12 +129,19 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def posts(*username)
 			init
-			unless username.empty?
-				username_array = add_arobase_if_absent(username)
-				Stream.new.posts(username_array.join, options)
-			else
-				puts Status.error_missing_username
+			begin
+				unless username.empty?
+					username_array = add_arobase_if_absent(username)
+					Stream.new.posts(username_array.join, options)
+				else
+					puts Status.error_missing_username
+				end
+			rescue Exception => e
+				$logger.error "\n(in stream/posts) =>\n\n#{e}"
+			ensure
+				$db.close_all
 			end
+			
 		end
 
 		desc "interactions", "Shows your recent ADN activity (ayadn -INT)"
@@ -99,7 +149,13 @@ module Ayadn
 		long_desc Descriptions.interactions
 		def interactions
 			init
-			Stream.new.interactions
+			begin
+				Stream.new.interactions(options)
+			rescue Exception => e
+				$logger.error "\n(in stream/interactions) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "whatstarred @USERNAME", "Shows posts starred by @username (ayadn -WAS @username)"
@@ -109,11 +165,17 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def whatstarred(*username)
 			init
-			unless username.empty?
-				username_array = add_arobase_if_absent(username)
-				Stream.new.whatstarred(username_array.join, options)
-			else
-				puts Status.error_missing_username
+			begin
+				unless username.empty?
+					username_array = add_arobase_if_absent(username)
+					Stream.new.whatstarred(username_array.join, options)
+				else
+					puts Status.error_missing_username
+				end
+			rescue Exception => e
+				$logger.error "\n(in stream/whatstarred) =>\n\n#{e}"
+			ensure
+				$db.close_all
 			end
 		end
 
@@ -122,10 +184,16 @@ module Ayadn
 		long_desc Descriptions.whoreposted
 		def whoreposted(post_id)
 			init
-			if post_id.is_integer?
-				Stream.new.whoreposted(post_id)
-			else
-				puts Status.error_missing_post_id
+			begin
+				if post_id.is_integer?
+					Stream.new.whoreposted(post_id)
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue Exception => e
+				$logger.error "\n(in stream/whoreposted) =>\n\n#{e}"
+			ensure
+				$db.close_all
 			end
 		end
 
@@ -134,10 +202,16 @@ module Ayadn
 		long_desc Descriptions.whostarred
 		def whostarred(post_id)
 			init
-			if post_id.is_integer?
-				Stream.new.whostarred(post_id)
-			else
-				puts Status.error_missing_post_id
+			begin
+				if post_id.is_integer?
+					Stream.new.whostarred(post_id)
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue Exception => e
+				$logger.error "\n(in stream/whostarred) =>\n\n#{e}"
+			ensure
+				$db.close_all
 			end
 		end
 
@@ -148,10 +222,16 @@ module Ayadn
 		long_desc Descriptions.convo
 		def convo(post_id)
 			init
-			if post_id.is_integer?
-				Stream.new.convo(post_id, options)
-			else
-				puts Status.error_missing_post_id
+			begin
+				if post_id.is_integer?
+					Stream.new.convo(post_id, options)
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue Exception => e
+				$logger.error "\n(in stream/convo) =>\n\n#{e}"
+			ensure
+				$db.close_all
 			end
 		end
 
@@ -160,11 +240,17 @@ module Ayadn
 		long_desc Descriptions.followings
 		def followings(*username)
 			init
-			unless username.empty?
-				username_array = add_arobase_if_absent(username)
-				Stream.new.followings(username_array.join)
-			else
-				puts Status.error_missing_username
+			begin
+				unless username.empty?
+					username_array = add_arobase_if_absent(username)
+					Stream.new.followings(username_array.join)
+				else
+					puts Status.error_missing_username
+				end
+			rescue Exception => e
+				$logger.error "\n(in stream/followings) =>\n\n#{e}"
+			ensure
+				$db.close_all
 			end
 		end
 
@@ -173,11 +259,17 @@ module Ayadn
 		long_desc Descriptions.followers
 		def followers(*username)
 			init
-			unless username.empty?
-				username_array = add_arobase_if_absent(username)
-				Stream.new.followers(username_array.join)
-			else
-				puts Status.error_missing_username
+			begin
+				unless username.empty?
+					username_array = add_arobase_if_absent(username)
+					Stream.new.followers(username_array.join)
+				else
+					puts Status.error_missing_username
+				end
+			rescue Exception => e
+				$logger.error "\n(in stream/followers) =>\n\n#{e}"
+			ensure
+				$db.close_all
 			end
 		end
 
@@ -186,7 +278,13 @@ module Ayadn
 		long_desc Descriptions.muted
 		def muted
 			init
-			Stream.new.muted
+			begin
+				Stream.new.muted
+			rescue Exception => e
+				$logger.error "\n(in stream/muted) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "blocked", "Lists the users you blocked (ayadn -BKD)"
@@ -194,7 +292,13 @@ module Ayadn
 		long_desc Descriptions.blocked
 		def blocked
 			init
-			Stream.new.blocked
+			begin
+				Stream.new.blocked
+			rescue Exception => e
+				$logger.error "\n(in stream/blocked) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "hashtag HASHTAG", "Shows recent posts containing #HASHTAG (ayadn -TAG hashtag)"
@@ -202,7 +306,13 @@ module Ayadn
 		long_desc Descriptions.hashtag
 		def hashtag(hashtag)
 			init
-			Stream.new.hashtag(hashtag)
+			begin
+				Stream.new.hashtag(hashtag)
+			rescue Exception => e
+				$logger.error "\n(in stream/hashtag) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "search WORD(S)", "Shows recents posts containing WORD(S) (ayadn -S word1 word2 ...)"
@@ -212,7 +322,13 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def search(*words)
 			init
-			Stream.new.search(words.join(","), options)
+			begin
+				Stream.new.search(words.join(","), options)
+			rescue Exception => e
+				$logger.error "\n(in stream/search) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 		desc "settings", "Lists current Ayadn settings (ayadn -OPT)"
@@ -220,7 +336,13 @@ module Ayadn
 		long_desc Descriptions.settings
 		def settings
 			init
-			Stream.new.view_settings
+			begin
+				Stream.new.view_settings
+			rescue Exception => e
+				$logger.error "\n(in stream/settings) =>\n\n#{e}"
+			ensure
+				$db.close_all
+			end
 		end
 
 
@@ -229,6 +351,7 @@ module Ayadn
 		def init
 			$config = MyConfig.new
 			$logger = Logger.new($config.config[:paths][:log] + "/ayadn.log", 'monthly')
+			$db = Databases.new
 		end
 
 		def add_arobase_if_absent(username)
