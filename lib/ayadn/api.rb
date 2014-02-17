@@ -135,15 +135,15 @@ module Ayadn
 		end
 
 		def get_parsed_response(url)
-			r = JSON.parse(@cnx.get_response_from(url))
-			@cnx.check_errors(r['meta'])
-			return r
+			JSON.parse(@cnx.get_response_from(url))
+			#@cnx.check_errors(r['meta'])
+			#return r
 		end
 
-		def empty_data
-			puts Status.empty_list
-			exit
-		end
+		# def empty_data
+		# 	puts Status.empty_list
+		# 	exit
+		# end
 
 	end
 end

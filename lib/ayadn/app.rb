@@ -13,8 +13,10 @@ module Ayadn
 			init
 			begin
 				Stream.new.unified(options)
-			rescue Exception => e
-				$logger.error "\n(in stream/unified) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/unified"
+				global_error(e)
+				# we should re-raise e but we don't because we try and catch Exceptions deeper in the app
 			ensure
 				$db.close_all
 			end
@@ -29,8 +31,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.checkins(options)
-			rescue Exception => e
-				$logger.error "\n(in stream/checkins) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/checkins"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -45,8 +48,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.global(options)
-			rescue Exception => e
-				$logger.error "\n(in stream/global) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/global"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -61,8 +65,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.trending(options)
-			rescue Exception => e
-				$logger.error "\n(in stream/trending) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/trending"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -77,8 +82,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.photos(options)
-			rescue Exception => e
-				$logger.error "\n(in stream/photos) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/photos"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -93,8 +99,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.conversations(options)
-			rescue Exception => e
-				$logger.error "\n(in stream/conversations) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/conversations"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -114,8 +121,9 @@ module Ayadn
 				else
 					puts Status.error_missing_username
 				end
-			rescue Exception => e
-				$logger.error "\n(in stream/mentions) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/mentions with args: #{username}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -136,8 +144,9 @@ module Ayadn
 				else
 					puts Status.error_missing_username
 				end
-			rescue Exception => e
-				$logger.error "\n(in stream/posts) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/posts with args: #{username}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -151,8 +160,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.interactions(options)
-			rescue Exception => e
-				$logger.error "\n(in stream/interactions) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/interactions"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -172,8 +182,9 @@ module Ayadn
 				else
 					puts Status.error_missing_username
 				end
-			rescue Exception => e
-				$logger.error "\n(in stream/whatstarred) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/whatstarred with args: #{username}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -190,8 +201,9 @@ module Ayadn
 				else
 					puts Status.error_missing_post_id
 				end
-			rescue Exception => e
-				$logger.error "\n(in stream/whoreposted) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/whoreposted with args: #{post_id}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -208,8 +220,9 @@ module Ayadn
 				else
 					puts Status.error_missing_post_id
 				end
-			rescue Exception => e
-				$logger.error "\n(in stream/whostarred) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/whostarred with args: #{post_id}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -228,8 +241,9 @@ module Ayadn
 				else
 					puts Status.error_missing_post_id
 				end
-			rescue Exception => e
-				$logger.error "\n(in stream/convo) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/convo with args: #{post_id}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -247,8 +261,9 @@ module Ayadn
 				else
 					puts Status.error_missing_username
 				end
-			rescue Exception => e
-				$logger.error "\n(in stream/followings) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/followings with args: #{username}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -266,8 +281,9 @@ module Ayadn
 				else
 					puts Status.error_missing_username
 				end
-			rescue Exception => e
-				$logger.error "\n(in stream/followers) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/followers with args: #{username}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -280,8 +296,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.muted
-			rescue Exception => e
-				$logger.error "\n(in stream/muted) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/muted"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -294,8 +311,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.blocked
-			rescue Exception => e
-				$logger.error "\n(in stream/blocked) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/blocked"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -308,8 +326,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.hashtag(hashtag)
-			rescue Exception => e
-				$logger.error "\n(in stream/hashtag) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/hashtag with args: #{hashtag}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -324,8 +343,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.search(words.join(","), options)
-			rescue Exception => e
-				$logger.error "\n(in stream/search) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/search with args: #{words}"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -338,8 +358,9 @@ module Ayadn
 			init
 			begin
 				Stream.new.view_settings
-			rescue Exception => e
-				$logger.error "\n(in stream/settings) =>\n\n#{e}"
+			rescue => e
+				$logger.error "From stream/settings"
+				global_error(e)
 			ensure
 				$db.close_all
 			end
@@ -352,6 +373,10 @@ module Ayadn
 			$config = MyConfig.new
 			$logger = Logger.new($config.config[:paths][:log] + "/ayadn.log", 'monthly')
 			$db = Databases.new
+		end
+
+		def global_error(e)
+			puts "\n\nERROR (see #{$config.config[:paths][:log]}/ayadn.log)\n".color(:red)
 		end
 
 		def add_arobase_if_absent(username)
