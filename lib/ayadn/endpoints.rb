@@ -102,6 +102,10 @@ module Ayadn
 			POSTS_URL + "search?text=#{words}&access_token=#{$config.user_token}#{@options_list}"
 		end
 
+		def user(username)
+			USERS_URL + "#{username}?access_token=#{$config.user_token}"
+		end
+
 		private
 
 		def init(options)

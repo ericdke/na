@@ -60,7 +60,9 @@ module Ayadn
 		def self.settings
 			%Q{Lists current Ayadn settings.\nShortcut: replace 'settings' by '-OPT'}
 		end
-
+		def self.user
+			%Q{Shows detailed informations about @username.\nShortcut: replace 'user' by '-UI'}
+		end
 
 
 

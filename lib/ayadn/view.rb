@@ -80,6 +80,62 @@ module Ayadn
 			puts table
 		end
 
+		def show_user_infos(content)
+			view = "Real name\t\t".color(:cyan) + content['name'].color($config.options[:colors][:name])
+			
+			view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color($config.options[:colors][:username])
+			
+			view << "\n\nID\t\t\t".color(:cyan) + content['id'].color(:yellow)
+			view << "\nURL\t\t\t".color(:cyan) + content['canonical_url'].color(:yellow)
+
+			unless content['verified_domain'].nil?
+				if content['verified_domain'] =~ (/http/ || /https/)
+					 domain = content['verified_domain']
+				else
+					domain = "http://#{content['verified_domain']}"
+				end
+				view << "\nVerified domain\t\t".color(:cyan) + domain.color(:yellow)
+			end
+
+			
+			view << "\nAccount creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(:yellow)
+			view << "\nTimeZone\t\t".color(:cyan) + content['timezone'].color(:yellow)
+			view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(:yellow)
+
+			view << "\n\nPosts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(:yellow)
+
+			view << "\n\nFollowing\t\t".color(:cyan) + content['counts']['following'].to_s.color(:yellow)
+			view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:yellow)
+			
+			#view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)
+
+			if content['you_follow']
+				view << "\n\nYou follow ".color(:cyan) + "@#{content['username']}".color($config.options[:colors][:username])
+			else
+				view << "\n\nYou don't follow ".color(:cyan) + "@#{content['username']}".color($config.options[:colors][:username])
+			end
+			if content['follows_you']
+				view << "\n" + "@#{content['username']}".color($config.options[:colors][:username]) + " follows you".color(:cyan)
+			else
+				view << "\n" + "@#{content['username']}".color($config.options[:colors][:username]) + " doesn't follow you".color(:cyan)
+			end
+			if content['you_muted']
+				view << "\nYou muted " + "@#{content['username']}".color($config.options[:colors][:username])
+			end
+			if content['you_blocked']
+				view << "\nYou blocked " + "@#{content['username']}".color($config.options[:colors][:username])
+			end
+
+			#view << "\n\nAvatar URL\t\t".color(:cyan) + content['avatar_image']['url']
+
+			view << "\n\n#{content['description']['text']}\n".color(:magenta) + "\n\n"
+
+			puts view
+		end
+
+
+
+
 		def clear_line
 			print "\r                                            \n"
 		end

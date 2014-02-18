@@ -366,6 +366,27 @@ module Ayadn
 			end
 		end
 
+		desc "user @USERNAME", "Shows detailed informations about @username (ayadn -UI @username)"
+		map "-UI" => :user
+		long_desc Descriptions.user
+		def user(*username)
+			init
+			begin
+				unless username.empty?
+					username_array = add_arobase_if_absent(username)
+					Stream.new.user(username_array.join)
+				else
+					puts Status.error_missing_username
+				end
+			rescue => e
+				$logger.error "From stream/user with args: #{username}"
+				global_error(e)
+				raise e
+			ensure
+				$db.close_all
+			end
+		end
+
 
 		private
 

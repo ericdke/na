@@ -145,6 +145,13 @@ module Ayadn
 			@view.settings
 		end
 
+		def user(username)
+			@view.clear_screen
+			print Status.downloading
+			stream = get_data_from_response(@api.get_user(username))
+			get_infos(stream)
+		end
+
 
 
 		private
@@ -165,6 +172,11 @@ module Ayadn
 		def get_simple_view(stream)
 			@view.clear_screen
 			@view.show_simple_stream(stream)
+		end
+
+		def get_infos(stream)
+			@view.clear_screen
+			@view.show_user_infos(stream)
 		end
 
 		def get_list(what, list, target)

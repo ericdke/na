@@ -128,6 +128,11 @@ module Ayadn
 			big_hash
 		end
 
+		def get_user(username)
+			url = @endpoints.user(username)
+			get_parsed_response(url)
+		end
+
 		private
 
 		def get_raw_response(url)

@@ -137,7 +137,7 @@ module Ayadn
 			end
 		end
 
-		private
+		#private
 
 		def build_users_list(list, table)
 			list.each_with_index do |obj, index|
