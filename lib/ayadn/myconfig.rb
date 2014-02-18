@@ -13,7 +13,7 @@ module Ayadn
 
 		def build_query_options(arg)
 			count = arg[:count] || @options[:counts][:default]
-			directed = @options[:timeline][:directed] || 1
+			directed = arg[:directed] || @options[:timeline][:directed]
 			deleted = arg[:deleted] || @options[:timeline][:deleted]
 			html = arg[:html] || @options[:timeline][:html]
 			annotations = arg[:annotations] || @options[:timeline][:annotations]
@@ -116,12 +116,14 @@ module Ayadn
 					photos: 50,
 					trending: 50,
 					mentions: 50,
+					convo: 50,
 					posts: 50,
 					messages: 50,
 					search: 100,
 					whoreposted: 50,
 					whostarred: 50,
-					whatstarred: 100
+					whatstarred: 100,
+					files: 66
 				},
 				formats: {
 					table: {

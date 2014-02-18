@@ -16,47 +16,83 @@ module Ayadn
 		end
 
 		def unified(options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:unified]})
+			end
 			POSTS_URL + "stream/unified?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def checkins(options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:checkins]})
+			end
 			POSTS_URL + "stream/explore/checkins?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def global(options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:global]})
+			end
 			POSTS_URL + "stream/global?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def trending(options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:trending]})
+			end
 			POSTS_URL + "stream/explore/trending?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def photos(options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:photos]})
+			end
 			POSTS_URL + "stream/explore/photos?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def conversations(options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:conversations]})
+			end
 			POSTS_URL + "stream/explore/conversations?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def mentions(username, options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:mentions]})
+			end
 			USERS_URL + "#{username}/mentions/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def posts(username, options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:posts]})
+			end
 			USERS_URL + "#{username}/posts/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		def whatstarred(username, options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:default]})
+			end
 			USERS_URL + "#{username}/stars/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
@@ -73,7 +109,11 @@ module Ayadn
 		end
 
 		def convo(post_id, options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:convo]})
+			end
 			POSTS_URL + "#{post_id}/replies/?access_token=#{$config.user_token}#{@options_list}"
 		end
 
@@ -98,7 +138,11 @@ module Ayadn
 		end
 
 		def search(words, options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:search]})
+			end
 			POSTS_URL + "search?text=#{words}&access_token=#{$config.user_token}#{@options_list}"
 		end
 
@@ -112,7 +156,11 @@ module Ayadn
 		end
 
 		def files_list(options)
-			init(options)
+			if options[:count]
+				init(options)
+			else
+				init({count: $config.options[:counts][:files]})
+			end
 			USERS_URL + "me/files?access_token=#{$config.user_token}#{@options_list}"
 		end
 
