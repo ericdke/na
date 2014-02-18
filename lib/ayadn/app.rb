@@ -414,7 +414,6 @@ module Ayadn
 			init
 			begin
 				if post_id.is_integer?
-					# Stream.new.user(xxx)
 					Stream.new.details(post_id)
 				else
 					puts Status.error_missing_post_id
