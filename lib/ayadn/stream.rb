@@ -157,7 +157,11 @@ module Ayadn
 			print Status.downloading
 			@view.clear_screen
 			resp = get_data_from_response(@api.get_details(post_id))
+			stream = get_data_from_response(@api.get_user("@#{resp['user']['username']}"))
+			puts "POST:\n".inverse
 			@view.show_simple_post([resp])
+			puts "AUTHOR:\n".inverse
+			@view.show_user_infos(stream)
 		end
 
 

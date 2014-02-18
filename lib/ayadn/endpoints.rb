@@ -107,7 +107,8 @@ module Ayadn
 		end
 
 		def single_post(post_id)
-			POSTS_URL + "#{post_id}?access_token=#{$config.user_token}"
+			init({annotations: 1})
+			POSTS_URL + "#{post_id}?access_token=#{$config.user_token}#{@options_list}"
 		end
 
 		private
