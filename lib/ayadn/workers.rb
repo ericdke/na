@@ -74,12 +74,32 @@ module Ayadn
 				view << "\n"
 				view << "Kind\t\t".color(:cyan)
 				view << file['kind'].color($config.options[:colors][:username])
+				view << " (#{file['mime_type']})".color($config.options[:colors][:username]) if file['mime_type']
+				if file['image_info']
+					view << "\n"
+					view << "Dimensions\t".color(:cyan)
+					view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color($config.options[:colors][:username])
+				end
 				view << "\n"
 				view << "Size\t\t".color(:cyan)
 				view << file['size'].to_filesize.color(:yellow)
 				view << "\n"
 				view << "Date\t\t".color(:cyan)
-				view << parsed_time(file['created_at']).color(:yellow)
+				view << parsed_time(file['created_at']).color(:green)
+				view << "\n"
+				view << "Source\t\t".color(:cyan)
+				view << file['source']['name'].color($config.options[:colors][:source])
+				view << "\n"
+				view << "State\t\t".color(:cyan)
+				if file['public']
+					view << "Public".color($config.options[:colors][:id])
+					view << "\n"
+					view << "Link\t\t".color(:cyan)
+					view << file['url_short'].color($config.options[:colors][:link])
+				else
+					view << "Private".color($config.options[:colors][:id])
+				end
+				
 				view << "\n\n"
 			end
 			view
