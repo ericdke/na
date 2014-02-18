@@ -1,6 +1,8 @@
 module Ayadn
 	class Stream
 
+		# Depending on context, Stream is a "stream" factory/launcher or an "action" launcher
+
 		def initialize
 			@api = API.new
 			@view = View.new
@@ -162,6 +164,10 @@ module Ayadn
 			@view.show_simple_post([resp])
 			puts "AUTHOR:\n".inverse
 			@view.show_user_infos(stream)
+		end
+
+		def files
+				
 		end
 
 

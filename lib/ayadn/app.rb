@@ -1,5 +1,8 @@
 module Ayadn
 	class App < Thor
+
+		# App creates Stream instance + config/log/db, which creates all other instances by cascade (Stream creates API and View, API creates Endpoints and CNX, etc)
+
 		package_name "ayadn"
 
 		%w{stream api descriptions endpoints cnx view workers myconfig status extend db}.each { |r| require_relative "#{r}" }
@@ -426,9 +429,23 @@ module Ayadn
 			end
 		end
 
-
-
-
+		desc "files", "Lists the files in your ADN storage (ayadn -F)"
+		map "-F" => :files
+		long_desc Descriptions.files
+		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+		def files
+			init
+			begin
+				Stream.new.files
+			rescue => e
+				$logger.error "From stream/files"
+				$logger.error "#{e}"
+				global_error(e)
+				raise e
+			ensure
+				$db.close_all
+			end
+		end
 
 
 		private

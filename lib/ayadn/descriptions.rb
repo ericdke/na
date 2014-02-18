@@ -66,6 +66,9 @@ module Ayadn
 		def self.details
 			%Q{Shows detailed informations about n°POST-ID.\nShortcut: replace 'details' by '-PI'}
 		end
+		def self.files
+			%Q{Lists the files in your ADN storage.\nShortcut: replace 'files' by '-F'}
+		end
 
 
 
