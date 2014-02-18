@@ -17,7 +17,6 @@ module Ayadn
 				$logger.error "From stream/unified"
 				$logger.error "#{e}"
 				global_error(e)
-				raise e
 			ensure
 				$db.close_all
 			end
@@ -422,7 +421,6 @@ module Ayadn
 				$logger.error "From stream/details with args: #{post_id}"
 				$logger.error "#{e}"
 				global_error(e)
-				raise e #devdebug
 			ensure
 				$db.close_all
 			end
