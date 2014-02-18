@@ -166,8 +166,12 @@ module Ayadn
 			@view.show_user_infos(stream)
 		end
 
-		def files
-				
+		def files(options)
+			@view.clear_screen
+			print Status.downloading
+			list = @api.get_files_list(options)
+			@view.clear_screen
+			@view.show_files_list(list)
 		end
 
 

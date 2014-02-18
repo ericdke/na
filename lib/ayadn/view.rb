@@ -62,6 +62,11 @@ module Ayadn
 			puts @workers.build_interactions_stream(stream)
 		end
 
+		def show_files_list(list)
+			fl = @workers.build_files_list(list)
+			puts fl
+		end
+
 		def settings			
 			table = Terminal::Table.new do |t|
 				t.style = { :width => $config.options[:formats][:table][:width] }

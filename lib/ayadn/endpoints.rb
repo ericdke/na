@@ -111,6 +111,11 @@ module Ayadn
 			POSTS_URL + "#{post_id}?access_token=#{$config.user_token}#{@options_list}"
 		end
 
+		def files_list(options)
+			init(options)
+			USERS_URL + "me/files?access_token=#{$config.user_token}#{@options_list}"
+		end
+
 		private
 
 		def init(options)

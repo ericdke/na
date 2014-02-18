@@ -436,7 +436,7 @@ module Ayadn
 		def files
 			init
 			begin
-				Stream.new.files
+				Stream.new.files(options)
 			rescue => e
 				$logger.error "From stream/files"
 				$logger.error "#{e}"

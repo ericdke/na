@@ -62,6 +62,26 @@ module Ayadn
 			inter
 		end
 
+		def build_files_list(list) #meta+data
+			data = list['data']
+			view = "\n"
+			data.each do |file|
+				view << "ID\t\t".color(:cyan)
+				view << file['id'].color($config.options[:colors][:id])
+				view << "\n"
+				view << "Name\t\t".color(:cyan)
+				view << file['name'].color($config.options[:colors][:name])
+				view << "\n"
+				view << "Kind\t\t".color(:cyan)
+				view << file['kind'].color($config.options[:colors][:username])
+				view << "\n"
+				view << "Size\t\t".color(:cyan)
+				view << file['size'].to_filesize.color(:yellow)
+				view << "\n\n"
+			end
+			view
+		end
+
 		def build_reposted_list(list, target)
 			table = Terminal::Table.new do |t|
 				t.style = { :width => $config.options[:formats][:table][:width] }

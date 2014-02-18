@@ -138,6 +138,11 @@ module Ayadn
 			get_parsed_response(url)
 		end
 
+		def get_files_list(options)
+			url = @endpoints.files_list(options)
+			get_parsed_response(url)
+		end
+
 		private
 
 		def get_raw_response(url)
