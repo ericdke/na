@@ -77,6 +77,9 @@ module Ayadn
 				view << "\n"
 				view << "Size\t\t".color(:cyan)
 				view << file['size'].to_filesize.color(:yellow)
+				view << "\n"
+				view << "Date\t\t".color(:cyan)
+				view << parsed_time(file['created_at']).color(:yellow)
 				view << "\n\n"
 			end
 			view
