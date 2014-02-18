@@ -1,9 +1,9 @@
 module Ayadn
 	class Workers
 
-		def build_stream_with_index(data)
+		def build_stream_with_index(data) #expects an array
 			@view = ""
-			posts = build_posts(data)
+			posts = build_posts(data.reverse)
 			posts.each do |id,content|
 				count = "%03d" % content[:count]
 				@view << count.color($config.options[:colors][:index])
@@ -12,9 +12,9 @@ module Ayadn
 			end
 			return posts, @view
 		end
-		def build_stream_without_index(data)
+		def build_stream_without_index(data) #expects an array
 			@view = ""
-			posts = build_posts(data)
+			posts = build_posts(data.reverse)
 			posts.each do |id,content|
 				@view << content[:id].to_s.color($config.options[:colors][:id]) + " "
 				@view << build_content(content)
@@ -23,6 +23,7 @@ module Ayadn
 			# exit
 			@view
 		end
+
 
 		def build_interactions_stream(data)
 			inter = ""
@@ -147,10 +148,11 @@ module Ayadn
 			table
 		end
 
-		def build_posts(data) # builds a hash of hashes, each hash is a normalized post with post id as a key
+		def build_posts(data)
+			# builds a hash of hashes, each hash is a normalized post with post id as a key
 			posts = {}
 			@count = 1
-			data.reverse.each do |post|
+			data.each do |post|
 				name = post['user']['name'] || "(no name)"
 				unless post['text'].nil? || post['text'].empty?
 					text = colorize_text(post['text'])

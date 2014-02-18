@@ -18,6 +18,11 @@ module Ayadn
 			puts view
 		end
 
+		def show_simple_post(post)
+			view = @workers.build_stream_without_index(post)
+			puts view
+		end
+
 		def show_simple_stream(stream)
 			puts stream
 		end

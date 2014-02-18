@@ -15,8 +15,9 @@ module Ayadn
 				Stream.new.unified(options)
 			rescue => e
 				$logger.error "From stream/unified"
+				$logger.error "#{e}"
 				global_error(e)
-				# we should re-raise e but we don't because we try and catch Exceptions deeper in the app
+				raise e
 			ensure
 				$db.close_all
 			end
@@ -33,6 +34,7 @@ module Ayadn
 				Stream.new.checkins(options)
 			rescue => e
 				$logger.error "From stream/checkins"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -50,6 +52,7 @@ module Ayadn
 				Stream.new.global(options)
 			rescue => e
 				$logger.error "From stream/global"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -67,6 +70,7 @@ module Ayadn
 				Stream.new.trending(options)
 			rescue => e
 				$logger.error "From stream/trending"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -84,6 +88,7 @@ module Ayadn
 				Stream.new.photos(options)
 			rescue => e
 				$logger.error "From stream/photos"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -101,6 +106,7 @@ module Ayadn
 				Stream.new.conversations(options)
 			rescue => e
 				$logger.error "From stream/conversations"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -123,6 +129,7 @@ module Ayadn
 				end
 			rescue => e
 				$logger.error "From stream/mentions with args: #{username}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -146,6 +153,7 @@ module Ayadn
 				end
 			rescue => e
 				$logger.error "From stream/posts with args: #{username}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -162,6 +170,7 @@ module Ayadn
 				Stream.new.interactions(options)
 			rescue => e
 				$logger.error "From stream/interactions"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -184,6 +193,7 @@ module Ayadn
 				end
 			rescue => e
 				$logger.error "From stream/whatstarred with args: #{username}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -203,6 +213,7 @@ module Ayadn
 				end
 			rescue => e
 				$logger.error "From stream/whoreposted with args: #{post_id}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -222,6 +233,7 @@ module Ayadn
 				end
 			rescue => e
 				$logger.error "From stream/whostarred with args: #{post_id}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -243,6 +255,7 @@ module Ayadn
 				end
 			rescue => e
 				$logger.error "From stream/convo with args: #{post_id}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -263,6 +276,7 @@ module Ayadn
 				end
 			rescue => e
 				$logger.error "From stream/followings with args: #{username}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -283,6 +297,7 @@ module Ayadn
 				end
 			rescue => e
 				$logger.error "From stream/followers with args: #{username}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -298,6 +313,7 @@ module Ayadn
 				Stream.new.muted
 			rescue => e
 				$logger.error "From stream/muted"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -313,6 +329,7 @@ module Ayadn
 				Stream.new.blocked
 			rescue => e
 				$logger.error "From stream/blocked"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -328,6 +345,7 @@ module Ayadn
 				Stream.new.hashtag(hashtag)
 			rescue => e
 				$logger.error "From stream/hashtag with args: #{hashtag}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -345,6 +363,7 @@ module Ayadn
 				Stream.new.search(words.join(","), options)
 			rescue => e
 				$logger.error "From stream/search with args: #{words}"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -360,6 +379,7 @@ module Ayadn
 				Stream.new.view_settings
 			rescue => e
 				$logger.error "From stream/settings"
+				$logger.error "#{e}"
 				global_error(e)
 			ensure
 				$db.close_all
@@ -380,12 +400,38 @@ module Ayadn
 				end
 			rescue => e
 				$logger.error "From stream/user with args: #{username}"
+				$logger.error "#{e}"
 				global_error(e)
-				raise e
 			ensure
 				$db.close_all
 			end
 		end
+
+		desc "details POST-ID", "Shows detailed informations about post n°POST-ID (ayadn -PI POST-ID)"
+		map "-PI" => :details
+		long_desc Descriptions.details
+		def details(post_id)
+			init
+			begin
+				if post_id.is_integer?
+					# Stream.new.user(xxx)
+					Stream.new.details(post_id)
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue => e
+				$logger.error "From stream/details with args: #{post_id}"
+				$logger.error "#{e}"
+				global_error(e)
+				raise e #devdebug
+			ensure
+				$db.close_all
+			end
+		end
+
+
+
+
 
 
 		private

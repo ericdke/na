@@ -106,6 +106,10 @@ module Ayadn
 			USERS_URL + "#{username}?access_token=#{$config.user_token}"
 		end
 
+		def single_post(post_id)
+			POSTS_URL + "#{post_id}?access_token=#{$config.user_token}"
+		end
+
 		private
 
 		def init(options)

@@ -63,6 +63,9 @@ module Ayadn
 		def self.user
 			%Q{Shows detailed informations about @username.\nShortcut: replace 'user' by '-UI'}
 		end
+		def self.details
+			%Q{Shows detailed informations about n°POST-ID.\nShortcut: replace 'details' by '-PI'}
+		end
 
 
 

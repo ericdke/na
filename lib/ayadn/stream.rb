@@ -152,6 +152,14 @@ module Ayadn
 			get_infos(stream)
 		end
 
+		def details(post_id)
+			@view.clear_screen
+			print Status.downloading
+			@view.clear_screen
+			resp = get_data_from_response(@api.get_details(post_id))
+			@view.show_simple_post([resp])
+		end
+
 
 
 		private
