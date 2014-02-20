@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe Ayadn::Workers do
-	let(:config) { Ayadn::MyConfig.new }
-	describe "#build_stream_without_index" do
-		
-	end
+	parsed = JSON.parse(IO.read('spec/mock/stream.json'))
+	# it "" do
+
+	# 	parsed.should be_kind_of Hash
+	# end
 end
