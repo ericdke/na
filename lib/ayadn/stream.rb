@@ -84,6 +84,7 @@ module Ayadn
 			print Status.downloading
 			list = get_data_from_response(@api.get_whoreposted(post_id))
 			get_list(:whoreposted, list, post_id)
+			add_users_from_list(list)
 		end
 
 		def whostarred(post_id)
@@ -91,6 +92,7 @@ module Ayadn
 			print Status.downloading
 			list = get_data_from_response(@api.get_whostarred(post_id))
 			get_list(:whostarred, list, post_id)
+			add_users_from_list(list)
 		end
 
 		def convo(post_id, options)
@@ -119,6 +121,7 @@ module Ayadn
 			print Status.downloading
 			list = @api.get_followings(username)
 			get_list(:followings, list, username)
+			add_users_from_list(list)
 		end
 
 		def followers(username)
@@ -126,13 +129,17 @@ module Ayadn
 			print Status.downloading
 			list = @api.get_followers(username)
 			get_list(:followers, list, username)
+			add_users_from_list(list)
 		end
+
+		
 
 		def muted
 			@view.clear_screen
 			print Status.downloading
 			list = @api.get_muted
 			get_list(:muted, list, nil)
+			add_users_from_list(list)
 		end
 
 		def blocked
@@ -140,6 +147,7 @@ module Ayadn
 			print Status.downloading
 			list = @api.get_blocked
 			get_list(:blocked, list, nil)
+			add_users_from_list(list)
 		end
 
 		def view_settings
@@ -216,6 +224,12 @@ module Ayadn
 				@view.show_list_muted(list)
 			when :blocked
 				@view.show_list_blocked(list)
+			end
+		end
+
+		def add_users_from_list(list)
+			list.each do |id, content_array|
+				$db.users[id] = {content_array[0] => content_array[1]}
 			end
 		end
 
