@@ -154,13 +154,6 @@ module Ayadn
 				},
 				identity: {
 					prefix: "me"
-				},
-				skipped: {
-					source: [],
-					mentions: [],
-					hashtags: [],
-					repost_of: [],
-					words: []
 				}
 			}
 		end
