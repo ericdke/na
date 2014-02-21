@@ -175,7 +175,10 @@ module Ayadn
 
 		def save_indexed_posts(posts)
 			begin
-				File.open($config.config[:paths][:pagination] + "/index", "w") { |f| f.write(posts.to_json) }	
+				$db.index.clear
+				posts.each do |id, hash|
+					$db.index[id] = hash
+				end
 			rescue => e
 				$logger.error "From workers/save_indexed_posts: #{e}"
 			end
