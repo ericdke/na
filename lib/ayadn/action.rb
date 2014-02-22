@@ -16,7 +16,7 @@ module Ayadn
 				stream = get_data_from_response(@api.get_unified(options))
 				get_view(stream, options)
 			rescue => e
-				Logs.rec.error "From stream/unified"
+				Logs.rec.error "From action/unified"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -31,7 +31,7 @@ module Ayadn
 				stream = get_data_from_response(@api.get_checkins(options))
 				get_view(stream, options)
 			rescue => e
-				Logs.rec.error "From stream/checkins"
+				Logs.rec.error "From action/checkins"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -46,7 +46,7 @@ module Ayadn
 				stream = get_data_from_response(@api.get_global(options))
 				get_view(stream, options)
 			rescue => e
-				Logs.rec.error "From stream/global"
+				Logs.rec.error "From action/global"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -61,7 +61,7 @@ module Ayadn
 				stream = get_data_from_response(@api.get_trending(options))
 				get_view(stream, options)
 			rescue => e
-				Logs.rec.error "From stream/trending"
+				Logs.rec.error "From action/trending"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -76,7 +76,7 @@ module Ayadn
 				stream = get_data_from_response(@api.get_photos(options))
 				get_view(stream, options)
 			rescue => e
-				Logs.rec.error "From stream/photos"
+				Logs.rec.error "From action/photos"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -91,7 +91,7 @@ module Ayadn
 				stream = get_data_from_response(@api.get_conversations(options))
 				get_view(stream, options)
 			rescue => e
-				Logs.rec.error "From stream/conversations"
+				Logs.rec.error "From action/conversations"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -111,7 +111,7 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				Logs.rec.error "From stream/mentions with args: #{username}"
+				Logs.rec.error "From action/mentions with args: #{username}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -131,7 +131,7 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				Logs.rec.error "From stream/posts with args: #{username}"
+				Logs.rec.error "From action/posts with args: #{username}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -147,7 +147,7 @@ module Ayadn
 				@view.clear_screen
 				@view.show_interactions(stream)
 			rescue => e
-				Logs.rec.error "From stream/interactions"
+				Logs.rec.error "From action/interactions"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -167,7 +167,7 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				Logs.rec.error "From stream/whatstarred with args: #{username}"
+				Logs.rec.error "From action/whatstarred with args: #{username}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -186,7 +186,7 @@ module Ayadn
 					puts Status.error_missing_post_id
 				end
 			rescue => e
-				Logs.rec.error "From stream/whoreposted with args: #{post_id}"
+				Logs.rec.error "From action/whoreposted with args: #{post_id}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -205,7 +205,7 @@ module Ayadn
 					puts Status.error_missing_post_id
 				end
 			rescue => e
-				Logs.rec.error "From stream/whostarred with args: #{post_id}"
+				Logs.rec.error "From action/whostarred with args: #{post_id}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -224,7 +224,31 @@ module Ayadn
 					puts Status.error_missing_post_id
 				end
 			rescue => e
-				Logs.rec.error "From stream/convo with args: #{post_id}"
+				Logs.rec.error "From action/convo with args: #{post_id}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+			ensure
+				Databases.close_all
+			end
+		end
+
+		def delete(post_id)
+			begin
+				if post_id.is_integer?
+					@view.clear_screen
+					print Status.deleting_post(post_id)
+					resp = @api.delete_post(post_id)
+					@view.clear_screen
+					if resp['meta']['code'] == 200
+						puts Status.deleted(post_id)
+					else
+						puts Status.not_deleted(post_id)
+					end
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue => e
+				Logs.rec.error "From action/delete with args: #{post_id}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -239,7 +263,7 @@ module Ayadn
 				stream = get_data_from_response(@api.get_hashtag(hashtag))
 				get_view(stream)
 			rescue => e
-				Logs.rec.error "From stream/hashtag with args: #{hashtag}"
+				Logs.rec.error "From action/hashtag with args: #{hashtag}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -254,7 +278,7 @@ module Ayadn
 				stream = get_data_from_response(@api.get_search(words, options))
 				get_view(stream, options)
 			rescue => e
-				Logs.rec.error "From stream/search with args: #{words}"
+				Logs.rec.error "From action/search with args: #{words}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -275,7 +299,7 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				Logs.rec.error "From stream/followings with args: #{username}"
+				Logs.rec.error "From action/followings with args: #{username}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -296,7 +320,7 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				Logs.rec.error "From stream/followers with args: #{username}"
+				Logs.rec.error "From action/followers with args: #{username}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -312,7 +336,7 @@ module Ayadn
 				get_list(:muted, list, nil)
 				add_to_users_db_from_list(list)
 			rescue => e
-				Logs.rec.error "From stream/muted"
+				Logs.rec.error "From action/muted"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -328,7 +352,7 @@ module Ayadn
 				get_list(:blocked, list, nil)
 				add_to_users_db_from_list(list)
 			rescue => e
-				Logs.rec.error "From stream/blocked"
+				Logs.rec.error "From action/blocked"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -341,7 +365,7 @@ module Ayadn
 				@view.clear_screen
 				@view.settings
 			rescue => e
-				Logs.rec.error "From stream/settings"
+				Logs.rec.error "From action/settings"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -361,7 +385,7 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				Logs.rec.error "From stream/user_info with args: #{username}"
+				Logs.rec.error "From action/user_info with args: #{username}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -385,7 +409,7 @@ module Ayadn
 					puts Status.error_missing_post_id
 				end
 			rescue => e
-				Logs.rec.error "From stream/post_info with args: #{post_id}"
+				Logs.rec.error "From action/post_info with args: #{post_id}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -401,7 +425,7 @@ module Ayadn
 				@view.clear_screen
 				@view.show_files_list(list)
 			rescue => e
-				Logs.rec.error "From stream/files"
+				Logs.rec.error "From action/files"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure

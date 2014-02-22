@@ -123,6 +123,10 @@ module Ayadn
 			get_parsed_response(Endpoints.files_list(options))
 		end
 
+		def delete_post(post_id)
+			JSON.parse(CNX.delete(Endpoints.delete_post(post_id)))
+		end
+
 		#private
 
 		def get_raw_response(url)

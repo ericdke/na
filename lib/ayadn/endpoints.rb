@@ -164,5 +164,9 @@ module Ayadn
 			USERS_URL + "me/files?access_token=#{MyConfig.user_token}#{@options_list}"
 		end
 
+		def self.delete_post(post_id)
+			POSTS_URL + "#{post_id}?access_token=#{MyConfig.user_token}"
+		end
+
 	end
 end

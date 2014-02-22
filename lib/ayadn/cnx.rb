@@ -10,5 +10,14 @@ module Ayadn
 			end
 		end
 
+		def self.delete(url)
+			begin
+				RestClient::Resource.new(url, :verify_ssl => OpenSSL::SSL::VERIFY_NONE).delete
+			rescue => e
+				Logs.rec.error "From cnx/delete"
+				Logs.rec.error "#{e}"
+			end
+		end
+
 	end
 end
