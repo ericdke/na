@@ -235,17 +235,33 @@ module Ayadn
 		end
 
 		def hashtag(hashtag)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_hashtag(hashtag))
-			get_view(stream)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				stream = get_data_from_response(@api.get_hashtag(hashtag))
+				get_view(stream)
+			rescue => e
+				$logger.error "From stream/hashtag with args: #{hashtag}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def search(words, options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_search(words, options))
-			get_view(stream, options)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				stream = get_data_from_response(@api.get_search(words, options))
+				get_view(stream, options)
+			rescue => e
+				$logger.error "From stream/search with args: #{words}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def followings(username)

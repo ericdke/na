@@ -147,15 +147,7 @@ module Ayadn
 		map "-TAG" => :hashtag
 		long_desc Descriptions.hashtag
 		def hashtag(hashtag)
-			begin
-				Stream.new.hashtag(hashtag)
-			rescue => e
-				$logger.error "From stream/hashtag with args: #{hashtag}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.hashtag(hashtag)
 		end
 
 		desc "search WORD(S)", "Shows recents posts containing WORD(S) (ayadn -S word1 word2 ...)"
@@ -164,15 +156,7 @@ module Ayadn
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def search(*words)
-			begin
-				Stream.new.search(words.join(","), options)
-			rescue => e
-				$logger.error "From stream/search with args: #{words}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.search(words.join(","), options)
 		end
 
 		desc "settings", "Lists current Ayadn settings (ayadn -OPT)"
