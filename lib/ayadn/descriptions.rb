@@ -69,6 +69,9 @@ module Ayadn
 		def self.files
 			%Q{Lists the files in your ADN storage.\nShortcut: replace 'files' by '-F'}
 		end
+		def self.delete
+			%Q{Delete a post.\nShortcut: replace 'delete' by '-DEL'}
+		end
 
 
 

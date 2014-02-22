@@ -188,6 +188,12 @@ module Ayadn
 			Stream.new.files(options)
 		end
 
+		desc "delete", "Delete a post (ayadn -DEL POST-ID)"
+		map "-DEL" => :delete
+		long_desc Descriptions.delete
+		def delete(post_id)
+			# TODO
+		end
 
 
 
@@ -197,8 +203,6 @@ module Ayadn
 
 
 
-
-		
 
 	end
 end
