@@ -102,17 +102,43 @@ module Ayadn
 		end
 
 		def mentions(username, options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_mentions(username, options))
-			get_view(stream, options)
+			begin
+				unless username.empty?
+					username = add_arobase_if_absent(username)
+					@view.clear_screen
+					print Status.downloading
+					stream = get_data_from_response(@api.get_mentions(username, options))
+					get_view(stream, options)
+				else
+					puts Status.error_missing_username
+				end
+			rescue => e
+				$logger.error "From stream/mentions with args: #{username}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def posts(username, options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_posts(username, options))
-			get_view(stream, options)
+			begin
+				unless username.empty?
+					username = add_arobase_if_absent(username)
+					@view.clear_screen
+					print Status.downloading
+					stream = get_data_from_response(@api.get_posts(username, options))
+					get_view(stream, options)
+				else
+					puts Status.error_missing_username
+				end
+			rescue => e
+				$logger.error "From stream/posts with args: #{username}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def whatstarred(username, options)
@@ -293,7 +319,7 @@ module Ayadn
 			else
 				username = "me".chars.to_a
 			end
-			username
+			username.join
 		end
 
 	end

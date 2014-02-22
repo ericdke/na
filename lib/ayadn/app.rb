@@ -64,21 +64,7 @@ module Ayadn
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def mentions(*username)
-			begin
-				unless username.empty?
-					username_array = add_arobase_if_absent(username)
-					Stream.new.mentions(username_array.join, options)
-				else
-					puts Status.error_missing_username
-				end
-			rescue => e
-				$logger.error "From stream/mentions with args: #{username}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
-			
+			Stream.new.mentions(username, options)
 		end
 
 		desc "posts @USERNAME", "Shows posts of @username (ayadn -PO @username)"
@@ -87,21 +73,7 @@ module Ayadn
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def posts(*username)
-			begin
-				unless username.empty?
-					username_array = add_arobase_if_absent(username)
-					Stream.new.posts(username_array.join, options)
-				else
-					puts Status.error_missing_username
-				end
-			rescue => e
-				$logger.error "From stream/posts with args: #{username}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
-			
+			Stream.new.posts(username, options)
 		end
 
 		desc "interactions", "Shows your recent ADN activity (ayadn -INT)"
