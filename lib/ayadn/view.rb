@@ -69,11 +69,11 @@ module Ayadn
 
 		def settings			
 			table = Terminal::Table.new do |t|
-				t.style = { :width => $myconfig.options[:formats][:table][:width] }
+				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "Current Ayadn settings".color(:cyan)
 				t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
 				@iter = 0
-				$myconfig.options.each do |k,v|
+				MyConfig.options.each do |k,v|
 					v.each do |x,y|
 						t << :separator if @iter >= 1
 						unless y.is_a?(Hash)
@@ -91,9 +91,9 @@ module Ayadn
 		end
 
 		def show_user_infos(content)
-			view = "Real name\t\t".color(:cyan) + content['name'].color($myconfig.options[:colors][:name])
+			view = "Real name\t\t".color(:cyan) + content['name'].color(MyConfig.options[:colors][:name])
 			
-			view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color($myconfig.options[:colors][:username])
+			view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color(MyConfig.options[:colors][:username])
 			
 			view << "\n\nID\t\t\t".color(:cyan) + content['id'].color(:yellow)
 			view << "\nURL\t\t\t".color(:cyan) + content['canonical_url'].color(:yellow)
@@ -120,20 +120,20 @@ module Ayadn
 			#view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)
 
 			if content['you_follow']
-				view << "\n\nYou follow ".color(:cyan) + "@#{content['username']}".color($myconfig.options[:colors][:username])
+				view << "\n\nYou follow ".color(:cyan) + "@#{content['username']}".color(MyConfig.options[:colors][:username])
 			else
-				view << "\n\nYou don't follow ".color(:cyan) + "@#{content['username']}".color($myconfig.options[:colors][:username])
+				view << "\n\nYou don't follow ".color(:cyan) + "@#{content['username']}".color(MyConfig.options[:colors][:username])
 			end
 			if content['follows_you']
-				view << "\n" + "@#{content['username']}".color($myconfig.options[:colors][:username]) + " follows you".color(:cyan)
+				view << "\n" + "@#{content['username']}".color(MyConfig.options[:colors][:username]) + " follows you".color(:cyan)
 			else
-				view << "\n" + "@#{content['username']}".color($myconfig.options[:colors][:username]) + " doesn't follow you".color(:cyan)
+				view << "\n" + "@#{content['username']}".color(MyConfig.options[:colors][:username]) + " doesn't follow you".color(:cyan)
 			end
 			if content['you_muted']
-				view << "\nYou muted " + "@#{content['username']}".color($myconfig.options[:colors][:username])
+				view << "\nYou muted " + "@#{content['username']}".color(MyConfig.options[:colors][:username])
 			end
 			if content['you_blocked']
-				view << "\nYou blocked " + "@#{content['username']}".color($myconfig.options[:colors][:username])
+				view << "\nYou blocked " + "@#{content['username']}".color(MyConfig.options[:colors][:username])
 			end
 
 			#view << "\n\nAvatar URL\t\t".color(:cyan) + content['avatar_image']['url']

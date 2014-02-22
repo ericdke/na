@@ -2,7 +2,7 @@ module Ayadn
 	class App < Thor
 		package_name "ayadn"
 
-		%w{stream api descriptions endpoints cnx view workers myconfig status extend db fileops log}.each { |r| require_relative "#{r}" }
+		%w{stream api descriptions endpoints cnx view workers myconfig status extend db fileops logs}.each { |r| require_relative "#{r}" }
 		
 		desc "unified", "Shows the Unified Stream, aka your App.net timeline (ayadn -U)"
 		map "-U" => :unified

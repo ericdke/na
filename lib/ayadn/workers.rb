@@ -6,8 +6,8 @@ module Ayadn
 			posts = build_posts(data.reverse)
 			posts.each do |id,content|
 				count = "%03d" % content[:count]
-				@view << count.color($myconfig.options[:colors][:index])
-				@view << ": ".color($myconfig.options[:colors][:index])
+				@view << count.color(MyConfig.options[:colors][:index])
+				@view << ": ".color(MyConfig.options[:colors][:index])
 				@view << build_content(content)
 			end
 			return posts, @view
@@ -16,7 +16,7 @@ module Ayadn
 			@view = ""
 			posts = build_posts(data.reverse)
 			posts.each do |id,content|
-				@view << content[:id].to_s.color($myconfig.options[:colors][:id]) + " "
+				@view << content[:id].to_s.color(MyConfig.options[:colors][:id]) + " "
 				@view << build_content(content)
 			end
 			# xxx = ap posts
@@ -29,7 +29,7 @@ module Ayadn
 			inter = ""
 			data.reverse.each do |event|
 				users_array = []
-				inter << "#{parsed_time(event['event_date'])}".color($myconfig.options[:colors][:date])
+				inter << "#{parsed_time(event['event_date'])}".color(MyConfig.options[:colors][:date])
 				inter << " => "
 				event['users'].each do |u|
 					users_array << "@" + u['username']
@@ -67,18 +67,18 @@ module Ayadn
 			view = "\n"
 			data.each do |file|
 				view << "ID\t\t".color(:cyan)
-				view << file['id'].color($myconfig.options[:colors][:id])
+				view << file['id'].color(MyConfig.options[:colors][:id])
 				view << "\n"
 				view << "Name\t\t".color(:cyan)
-				view << file['name'].color($myconfig.options[:colors][:name])
+				view << file['name'].color(MyConfig.options[:colors][:name])
 				view << "\n"
 				view << "Kind\t\t".color(:cyan)
-				view << file['kind'].color($myconfig.options[:colors][:username])
-				view << " (#{file['mime_type']})".color($myconfig.options[:colors][:username]) if file['mime_type']
+				view << file['kind'].color(MyConfig.options[:colors][:username])
+				view << " (#{file['mime_type']})".color(MyConfig.options[:colors][:username]) if file['mime_type']
 				if file['image_info']
 					view << "\n"
 					view << "Dimensions\t".color(:cyan)
-					view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color($myconfig.options[:colors][:username])
+					view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color(MyConfig.options[:colors][:username])
 				end
 				view << "\n"
 				view << "Size\t\t".color(:cyan)
@@ -88,16 +88,16 @@ module Ayadn
 				view << parsed_time(file['created_at']).color(:green)
 				view << "\n"
 				view << "Source\t\t".color(:cyan)
-				view << file['source']['name'].color($myconfig.options[:colors][:source])
+				view << file['source']['name'].color(MyConfig.options[:colors][:source])
 				view << "\n"
 				view << "State\t\t".color(:cyan)
 				if file['public']
-					view << "Public".color($myconfig.options[:colors][:id])
+					view << "Public".color(MyConfig.options[:colors][:id])
 					view << "\n"
 					view << "Link\t\t".color(:cyan)
-					view << file['url_short'].color($myconfig.options[:colors][:link])
+					view << file['url_short'].color(MyConfig.options[:colors][:link])
 				else
-					view << "Private".color($myconfig.options[:colors][:id])
+					view << "Private".color(MyConfig.options[:colors][:id])
 				end
 				
 				view << "\n\n"
@@ -107,7 +107,7 @@ module Ayadn
 
 		def build_reposted_list(list, target)
 			table = Terminal::Table.new do |t|
-				t.style = { :width => $myconfig.options[:formats][:table][:width] }
+				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
 			users_list = []
@@ -120,7 +120,7 @@ module Ayadn
 
 		def build_starred_list(list, target)
 			table = Terminal::Table.new do |t|
-				t.style = { :width => $myconfig.options[:formats][:table][:width] }
+				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
 			users_list = []
@@ -133,7 +133,7 @@ module Ayadn
 
 		def build_followings_list(list, target)
 			table = Terminal::Table.new do |t|
-				t.style = { :width => $myconfig.options[:formats][:table][:width] }
+				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				if target == "me"
 					t.title = "List of users you're following".color(:cyan) + "".color(:white)
 				else
@@ -146,7 +146,7 @@ module Ayadn
 
 		def build_followers_list(list, target)
 			table = Terminal::Table.new do |t|
-				t.style = { :width => $myconfig.options[:formats][:table][:width] }
+				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				if target == "me"
 					t.title = "List of your followers".color(:cyan) + "".color(:white)
 				else
@@ -159,7 +159,7 @@ module Ayadn
 
 		def build_muted_list(list)
 			table = Terminal::Table.new do |t|
-				t.style = { :width => $myconfig.options[:formats][:table][:width] }
+				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "List of users you muted".color(:cyan) + "".color(:white)
 			end
 			users_list = build_users_hash(list)
@@ -168,7 +168,7 @@ module Ayadn
 
 		def build_blocked_list(list)
 			table = Terminal::Table.new do |t|
-				t.style = { :width => $myconfig.options[:formats][:table][:width] }
+				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "List of users you blocked".color(:cyan) + "".color(:white)
 			end
 			users_list = build_users_hash(list)
@@ -189,16 +189,16 @@ module Ayadn
 			list.each_with_index do |obj, index|
 				# if obj[:username]
 					unless obj[:name].nil?
-						table << [ "@#{obj[:username]} ".color($myconfig.options[:colors][:username]), "#{obj[:name]}" ]
+						table << [ "@#{obj[:username]} ".color(MyConfig.options[:colors][:username]), "#{obj[:name]}" ]
 					else
-						table << [ "@#{obj[:username]} ".color($myconfig.options[:colors][:username]), "" ]
+						table << [ "@#{obj[:username]} ".color(MyConfig.options[:colors][:username]), "" ]
 					end
 					table << :separator unless index + 1 == list.length
 			# 	elsif obj['username']
 			# 		unless obj['name'].nil?
-			# 			table << [ "@#{obj['username']} ".color($myconfig.options[:colors]['username']), "#{obj['name']}" ]
+			# 			table << [ "@#{obj['username']} ".color(MyConfig.options[:colors]['username']), "#{obj['name']}" ]
 			# 		else
-			# 			table << [ "@#{obj['username']} ".color($myconfig.options[:colors]['username']), "" ]
+			# 			table << [ "@#{obj['username']} ".color(MyConfig.options[:colors]['username']), "" ]
 			# 		end
 			# 		table << :separator unless index + 1 == list.length
 			# 	end
@@ -365,7 +365,7 @@ module Ayadn
 			else
 				num_dots = 10
 			end
-			hd = (".".color($myconfig.options[:colors][:dots])) * num_dots
+			hd = (".".color(MyConfig.options[:colors][:dots])) * num_dots
 			hd << "\n"
 			formatted = { header: hd }
 			content[:checkins].each do |key, val|
@@ -414,7 +414,7 @@ module Ayadn
 			
 			chk = formatted[:header]
 			unless formatted[:name].nil?
-				chk << formatted[:name].color($myconfig.options[:colors][:dots])
+				chk << formatted[:name].color(MyConfig.options[:colors][:dots])
 				chk << "\n"
 			end
 			unless formatted[:address].nil?
@@ -472,7 +472,7 @@ module Ayadn
 			unless content[:links].empty?
 				view << "\n"
 				content[:links].each do |link|
-					view << link.color($myconfig.options[:colors][:link])
+					view << link.color(MyConfig.options[:colors][:link])
 					view << "\n"
 				end
 			end
@@ -481,24 +481,24 @@ module Ayadn
 
 		def build_header(content)
 			header = ""
-			header << content[:handle].color($myconfig.options[:colors][:username])
-			if $myconfig.options[:timeline][:show_real_name]
+			header << content[:handle].color(MyConfig.options[:colors][:username])
+			if MyConfig.options[:timeline][:show_real_name]
 				header << " "
-				header << content[:name].color($myconfig.options[:colors][:name])
+				header << content[:name].color(MyConfig.options[:colors][:name])
 			end
-			if $myconfig.options[:timeline][:show_date]
+			if MyConfig.options[:timeline][:show_date]
 				header << " "
-				header << content[:date].color($myconfig.options[:colors][:date])
+				header << content[:date].color(MyConfig.options[:colors][:date])
 			end
-			if $myconfig.options[:timeline][:show_source]
+			if MyConfig.options[:timeline][:show_source]
 				header << " "
-				header << "[#{content[:source_name]}]".color($myconfig.options[:colors][:source])
+				header << "[#{content[:source_name]}]".color(MyConfig.options[:colors][:source])
 			end
-			if $myconfig.options[:timeline][:show_symbols]
-				header << " <".color($myconfig.options[:colors][:symbols]) if content[:is_reply]
-				header << " #{content[:num_stars]}*".color($myconfig.options[:colors][:symbols]) if content[:is_starred]
-				header << " >".color($myconfig.options[:colors][:symbols]) if content[:num_replies] > 0
-				header << " #{content[:num_reposts]}x".color($myconfig.options[:colors][:symbols]) if content[:is_repost]
+			if MyConfig.options[:timeline][:show_symbols]
+				header << " <".color(MyConfig.options[:colors][:symbols]) if content[:is_reply]
+				header << " #{content[:num_stars]}*".color(MyConfig.options[:colors][:symbols]) if content[:is_starred]
+				header << " >".color(MyConfig.options[:colors][:symbols]) if content[:num_replies] > 0
+				header << " #{content[:num_reposts]}x".color(MyConfig.options[:colors][:symbols]) if content[:is_repost]
 			end
 			header << "\n"
 		end
@@ -511,8 +511,8 @@ module Ayadn
 
 		def colorize_text(text)
 			content = Array.new
-			@hashtag_color = $myconfig.options[:colors][:hashtags]
-			@mention_color = $myconfig.options[:colors][:mentions]
+			@hashtag_color = MyConfig.options[:colors][:hashtags]
+			@mention_color = MyConfig.options[:colors][:mentions]
 			#for word in text.split(" ") do
 			#for word in text.split(/(\?|\!)/) do
 			for word in text.scan(/^.+[\r\n]*/) do

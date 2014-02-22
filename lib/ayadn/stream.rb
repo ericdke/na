@@ -4,10 +4,10 @@ module Ayadn
 		def initialize
 			@api = API.new
 			@view = View.new
-			$myconfig = MyConfig.new
-			Logs.rec = Logger.new($myconfig.config[:paths][:log] + "/ayadn.log", 'monthly')
-			Databases.users = Daybreak::DB.new "#{$myconfig.config[:paths][:db]}/users.db"
-			Databases.index = Daybreak::DB.new "#{$myconfig.config[:paths][:pagination]}/index.db"
+			MyConfig.load_config
+			Logs.create_logger
+			Databases.users = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/users.db"
+			Databases.index = Daybreak::DB.new "#{MyConfig.config[:paths][:pagination]}/index.db"
 		end
 
 		def unified(options)
@@ -462,7 +462,7 @@ module Ayadn
 		end
 
 		def global_error(e)
-			puts "\n\nERROR (see #{$myconfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
+			puts "\n\nERROR (see #{MyConfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
 		end
 
 		def add_arobase_if_absent(username)

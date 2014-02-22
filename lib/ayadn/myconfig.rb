@@ -4,14 +4,12 @@ module Ayadn
 
 		AYADN_CLIENT_ID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
 
-		attr_accessor :options, :config
-
-		def initialize
-			@user_token = IO.read(File.expand_path("../../../token", __FILE__)).chomp
-			load_config
+		class << self
+			attr_accessor :options, :config
+			attr_reader :user_token
 		end
 
-		def build_query_options(arg)
+		def self.build_query_options(arg)
 			count = arg[:count] || @options[:counts][:default]
 			directed = arg[:directed] || @options[:timeline][:directed]
 			deleted = arg[:deleted] || @options[:timeline][:deleted]
@@ -20,12 +18,9 @@ module Ayadn
 			"&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}"
 		end
 
-		def user_token
-			@user_token
-		end
-
-		def load_config
-			@options = defaults # overridden later in the method by the loaded file
+		def self.load_config
+			@user_token = IO.read(File.expand_path("../../../token", __FILE__)).chomp
+			@options = self.defaults # overridden later in the method by the loaded file
 			home = Dir.home + "/ayadn2/data/#{@options[:identity][:prefix]}" #temp, will be /ayadn/data in v1
 			@config = {
 				paths: {
@@ -72,15 +67,13 @@ module Ayadn
 				# TODO: system to merge existing config file when future category are added
 				begin
 					@options = YAML.load(IO.read(config_file))
-					#ap @options
-					#exit
 				rescue => e
 					Logs.rec.error "From myconfig/load config.yml"
 					Logs.rec.error "#{e}"
 				end
 			else
 				begin
-					write_config_file(config_file, @options)
+					self.write_config_file(config_file, @options)
 				rescue => e
 					Logs.rec.error "From myconfig/create config.yml from defaults"
 					Logs.rec.error "#{e}"
@@ -91,15 +84,13 @@ module Ayadn
 			vf.close
 		end
 
-		def write_config_file(config_file, options)
+		def self.write_config_file(config_file, options)
 			f = File.new(config_file, "w")
 				f.write(options.to_yaml)
 			f.close
 		end
 
-		private
-
-		def defaults
+		def self.defaults
 			{
 				timeline: {
 					directed: 1,
