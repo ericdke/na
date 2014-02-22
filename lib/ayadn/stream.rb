@@ -352,10 +352,23 @@ module Ayadn
 		end
 
 		def user(username)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_user(username))
-			get_infos(stream)
+			begin
+				unless username.empty?
+					username = add_arobase_if_absent(username)
+					@view.clear_screen
+					print Status.downloading
+					stream = get_data_from_response(@api.get_user(username))
+					get_infos(stream)
+				else
+					puts Status.error_missing_username
+				end
+			rescue => e
+				$logger.error "From stream/user with args: #{username}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def details(post_id)

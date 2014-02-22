@@ -170,20 +170,7 @@ module Ayadn
 		map "-UI" => :user
 		long_desc Descriptions.user
 		def user(*username)
-			begin
-				unless username.empty?
-					username_array = add_arobase_if_absent(username)
-					Stream.new.user(username_array.join)
-				else
-					puts Status.error_missing_username
-				end
-			rescue => e
-				$logger.error "From stream/user with args: #{username}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.user(username)
 		end
 
 		desc "details POST-ID", "Shows detailed informations about post n°POST-ID (ayadn -PI POST-ID)"
