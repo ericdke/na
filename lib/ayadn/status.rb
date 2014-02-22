@@ -18,8 +18,14 @@ module Ayadn
 		def self.unblocking(username)
 			"Unblocking #{username}\n".inverse
 		end
+		def self.unreposting(post_id)
+			"Unreposting #{post_id}\n".inverse
+		end
 		def self.not_deleted(post_id)
 			"Could not delete post #{post_id} (post isn't yours, or is already deleted)\n".color(:red)
+		end
+		def self.not_unreposted(post_id)
+			"Could not unrepost post #{post_id} (post isn't yours, isn't a repost, or has been deleted)\n".color(:red)
 		end
 		def self.not_unfollowed(post_id)
 			"Could not unfollow user #{username} (doesn't exist, or wasn't already followed)\n".color(:red)
@@ -32,6 +38,9 @@ module Ayadn
 		end
 		def self.deleted(post_id)
 			"Post #{post_id} has been deleted.\n".color(:green)
+		end
+		def self.unreposted(post_id)
+			"Post #{post_id} has been unreposted.\n".color(:green)
 		end
 		def self.unfollowed(username)
 			"User #{username} has been unfollowed.\n".color(:green)

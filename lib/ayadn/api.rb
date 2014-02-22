@@ -139,6 +139,15 @@ module Ayadn
 			JSON.parse(CNX.delete(Endpoints.block(username)))
 		end
 
+		def unrepost(post_id)
+			resp = JSON.parse(CNX.delete(Endpoints.repost(post_id)))
+			if resp['data']['repost_of']
+				JSON.parse(CNX.delete(Endpoints.repost(resp['data']['repost_of']['id'])))
+			else
+				resp
+			end
+		end
+
 		#private
 
 		def get_raw_response(url)

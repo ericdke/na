@@ -180,5 +180,9 @@ module Ayadn
 			USERS_URL + "#{username}/block?access_token=#{MyConfig.user_token}"
 		end
 
+		def self.repost(post_id)
+			POSTS_URL + "#{post_id}/repost?access_token=#{MyConfig.user_token}"
+		end
+
 	end
 end

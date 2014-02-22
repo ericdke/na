@@ -323,7 +323,31 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				Logs.rec.error "From action/unmute with args: #{username}"
+				Logs.rec.error "From action/unblock with args: #{username}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+			ensure
+				Databases.close_all
+			end
+		end
+
+		def unrepost(post_id)
+			begin
+				if post_id.is_integer?
+					@view.clear_screen
+					puts Status.unreposting(post_id)
+					resp = @api.unrepost(post_id)
+					@view.clear_screen
+					if resp['meta']['code'] == 200
+						puts Status.unreposted(post_id)
+					else
+						puts Status.not_unreposted(post_id)
+					end
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue => e
+				Logs.rec.error "From action/unrepost with args: #{post_id}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure

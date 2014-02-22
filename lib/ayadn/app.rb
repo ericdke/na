@@ -216,6 +216,13 @@ module Ayadn
 			Action.new.unblock(username)
 		end
 
+		desc "unrepost @USERNAME", "Unrepost @username (ayadn -UNR @username)"
+		map "-UNR" => :unrepost
+		long_desc Descriptions.unrepost
+		def unrepost(post_id)
+			Action.new.unrepost(post_id)
+		end
+
 
 
 
