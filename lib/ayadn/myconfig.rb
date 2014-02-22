@@ -10,7 +10,7 @@ module Ayadn
 		end
 
 		def self.build_query_options(arg)
-			count = arg[:count] || @options[:counts][:default]
+			count = arg[:count] || @options[:counts][:default] #default as a backup, but real value comes from Endpoints
 			directed = arg[:directed] || @options[:timeline][:directed]
 			deleted = arg[:deleted] || @options[:timeline][:deleted]
 			html = arg[:html] || @options[:timeline][:html]

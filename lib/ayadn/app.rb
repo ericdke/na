@@ -188,5 +188,17 @@ module Ayadn
 			Stream.new.files(options)
 		end
 
+
+
+
+
+
+
+
+
+
+
+		
+
 	end
 end

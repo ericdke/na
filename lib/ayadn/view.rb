@@ -63,8 +63,7 @@ module Ayadn
 		end
 
 		def show_files_list(list)
-			fl = @workers.build_files_list(list)
-			puts fl
+			puts @workers.build_files_list(list)
 		end
 
 		def settings			
