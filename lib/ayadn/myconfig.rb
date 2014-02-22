@@ -38,6 +38,38 @@ module Ayadn
 				},
 				version: VERSION
 			}
+			self.create_config_folders
+			self.create_config_file
+			self.create_version_file
+		end
+
+		def self.create_version_file
+			vf = File.new(@config[:paths][:config] + "/version.yml", "w")
+				vf.write({version: @config[:version]}.to_yaml)
+			vf.close
+		end
+
+		def self.create_config_file
+			config_file = @config[:paths][:config] + "/config.yml"
+			if File.exists?(config_file)
+				# TODO: system to merge existing config file when future category are added
+				begin
+					@options = YAML.load(IO.read(config_file))
+				rescue => e
+					Logs.rec.error "From myconfig/load config.yml"
+					Logs.rec.error "#{e}"
+				end
+			else
+				begin
+					self.write_config_file(config_file, @options)
+				rescue => e
+					Logs.rec.error "From myconfig/create config.yml from defaults"
+					Logs.rec.error "#{e}"
+				end
+			end
+		end
+
+		def self.create_config_folders
 			unless Dir.exists?(@config[:paths][:home])
 				begin
 					Dir.mkdir(@config[:paths][:home])
@@ -62,26 +94,6 @@ module Ayadn
 					Logs.rec.fatal "#{e}"
 				end
 			end
-			config_file = @config[:paths][:config] + "/config.yml"
-			if File.exists?(config_file)
-				# TODO: system to merge existing config file when future category are added
-				begin
-					@options = YAML.load(IO.read(config_file))
-				rescue => e
-					Logs.rec.error "From myconfig/load config.yml"
-					Logs.rec.error "#{e}"
-				end
-			else
-				begin
-					self.write_config_file(config_file, @options)
-				rescue => e
-					Logs.rec.error "From myconfig/create config.yml from defaults"
-					Logs.rec.error "#{e}"
-				end
-			end
-			vf = File.new(@config[:paths][:config] + "/version.yml", "w")
-				vf.write({version: @config[:version]}.to_yaml)
-			vf.close
 		end
 
 		def self.write_config_file(config_file, options)
