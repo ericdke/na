@@ -135,6 +135,10 @@ module Ayadn
 			JSON.parse(CNX.delete(Endpoints.mute(username)))
 		end
 
+		def unblock(username)
+			JSON.parse(CNX.delete(Endpoints.block(username)))
+		end
+
 		#private
 
 		def get_raw_response(url)

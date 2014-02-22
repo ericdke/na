@@ -78,6 +78,9 @@ module Ayadn
 		def self.unmute
 			%Q{Unmute a user.\nShortcut: replace 'unmute' by '-UNM'}
 		end
+		def self.unblock
+			%Q{Unblock a user.\nShortcut: replace 'unblock' by '-UNB'}
+		end
 
 
 

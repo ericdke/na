@@ -176,5 +176,9 @@ module Ayadn
 			USERS_URL + "#{username}/mute?access_token=#{MyConfig.user_token}"
 		end
 
+		def self.block(username)
+			USERS_URL + "#{username}/block?access_token=#{MyConfig.user_token}"
+		end
+
 	end
 end

@@ -202,13 +202,19 @@ module Ayadn
 			Action.new.unfollow(username)
 		end
 
-		desc "unmute @USERNAME", "Unmute @username (ayadn - UNM @username)"
+		desc "unmute @USERNAME", "Unmute @username (ayadn -UNM @username)"
 		map "-UNM" => :unmute
 		long_desc Descriptions.unmute
 		def unmute(*username)
 			Action.new.unmute(username)
 		end
 
+		desc "unblock @USERNAME", "Unblock @username (ayadn -UNB @username)"
+		map "-UNB" => :unblock
+		long_desc Descriptions.unblock
+		def unblock(*username)
+			Action.new.unblock(username)
+		end
 
 
 
