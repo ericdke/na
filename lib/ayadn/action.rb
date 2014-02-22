@@ -1,5 +1,5 @@
 module Ayadn
-	class Stream
+	class Action
 
 		def initialize
 			@api = API.new
