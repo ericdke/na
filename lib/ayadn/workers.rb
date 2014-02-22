@@ -184,6 +184,20 @@ module Ayadn
 			end
 		end
 
+		def get_post_from_index(number)
+			begin
+				unless number > $db.index.length || number <= 0
+					$db.index.to_h.each do |id, values|
+						return values if values[:count] == number
+					end
+				else
+					raise #temp
+				end
+			rescue => e
+				$logger.error "From workers/get_post_from_index: #{e}"
+			end
+		end
+
 		#private
 
 		def build_users_list(list, table)
@@ -201,8 +215,10 @@ module Ayadn
 			data.each do |post|
 				name = post['user']['name'] || "(no name)"
 				unless post['text'].nil? || post['text'].empty?
+					raw_text = post['text']
 					text = colorize_text(post['text'])
 				else
+					raw_text = nil
 					text = "(no text)"
 				end
 				
@@ -319,6 +335,7 @@ module Ayadn
 						handle: handle,
 						date: date,
 						text: text,
+						raw_text: raw_text,
 						thread_id: thread_id,
 						directed_to: directed_to,
 						mentions: mentions,

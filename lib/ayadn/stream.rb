@@ -6,27 +6,54 @@ module Ayadn
 		def initialize
 			@api = API.new
 			@view = View.new
+			$config = MyConfig.new
+			$logger = Logger.new($config.config[:paths][:log] + "/ayadn.log", 'monthly')
+			$db = Databases.new
 		end
 
 		def unified(options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_unified(options))
-			get_view(stream, options)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				stream = get_data_from_response(@api.get_unified(options))
+				get_view(stream, options)
+			rescue => e
+				$logger.error "From stream/unified"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def checkins(options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_checkins(options))
-			get_view(stream, options)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				stream = get_data_from_response(@api.get_checkins(options))
+				get_view(stream, options)
+			rescue => e
+				$logger.error "From stream/checkins"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def global(options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_global(options))
-			get_view(stream, options)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				stream = get_data_from_response(@api.get_global(options))
+				get_view(stream, options)
+			rescue => e
+				$logger.error "From stream/global"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def trending(options)
@@ -229,6 +256,20 @@ module Ayadn
 			list.each do |id, content_array|
 				$db.users[id] = {content_array[0] => content_array[1]}
 			end
+		end
+
+		def global_error(e)
+			puts "\n\nERROR (see #{$config.config[:paths][:log]}/ayadn.log)\n".color(:red)
+		end
+
+		def add_arobase_if_absent(username)
+			unless username.first == "me"
+				username = username.first.chars.to_a
+				username.unshift("@") unless username.first == "@"
+			else
+				username = "me".chars.to_a
+			end
+			username
 		end
 
 	end
