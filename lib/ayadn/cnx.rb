@@ -1,7 +1,7 @@
 module Ayadn
 	class CNX
 
-		def get_response_from(url)
+		def self.get_response_from(url)
 			begin
 				RestClient::Resource.new(url, :verify_ssl => OpenSSL::SSL::VERIFY_NONE).get
 			rescue => e
