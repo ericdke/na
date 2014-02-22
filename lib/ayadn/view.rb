@@ -9,7 +9,7 @@ module Ayadn
 			posts, view = @workers.build_stream_with_index(data)
 			#puts "\n"
 			puts view
-			@workers.save_indexed_posts(posts)
+			FileOps.save_indexed_posts(posts)
 		end
 
 		def show_posts(data)

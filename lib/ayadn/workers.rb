@@ -183,31 +183,6 @@ module Ayadn
 			users_list
 		end
 
-		def save_indexed_posts(posts)
-			begin
-				$db.index.clear
-				posts.each do |id, hash|
-					$db.index[id] = hash
-				end
-			rescue => e
-				$logger.error "From workers/save_indexed_posts: #{e}"
-			end
-		end
-
-		def get_post_from_index(number)
-			begin
-				unless number > $db.index.length || number <= 0
-					$db.index.to_h.each do |id, values|
-						return values if values[:count] == number
-					end
-				else
-					raise #temp
-				end
-			rescue => e
-				$logger.error "From workers/get_post_from_index: #{e}"
-			end
-		end
-
 		#private
 
 		def build_users_list(list, table)

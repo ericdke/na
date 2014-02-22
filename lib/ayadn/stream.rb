@@ -1,8 +1,6 @@
 module Ayadn
 	class Stream
 
-		# Depending on context, Stream is a "stream" factory/launcher or an "action" launcher
-
 		def initialize
 			@api = API.new
 			@view = View.new
