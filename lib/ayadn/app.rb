@@ -96,19 +96,7 @@ module Ayadn
 		map "-WOR" => :whoreposted
 		long_desc Descriptions.whoreposted
 		def whoreposted(post_id)
-			begin
-				if post_id.is_integer?
-					Stream.new.whoreposted(post_id)
-				else
-					puts Status.error_missing_post_id
-				end
-			rescue => e
-				$logger.error "From stream/whoreposted with args: #{post_id}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.whoreposted(post_id)
 		end
 
 		desc "whostarred POST-ID", "Lists users who starred post n°POST-ID (ayadn -WOS POST-ID)"
@@ -175,20 +163,7 @@ module Ayadn
 		map "-FWR" => :followers
 		long_desc Descriptions.followers
 		def followers(*username)
-			begin
-				unless username.empty?
-					username_array = add_arobase_if_absent(username)
-					Stream.new.followers(username_array.join)
-				else
-					puts Status.error_missing_username
-				end
-			rescue => e
-				$logger.error "From stream/followers with args: #{username}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.followers(username)
 		end
 
 		desc "muted", "Lists the users you muted (ayadn -MTD)"

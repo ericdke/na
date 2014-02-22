@@ -178,14 +178,26 @@ module Ayadn
 		end
 
 		def whoreposted(post_id)
-			@view.clear_screen
-			print Status.downloading
-			list = get_data_from_response(@api.get_whoreposted(post_id))
-			get_list(:whoreposted, list, post_id)
-			add_to_users_db_from_list(list)
+			begin
+				if post_id.is_integer?
+					@view.clear_screen
+					print Status.downloading
+					list = get_data_from_response(@api.get_whoreposted(post_id))
+					get_list(:whoreposted, list, post_id)
+					#add_to_users_db_from_list(list)
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue Exception => e
+				$logger.error "From stream/whoreposted with args: #{post_id}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
-		def whostarred(post_id)
+		def whostarred(post_id) #!!!
 			@view.clear_screen
 			print Status.downloading
 			list = get_data_from_response(@api.get_whostarred(post_id))
@@ -223,11 +235,24 @@ module Ayadn
 		end
 
 		def followers(username)
-			@view.clear_screen
-			print Status.downloading
-			list = @api.get_followers(username)
-			get_list(:followers, list, username)
-			add_to_users_db_from_list(list)
+			begin
+				unless username.empty?
+					username = add_arobase_if_absent(username)
+					@view.clear_screen
+					print Status.downloading
+					list = @api.get_followers(username)
+					get_list(:followers, list, username)
+					add_to_users_db_from_list(list)
+				else
+					puts Status.error_missing_username
+				end
+			rescue => e
+				$logger.error "From stream/followers with args: #{username}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def muted

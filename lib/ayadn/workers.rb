@@ -110,13 +110,23 @@ module Ayadn
 				t.style = { :width => $config.options[:formats][:table][:width] }
 				t.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
-			build_users_list(list, table)
+			users_list = []
+			list.each do |obj|
+				obj['name'].nil? ? name = "" : name = obj['name']
+				users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you']}
+			end
+			build_users_list(users_list, table)
 		end
 
 		def build_starred_list(list, target)
 			table = Terminal::Table.new do |t|
 				t.style = { :width => $config.options[:formats][:table][:width] }
 				t.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
+			end
+			users_list = []
+			list.each do |obj|
+				obj['name'].nil? ? name = "" : name = obj['name']
+				users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you']}
 			end
 			build_users_list(list, table)
 		end
@@ -202,8 +212,21 @@ module Ayadn
 
 		def build_users_list(list, table)
 			list.each_with_index do |obj, index|
-				table << [ "@#{obj[:username]} ".color($config.options[:colors][:username]), "#{obj[:name]}" ]
-				table << :separator unless index + 1 == list.length
+				# if obj[:username]
+					unless obj[:name].nil?
+						table << [ "@#{obj[:username]} ".color($config.options[:colors][:username]), "#{obj[:name]}" ]
+					else
+						table << [ "@#{obj[:username]} ".color($config.options[:colors][:username]), "" ]
+					end
+					table << :separator unless index + 1 == list.length
+			# 	elsif obj['username']
+			# 		unless obj['name'].nil?
+			# 			table << [ "@#{obj['username']} ".color($config.options[:colors]['username']), "#{obj['name']}" ]
+			# 		else
+			# 			table << [ "@#{obj['username']} ".color($config.options[:colors]['username']), "" ]
+			# 		end
+			# 		table << :separator unless index + 1 == list.length
+			# 	end
 			end
 			table
 		end
