@@ -2,18 +2,15 @@ module Ayadn
 	class API
 		
 		def get_unified(options)
-			url = Endpoints.unified(options)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.unified(options))
 		end
 
 		def get_checkins(options)
-			url = Endpoints.checkins(options)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.checkins(options))
 		end
 
 		def get_global(options)
-			url = Endpoints.global(options)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.global(options))
 		end
 
 		def get_trending(options)
@@ -34,48 +31,39 @@ module Ayadn
 		end
 
 		def get_mentions(username, options)
-			url = Endpoints.mentions(username, options)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.mentions(username, options))
 		end
 
 		def get_posts(username, options)
-			url = Endpoints.posts(username, options)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.posts(username, options))
 		end
 
 		def get_whatstarred(username, options)
-			url = Endpoints.whatstarred(username, options)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.whatstarred(username, options))
 		end
 
 		def get_interactions
-			url = Endpoints.interactions
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.interactions)
 		end
 
 		def get_whoreposted(post_id)
-			url = Endpoints.whoreposted(post_id)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.whoreposted(post_id))
 		end
 
 		def get_whostarred(post_id)
-			url = Endpoints.whostarred(post_id)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.whostarred(post_id))
 		end
 
 		def get_convo(post_id, options)
-			url = Endpoints.convo(post_id, options)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.convo(post_id, options))
 		end
 
 		def get_hashtag(hashtag)
-			url = Endpoints.hashtag(hashtag)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.hashtag(hashtag))
 		end
 
 		def get_search(words, options)
-			url = Endpoints.search(words, options)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.search(words, options))
 		end
 
 		def get_followings(username)
@@ -124,18 +112,15 @@ module Ayadn
 		end
 
 		def get_user(username)
-			url = Endpoints.user(username)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.user(username))
 		end
 
 		def get_details(post_id)
-			url = Endpoints.single_post(post_id)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.single_post(post_id))
 		end
 
 		def get_files_list(options)
-			url = Endpoints.files_list(options)
-			get_parsed_response(url)
+			get_parsed_response(Endpoints.files_list(options))
 		end
 
 		#private
