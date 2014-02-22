@@ -75,7 +75,9 @@ module Ayadn
 		def self.unfollow
 			%Q{Unfollow a user.\nShortcut: replace 'unfollow' by '-UNF'}
 		end
-
+		def self.unmute
+			%Q{Unmute a user.\nShortcut: replace 'unmute' by '-UNM'}
+		end
 
 
 

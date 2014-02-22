@@ -172,5 +172,9 @@ module Ayadn
 			USERS_URL + "#{username}/follow?access_token=#{MyConfig.user_token}"
 		end
 
+		def self.mute(username)
+			USERS_URL + "#{username}/mute?access_token=#{MyConfig.user_token}"
+		end
+
 	end
 end
