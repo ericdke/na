@@ -80,15 +80,7 @@ module Ayadn
 		map "-INT" => :interactions
 		long_desc Descriptions.interactions
 		def interactions
-			begin
-				Stream.new.interactions(options)
-			rescue => e
-				$logger.error "From stream/interactions"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.interactions
 		end
 
 		desc "whatstarred @USERNAME", "Shows posts starred by @username (ayadn -WAS @username)"

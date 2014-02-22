@@ -149,11 +149,19 @@ module Ayadn
 		end
 
 		def interactions
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_interactions)
-			@view.clear_screen
-			@view.show_interactions(stream)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				stream = get_data_from_response(@api.get_interactions)
+				@view.clear_screen
+				@view.show_interactions(stream)
+			rescue => e
+				$logger.error "From stream/interactions"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def whoreposted(post_id)
