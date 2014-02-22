@@ -119,20 +119,7 @@ module Ayadn
 		map "-FWG" => :followings
 		long_desc Descriptions.followings
 		def followings(*username)
-			begin
-				unless username.empty?
-					username_array = add_arobase_if_absent(username)
-					Stream.new.followings(username_array.join)
-				else
-					puts Status.error_missing_username
-				end
-			rescue => e
-				$logger.error "From stream/followings with args: #{username}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.followings(username)
 		end
 
 		desc "followers @USERNAME", "Lists users following @username (ayadn -FWR @username)"

@@ -249,11 +249,24 @@ module Ayadn
 		end
 
 		def followings(username)
-			@view.clear_screen
-			print Status.downloading
-			list = @api.get_followings(username)
-			get_list(:followings, list, username)
-			add_to_users_db_from_list(list)
+			begin
+				unless username.empty?
+					username = add_arobase_if_absent(username)
+					@view.clear_screen
+					print Status.downloading
+					list = @api.get_followings(username)
+					get_list(:followings, list, username)
+					add_to_users_db_from_list(list)
+				else
+					puts Status.error_missing_username
+				end
+			rescue => e
+				$logger.error "From stream/followings with args: #{username}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def followers(username)
