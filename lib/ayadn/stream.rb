@@ -184,11 +184,10 @@ module Ayadn
 					print Status.downloading
 					list = get_data_from_response(@api.get_whoreposted(post_id))
 					get_list(:whoreposted, list, post_id)
-					#add_to_users_db_from_list(list)
 				else
 					puts Status.error_missing_post_id
 				end
-			rescue Exception => e
+			rescue => e
 				$logger.error "From stream/whoreposted with args: #{post_id}"
 				$logger.error "#{e}"
 				global_error(e)
@@ -197,12 +196,23 @@ module Ayadn
 			end
 		end
 
-		def whostarred(post_id) #!!!
-			@view.clear_screen
-			print Status.downloading
-			list = get_data_from_response(@api.get_whostarred(post_id))
-			get_list(:whostarred, list, post_id)
-			add_to_users_db_from_list(list)
+		def whostarred(post_id)
+			begin
+				if post_id.is_integer?
+					@view.clear_screen
+					print Status.downloading
+					list = get_data_from_response(@api.get_whostarred(post_id))
+					get_list(:whostarred, list, post_id)
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue Exception => e
+				$logger.error "From stream/whostarred with args: #{post_id}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def convo(post_id, options)

@@ -103,19 +103,7 @@ module Ayadn
 		map "-WOS" => :whostarred
 		long_desc Descriptions.whostarred
 		def whostarred(post_id)
-			begin
-				if post_id.is_integer?
-					Stream.new.whostarred(post_id)
-				else
-					puts Status.error_missing_post_id
-				end
-			rescue => e
-				$logger.error "From stream/whostarred with args: #{post_id}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.whostarred(post_id)
 		end
 
 		desc "convo POST-ID", "Shows the conversation thread around post n°POST_ID (ayadn -CO POST-ID)"

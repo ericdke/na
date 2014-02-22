@@ -128,7 +128,7 @@ module Ayadn
 				obj['name'].nil? ? name = "" : name = obj['name']
 				users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you']}
 			end
-			build_users_list(list, table)
+			build_users_list(users_list, table)
 		end
 
 		def build_followings_list(list, target)
