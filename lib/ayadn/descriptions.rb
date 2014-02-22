@@ -60,11 +60,11 @@ module Ayadn
 		def self.settings
 			%Q{Lists current Ayadn settings.\nShortcut: replace 'settings' by '-OPT'}
 		end
-		def self.user
-			%Q{Shows detailed informations about @username.\nShortcut: replace 'user' by '-UI'}
+		def self.user_info
+			%Q{Shows detailed informations about @username.\nShortcut: replace 'user_info' by '-UI'}
 		end
-		def self.details
-			%Q{Shows detailed informations about n°POST-ID.\nShortcut: replace 'details' by '-PI'}
+		def self.post_info
+			%Q{Shows detailed informations about n°POST-ID.\nShortcut: replace 'post_info' by '-PI'}
 		end
 		def self.files
 			%Q{Lists the files in your ADN storage.\nShortcut: replace 'files' by '-F'}

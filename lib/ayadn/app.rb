@@ -166,30 +166,18 @@ module Ayadn
 			Stream.new.view_settings
 		end
 
-		desc "user @USERNAME", "Shows detailed informations about @username (ayadn -UI @username)"
-		map "-UI" => :user
-		long_desc Descriptions.user
-		def user(*username)
-			Stream.new.user(username)
+		desc "user_info @USERNAME", "Shows detailed informations about @username (ayadn -UI @username)"
+		map "-UI" => :user_info
+		long_desc Descriptions.user_info
+		def user_info(*username)
+			Stream.new.user_info(username)
 		end
 
-		desc "details POST-ID", "Shows detailed informations about post n°POST-ID (ayadn -PI POST-ID)"
-		map "-PI" => :details
-		long_desc Descriptions.details
-		def details(post_id)
-			begin
-				if post_id.is_integer?
-					Stream.new.details(post_id)
-				else
-					puts Status.error_missing_post_id
-				end
-			rescue => e
-				$logger.error "From stream/details with args: #{post_id}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+		desc "post_info POST-ID", "Shows detailed informations about post n°POST-ID (ayadn -PI POST-ID)"
+		map "-PI" => :post_info
+		long_desc Descriptions.post_info
+		def post_info(post_id)
+			Stream.new.post_info(post_id)
 		end
 
 		desc "files", "Lists the files in your ADN storage (ayadn -F)"
@@ -197,16 +185,7 @@ module Ayadn
 		long_desc Descriptions.files
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		def files
-			begin
-				Stream.new.files(options)
-			rescue => e
-				$logger.error "From stream/files"
-				$logger.error "#{e}"
-				global_error(e)
-				raise e
-			ensure
-				$db.close_all
-			end
+			Stream.new.files(options)
 		end
 
 	end

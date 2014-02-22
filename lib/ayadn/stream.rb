@@ -351,7 +351,7 @@ module Ayadn
 			end
 		end
 
-		def user(username)
+		def user_info(username)
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
@@ -363,7 +363,7 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				$logger.error "From stream/user with args: #{username}"
+				$logger.error "From stream/user_info with args: #{username}"
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
@@ -371,24 +371,44 @@ module Ayadn
 			end
 		end
 
-		def details(post_id)
-			@view.clear_screen
-			print Status.downloading
-			@view.clear_screen
-			resp = get_data_from_response(@api.get_details(post_id))
-			stream = get_data_from_response(@api.get_user("@#{resp['user']['username']}"))
-			puts "POST:\n".inverse
-			@view.show_simple_post([resp])
-			puts "AUTHOR:\n".inverse
-			@view.show_user_infos(stream)
+		def post_info(post_id)
+			begin
+				if post_id.is_integer?
+					@view.clear_screen
+					print Status.downloading
+					@view.clear_screen
+					resp = get_data_from_response(@api.get_details(post_id))
+					stream = get_data_from_response(@api.get_user("@#{resp['user']['username']}"))
+					puts "POST:\n".inverse
+					@view.show_simple_post([resp])
+					puts "AUTHOR:\n".inverse
+					@view.show_user_infos(stream)
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue => e
+				$logger.error "From stream/post_info with args: #{post_id}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def files(options)
-			@view.clear_screen
-			print Status.downloading
-			list = @api.get_files_list(options)
-			@view.clear_screen
-			@view.show_files_list(list)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				list = @api.get_files_list(options)
+				@view.clear_screen
+				@view.show_files_list(list)
+			rescue => e
+				$logger.error "From stream/files"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 
