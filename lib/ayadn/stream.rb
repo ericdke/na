@@ -6,8 +6,7 @@ module Ayadn
 			@view = View.new
 			MyConfig.load_config
 			Logs.create_logger
-			Databases.users = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/users.db"
-			Databases.index = Daybreak::DB.new "#{MyConfig.config[:paths][:pagination]}/index.db"
+			Databases.open_databases
 		end
 
 		def unified(options)
