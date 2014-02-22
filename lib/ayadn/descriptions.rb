@@ -82,8 +82,12 @@ module Ayadn
 			%Q{Unblock a user.\nShortcut: replace 'unblock' by '-UNB'}
 		end
 		def self.unrepost
-			%Q{Unrepost a user.\nShortcut: replace 'unrepost' by '-UNR'}
+			%Q{Unrepost a post.\nShortcut: replace 'unrepost' by '-UNR'}
 		end
+		def self.unstar
+			%Q{Unstar a post.\nShortcut: replace 'unstar' by '-UNS'}
+		end
+
 
 
 

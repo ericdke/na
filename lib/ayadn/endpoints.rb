@@ -184,5 +184,9 @@ module Ayadn
 			POSTS_URL + "#{post_id}/repost?access_token=#{MyConfig.user_token}"
 		end
 
+		def self.star(post_id)
+			POSTS_URL + "#{post_id}/star?access_token=#{MyConfig.user_token}"
+		end
+
 	end
 end

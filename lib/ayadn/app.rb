@@ -188,7 +188,7 @@ module Ayadn
 			Action.new.files(options)
 		end
 
-		desc "delete POST-ID", "Delete a post (ayadn -DEL POST-ID)"
+		desc "delete POST-ID", "Delete post n°POST-ID (ayadn -DEL POST-ID)"
 		map "-DEL" => :delete
 		long_desc Descriptions.delete
 		def delete(post_id)
@@ -216,11 +216,18 @@ module Ayadn
 			Action.new.unblock(username)
 		end
 
-		desc "unrepost @USERNAME", "Unrepost @username (ayadn -UNR @username)"
+		desc "unrepost POST-ID", "Unrepost post n°POST-ID (ayadn -UNR POST-ID)"
 		map "-UNR" => :unrepost
 		long_desc Descriptions.unrepost
 		def unrepost(post_id)
 			Action.new.unrepost(post_id)
+		end
+
+		desc "unstar POST-ID", "Unstar post n°POST-ID (ayadn -UNS POST-ID)"
+		map "-UNS" => :unstar
+		long_desc Descriptions.unstar
+		def unstar(post_id)
+			Action.new.unstar(post_id)
 		end
 
 

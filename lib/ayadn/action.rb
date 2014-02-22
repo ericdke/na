@@ -355,6 +355,30 @@ module Ayadn
 			end
 		end
 
+		def unstar(post_id)
+			begin
+				if post_id.is_integer?
+					@view.clear_screen
+					puts Status.unstarring(post_id)
+					resp = @api.unstar(post_id)
+					@view.clear_screen
+					if resp['meta']['code'] == 200
+						puts Status.unstarred(post_id)
+					else
+						puts Status.not_unstarred(post_id)
+					end
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue => e
+				Logs.rec.error "From action/unstar with args: #{post_id}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+			ensure
+				Databases.close_all
+			end
+		end
+
 		def hashtag(hashtag)
 			begin
 				@view.clear_screen
