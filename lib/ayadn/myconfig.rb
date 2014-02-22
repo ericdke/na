@@ -47,7 +47,8 @@ module Ayadn
 				begin
 					Dir.mkdir(@config[:paths][:home])
 				rescue => e
-					$logger.fatal "From myconfig/create home data folder: #{e}"
+					Logs.rec.fatal "From myconfig/create home data folder"
+					Logs.rec.fatal "#{e}"
 				end
 			else
 				begin
@@ -62,7 +63,8 @@ module Ayadn
 					Dir.mkdir(@config[:paths][:messages]) unless Dir.exists?(@config[:paths][:messages])
 					Dir.mkdir(@config[:paths][:lists]) unless Dir.exists?(@config[:paths][:lists])
 				rescue => e
-					$logger.fatal "From myconfig/create ayadn folders: #{e}"
+					Logs.rec.fatal "From myconfig/create ayadn folders"
+					Logs.rec.fatal "#{e}"
 				end
 			end
 			config_file = @config[:paths][:config] + "/config.yml"
@@ -73,13 +75,15 @@ module Ayadn
 					#ap @options
 					#exit
 				rescue => e
-					$logger.error "From myconfig/load config.yml: #{e}"
+					Logs.rec.error "From myconfig/load config.yml"
+					Logs.rec.error "#{e}"
 				end
 			else
 				begin
 					write_config_file(config_file, @options)
 				rescue => e
-					$logger.error "From myconfig/create config.yml from defaults: #{e}"
+					Logs.rec.error "From myconfig/create config.yml from defaults"
+					Logs.rec.error "#{e}"
 				end
 			end
 			vf = File.new(@config[:paths][:config] + "/version.yml", "w")

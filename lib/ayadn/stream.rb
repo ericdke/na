@@ -32,8 +32,8 @@ module Ayadn
 				stream = get_data_from_response(@api.get_checkins(options))
 				get_view(stream, options)
 			rescue => e
-				$logger.error "From stream/checkins"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/checkins"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -47,8 +47,8 @@ module Ayadn
 				stream = get_data_from_response(@api.get_global(options))
 				get_view(stream, options)
 			rescue => e
-				$logger.error "From stream/global"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/global"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -62,8 +62,8 @@ module Ayadn
 				stream = get_data_from_response(@api.get_trending(options))
 				get_view(stream, options)
 			rescue => e
-				$logger.error "From stream/trending"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/trending"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -77,8 +77,8 @@ module Ayadn
 				stream = get_data_from_response(@api.get_photos(options))
 				get_view(stream, options)
 			rescue => e
-				$logger.error "From stream/photos"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/photos"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -92,8 +92,8 @@ module Ayadn
 				stream = get_data_from_response(@api.get_conversations(options))
 				get_view(stream, options)
 			rescue => e
-				$logger.error "From stream/conversations"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/conversations"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -112,8 +112,8 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				$logger.error "From stream/mentions with args: #{username}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/mentions with args: #{username}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -132,8 +132,8 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				$logger.error "From stream/posts with args: #{username}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/posts with args: #{username}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -148,8 +148,8 @@ module Ayadn
 				@view.clear_screen
 				@view.show_interactions(stream)
 			rescue => e
-				$logger.error "From stream/interactions"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/interactions"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -168,8 +168,8 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				$logger.error "From stream/whatstarred with args: #{username}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/whatstarred with args: #{username}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -187,8 +187,8 @@ module Ayadn
 					puts Status.error_missing_post_id
 				end
 			rescue => e
-				$logger.error "From stream/whoreposted with args: #{post_id}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/whoreposted with args: #{post_id}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -206,8 +206,8 @@ module Ayadn
 					puts Status.error_missing_post_id
 				end
 			rescue => e
-				$logger.error "From stream/whostarred with args: #{post_id}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/whostarred with args: #{post_id}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -225,8 +225,8 @@ module Ayadn
 					puts Status.error_missing_post_id
 				end
 			rescue => e
-				$logger.error "From stream/convo with args: #{post_id}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/convo with args: #{post_id}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -240,8 +240,8 @@ module Ayadn
 				stream = get_data_from_response(@api.get_hashtag(hashtag))
 				get_view(stream)
 			rescue => e
-				$logger.error "From stream/hashtag with args: #{hashtag}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/hashtag with args: #{hashtag}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -255,8 +255,8 @@ module Ayadn
 				stream = get_data_from_response(@api.get_search(words, options))
 				get_view(stream, options)
 			rescue => e
-				$logger.error "From stream/search with args: #{words}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/search with args: #{words}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -276,8 +276,8 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				$logger.error "From stream/followings with args: #{username}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/followings with args: #{username}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -297,8 +297,8 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				$logger.error "From stream/followers with args: #{username}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/followers with args: #{username}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -313,8 +313,8 @@ module Ayadn
 				get_list(:muted, list, nil)
 				add_to_users_db_from_list(list)
 			rescue => e
-				$logger.error "From stream/muted"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/muted"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -329,8 +329,8 @@ module Ayadn
 				get_list(:blocked, list, nil)
 				add_to_users_db_from_list(list)
 			rescue => e
-				$logger.error "From stream/blocked"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/blocked"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -342,8 +342,8 @@ module Ayadn
 				@view.clear_screen
 				@view.settings
 			rescue => e
-				$logger.error "From stream/settings"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/settings"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -362,8 +362,8 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				$logger.error "From stream/user_info with args: #{username}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/user_info with args: #{username}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -386,8 +386,8 @@ module Ayadn
 					puts Status.error_missing_post_id
 				end
 			rescue => e
-				$logger.error "From stream/post_info with args: #{post_id}"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/post_info with args: #{post_id}"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
@@ -402,8 +402,8 @@ module Ayadn
 				@view.clear_screen
 				@view.show_files_list(list)
 			rescue => e
-				$logger.error "From stream/files"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/files"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all

@@ -8,8 +8,8 @@ module Ayadn
 					Databases.index[id] = hash
 				end
 			rescue => e
-				$logger.error "From fileops/save_indexed_posts"
-				$logger.error "#{e}"
+				Logs.rec.error "From fileops/save_indexed_posts"
+				Logs.rec.error "#{e}"
 			end
 		end
 
@@ -23,7 +23,8 @@ module Ayadn
 					raise #temp
 				end
 			rescue => e
-				$logger.error "From workers/get_post_from_index: #{e}"
+				Logs.rec.error "From workers/get_post_from_index"
+				Logs.rec.error "#{e}"
 			end
 		end
 

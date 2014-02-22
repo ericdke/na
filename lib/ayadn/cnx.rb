@@ -5,8 +5,8 @@ module Ayadn
 			begin
 				RestClient::Resource.new(url, :verify_ssl => OpenSSL::SSL::VERIFY_NONE).get
 			rescue => e
-				$logger.error "From cnx/get"
-				$logger.error "#{e}"
+				Logs.rec.error "From cnx/get"
+				Logs.rec.error "#{e}"
 			end
 		end
 
