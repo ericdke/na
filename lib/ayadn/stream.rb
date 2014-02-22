@@ -5,7 +5,7 @@ module Ayadn
 			@api = API.new
 			@view = View.new
 			$myconfig = MyConfig.new
-			$logger = Logger.new($myconfig.config[:paths][:log] + "/ayadn.log", 'monthly')
+			Logs.rec = Logger.new($myconfig.config[:paths][:log] + "/ayadn.log", 'monthly')
 			Databases.users = Daybreak::DB.new "#{$myconfig.config[:paths][:db]}/users.db"
 			Databases.index = Daybreak::DB.new "#{$myconfig.config[:paths][:pagination]}/index.db"
 		end
@@ -17,8 +17,8 @@ module Ayadn
 				stream = get_data_from_response(@api.get_unified(options))
 				get_view(stream, options)
 			rescue => e
-				$logger.error "From stream/unified"
-				$logger.error "#{e}"
+				Logs.rec.error "From stream/unified"
+				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
 				Databases.close_all
