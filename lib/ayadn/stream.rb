@@ -206,7 +206,7 @@ module Ayadn
 				else
 					puts Status.error_missing_post_id
 				end
-			rescue Exception => e
+			rescue => e
 				$logger.error "From stream/whostarred with args: #{post_id}"
 				$logger.error "#{e}"
 				global_error(e)
@@ -216,10 +216,22 @@ module Ayadn
 		end
 
 		def convo(post_id, options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_convo(post_id, options))
-			get_view(stream, options)
+			begin
+				if post_id.is_integer?
+					@view.clear_screen
+					print Status.downloading
+					stream = get_data_from_response(@api.get_convo(post_id, options))
+					get_view(stream, options)
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue => e
+				$logger.error "From stream/convo with args: #{post_id}"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def hashtag(hashtag)

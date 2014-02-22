@@ -112,19 +112,7 @@ module Ayadn
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		long_desc Descriptions.convo
 		def convo(post_id)
-			begin
-				if post_id.is_integer?
-					Stream.new.convo(post_id, options)
-				else
-					puts Status.error_missing_post_id
-				end
-			rescue => e
-				$logger.error "From stream/convo with args: #{post_id}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.convo(post_id, options)
 		end
 
 		desc "followings @USERNAME", "Lists users @username is following (ayadn -FWG @username)"
