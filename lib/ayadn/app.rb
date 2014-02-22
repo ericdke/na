@@ -163,15 +163,7 @@ module Ayadn
 		map "-OPT" => :settings
 		long_desc Descriptions.settings
 		def settings
-			begin
-				Stream.new.view_settings
-			rescue => e
-				$logger.error "From stream/settings"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.view_settings
 		end
 
 		desc "user @USERNAME", "Shows detailed informations about @username (ayadn -UI @username)"

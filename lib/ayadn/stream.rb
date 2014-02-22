@@ -339,8 +339,16 @@ module Ayadn
 		end
 
 		def view_settings
-			@view.clear_screen
-			@view.settings
+			begin
+				@view.clear_screen
+				@view.settings
+			rescue => e
+				$logger.error "From stream/settings"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def user(username)
