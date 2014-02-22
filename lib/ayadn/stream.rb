@@ -291,11 +291,19 @@ module Ayadn
 		end
 
 		def muted
-			@view.clear_screen
-			print Status.downloading
-			list = @api.get_muted
-			get_list(:muted, list, nil)
-			add_to_users_db_from_list(list)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				list = @api.get_muted
+				get_list(:muted, list, nil)
+				add_to_users_db_from_list(list)
+			rescue => e
+				$logger.error "From stream/muted"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def blocked

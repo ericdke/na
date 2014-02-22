@@ -133,15 +133,7 @@ module Ayadn
 		map "-MTD" => :muted
 		long_desc Descriptions.muted
 		def muted
-			begin
-				Stream.new.muted
-			rescue => e
-				$logger.error "From stream/muted"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.muted
 		end
 
 		desc "blocked", "Lists the users you blocked (ayadn -BKD)"
