@@ -141,13 +141,6 @@ module Ayadn
 			end
 		end
 
-		def whatstarred(username, options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_whatstarred(username, options))
-			get_view(stream, options)
-		end
-
 		def interactions
 			begin
 				@view.clear_screen
@@ -157,6 +150,26 @@ module Ayadn
 				@view.show_interactions(stream)
 			rescue => e
 				$logger.error "From stream/interactions"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
+		end
+
+		def whatstarred(username, options)
+			begin
+				unless username.empty?
+					username = add_arobase_if_absent(username)
+					@view.clear_screen
+					print Status.downloading
+					stream = get_data_from_response(@api.get_whatstarred(username, options))
+					get_view(stream, options)
+				else
+					puts Status.error_missing_username
+				end
+			rescue => e
+				$logger.error "From stream/whatstarred with args: #{username}"
 				$logger.error "#{e}"
 				global_error(e)
 			ensure

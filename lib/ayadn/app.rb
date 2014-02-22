@@ -89,20 +89,7 @@ module Ayadn
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def whatstarred(*username)
-			begin
-				unless username.empty?
-					username_array = add_arobase_if_absent(username)
-					Stream.new.whatstarred(username_array.join, options)
-				else
-					puts Status.error_missing_username
-				end
-			rescue => e
-				$logger.error "From stream/whatstarred with args: #{username}"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.whatstarred(username, options)
 		end
 
 		desc "whoreposted POST-ID", "Lists users who reposted post n°POST-ID (ayadn -WOR POST-ID)"
