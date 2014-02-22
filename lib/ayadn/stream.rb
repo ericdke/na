@@ -57,24 +57,48 @@ module Ayadn
 		end
 
 		def trending(options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_trending(options))
-			get_view(stream, options)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				stream = get_data_from_response(@api.get_trending(options))
+				get_view(stream, options)
+			rescue => e
+				$logger.error "From stream/trending"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
-		def photos(options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_photos(options))
-			get_view(stream, options)
+		def photos(options)		
+			begin
+				@view.clear_screen
+				print Status.downloading
+				stream = get_data_from_response(@api.get_photos(options))
+				get_view(stream, options)
+			rescue => e
+				$logger.error "From stream/photos"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def conversations(options)
-			@view.clear_screen
-			print Status.downloading
-			stream = get_data_from_response(@api.get_conversations(options))
-			get_view(stream, options)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				stream = get_data_from_response(@api.get_conversations(options))
+				get_view(stream, options)
+			rescue => e
+				$logger.error "From stream/conversations"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def mentions(username, options)

@@ -37,15 +37,7 @@ module Ayadn
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def trending
-			begin
-				Stream.new.trending(options)
-			rescue => e
-				$logger.error "From stream/trending"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.trending(options)
 		end
 
 		desc "photos", "Shows the Photos Stream (ayadn -PH)"
@@ -54,15 +46,7 @@ module Ayadn
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def photos
-			begin
-				Stream.new.photos(options)
-			rescue => e
-				$logger.error "From stream/photos"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.photos(options)
 		end
 
 		desc "conversations", "Shows the Conversations Stream (ayadn -CQ)"
@@ -71,15 +55,7 @@ module Ayadn
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
 		def conversations
-			begin
-				Stream.new.conversations(options)
-			rescue => e
-				$logger.error "From stream/conversations"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.conversations(options)
 		end
 
 		desc "mentions @USERNAME", "Shows posts containing a mention of a @username (ayadn -M @username)"
