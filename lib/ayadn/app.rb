@@ -140,15 +140,7 @@ module Ayadn
 		map "-BKD" => :blocked
 		long_desc Descriptions.blocked
 		def blocked
-			begin
-				Stream.new.blocked
-			rescue => e
-				$logger.error "From stream/blocked"
-				$logger.error "#{e}"
-				global_error(e)
-			ensure
-				$db.close_all
-			end
+			Stream.new.blocked
 		end
 
 		desc "hashtag HASHTAG", "Shows recent posts containing #HASHTAG (ayadn -TAG hashtag)"

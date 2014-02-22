@@ -307,11 +307,19 @@ module Ayadn
 		end
 
 		def blocked
-			@view.clear_screen
-			print Status.downloading
-			list = @api.get_blocked
-			get_list(:blocked, list, nil)
-			add_to_users_db_from_list(list)
+			begin
+				@view.clear_screen
+				print Status.downloading
+				list = @api.get_blocked
+				get_list(:blocked, list, nil)
+				add_to_users_db_from_list(list)
+			rescue => e
+				$logger.error "From stream/blocked"
+				$logger.error "#{e}"
+				global_error(e)
+			ensure
+				$db.close_all
+			end
 		end
 
 		def view_settings
