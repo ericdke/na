@@ -4,8 +4,8 @@ module Ayadn
 		def initialize
 			@api = API.new
 			@view = View.new
-			$config = MyConfig.new
-			$logger = Logger.new($config.config[:paths][:log] + "/ayadn.log", 'monthly')
+			$myconfig = MyConfig.new
+			$logger = Logger.new($myconfig.config[:paths][:log] + "/ayadn.log", 'monthly')
 			$db = Databases.new
 		end
 
@@ -461,7 +461,7 @@ module Ayadn
 		end
 
 		def global_error(e)
-			puts "\n\nERROR (see #{$config.config[:paths][:log]}/ayadn.log)\n".color(:red)
+			puts "\n\nERROR (see #{$myconfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
 		end
 
 		def add_arobase_if_absent(username)

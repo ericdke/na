@@ -17,120 +17,120 @@ module Ayadn
 
 		def self.unified(options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:unified]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:unified]})
 			end
-			POSTS_URL + "stream/unified?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/unified?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.checkins(options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:checkins]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:checkins]})
 			end
-			POSTS_URL + "stream/explore/checkins?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/explore/checkins?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.global(options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:global]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:global]})
 			end
-			POSTS_URL + "stream/global?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/global?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.trending(options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:trending]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:trending]})
 			end
-			POSTS_URL + "stream/explore/trending?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/explore/trending?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.photos(options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:photos]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:photos]})
 			end
-			POSTS_URL + "stream/explore/photos?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/explore/photos?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.conversations(options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:conversations]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:conversations]})
 			end
-			POSTS_URL + "stream/explore/conversations?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "stream/explore/conversations?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.mentions(username, options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:mentions]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:mentions]})
 			end
-			USERS_URL + "#{username}/mentions/?access_token=#{$config.user_token}#{@options_list}"
+			USERS_URL + "#{username}/mentions/?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.posts(username, options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:posts]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:posts]})
 			end
-			USERS_URL + "#{username}/posts/?access_token=#{$config.user_token}#{@options_list}"
+			USERS_URL + "#{username}/posts/?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.whatstarred(username, options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:default]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:default]})
 			end
-			USERS_URL + "#{username}/stars/?access_token=#{$config.user_token}#{@options_list}"
+			USERS_URL + "#{username}/stars/?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.interactions
-			USERS_URL + "me/interactions?access_token=#{$config.user_token}"
+			USERS_URL + "me/interactions?access_token=#{$myconfig.user_token}"
 		end
 
 		def self.whoreposted(post_id)
-			POSTS_URL + "#{post_id}/reposters/?access_token=#{$config.user_token}"
+			POSTS_URL + "#{post_id}/reposters/?access_token=#{$myconfig.user_token}"
 		end
 
 		def self.whostarred(post_id)
-			POSTS_URL + "#{post_id}/stars/?access_token=#{$config.user_token}"
+			POSTS_URL + "#{post_id}/stars/?access_token=#{$myconfig.user_token}"
 		end
 
 		def self.convo(post_id, options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:convo]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:convo]})
 			end
-			POSTS_URL + "#{post_id}/replies/?access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "#{post_id}/replies/?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.followings(username, options)
-			USERS_URL + "#{username}/following/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+			USERS_URL + "#{username}/following/?access_token=#{$myconfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
 		end
 
 		def self.followers(username, options)
-			USERS_URL + "#{username}/followers/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+			USERS_URL + "#{username}/followers/?access_token=#{$myconfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
 		end
 
 		def self.muted(options)
-			USERS_URL + "me/muted/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+			USERS_URL + "me/muted/?access_token=#{$myconfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
 		end
 
 		def self.blocked(options)
-			USERS_URL + "me/blocked/?access_token=#{$config.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+			USERS_URL + "me/blocked/?access_token=#{$myconfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
 		end
 
 		def self.hashtag(hashtag)
@@ -139,29 +139,29 @@ module Ayadn
 
 		def self.search(words, options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:search]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:search]})
 			end
-			POSTS_URL + "search?text=#{words}&access_token=#{$config.user_token}#{@options_list}"
+			POSTS_URL + "search?text=#{words}&access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.user(username)
-			USERS_URL + "#{username}?access_token=#{$config.user_token}"
+			USERS_URL + "#{username}?access_token=#{$myconfig.user_token}"
 		end
 
 		def self.single_post(post_id)
-			@options_list = $config.build_query_options({annotations: 1})
-			POSTS_URL + "#{post_id}?access_token=#{$config.user_token}#{@options_list}"
+			@options_list = $myconfig.build_query_options({annotations: 1})
+			POSTS_URL + "#{post_id}?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 		def self.files_list(options)
 			if options[:count]
-				@options_list = $config.build_query_options(options)
+				@options_list = $myconfig.build_query_options(options)
 			else
-				@options_list = $config.build_query_options({count: $config.options[:counts][:files]})
+				@options_list = $myconfig.build_query_options({count: $myconfig.options[:counts][:files]})
 			end
-			USERS_URL + "me/files?access_token=#{$config.user_token}#{@options_list}"
+			USERS_URL + "me/files?access_token=#{$myconfig.user_token}#{@options_list}"
 		end
 
 	end

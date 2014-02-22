@@ -5,8 +5,8 @@ module Ayadn
 		attr_accessor :users, :index
 
 		def initialize
-			@users = Daybreak::DB.new "#{$config.config[:paths][:db]}/users.db"
-			@index = Daybreak::DB.new "#{$config.config[:paths][:pagination]}/index.db"
+			@users = Daybreak::DB.new "#{$myconfig.config[:paths][:db]}/users.db"
+			@index = Daybreak::DB.new "#{$myconfig.config[:paths][:pagination]}/index.db"
 		end
 
 		def close_all
