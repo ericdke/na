@@ -127,6 +127,10 @@ module Ayadn
 			JSON.parse(CNX.delete(Endpoints.delete_post(post_id)))
 		end
 
+		def unfollow(username)
+			JSON.parse(CNX.delete(Endpoints.follow(username)))
+		end
+
 		#private
 
 		def get_raw_response(url)

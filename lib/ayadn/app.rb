@@ -188,12 +188,24 @@ module Ayadn
 			Action.new.files(options)
 		end
 
-		desc "delete", "Delete a post (ayadn -DEL POST-ID)"
+		desc "delete POST-ID", "Delete a post (ayadn -DEL POST-ID)"
 		map "-DEL" => :delete
 		long_desc Descriptions.delete
 		def delete(post_id)
 			Action.new.delete(post_id)
 		end
+
+		desc "unfollow @USERNAME", "Unfollow @username (ayadn -UNF @username)"
+		map "-UNF" => :unfollow
+		long_desc Descriptions.unfollow
+		def unfollow(*username)
+			Action.new.unfollow(username)
+		end
+
+
+
+
+
 
 
 

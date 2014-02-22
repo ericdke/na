@@ -72,6 +72,9 @@ module Ayadn
 		def self.delete
 			%Q{Delete a post.\nShortcut: replace 'delete' by '-DEL'}
 		end
+		def self.unfollow
+			%Q{Unfollow a user.\nShortcut: replace 'unfollow' by '-UNF'}
+		end
 
 
 

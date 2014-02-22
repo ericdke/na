@@ -168,5 +168,9 @@ module Ayadn
 			POSTS_URL + "#{post_id}?access_token=#{MyConfig.user_token}"
 		end
 
+		def self.follow(username)
+			USERS_URL + "#{username}/follow?access_token=#{MyConfig.user_token}"
+		end
+
 	end
 end

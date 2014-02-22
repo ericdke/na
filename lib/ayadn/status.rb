@@ -9,11 +9,20 @@ module Ayadn
 		def self.deleting_post(post_id)
 			"Deleting post #{post_id}\n".inverse
 		end
+		def self.unfollowing(username)
+			"Unfollowing #{username}\n".inverse
+		end
 		def self.not_deleted(post_id)
 			"Could not delete post #{post_id} (post isn't yours, or is already deleted)\n".color(:red)
 		end
+		def self.not_unfollowed(post_id)
+			"Could not unfollow user #{username} (doesn't exist, or wasn't already followed)\n".color(:red)
+		end
 		def self.deleted(post_id)
 			"Post #{post_id} has been deleted.\n".color(:green)
+		end
+		def self.unfollowed(username)
+			"User #{username} has been unfollowed.\n".color(:green)
 		end
 		def self.error_missing_username
 			"\nYou have to specify a username.\n".color(:red)
