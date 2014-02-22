@@ -6,7 +6,8 @@ module Ayadn
 			@view = View.new
 			$myconfig = MyConfig.new
 			$logger = Logger.new($myconfig.config[:paths][:log] + "/ayadn.log", 'monthly')
-			$db = Databases.new
+			Databases.users = Daybreak::DB.new "#{$myconfig.config[:paths][:db]}/users.db"
+			Databases.index = Daybreak::DB.new "#{$myconfig.config[:paths][:pagination]}/index.db"
 		end
 
 		def unified(options)
@@ -20,7 +21,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -35,7 +36,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -50,7 +51,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -65,7 +66,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -80,7 +81,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -95,7 +96,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -115,7 +116,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -135,7 +136,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -151,7 +152,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -171,7 +172,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -190,7 +191,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -209,7 +210,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -228,7 +229,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -243,7 +244,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -258,7 +259,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -279,7 +280,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -300,7 +301,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -316,7 +317,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -332,7 +333,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -345,7 +346,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -365,7 +366,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -389,7 +390,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -405,7 +406,7 @@ module Ayadn
 				$logger.error "#{e}"
 				global_error(e)
 			ensure
-				$db.close_all
+				Databases.close_all
 			end
 		end
 
@@ -456,7 +457,7 @@ module Ayadn
 
 		def add_to_users_db_from_list(list)
 			list.each do |id, content_array|
-				$db.users[id] = {content_array[0] => content_array[1]}
+				Databases.users[id] = {content_array[0] => content_array[1]}
 			end
 		end
 
