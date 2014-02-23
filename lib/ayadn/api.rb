@@ -135,6 +135,10 @@ module Ayadn
 			JSON.parse(CNX.post(Endpoints.mute(post_id)))
 		end
 
+		def block(username)
+			JSON.parse(CNX.post(Endpoints.block(username)))
+		end
+
 		def repost(post_id)
 			JSON.parse(CNX.post(Endpoints.repost(post_id)))
 		end

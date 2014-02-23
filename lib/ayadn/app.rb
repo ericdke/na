@@ -258,6 +258,13 @@ module Ayadn
 			Action.new.mute(username)
 		end
 
+		desc "block @USERNAME", "Block @username (ayadn -bl @username)"
+		map "-bl" => :block
+		long_desc Descriptions.block
+		def block(*username)
+			Action.new.block(username)
+		end
+
 
 
 

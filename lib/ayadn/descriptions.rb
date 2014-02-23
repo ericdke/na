@@ -99,6 +99,9 @@ module Ayadn
 		def self.mute
 			%Q{Mute a user.\nShortcut: replace 'mute' by '-mu'}
 		end
+		def self.block
+			%Q{Block a user.\nShortcut: replace 'block' by '-bl'}
+		end
 
 
 

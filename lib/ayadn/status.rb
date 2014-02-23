@@ -24,6 +24,9 @@ module Ayadn
 		def self.unblocking(username)
 			"Unblocking #{username}\n".inverse
 		end
+		def self.blocking(username)
+			"Blocking #{username}\n".inverse
+		end
 		def self.unreposting(post_id)
 			"Unreposting #{post_id}\n".inverse
 		end
@@ -66,6 +69,9 @@ module Ayadn
 		def self.not_unblocked(post_id)
 			"Could not unblock user #{username} (doesn't exist, or wasn't already blocked)\n".color(:red)
 		end
+		def self.not_blocked(post_id)
+			"Could not block user #{username} (doesn't exist, or is already blocked)\n".color(:red)
+		end
 		def self.deleted(post_id)
 			"Post #{post_id} has been deleted.\n".color(:green)
 		end
@@ -95,6 +101,9 @@ module Ayadn
 		end
 		def self.unblocked(username)
 			"User #{username} has been unblocked.\n".color(:green)
+		end
+		def self.blocked(username)
+			"User #{username} has been blocked.\n".color(:green)
 		end
 		def self.error_missing_username
 			"\nYou have to specify a username.\n".color(:red)
