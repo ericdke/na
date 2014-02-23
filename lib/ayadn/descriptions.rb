@@ -90,6 +90,9 @@ module Ayadn
 		def self.star
 			%Q{Star a post.\nShortcut: replace 'star' by '-ST'}
 		end
+		def self.repost
+			%Q{Repost a post.\nShortcut: replace 'repost' by '-RP'}
+		end
 
 
 

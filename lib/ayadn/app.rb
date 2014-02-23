@@ -237,6 +237,13 @@ module Ayadn
 			Action.new.star(post_id)
 		end
 
+		desc "repost POST-ID", "Repost a post (ayadn -RP POST-ID)"
+		map "-RP" => :repost
+		long_desc Descriptions.repost
+		def repost(post_id)
+			Action.new.repost(post_id)
+		end
+
 
 
 

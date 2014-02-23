@@ -403,6 +403,30 @@ module Ayadn
 			end
 		end
 
+		def repost(post_id)
+			begin
+				if post_id.is_integer?
+					@view.clear_screen
+					puts Status.reposting(post_id)
+					resp = @api.repost(post_id)
+					@view.clear_screen
+					if resp['meta']['code'] == 200
+						puts Status.reposted(post_id)
+					else
+						puts Status.not_reposted(post_id)
+					end
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue => e
+				Logs.rec.error "From action/repost with args: #{post_id}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+			ensure
+				Databases.close_all
+			end
+		end
+
 		def hashtag(hashtag)
 			begin
 				@view.clear_screen
