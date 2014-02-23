@@ -40,10 +40,10 @@ module Ayadn
 			%Q{Shows the conversation thread around post n°POST_ID.\nShortcut: replace 'convo' by '-co'}
 		end
 		def self.followings
-			%Q{Lists users @username is following.\nShortcut: replace 'followings' by '-fwg'}
+			%Q{Lists users @username is following.\nShortcut: replace 'followings' by '-fg'}
 		end
 		def self.followers
-			%Q{Lists users following @username.\nShortcut: replace 'followers' by '-fwr'}
+			%Q{Lists users following @username.\nShortcut: replace 'followers' by '-fr'}
 		end
 		def self.muted
 			%Q{Lists the users you muted.\nShortcut: replace 'muted' by '-mtd'}
@@ -58,7 +58,7 @@ module Ayadn
 			%Q{Shows recents posts containing WORD(S).\nShortcut: replace 'search' by '-s'}
 		end
 		def self.settings
-			%Q{Lists current Ayadn settings.\nShortcut: replace 'settings' by '-stg'}
+			%Q{Lists current Ayadn settings.\nShortcut: replace 'settings' by '-sg'}
 		end
 		def self.user_info
 			%Q{Shows detailed informations about @username.\nShortcut: replace 'user_info' by '-ui'}
@@ -67,7 +67,7 @@ module Ayadn
 			%Q{Shows detailed informations about n°POST-ID.\nShortcut: replace 'post_info' by '-pi'}
 		end
 		def self.files
-			%Q{Lists the files in your ADN storage.\nShortcut: replace 'files' by '-fi'}
+			%Q{Lists the files in your ADN storage.\nShortcut: replace 'files' by '-fl'}
 		end
 		def self.delete
 			%Q{Delete a post.\nShortcut: replace 'delete' by '-del'}

@@ -15,7 +15,6 @@ module Ayadn
 
 		desc "checkins", "Show the Checkins Stream (ayadn -ch)"
 		map "-ch" => :checkins
-		map "-chk" => :checkins
 		long_desc Descriptions.checkins
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -116,15 +115,15 @@ module Ayadn
 			Action.new.convo(post_id, options)
 		end
 
-		desc "followings @USERNAME", "List users @username is following (ayadn -fwg @username)"
-		map "-fwg" => :followings
+		desc "followings @USERNAME", "List users @username is following (ayadn -fg @username)"
+		map "-fg" => :followings
 		long_desc Descriptions.followings
 		def followings(*username)
 			Action.new.followings(username)
 		end
 
-		desc "followers @USERNAME", "List users following @username (ayadn -fwr @username)"
-		map "-fwr" => :followers
+		desc "followers @USERNAME", "List users following @username (ayadn -fr @username)"
+		map "-fr" => :followers
 		long_desc Descriptions.followers
 		def followers(*username)
 			Action.new.followers(username)
@@ -160,8 +159,8 @@ module Ayadn
 			Action.new.search(words.join(","), options)
 		end
 
-		desc "settings", "List current Ayadn settings (ayadn -stg)"
-		map "-stg" => :settings
+		desc "settings", "List current Ayadn settings (ayadn -sg)"
+		map "-sg" => :settings
 		long_desc Descriptions.settings
 		def settings
 			Action.new.view_settings
@@ -181,8 +180,8 @@ module Ayadn
 			Action.new.post_info(post_id)
 		end
 
-		desc "files", "List your files (ayadn -fi)"
-		map "-fi" => :files
+		desc "files", "List your files (ayadn -fl)"
+		map "-fl" => :files
 		long_desc Descriptions.files
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		def files
