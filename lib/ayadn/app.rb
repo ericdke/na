@@ -9,6 +9,7 @@ module Ayadn
 		long_desc Descriptions.unified
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def unified
 			Action.new.unified(options)
 		end

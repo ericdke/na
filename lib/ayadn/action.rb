@@ -14,7 +14,12 @@ module Ayadn
 				@view.clear_screen
 				print Status.downloading
 				stream = get_data_from_response(@api.get_unified(options))
-				get_view(stream, options)
+				@view.clear_screen
+				unless options[:raw]
+					get_view(stream, options)
+				else
+					@view.show_raw(stream)
+				end
 			rescue => e
 				Logs.rec.error "From action/unified"
 				Logs.rec.error "#{e}"
