@@ -13,7 +13,7 @@ module Ayadn
 			begin
 				@view.clear_screen
 				print Status.downloading
-				stream = get_data_from_response(@api.get_unified(options))
+				stream = @api.get_unified(options)
 				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/unified"
@@ -28,7 +28,7 @@ module Ayadn
 			begin
 				@view.clear_screen
 				print Status.downloading
-				stream = get_data_from_response(@api.get_checkins(options))
+				stream = @api.get_checkins(options)
 				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/checkins"
@@ -43,7 +43,7 @@ module Ayadn
 			begin
 				@view.clear_screen
 				print Status.downloading
-				stream = get_data_from_response(@api.get_global(options))
+				stream = @api.get_global(options)
 				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/global"
@@ -58,7 +58,7 @@ module Ayadn
 			begin
 				@view.clear_screen
 				print Status.downloading
-				stream = get_data_from_response(@api.get_trending(options))
+				stream = @api.get_trending(options)
 				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/trending"
@@ -73,7 +73,7 @@ module Ayadn
 			begin
 				@view.clear_screen
 				print Status.downloading
-				stream = get_data_from_response(@api.get_photos(options))
+				stream = @api.get_photos(options)
 				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/photos"
@@ -88,7 +88,7 @@ module Ayadn
 			begin
 				@view.clear_screen
 				print Status.downloading
-				stream = get_data_from_response(@api.get_conversations(options))
+				stream = @api.get_conversations(options)
 				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/conversations"
@@ -105,7 +105,7 @@ module Ayadn
 					username = add_arobase_if_absent(username)
 					@view.clear_screen
 					print Status.downloading
-					stream = get_data_from_response(@api.get_mentions(username, options))
+					stream = @api.get_mentions(username, options)
 					render_view(stream, options)
 				else
 					puts Status.error_missing_username
@@ -125,7 +125,7 @@ module Ayadn
 					username = add_arobase_if_absent(username)
 					@view.clear_screen
 					print Status.downloading
-					stream = get_data_from_response(@api.get_posts(username, options))
+					stream = @api.get_posts(username, options)
 					render_view(stream, options)
 				else
 					puts Status.error_missing_username
@@ -161,7 +161,7 @@ module Ayadn
 					username = add_arobase_if_absent(username)
 					@view.clear_screen
 					print Status.downloading
-					stream = get_data_from_response(@api.get_whatstarred(username, options))
+					stream = @api.get_whatstarred(username, options)
 					render_view(stream, options)
 				else
 					puts Status.error_missing_username
@@ -218,7 +218,7 @@ module Ayadn
 				if post_id.is_integer?
 					@view.clear_screen
 					print Status.downloading
-					stream = get_data_from_response(@api.get_convo(post_id, options))
+					stream = @api.get_convo(post_id, options)
 					render_view(stream, options)
 				else
 					puts Status.error_missing_post_id
@@ -506,7 +506,7 @@ module Ayadn
 			begin
 				@view.clear_screen
 				print Status.downloading
-				stream = get_data_from_response(@api.get_hashtag(hashtag))
+				stream = @api.get_hashtag(hashtag)
 				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/hashtag with args: #{hashtag}"
@@ -521,7 +521,7 @@ module Ayadn
 			begin
 				@view.clear_screen
 				print Status.downloading
-				stream = get_data_from_response(@api.get_search(words, options))
+				stream = @api.get_search(words, options)
 				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/search with args: #{words}"
@@ -686,7 +686,7 @@ module Ayadn
 		def render_view(data, options = {})
 			@view.clear_screen
 			unless options[:raw]
-				get_view(data, options)
+				get_view(data['data'], options)
 			else
 				@view.show_raw(data)
 			end
