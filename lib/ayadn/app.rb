@@ -19,6 +19,7 @@ module Ayadn
 		long_desc Descriptions.checkins
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def checkins
 			Action.new.checkins(options)
 		end
@@ -28,6 +29,7 @@ module Ayadn
 		long_desc Descriptions.global
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def global
 			Action.new.global(options)
 		end
@@ -37,6 +39,7 @@ module Ayadn
 		long_desc Descriptions.trending
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def trending
 			Action.new.trending(options)
 		end
@@ -46,6 +49,7 @@ module Ayadn
 		long_desc Descriptions.photos
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def photos
 			Action.new.photos(options)
 		end
@@ -55,6 +59,7 @@ module Ayadn
 		long_desc Descriptions.conversations
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def conversations
 			Action.new.conversations(options)
 		end
@@ -64,6 +69,7 @@ module Ayadn
 		long_desc Descriptions.mentions
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def mentions(*username)
 			Action.new.mentions(username, options)
 		end
@@ -73,6 +79,7 @@ module Ayadn
 		long_desc Descriptions.posts
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def posts(*username)
 			Action.new.posts(username, options)
 		end
@@ -89,6 +96,7 @@ module Ayadn
 		long_desc Descriptions.whatstarred
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def whatstarred(*username)
 			Action.new.whatstarred(username, options)
 		end
@@ -111,6 +119,7 @@ module Ayadn
 		map "-co" => :convo
 		map "thread" => :convo
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		long_desc Descriptions.convo
 		def convo(post_id)
 			Action.new.convo(post_id, options)
@@ -147,8 +156,9 @@ module Ayadn
 		desc "hashtag HASHTAG", "Show recent posts containing #HASHTAG (ayadn -t hashtag)"
 		map "-t" => :hashtag
 		long_desc Descriptions.hashtag
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def hashtag(hashtag)
-			Action.new.hashtag(hashtag)
+			Action.new.hashtag(hashtag, options)
 		end
 
 		desc "search WORD(S)", "Show recents posts containing WORD(S) (ayadn -s word1 word2 ...)"
@@ -156,6 +166,7 @@ module Ayadn
 		long_desc Descriptions.search
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def search(*words)
 			Action.new.search(words.join(","), options)
 		end

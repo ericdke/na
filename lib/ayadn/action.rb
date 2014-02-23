@@ -14,12 +14,7 @@ module Ayadn
 				@view.clear_screen
 				print Status.downloading
 				stream = get_data_from_response(@api.get_unified(options))
-				@view.clear_screen
-				unless options[:raw]
-					get_view(stream, options)
-				else
-					@view.show_raw(stream)
-				end
+				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/unified"
 				Logs.rec.error "#{e}"
@@ -34,7 +29,7 @@ module Ayadn
 				@view.clear_screen
 				print Status.downloading
 				stream = get_data_from_response(@api.get_checkins(options))
-				get_view(stream, options)
+				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/checkins"
 				Logs.rec.error "#{e}"
@@ -49,7 +44,7 @@ module Ayadn
 				@view.clear_screen
 				print Status.downloading
 				stream = get_data_from_response(@api.get_global(options))
-				get_view(stream, options)
+				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/global"
 				Logs.rec.error "#{e}"
@@ -64,7 +59,7 @@ module Ayadn
 				@view.clear_screen
 				print Status.downloading
 				stream = get_data_from_response(@api.get_trending(options))
-				get_view(stream, options)
+				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/trending"
 				Logs.rec.error "#{e}"
@@ -79,7 +74,7 @@ module Ayadn
 				@view.clear_screen
 				print Status.downloading
 				stream = get_data_from_response(@api.get_photos(options))
-				get_view(stream, options)
+				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/photos"
 				Logs.rec.error "#{e}"
@@ -94,7 +89,7 @@ module Ayadn
 				@view.clear_screen
 				print Status.downloading
 				stream = get_data_from_response(@api.get_conversations(options))
-				get_view(stream, options)
+				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/conversations"
 				Logs.rec.error "#{e}"
@@ -111,7 +106,7 @@ module Ayadn
 					@view.clear_screen
 					print Status.downloading
 					stream = get_data_from_response(@api.get_mentions(username, options))
-					get_view(stream, options)
+					render_view(stream, options)
 				else
 					puts Status.error_missing_username
 				end
@@ -131,7 +126,7 @@ module Ayadn
 					@view.clear_screen
 					print Status.downloading
 					stream = get_data_from_response(@api.get_posts(username, options))
-					get_view(stream, options)
+					render_view(stream, options)
 				else
 					puts Status.error_missing_username
 				end
@@ -167,7 +162,7 @@ module Ayadn
 					@view.clear_screen
 					print Status.downloading
 					stream = get_data_from_response(@api.get_whatstarred(username, options))
-					get_view(stream, options)
+					render_view(stream, options)
 				else
 					puts Status.error_missing_username
 				end
@@ -224,7 +219,7 @@ module Ayadn
 					@view.clear_screen
 					print Status.downloading
 					stream = get_data_from_response(@api.get_convo(post_id, options))
-					get_view(stream, options)
+					render_view(stream, options)
 				else
 					puts Status.error_missing_post_id
 				end
@@ -507,12 +502,12 @@ module Ayadn
 			end
 		end
 
-		def hashtag(hashtag)
+		def hashtag(hashtag, options)
 			begin
 				@view.clear_screen
 				print Status.downloading
 				stream = get_data_from_response(@api.get_hashtag(hashtag))
-				get_view(stream)
+				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/hashtag with args: #{hashtag}"
 				Logs.rec.error "#{e}"
@@ -527,7 +522,7 @@ module Ayadn
 				@view.clear_screen
 				print Status.downloading
 				stream = get_data_from_response(@api.get_search(words, options))
-				get_view(stream, options)
+				render_view(stream, options)
 			rescue => e
 				Logs.rec.error "From action/search with args: #{words}"
 				Logs.rec.error "#{e}"
@@ -687,6 +682,15 @@ module Ayadn
 
 
 		#private
+
+		def render_view(data, options = {})
+			@view.clear_screen
+			unless options[:raw]
+				get_view(data, options)
+			else
+				@view.show_raw(data)
+			end
+		end
 
 		def get_data_from_response(response)
 			response['data']
