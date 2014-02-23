@@ -127,6 +127,10 @@ module Ayadn
 			JSON.parse(CNX.post(Endpoints.star(post_id)))
 		end
 
+		def follow(post_id)
+			JSON.parse(CNX.post(Endpoints.follow(post_id)))
+		end
+
 		def repost(post_id)
 			JSON.parse(CNX.post(Endpoints.repost(post_id)))
 		end

@@ -12,6 +12,9 @@ module Ayadn
 		def self.unfollowing(username)
 			"Unfollowing #{username}\n".inverse
 		end
+		def self.following(username)
+			"Following #{username}\n".inverse
+		end
 		def self.unmuting(username)
 			"Unmuting #{username}\n".inverse
 		end
@@ -48,6 +51,9 @@ module Ayadn
 		def self.not_unfollowed(post_id)
 			"Could not unfollow user #{username} (doesn't exist, or wasn't already followed)\n".color(:red)
 		end
+		def self.not_followed(post_id)
+			"Could not follow user #{username} (doesn't exist, or you already follow)\n".color(:red)
+		end
 		def self.not_unmuted(post_id)
 			"Could not unmute user #{username} (doesn't exist, or wasn't already muted)\n".color(:red)
 		end
@@ -71,6 +77,9 @@ module Ayadn
 		end
 		def self.unfollowed(username)
 			"User #{username} has been unfollowed.\n".color(:green)
+		end
+		def self.followed(username)
+			"User #{username} has been followed.\n".color(:green)
 		end
 		def self.unmuted(username)
 			"User #{username} has been unmuted.\n".color(:green)

@@ -244,6 +244,14 @@ module Ayadn
 			Action.new.repost(post_id)
 		end
 
+		desc "follow @USERNAME", "Follow @username (ayadn -fo @username)"
+		map "-fo" => :follow
+		long_desc Descriptions.follow
+		def follow(*username)
+			Action.new.follow(username)
+		end
+
+
 
 
 

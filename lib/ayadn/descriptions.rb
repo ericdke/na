@@ -93,6 +93,9 @@ module Ayadn
 		def self.repost
 			%Q{Repost a post.\nShortcut: replace 'repost' by '-rp'}
 		end
+		def self.follow
+			%Q{Follow a user.\nShortcut: replace 'follow' by '-fo'}
+		end
 
 
 

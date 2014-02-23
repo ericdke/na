@@ -281,6 +281,31 @@ module Ayadn
 			end
 		end
 
+		def follow(username)
+			begin
+				unless username.empty?
+					username = add_arobase_if_absent(username)
+					@view.clear_screen
+					puts Status.following(username)
+					resp = @api.follow(username)
+					@view.clear_screen
+					if resp['meta']['code'] == 200
+						puts Status.followed(username)
+					else
+						puts Status.not_followed(username)
+					end
+				else
+					puts Status.error_missing_username
+				end
+			rescue => e
+				Logs.rec.error "From action/follow with args: #{username}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+			ensure
+				Databases.close_all
+			end
+		end
+
 		def unmute(username)
 			begin
 				unless username.empty?
