@@ -140,7 +140,7 @@ module Ayadn
 					t.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
 				end
 			end
-			users_list = build_users_hash(list)
+			users_list = build_users_array(list)
 			build_users_list(users_list, table)
 		end
 
@@ -153,7 +153,7 @@ module Ayadn
 					t.title = "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 				end
 			end
-			users_list = build_users_hash(list)
+			users_list = build_users_array(list)
 			build_users_list(users_list, table)
 		end
 
@@ -162,7 +162,7 @@ module Ayadn
 				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "List of users you muted".color(:cyan) + "".color(:white)
 			end
-			users_list = build_users_hash(list)
+			users_list = build_users_array(list)
 			build_users_list(users_list, table)
 		end
 
@@ -171,11 +171,11 @@ module Ayadn
 				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "List of users you blocked".color(:cyan) + "".color(:white)
 			end
-			users_list = build_users_hash(list)
+			users_list = build_users_array(list)
 			build_users_list(users_list, table)
 		end
 
-		def build_users_hash(list)
+		def build_users_array(list)
 			users_list = []
 			list.each do |key, value|
 				users_list << {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3]}
