@@ -87,6 +87,9 @@ module Ayadn
 		def self.unstar
 			%Q{Unstar a post.\nShortcut: replace 'unstar' by '-UNS'}
 		end
+		def self.star
+			%Q{Star a post.\nShortcut: replace 'star' by '-ST'}
+		end
 
 
 

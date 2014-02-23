@@ -19,5 +19,14 @@ module Ayadn
 			end
 		end
 
+		def self.post(url)
+			begin
+				RestClient::Resource.new(url, :verify_ssl => OpenSSL::SSL::VERIFY_NONE).post
+			rescue => e
+				Logs.rec.error "From cnx/post"
+				Logs.rec.error "#{e}"
+			end
+		end
+
 	end
 end
