@@ -315,6 +315,7 @@ module Ayadn
 						 			})
 							end
 						when "net.app.core.oembed"
+							@has_checkins = true
 							@checkins.merge!({
 						 			embeddable_url: annotation_value['embeddable_url']
 						 			})

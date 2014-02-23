@@ -123,6 +123,10 @@ module Ayadn
 			get_parsed_response(Endpoints.files_list(options))
 		end
 
+		def star(post_id)
+			JSON.parse(CNX.post(Endpoints.star(post_id)))
+		end
+
 		def delete_post(post_id)
 			JSON.parse(CNX.delete(Endpoints.delete_post(post_id)))
 		end

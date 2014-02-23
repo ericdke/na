@@ -21,7 +21,7 @@ module Ayadn
 
 		def self.post(url)
 			begin
-				RestClient::Resource.new(url, :verify_ssl => OpenSSL::SSL::VERIFY_NONE).post
+				RestClient.post url, :authorization => "Bearer #{Ayadn::MyConfig.user_token}"
 			rescue => e
 				Logs.rec.error "From cnx/post"
 				Logs.rec.error "#{e}"

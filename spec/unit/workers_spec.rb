@@ -23,6 +23,7 @@ describe Ayadn::Workers do
 			expect(posts[23187363][:name]).to eq "App.net Staff"
 			expect(posts[23184500][:username]).to eq "wired"
 			expect(posts[23185033][:handle]).to eq "@hackernews"
+			expect(posts[23184500][:links]).to eq ["http://ift.tt/1mtTrU9"]
 		end
 	end
 
