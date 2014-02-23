@@ -19,7 +19,7 @@ module Ayadn
 		end
 
 		def show_raw(stream)
-			jj stream
+			puts stream
 		end
 
 		def show_simple_post(post)
