@@ -5,29 +5,34 @@ describe Ayadn::MyConfig do
 	subject(:opt) { Ayadn::MyConfig.options }
 	subject(:cfg) { Ayadn::MyConfig.config }
 	describe ".options" do
-		it 'returns a hash of defaults settings' do
-			opt.should be_kind_of Hash
-			expect(opt).to include :counts
-			expect(opt).to include :timeline
-			expect(opt).to include :formats
-			expect(opt).to include :colors
-			expect(opt).to include :backup
-			expect(opt).to include :identity
-			expect(opt).to include :pinboard
+		it 'is a hash of defaults settings' do
+			expect(opt).to be_kind_of Hash
+		end
+		it 'has keys' do
+			expect(opt).to have_key :counts
+			expect(opt).to have_key :timeline
+			expect(opt).to have_key :formats
+			expect(opt).to have_key :colors
+			expect(opt).to have_key :backup
+			expect(opt).to have_key :identity
+			expect(opt).to have_key :pinboard
 		end
 	end
 	describe ".config" do
-		it 'returns a hash of defaults settings' do
-			cfg.should be_kind_of Hash
+		it 'is a hash of defaults settings' do
+			expect(cfg).to be_kind_of Hash
 		end
 	end
 	describe ".user_token" do
-		it 'checks that token string is loaded' do
-			Ayadn::MyConfig.user_token.should be_kind_of String
+		it 'loads token string' do
+			expect(Ayadn::MyConfig.user_token).to be_kind_of String
+		end
+		it 'is longer than 15 char' do
+			expect(Ayadn::MyConfig.user_token.length).to be >= 15
 		end
 	end
 	describe ".load_config" do
-		it 'checks the creation/existence of default directories' do
+		it 'checks/makes default directories' do
 			expect(Dir).to exist(cfg[:paths][:home])
 			expect(Dir).to exist(cfg[:paths][:log])
 			expect(Dir).to exist(cfg[:paths][:db])
@@ -39,41 +44,43 @@ describe Ayadn::MyConfig do
 			expect(Dir).to exist(cfg[:paths][:messages])
 			expect(Dir).to exist(cfg[:paths][:lists])
 		end
-		it 'checks the creation/existence of default files' do
+		it 'checks for config file' do
 			expect(File).to exist(cfg[:paths][:config] + "/config.yml")
+		end
+		it 'checks for version file' do
 			expect(File).to exist(cfg[:paths][:config] + "/version.yml")
 		end
 	end
 	describe ".build_query_options" do
 		it 'returns a URL with count=12' do
-			Ayadn::MyConfig.build_query_options({count: 12}).should =~ /count=12/
+			expect(Ayadn::MyConfig.build_query_options({count: 12})).to match /count=12/
 		end
 		it 'returns a URL with count=50' do
-			Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options).should =~ /count=50/
+			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /count=50/
 		end
 		it 'returns a URL with directed=0' do
-			Ayadn::MyConfig.build_query_options({directed: 0}).should =~ /directed=0/
+			expect(Ayadn::MyConfig.build_query_options({directed: 0})).to match /directed=0/
 		end
 		it 'returns a URL with directed=1' do
-			Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options).should =~ /directed=1/
+			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /directed=1/
 		end
 		it 'returns a URL with deleted=1' do
-			Ayadn::MyConfig.build_query_options({deleted: 1}).should =~ /deleted=1/
+			expect(Ayadn::MyConfig.build_query_options({deleted: 1})).to match /deleted=1/
 		end
 		it 'returns a URL with deleted=0' do
-			Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options).should =~ /deleted=0/
+			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /deleted=0/
 		end
 		it 'returns a URL with html=1' do
-			Ayadn::MyConfig.build_query_options({html: 1}).should =~ /html=1/
+			expect(Ayadn::MyConfig.build_query_options({html: 1})).to match /html=1/
 		end
 		it 'returns a URL with html=0' do
-			Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options).should =~ /html=0/
+			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /html=0/
 		end
 		it 'returns a URL with annotations=0' do
-			Ayadn::MyConfig.build_query_options({annotations: 0}).should =~ /annotations=0/
+			expect(Ayadn::MyConfig.build_query_options({annotations: 0})).to match /annotations=0/
 		end
 		it 'returns a URL with annotations=1' do
-			Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options).should =~ /annotations=1/
+			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /annotations=1/
 		end
 	end
 end
