@@ -251,6 +251,13 @@ module Ayadn
 			Action.new.follow(username)
 		end
 
+		desc "mute @USERNAME", "Mute @username (ayadn -mu @username)"
+		map "-mu" => :mute
+		long_desc Descriptions.mute
+		def mute(*username)
+			Action.new.mute(username)
+		end
+
 
 
 

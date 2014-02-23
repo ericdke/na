@@ -18,6 +18,9 @@ module Ayadn
 		def self.unmuting(username)
 			"Unmuting #{username}\n".inverse
 		end
+		def self.muting(username)
+			"Muting #{username}\n".inverse
+		end
 		def self.unblocking(username)
 			"Unblocking #{username}\n".inverse
 		end
@@ -57,6 +60,9 @@ module Ayadn
 		def self.not_unmuted(post_id)
 			"Could not unmute user #{username} (doesn't exist, or wasn't already muted)\n".color(:red)
 		end
+		def self.not_muted(post_id)
+			"Could not mute user #{username} (doesn't exist, or is already muted)\n".color(:red)
+		end
 		def self.not_unblocked(post_id)
 			"Could not unblock user #{username} (doesn't exist, or wasn't already blocked)\n".color(:red)
 		end
@@ -83,6 +89,9 @@ module Ayadn
 		end
 		def self.unmuted(username)
 			"User #{username} has been unmuted.\n".color(:green)
+		end
+		def self.muted(username)
+			"User #{username} has been muted.\n".color(:green)
 		end
 		def self.unblocked(username)
 			"User #{username} has been unblocked.\n".color(:green)

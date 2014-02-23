@@ -96,6 +96,9 @@ module Ayadn
 		def self.follow
 			%Q{Follow a user.\nShortcut: replace 'follow' by '-fo'}
 		end
+		def self.mute
+			%Q{Mute a user.\nShortcut: replace 'mute' by '-mu'}
+		end
 
 
 
