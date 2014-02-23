@@ -105,7 +105,7 @@ module Ayadn
 			view
 		end
 
-		def build_reposted_list(list, target)
+		def build_reposted_list(list, target) #not the same format as wollowings/etc: taks an array of hashes
 			table = Terminal::Table.new do |t|
 				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
@@ -131,7 +131,7 @@ module Ayadn
 			build_users_list(users_list, table)
 		end
 
-		def build_followings_list(list, target)
+		def build_followings_list(list, target) #takes a hash of users with ayadn format
 			table = Terminal::Table.new do |t|
 				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				if target == "me"

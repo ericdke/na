@@ -4,7 +4,7 @@ require 'json'
 require 'io/console'
 
 describe Ayadn::View do
-#	let(:action) { Ayadn::Action.new }
+
 	before do
 		Ayadn::MyConfig.load_config
 		Ayadn::Logs.create_logger
@@ -31,8 +31,31 @@ describe Ayadn::View do
 		  printed = capture_stdout do
 		    Ayadn::View.new.show_posts(data['data'])
 		  end
-		  expect(printed).to include "by Julia Cory"
+		  expect(printed).to include "\e[31m23184500\e[0m"
+		  expect(printed).to include "\e[0m\n\nBacker of the Day"
 		end
 	end
+
+	describe "#show_posts_with_index" do
+		it 'outputs the indexed stream' do
+		  printed = capture_stdout do
+		    Ayadn::View.new.show_posts_with_index(data['data'])
+		  end
+		  expect(printed).to include "\e[31m001\e[0m\e[31m:"
+		  expect(printed).to include "\e[0m\n\nBacker of the Day"
+		end
+	end
+
+
+
+
+
+
+
+
+
+
+
+
 
 end
