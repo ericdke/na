@@ -15,6 +15,17 @@ describe Ayadn::Workers do
 		Ayadn::Databases.close_all
 	end
 
+	let(:data) { JSON.parse(IO.read("spec/mock/stream.json")) }
+
+	describe "#build_posts" do
+		it "builds posts hash from stream" do
+			posts = Ayadn::Workers.new.build_posts(data['data'])
+			expect(posts[23187363][:name]).to eq "App.net Staff"
+			expect(posts[23184500][:username]).to eq "wired"
+			expect(posts[23185033][:handle]).to eq "@hackernews"
+		end
+	end
+
 	let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
 	describe "#build_users_array" do
