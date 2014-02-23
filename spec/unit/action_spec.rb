@@ -3,7 +3,7 @@ require 'helpers'
 
 describe Ayadn::Action do
 	let(:action) { Ayadn::Action.new }
-	
+
 	describe "#add_arobase_if_absent" do
 		after do
 			Ayadn::Databases.close_all
@@ -24,14 +24,5 @@ describe Ayadn::Action do
 		  expect(printed).to include "Ayadn settings"
 		end
 	end
-
-
-
-
-
-
-
-
-
 
 end
