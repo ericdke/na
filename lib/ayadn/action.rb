@@ -558,7 +558,7 @@ module Ayadn
 
 
 
-		private
+		#private
 
 		def get_data_from_response(response)
 			response['data']
@@ -611,7 +611,7 @@ module Ayadn
 			puts "\n\nERROR (see #{MyConfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
 		end
 
-		def add_arobase_if_absent(username)
+		def add_arobase_if_absent(username) # expects an array of username(s) and works on the first one
 			unless username.first == "me"
 				username = username.first.chars.to_a
 				username.unshift("@") unless username.first == "@"
