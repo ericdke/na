@@ -1,97 +1,97 @@
 module Ayadn
 	class Descriptions
 		def self.unified
-			%Q{Shows your Unified Stream.\nShortcut: replace 'unified' by '-U'.}
+			%Q{Shows your Unified Stream.\nShortcut: replace 'unified' by '-u'.}
 		end
 		def self.checkins
-			%Q{Shows the Checkins Stream.\nShortcut: replace 'checkins' by '-K'}
+			%Q{Shows the Checkins Stream.\nShortcut: replace 'checkins' by '-ch'}
 		end
 		def self.global
-			%Q{Shows the Global Stream.\nShortcut: replace 'global' by '-G'}
+			%Q{Shows the Global Stream.\nShortcut: replace 'global' by '-gl'}
 		end
 		def self.trending
-			%Q{Shows the Trending Stream.\nShortcut: replace 'trending' by '-TR'}
+			%Q{Shows the Trending Stream.\nShortcut: replace 'trending' by '-tr'}
 		end
 		def self.photos
-			%Q{Shows the Photos Stream.\nShortcut: replace 'photos' by '-PH'}
+			%Q{Shows the Photos Stream.\nShortcut: replace 'photos' by '-ph'}
 		end
 		def self.conversations
-			%Q{Shows the Conversations Stream.\nShortcut: replace 'conversations' by '-CQ'}
+			%Q{Shows the Conversations Stream.\nShortcut: replace 'conversations' by '-cq'}
 		end
 		def self.mentions
-			%Q{Shows posts containing a mention of a @username.\nShortcut: replace 'mentions' by '-M'}
+			%Q{Shows posts containing a mention of a @username.\nShortcut: replace 'mentions' by '-m'}
 		end
 		def self.posts
-			%Q{Shows @username's posts.\nShortcut: replace 'posts' by '-PO'}
+			%Q{Shows @username's posts.\nShortcut: replace 'posts' by '-po'}
 		end
 		def self.whatstarred
-			%Q{Shows posts starred by @username.\nShortcut: replace 'whatstarred' by '-WAS'}
+			%Q{Shows posts starred by @username.\nShortcut: replace 'whatstarred' by '-was'}
 		end
 		def self.interactions
-			%Q{Shows your recent ADN activity.\nShortcut: replace 'interactions' by '-INT'}
+			%Q{Shows your recent ADN activity.\nShortcut: replace 'interactions' by '-int'}
 		end
 		def self.whoreposted
-			%Q{Lists users who reposted post n°POST-ID.\nShortcut: replace 'whoreposted' by '-WOR'}
+			%Q{Lists users who reposted post n°POST-ID.\nShortcut: replace 'whoreposted' by '-wor'}
 		end
 		def self.whostarred
-			%Q{Lists users who starred post n°POST-ID.\nShortcut: replace 'whostarred' by '-WOS'}
+			%Q{Lists users who starred post n°POST-ID.\nShortcut: replace 'whostarred' by '-wos'}
 		end
 		def self.convo
-			%Q{Shows the conversation thread around post n°POST_ID.\nShortcut: replace 'convo' by '-CO'}
+			%Q{Shows the conversation thread around post n°POST_ID.\nShortcut: replace 'convo' by '-co'}
 		end
 		def self.followings
-			%Q{Lists users @username is following.\nShortcut: replace 'followings' by '-FWG'}
+			%Q{Lists users @username is following.\nShortcut: replace 'followings' by '-fwg'}
 		end
 		def self.followers
-			%Q{Lists users following @username.\nShortcut: replace 'followers' by '-FWR'}
+			%Q{Lists users following @username.\nShortcut: replace 'followers' by '-fwr'}
 		end
 		def self.muted
-			%Q{Lists the users you muted.\nShortcut: replace 'muted' by '-MTD'}
+			%Q{Lists the users you muted.\nShortcut: replace 'muted' by '-mtd'}
 		end
 		def self.blocked
-			%Q{Lists the users you blocked.\nShortcut: replace 'blocked' by '-BKD'}
+			%Q{Lists the users you blocked.\nShortcut: replace 'blocked' by '-bkd'}
 		end
 		def self.hashtag
-			%Q{Shows recent posts containing #HASHTAG.\nShortcut: replace 'hashtag' by '-TAG'}
+			%Q{Shows recent posts containing #HASHTAG.\nShortcut: replace 'hashtag' by '-t'}
 		end
 		def self.search
-			%Q{Shows recents posts containing WORD(S).\nShortcut: replace 'search' by '-S'}
+			%Q{Shows recents posts containing WORD(S).\nShortcut: replace 'search' by '-s'}
 		end
 		def self.settings
-			%Q{Lists current Ayadn settings.\nShortcut: replace 'settings' by '-OPT'}
+			%Q{Lists current Ayadn settings.\nShortcut: replace 'settings' by '-stg'}
 		end
 		def self.user_info
-			%Q{Shows detailed informations about @username.\nShortcut: replace 'user_info' by '-UI'}
+			%Q{Shows detailed informations about @username.\nShortcut: replace 'user_info' by '-ui'}
 		end
 		def self.post_info
-			%Q{Shows detailed informations about n°POST-ID.\nShortcut: replace 'post_info' by '-PI'}
+			%Q{Shows detailed informations about n°POST-ID.\nShortcut: replace 'post_info' by '-pi'}
 		end
 		def self.files
-			%Q{Lists the files in your ADN storage.\nShortcut: replace 'files' by '-F'}
+			%Q{Lists the files in your ADN storage.\nShortcut: replace 'files' by '-fi'}
 		end
 		def self.delete
-			%Q{Delete a post.\nShortcut: replace 'delete' by '-DEL'}
+			%Q{Delete a post.\nShortcut: replace 'delete' by '-del'}
 		end
 		def self.unfollow
-			%Q{Unfollow a user.\nShortcut: replace 'unfollow' by '-UNF'}
+			%Q{Unfollow a user.\nShortcut: replace 'unfollow' by '-unf'}
 		end
 		def self.unmute
-			%Q{Unmute a user.\nShortcut: replace 'unmute' by '-UNM'}
+			%Q{Unmute a user.\nShortcut: replace 'unmute' by '-unm'}
 		end
 		def self.unblock
-			%Q{Unblock a user.\nShortcut: replace 'unblock' by '-UNB'}
+			%Q{Unblock a user.\nShortcut: replace 'unblock' by '-unb'}
 		end
 		def self.unrepost
-			%Q{Unrepost a post.\nShortcut: replace 'unrepost' by '-UNR'}
+			%Q{Unrepost a post.\nShortcut: replace 'unrepost' by '-unr'}
 		end
 		def self.unstar
-			%Q{Unstar a post.\nShortcut: replace 'unstar' by '-UNS'}
+			%Q{Unstar a post.\nShortcut: replace 'unstar' by '-uns'}
 		end
 		def self.star
-			%Q{Star a post.\nShortcut: replace 'star' by '-ST'}
+			%Q{Star a post.\nShortcut: replace 'star' by '-st'}
 		end
 		def self.repost
-			%Q{Repost a post.\nShortcut: replace 'repost' by '-RP'}
+			%Q{Repost a post.\nShortcut: replace 'repost' by '-rp'}
 		end
 
 
