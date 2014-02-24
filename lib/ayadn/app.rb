@@ -182,20 +182,20 @@ module Ayadn
 			Action.new.view_settings
 		end
 
-		desc "user_info @USERNAME", "Show detailed informations about @username (ayadn -ui @username)"
+		desc "userinfo @USERNAME", "Show detailed informations about @username (ayadn -ui @username)"
 		map "-ui" => :user_info
 		long_desc Descriptions.user_info
 		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def user_info(*username)
-			Action.new.user_info(username, options)
+			Action.new.userinfo(username, options)
 		end
 
-		desc "post_info POST-ID", "Show detailed informations about a post (ayadn -pi POST-ID)"
+		desc "postinfo POST-ID", "Show detailed informations about a post (ayadn -pi POST-ID)"
 		map "-pi" => :post_info
 		long_desc Descriptions.post_info
 		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def post_info(post_id)
-			Action.new.post_info(post_id, options)
+			Action.new.postinfo(post_id, options)
 		end
 
 		desc "files", "List your files (ayadn -fl)"

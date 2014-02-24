@@ -639,7 +639,7 @@ module Ayadn
 			end
 		end
 
-		def user_info(username, options)
+		def userinfo(username, options)
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
@@ -663,7 +663,7 @@ module Ayadn
 			end
 		end
 
-		def post_info(post_id, options)
+		def postinfo(post_id, options)
 			begin
 				if post_id.is_integer?
 					@view.clear_screen
