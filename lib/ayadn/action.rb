@@ -655,7 +655,7 @@ module Ayadn
 					puts Status.error_missing_username
 				end
 			rescue => e
-				Logs.rec.error "From action/user_info with args: #{username}"
+				Logs.rec.error "From action/userinfo with args: #{username}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -675,7 +675,7 @@ module Ayadn
 						puts "POST:\n".inverse
 						@view.show_simple_post([resp])
 						puts "AUTHOR:\n".inverse
-						@view.show_user_infos(stream)
+						@view.show_userinfos(stream)
 					else
 						@view.show_raw(@api.get_details(post_id))
 					end
@@ -683,7 +683,7 @@ module Ayadn
 					puts Status.error_missing_post_id
 				end
 			rescue => e
-				Logs.rec.error "From action/post_info with args: #{post_id}"
+				Logs.rec.error "From action/postinfo with args: #{post_id}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure
@@ -744,7 +744,7 @@ module Ayadn
 
 		def get_infos(stream)
 			@view.clear_screen
-			@view.show_user_infos(stream)
+			@view.show_userinfos(stream)
 		end
 
 		def get_list(what, list, target)
@@ -772,6 +772,7 @@ module Ayadn
 		end
 
 		def global_error(e)
+			@view.clear_screen
 			puts "\n\nERROR (see #{MyConfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
 		end
 

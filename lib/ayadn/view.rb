@@ -93,7 +93,7 @@ module Ayadn
 			puts table
 		end
 
-		def show_user_infos(content)
+		def show_userinfos(content)
 			view = "Real name\t\t".color(:cyan) + content['name'].color(MyConfig.options[:colors][:name])
 			
 			view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color(MyConfig.options[:colors][:username])

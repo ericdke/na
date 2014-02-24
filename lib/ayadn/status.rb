@@ -117,5 +117,8 @@ module Ayadn
 		def self.empty_list
 			"\n\nThe list is empty.\n\n".color(:red)
 		end
+		def self.not_found
+			"\n\n404 NOT FOUND - Object does not exist or has been deleted\n\n"
+		end
 	end
 end

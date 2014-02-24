@@ -118,8 +118,10 @@ module Ayadn
 				when :blocked
 					url = Endpoints.blocked(options)
 				end
+
 				resp = get_parsed_response(url)
 
+				#check_error(resp)
 				#empty_data if resp['data'].empty?
 
 				users_hash = {}
@@ -195,6 +197,20 @@ module Ayadn
 		end
 
 		#private
+
+		def check_error(resp)
+			unless resp['meta']['code'] == 200
+				puts "\e[H\e[2J"
+				puts Status.not_found
+				exit
+			end
+		end
+
+		def empty_data
+			puts "\e[H\e[2J"
+			puts Status.empty_list
+			exit
+		end
 
 		def get_raw_response(url)
 			CNX.get_response_from(url)
