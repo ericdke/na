@@ -185,8 +185,9 @@ module Ayadn
 		desc "user_info @USERNAME", "Show detailed informations about @username (ayadn -ui @username)"
 		map "-ui" => :user_info
 		long_desc Descriptions.user_info
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def user_info(*username)
-			Action.new.user_info(username)
+			Action.new.user_info(username, options)
 		end
 
 		desc "post_info POST-ID", "Show detailed informations about a post (ayadn -pi POST-ID)"

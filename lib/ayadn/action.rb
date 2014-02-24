@@ -639,14 +639,18 @@ module Ayadn
 			end
 		end
 
-		def user_info(username)
+		def user_info(username, options)
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
 					@view.clear_screen
 					print Status.downloading
-					stream = get_data_from_response(@api.get_user(username))
-					get_infos(stream)
+					unless options[:raw]
+						stream = get_data_from_response(@api.get_user(username))
+						get_infos(stream)
+					else
+						@view.show_raw(@api.get_user(username))
+					end
 				else
 					puts Status.error_missing_username
 				end
