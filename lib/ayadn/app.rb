@@ -193,8 +193,9 @@ module Ayadn
 		desc "post_info POST-ID", "Show detailed informations about a post (ayadn -pi POST-ID)"
 		map "-pi" => :post_info
 		long_desc Descriptions.post_info
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def post_info(post_id)
-			Action.new.post_info(post_id)
+			Action.new.post_info(post_id, options)
 		end
 
 		desc "files", "List your files (ayadn -fl)"
