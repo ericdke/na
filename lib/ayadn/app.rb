@@ -202,6 +202,7 @@ module Ayadn
 		map "-fl" => :files
 		long_desc Descriptions.files
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def files
 			Action.new.files(options)
 		end

@@ -695,9 +695,13 @@ module Ayadn
 			begin
 				@view.clear_screen
 				print Status.downloading
-				list = @api.get_files_list(options)
-				@view.clear_screen
-				@view.show_files_list(list)
+				unless options[:raw]
+					list = @api.get_files_list(options)
+					@view.clear_screen
+					@view.show_files_list(list)
+				else
+					@view.show_raw(@api.get_files_list(options))
+				end
 			rescue => e
 				Logs.rec.error "From action/files"
 				Logs.rec.error "#{e}"
