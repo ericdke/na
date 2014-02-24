@@ -128,29 +128,33 @@ module Ayadn
 		desc "followings @USERNAME", "List users @username is following (ayadn -fg @username)"
 		map "-fg" => :followings
 		long_desc Descriptions.followings
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def followings(*username)
-			Action.new.followings(username)
+			Action.new.followings(username, options)
 		end
 
 		desc "followers @USERNAME", "List users following @username (ayadn -fr @username)"
 		map "-fr" => :followers
 		long_desc Descriptions.followers
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def followers(*username)
-			Action.new.followers(username)
+			Action.new.followers(username, options)
 		end
 
 		desc "muted", "List the users you muted (ayadn -mtd)"
 		map "-mtd" => :muted
 		long_desc Descriptions.muted
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def muted
-			Action.new.muted
+			Action.new.muted(options)
 		end
 
 		desc "blocked", "List the users you blocked (ayadn -bkd)"
 		map "-bkd" => :blocked
 		long_desc Descriptions.blocked
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
 		def blocked
-			Action.new.blocked
+			Action.new.blocked(options)
 		end
 
 		desc "hashtag HASHTAG", "Show recent posts containing #HASHTAG (ayadn -t hashtag)"

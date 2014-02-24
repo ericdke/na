@@ -82,6 +82,28 @@ module Ayadn
 			build_list(nil, :blocked)
 		end
 
+		def get_raw_list(username, target)
+			options = {:count => 200, :before_id => nil}
+			big = []
+			loop do
+				case target
+				when :followings
+					url = Endpoints.followings(username, options)
+				when :followers
+					url = Endpoints.followers(username, options)
+				when :muted
+					url = Endpoints.muted(options)
+				when :blocked
+					url = Endpoints.blocked(options)
+				end
+				resp = get_parsed_response(url)
+				big << resp
+				break if resp['meta']['min_id'] == nil
+				options = {:count => 200, :before_id => resp['meta']['min_id']}
+			end
+			big
+		end
+
 		def build_list(username, target)
 			options = {:count => 200, :before_id => nil}
 			big_hash = {}

@@ -532,15 +532,20 @@ module Ayadn
 			end
 		end
 
-		def followings(username)
+		def followings(username, options)
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
 					@view.clear_screen
 					print Status.downloading
-					list = @api.get_followings(username)
-					get_list(:followings, list, username)
-					add_to_users_db_from_list(list)
+					unless options[:raw]
+						list = @api.get_followings(username)
+						get_list(:followings, list, username)
+						add_to_users_db_from_list(list)
+					else
+						list = @api.get_raw_list(username, :followings)
+						@view.show_raw(list)
+					end
 				else
 					puts Status.error_missing_username
 				end
@@ -553,15 +558,20 @@ module Ayadn
 			end
 		end
 
-		def followers(username)
+		def followers(username, options)
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
 					@view.clear_screen
 					print Status.downloading
-					list = @api.get_followers(username)
-					get_list(:followers, list, username)
-					add_to_users_db_from_list(list)
+					unless options[:raw]
+						list = @api.get_followers(username)
+						get_list(:followers, list, username)
+						add_to_users_db_from_list(list)
+					else
+						list = @api.get_raw_list(username, :followers)
+						@view.show_raw(list)
+					end
 				else
 					puts Status.error_missing_username
 				end
@@ -574,13 +584,18 @@ module Ayadn
 			end
 		end
 
-		def muted
+		def muted(options)
 			begin
 				@view.clear_screen
 				print Status.downloading
-				list = @api.get_muted
-				get_list(:muted, list, nil)
-				add_to_users_db_from_list(list)
+				unless options[:raw]
+					list = @api.get_muted
+					get_list(:muted, list, nil)
+					add_to_users_db_from_list(list)
+				else
+					list = @api.get_raw_list(nil, :muted)
+					@view.show_raw(list)
+				end
 			rescue => e
 				Logs.rec.error "From action/muted"
 				Logs.rec.error "#{e}"
@@ -590,13 +605,18 @@ module Ayadn
 			end
 		end
 
-		def blocked
+		def blocked(options)
 			begin
 				@view.clear_screen
 				print Status.downloading
-				list = @api.get_blocked
-				get_list(:blocked, list, nil)
-				add_to_users_db_from_list(list)
+				unless options[:raw]
+					list = @api.get_blocked
+					get_list(:blocked, list, nil)
+					add_to_users_db_from_list(list)
+				else
+					list = @api.get_raw_list(nil, :blocked)
+					@view.show_raw(list)
+				end
 			rescue => e
 				Logs.rec.error "From action/blocked"
 				Logs.rec.error "#{e}"
