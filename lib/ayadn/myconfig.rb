@@ -150,10 +150,6 @@ module Ayadn
 					source: :blue,
 					symbols: :green
 				},
-				pinboard: { #move this elsewhere
-					login: nil,
-					password: nil
-				},
 				backup: {
 					auto_save_sent_posts: false,
 					auto_save_sent_messages: false,

@@ -15,7 +15,6 @@ describe Ayadn::MyConfig do
 			expect(opt).to have_key :colors
 			expect(opt).to have_key :backup
 			expect(opt).to have_key :identity
-			expect(opt).to have_key :pinboard
 		end
 	end
 	describe ".config" do
