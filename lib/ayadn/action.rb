@@ -9,10 +9,25 @@ module Ayadn
 			Databases.open_databases
 		end
 
-		def unified(options)
-			begin
+		def render_view(data, options = {})
+			unless options[:raw]
+				@view.clear_screen
+				get_view(data['data'], options)
+			else
+				@view.show_raw(data)
+			end
+		end
+
+		def doing(options)
+			unless options[:raw]
 				@view.clear_screen
 				print Status.downloading
+			end
+		end
+
+		def unified(options)
+			begin
+				doing(options)
 				stream = @api.get_unified(options)
 				render_view(stream, options)
 			rescue => e
@@ -26,8 +41,7 @@ module Ayadn
 
 		def checkins(options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				stream = @api.get_checkins(options)
 				render_view(stream, options)
 			rescue => e
@@ -41,8 +55,7 @@ module Ayadn
 
 		def global(options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				stream = @api.get_global(options)
 				render_view(stream, options)
 			rescue => e
@@ -56,8 +69,7 @@ module Ayadn
 
 		def trending(options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				stream = @api.get_trending(options)
 				render_view(stream, options)
 			rescue => e
@@ -71,8 +83,7 @@ module Ayadn
 
 		def photos(options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				stream = @api.get_photos(options)
 				render_view(stream, options)
 			rescue => e
@@ -86,8 +97,7 @@ module Ayadn
 
 		def conversations(options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				stream = @api.get_conversations(options)
 				render_view(stream, options)
 			rescue => e
@@ -103,8 +113,7 @@ module Ayadn
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
-					@view.clear_screen
-					print Status.downloading
+					doing(options)
 					stream = @api.get_mentions(username, options)
 					render_view(stream, options)
 				else
@@ -123,8 +132,7 @@ module Ayadn
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
-					@view.clear_screen
-					print Status.downloading
+					doing(options)
 					stream = @api.get_posts(username, options)
 					render_view(stream, options)
 				else
@@ -141,8 +149,7 @@ module Ayadn
 
 		def interactions
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing({})
 				stream = get_data_from_response(@api.get_interactions)
 				@view.clear_screen
 				@view.show_interactions(stream)
@@ -159,8 +166,7 @@ module Ayadn
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
-					@view.clear_screen
-					print Status.downloading
+					doing(options)
 					stream = @api.get_whatstarred(username, options)
 					render_view(stream, options)
 				else
@@ -178,8 +184,7 @@ module Ayadn
 		def whoreposted(post_id)
 			begin
 				if post_id.is_integer?
-					@view.clear_screen
-					print Status.downloading
+					doing({})
 					list = get_data_from_response(@api.get_whoreposted(post_id))
 					get_list(:whoreposted, list, post_id)
 				else
@@ -197,8 +202,7 @@ module Ayadn
 		def whostarred(post_id)
 			begin
 				if post_id.is_integer?
-					@view.clear_screen
-					print Status.downloading
+					doing({})
 					list = get_data_from_response(@api.get_whostarred(post_id))
 					get_list(:whostarred, list, post_id)
 				else
@@ -216,8 +220,7 @@ module Ayadn
 		def convo(post_id, options)
 			begin
 				if post_id.is_integer?
-					@view.clear_screen
-					print Status.downloading
+					doing(options)
 					stream = @api.get_convo(post_id, options)
 					render_view(stream, options)
 				else
@@ -504,8 +507,7 @@ module Ayadn
 
 		def hashtag(hashtag, options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				stream = @api.get_hashtag(hashtag)
 				render_view(stream, options)
 			rescue => e
@@ -519,8 +521,7 @@ module Ayadn
 
 		def search(words, options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				stream = @api.get_search(words, options)
 				render_view(stream, options)
 			rescue => e
@@ -536,8 +537,7 @@ module Ayadn
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
-					@view.clear_screen
-					print Status.downloading
+					doing(options)
 					unless options[:raw]
 						list = @api.get_followings(username)
 						get_list(:followings, list, username)
@@ -562,8 +562,7 @@ module Ayadn
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
-					@view.clear_screen
-					print Status.downloading
+					doing(options)
 					unless options[:raw]
 						list = @api.get_followers(username)
 						get_list(:followers, list, username)
@@ -586,8 +585,7 @@ module Ayadn
 
 		def muted(options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				unless options[:raw]
 					list = @api.get_muted
 					get_list(:muted, list, nil)
@@ -607,8 +605,7 @@ module Ayadn
 
 		def blocked(options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				unless options[:raw]
 					list = @api.get_blocked
 					get_list(:blocked, list, nil)
@@ -643,8 +640,7 @@ module Ayadn
 			begin
 				unless username.empty?
 					username = add_arobase_if_absent(username)
-					@view.clear_screen
-					print Status.downloading
+					doing(options)
 					unless options[:raw]
 						stream = get_data_from_response(@api.get_user(username))
 						get_infos(stream)
@@ -666,8 +662,7 @@ module Ayadn
 		def postinfo(post_id, options)
 			begin
 				if post_id.is_integer?
-					@view.clear_screen
-					print Status.downloading
+					doing(options)
 					unless options[:raw]
 						@view.clear_screen
 						resp = get_data_from_response(@api.get_details(post_id))
@@ -693,8 +688,7 @@ module Ayadn
 
 		def files(options)
 			begin
-				@view.clear_screen
-				print Status.downloading
+				doing(options)
 				unless options[:raw]
 					list = @api.get_files_list(options)
 					@view.clear_screen
@@ -715,14 +709,7 @@ module Ayadn
 
 		#private
 
-		def render_view(data, options = {})
-			@view.clear_screen
-			unless options[:raw]
-				get_view(data['data'], options)
-			else
-				@view.show_raw(data)
-			end
-		end
+
 
 		def get_data_from_response(response)
 			response['data']

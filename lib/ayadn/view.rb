@@ -19,7 +19,7 @@ module Ayadn
 		end
 
 		def show_raw(stream)
-			puts stream
+			puts stream.to_json
 		end
 
 		def show_simple_post(post)
@@ -70,7 +70,7 @@ module Ayadn
 			puts @workers.build_files_list(list)
 		end
 
-		def settings			
+		def settings
 			table = Terminal::Table.new do |t|
 				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "Current Ayadn settings".color(:cyan)
@@ -95,9 +95,9 @@ module Ayadn
 
 		def show_userinfos(content)
 			view = "Real name\t\t".color(:cyan) + content['name'].color(MyConfig.options[:colors][:name])
-			
+
 			view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color(MyConfig.options[:colors][:username])
-			
+
 			view << "\n\nID\t\t\t".color(:cyan) + content['id'].color(:yellow)
 			view << "\nURL\t\t\t".color(:cyan) + content['canonical_url'].color(:yellow)
 
@@ -110,7 +110,7 @@ module Ayadn
 				view << "\nVerified domain\t\t".color(:cyan) + domain.color(:yellow)
 			end
 
-			
+
 			view << "\nAccount creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(:yellow)
 			view << "\nTimeZone\t\t".color(:cyan) + content['timezone'].color(:yellow)
 			view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(:yellow)
@@ -119,7 +119,7 @@ module Ayadn
 
 			view << "\n\nFollowing\t\t".color(:cyan) + content['counts']['following'].to_s.color(:yellow)
 			view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:yellow)
-			
+
 			#view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)
 
 			if content['you_follow']
