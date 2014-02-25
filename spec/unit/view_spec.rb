@@ -61,6 +61,17 @@ describe Ayadn::View do
 	  end
 	end
 
+	let(:user_e) { JSON.parse(IO.read("spec/mock/@ericd.json")) }
+
+	describe "#show_userinfos" do
+	  it "outputs user info" do
+	    printed = capture_stdout do
+		    Ayadn::View.new.show_userinfos(user_e['data'])
+		  end
+		  expect(printed).to include "Sound engineer"
+		  expect(printed).to include "aya.io"
+	  end
+	end
 
 
 
