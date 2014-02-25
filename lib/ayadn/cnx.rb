@@ -23,13 +23,5 @@ module Ayadn
 			end
 		end
 
-		# def self.check_error(res)
-		# 	unless res.code == 200
-		# 		puts "\e[H\e[2J"
-		# 		puts Status.not_found
-		# 		exit
-		# 	end
-		# end
-
 	end
 end

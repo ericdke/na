@@ -161,19 +161,19 @@ module Ayadn
 		end
 
 		def get_user(username)
-			get_parsed_response(Endpoints.user(username))
+			resp = get_parsed_response(Endpoints.user(username))
 			check_error(resp)
 			resp
 		end
 
 		def get_details(post_id)
-			get_parsed_response(Endpoints.single_post(post_id))
+			resp = get_parsed_response(Endpoints.single_post(post_id))
 			check_error(resp)
 			resp
 		end
 
 		def get_files_list(options)
-			get_parsed_response(Endpoints.files_list(options))
+			resp = get_parsed_response(Endpoints.files_list(options))
 			check_error(resp)
 			resp
 		end
