@@ -69,7 +69,7 @@ module Ayadn
 			end
 		end
 
-		def photos(options)		
+		def photos(options)
 			begin
 				@view.clear_screen
 				print Status.downloading
