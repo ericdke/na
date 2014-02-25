@@ -141,7 +141,9 @@ module Ayadn
 
 			#view << "\n\nAvatar URL\t\t".color(:cyan) + content['avatar_image']['url']
 
-			view << "\n\n#{content['description']['text']}\n".color(:magenta) + "\n\n"
+			if content['description']
+				view << "\n\n#{content['description']['text']}\n".color(:magenta) + "\n\n"
+			end
 
 			puts view
 		end

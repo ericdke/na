@@ -236,6 +236,8 @@ module Ayadn
 				Logs.rec.error "From api/check_error"
 				Logs.rec.error "#{res}"
 				exit
+			elsif res['meta']['code'] != 200
+				puts "\n\nHTTP ERROR #{res['meta']['code']}\n\n"
 			end
 		end
 
@@ -251,7 +253,7 @@ module Ayadn
 
 		def get_parsed_response(url)
 			res = CNX.get_response_from(url)
-			JSON.parse(res.body)
+			JSON.parse(res)
 		end
 
 	end
