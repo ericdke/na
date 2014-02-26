@@ -209,108 +209,80 @@ module Ayadn
 		def build_posts(data)
 			# builds a hash of hashes, each hash is a normalized post with post id as a key
 			posts = {}
-			@count = 1
-			data.each do |post|
 
-				name = post['user']['name'] || "(no name)"
-				unless post['text'].nil? || post['text'].empty?
-					raw_text = post['text']
-					text = colorize_text(post['text'])
+			data.each.with_index(1) do |post, index|
+
+				values = {
+					count: index,
+					id: post['id'].to_i,
+					name: post['user']['name'] || "(no name)",
+					thread_id: post['thread_id'],
+					username: post['user']['username'],
+					handle: "@" + post['user']['username'],
+					date: parsed_time(post['created_at']),
+					you_starred: post['you_starred']
+				}
+
+				unless post['text'].nil?
+					values[:raw_text] = post['text']
+					values[:text] = colorize_text(post['text'])
 				else
-					raw_text = nil
-					text = "(no text)"
+					values[:raw_text] = ""
+					values[:text] = "(no text)"
 				end
 
-				thread_id = post['thread_id']
-
-				username = post['user']['username']
-				handle = "@" + username
-				date = parsed_time(post['created_at'])
-
-				if post['source']['name']
-					source = post['source']['name']
+				unless post['source']['name'].nil?
+					values[:source_name] = post['source']['name']
 				else
-					source = "(unknown)"
+					values[:source_name] = "(unknown)"
 				end
 
-				if post['you_starred']
-					you_starred = true
-				else
-					you_starred = false
-				end
 				unless post['num_stars'].nil? || post['num_stars'] == 0
-					is_starred = true
-					num_stars = post['num_stars']
+					values[:is_starred] = true
+					values[:num_stars] = post['num_stars']
 				else
-					is_starred = false
-					num_stars = 0
+					values[:is_starred] = false
+					values[:num_stars] = 0
 				end
 				if post['repost_of']
-					is_repost = true
-					repost_of = post['repost_of']['id']
-					num_reposts = post['repost_of']['num_reposts']
+					values[:is_repost] = true
+					values[:repost_of] = post['repost_of']['id']
+					values[:num_reposts] = post['repost_of']['num_reposts']
 				else
-					is_repost = false
-					repost_of = nil
-					num_reposts = 0
+					values[:is_repost] = false
+					values[:repost_of] = nil
+					values[:num_reposts] = 0
 				end
 				if post['reply_to']
-					is_reply = true
-					reply_to = post['reply_to']
-					num_replies = post['num_replies']
+					values[:is_reply] = true
+					values[:reply_to] = post['reply_to']
+					values[:num_replies] = post['num_replies']
 				else
-					is_reply = false
-					reply_to = nil
-					num_replies = 0
+					values[:is_reply] = false
+					values[:reply_to] = nil
+					values[:num_replies] = 0
 				end
 				mentions = []
 				post['entities']['mentions'].each do |m|
 					mentions << m['name']
 				end
-				directed_to = mentions.first || false
+				values[:mentions] = mentions
+				values[:directed_to] = mentions.first || false
 				tags = []
 				post['entities']['hashtags'].each do |h|
 					tags << h['name']
 				end
+				values[:tags] = tags
 				links = []
 				post['entities']['links'].each do |l|
 					links << l['url']
 				end
+				values[:links] = links
 
-				checkins, has_checkins = extract_checkins(post)
+				values[:checkins], values[:has_checkins] = extract_checkins(post)
 
+				posts[post['id'].to_i] = values
 
-				posts.merge!(
-					post['id'].to_i => {
-						count: @count,
-						id: post['id'].to_i,
-						name: name,
-						username: username,
-						handle: handle,
-						date: date,
-						text: text,
-						raw_text: raw_text,
-						thread_id: thread_id,
-						directed_to: directed_to,
-						mentions: mentions,
-						tags: tags,
-						links: links,
-						is_repost: is_repost,
-						repost_of: repost_of,
-						num_reposts: num_reposts,
-						is_reply: is_reply,
-						reply_to: reply_to,
-						num_replies: num_replies,
-						is_starred: is_starred,
-						you_starred: you_starred,
-						num_stars: num_stars,
-						source_name: source,
-						has_checkins: has_checkins,
-						checkins: checkins
-					}
-				)
-
-				@count += 1
 			end
 			posts
 		end
@@ -335,27 +307,19 @@ module Ayadn
 						}
 						unless obj['value']['categories'].nil?
 							unless obj['value']['categories'][0].nil?
-					 			checkins.merge!({
-					 				categories: obj['value']['categories'][0]['labels'].join(", ")
-					 				})
+					 			checkins[:categories] = obj['value']['categories'][0]['labels'].join(", ")
 					 		end
 						end
 						unless obj['value']['factual_id'].nil?
-							checkins.merge!({
-					 			factual_id: obj['value']['factual_id']
-					 			})
+					 			checkins[:factual_id] = obj['value']['factual_id']
 						end
 						unless obj['value']['longitude'].nil?
-							checkins.merge!({
-					 			longitude: obj['value']['longitude'],
-					 			latitude: obj['value']['latitude']
-					 			})
+					 			checkins[:longitude] = obj['value']['longitude']
+					 			checkins[:latitude] = obj['value']['latitude']
 						end
 					when "net.app.core.oembed"
 						has_checkins = true
-						checkins.merge!({
-					 			embeddable_url: obj['value']['embeddable_url']
-					 			})
+					 			checkins[:embeddable_url] = obj['value']['embeddable_url']
 			 		end
 				end
 			end
@@ -373,47 +337,7 @@ module Ayadn
 			hd << "\n"
 			formatted = { header: hd }
 			content[:checkins].each do |key, val|
-				unless val.nil? || !val
-					case key
-					when :name
-						formatted.merge!({
-							name: "#{val}"
-						})
-					when :address
-						formatted.merge!({
-							address: "#{val}"
-						})
-					when :address_extended
-						formatted.merge!({
-							address_extended: "#{val}"
-						})
-					when :postcode
-						formatted.merge!({
-							postcode: "#{val}"
-						})
-					when :locality
-						formatted.merge!({
-							locality: "#{val}"
-						})
-					when :country_code
-						formatted.merge!({
-							country_code: "#{val}"
-						})
-					when :website
-						formatted.merge!({
-							website: "#{val}"
-						})
-					when :telephone
-						formatted.merge!({
-							telephone: "#{val}"
-						})
-					when :categories
-						formatted.merge!({
-							categories: "#{val}"
-						})
-
-					end
-				end
+					formatted[key] = val unless (val.nil? || !val)
 			end
 
 			chk = formatted[:header]
