@@ -99,7 +99,7 @@ module Ayadn
 				else
 					view << "Private".color(MyConfig.options[:colors][:id])
 				end
-				
+
 				view << "\n\n"
 			end
 			view
@@ -211,6 +211,7 @@ module Ayadn
 			posts = {}
 			@count = 1
 			data.each do |post|
+
 				name = post['user']['name'] || "(no name)"
 				unless post['text'].nil? || post['text'].empty?
 					raw_text = post['text']
@@ -219,9 +220,9 @@ module Ayadn
 					raw_text = nil
 					text = "(no text)"
 				end
-				
+
 				thread_id = post['thread_id']
-				
+
 				username = post['user']['username']
 				handle = "@" + username
 				date = parsed_time(post['created_at'])
@@ -275,56 +276,10 @@ module Ayadn
 				post['entities']['links'].each do |l|
 					links << l['url']
 				end
-				annotations_list = post['annotations']
-				@has_checkins = false
-				@checkins = {}
-				unless annotations_list.nil?
-					xxx = 0
-					annotations_list.each do
-						annotation_type = annotations_list[xxx]['type']
-						annotation_value = annotations_list[xxx]['value']
-						case annotation_type
-						when "net.app.core.checkin", "net.app.ohai.location"
-							@has_checkins = true
-							@checkins = {
-								name: annotation_value['name'],
-								address: annotation_value['address'],
-								address_extended: annotation_value['address_extended'],
-								locality: annotation_value['locality'],
-								postcode: annotation_value['postcode'],
-								country_code: annotation_value['country_code'],
-								website: annotation_value['website'],
-								telephone: annotation_value['telephone']
-							}
-							unless annotation_value['categories'].nil?
-								unless annotation_value['categories'][0].nil?
-						 			@checkins.merge!({
-						 				categories: annotation_value['categories'][0]['labels'].join(", ")
-						 				})
-						 		end
-							end
-							unless annotation_value['factual_id'].nil?
-								@checkins.merge!({
-						 			factual_id: annotation_value['factual_id']
-						 			})
-							end
-							unless annotation_value['longitude'].nil?
-								@checkins.merge!({
-						 			longitude: annotation_value['longitude'],
-						 			latitude: annotation_value['latitude']
-						 			})
-							end
-						when "net.app.core.oembed"
-							@has_checkins = true
-							@checkins.merge!({
-						 			embeddable_url: annotation_value['embeddable_url']
-						 			})
-				 		end
 
-				 		xxx += 1
-					end
-				end
-				
+				checkins, has_checkins = extract_checkins(post)
+
+
 				posts.merge!(
 					post['id'].to_i => {
 						count: @count,
@@ -350,8 +305,8 @@ module Ayadn
 						you_starred: you_starred,
 						num_stars: num_stars,
 						source_name: source,
-						has_checkins: @has_checkins,
-						checkins: @checkins
+						has_checkins: has_checkins,
+						checkins: checkins
 					}
 				)
 
@@ -359,6 +314,54 @@ module Ayadn
 			end
 			posts
 		end
+
+		def extract_checkins(post)
+			has_checkins = false
+			checkins = {}
+			unless post['annotations'].nil?
+				post['annotations'].each do |obj|
+					case obj['type']
+					when "net.app.core.checkin", "net.app.ohai.location"
+						has_checkins = true
+						checkins = {
+							name: obj['value']['name'],
+							address: obj['value']['address'],
+							address_extended: obj['value']['address_extended'],
+							locality: obj['value']['locality'],
+							postcode: obj['value']['postcode'],
+							country_code: obj['value']['country_code'],
+							website: obj['value']['website'],
+							telephone: obj['value']['telephone']
+						}
+						unless obj['value']['categories'].nil?
+							unless obj['value']['categories'][0].nil?
+					 			checkins.merge!({
+					 				categories: obj['value']['categories'][0]['labels'].join(", ")
+					 				})
+					 		end
+						end
+						unless obj['value']['factual_id'].nil?
+							checkins.merge!({
+					 			factual_id: obj['value']['factual_id']
+					 			})
+						end
+						unless obj['value']['longitude'].nil?
+							checkins.merge!({
+					 			longitude: obj['value']['longitude'],
+					 			latitude: obj['value']['latitude']
+					 			})
+						end
+					when "net.app.core.oembed"
+						has_checkins = true
+						checkins.merge!({
+					 			embeddable_url: obj['value']['embeddable_url']
+					 			})
+			 		end
+				end
+			end
+			return checkins, has_checkins
+		end
+
 
 		def build_checkins(content)
 			unless content[:checkins][:name].nil?
@@ -412,7 +415,7 @@ module Ayadn
 					end
 				end
 			end
-			
+
 			chk = formatted[:header]
 			unless formatted[:name].nil?
 				chk << formatted[:name].color(MyConfig.options[:colors][:dots])
@@ -422,37 +425,37 @@ module Ayadn
 				chk << formatted[:address]
 				chk << "\n"
 			end
-			if formatted.has_key?(:address_extended)
+			if formatted.key?(:address_extended)
 				unless formatted[:address_extended].nil?
 					chk << formatted[:address_extended]
 					chk << "\n"
 				end
 			end
-			if formatted.has_key?(:country_code)
+			if formatted.key?(:country_code)
 				cc = "(#{formatted[:country_code]})".upcase
 			else
 				cc = ""
 			end
-			if formatted.has_key?(:postcode)
-				if formatted.has_key?(:locality)
+			if formatted.key?(:postcode)
+				if formatted.key?(:locality)
 					chk << "#{formatted[:postcode]}, #{formatted[:locality]} #{cc}"
 					chk << "\n"
 				end
 			else
-				if formatted.has_key?(:locality)
+				if formatted.key?(:locality)
 					chk << "#{formatted[:locality]} #{cc}"
 					chk << "\n"
 				end
 			end
-			if formatted.has_key?(:website)
+			if formatted.key?(:website)
 				chk << "#{formatted[:website]}"
 				chk << "\n"
 			end
-			if formatted.has_key?(:telephone)
+			if formatted.key?(:telephone)
 				chk << formatted[:telephone]
 				chk << "\n"
 			end
-			if formatted.has_key?(:categories)
+			if formatted.key?(:categories)
 				chk << formatted[:categories]
 				chk << "\n"
 			end
@@ -467,7 +470,7 @@ module Ayadn
 			view << content[:text]
 			view << "\n"
 			if content[:has_checkins]
-				view << build_checkins(content) 
+				view << build_checkins(content)
 				view << "\n"
 			end
 			unless content[:links].empty?
@@ -504,7 +507,7 @@ module Ayadn
 			header << "\n"
 		end
 
-		
+
 
 		def parsed_time(string)
 			"#{string[0...10]} #{string[11...19]}"
@@ -519,7 +522,7 @@ module Ayadn
 			for word in text.scan(/^.+[\r\n]*/) do
 				if word =~ /#\w+/
                     content.push(word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(@hashtag_color)))
-				elsif word =~ /@\w+/ 
+				elsif word =~ /@\w+/
                     content.push(word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(@mention_color)))
 				else
 					content.push(word)
