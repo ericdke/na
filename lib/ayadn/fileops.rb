@@ -10,6 +10,7 @@ module Ayadn
 			rescue => e
 				Logs.rec.error "From fileops/save_indexed_posts"
 				Logs.rec.error "#{e}"
+				raise e
 			end
 		end
 
@@ -23,8 +24,15 @@ module Ayadn
 					raise #temp
 				end
 			rescue => e
-				Logs.rec.error "From workers/get_post_from_index"
+				Logs.rec.error "From fileops/get_post_from_index"
 				Logs.rec.error "#{e}"
+				raise e
+			end
+		end
+
+		def self.add_to_users_db_from_list(list)
+			list.each do |id, content_array|
+				Databases.users[id] = {content_array[0] => content_array[1]}
 			end
 		end
 

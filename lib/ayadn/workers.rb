@@ -12,6 +12,7 @@ module Ayadn
 			end
 			return posts, @view
 		end
+
 		def build_stream_without_index(data) #expects an array
 			@view = ""
 			posts = build_posts(data.reverse)
@@ -19,8 +20,6 @@ module Ayadn
 				@view << content[:id].to_s.color(MyConfig.options[:colors][:id]) + " "
 				@view << build_content(content)
 			end
-			# xxx = ap posts
-			# exit
 			@view
 		end
 
@@ -105,11 +104,16 @@ module Ayadn
 			view
 		end
 
-		def build_reposted_list(list, target) #not the same format as wollowings/etc: taks an array of hashes
+		def init_table(target)
 			table = Terminal::Table.new do |t|
 				t.style = { :width => MyConfig.options[:formats][:table][:width] }
-				t.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
+			table
+		end
+
+		def build_reposted_list(list, target) #not the same format as wollowings/etc: taks an array of hashes
+			table = init_table(target)
+			table.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			users_list = []
 			list.each do |obj|
 				obj['name'].nil? ? name = "" : name = obj['name']
@@ -119,10 +123,8 @@ module Ayadn
 		end
 
 		def build_starred_list(list, target)
-			table = Terminal::Table.new do |t|
-				t.style = { :width => MyConfig.options[:formats][:table][:width] }
-				t.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
-			end
+			table = init_table(target)
+			table.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			users_list = []
 			list.each do |obj|
 				obj['name'].nil? ? name = "" : name = obj['name']
@@ -132,26 +134,22 @@ module Ayadn
 		end
 
 		def build_followings_list(list, target) #takes a hash of users with ayadn format
-			table = Terminal::Table.new do |t|
-				t.style = { :width => MyConfig.options[:formats][:table][:width] }
-				if target == "me"
-					t.title = "List of users you're following".color(:cyan) + "".color(:white)
-				else
-					t.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
-				end
+			table = init_table(target)
+			if target == "me"
+				table.title = "List of users you're following".color(:cyan) + "".color(:white)
+			else
+				table.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
 			end
 			users_list = build_users_array(list)
 			build_users_list(users_list, table)
 		end
 
 		def build_followers_list(list, target)
-			table = Terminal::Table.new do |t|
-				t.style = { :width => MyConfig.options[:formats][:table][:width] }
-				if target == "me"
-					t.title = "List of your followers".color(:cyan) + "".color(:white)
-				else
-					t.title = "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
-				end
+			table = init_table(target)
+			if target == "me"
+				table.title = "List of your followers".color(:cyan) + "".color(:white)
+			else
+				table.title = "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			end
 			users_list = build_users_array(list)
 			build_users_list(users_list, table)
@@ -187,21 +185,12 @@ module Ayadn
 
 		def build_users_list(list, table)
 			list.each_with_index do |obj, index|
-				# if obj[:username]
-					unless obj[:name].nil?
-						table << [ "@#{obj[:username]} ".color(MyConfig.options[:colors][:username]), "#{obj[:name]}" ]
-					else
-						table << [ "@#{obj[:username]} ".color(MyConfig.options[:colors][:username]), "" ]
-					end
-					table << :separator unless index + 1 == list.length
-			# 	elsif obj['username']
-			# 		unless obj['name'].nil?
-			# 			table << [ "@#{obj['username']} ".color(MyConfig.options[:colors]['username']), "#{obj['name']}" ]
-			# 		else
-			# 			table << [ "@#{obj['username']} ".color(MyConfig.options[:colors]['username']), "" ]
-			# 		end
-			# 		table << :separator unless index + 1 == list.length
-			# 	end
+				unless obj[:name].nil?
+					table << [ "@#{obj[:username]} ".color(MyConfig.options[:colors][:username]), "#{obj[:name]}" ]
+				else
+					table << [ "@#{obj[:username]} ".color(MyConfig.options[:colors][:username]), "" ]
+				end
+				table << :separator unless index + 1 == list.length
 			end
 			table
 		end
@@ -219,8 +208,12 @@ module Ayadn
 					thread_id: post['thread_id'],
 					username: post['user']['username'],
 					handle: "@" + post['user']['username'],
+					type: post['user']['type'],
 					date: parsed_time(post['created_at']),
-					you_starred: post['you_starred']
+					you_starred: post['you_starred'],
+					source_name: post['source']['name'],
+					source_link: post['source']['link'],
+					canonical_url: post['canonical_url']
 				}
 
 				unless post['text'].nil?
@@ -229,12 +222,6 @@ module Ayadn
 				else
 					values[:raw_text] = ""
 					values[:text] = "(no text)"
-				end
-
-				unless post['source']['name'].nil?
-					values[:source_name] = post['source']['name']
-				else
-					values[:source_name] = "(unknown)"
 				end
 
 				unless post['num_stars'].nil? || post['num_stars'] == 0
@@ -262,21 +249,17 @@ module Ayadn
 					values[:reply_to] = nil
 					values[:num_replies] = 0
 				end
-				mentions = []
-				post['entities']['mentions'].each do |m|
-					mentions << m['name']
-				end
+
+				mentions, tags, links = [], [], []
+
+				post['entities']['mentions'].each { |m| mentions << m['name'] }
 				values[:mentions] = mentions
 				values[:directed_to] = mentions.first || false
-				tags = []
-				post['entities']['hashtags'].each do |h|
-					tags << h['name']
-				end
+
+				post['entities']['hashtags'].each { |h| tags << h['name'] }
 				values[:tags] = tags
-				links = []
-				post['entities']['links'].each do |l|
-					links << l['url']
-				end
+
+				post['entities']['links'].each { |l| links << l['url'] }
 				values[:links] = links
 
 				values[:checkins], values[:has_checkins] = extract_checkins(post)
@@ -349,37 +332,35 @@ module Ayadn
 				chk << formatted[:address]
 				chk << "\n"
 			end
-			if formatted.key?(:address_extended)
-				unless formatted[:address_extended].nil?
-					chk << formatted[:address_extended]
-					chk << "\n"
-				end
+			unless formatted[:address_extended].nil?
+				chk << formatted[:address_extended]
+				chk << "\n"
 			end
-			if formatted.key?(:country_code)
+			unless formatted[:country_code].nil?
 				cc = "(#{formatted[:country_code]})".upcase
 			else
 				cc = ""
 			end
-			if formatted.key?(:postcode)
-				if formatted.key?(:locality)
+			unless formatted[:postcode].nil?
+				unless formatted[:locality].nil?
 					chk << "#{formatted[:postcode]}, #{formatted[:locality]} #{cc}"
 					chk << "\n"
 				end
 			else
-				if formatted.key?(:locality)
+				unless formatted[:locality].nil?
 					chk << "#{formatted[:locality]} #{cc}"
 					chk << "\n"
 				end
 			end
-			if formatted.key?(:website)
-				chk << "#{formatted[:website]}"
+			unless formatted[:website].nil?
+				chk << formatted[:website]
 				chk << "\n"
 			end
-			if formatted.key?(:telephone)
+			unless formatted[:telephone].nil?
 				chk << formatted[:telephone]
 				chk << "\n"
 			end
-			if formatted.key?(:categories)
+			unless formatted[:categories].nil?
 				chk << formatted[:categories]
 				chk << "\n"
 			end
@@ -439,17 +420,15 @@ module Ayadn
 
 		def colorize_text(text)
 			content = Array.new
-			@hashtag_color = MyConfig.options[:colors][:hashtags]
-			@mention_color = MyConfig.options[:colors][:mentions]
-			#for word in text.split(" ") do
-			#for word in text.split(/(\?|\!)/) do
-			for word in text.scan(/^.+[\r\n]*/) do
+			hashtag_color = MyConfig.options[:colors][:hashtags]
+			mention_color = MyConfig.options[:colors][:mentions]
+			text.scan(/^.+[\r\n]*/) do |word|
 				if word =~ /#\w+/
-                    content.push(word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(@hashtag_color)))
+          content << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
 				elsif word =~ /@\w+/
-                    content.push(word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(@mention_color)))
+          content << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
 				else
-					content.push(word)
+					content << word
 				end
 			end
 			content.join()

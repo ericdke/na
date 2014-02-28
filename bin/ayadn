@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # App.net command-line client
-# © Eric DEJONCKHEERE (http://app.net/ericd)
+# Author: Eric DEJONCKHEERE (http://app.net/ericd)
 
-$PROGRAM_NAME = "ayadn"
+$PROGRAM_NAME = 'ayadn'
 require_relative '../lib/ayadn'
 
 Ayadn::App.start ARGV

@@ -1,6 +1,6 @@
 module Ayadn
 	class API
-		
+
 		def get_unified(options)
 			resp = get_parsed_response(Endpoints.unified(options))
 			check_error(resp)
@@ -231,14 +231,11 @@ module Ayadn
 		#private
 
 		def check_error(res)
+			Logs.rec.error "From api/check http response"
 			if res['meta']['code'] == 404
 				puts Status.not_found
-				Logs.rec.error "From api/check_error"
-				Logs.rec.error "#{res}"
-				exit
-			elsif res['meta']['code'] != 200
-				puts "\n\nHTTP ERROR #{res['meta']['code']}\n\n"
 			end
+			raise("#{res}")
 		end
 
 		def empty_data
