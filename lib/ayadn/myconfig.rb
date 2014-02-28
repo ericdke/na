@@ -19,9 +19,9 @@ module Ayadn
 		end
 
 		def self.load_config
-			@user_token = IO.read(File.expand_path("../../../token", __FILE__)).chomp
 			@options = self.defaults # overridden later in the method by the loaded file
-			home = Dir.home + "/ayadn2/data/#{@options[:identity][:prefix]}" #temp, will be /ayadn/data in v1
+			home = Dir.home + "/ayadn2/data" #temp, will be /ayadn/data in v1
+			@user_token = IO.read(File.expand_path("../../../token", __FILE__)).chomp #temp
 			@config = {
 				paths: {
 					home: home,
@@ -38,9 +38,29 @@ module Ayadn
 				},
 				version: VERSION
 			}
+
 			self.create_config_folders
 			self.create_config_file
 			self.create_version_file
+			unless File.exist?(@config[:paths][:config] + "/identity.yml")
+				resp = API.new.get_user("me")
+				username = resp['data']['username']
+				self.create_identity_file(username)
+				@config[:identity] = username
+			else
+				@config[:identity] = self.read_identity_file
+			end
+		end
+
+		def self.create_identity_file(username)
+			f = File.new(@config[:paths][:config] + "/identity.yml", "w")
+				f.write({identity: username}.to_yaml)
+			f.close
+		end
+
+		def self.read_identity_file
+			content = YAML.load(IO.read(@config[:paths][:config] + "/identity.yml"))
+			content[:identity]
 		end
 
 		def self.create_version_file
@@ -70,29 +90,22 @@ module Ayadn
 		end
 
 		def self.create_config_folders
-			unless Dir.exists?(@config[:paths][:home])
-				begin
-					Dir.mkdir(@config[:paths][:home])
-				rescue => e
-					Logs.rec.fatal "From myconfig/create home data folder"
-					Logs.rec.fatal "#{e}"
-				end
-			else
-				begin
-					Dir.mkdir(@config[:paths][:log]) unless Dir.exists?(@config[:paths][:log])
-					Dir.mkdir(@config[:paths][:db]) unless Dir.exists?(@config[:paths][:db])
-					Dir.mkdir(@config[:paths][:pagination]) unless Dir.exists?(@config[:paths][:pagination])
-					Dir.mkdir(@config[:paths][:config]) unless Dir.exists?(@config[:paths][:config])
-					Dir.mkdir(@config[:paths][:auth]) unless Dir.exists?(@config[:paths][:auth])
-					Dir.mkdir(@config[:paths][:downloads]) unless Dir.exists?(@config[:paths][:downloads])
-					Dir.mkdir(@config[:paths][:backup]) unless Dir.exists?(@config[:paths][:backup])
-					Dir.mkdir(@config[:paths][:posts]) unless Dir.exists?(@config[:paths][:posts])
-					Dir.mkdir(@config[:paths][:messages]) unless Dir.exists?(@config[:paths][:messages])
-					Dir.mkdir(@config[:paths][:lists]) unless Dir.exists?(@config[:paths][:lists])
-				rescue => e
-					Logs.rec.fatal "From myconfig/create ayadn folders"
-					Logs.rec.fatal "#{e}"
-				end
+			#todo: unless version file exists + more checks
+			begin
+				FileUtils.mkdir_p(@config[:paths][:home]) unless Dir.exists?(@config[:paths][:home])
+				Dir.mkdir(@config[:paths][:log]) unless Dir.exists?(@config[:paths][:log])
+				Dir.mkdir(@config[:paths][:db]) unless Dir.exists?(@config[:paths][:db])
+				Dir.mkdir(@config[:paths][:pagination]) unless Dir.exists?(@config[:paths][:pagination])
+				Dir.mkdir(@config[:paths][:config]) unless Dir.exists?(@config[:paths][:config])
+				Dir.mkdir(@config[:paths][:auth]) unless Dir.exists?(@config[:paths][:auth])
+				Dir.mkdir(@config[:paths][:downloads]) unless Dir.exists?(@config[:paths][:downloads])
+				Dir.mkdir(@config[:paths][:backup]) unless Dir.exists?(@config[:paths][:backup])
+				Dir.mkdir(@config[:paths][:posts]) unless Dir.exists?(@config[:paths][:posts])
+				Dir.mkdir(@config[:paths][:messages]) unless Dir.exists?(@config[:paths][:messages])
+				Dir.mkdir(@config[:paths][:lists]) unless Dir.exists?(@config[:paths][:lists])
+			rescue => e
+				Logs.rec.error "From myconfig/create ayadn folders"
+				Logs.rec.error "#{e}"
 			end
 		end
 
@@ -154,9 +167,6 @@ module Ayadn
 					auto_save_sent_posts: false,
 					auto_save_sent_messages: false,
 					auto_save_lists: false
-				},
-				identity: {
-					prefix: "me"
 				}
 			}
 		end

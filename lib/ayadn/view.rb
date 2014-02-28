@@ -179,7 +179,7 @@ module Ayadn
 				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "Current Ayadn settings".color(:cyan)
 				t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
-				@iter = 0 #todo: each.with_index
+				@iter = 0
 				MyConfig.options.each do |k,v|
 					v.each do |x,y|
 						t << :separator if @iter >= 1
