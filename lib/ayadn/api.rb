@@ -231,11 +231,15 @@ module Ayadn
 		#private
 
 		def check_error(res)
-			Logs.rec.error "From api/check http response"
-			if res['meta']['code'] == 404
-				puts Status.not_found
+			if res['meta']['code'] == 200
+				res
+			else
+				Logs.rec.error "From api/check http response"
+				# if res['meta']['code'] == 404
+				# 	puts Status.not_found
+				# end
+				raise("#{res}")
 			end
-			raise("#{res}")
 		end
 
 		def empty_data

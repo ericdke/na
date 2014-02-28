@@ -83,30 +83,4 @@ describe Ayadn::Workers do
 		  expect(printed).to include "Mr Test"
 		end
 	end
-
-	let(:alt_list) { [{"username" => "test", "name" => "Mr Test", "you_follow" => true, "follows_you" => false}] }
-
-	describe "#build_reposted_list" do
-		it 'builds the reposted table list' do
-		  printed = capture_stdout do
-		    puts Ayadn::Workers.new.build_reposted_list(alt_list, 42)
-		  end
-		  expect(printed).to include "+----"
-		  expect(printed).to include "42"
-		  expect(printed).to include "@test"
-		  expect(printed).to include "Mr Test"
-		end
-	end
-
-	describe "#build_starred_list" do
-		it 'builds the starred table list' do
-		  printed = capture_stdout do
-		    puts Ayadn::Workers.new.build_starred_list(alt_list, 42)
-		  end
-		  expect(printed).to include "+----"
-		  expect(printed).to include "42"
-		  expect(printed).to include "@test"
-		  expect(printed).to include "Mr Test"
-		end
-	end
 end

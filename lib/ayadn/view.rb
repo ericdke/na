@@ -6,16 +6,38 @@ module Ayadn
 		end
 
 		def show_posts_with_index(data)
-			posts, view = @workers.build_stream_with_index(data)
+			posts, view = build_stream_with_index(data)
 			#puts "\n"
 			puts view
 			FileOps.save_indexed_posts(posts)
 		end
 
 		def show_posts(data)
-			view = @workers.build_stream_without_index(data)
+			view = build_stream_without_index(data)
 			#puts "\n"
 			puts view
+		end
+
+		def build_stream_with_index(data) #expects an array
+			@view = ""
+			posts = @workers.build_posts(data.reverse)
+			posts.each do |id,content|
+				count = "%03d" % content[:count]
+				@view << count.color(MyConfig.options[:colors][:index])
+				@view << ": ".color(MyConfig.options[:colors][:index])
+				@view << build_content(content)
+			end
+			return posts, @view
+		end
+
+		def build_stream_without_index(data) #expects an array
+			@view = ""
+			posts = @workers.build_posts(data.reverse)
+			posts.each do |id,content|
+				@view << content[:id].to_s.color(MyConfig.options[:colors][:id]) + " "
+				@view << build_content(content)
+			end
+			@view
 		end
 
 		def show_raw(stream)
@@ -23,7 +45,7 @@ module Ayadn
 		end
 
 		def show_simple_post(post)
-			view = @workers.build_stream_without_index(post)
+			view = build_stream_without_index(post)
 			puts view
 		end
 
@@ -32,12 +54,14 @@ module Ayadn
 		end
 
 		def show_list_reposted(list, target)
-			puts @workers.build_reposted_list(list, target)
+			users_list, table = @workers.build_reposted_list(list, target)
+			puts @workers.build_users_list(users_list, table)
 			puts "\n"
 		end
 
 		def show_list_starred(list, target)
-			puts @workers.build_starred_list(list, target)
+			users_list, table = @workers.build_starred_list(list, target)
+			puts @workers.build_users_list(users_list, table)
 			puts "\n"
 		end
 
@@ -63,11 +87,91 @@ module Ayadn
 
 		def show_interactions(stream)
 			#puts "\n"
-			puts @workers.build_interactions_stream(stream)
+			puts build_interactions_stream(stream)
+		end
+
+		def build_interactions_stream(data)
+			inter = ""
+			data.reverse.each do |event|
+				users_array = []
+				inter << "#{@workers.parsed_time(event['event_date'])}".color(MyConfig.options[:colors][:date])
+				inter << " => "
+				event['users'].each do |u|
+					users_array << "@" + u['username']
+				end
+				case event['action']
+					when "follow", "unfollow"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "#{event['action']}ed you".color(:green)
+					when "mute", "unmute"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "#{event['action']}d you".color(:green)
+					when "star", "unstar"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "#{event['action']}red post #{event['objects'][0]['id']}".color(:green)
+					when "repost", "unrepost"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "#{event['action']}ed post ".color(:green)
+						inter << "#{event['objects'][0]['id']}".color(:red)
+					when "reply"
+						inter << "#{users_array.join(", ")} ".color(:magenta)
+						inter << "replied to post ".color(:green)
+						inter << "#{event['objects'][0]['id']}".color(:red)
+					when "welcome"
+						inter << "App.net ".color(:cyan)
+						inter << "welcomed ".color(:green)
+						inter << "you!".color(:yellow)
+				end
+				inter << "\n\n"
+			end
+			inter
 		end
 
 		def show_files_list(list)
-			puts @workers.build_files_list(list)
+			puts build_files_list(list)
+		end
+
+		def build_files_list(list) #meta+data
+			data = list['data'].reverse
+			view = "\n"
+			data.each do |file|
+				view << "ID\t\t".color(:cyan)
+				view << file['id'].color(MyConfig.options[:colors][:id])
+				view << "\n"
+				view << "Name\t\t".color(:cyan)
+				view << file['name'].color(MyConfig.options[:colors][:name])
+				view << "\n"
+				view << "Kind\t\t".color(:cyan)
+				view << file['kind'].color(MyConfig.options[:colors][:username])
+				view << " (#{file['mime_type']})".color(MyConfig.options[:colors][:username]) if file['mime_type']
+				if file['image_info']
+					view << "\n"
+					view << "Dimensions\t".color(:cyan)
+					view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color(MyConfig.options[:colors][:username])
+				end
+				view << "\n"
+				view << "Size\t\t".color(:cyan)
+				view << file['size'].to_filesize.color(:yellow)
+				view << "\n"
+				view << "Date\t\t".color(:cyan)
+				view << @workers.parsed_time(file['created_at']).color(:green)
+				view << "\n"
+				view << "Source\t\t".color(:cyan)
+				view << file['source']['name'].color(MyConfig.options[:colors][:source])
+				view << "\n"
+				view << "State\t\t".color(:cyan)
+				if file['public']
+					view << "Public".color(MyConfig.options[:colors][:id])
+					view << "\n"
+					view << "Link\t\t".color(:cyan)
+					view << file['url_short'].color(MyConfig.options[:colors][:link])
+				else
+					view << "Private".color(MyConfig.options[:colors][:id])
+				end
+
+				view << "\n\n"
+			end
+			view
 		end
 
 		def settings
@@ -75,7 +179,7 @@ module Ayadn
 				t.style = { :width => MyConfig.options[:formats][:table][:width] }
 				t.title = "Current Ayadn settings".color(:cyan)
 				t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
-				@iter = 0
+				@iter = 0 #todo: each.with_index
 				MyConfig.options.each do |k,v|
 					v.each do |x,y|
 						t << :separator if @iter >= 1
@@ -146,6 +250,108 @@ module Ayadn
 			end
 
 			puts view
+		end
+
+		def build_content(content)
+			view = ""
+			view << build_header(content)
+			view << "\n"
+			view << content[:text]
+			view << "\n"
+			if content[:has_checkins]
+				view << build_checkins(content)
+				view << "\n"
+			end
+			unless content[:links].empty?
+				view << "\n"
+				content[:links].each do |link|
+					view << link.color(MyConfig.options[:colors][:link])
+					view << "\n"
+				end
+			end
+			view << "\n\n"
+		end
+
+		def build_header(content)
+			header = ""
+			header << content[:handle].color(MyConfig.options[:colors][:username])
+			if MyConfig.options[:timeline][:show_real_name]
+				header << " "
+				header << content[:name].color(MyConfig.options[:colors][:name])
+			end
+			if MyConfig.options[:timeline][:show_date]
+				header << " "
+				header << content[:date].color(MyConfig.options[:colors][:date])
+			end
+			if MyConfig.options[:timeline][:show_source]
+				header << " "
+				header << "[#{content[:source_name]}]".color(MyConfig.options[:colors][:source])
+			end
+			if MyConfig.options[:timeline][:show_symbols]
+				header << " <".color(MyConfig.options[:colors][:symbols]) if content[:is_reply]
+				header << " #{content[:num_stars]}*".color(MyConfig.options[:colors][:symbols]) if content[:is_starred]
+				header << " >".color(MyConfig.options[:colors][:symbols]) if content[:num_replies] > 0
+				header << " #{content[:num_reposts]}x".color(MyConfig.options[:colors][:symbols]) if content[:is_repost]
+			end
+			header << "\n"
+		end
+
+		def build_checkins(content)
+			unless content[:checkins][:name].nil?
+				num_dots = content[:checkins][:name].length
+			else
+				num_dots = 10
+			end
+			hd = (".".color(MyConfig.options[:colors][:dots])) * num_dots
+			hd << "\n"
+			formatted = { header: hd }
+			content[:checkins].each do |key, val|
+					formatted[key] = val unless (val.nil? || !val)
+			end
+
+			chk = formatted[:header]
+			unless formatted[:name].nil?
+				chk << formatted[:name].color(MyConfig.options[:colors][:dots])
+				chk << "\n"
+			end
+			unless formatted[:address].nil?
+				chk << formatted[:address]
+				chk << "\n"
+			end
+			unless formatted[:address_extended].nil?
+				chk << formatted[:address_extended]
+				chk << "\n"
+			end
+			unless formatted[:country_code].nil?
+				cc = "(#{formatted[:country_code]})".upcase
+			else
+				cc = ""
+			end
+			unless formatted[:postcode].nil?
+				unless formatted[:locality].nil?
+					chk << "#{formatted[:postcode]}, #{formatted[:locality]} #{cc}"
+					chk << "\n"
+				end
+			else
+				unless formatted[:locality].nil?
+					chk << "#{formatted[:locality]} #{cc}"
+					chk << "\n"
+				end
+			end
+			unless formatted[:website].nil?
+				chk << formatted[:website]
+				chk << "\n"
+			end
+			unless formatted[:telephone].nil?
+				chk << formatted[:telephone]
+				chk << "\n"
+			end
+			unless formatted[:categories].nil?
+				chk << formatted[:categories]
+				chk << "\n"
+			end
+
+			chk.chomp
 		end
 
 
