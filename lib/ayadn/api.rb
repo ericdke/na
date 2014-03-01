@@ -125,7 +125,7 @@ module Ayadn
 				resp = get_parsed_response(url)
 				check_error(resp)
 				big << resp
-				break if resp['meta']['min_id'] == nil
+				break if resp['meta']['min_id'] == nil || resp['meta']['more'] == false
 				options = {:count => 200, :before_id => resp['meta']['min_id']}
 			end
 			big
@@ -226,6 +226,20 @@ module Ayadn
 			else
 				resp
 			end
+		end
+
+		def get_channels
+			options = {:count => 200, :recent_message => 1, :annotations => 1, :before_id => nil}
+			resp = get_parsed_response(Endpoints.channels(options))
+			# big = []
+			# loop do
+			# 	resp = get_parsed_response(Endpoints.channels(options))
+			# 	check_error(resp)
+			# 	big << resp
+			# 	break if resp['meta']['min_id'] == nil || resp['meta']['more'] == false
+			# 	options = {:count => 200, :before_id => resp['meta']['min_id']}
+			# end
+			# big
 		end
 
 		#private

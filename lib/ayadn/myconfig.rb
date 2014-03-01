@@ -15,7 +15,11 @@ module Ayadn
 			deleted = arg[:deleted] || @options[:timeline][:deleted]
 			html = arg[:html] || @options[:timeline][:html]
 			annotations = arg[:annotations] || @options[:timeline][:annotations]
-			"&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}"
+			if arg[:recent_message]
+				"&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&include_recent_message=#{arg[:recent_message]}"
+			else
+				"&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}"
+			end
 		end
 
 		def self.load_config

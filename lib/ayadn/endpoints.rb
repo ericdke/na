@@ -188,5 +188,9 @@ module Ayadn
 			POSTS_URL + "#{post_id}/star?access_token=#{MyConfig.user_token}"
 		end
 
+		def self.channels(options)
+			CHANNELS_URL + "?access_token=#{MyConfig.user_token}#{MyConfig.build_query_options(options)}"
+		end
+
 	end
 end
