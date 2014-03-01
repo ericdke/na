@@ -5,20 +5,20 @@ module Ayadn
 			@workers = Workers.new
 		end
 
-		def show_posts_with_index(data)
-			posts, view = build_stream_with_index(data)
+		def show_posts_with_index(data, options)
+			posts, view = build_stream_with_index(data, options)
 			#puts "\n"
 			puts view
 			FileOps.save_indexed_posts(posts)
 		end
 
-		def show_posts(data)
-			view = build_stream_without_index(data)
+		def show_posts(data, options)
+			view = build_stream_without_index(data, options)
 			#puts "\n"
 			puts view
 		end
 
-		def build_stream_with_index(data) #expects an array
+		def build_stream_with_index(data, options) #expects an array
 			@view = ""
 			posts = @workers.build_posts(data.reverse)
 			posts.each do |id,content|
@@ -30,7 +30,7 @@ module Ayadn
 			return posts, @view
 		end
 
-		def build_stream_without_index(data) #expects an array
+		def build_stream_without_index(data, options) #expects an array
 			@view = ""
 			posts = @workers.build_posts(data.reverse)
 			posts.each do |id,content|

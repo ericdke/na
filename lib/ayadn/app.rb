@@ -14,8 +14,8 @@ module Ayadn
 			Action.new.unified(options)
 		end
 
-		desc "checkins", "Show the Checkins Stream (ayadn -ch)"
-		map "-ch" => :checkins
+		desc "checkins", "Show the Checkins Stream (ayadn -ck)"
+		map "-ck" => :checkins
 		long_desc Descriptions.checkins
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -284,6 +284,12 @@ module Ayadn
 			Action.new.block(username)
 		end
 
+		desc "channels", "List your active channels (ayadn -ch)"
+		map "-ch" => :channels
+		long_desc Descriptions.channels
+		def channels
+			Action.new.channels
+		end
 
 
 

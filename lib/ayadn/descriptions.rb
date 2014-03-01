@@ -1,106 +1,109 @@
 module Ayadn
 	class Descriptions
 		def self.unified
-			%Q{Shows your Unified Stream.\nShortcut: replace 'unified' by '-u'.}
+			%Q{Shows your Unified Stream. Shortcut: replace 'unified' by '-u'.}
 		end
 		def self.checkins
-			%Q{Shows the Checkins Stream.\nShortcut: replace 'checkins' by '-ch'}
+			%Q{Shows the Checkins Stream. Shortcut: replace 'checkins' by '-ck'}
 		end
 		def self.global
-			%Q{Shows the Global Stream.\nShortcut: replace 'global' by '-gl'}
+			%Q{Shows the Global Stream. Shortcut: replace 'global' by '-gl'}
 		end
 		def self.trending
-			%Q{Shows the Trending Stream.\nShortcut: replace 'trending' by '-tr'}
+			%Q{Shows the Trending Stream. Shortcut: replace 'trending' by '-tr'}
 		end
 		def self.photos
-			%Q{Shows the Photos Stream.\nShortcut: replace 'photos' by '-ph'}
+			%Q{Shows the Photos Stream. Shortcut: replace 'photos' by '-ph'}
 		end
 		def self.conversations
-			%Q{Shows the Conversations Stream.\nShortcut: replace 'conversations' by '-cq'}
+			%Q{Shows the Conversations Stream. Shortcut: replace 'conversations' by '-cq'}
 		end
 		def self.mentions
-			%Q{Shows posts containing a mention of a @username.\nShortcut: replace 'mentions' by '-m'}
+			%Q{Shows posts containing a mention of a @username. Shortcut: replace 'mentions' by '-m'}
 		end
 		def self.posts
-			%Q{Shows @username's posts.\nShortcut: replace 'posts' by '-po'}
+			%Q{Shows @username's posts. Shortcut: replace 'posts' by '-po'}
 		end
 		def self.whatstarred
-			%Q{Shows posts starred by @username.\nShortcut: replace 'whatstarred' by '-was'}
+			%Q{Shows posts starred by @username. Shortcut: replace 'whatstarred' by '-was'}
 		end
 		def self.interactions
-			%Q{Shows your recent ADN activity.\nShortcut: replace 'interactions' by '-int'}
+			%Q{Shows your recent ADN activity. Shortcut: replace 'interactions' by '-int'}
 		end
 		def self.whoreposted
-			%Q{Lists users who reposted post n°POST-ID.\nShortcut: replace 'whoreposted' by '-wor'}
+			%Q{Lists users who reposted post n°POST-ID. Shortcut: replace 'whoreposted' by '-wor'}
 		end
 		def self.whostarred
-			%Q{Lists users who starred post n°POST-ID.\nShortcut: replace 'whostarred' by '-wos'}
+			%Q{Lists users who starred post n°POST-ID. Shortcut: replace 'whostarred' by '-wos'}
 		end
 		def self.convo
-			%Q{Shows the conversation thread around post n°POST_ID.\nShortcut: replace 'convo' by '-co'}
+			%Q{Shows the conversation thread around post n°POST_ID. Shortcut: replace 'convo' by '-co'}
 		end
 		def self.followings
-			%Q{Lists users @username is following.\nShortcut: replace 'followings' by '-fg'}
+			%Q{Lists users @username is following. Shortcut: replace 'followings' by '-fg'}
 		end
 		def self.followers
-			%Q{Lists users following @username.\nShortcut: replace 'followers' by '-fr'}
+			%Q{Lists users following @username. Shortcut: replace 'followers' by '-fr'}
 		end
 		def self.muted
-			%Q{Lists the users you muted.\nShortcut: replace 'muted' by '-mtd'}
+			%Q{Lists the users you muted. Shortcut: replace 'muted' by '-mtd'}
 		end
 		def self.blocked
-			%Q{Lists the users you blocked.\nShortcut: replace 'blocked' by '-bkd'}
+			%Q{Lists the users you blocked. Shortcut: replace 'blocked' by '-bkd'}
 		end
 		def self.hashtag
-			%Q{Shows recent posts containing #HASHTAG.\nShortcut: replace 'hashtag' by '-t'}
+			%Q{Shows recent posts containing #HASHTAG. Shortcut: replace 'hashtag' by '-t'}
 		end
 		def self.search
-			%Q{Shows recents posts containing WORD(S).\nShortcut: replace 'search' by '-s'}
+			%Q{Shows recents posts containing WORD(S). Shortcut: replace 'search' by '-s'}
 		end
 		def self.settings
-			%Q{Lists current Ayadn settings.\nShortcut: replace 'settings' by '-sg'}
+			%Q{Lists current Ayadn settings. Shortcut: replace 'settings' by '-sg'}
 		end
 		def self.userinfo
-			%Q{Shows detailed informations about @username.\nShortcut: replace 'userinfo' by '-ui'}
+			%Q{Shows detailed informations about @username. Shortcut: replace 'userinfo' by '-ui'}
 		end
 		def self.postinfo
-			%Q{Shows detailed informations about n°POST-ID.\nShortcut: replace 'postinfo' by '-pi'}
+			%Q{Shows detailed informations about n°POST-ID. Shortcut: replace 'postinfo' by '-pi'}
 		end
 		def self.files
-			%Q{Lists the files in your ADN storage.\nShortcut: replace 'files' by '-fl'}
+			%Q{Lists the files in your ADN storage. Shortcut: replace 'files' by '-fl'}
 		end
 		def self.delete
-			%Q{Delete a post.\nShortcut: replace 'delete' by '-del'}
+			%Q{Delete a post. Shortcut: replace 'delete' by '-del'}
 		end
 		def self.unfollow
-			%Q{Unfollow a user.\nShortcut: replace 'unfollow' by '-unf'}
+			%Q{Unfollow a user. Shortcut: replace 'unfollow' by '-unf'}
 		end
 		def self.unmute
-			%Q{Unmute a user.\nShortcut: replace 'unmute' by '-unm'}
+			%Q{Unmute a user. Shortcut: replace 'unmute' by '-unm'}
 		end
 		def self.unblock
-			%Q{Unblock a user.\nShortcut: replace 'unblock' by '-unb'}
+			%Q{Unblock a user. Shortcut: replace 'unblock' by '-unb'}
 		end
 		def self.unrepost
-			%Q{Unrepost a post.\nShortcut: replace 'unrepost' by '-unr'}
+			%Q{Unrepost a post. Shortcut: replace 'unrepost' by '-unr'}
 		end
 		def self.unstar
-			%Q{Unstar a post.\nShortcut: replace 'unstar' by '-uns'}
+			%Q{Unstar a post. Shortcut: replace 'unstar' by '-uns'}
 		end
 		def self.star
-			%Q{Star a post.\nShortcut: replace 'star' by '-st'}
+			%Q{Star a post. Shortcut: replace 'star' by '-st'}
 		end
 		def self.repost
-			%Q{Repost a post.\nShortcut: replace 'repost' by '-rp'}
+			%Q{Repost a post. Shortcut: replace 'repost' by '-rp'}
 		end
 		def self.follow
-			%Q{Follow a user.\nShortcut: replace 'follow' by '-fo'}
+			%Q{Follow a user. Shortcut: replace 'follow' by '-fo'}
 		end
 		def self.mute
-			%Q{Mute a user.\nShortcut: replace 'mute' by '-mu'}
+			%Q{Mute a user. Shortcut: replace 'mute' by '-mu'}
 		end
 		def self.block
-			%Q{Block a user.\nShortcut: replace 'block' by '-bl'}
+			%Q{Block a user. Shortcut: replace 'block' by '-bl'}
+		end
+		def self.channels
+			%Q{List your active channels. Shortcut: replace 'channels' by '-ch'}
 		end
 
 

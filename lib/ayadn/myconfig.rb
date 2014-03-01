@@ -93,16 +93,9 @@ module Ayadn
 			#todo: unless version file exists + more checks
 			begin
 				FileUtils.mkdir_p(@config[:paths][:home]) unless Dir.exists?(@config[:paths][:home])
-				Dir.mkdir(@config[:paths][:log]) unless Dir.exists?(@config[:paths][:log])
-				Dir.mkdir(@config[:paths][:db]) unless Dir.exists?(@config[:paths][:db])
-				Dir.mkdir(@config[:paths][:pagination]) unless Dir.exists?(@config[:paths][:pagination])
-				Dir.mkdir(@config[:paths][:config]) unless Dir.exists?(@config[:paths][:config])
-				Dir.mkdir(@config[:paths][:auth]) unless Dir.exists?(@config[:paths][:auth])
-				Dir.mkdir(@config[:paths][:downloads]) unless Dir.exists?(@config[:paths][:downloads])
-				Dir.mkdir(@config[:paths][:backup]) unless Dir.exists?(@config[:paths][:backup])
-				Dir.mkdir(@config[:paths][:posts]) unless Dir.exists?(@config[:paths][:posts])
-				Dir.mkdir(@config[:paths][:messages]) unless Dir.exists?(@config[:paths][:messages])
-				Dir.mkdir(@config[:paths][:lists]) unless Dir.exists?(@config[:paths][:lists])
+				%w{log db pagination config auth downloads backup posts messages lists}.each do |target|
+					Dir.mkdir(@config[:paths][target.to_sym]) unless Dir.exists?(@config[:paths][target.to_sym])
+				end
 			rescue => e
 				Logs.rec.error "From myconfig/create ayadn folders"
 				Logs.rec.error "#{e}"

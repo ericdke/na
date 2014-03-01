@@ -719,9 +719,9 @@ module Ayadn
 		def get_view(stream, options = {})
 			@view.clear_screen
 			if options[:index]
-				@view.show_posts_with_index(stream)
+				@view.show_posts_with_index(stream, options)
 			else
-				@view.show_posts(stream)
+				@view.show_posts(stream, options)
 			end
 		end
 
