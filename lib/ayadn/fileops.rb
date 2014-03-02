@@ -36,5 +36,17 @@ module Ayadn
 			end
 		end
 
+		def self.add_to_users_db(id, username, name)
+			Databases.users[id] = {username => name}
+		end
+
+		def self.get_from_users_db(id)
+			Databases.users[id]
+		end
+
+		def self.load_users_db
+			Databases.users
+		end
+
 	end
 end

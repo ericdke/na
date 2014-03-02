@@ -716,15 +716,20 @@ module Ayadn
 				chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
 				channels.each do |ch|
 					unless ch['writers']['user_ids'].empty?
-						#for each user id
-						#check if user in db
-						#if yes, fetch him
-						#else, call api
-						#then rec user in db
-						#return user
-						writers = ch['writers']['user_ids'].join(", ") + " and yourself"
+						usernames = []
+						ch['writers']['user_ids'].each do |id|
+							db = FileOps.get_from_users_db(id)
+							unless db.nil?
+								usernames << "@" + db.keys.first
+							else
+								resp = @api.get_user(id)
+								usernames << "@" + resp['data']['username']
+								FileOps.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
+							end
+						end
+						writers = "@" + MyConfig.config[:identity] + ", " + usernames.join(", ")
 					else
-						writers = "yourself only"
+						writers = "@" + MyConfig.config[:identity]
 					end
 					if ch['has_unread']
 						unread = "This channel has unread message(s)"
@@ -736,7 +741,7 @@ module Ayadn
 				bucket.each do |ch|
 					puts "ID: #{ch.id}"
 					puts "Messages: #{ch.num_messages}"
-					puts "Owner: @#{ch.owner['username']} (#{ch.owner['name']})"
+					puts "Owner: @#{ch.owner['username']}" # + (#{ch.owner['name']}) if ch.owner['name']
 					puts "Writers: #{ch.writers}"
 					puts "Type: #{ch.type}"
 					puts "You follow this channel" if ch.you_subscribed
