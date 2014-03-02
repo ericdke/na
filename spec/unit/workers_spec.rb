@@ -83,4 +83,13 @@ describe Ayadn::Workers do
 		  expect(printed).to include "Mr Test"
 		end
 	end
+
+	describe ".add_arobase_if_absent" do
+		it 'adds @ to username' do
+			expect(Ayadn::Workers.add_arobase_if_absent(["user"])).to eq "@user"
+		end
+		it 'does nothing to @username' do
+			expect(Ayadn::Workers.add_arobase_if_absent(["@user"])).to eq "@user"
+		end
+	end
 end

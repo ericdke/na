@@ -39,5 +39,19 @@ module Ayadn
 			pin.posts(:results => count)
 		end
 
+		def ask_credentials
+			begin
+				puts "Please enter your Pinboard username (CTRL+C to cancel): ".color(:green)
+				pin_username = STDIN.gets.chomp()
+				puts "\nPlease enter your Pinboard password (invisible, CTRL+C to cancel): ".color(:green)
+				pin_password = STDIN.noecho(&:gets).chomp()
+			rescue Exception
+				puts Status.stopped
+			rescue => e
+				raise e
+			end
+			return encode(pin_username, pin_password)
+		end
+
 	end
 end
