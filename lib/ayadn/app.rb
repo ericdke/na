@@ -9,7 +9,7 @@ module Ayadn
 		long_desc Descriptions.unified
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def unified
 			Action.new.unified(options)
 		end
@@ -19,7 +19,7 @@ module Ayadn
 		long_desc Descriptions.checkins
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def checkins
 			Action.new.checkins(options)
 		end
@@ -29,7 +29,7 @@ module Ayadn
 		long_desc Descriptions.global
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def global
 			Action.new.global(options)
 		end
@@ -39,7 +39,7 @@ module Ayadn
 		long_desc Descriptions.trending
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def trending
 			Action.new.trending(options)
 		end
@@ -49,7 +49,7 @@ module Ayadn
 		long_desc Descriptions.photos
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def photos
 			Action.new.photos(options)
 		end
@@ -59,7 +59,7 @@ module Ayadn
 		long_desc Descriptions.conversations
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def conversations
 			Action.new.conversations(options)
 		end
@@ -69,7 +69,7 @@ module Ayadn
 		long_desc Descriptions.mentions
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def mentions(*username)
 			Action.new.mentions(username, options)
 		end
@@ -79,7 +79,7 @@ module Ayadn
 		long_desc Descriptions.posts
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def posts(*username)
 			Action.new.posts(username, options)
 		end
@@ -96,7 +96,7 @@ module Ayadn
 		long_desc Descriptions.whatstarred
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def whatstarred(*username)
 			Action.new.whatstarred(username, options)
 		end
@@ -119,7 +119,7 @@ module Ayadn
 		map "-co" => :convo
 		map "thread" => :convo
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		long_desc Descriptions.convo
 		def convo(post_id)
 			Action.new.convo(post_id, options)
@@ -128,7 +128,7 @@ module Ayadn
 		desc "followings @USERNAME", "List users @username is following (ayadn -fg @username)"
 		map "-fg" => :followings
 		long_desc Descriptions.followings
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def followings(*username)
 			Action.new.followings(username, options)
 		end
@@ -136,7 +136,7 @@ module Ayadn
 		desc "followers @USERNAME", "List users following @username (ayadn -fr @username)"
 		map "-fr" => :followers
 		long_desc Descriptions.followers
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def followers(*username)
 			Action.new.followers(username, options)
 		end
@@ -144,7 +144,7 @@ module Ayadn
 		desc "muted", "List the users you muted (ayadn -mtd)"
 		map "-mtd" => :muted
 		long_desc Descriptions.muted
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def muted
 			Action.new.muted(options)
 		end
@@ -152,7 +152,7 @@ module Ayadn
 		desc "blocked", "List the users you blocked (ayadn -bkd)"
 		map "-bkd" => :blocked
 		long_desc Descriptions.blocked
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def blocked
 			Action.new.blocked(options)
 		end
@@ -160,7 +160,7 @@ module Ayadn
 		desc "hashtag HASHTAG", "Show recent posts containing #HASHTAG (ayadn -t hashtag)"
 		map "-t" => :hashtag
 		long_desc Descriptions.hashtag
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def hashtag(hashtag)
 			Action.new.hashtag(hashtag, options)
 		end
@@ -170,7 +170,7 @@ module Ayadn
 		long_desc Descriptions.search
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def search(*words)
 			Action.new.search(words.join(","), options)
 		end
@@ -185,7 +185,7 @@ module Ayadn
 		desc "userinfo @USERNAME", "Show detailed informations about @username (ayadn -ui @username)"
 		map "-ui" => :userinfo
 		long_desc Descriptions.userinfo
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def userinfo(*username)
 			Action.new.userinfo(username, options)
 		end
@@ -193,7 +193,7 @@ module Ayadn
 		desc "postinfo POST-ID", "Show detailed informations about a post (ayadn -pi POST-ID)"
 		map "-pi" => :postinfo
 		long_desc Descriptions.postinfo
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def postinfo(post_id)
 			Action.new.postinfo(post_id, options)
 		end
@@ -202,7 +202,7 @@ module Ayadn
 		map "-fl" => :files
 		long_desc Descriptions.files
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
-		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net response without formatting"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
 		def files
 			Action.new.files(options)
 		end
@@ -290,6 +290,21 @@ module Ayadn
 		def channels
 			Action.new.channels
 		end
+
+		desc "messages CHANNEL", "Show messages in channel CHANNEL (ayadn -ms CHANNEL)"
+		map "-ms" => :messages
+		long_desc Descriptions.messages
+		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of messages to retrieve"
+		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
+		def messages(channel_id)
+			Action.new.messages(channel_id, options)
+		end
+
+
+
+
+
+
 
 
 

@@ -111,6 +111,9 @@ module Ayadn
 		def self.error_missing_post_id
 			"\nYou have to specify a post id.\n".color(:red)
 		end
+		def self.error_missing_channel_id
+			"\nYou have to specify a channel id.\n".color(:red)
+		end
 		def self.error_missing_hashtag
 			"\nYou have to specify one or more hashtag(s).\n".color(:red)
 		end

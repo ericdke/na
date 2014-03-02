@@ -105,6 +105,9 @@ module Ayadn
 		def self.channels
 			%Q{List your active channels. Shortcut: replace 'channels' by '-ch'}
 		end
+		def self.messages
+			%Q{Show messages in channel CHANNEL. Shortcut: replace 'messages' by '-ms'}
+		end
 
 
 

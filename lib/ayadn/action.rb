@@ -706,7 +706,7 @@ module Ayadn
 			end
 		end
 
-		def channels #TODO -> split into classes
+		def channels
 			begin
 				doing
 				resp = @api.get_channels
@@ -721,9 +721,28 @@ module Ayadn
 			end
 		end
 
+		def messages(channel_id, options)
+			begin
+				if channel_id.is_integer?
+					doing
+					resp = @api.get_messages(channel_id, options)
+					@view.clear_screen
+					@view.show_posts(resp['data'], options)
+				else
+					puts Status.error_missing_channel_id
+					#TODO: replace with get from aliased channel
+					#if not int && not in db then err
+				end
+			rescue => e
+				Logs.rec.error "In action/messages with args: #{channel_id}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+			ensure
+				Databases.close_all
+			end
+		end
 
 
-		#private
 
 
 

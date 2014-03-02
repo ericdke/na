@@ -230,7 +230,7 @@ module Ayadn
 
 		def get_channels
 			options = {:count => 200, :recent_message => 1, :annotations => 1, :before_id => nil}
-			resp = get_parsed_response(Endpoints.channels(options))
+			get_parsed_response(Endpoints.channels(options))
 			# big = []
 			# loop do
 			# 	resp = get_parsed_response(Endpoints.channels(options))
@@ -242,7 +242,11 @@ module Ayadn
 			# big
 		end
 
-		#private
+		def get_messages(channel_id, options)
+			get_parsed_response(Endpoints.messages(channel_id, options))
+		end
+
+
 
 		def check_error(res)
 			if res['meta']['code'] == 200

@@ -192,5 +192,9 @@ module Ayadn
 			CHANNELS_URL + "?access_token=#{MyConfig.user_token}#{MyConfig.build_query_options(options)}"
 		end
 
+		def self.messages(channel_id, options)
+			CHANNELS_URL + "#{channel_id}/messages?access_token=#{MyConfig.user_token}#{MyConfig.build_query_options(options)}"
+		end
+
 	end
 end
