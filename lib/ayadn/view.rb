@@ -354,6 +354,41 @@ module Ayadn
 			chk.chomp
 		end
 
+		def show_channels(resp)
+			view = ""
+			bucket = @workers.build_channels(resp['data'])
+			bucket.each do |ch|
+				view << "\n"
+				view << "ID: ".color(:cyan)
+				view << "#{ch.id}".color(MyConfig.options[:colors][:id])
+				view << "\n"
+				view << "Messages: ".color(:cyan)
+				view << "#{ch.num_messages}".color(MyConfig.options[:colors][:symbols])
+				view << "\n"
+				view << "Owner: ".color(:cyan)
+				view << "@#{ch.owner['username']}".color(MyConfig.options[:colors][:username])
+				# + (#{ch.owner['name']}) if ch.owner['name']
+				view << "\n"
+				view << "Writers: ".color(:cyan)
+				view << "#{ch.writers}".color(MyConfig.options[:colors][:name])
+				view << "\n"
+				view << "Type: ".color(:cyan)
+				view << "#{ch.type}".color(MyConfig.options[:colors][:source])
+				view << "\n"
+				#view << "You follow this channel" if ch.you_subscribed
+				#view << "\n"
+				#view << ch.unread
+				#view << "\n"
+				unless ch.recent_message.nil?
+					view << "Most recent messsage: ".color(:cyan)
+					view << "\n"
+					view << "---\n#{ch.recent_message['text']}\n---"
+				end
+				view << "\n\n"
+			end
+			puts view
+		end
+
 
 
 

@@ -207,6 +207,40 @@ module Ayadn
 			return checkins, has_checkins
 		end
 
+		def build_channels(data)
+			channels = []
+			data.each { |ch| channels << ch }
+			bucket = []
+			#puts "Downloading new channels and unknown users ids, please wait...\n\n"
+			chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
+			channels.each do |ch|
+				unless ch['writers']['user_ids'].empty?
+					usernames = []
+					ch['writers']['user_ids'].each do |id|
+						db = FileOps.get_from_users_db(id)
+						unless db.nil?
+							usernames << "@" + db.keys.first
+						else
+							resp = @api.get_user(id)
+							usernames << "@" + resp['data']['username']
+							FileOps.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
+						end
+					end
+					usernames << MyConfig.config[:handle] unless usernames.length == 1 && usernames.first == MyConfig.config[:handle]
+					writers = usernames.join(", ")
+				else
+					writers = MyConfig.config[:handle]
+				end
+				if ch['has_unread']
+					unread = "This channel has unread message(s)"
+				else
+					unread = "No unread messages"
+				end
+				bucket << chan.new(ch['id'], ch['counts']['messages'], ch['counts']['subscribers'], ch['type'], ch['owner'], ch['annotations'], ch['readers'], ch['editors'], writers, ch['you_subscribed'], unread, ch['recent_message_id'], ch['recent_message'])
+			end
+			bucket
+		end
+
 
 		def parsed_time(string)
 			"#{string[0...10]} #{string[11...19]}"

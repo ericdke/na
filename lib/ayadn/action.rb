@@ -710,49 +710,8 @@ module Ayadn
 			begin
 				doing
 				resp = @api.get_channels
-				channels = []
-				resp['data'].each { |ch| channels << ch }
-				bucket = []
-				chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
-				#puts "Downloading new channels and unknown users ids, please wait...\n\n"
-				channels.each do |ch|
-					unless ch['writers']['user_ids'].empty?
-						usernames = []
-						ch['writers']['user_ids'].each do |id|
-							db = FileOps.get_from_users_db(id)
-							unless db.nil?
-								usernames << "@" + db.keys.first
-							else
-								resp = @api.get_user(id)
-								usernames << "@" + resp['data']['username']
-								FileOps.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
-							end
-						end
-						writers = MyConfig.config[:handle] + ", " + usernames.join(", ")
-					else
-						writers = MyConfig.config[:handle]
-					end
-					if ch['has_unread']
-						unread = "This channel has unread message(s)"
-					else
-						unread = "No unread messages"
-					end
-					bucket << chan.new(ch['id'], ch['counts']['messages'], ch['counts']['subscribers'], ch['type'], ch['owner'], ch['annotations'], ch['readers'], ch['editors'], writers, ch['you_subscribed'], unread, ch['recent_message_id'], ch['recent_message'])
-				end
-				bucket.each do |ch|
-					puts "ID: #{ch.id}"
-					puts "Messages: #{ch.num_messages}"
-					puts "Owner: @#{ch.owner['username']}" # + (#{ch.owner['name']}) if ch.owner['name']
-					puts "Writers: #{ch.writers}"
-					puts "Type: #{ch.type}"
-					#puts "You follow this channel" if ch.you_subscribed
-					#puts ch.unread
-					unless ch.recent_message.nil?
-						puts "Most recent messsage: "
-						puts "---\n#{ch.recent_message['text']}\n---"
-					end
-					puts "\n\n"
-				end
+				@view.clear_screen
+				@view.show_channels(resp)
 			rescue => e
 				Logs.rec.error "In action/channels"
 				Logs.rec.error "#{e}"
