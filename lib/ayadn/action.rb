@@ -112,7 +112,7 @@ module Ayadn
 		def mentions(username, options)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					doing(options)
 					stream = @api.get_mentions(username, options)
 					render_view(stream, options)
@@ -132,7 +132,7 @@ module Ayadn
 		def posts(username, options)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					doing(options)
 					stream = @api.get_posts(username, options)
 					render_view(stream, options)
@@ -166,7 +166,7 @@ module Ayadn
 		def whatstarred(username, options)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					doing(options)
 					stream = @api.get_whatstarred(username, options)
 					render_view(stream, options)
@@ -265,7 +265,7 @@ module Ayadn
 		def unfollow(username)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					@view.clear_screen
 					puts Status.unfollowing(username)
 					resp = @api.unfollow(username)
@@ -292,7 +292,7 @@ module Ayadn
 		def follow(username)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					@view.clear_screen
 					puts Status.following(username)
 					resp = @api.follow(username)
@@ -319,7 +319,7 @@ module Ayadn
 		def unmute(username)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					@view.clear_screen
 					puts Status.unmuting(username)
 					resp = @api.unmute(username)
@@ -346,7 +346,7 @@ module Ayadn
 		def mute(username)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					@view.clear_screen
 					puts Status.muting(username)
 					resp = @api.mute(username)
@@ -373,7 +373,7 @@ module Ayadn
 		def unblock(username)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					@view.clear_screen
 					puts Status.unblocking(username)
 					resp = @api.unblock(username)
@@ -400,7 +400,7 @@ module Ayadn
 		def block(username)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					@view.clear_screen
 					puts Status.blocking(username)
 					resp = @api.block(username)
@@ -559,7 +559,7 @@ module Ayadn
 		def followings(username, options)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					doing(options)
 					unless options[:raw]
 						list = @api.get_followings(username)
@@ -589,7 +589,7 @@ module Ayadn
 		def followers(username, options)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					doing(options)
 					unless options[:raw]
 						list = @api.get_followers(username)
@@ -682,7 +682,7 @@ module Ayadn
 		def userinfo(username, options)
 			begin
 				unless username.empty?
-					username = add_arobase_if_absent(username)
+					username = Workers.add_arobase_if_absent(username)
 					doing(options)
 					unless options[:raw]
 						stream = get_data_from_response(@api.get_user(username))
@@ -835,15 +835,7 @@ module Ayadn
 			puts "\n\nERROR (see #{MyConfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
 		end
 
-		def add_arobase_if_absent(username) # expects an array of username(s), works on the first one and outputs a string
-			unless username.first == "me"
-				username = username.first.chars.to_a
-				username.unshift("@") unless username.first == "@"
-			else
-				username = "me".chars.to_a
-			end
-			username.join
-		end
+
 
 	end
 end

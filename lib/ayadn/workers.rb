@@ -1,14 +1,8 @@
 module Ayadn
 	class Workers
-		def init_table(target)
-			table = Terminal::Table.new do |t|
-				t.style = { :width => MyConfig.options[:formats][:table][:width] }
-			end
-			table
-		end
 
 		def build_reposted_list(list, target) #not the same format as wollowings/etc: taks an array of hashes
-			table = init_table(target)
+			table = init_table
 			table.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			users_list = []
 			list.each do |obj|
@@ -19,7 +13,7 @@ module Ayadn
 		end
 
 		def build_starred_list(list, target)
-			table = init_table(target)
+			table = init_table
 			table.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
 			users_list = []
 			list.each do |obj|
@@ -30,7 +24,7 @@ module Ayadn
 		end
 
 		def build_followings_list(list, target) #takes a hash of users with ayadn format
-			table = init_table(target)
+			table = init_table
 			if target == "me"
 				table.title = "List of users you're following".color(:cyan) + "".color(:white)
 			else
@@ -41,7 +35,7 @@ module Ayadn
 		end
 
 		def build_followers_list(list, target)
-			table = init_table(target)
+			table = init_table
 			if target == "me"
 				table.title = "List of your followers".color(:cyan) + "".color(:white)
 			else
@@ -52,21 +46,23 @@ module Ayadn
 		end
 
 		def build_muted_list(list)
-			table = Terminal::Table.new do |t|
-				t.style = { :width => MyConfig.options[:formats][:table][:width] }
-				t.title = "List of users you muted".color(:cyan) + "".color(:white)
-			end
+			table = init_table
+			table.title = "List of users you muted".color(:cyan) + "".color(:white)
 			users_list = build_users_array(list)
 			build_users_list(users_list, table)
 		end
 
 		def build_blocked_list(list)
-			table = Terminal::Table.new do |t|
-				t.style = { :width => MyConfig.options[:formats][:table][:width] }
-				t.title = "List of users you blocked".color(:cyan) + "".color(:white)
-			end
+			table = init_table
+			table.title = "List of users you blocked".color(:cyan) + "".color(:white)
 			users_list = build_users_array(list)
 			build_users_list(users_list, table)
+		end
+
+		def init_table
+			Terminal::Table.new do |t|
+				t.style = { :width => MyConfig.options[:formats][:table][:width] }
+			end
 		end
 
 		def build_users_array(list)
@@ -78,8 +74,6 @@ module Ayadn
 		end
 
 
-
-		#private
 
 		def build_users_list(list, table)
 			list.each_with_index do |obj, index|
@@ -260,6 +254,16 @@ module Ayadn
 				end
 			end
 			content.join()
+		end
+
+		def self.add_arobase_if_absent(username) # expects an array of username(s), works on the first one and outputs a string
+			unless username.first == "me"
+				username = username.first.chars.to_a
+				username.unshift("@") unless username.first == "@"
+			else
+				username = "me".chars.to_a
+			end
+			username.join
 		end
 
 	end
