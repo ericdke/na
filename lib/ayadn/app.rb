@@ -101,21 +101,21 @@ module Ayadn
 			Action.new.whatstarred(username, options)
 		end
 
-		desc "whoreposted POST-ID", "List users who reposted a post (ayadn -wor POST-ID)"
+		desc "whoreposted POST", "List users who reposted a post (ayadn -wor POST)"
 		map "-wor" => :whoreposted
 		long_desc Descriptions.whoreposted
 		def whoreposted(post_id)
 			Action.new.whoreposted(post_id)
 		end
 
-		desc "whostarred POST-ID", "List users who starred a post (ayadn -wos POST-ID)"
+		desc "whostarred POST", "List users who starred a post (ayadn -wos POST)"
 		map "-wos" => :whostarred
 		long_desc Descriptions.whostarred
 		def whostarred(post_id)
 			Action.new.whostarred(post_id)
 		end
 
-		desc "convo POST-ID", "Show the conversation thread around a post (ayadn -co POST-ID)"
+		desc "convo POST", "Show the conversation thread around a post (ayadn -co POST)"
 		map "-co" => :convo
 		map "thread" => :convo
 		option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -190,7 +190,7 @@ module Ayadn
 			Action.new.userinfo(username, options)
 		end
 
-		desc "postinfo POST-ID", "Show detailed informations about a post (ayadn -pi POST-ID)"
+		desc "postinfo POST", "Show detailed informations about a post (ayadn -pi POST)"
 		map "-pi" => :postinfo
 		long_desc Descriptions.postinfo
 		option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
@@ -207,7 +207,7 @@ module Ayadn
 			Action.new.files(options)
 		end
 
-		desc "delete POST-ID", "Delete a post (ayadn -del POST-ID)"
+		desc "delete POST", "Delete a post (ayadn -del POST)"
 		map "-del" => :delete
 		long_desc Descriptions.delete
 		def delete(post_id)
@@ -235,28 +235,28 @@ module Ayadn
 			Action.new.unblock(username)
 		end
 
-		desc "unrepost POST-ID", "Unrepost a post (ayadn -unr POST-ID)"
+		desc "unrepost POST", "Unrepost a post (ayadn -unr POST)"
 		map "-unr" => :unrepost
 		long_desc Descriptions.unrepost
 		def unrepost(post_id)
 			Action.new.unrepost(post_id)
 		end
 
-		desc "unstar POST-ID", "Unstar a post (ayadn -uns POST-ID)"
+		desc "unstar POST", "Unstar a post (ayadn -uns POST)"
 		map "-uns" => :unstar
 		long_desc Descriptions.unstar
 		def unstar(post_id)
 			Action.new.unstar(post_id)
 		end
 
-		desc "star POST-ID", "Star a post (ayadn -st POST-ID)"
+		desc "star POST", "Star a post (ayadn -st POST)"
 		map "-st" => :star
 		long_desc Descriptions.star
 		def star(post_id)
 			Action.new.star(post_id)
 		end
 
-		desc "repost POST-ID", "Repost a post (ayadn -rp POST-ID)"
+		desc "repost POST", "Repost a post (ayadn -rp POST)"
 		map "-rp" => :repost
 		long_desc Descriptions.repost
 		def repost(post_id)

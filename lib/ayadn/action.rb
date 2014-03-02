@@ -247,6 +247,8 @@ module Ayadn
 						puts Status.deleted(post_id)
 					else
 						puts Status.not_deleted(post_id)
+						Logs.rec.warn "#{Status.not_deleted(post_id)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_post_id
@@ -272,6 +274,8 @@ module Ayadn
 						puts Status.unfollowed(username)
 					else
 						puts Status.not_unfollowed(username)
+						Logs.rec.warn "#{Status.not_unfollowed(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_username
@@ -297,6 +301,8 @@ module Ayadn
 						puts Status.followed(username)
 					else
 						puts Status.not_followed(username)
+						Logs.rec.warn "#{Status.not_followed(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_username
@@ -322,6 +328,8 @@ module Ayadn
 						puts Status.unmuted(username)
 					else
 						puts Status.not_unmuted(username)
+						Logs.rec.warn "#{Status.not_unmuted(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_username
@@ -347,6 +355,8 @@ module Ayadn
 						puts Status.muted(username)
 					else
 						puts Status.not_muted(username)
+						Logs.rec.warn "#{Status.not_muted(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_username
@@ -372,6 +382,8 @@ module Ayadn
 						puts Status.unblocked(username)
 					else
 						puts Status.not_unblocked(username)
+						Logs.rec.warn "#{Status.not_unblocked(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_username
@@ -397,6 +409,8 @@ module Ayadn
 						puts Status.blocked(username)
 					else
 						puts Status.not_blocked(username)
+						Logs.rec.warn "#{Status.not_blocked(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_username
@@ -421,6 +435,8 @@ module Ayadn
 						puts Status.unreposted(post_id)
 					else
 						puts Status.not_unreposted(post_id)
+						Logs.rec.warn "#{Status.not_unreposted(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_post_id
@@ -445,6 +461,8 @@ module Ayadn
 						puts Status.unstarred(post_id)
 					else
 						puts Status.not_unstarred(post_id)
+						Logs.rec.warn "#{Status.not_unstarred(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_post_id
@@ -469,6 +487,8 @@ module Ayadn
 						puts Status.starred(post_id)
 					else
 						puts Status.not_starred(post_id)
+						Logs.rec.warn "#{Status.not_starred(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_post_id
@@ -493,6 +513,8 @@ module Ayadn
 						puts Status.reposted(post_id)
 					else
 						puts Status.not_reposted(post_id)
+						Logs.rec.warn "#{Status.not_reposted(username)}"
+						Logs.rec.warn "#{resp['meta']}"
 					end
 				else
 					puts Status.error_missing_post_id
@@ -541,8 +563,13 @@ module Ayadn
 					doing(options)
 					unless options[:raw]
 						list = @api.get_followings(username)
-						get_list(:followings, list, username)
-						FileOps.add_to_users_db_from_list(list)
+						unless list.empty?
+							get_list(:followings, list, username)
+							FileOps.add_to_users_db_from_list(list)
+						else
+							Logs.rec.warn "In followings: no data"
+							abort(Status.empty_list)
+						end
 					else
 						list = @api.get_raw_list(username, :followings)
 						@view.show_raw(list)
@@ -566,8 +593,13 @@ module Ayadn
 					doing(options)
 					unless options[:raw]
 						list = @api.get_followers(username)
-						get_list(:followers, list, username)
-						FileOps.add_to_users_db_from_list(list)
+						unless list.empty?
+							get_list(:followers, list, username)
+							FileOps.add_to_users_db_from_list(list)
+						else
+							Logs.rec.warn "In followers: no data"
+							abort(Status.empty_list)
+						end
 					else
 						list = @api.get_raw_list(username, :followers)
 						@view.show_raw(list)
@@ -589,8 +621,13 @@ module Ayadn
 				doing(options)
 				unless options[:raw]
 					list = @api.get_muted
-					get_list(:muted, list, nil)
-					FileOps.add_to_users_db_from_list(list)
+					unless list.empty?
+						get_list(:muted, list, nil)
+						FileOps.add_to_users_db_from_list(list)
+					else
+						Logs.rec.warn "In muted: no data"
+						abort(Status.empty_list)
+					end
 				else
 					list = @api.get_raw_list(nil, :muted)
 					@view.show_raw(list)
@@ -609,8 +646,13 @@ module Ayadn
 				doing(options)
 				unless options[:raw]
 					list = @api.get_blocked
-					get_list(:blocked, list, nil)
-					FileOps.add_to_users_db_from_list(list)
+					unless list.empty?
+						get_list(:blocked, list, nil)
+						FileOps.add_to_users_db_from_list(list)
+					else
+						Logs.rec.warn "In blocked: no data"
+						abort(Status.empty_list)
+					end
 				else
 					list = @api.get_raw_list(nil, :blocked)
 					@view.show_raw(list)

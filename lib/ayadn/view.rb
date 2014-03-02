@@ -9,7 +9,12 @@ module Ayadn
 			posts, view = build_stream_with_index(data, options)
 			#puts "\n"
 			puts view
-			FileOps.save_indexed_posts(posts)
+			begin
+				FileOps.save_indexed_posts(posts)
+			rescue => e
+				Logs.rec.error "In view/show_posts_with_index/save_indexed_posts"
+				Logs.rec.error "#{e}"
+			end
 		end
 
 		def show_posts(data, options)

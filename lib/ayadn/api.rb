@@ -262,8 +262,8 @@ module Ayadn
 
 		def empty_data
 			puts "\e[H\e[2J"
-			puts Status.empty_list
-			exit
+			#puts Status.empty_list
+			raise Status.empty_list
 		end
 
 		def get_raw_response(url)
@@ -271,8 +271,7 @@ module Ayadn
 		end
 
 		def get_parsed_response(url)
-			res = CNX.get_response_from(url)
-			JSON.parse(res)
+			JSON.parse(CNX.get_response_from(url))
 		end
 
 	end

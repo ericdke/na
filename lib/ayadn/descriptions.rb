@@ -31,13 +31,13 @@ module Ayadn
 			%Q{Shows your recent ADN activity. Shortcut: replace 'interactions' by '-int'}
 		end
 		def self.whoreposted
-			%Q{Lists users who reposted post n°POST-ID. Shortcut: replace 'whoreposted' by '-wor'}
+			%Q{Lists users who reposted post n°POST. Shortcut: replace 'whoreposted' by '-wor'}
 		end
 		def self.whostarred
-			%Q{Lists users who starred post n°POST-ID. Shortcut: replace 'whostarred' by '-wos'}
+			%Q{Lists users who starred post n°POST. Shortcut: replace 'whostarred' by '-wos'}
 		end
 		def self.convo
-			%Q{Shows the conversation thread around post n°POST_ID. Shortcut: replace 'convo' by '-co'}
+			%Q{Shows the conversation thread around post n°POST. Shortcut: replace 'convo' by '-co'}
 		end
 		def self.followings
 			%Q{Lists users @username is following. Shortcut: replace 'followings' by '-fg'}
@@ -64,7 +64,7 @@ module Ayadn
 			%Q{Shows detailed informations about @username. Shortcut: replace 'userinfo' by '-ui'}
 		end
 		def self.postinfo
-			%Q{Shows detailed informations about n°POST-ID. Shortcut: replace 'postinfo' by '-pi'}
+			%Q{Shows detailed informations about n°POST. Shortcut: replace 'postinfo' by '-pi'}
 		end
 		def self.files
 			%Q{Lists the files in your ADN storage. Shortcut: replace 'files' by '-fl'}
