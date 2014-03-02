@@ -54,6 +54,7 @@ module Ayadn
 			else
 				@config[:identity] = self.read_identity_file
 			end
+			@config[:handle] = "@" + @config[:identity]
 		end
 
 		def self.create_identity_file(username)
