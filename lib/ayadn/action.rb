@@ -726,8 +726,7 @@ module Ayadn
 				if channel_id.is_integer?
 					doing
 					resp = @api.get_messages(channel_id, options)
-					@view.clear_screen
-					@view.show_posts(resp['data'], options)
+					render_view(resp, options)
 				else
 					puts Status.error_missing_channel_id
 					#TODO: replace with get from aliased channel
