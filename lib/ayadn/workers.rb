@@ -142,17 +142,15 @@ module Ayadn
 					values[:num_replies] = 0
 				end
 
-				mentions, tags, links = [], [], []
+				mentions= []
 
 				post['entities']['mentions'].each { |m| mentions << m['name'] }
 				values[:mentions] = mentions
 				values[:directed_to] = mentions.first || false
 
-				post['entities']['hashtags'].each { |h| tags << h['name'] }
-				values[:tags] = tags
+				values[:tags] = extract_hashtags(post)
 
-				post['entities']['links'].each { |l| links << l['url'] }
-				values[:links] = links
+				values[:links] = extract_links(post)
 
 				values[:checkins], values[:has_checkins] = extract_checkins(post)
 
@@ -160,6 +158,18 @@ module Ayadn
 
 			end
 			posts
+		end
+
+		def extract_links(post)
+			links = []
+			post['entities']['links'].each { |l| links << l['url'] }
+			links
+		end
+
+		def extract_hashtags(post)
+			tags = []
+			post['entities']['hashtags'].each { |h| tags << h['name'] }
+			tags
 		end
 
 		def extract_checkins(post)

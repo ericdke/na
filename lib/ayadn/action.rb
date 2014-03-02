@@ -708,14 +708,14 @@ module Ayadn
 					doing(options)
 					unless options[:raw]
 						@view.clear_screen
-						resp = get_data_from_response(@api.get_details(post_id))
+						resp = get_data_from_response(@api.get_details(post_id, options))
 						stream = get_data_from_response(@api.get_user("@#{resp['user']['username']}"))
 						puts "POST:\n".inverse
-						@view.show_simple_post([resp])
+						@view.show_simple_post([resp], options)
 						puts "AUTHOR:\n".inverse
 						@view.show_userinfos(stream)
 					else
-						@view.show_raw(@api.get_details(post_id))
+						@view.show_raw(@api.get_details(post_id, options))
 					end
 				else
 					puts Status.error_missing_post_id
@@ -776,6 +776,55 @@ module Ayadn
 				end
 			rescue => e
 				Logs.rec.error "In action/messages with args: #{channel_id}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+			ensure
+				Databases.close_all
+			end
+		end
+
+		def pin(post_id, usertags)
+			begin
+				if post_id.is_integer?
+					doing
+					resp = get_data_from_response(@api.get_details(post_id, {}))
+					@view.clear_screen
+					goblin = Workers.new
+					links = goblin.extract_links(resp)
+					resp['text'].nil? ? text = "" : text = resp['text']
+					usertags << "ADN"
+					post_url = resp['canonical_url']
+					handle = "@" + resp['user']['username']
+					post_text = "From: #{handle} -- Text: #{text} -- Links: #{links.join(" ")}"
+					orc = Ayadn::PinBoard.new
+					if orc.has_credentials_file?
+						decoded_arr = orc.decode(orc.load_credentials)
+						pin_username, pin_password = decoded_arr[0], decoded_arr[1]
+					else
+						puts "\nAyadn couldn't find your Pinboard credentials.\n".color(:red)
+						begin
+							puts "Please enter your Pinboard username (CTRL+C to cancel): ".color(:green)
+							pin_username = STDIN.gets.chomp()
+							puts "\nPlease enter your Pinboard password (invisible, CTRL+C to cancel): ".color(:green)
+							pin_password = STDIN.noecho(&:gets).chomp()
+						rescue Exception
+							puts Status.stopped
+						rescue => e
+							raise e
+						end
+						orc.save_credentials(orc.encode(pin_username, pin_password))
+						puts "\n\nCredentials successfully encoded and saved in database.\n\n".color(:green)
+					end
+					hobbit = Struct.new(:username, :password, :url, :tags, :text, :description)
+					data = hobbit.new(pin_username, pin_password, post_url, usertags.join(","), post_text, links[0])
+					puts "\n\nSaving post data to Pinboard...\n\n".color(:yellow)
+					orc.pin(data)
+					puts "\n\nDone!\n\n".color(:green)
+				else
+					puts Status.error_missing_post_id
+				end
+			rescue => e
+				Logs.rec.error "In action/pin with args: #{post_id} #{usertags}"
 				Logs.rec.error "#{e}"
 				global_error(e)
 			ensure

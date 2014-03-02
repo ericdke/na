@@ -123,5 +123,8 @@ module Ayadn
 		def self.not_found
 			"\n\n404 NOT FOUND - Object does not exist or has been deleted\n\n"
 		end
+		def self.stopped
+			"\n\nStopped.".color(:red)
+		end
 	end
 end

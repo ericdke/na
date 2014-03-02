@@ -166,8 +166,8 @@ module Ayadn
 			resp
 		end
 
-		def get_details(post_id)
-			resp = get_parsed_response(Endpoints.single_post(post_id))
+		def get_details(post_id, options)
+			resp = get_parsed_response(Endpoints.single_post(post_id, options))
 			check_error(resp)
 			resp
 		end

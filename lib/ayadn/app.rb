@@ -4,7 +4,7 @@ module Ayadn
 
 		%w{action api descriptions endpoints cnx view workers myconfig status extend databases fileops logs pinboard}.each { |r| require_relative "#{r}" }
 
-		desc "unified", "Show the Unified Stream, aka your App.net timeline (ayadn -u)"
+		desc "unified", "Show your Unified Stream, aka your App.net timeline (ayadn -u)"
 		map "-u" => :unified
 		long_desc Descriptions.unified
 		option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
@@ -300,8 +300,11 @@ module Ayadn
 			Action.new.messages(channel_id, options)
 		end
 
-
-
+		desc "pin POST TAG(S)", "Export a post's link and text with tags to Pinboard (ayadn pin POST tag1 tag2 ...)"
+		long_desc Descriptions.pin
+		def pin(post_id, *tags)
+			Action.new.pin(post_id, tags)
+		end
 
 
 

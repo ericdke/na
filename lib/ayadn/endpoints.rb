@@ -150,8 +150,8 @@ module Ayadn
 			USERS_URL + "#{username}?access_token=#{MyConfig.user_token}"
 		end
 
-		def self.single_post(post_id)
-			@options_list = MyConfig.build_query_options({annotations: 1})
+		def self.single_post(post_id, options)
+			@options_list = MyConfig.build_query_options(options)
 			POSTS_URL + "#{post_id}?access_token=#{MyConfig.user_token}#{@options_list}"
 		end
 

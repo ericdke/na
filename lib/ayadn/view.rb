@@ -49,8 +49,8 @@ module Ayadn
 			puts stream.to_json
 		end
 
-		def show_simple_post(post)
-			view = build_stream_without_index(post)
+		def show_simple_post(post, options)
+			view = build_stream_without_index(post, options)
 			puts view
 		end
 
