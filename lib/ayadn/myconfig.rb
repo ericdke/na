@@ -40,7 +40,8 @@ module Ayadn
 					messages: "#{home}/backup/messages",
 					lists: "#{home}/backup/lists"
 				},
-				version: VERSION
+				version: VERSION,
+				platform: RbConfig::CONFIG['host_os']
 			}
 
 			self.create_config_folders
