@@ -111,6 +111,12 @@ module Ayadn
 		def self.pin
 			%Q{Export a POST's link and text with tags to Pinboard. Example: 'ayadn pin 23365251 screenshot iTerm'}
 		end
+		def self.post
+			%Q{Post to App.net with a one-liner. Example: 'ayadn -p Hello!'. Note that the 'write' method is recommended over this one.}
+		end
+		def self.write
+			%Q{Post to App.net. Example: 'ayadn -w'. You will enter the compose mode where you will write your post.}
+		end
 
 
 

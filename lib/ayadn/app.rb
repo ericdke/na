@@ -2,7 +2,7 @@ module Ayadn
 	class App < Thor
 		package_name "ayadn"
 
-		%w{action api descriptions endpoints cnx view workers myconfig status extend databases fileops logs pinboard}.each { |r| require_relative "#{r}" }
+		%w{action api descriptions endpoints cnx view workers myconfig post status extend databases fileops logs pinboard}.each { |r| require_relative "#{r}" }
 
 		desc "unified", "Show your Unified Stream, aka your App.net timeline (ayadn -u)"
 		map "-u" => :unified
@@ -306,9 +306,19 @@ module Ayadn
 			Action.new.pin(post_id, tags)
 		end
 
+		desc "post Your text", "Post to App.net with a one-liner (ayadn -p Hello from Ayadn!)"
+		map "-p" => :post
+		long_desc Descriptions.post
+		def post(*args)
+			Action.new.post(args)
+		end
 
-
-
+		desc "write", "Post to App.net (ayadn -w)"
+		map "-w" => :write
+		long_desc Descriptions.write
+		def write(*args)
+			Action.new.write(args)
+		end
 
 
 

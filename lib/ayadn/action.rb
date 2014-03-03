@@ -864,6 +864,47 @@ module Ayadn
 			end
 		end
 
+		def post(args)
+			begin
+				Post.new.post(args)
+			rescue => e
+				Logs.rec.error "In action/post with args: #{args}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+				raise e #temp
+			ensure
+				Databases.close_all
+			end
+		end
+
+		def write
+			begin
+				Post.new.compose
+			rescue => e
+				Logs.rec.error "In action/write"
+				Logs.rec.error "#{e}"
+				global_error(e)
+				raise e #temp
+			ensure
+				Databases.close_all
+			end
+		end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 		def global_error(e)
