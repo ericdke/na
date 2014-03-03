@@ -1,5 +1,6 @@
 module Ayadn
 	class Post
+		require "readline"
 
 		def post(args)
 			unless text_is_empty?(args)
@@ -19,6 +20,13 @@ module Ayadn
 		end
 
 		def compose
+			#test
+			post = []
+			while buf = Readline.readline("> ", true)
+			  post << buf
+			end
+			puts post.inspect
+			puts post.join("\n")
 			# ...
 			# send(post)
 		end

@@ -316,8 +316,8 @@ module Ayadn
 		desc "write", "Post to App.net (ayadn -w)"
 		map "-w" => :write
 		long_desc Descriptions.write
-		def write(*args)
-			Action.new.write(args)
+		def write
+			Action.new.write
 		end
 
 
