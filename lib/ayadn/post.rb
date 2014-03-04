@@ -10,17 +10,17 @@ module Ayadn
 		end
 
 		def send_post(text)
-			url = Endpoints::POSTS_URL + "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
-			payload = payload_basic(text)
-			resp = CNX.post(url, payload)
-			puts resp
+			url = Endpoints::POSTS_URL
+			url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
+			resp = CNX.post(url, payload_basic(text))
+			API.check_http_error(resp)
+			JSON.parse(resp)
 		end
 
-		def text_is_empty?(args)
-			args.empty? || args[0] == ""
-		end
+
 
 		def reply(post_id)
+			payload = payload_reply(text, post_id)
 			# extract mentions
 			# post = compose
 			# post = mention + post + (other mentions)
@@ -59,7 +59,9 @@ module Ayadn
 			#[post]
 		end
 
-
+		def text_is_empty?(args)
+			args.empty? || args[0] == ""
+		end
 
 		def error_text_empty
 			puts "\n\nYou must provide some text. See 'ayadn help post' for help.\n\n".color(:red)
@@ -101,12 +103,12 @@ module Ayadn
 			}
 		end
 
-		def payload_reply(data) #data should be a struct
+		def payload_reply(text, reply_to) #data should be a struct
 			{
-				"text" => data.text,
-				"reply_to" => data.replyto,
-				"entities" => data.entities,
-				"annotations" => data.annotations
+				"text" => text,
+				"reply_to" => reply_to,
+				"entities" => entities,
+				"annotations" => annotations
 			}
 		end
 

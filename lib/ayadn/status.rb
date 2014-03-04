@@ -6,6 +6,9 @@ module Ayadn
 		def self.downloading
 			"Downloading from ADN...\n".inverse
 		end
+		def self.posting
+			"Posting to ADN...\n".inverse
+		end
 		def self.deleting_post(post_id)
 			"Deleting post #{post_id}\n".inverse
 		end

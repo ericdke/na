@@ -246,7 +246,11 @@ module Ayadn
 			get_parsed_response(Endpoints.messages(channel_id, options))
 		end
 
-
+		def self.check_http_error(resp)
+			unless resp.code == 200
+				raise "#{resp}"
+			end
+		end
 
 		def check_error(res)
 			if res['meta']['code'] == 200

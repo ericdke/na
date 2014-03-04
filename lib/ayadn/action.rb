@@ -823,12 +823,17 @@ module Ayadn
 
 		def post(args)
 			begin
-				Post.new.post(args)
+				@view.clear_screen
+				puts Status.posting
+				resp = Post.new.post(args)
+				@view.clear_screen
+				puts Status.done
+				puts "Your post:\n\n".color(:cyan)
+				@view.show_simple_post([resp['data']], {})
 			rescue => e
 				Logs.rec.error "In action/post with args: #{args}"
 				Logs.rec.error "#{e}"
 				global_error(e)
-				raise e #temp
 			ensure
 				Databases.close_all
 			end

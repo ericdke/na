@@ -20,7 +20,6 @@ module Ayadn
 			rescue => e
 				Logs.rec.error "From cnx/post"
 				Logs.rec.error "#{e}"
-				raise e
 			end
 		end
 
