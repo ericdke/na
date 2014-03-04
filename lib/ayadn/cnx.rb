@@ -14,12 +14,13 @@ module Ayadn
 			end
 		end
 
-		def self.post(url)
+		def self.post(url, payload)
 			begin
-				RestClient.post url, :authorization => "Bearer #{Ayadn::MyConfig.user_token}"
+				RestClient.post url, payload.to_json, :content_type => :json, :accept => :json
 			rescue => e
 				Logs.rec.error "From cnx/post"
 				Logs.rec.error "#{e}"
+				raise e
 			end
 		end
 

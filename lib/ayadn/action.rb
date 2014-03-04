@@ -784,6 +784,8 @@ module Ayadn
 		end
 
 		def pin(post_id, usertags)
+			require 'pinboard'
+			require 'base64'
 			begin
 				if post_id.is_integer?
 					doing
@@ -818,6 +820,51 @@ module Ayadn
 				Databases.close_all
 			end
 		end
+
+		def post(args)
+			begin
+				Post.new.post(args)
+			rescue => e
+				Logs.rec.error "In action/post with args: #{args}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+				raise e #temp
+			ensure
+				Databases.close_all
+			end
+		end
+
+		def write
+			begin
+				Post.new.compose
+			rescue => e
+				Logs.rec.error "In action/write"
+				Logs.rec.error "#{e}"
+				global_error(e)
+				raise e #temp
+			ensure
+				Databases.close_all
+			end
+		end
+
+		def reply(post_id)
+			begin
+				Post.new.reply(post_id)
+			rescue => e
+				Logs.rec.error "In action/reply with args: #{post_id}"
+				Logs.rec.error "#{e}"
+				global_error(e)
+				raise e #temp
+			ensure
+				Databases.close_all
+			end
+		end
+
+
+
+
+
+
 
 
 
@@ -863,48 +910,6 @@ module Ayadn
 				@view.show_list_blocked(list)
 			end
 		end
-
-		def post(args)
-			begin
-				Post.new.post(args)
-			rescue => e
-				Logs.rec.error "In action/post with args: #{args}"
-				Logs.rec.error "#{e}"
-				global_error(e)
-				raise e #temp
-			ensure
-				Databases.close_all
-			end
-		end
-
-		def write
-			begin
-				Post.new.compose
-			rescue => e
-				Logs.rec.error "In action/write"
-				Logs.rec.error "#{e}"
-				global_error(e)
-				raise e #temp
-			ensure
-				Databases.close_all
-			end
-		end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 		def global_error(e)
