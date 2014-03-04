@@ -17,24 +17,13 @@ module Ayadn
       JSON.parse(resp)
     end
 
-
-
-    def reply(post_id)
-      payload = payload_reply(text, post_id)
-      # extract mentions
-      # post = compose
-      # post = mention + post + (other mentions)
-      # prepare object
-      # send
-    end
-
     def compose
       case MyConfig.config[:platform]
       when /mswin|mingw|mingw32|cygwin/
         post = classic
       else
         require "readline"
-        post = readline # later, text should be .join("\n")
+        post = readline
       end
       post
     end
@@ -54,6 +43,30 @@ module Ayadn
       post
     end
 
+    def check_length(lines_array, target)
+      if target == :post
+        max_size = 256 #temp
+      elsif target == :message
+        max_size = 2048 #temp
+      end
+      words_array, items_array = [], []
+      lines_array.each { |word| words_array << markdown_extract(word) }
+      words_array.each { |item| items_array << item[0] }
+      size = items_array.join.length
+      if size < 1
+        error_text_empty
+        abort("")
+      elsif size > max_size
+        Logs.rec.warn "Canceled: too long (#{size - max_size}chars)"
+        abort("\n\nCanceled: too long. #{max_size} max, #{size - max_size} characters to remove.\n\n\n".color(:red))
+      end
+    end
+
+    def markdown_extract(str)
+        result = str.gsub /\[([^\]]+)\]\(([^)]+)\)/, '\1|||\2'
+        result.split('|||') #array text, link
+    end
+
     def classic
       #STDIN ...
       #[post]
@@ -63,9 +76,18 @@ module Ayadn
       args.empty? || args[0] == ""
     end
 
+    def reply(post_id)
+      payload = payload_reply(text, post_id)
+      # extract mentions
+      # post = compose
+      # post = mention + post + (other mentions)
+      # prepare object
+      # send
+    end
+
     def error_text_empty
-      puts "\n\nYou must provide some text. See 'ayadn help post' for help.\n\n".color(:red)
-      Logs.rec.warn "'ayadn post' invoked without text"
+      puts "\n\nYou must provide some text.\n\n".color(:red)
+      Logs.rec.warn "-Post without text-"
     end
 
     def annotations
@@ -111,14 +133,6 @@ module Ayadn
         "annotations" => annotations
       }
     end
-
-
-
-
-
-
-
-
 
   end
 end

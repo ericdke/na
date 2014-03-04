@@ -54,6 +54,11 @@ module Ayadn
       puts view
     end
 
+    def show_posted(resp)
+      puts "\nYour post:\n\n".color(:cyan)
+      puts show_simple_post([resp['data']], {})
+    end
+
     def show_simple_stream(stream)
       puts stream
     end

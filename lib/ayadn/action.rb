@@ -828,8 +828,7 @@ module Ayadn
         resp = Post.new.post(args)
         @view.clear_screen
         puts Status.done
-        puts "Your post:\n\n".color(:cyan)
-        @view.show_simple_post([resp['data']], {})
+        @view.show_posted(resp)
       rescue => e
         Logs.rec.error "In action/post with args: #{args}"
         Logs.rec.error "#{e}"
@@ -841,7 +840,16 @@ module Ayadn
 
     def write
       begin
-        Post.new.compose
+        obj = Post.new
+        lines_array = obj.compose
+        #lines_array = Post.new.compose
+        #puts lines_array.inspect
+        obj.check_length(lines_array, :post)
+        puts "---"
+        puts lines_array.join("\n")
+        #post = lines_array.join("\n")
+        #resp = post.send_post(text)
+        #show_posted(resp)
       rescue => e
         Logs.rec.error "In action/write"
         Logs.rec.error "#{e}"
