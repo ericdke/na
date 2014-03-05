@@ -246,6 +246,10 @@ module Ayadn
       get_parsed_response(Endpoints.messages(channel_id, options))
     end
 
+    def get_config
+      get_parsed_response(Endpoints::CONFIG_API_URL)
+    end
+
     def self.check_http_error(resp)
       unless resp.code == 200
         raise "#{resp}"

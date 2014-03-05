@@ -28,6 +28,15 @@ module Ayadn
       post
     end
 
+    def reply(post_id)
+      #payload = payload_reply(text, post_id)
+      # extract mentions
+      # post = compose
+      # post = mention + post + (other mentions)
+      # prepare object
+      # send
+    end
+
     def readline
       puts "\nType your text. [CTRL+D] to validate, [CTRL+C] to cancel.\n\n".color(:cyan)
       post = []
@@ -78,15 +87,6 @@ module Ayadn
 
     def text_is_empty?(args)
       args.empty? || args[0] == ""
-    end
-
-    def reply(post_id)
-      payload = payload_reply(text, post_id)
-      # extract mentions
-      # post = compose
-      # post = mention + post + (other mentions)
-      # prepare object
-      # send
     end
 
     def error_text_empty

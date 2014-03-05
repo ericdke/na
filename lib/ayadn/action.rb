@@ -840,13 +840,13 @@ module Ayadn
 
     def write
       begin
-        monkey = Post.new
-        lines_array = monkey.compose
-        monkey.check_length(lines_array, :post)
+        writer = Post.new
+        lines_array = writer.compose
+        writer.check_length(lines_array, :post)
         @view.clear_screen
         puts Status.posting
         text = lines_array.join("\n")
-        resp = monkey.send_post(text)
+        resp = writer.send_post(text)
         @view.clear_screen
         @view.show_posted(resp)
       rescue => e
