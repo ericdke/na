@@ -25,7 +25,7 @@ module Ayadn
     def self.load_config
       @options = self.defaults # overridden later in the method by the loaded file
       home = Dir.home + "/ayadn2/data" #temp, will be /ayadn/data in v1
-      @user_token = IO.read(File.expand_path("../../../token", __FILE__)).chomp #temp
+      @user_token = File.read(File.expand_path("../../../token", __FILE__)).chomp #temp
       @config = {
         paths: {
           home: home,
@@ -71,7 +71,7 @@ module Ayadn
       else
         self.new_api_file(api_file)
       end
-      content = JSON.parse(IO.read(api_file))
+      content = JSON.parse(File.read(api_file))
       @config[:post_max_length] = content['post']['text_max_length']
       @config[:message_max_length] = content['message']['text_max_length']
     end
@@ -91,7 +91,7 @@ module Ayadn
     end
 
     def self.read_identity_file
-      content = YAML.load(IO.read(@config[:paths][:config] + "/identity.yml"))
+      content = YAML.load(File.read(@config[:paths][:config] + "/identity.yml"))
       content[:identity]
     end
 
@@ -106,7 +106,7 @@ module Ayadn
       if File.exists?(config_file)
         # TODO: system to merge existing config file when future category are added
         begin
-          @options = YAML.load(IO.read(config_file))
+          @options = YAML.load(File.read(config_file))
         rescue => e
           Logs.rec.error "From myconfig/load config.yml"
           Logs.rec.error "#{e}"
