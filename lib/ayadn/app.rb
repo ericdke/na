@@ -293,7 +293,7 @@ module Ayadn
       Action.new.channels
     end
 
-    desc "messages CHANNEL", "Show messages in channel CHANNEL (ayadn -ms CHANNEL)"
+    desc "messages CHANNEL", "Show messages in a CHANNEL (ayadn -ms CHANNEL)"
     map "-ms" => :messages
     long_desc Descriptions.messages
     option :count, aliases: "-c", type: :numeric, desc: "Specify the number of messages to retrieve"
