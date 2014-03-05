@@ -323,7 +323,12 @@ module Ayadn
       Action.new.write
     end
 
-
+    desc "pmess @USERNAME", "Send a private message to @username (ayadn -pm @username)"
+    map "-pm" => :pmess
+    long_desc Descriptions.pmess
+    def pmess(*username)
+      Action.new.pmess(username)
+    end
 
 
 

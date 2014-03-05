@@ -842,11 +842,10 @@ module Ayadn
       begin
         writer = Post.new
         lines_array = writer.compose
-        writer.check_length(lines_array, :post)
+        writer.check_post_length(lines_array)
         @view.clear_screen
         puts Status.posting
-        text = lines_array.join("\n")
-        resp = writer.send_post(text)
+        resp = writer.send_post(lines_array.join("\n"))
         @view.clear_screen
         @view.show_posted(resp)
       rescue => e
@@ -857,6 +856,30 @@ module Ayadn
       ensure
         Databases.close_all
       end
+    end
+
+    def pmess(username)
+    	begin
+    		unless username.empty?
+	    		messenger = Post.new
+	    		lines_array = messenger.compose
+	    		messenger.check_message_length(lines_array)
+	    		@view.clear_screen
+	    		puts Status.posting
+	    		resp = messenger.send_pm(username, lines_array.join("\n"))
+	    		@view.clear_screen
+	    		@view.show_posted(resp)
+	    	else
+	    		puts Status.error_missing_username
+	    	end
+    	rescue => e
+  		  Logs.rec.error "In action/pmess"
+  		  Logs.rec.error "#{e}"
+  		  global_error(e)
+  		  raise e #temp
+  		ensure
+  		  Databases.close_all
+    	end
     end
 
     def reply(post_id)

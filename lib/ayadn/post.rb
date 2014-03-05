@@ -9,8 +9,26 @@ module Ayadn
       end
     end
 
+    def send_pm(username, text)
+      url = Endpoints::PM_URL
+      url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
+      resp = CNX.post(url, payload_pm(username, text))
+      API.check_http_error(resp)
+      JSON.parse(resp)
+    end
+
+    def send_message(text)
+      url = Endpoints::CHANNELS_URL #préparer les payload dans les send_xxx AVANT d'aller à send_content
+
+      #send_content(url, text)
+    end
+
     def send_post(text)
       url = Endpoints::POSTS_URL
+      send_content(url, text)
+    end
+
+    def send_content(url, text)
       url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
       resp = CNX.post(url, payload_basic(text))
       API.check_http_error(resp)
@@ -58,12 +76,17 @@ module Ayadn
       [input_text]
     end
 
-    def check_length(lines_array, target)
-      if target == :post
-        max_size = MyConfig.config[:post_max_length]
-      elsif target == :message
-        max_size = MyConfig.config[:message_max_length]
-      end
+    def check_post_length(lines_array)
+      max_size = MyConfig.config[:post_max_length]
+      check_length(lines_array, max_size)
+    end
+
+    def check_message_length(lines_array)
+      max_size = MyConfig.config[:message_max_length]
+      check_length(lines_array, max_size)
+    end
+
+    def check_length(lines_array, max_size)
       words_array, items_array = [], []
       lines_array.each { |word| words_array << get_markdown_text(word) }
       size = words_array.join.length
@@ -125,6 +148,15 @@ module Ayadn
       {
         "text" => text,
         "entities" => entities,
+        "annotations" => annotations
+      }
+    end
+
+    def payload_pm(username, text)
+      {
+        "text" => text,
+        "entities" => entities,
+        "destinations" => username,
         "annotations" => annotations
       }
     end

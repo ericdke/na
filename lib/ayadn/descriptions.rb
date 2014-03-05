@@ -318,6 +318,16 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.pmess
+      <<-USAGE
+      Send a private message to @username.
+
+      Example: ayadn -pm @ericd
+
+      Enters the writing mode where you will type your message.
+      \n\n
+      USAGE
+    end
 
 
 
