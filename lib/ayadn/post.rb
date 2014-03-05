@@ -9,32 +9,6 @@ module Ayadn
       end
     end
 
-    def send_pm(username, text)
-      url = Endpoints::PM_URL
-      url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
-      resp = CNX.post(url, payload_pm(username, text))
-      API.check_http_error(resp)
-      JSON.parse(resp)
-    end
-
-    def send_message(text)
-      url = Endpoints::CHANNELS_URL #préparer les payload dans les send_xxx AVANT d'aller à send_content
-
-      #send_content(url, text)
-    end
-
-    def send_post(text)
-      url = Endpoints::POSTS_URL
-      send_content(url, text)
-    end
-
-    def send_content(url, text)
-      url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
-      resp = CNX.post(url, payload_basic(text))
-      API.check_http_error(resp)
-      JSON.parse(resp)
-    end
-
     def compose
       case MyConfig.config[:platform]
       when /mswin|mingw|cygwin/
@@ -74,6 +48,31 @@ module Ayadn
       puts "\nType your text. [ENTER] to validate, [CTRL+C] to cancel.\n\n".color(:cyan)
       input_text = STDIN.gets.chomp
       [input_text]
+    end
+
+    def send_pm(username, text)
+      url = Endpoints::PM_URL
+      url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
+      resp = CNX.post(url, payload_pm(username, text))
+      API.check_http_error(resp)
+      JSON.parse(resp)
+    end
+
+    def send_message(channel_id, text)
+      url = Endpoints.messages(channel_id, {}) #idéalement, préparer les payload dans les send_xxx AVANT d'aller à send_content
+      send_content(url, text)
+    end
+
+    def send_post(text)
+      url = Endpoints::POSTS_URL
+      send_content(url, text)
+    end
+
+    def send_content(url, text)
+      url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
+      resp = CNX.post(url, payload_basic(text))
+      API.check_http_error(resp)
+      JSON.parse(resp)
     end
 
     def check_post_length(lines_array)

@@ -328,6 +328,16 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.send_to_channel
+      <<-USAGE
+      Send a message to a channel.
+
+      Example: ayadn -se 46217
+
+      Enters the writing mode where you will type your message.
+      \n\n
+      USAGE
+    end
 
 
 

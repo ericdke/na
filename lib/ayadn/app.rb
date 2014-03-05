@@ -330,6 +330,13 @@ module Ayadn
       Action.new.pmess(username)
     end
 
+    desc "send CHANNEL", "Send a message to a CHANNEL (ayadn -se CHANNEL)"
+    map "-se" => :send_to_channel
+    long_desc Descriptions.send_to_channel
+    def send_to_channel(channel_id)
+      Action.new.send_to_channel(channel_id)
+    end
+
 
 
 

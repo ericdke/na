@@ -882,11 +882,35 @@ module Ayadn
     	end
     end
 
+    def send_to_channel(channel_id)
+    	begin
+    		if channel_id.is_integer?
+    			messenger = Post.new
+    			lines_array = messenger.compose
+    			messenger.check_message_length(lines_array)
+    			@view.clear_screen
+    			puts Status.posting
+    			resp = messenger.send_message(channel_id, lines_array.join("\n"))
+    			@view.clear_screen
+    			@view.show_posted(resp)
+    		else
+    			puts Status.error_missing_channel_id
+    		end
+    	rescue => e
+  		  Logs.rec.error "In action/send_to_channel with channel_id: #{channel_id}"
+  		  Logs.rec.error "#{e}"
+  		  global_error(e)
+  		  raise e #temp
+  		ensure
+  		  Databases.close_all
+    	end
+    end
+
     def reply(post_id)
       begin
         Post.new.reply(post_id)
       rescue => e
-        Logs.rec.error "In action/reply with args: #{post_id}"
+        Logs.rec.error "In action/reply with post_id: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
         raise e #temp
