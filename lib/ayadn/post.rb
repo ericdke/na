@@ -60,9 +60,9 @@ module Ayadn
 
     def check_length(lines_array, target)
       if target == :post
-        max_size = 256 #temp
+        max_size = MyConfig.config[:post_max_length]
       elsif target == :message
-        max_size = 2048 #temp
+        max_size = MyConfig.config[:message_max_length]
       end
       words_array, items_array = [], []
       lines_array.each { |word| words_array << get_markdown_text(word) }
