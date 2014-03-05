@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Ayadn::Descriptions do
 	describe ".unified" do
 		it 'returns a string' do
-			Ayadn::Descriptions.unified.should == "Show your Unified Stream. Example: 'ayadn -u'"
-		end
+			expect(Ayadn::Descriptions.unified).to include "Unified Stream, aka your App.net timeline"
+            end
 	end
 end

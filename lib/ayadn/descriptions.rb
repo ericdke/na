@@ -1,121 +1,322 @@
 module Ayadn
   class Descriptions
     def self.unified
-      %Q{Show your Unified Stream. Example: 'ayadn -u'}
+      <<-USAGE
+      Show your Unified Stream, aka your App.net timeline.
+
+      Example: ayadn -u
+      \n\n
+      USAGE
     end
     def self.checkins
-      %Q{Show the Checkins Stream. Example: 'ayadn -ck'}
+      <<-USAGE
+      Show the Checkins Stream.
+
+      Example: ayadn -ck
+      \n\n
+      USAGE
     end
     def self.global
-      %Q{Show the Global Stream. Example: 'ayadn -gl'}
+      <<-USAGE
+      Show the Global Stream.
+
+      Example: ayadn -gl
+      \n\n
+      USAGE
     end
     def self.trending
-      %Q{Show the Trending Stream. Example: 'ayadn -tr'}
+      <<-USAGE
+      Show the Trending Stream.
+
+      Example: ayadn -tr
+      \n\n
+      USAGE
     end
     def self.photos
-      %Q{Show the Photos Stream. Example: 'ayadn -ph'}
+      <<-USAGE
+      Show the Photos Stream.
+
+      Example: ayadn -ph
+      \n\n
+      USAGE
     end
     def self.conversations
-      %Q{Show the Conversations Stream. Example: 'ayadn -cq'}
+      <<-USAGE
+      Show the Conversations Stream.
+
+      Example: ayadn -cq
+      \n\n
+      USAGE
     end
     def self.mentions
-      %Q{Show posts containing a mention of a @username. Example: 'ayadn -m @ericd', 'ayadn -m me'}
+      <<-USAGE
+      Show posts containing a mention of @username.
+
+      Example: ayadn -m @ericd
+      \n\n
+      USAGE
     end
     def self.posts
-      %Q{Show @username's posts. Example: 'ayadn -po @ericd', 'ayadn -po me'}
+      <<-USAGE
+      Show @username's posts.
+
+      Example: ayadn -po @ericd
+      \n\n
+      USAGE
     end
     def self.whatstarred
-      %Q{Show posts starred by @username. Example: 'ayadn -was @ericd'}
+      <<-USAGE
+      Show posts starred by @username.
+
+      Example: ayadn -was @ericd
+      \n\n
+      USAGE
     end
     def self.interactions
-      %Q{Show your recent ADN activity. Example: 'ayadn -int'}
+      <<-USAGE
+      Show your recent ADN activity.
+
+      Example: ayadn -int
+      \n\n
+      USAGE
     end
     def self.whoreposted
-      %Q{List users who reposted post n°POST. Example: 'ayadn -wor 22790201'}
+      <<-USAGE
+      List users who reposted post n°POST.
+
+      Example: ayadn -wor 22790201
+      \n\n
+      USAGE
     end
     def self.whostarred
-      %Q{List users who starred post n°POST. Example: 'ayadn -wos 22790201'}
+      <<-USAGE
+      List users who starred post n°POST.
+
+      Example: ayadn -wos 22790201
+      \n\n
+      USAGE
     end
     def self.convo
-      %Q{Show the conversation thread around post n°POST. Example: 'ayadn -co 23362788'}
+      <<-USAGE
+      Show the conversation thread around post n°POST.
+
+      Example: ayadn -co 23362788
+      \n\n
+      USAGE
     end
     def self.followings
-      %Q{List users @username is following. Example: 'ayadn -fg @ericd', 'ayadn -fg me'}
+      <<-USAGE
+      List users @username is following.
+
+      Example: ayadn -fg @ericd
+      \n\n
+      USAGE
     end
     def self.followers
-      %Q{List users following @username. Example: 'ayadn -fr @ericd', 'ayadn -fr me'}
+      <<-USAGE
+      List users following @username.
+
+      Example: ayadn -fr @ericd
+      \n\n
+      USAGE
     end
     def self.muted
-      %Q{List the users you muted. Example: 'ayadn -mtd'}
+      <<-USAGE
+      List the users you muted.
+
+      Example: ayadn -mtd
+      \n\n
+      USAGE
     end
     def self.blocked
-      %Q{List the users you blocked. Example: 'ayadn -bkd'}
+      <<-USAGE
+      List the users you blocked.
+
+      Example: ayadn -bkd
+      \n\n
+      USAGE
     end
     def self.hashtag
-      %Q{Show recent posts containing #HASHTAG. Example: 'ayadn -t thememonday'}
+      <<-USAGE
+      Show recent posts containing #HASHTAG.
+
+      Example: ayadn -t thememonday
+      \n\n
+      USAGE
     end
     def self.search
-      %Q{Show recents posts containing WORD(S). Example: 'ayadn -s screenshot iTerm'}
+      <<-USAGE
+      Show recents posts containing WORD(S).
+
+      Example: ayadn -s screenshot iterm
+      \n\n
+      USAGE
     end
     def self.settings
-      %Q{List current Ayadn settings. Example: 'ayadn -sg'}
+      <<-USAGE
+      List current Ayadn settings.
+
+      Example: ayadn -sg
+      \n\n
+      USAGE
     end
     def self.userinfo
-      %Q{Show detailed informations about @username. Example: 'ayadn -ui @ericd', 'ayadn -ui me'}
+      <<-USAGE
+      Show detailed informations about @username.
+
+      Example: ayadn -ui @ericd
+      \n\n
+      USAGE
     end
     def self.postinfo
-      %Q{Show detailed informations about n°POST. Example: 'ayadn -pi 23365251'}
+      <<-USAGE
+      Show detailed informations about post n°POST.
+
+      Example: ayadn -pi 23365251
+      \n\n
+      USAGE
     end
     def self.files
-      %Q{List the files in your ADN storage. Example: 'ayadn -fl'}
+      <<-USAGE
+      List the files in your ADN storage.
+
+      Example: ayadn -fl
+      \n\n
+      USAGE
     end
     def self.delete
-      %Q{Delete a post. Example: 'ayadn -del 23365251'}
+      <<-USAGE
+      Delete a post.
+
+      Example: ayadn -del 23365251
+      \n\n
+      USAGE
     end
     def self.unfollow
-      %Q{Unfollow a user. Example: 'ayadn -unf @spammer'}
+      <<-USAGE
+      Unfollow a user.
+
+      Example: ayadn -unf @spammer
+      \n\n
+      USAGE
     end
     def self.unmute
-      %Q{Unmute a user. Example: 'ayadn -unm @ericd'}
+      <<-USAGE
+      Unmute a user.
+
+      Example: ayadn -unm @ericd
+      \n\n
+      USAGE
     end
     def self.unblock
-      %Q{Unblock a user. Example: 'ayadn -unb @ericd'}
+      <<-USAGE
+      Unblock a user.
+
+      Example: ayadn -unb @ericd
+      \n\n
+      USAGE
     end
     def self.unrepost
-      %Q{Unrepost a post. Example: 'ayadn -unr 23365251'}
+      <<-USAGE
+      Unrepost a post.
+
+      Example: ayadn -unr 23365251
+      \n\n
+      USAGE
     end
     def self.unstar
-      %Q{Unstar a post. Example: 'ayadn -uns 23365251'}
+      <<-USAGE
+      Unstar a post.
+
+      Example: ayadn -uns 23365251
+      \n\n
+      USAGE
     end
     def self.star
-      %Q{Star a post. Example: 'ayadn -st 23365251'}
+      <<-USAGE
+      Star a post.
+
+      Example: ayadn -st 23365251
+      \n\n
+      USAGE
     end
     def self.repost
-      %Q{Repost a post. Example: 'ayadn -rp 23365251'}
+      <<-USAGE
+      Repost a post.
+
+      Example: ayadn -rp 23365251
+      \n\n
+      USAGE
     end
     def self.follow
-      %Q{Follow a user. Example: 'ayadn -fo @ayadn'}
+      <<-USAGE
+      Follow a user.
+
+      Example: ayadn -fo @ericd
+      \n\n
+      USAGE
     end
     def self.mute
-      %Q{Mute a user. Example: 'ayadn -mu @spammer'}
+      <<-USAGE
+      Mute a user.
+
+      Example: ayadn -mu @spammer
+      \n\n
+      USAGE
     end
     def self.block
-      %Q{Block a user. Example: 'ayadn -bl @spammer'}
+      <<-USAGE
+      Block a user.
+
+      Example: ayadn -bl @spammer
+      \n\n
+      USAGE
     end
     def self.channels
-      %Q{List your active channels. Example: 'ayadn -ch'}
+      <<-USAGE
+      List your active channels.
+
+      Example: ayadn -ch
+      \n\n
+      USAGE
     end
     def self.messages
-      %Q{Show messages in channel CHANNEL. Example: 'ayadn -ms 46217'}
+      <<-USAGE
+      Show recent messages in a channel.
+
+      Example: ayadn -ms 46217
+      \n\n
+      USAGE
     end
     def self.pin
-      %Q{Export a POST's link and text with tags to Pinboard. Example: 'ayadn pin 23365251 screenshot iTerm'}
+      <<-USAGE
+      Export a POST's link and text with tags to Pinboard.
+
+      Example: ayadn pin 23365251 screenshot iTerm
+      \n\n
+      USAGE
     end
     def self.post
-      %Q{Post to App.net with a one-liner. Example: 'ayadn -p Hello!'. Note that the 'write' method is recommended over this one.}
+      <<-USAGE
+      Simple post to App.net.
+
+      Example: ayadn -p Hello from Ayadn!
+
+      You don't have to put quotes around your text.
+
+      Note: the 'write' method is recommended over this one (more secure and offers multi-line support).
+      \n\n
+      USAGE
     end
     def self.write
-      %Q{Post to App.net. Example: 'ayadn -w'. You will enter the compose mode where you will write your post.}
+      <<-USAGE
+      Multi-line post to App.net.
+
+      Example: ayadn -w
+
+      Enters the writing mode where you will type your post.
+      \n\n
+      USAGE
     end
 
 

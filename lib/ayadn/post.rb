@@ -19,7 +19,7 @@ module Ayadn
 
     def compose
       case MyConfig.config[:platform]
-      when /mswin|mingw|mingw32|cygwin/
+      when /mswin|mingw|cygwin/
         post = classic
       else
         require "readline"
@@ -29,7 +29,7 @@ module Ayadn
     end
 
     def readline
-      puts "\nType your text. [CTRL+D] to validate, [CTRL+C] to cancel.\n\n"
+      puts "\nType your text. [CTRL+D] to validate, [CTRL+C] to cancel.\n\n".color(:cyan)
       post = []
       begin
         while buffer = Readline.readline("> ")
@@ -43,6 +43,12 @@ module Ayadn
       post
     end
 
+    def classic
+      puts "\nType your text. [ENTER] to validate, [CTRL+C] to cancel.\n\n".color(:cyan)
+      input_text = STDIN.gets.chomp
+      [input_text]
+    end
+
     def check_length(lines_array, target)
       if target == :post
         max_size = 256 #temp
@@ -50,9 +56,8 @@ module Ayadn
         max_size = 2048 #temp
       end
       words_array, items_array = [], []
-      lines_array.each { |word| words_array << markdown_extract(word) }
-      words_array.each { |item| items_array << item[0] }
-      size = items_array.join.length
+      lines_array.each { |word| words_array << get_markdown_text(word) }
+      size = words_array.join.length
       if size < 1
         error_text_empty
         abort("")
@@ -62,14 +67,13 @@ module Ayadn
       end
     end
 
-    def markdown_extract(str)
-        result = str.gsub /\[([^\]]+)\]\(([^)]+)\)/, '\1|||\2'
-        result.split('|||') #array text, link
+    def get_markdown_text(str)
+      str.gsub /\[([^\]]+)\]\(([^)]+)\)/, '\1'
     end
 
-    def classic
-      #STDIN ...
-      #[post]
+    def markdown_extract(str)
+        result = str.gsub /\[([^\]]+)\]\(([^)]+)\)/, '\1|||\2'
+        result.split('|||') #=> [text, link]
     end
 
     def text_is_empty?(args)

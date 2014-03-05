@@ -6,6 +6,8 @@ module Ayadn
 
     desc "unified", "Show your Unified Stream, aka your App.net timeline (ayadn -u)"
     map "-u" => :unified
+    map "timeline" => :unified
+    map "-tl" => :unified
     long_desc Descriptions.unified
     option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
     option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
@@ -306,14 +308,15 @@ module Ayadn
       Action.new.pin(post_id, tags)
     end
 
-    desc "post Your text", "Post to App.net with a one-liner (ayadn -p Hello from Ayadn!)"
+    desc "post Your text", "Simple post to App.net (ayadn -p Hello from Ayadn!)"
     map "-p" => :post
     long_desc Descriptions.post
     def post(*args)
       Action.new.post(args)
     end
 
-    desc "write", "Post to App.net (ayadn -w)"
+    desc "write", "Multi-line post to App.net (ayadn -w)"
+    map "compose" => :write
     map "-w" => :write
     long_desc Descriptions.write
     def write

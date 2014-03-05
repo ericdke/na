@@ -840,16 +840,15 @@ module Ayadn
 
     def write
       begin
-        obj = Post.new
-        lines_array = obj.compose
-        #lines_array = Post.new.compose
-        #puts lines_array.inspect
-        obj.check_length(lines_array, :post)
-        puts "---"
-        puts lines_array.join("\n")
-        #post = lines_array.join("\n")
-        #resp = post.send_post(text)
-        #show_posted(resp)
+        monkey = Post.new
+        lines_array = monkey.compose
+        monkey.check_length(lines_array, :post)
+        @view.clear_screen
+        puts Status.posting
+        text = lines_array.join("\n")
+        resp = monkey.send_post(text)
+        @view.clear_screen
+        @view.show_posted(resp)
       rescue => e
         Logs.rec.error "In action/write"
         Logs.rec.error "#{e}"
