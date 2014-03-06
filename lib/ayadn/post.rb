@@ -53,24 +53,22 @@ module Ayadn
     def send_pm(username, text)
       url = Endpoints::PM_URL
       url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
-      resp = CNX.post(url, payload_pm(username, text))
-      API.check_http_error(resp)
-      JSON.parse(resp)
+      send_content(url, payload_pm(username, text))
     end
 
     def send_message(channel_id, text)
-      url = Endpoints.messages(channel_id, {}) #idéalement, préparer les payload dans les send_xxx AVANT d'aller à send_content
-      send_content(url, text)
+      url = Endpoints.messages(channel_id, {})
+      send_content(url, payload_basic(text))
     end
 
     def send_post(text)
       url = Endpoints::POSTS_URL
-      send_content(url, text)
+      send_content(url, payload_basic(text))
     end
 
-    def send_content(url, text)
+    def send_content(url, payload)
       url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
-      resp = CNX.post(url, payload_basic(text))
+      resp = CNX.post(url, payload)
       API.check_http_error(resp)
       JSON.parse(resp)
     end
@@ -160,7 +158,7 @@ module Ayadn
       }
     end
 
-    def payload_reply(text, reply_to) #data should be a struct
+    def payload_reply(text, reply_to)
       {
         "text" => text,
         "reply_to" => reply_to,

@@ -129,5 +129,8 @@ module Ayadn
     def self.stopped
       "\n\nStopped.".color(:red)
     end
+    def self.yourpost
+      "\nYour post:\n\n".color(:cyan)
+    end
   end
 end

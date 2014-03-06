@@ -827,7 +827,7 @@ module Ayadn
         puts Status.posting
         resp = Post.new.post(args)
         @view.clear_screen
-        puts Status.done
+        puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
         Logs.rec.error "In action/post with args: #{args}"
@@ -847,6 +847,7 @@ module Ayadn
         puts Status.posting
         resp = writer.send_post(lines_array.join("\n"))
         @view.clear_screen
+        puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
         Logs.rec.error "In action/write"
@@ -867,7 +868,9 @@ module Ayadn
 	    		@view.clear_screen
 	    		puts Status.posting
 	    		resp = messenger.send_pm(username, lines_array.join("\n"))
+	    		# TODO: CNX returns True if... failure, so change this soon!
 	    		@view.clear_screen
+	    		puts Status.yourpost
 	    		@view.show_posted(resp)
 	    	else
 	    		puts Status.error_missing_username
@@ -892,6 +895,7 @@ module Ayadn
     			puts Status.posting
     			resp = messenger.send_message(channel_id, lines_array.join("\n"))
     			@view.clear_screen
+    			puts Status.yourpost
     			@view.show_posted(resp)
     		else
     			puts Status.error_missing_channel_id
