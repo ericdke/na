@@ -338,6 +338,20 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.reply
+      <<-USAGE
+      Reply to post n°POST.
+
+      Example: ayadn -r 23365251
+
+      Enters the writing mode where you will type your reply.
+
+      Mentions will be detected and your text will be inserted appropriately.
+
+      If you reply to a repost, Ayadn will automatically replace it by the original post.
+      \n\n
+      USAGE
+    end
 
 
 

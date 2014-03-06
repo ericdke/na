@@ -20,17 +20,16 @@ module Ayadn
       post
     end
 
-    def reply(post_id)
-      #payload = payload_reply(text, post_id)
-      # extract mentions
-      # post = compose
-      # post = mention + post + (other mentions)
-      # prepare object
-      # send
+    def reply(new_post, replied_to)
+      replied_to = replied_to.values[0]
+      reply = replied_to[:handle]
+      reply << " #{new_post}"
+      replied_to[:mentions].map { |m| reply << " @#{m}" }
+      reply
     end
 
     def readline
-      puts "\nType your text. [CTRL+D] to validate, [CTRL+C] to cancel.\n\n".color(:cyan)
+      puts Status.readline
       post = []
       begin
         while buffer = Readline.readline("> ")
@@ -45,7 +44,7 @@ module Ayadn
     end
 
     def classic
-      puts "\nType your text. [ENTER] to validate, [CTRL+C] to cancel.\n\n".color(:cyan)
+      puts Status.classic
       input_text = STDIN.gets.chomp
       [input_text]
     end
@@ -64,6 +63,11 @@ module Ayadn
     def send_post(text)
       url = Endpoints::POSTS_URL
       send_content(url, payload_basic(text))
+    end
+
+    def send_reply(text, post_id)
+      url = Endpoints::POSTS_URL
+      send_content(url, payload_reply(text, post_id))
     end
 
     def send_content(url, payload)

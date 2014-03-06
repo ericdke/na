@@ -841,6 +841,7 @@ module Ayadn
     def write
       begin
         writer = Post.new
+        puts Status.post
         lines_array = writer.compose
         writer.check_post_length(lines_array)
         @view.clear_screen
@@ -863,6 +864,7 @@ module Ayadn
     	begin
     		unless username.empty?
 	    		messenger = Post.new
+	    		puts Status.post
 	    		lines_array = messenger.compose
 	    		messenger.check_message_length(lines_array)
 	    		@view.clear_screen
@@ -889,6 +891,7 @@ module Ayadn
     	begin
     		if channel_id.is_integer?
     			messenger = Post.new
+    			puts Status.post
     			lines_array = messenger.compose
     			messenger.check_message_length(lines_array)
     			@view.clear_screen
@@ -912,7 +915,24 @@ module Ayadn
 
     def reply(post_id)
       begin
-        Post.new.reply(post_id)
+      	if post_id.is_integer?
+	      	puts Status.replying_to(post_id)
+	      	resp = @api.get_details(post_id, {})
+	      	replied_to = @api.get_original_if_repost(resp['data'])
+	        messenger = Post.new
+	        puts Status.reply
+	        lines_array = messenger.compose
+	        messenger.check_post_length(lines_array)
+	        @view.clear_screen
+	        reply = messenger.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to]))
+	        puts Status.posting
+	        resp = messenger.send_reply(reply, post_id)
+	        @view.clear_screen
+	        puts Status.done
+	        # TODO: see convo
+	      else
+	      	puts Status.error_missing_post_id
+	      end
       rescue => e
         Logs.rec.error "In action/reply with post_id: #{post_id}"
         Logs.rec.error "#{e}"
@@ -933,7 +953,9 @@ module Ayadn
 
 
 
-    def get_data_from_response(response)
+
+
+    def get_data_from_response(response) # TODO: replace its calls by the api version
       response['data']
     end
 

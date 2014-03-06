@@ -337,6 +337,13 @@ module Ayadn
       Action.new.send_to_channel(channel_id)
     end
 
+    desc "reply POST", "Reply to post n°POST (ayadn -r POST)"
+    map "-r" => :reply
+    long_desc Descriptions.reply
+    def reply(post_id)
+      Action.new.reply(post_id)
+    end
+
 
 
 

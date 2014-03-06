@@ -132,5 +132,23 @@ module Ayadn
     def self.yourpost
       "\nYour post:\n\n".color(:cyan)
     end
+    def self.replying_to(post_id)
+      "\nReplying to post #{post_id}...\n".color(:green)
+    end
+    def self.readline
+      "\nType your text. [CTRL+D] to validate, [CTRL+C] to cancel.\n\n".color(:cyan)
+    end
+    def self.classic
+      "\nType your text. [ENTER] to validate, [CTRL+C] to cancel.\n\n".color(:cyan)
+    end
+    def self.reply
+      "\n#{MyConfig.config[:post_max_length]} characters maximum. Mentions will be detected and your text will be inserted appropriately. Markdown links will be resolved.\n\n"
+    end
+    def self.post
+      "\n#{MyConfig.config[:post_max_length]} characters maximum. Markdown links will be resolved.\n\n"
+    end
+    def self.message
+      "\n#{MyConfig.config[:message_max_length]} characters maximum. Markdown links will be resolved.\n\n"
+    end
   end
 end

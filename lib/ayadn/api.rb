@@ -282,5 +282,17 @@ module Ayadn
       JSON.parse(CNX.get_response_from(url))
     end
 
+    def get_original_if_repost(resp)
+      if resp['repost_of']
+        get_data_from_response(get_details(resp['repost_of']['id'], {}))
+      else
+        resp
+      end
+    end
+
+    def get_data_from_response(response)
+      response['data']
+    end
+
   end
 end
