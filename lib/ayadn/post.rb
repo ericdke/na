@@ -50,23 +50,23 @@ module Ayadn
     end
 
     def send_pm(username, text)
-      url = Endpoints::PM_URL
+      url = Endpoints.new.pm_url
       url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
       send_content(url, payload_pm(username, text))
     end
 
     def send_message(channel_id, text)
-      url = Endpoints.messages(channel_id, {})
+      url = Endpoints.new.messages(channel_id, {})
       send_content(url, payload_basic(text))
     end
 
     def send_post(text)
-      url = Endpoints::POSTS_URL
+      url = Endpoints.new.posts_url
       send_content(url, payload_basic(text))
     end
 
     def send_reply(text, post_id)
-      url = Endpoints::POSTS_URL
+      url = Endpoints.new.posts_url
       send_content(url, payload_reply(text, post_id))
     end
 

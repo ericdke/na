@@ -341,7 +341,8 @@ module Ayadn
     map "-r" => :reply
     long_desc Descriptions.reply
     def reply(post_id)
-      Action.new.reply(post_id)
+      a = Action.new
+      a.reply(post_id)
     end
 
 

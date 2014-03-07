@@ -929,7 +929,8 @@ module Ayadn
 	        resp = messenger.send_reply(reply, post_id)
 	        @view.clear_screen
 	        puts Status.done
-	        # TODO: see convo
+	        stream = @api.get_convo(post_id, {})
+	        render_view(stream, {})
 	      else
 	      	puts Status.error_missing_post_id
 	      end

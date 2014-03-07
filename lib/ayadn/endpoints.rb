@@ -1,199 +1,203 @@
 module Ayadn
   class Endpoints
 
-    AYADN_CALLBACK_URL = "http://aya.io/ayadn/auth.html"
-    BASE_URL = "https://alpha-api.app.net/"
-    CONFIG_API_URL = BASE_URL + "stream/0/config"
-    POSTS_URL = BASE_URL + "stream/0/posts/"
-    USERS_URL = BASE_URL + "stream/0/users/"
-    FILES_URL = BASE_URL + "stream/0/files/"
-    TOKEN_URL = BASE_URL + "stream/0/token/"
-    CHANNELS_URL = BASE_URL + "stream/0/channels/"
-    PM_URL = CHANNELS_URL + "pm/messages"
+    attr_accessor :ayadn_callback_url, :base_url, :config_api_url, :posts_url, :users_url, :files_url, :token_url, :channels_url, :pm_url
 
-    def self.authorize_url
-      "https://account.app.net/oauth/authenticate?client_id=#{MyConfig::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{AYADN_CALLBACK_URL}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
+    def initialize
+      @ayadn_callback_url = "http://aya.io/ayadn/auth.html"
+      @base_url = "https://alpha-api.app.net/"
+      @config_api_url = @base_url + "stream/0/config"
+      @posts_url = @base_url + "stream/0/posts/"
+      @users_url = @base_url + "stream/0/users/"
+      @files_url = @base_url + "stream/0/files/"
+      @token_url = @base_url + "stream/0/token/"
+      @channels_url = @base_url + "stream/0/channels/"
+      @pm_url = @channels_url + "pm/messages"
     end
 
-    def self.unified(options)
+    def authorize_url
+      "https://account.app.net/oauth/authenticate?client_id=#{MyConfig::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
+    end
+
+    def unified(options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:unified]})
       end
-      POSTS_URL + "stream/unified?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/unified?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.checkins(options)
+    def checkins(options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:checkins]})
       end
-      POSTS_URL + "stream/explore/checkins?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/explore/checkins?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.global(options)
+    def global(options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:global]})
       end
-      POSTS_URL + "stream/global?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/global?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.trending(options)
+    def trending(options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:trending]})
       end
-      POSTS_URL + "stream/explore/trending?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/explore/trending?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.photos(options)
+    def photos(options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:photos]})
       end
-      POSTS_URL + "stream/explore/photos?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/explore/photos?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.conversations(options)
+    def conversations(options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:conversations]})
       end
-      POSTS_URL + "stream/explore/conversations?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/explore/conversations?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.mentions(username, options)
+    def mentions(username, options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:mentions]})
       end
-      USERS_URL + "#{username}/mentions/?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@users_url}#{username}/mentions/?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.posts(username, options)
+    def posts(username, options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:posts]})
       end
-      USERS_URL + "#{username}/posts/?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@users_url}#{username}/posts/?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.whatstarred(username, options)
+    def whatstarred(username, options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:default]})
       end
-      USERS_URL + "#{username}/stars/?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@users_url}#{username}/stars/?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.interactions
-      USERS_URL + "me/interactions?access_token=#{MyConfig.user_token}"
+    def interactions
+      "#{@users_url}me/interactions?access_token=#{MyConfig.user_token}"
     end
 
-    def self.whoreposted(post_id)
-      POSTS_URL + "#{post_id}/reposters/?access_token=#{MyConfig.user_token}"
+    def whoreposted(post_id)
+      "#{@posts_url}#{post_id}/reposters/?access_token=#{MyConfig.user_token}"
     end
 
-    def self.whostarred(post_id)
-      POSTS_URL + "#{post_id}/stars/?access_token=#{MyConfig.user_token}"
+    def whostarred(post_id)
+      "#{@posts_url}#{post_id}/stars/?access_token=#{MyConfig.user_token}"
     end
 
-    def self.convo(post_id, options)
+    def convo(post_id, options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:convo]})
       end
-      POSTS_URL + "#{post_id}/replies/?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}#{post_id}/replies/?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.followings(username, options)
-      USERS_URL + "#{username}/following/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+    def followings(username, options)
+      "#{@users_url}#{username}/following/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
     end
 
-    def self.followers(username, options)
-      USERS_URL + "#{username}/followers/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+    def followers(username, options)
+      "#{@users_url}#{username}/followers/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
     end
 
-    def self.muted(options)
-      USERS_URL + "me/muted/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+    def muted(options)
+      "#{@users_url}me/muted/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
     end
 
-    def self.blocked(options)
-      USERS_URL + "me/blocked/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+    def blocked(options)
+      "#{@users_url}me/blocked/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
     end
 
-    def self.hashtag(hashtag)
-      POSTS_URL + "tag/#{hashtag}"
+    def hashtag(hashtag)
+      "#{@posts_url}tag/#{hashtag}"
     end
 
-    def self.search(words, options)
+    def search(words, options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:search]})
       end
-      POSTS_URL + "search?text=#{words}&access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}search?text=#{words}&access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.user(username)
-      USERS_URL + "#{username}?access_token=#{MyConfig.user_token}"
+    def user(username)
+      "#{@users_url}#{username}?access_token=#{MyConfig.user_token}"
     end
 
-    def self.single_post(post_id, options)
+    def single_post(post_id, options)
       @options_list = MyConfig.build_query_options(options)
-      POSTS_URL + "#{post_id}?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}#{post_id}?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.files_list(options)
+    def files_list(options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:files]})
       end
-      USERS_URL + "me/files?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@users_url}me/files?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
-    def self.delete_post(post_id)
-      POSTS_URL + "#{post_id}?access_token=#{MyConfig.user_token}"
+    def delete_post(post_id)
+      "#{@posts_url}#{post_id}?access_token=#{MyConfig.user_token}"
     end
 
-    def self.follow(username)
-      USERS_URL + "#{username}/follow?access_token=#{MyConfig.user_token}"
+    def follow(username)
+      "#{@users_url}#{username}/follow?access_token=#{MyConfig.user_token}"
     end
 
-    def self.mute(username)
-      USERS_URL + "#{username}/mute?access_token=#{MyConfig.user_token}"
+    def mute(username)
+      "#{@users_url}#{username}/mute?access_token=#{MyConfig.user_token}"
     end
 
-    def self.block(username)
-      USERS_URL + "#{username}/block?access_token=#{MyConfig.user_token}"
+    def block(username)
+      "#{@users_url}#{username}/block?access_token=#{MyConfig.user_token}"
     end
 
-    def self.repost(post_id)
-      POSTS_URL + "#{post_id}/repost?access_token=#{MyConfig.user_token}"
+    def repost(post_id)
+      "#{@posts_url}#{post_id}/repost?access_token=#{MyConfig.user_token}"
     end
 
-    def self.star(post_id)
-      POSTS_URL + "#{post_id}/star?access_token=#{MyConfig.user_token}"
+    def star(post_id)
+      "#{@posts_url}#{post_id}/star?access_token=#{MyConfig.user_token}"
     end
 
-    def self.channels(options)
-      CHANNELS_URL + "?access_token=#{MyConfig.user_token}#{MyConfig.build_query_options(options)}"
+    def channels(options)
+      "#{@channels_url}?access_token=#{MyConfig.user_token}#{MyConfig.build_query_options(options)}"
     end
 
-    def self.messages(channel_id, options)
-      CHANNELS_URL + "#{channel_id}/messages?access_token=#{MyConfig.user_token}#{MyConfig.build_query_options(options)}"
+    def messages(channel_id, options)
+      "#{@channels_url}#{channel_id}/messages?access_token=#{MyConfig.user_token}#{MyConfig.build_query_options(options)}"
     end
 
   end
