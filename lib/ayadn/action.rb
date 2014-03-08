@@ -34,6 +34,7 @@ module Ayadn
         Logs.rec.error "In action/unified"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -48,6 +49,7 @@ module Ayadn
         Logs.rec.error "In action/checkins"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -62,6 +64,7 @@ module Ayadn
         Logs.rec.error "In action/global"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -76,6 +79,7 @@ module Ayadn
         Logs.rec.error "In action/trending"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -90,6 +94,7 @@ module Ayadn
         Logs.rec.error "In action/photos"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -104,6 +109,7 @@ module Ayadn
         Logs.rec.error "In action/conversations"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -123,7 +129,7 @@ module Ayadn
         Logs.rec.error "In action/mentions with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
-        #raise e
+        raise e
       ensure
         Databases.close_all
       end
@@ -143,6 +149,7 @@ module Ayadn
         Logs.rec.error "In action/posts with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -158,6 +165,7 @@ module Ayadn
         Logs.rec.error "In action/interactions"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -177,6 +185,7 @@ module Ayadn
         Logs.rec.error "In action/whatstarred with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -195,6 +204,7 @@ module Ayadn
         Logs.rec.error "In action/whoreposted with args: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -213,6 +223,7 @@ module Ayadn
         Logs.rec.error "In action/whostarred with args: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -231,6 +242,7 @@ module Ayadn
         Logs.rec.error "In action/convo with args: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -257,6 +269,7 @@ module Ayadn
         Logs.rec.error "In action/delete with args: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -284,6 +297,7 @@ module Ayadn
         Logs.rec.error "In action/unfollow with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -311,6 +325,7 @@ module Ayadn
         Logs.rec.error "In action/follow with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -338,6 +353,7 @@ module Ayadn
         Logs.rec.error "In action/unmute with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -365,6 +381,7 @@ module Ayadn
         Logs.rec.error "In action/mute with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -392,6 +409,7 @@ module Ayadn
         Logs.rec.error "In action/unblock with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -419,6 +437,7 @@ module Ayadn
         Logs.rec.error "In action/block with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -445,6 +464,7 @@ module Ayadn
         Logs.rec.error "In action/unrepost with args: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -471,6 +491,7 @@ module Ayadn
         Logs.rec.error "In action/unstar with args: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -497,6 +518,7 @@ module Ayadn
         Logs.rec.error "In action/star with args: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -523,6 +545,7 @@ module Ayadn
         Logs.rec.error "In action/repost with args: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -537,6 +560,7 @@ module Ayadn
         Logs.rec.error "In action/hashtag with args: #{hashtag}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -551,6 +575,7 @@ module Ayadn
         Logs.rec.error "In action/search with args: #{words}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -581,6 +606,7 @@ module Ayadn
         Logs.rec.error "In action/followings with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -611,6 +637,7 @@ module Ayadn
         Logs.rec.error "In action/followers with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -636,6 +663,7 @@ module Ayadn
         Logs.rec.error "In action/muted"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -661,6 +689,7 @@ module Ayadn
         Logs.rec.error "In action/blocked"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -674,6 +703,7 @@ module Ayadn
         Logs.rec.error "In action/settings"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -697,6 +727,7 @@ module Ayadn
         Logs.rec.error "In action/userinfo with args: #{username}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -724,6 +755,7 @@ module Ayadn
         Logs.rec.error "In action/postinfo with args: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -743,6 +775,7 @@ module Ayadn
         Logs.rec.error "In action/files"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -779,6 +812,7 @@ module Ayadn
         Logs.rec.error "In action/messages with args: #{channel_id}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -817,6 +851,7 @@ module Ayadn
         Logs.rec.error "In action/pin with args: #{post_id} #{usertags}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -834,6 +869,7 @@ module Ayadn
         Logs.rec.error "In action/post with args: #{args}"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end
@@ -855,7 +891,7 @@ module Ayadn
         Logs.rec.error "In action/write"
         Logs.rec.error "#{e}"
         global_error(e)
-        raise e #temp
+        raise e
       ensure
         Databases.close_all
       end
@@ -882,7 +918,7 @@ module Ayadn
   		  Logs.rec.error "In action/pmess"
   		  Logs.rec.error "#{e}"
   		  global_error(e)
-  		  raise e #temp
+  		  raise e
   		ensure
   		  Databases.close_all
     	end
@@ -908,7 +944,7 @@ module Ayadn
   		  Logs.rec.error "In action/send_to_channel with channel_id: #{channel_id}"
   		  Logs.rec.error "#{e}"
   		  global_error(e)
-  		  raise e #temp
+  		  raise e
   		ensure
   		  Databases.close_all
     	end
@@ -940,7 +976,7 @@ module Ayadn
         Logs.rec.error "In action/reply with post_id: #{post_id}"
         Logs.rec.error "#{e}"
         global_error(e)
-        raise e #temp
+        raise e
       ensure
         Databases.close_all
       end
