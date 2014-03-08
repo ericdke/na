@@ -758,6 +758,7 @@ module Ayadn
         Logs.rec.error "In action/channels"
         Logs.rec.error "#{e}"
         global_error(e)
+        raise e
       ensure
         Databases.close_all
       end

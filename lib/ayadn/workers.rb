@@ -225,7 +225,7 @@ module Ayadn
             unless db.nil?
               usernames << "@" + db.keys.first
             else
-              resp = @api.get_user(id)
+              resp = API.new.get_user(id)
               usernames << "@" + resp['data']['username']
               Databases.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
             end
