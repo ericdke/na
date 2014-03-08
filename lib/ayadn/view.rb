@@ -10,7 +10,7 @@ module Ayadn
       #puts "\n"
       puts view
       begin
-        FileOps.save_indexed_posts(posts)
+        Databases.save_indexed_posts(posts)
       rescue => e
         Logs.rec.error "In view/show_posts_with_index/save_indexed_posts"
         Logs.rec.error "#{e}"

@@ -221,13 +221,13 @@ module Ayadn
         unless ch['writers']['user_ids'].empty?
           usernames = []
           ch['writers']['user_ids'].each do |id|
-            db = FileOps.get_from_users_db(id)
+            db = Databases.get_from_users_db(id)
             unless db.nil?
               usernames << "@" + db.keys.first
             else
               resp = @api.get_user(id)
               usernames << "@" + resp['data']['username']
-              FileOps.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
+              Databases.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
             end
           end
           usernames << MyConfig.config[:handle] unless usernames.length == 1 && usernames.first == MyConfig.config[:handle]

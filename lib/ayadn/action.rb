@@ -565,7 +565,7 @@ module Ayadn
             list = @api.get_followings(username)
             unless list.empty?
               get_list(:followings, list, username)
-              FileOps.add_to_users_db_from_list(list)
+              Databases.add_to_users_db_from_list(list)
             else
               Logs.rec.warn "In followings: no data"
               abort(Status.empty_list)
@@ -595,7 +595,7 @@ module Ayadn
             list = @api.get_followers(username)
             unless list.empty?
               get_list(:followers, list, username)
-              FileOps.add_to_users_db_from_list(list)
+              Databases.add_to_users_db_from_list(list)
             else
               Logs.rec.warn "In followers: no data"
               abort(Status.empty_list)
@@ -623,7 +623,7 @@ module Ayadn
           list = @api.get_muted
           unless list.empty?
             get_list(:muted, list, nil)
-            FileOps.add_to_users_db_from_list(list)
+            Databases.add_to_users_db_from_list(list)
           else
             Logs.rec.warn "In muted: no data"
             abort(Status.empty_list)
@@ -648,7 +648,7 @@ module Ayadn
           list = @api.get_blocked
           unless list.empty?
             get_list(:blocked, list, nil)
-            FileOps.add_to_users_db_from_list(list)
+            Databases.add_to_users_db_from_list(list)
           else
             Logs.rec.warn "In blocked: no data"
             abort(Status.empty_list)
@@ -917,8 +917,9 @@ module Ayadn
       begin
       	if post_id.is_integer?
 	      	puts Status.replying_to(post_id)
-	      	resp = @api.get_details(post_id, {})
-	      	replied_to = @api.get_original_if_repost(resp['data'])
+	      	#resp = @api.get_details(post_id, {})
+	      	#replied_to = @api.get_original_if_repost(resp['data'])
+	      	replied_to = @api.get_details(post_id, {})
 	        messenger = Post.new
 	        puts Status.reply
 	        lines_array = messenger.compose
