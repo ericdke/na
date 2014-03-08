@@ -378,6 +378,14 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.set_backup
+      <<-USAGE
+      Set ITEM to be activated or not.
+
+      Example: ayadn set auto_save_lists true
+      \n\n
+      USAGE
+    end
 
 
 

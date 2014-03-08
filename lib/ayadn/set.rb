@@ -22,11 +22,11 @@ module Ayadn
       puts args
     end
 
-    desc "format ITEM NUMBER", "Set ITEM parameter to NUMBER by default"
-    map "formats" => :format
-    def format(*args)
-      puts args
-    end
+    # desc "format ITEM NUMBER", "Set ITEM parameter to NUMBER by default"
+    # map "formats" => :format
+    # def format(*args)
+    #   puts args
+    # end
 
     desc "color ITEM COLOR", "Set ITEM to COLOR"
     long_desc Descriptions.set_color
@@ -44,8 +44,47 @@ module Ayadn
     end
 
     desc "backup ITEM TRUE/FALSE", "Set ITEM to be activated or not"
+    long_desc Descriptions.set_backup
     def backup(*args)
-      puts args
+      backup_config = SetBackup.new
+      if args[0]
+        param = backup_config.validate(args[1])
+        backup_config.send(args[0], args[1])
+      else
+        abort(Status.error_missing_parameters)
+      end
+      backup_config.log(args)
+      backup_config.save
+    end
+  end
+
+  class SetBackup
+    def initialize
+      MyConfig.load_config
+      Logs.create_logger
+    end
+    def log(args)
+      Logs.rec.info "New value for '#{args[0]}' in 'Backup' => #{args[1]}"
+    end
+    def save
+      MyConfig.save_config
+    end
+    def validate(value)
+      case value
+      when "TRUE", "true", "1", "yes"
+        1
+      when "FALSE", "false", "0", "no"
+        0
+      end
+    end
+    def auto_save_sent_posts(value)
+      MyConfig.options[:backup][:auto_save_sent_posts] = value
+    end
+    def auto_save_sent_messages(value)
+      MyConfig.options[:backup][:auto_save_sent_messages] = value
+    end
+    def auto_save_lists(value)
+      MyConfig.options[:backup][:auto_save_lists] = value
     end
   end
 
