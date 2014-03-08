@@ -156,5 +156,8 @@ module Ayadn
     def self.method_missing(meth, args)
       "\nThe command '#{meth} #{args}' doesn't exist.\n".color(:red)
     end
+    def self.valid_colors(colors_list)
+      "\nThe valid colors are: #{colors_list}\n".color(:cyan)
+    end
   end
 end

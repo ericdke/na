@@ -20,18 +20,18 @@ module Ayadn
     end
 
     desc "color ITEM COLOR", "Set ITEM to COLOR"
+    long_desc Descriptions.set_color
     map "colors" => :color
     def color(*args)
-      color = SetColor.new
-      param = args[1]
-      color.validate(param)
-      case args[0]
-      when "id"
-        color.id(param)
+      color_config = SetColor.new
+      if args[0]
+        param = args[1]
+        color_config.validate(param)
+        color_config.send(args[0](param))
       else
         abort(Status.error_missing_parameters)
       end
-      color.save
+      color_config.save
     end
 
     desc "backup ITEM TRUE/FALSE", "Set ITEM to be activated or not"
@@ -49,8 +49,10 @@ module Ayadn
     end
 
     def validate(color)
-      unless %w{red green magenta cyan yellow blue white}.include?(color)
-        abort(Status.error_missing_parameters)
+      colors_list = %w{red green magenta cyan yellow blue white}
+      unless colors_list.include?(color)
+        puts Status.error_missing_parameters
+        abort(Status.valid_colors(colors_list))
       end
     end
 

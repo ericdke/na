@@ -362,6 +362,14 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.set_color
+      <<-USAGE
+      Set ITEM to color COLOR.
+
+      Example: ayadn set color mentions blue
+      \n\n
+      USAGE
+    end
 
 
 
