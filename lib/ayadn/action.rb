@@ -862,6 +862,9 @@ module Ayadn
         @view.clear_screen
         puts Status.posting
         resp = Post.new.post(args)
+        if MyConfig.options[:backup][:auto_save_sent_posts]
+          FileOps.save_post(resp)
+        end
         @view.clear_screen
         puts Status.yourpost
         @view.show_posted(resp)
@@ -994,7 +997,7 @@ module Ayadn
 
 
 
-    def get_data_from_response(response) # TODO: replace its calls by the api version
+    def get_data_from_response(response)
       response['data']
     end
 

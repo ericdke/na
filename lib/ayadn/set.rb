@@ -58,7 +58,7 @@ module Ayadn
       backup_config = SetBackup.new
       if args[0]
         param = backup_config.validate(args[1])
-        backup_config.send(args[0], args[1])
+        backup_config.send(args[0], param)
       else
         abort(Status.error_missing_parameters)
       end
@@ -81,9 +81,9 @@ module Ayadn
     def validate(value)
       case value
       when "TRUE", "true", "1", "yes"
-        1
+        true
       when "FALSE", "false", "0", "no"
-        0
+        false
       end
     end
     def auto_save_sent_posts(value)
@@ -110,7 +110,7 @@ module Ayadn
     end
     def validate(value)
       if value.is_integer?
-        if value >= 1 and <= 200
+        if value >= 1 && value <= 200
           value
         else
           abort(Status.must_be_integer)
