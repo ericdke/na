@@ -9,32 +9,13 @@ module Ayadn
       Databases.open_databases
     end
 
-    def render_view(data, options = {})
-      unless options[:raw]
-        @view.clear_screen
-        get_view(data['data'], options)
-      else
-        @view.show_raw(data)
-      end
-    end
-
-    def doing(options = {})
-      unless options[:raw]
-        @view.clear_screen
-        print Status.downloading
-      end
-    end
-
     def unified(options)
       begin
         doing(options)
         stream = @api.get_unified(options)
         render_view(stream, options)
       rescue => e
-        Logs.rec.error "In action/unified"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/unified", nil, e)
       ensure
         Databases.close_all
       end
@@ -46,10 +27,7 @@ module Ayadn
         stream = @api.get_checkins(options)
         render_view(stream, options)
       rescue => e
-        Logs.rec.error "In action/checkins"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/checkins", nil, e)
       ensure
         Databases.close_all
       end
@@ -61,10 +39,7 @@ module Ayadn
         stream = @api.get_global(options)
         render_view(stream, options)
       rescue => e
-        Logs.rec.error "In action/global"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/global", nil, e)
       ensure
         Databases.close_all
       end
@@ -76,10 +51,7 @@ module Ayadn
         stream = @api.get_trending(options)
         render_view(stream, options)
       rescue => e
-        Logs.rec.error "In action/trending"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/trending", nil, e)
       ensure
         Databases.close_all
       end
@@ -91,10 +63,7 @@ module Ayadn
         stream = @api.get_photos(options)
         render_view(stream, options)
       rescue => e
-        Logs.rec.error "In action/photos"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/photos", nil, e)
       ensure
         Databases.close_all
       end
@@ -106,10 +75,7 @@ module Ayadn
         stream = @api.get_conversations(options)
         render_view(stream, options)
       rescue => e
-        Logs.rec.error "In action/conversations"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/conversations", nil, e)
       ensure
         Databases.close_all
       end
@@ -126,10 +92,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/mentions with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/mentions", username, e)
       ensure
         Databases.close_all
       end
@@ -146,10 +109,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/posts with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/posts", username, e)
       ensure
         Databases.close_all
       end
@@ -162,10 +122,7 @@ module Ayadn
         @view.clear_screen
         @view.show_interactions(stream)
       rescue => e
-        Logs.rec.error "In action/interactions"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/interactions", nil, e)
       ensure
         Databases.close_all
       end
@@ -182,10 +139,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/whatstarred with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/whatstarred", username, e)
       ensure
         Databases.close_all
       end
@@ -201,10 +155,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/whoreposted with args: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/whoreposted", post_id, e)
       ensure
         Databases.close_all
       end
@@ -220,10 +171,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/whostarred with args: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/whostarred", post_id, e)
       ensure
         Databases.close_all
       end
@@ -239,10 +187,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/convo with args: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/convo", post_id, e)
       ensure
         Databases.close_all
       end
@@ -266,10 +211,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/delete with args: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/delete", post_id, e)
       ensure
         Databases.close_all
       end
@@ -294,10 +236,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/unfollow with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/unfollow", username, e)
       ensure
         Databases.close_all
       end
@@ -322,10 +261,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/follow with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/follow", username, e)
       ensure
         Databases.close_all
       end
@@ -350,10 +286,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/unmute with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/unmute", username, e)
       ensure
         Databases.close_all
       end
@@ -378,10 +311,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/mute with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/mute", username, e)
       ensure
         Databases.close_all
       end
@@ -406,10 +336,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/unblock with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/unblock", username, e)
       ensure
         Databases.close_all
       end
@@ -434,10 +361,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/block with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/block", username, e)
       ensure
         Databases.close_all
       end
@@ -461,10 +385,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/unrepost with args: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/unrepost", post_id, e)
       ensure
         Databases.close_all
       end
@@ -488,10 +409,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/unstar with args: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/unstar", post_id, e)
       ensure
         Databases.close_all
       end
@@ -515,10 +433,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/star with args: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/star", post_id, e)
       ensure
         Databases.close_all
       end
@@ -542,10 +457,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/repost with args: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/repost", post_id, e)
       ensure
         Databases.close_all
       end
@@ -557,10 +469,7 @@ module Ayadn
         stream = @api.get_hashtag(hashtag)
         render_view(stream, options)
       rescue => e
-        Logs.rec.error "In action/hashtag with args: #{hashtag}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/hashtag", hashtag, e)
       ensure
         Databases.close_all
       end
@@ -572,10 +481,7 @@ module Ayadn
         stream = @api.get_search(words, options)
         render_view(stream, options)
       rescue => e
-        Logs.rec.error "In action/search with args: #{words}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/search", words, e)
       ensure
         Databases.close_all
       end
@@ -606,10 +512,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/followings with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/followings", username, e)
       ensure
         Databases.close_all
       end
@@ -640,10 +543,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/followers with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/followers", username, e)
       ensure
         Databases.close_all
       end
@@ -669,10 +569,7 @@ module Ayadn
           @view.show_raw(list)
         end
       rescue => e
-        Logs.rec.error "In action/muted"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/muted", nil, e)
       ensure
         Databases.close_all
       end
@@ -695,10 +592,7 @@ module Ayadn
           @view.show_raw(list)
         end
       rescue => e
-        Logs.rec.error "In action/blocked"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/blocked", nil, e)
       ensure
         Databases.close_all
       end
@@ -709,10 +603,7 @@ module Ayadn
         @view.clear_screen
         @view.settings
       rescue => e
-        Logs.rec.error "In action/settings"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/settings", nil, e)
       ensure
         Databases.close_all
       end
@@ -733,10 +624,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        Logs.rec.error "In action/userinfo with args: #{username}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/userinfo", username, e)
       ensure
         Databases.close_all
       end
@@ -761,10 +649,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/postinfo with args: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/postinfo", post_id, e)
       ensure
         Databases.close_all
       end
@@ -781,10 +666,7 @@ module Ayadn
           @view.show_raw(@api.get_files_list(options))
         end
       rescue => e
-        Logs.rec.error "In action/files"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/files", nil, e)
       ensure
         Databases.close_all
       end
@@ -797,10 +679,7 @@ module Ayadn
         @view.clear_screen
         @view.show_channels(resp)
       rescue => e
-        Logs.rec.error "In action/channels"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/channels", resp, e)
       ensure
         Databases.close_all
       end
@@ -818,10 +697,7 @@ module Ayadn
           #if not int && not in db then err
         end
       rescue => e
-        Logs.rec.error "In action/messages with args: #{channel_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/messages", channel_id, e)
       ensure
         Databases.close_all
       end
@@ -857,10 +733,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Logs.rec.error "In action/pin with args: #{post_id} #{usertags}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/pin", [post_id, usertags], e)
       ensure
         Databases.close_all
       end
@@ -878,10 +751,7 @@ module Ayadn
         puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
-        Logs.rec.error "In action/post with args: #{args}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/post", args, e)
       ensure
         Databases.close_all
       end
@@ -903,10 +773,7 @@ module Ayadn
         puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
-        Logs.rec.error "In action/write"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/write", lines_array.join(" "), e)
       ensure
         Databases.close_all
       end
@@ -933,10 +800,7 @@ module Ayadn
 	    		puts Status.error_missing_username
 	    	end
     	rescue => e
-  		  Logs.rec.error "In action/pmess"
-  		  Logs.rec.error "#{e}"
-  		  global_error(e)
-  		  raise e
+        global_error("action/pmess", username, e)
   		ensure
   		  Databases.close_all
     	end
@@ -962,10 +826,7 @@ module Ayadn
     			puts Status.error_missing_channel_id
     		end
     	rescue => e
-  		  Logs.rec.error "In action/send_to_channel with channel_id: #{channel_id}"
-  		  Logs.rec.error "#{e}"
-  		  global_error(e)
-  		  raise e
+        global_error("action/send_to_channel", channel_id, e)
   		ensure
   		  Databases.close_all
     	end
@@ -997,26 +858,39 @@ module Ayadn
 	      	puts Status.error_missing_post_id
 	      end
       rescue => e
-        Logs.rec.error "In action/reply with post_id: #{post_id}"
-        Logs.rec.error "#{e}"
-        global_error(e)
-        raise e
+        global_error("action/reply", post_id, e)
       ensure
         Databases.close_all
       end
     end
 
+    def global_error(where, args, error)
+      unless args.nil?
+        Logs.rec.error "In #{where}, args: #{args}"
+      else
+        Logs.rec.error "In #{where}:"
+      end
+      Logs.rec.error "#{error}"
+      @view.clear_screen
+      puts "\n\nERROR (see #{MyConfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
+      raise error
+    end
 
+    def render_view(data, options = {})
+      unless options[:raw]
+        @view.clear_screen
+        get_view(data['data'], options)
+      else
+        @view.show_raw(data)
+      end
+    end
 
-
-
-
-
-
-
-
-
-
+    def doing(options = {})
+      unless options[:raw]
+        @view.clear_screen
+        print Status.downloading
+      end
+    end
 
     def get_data_from_response(response)
       response['data']
@@ -1058,14 +932,6 @@ module Ayadn
         @view.show_list_blocked(list)
       end
     end
-
-
-    def global_error(e)
-      @view.clear_screen
-      puts "\n\nERROR (see #{MyConfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
-    end
-
-
 
   end
 end
