@@ -88,7 +88,7 @@ module Ayadn
     end
 
     def check_length(lines_array, max_size)
-      words_array, items_array = [], []
+      words_array = []
       lines_array.each { |word| words_array << get_markdown_text(word) }
       size = words_array.join.length
       if size < 1

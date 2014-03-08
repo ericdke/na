@@ -21,7 +21,7 @@ module Ayadn
       end
     end
 
-    def self.post(url, payload)
+    def self.post(url, payload = nil)
       begin
         RestClient.post url, payload.to_json, :content_type => :json, :accept => :json
       rescue => e
