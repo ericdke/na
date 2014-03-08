@@ -887,6 +887,9 @@ module Ayadn
         @view.clear_screen
         puts Status.posting
         resp = writer.send_post(lines_array.join("\n"))
+        if MyConfig.options[:backup][:auto_save_sent_posts]
+          FileOps.save_post(resp)
+        end
         @view.clear_screen
         puts Status.yourpost
         @view.show_posted(resp)
@@ -910,6 +913,9 @@ module Ayadn
 	    		@view.clear_screen
 	    		puts Status.posting
 	    		resp = messenger.send_pm(username, lines_array.join("\n"))
+          if MyConfig.options[:backup][:auto_save_sent_messages]
+            FileOps.save_message(resp)
+          end
 	    		# TODO: CNX returns True if... failure, so change this soon!
 	    		@view.clear_screen
 	    		puts Status.yourpost
@@ -937,6 +943,9 @@ module Ayadn
     			@view.clear_screen
     			puts Status.posting
     			resp = messenger.send_message(channel_id, lines_array.join("\n"))
+          if MyConfig.options[:backup][:auto_save_sent_messages]
+            FileOps.save_message(resp)
+          end
     			@view.clear_screen
     			puts Status.yourpost
     			@view.show_posted(resp)

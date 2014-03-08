@@ -8,5 +8,12 @@ module Ayadn
       f.close
     end
 
+    def self.save_message(resp)
+      id = resp['data']['id']
+      f = File.new(MyConfig.config[:paths][:messages] + "/#{id}.json", "w")
+      f.write(resp['data'].to_json)
+      f.close
+    end
+
   end
 end
