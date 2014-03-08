@@ -110,13 +110,13 @@ module Ayadn
     end
     def validate(value)
       if value.is_integer?
-        if value >= 1 && value <= 200
-          value
-        else
-          abort(Status.must_be_integer)
-        end
+        x = value
       else
-        puts Status.error_missing_parameters
+        x = value.to_i
+      end
+      if x >= 1 && x <= 200
+        x
+      else
         abort(Status.must_be_integer)
       end
     end
@@ -240,47 +240,47 @@ module Ayadn
     end
 
     def id(color)
-      MyConfig.options[:colors][:id] = color
+      MyConfig.options[:colors][:id] = color.to_sym
     end
 
     def index(color)
-      MyConfig.options[:colors][:index] = color
+      MyConfig.options[:colors][:index] = color.to_sym
     end
 
     def username(color)
-      MyConfig.options[:colors][:username] = color
+      MyConfig.options[:colors][:username] = color.to_sym
     end
 
     def name(color)
-      MyConfig.options[:colors][:name] = color
+      MyConfig.options[:colors][:name] = color.to_sym
     end
 
     def date(color)
-      MyConfig.options[:colors][:date] = color
+      MyConfig.options[:colors][:date] = color.to_sym
     end
 
     def link(color)
-      MyConfig.options[:colors][:link] = color
+      MyConfig.options[:colors][:link] = color.to_sym
     end
 
     def dots(color)
-      MyConfig.options[:colors][:dots] = color
+      MyConfig.options[:colors][:dots] = color.to_sym
     end
 
     def hashtags(color)
-      MyConfig.options[:colors][:hashtags] = color
+      MyConfig.options[:colors][:hashtags] = color.to_sym
     end
 
     def mentions(color)
-      MyConfig.options[:colors][:mentions] = color
+      MyConfig.options[:colors][:mentions] = color.to_sym
     end
 
     def source(color)
-      MyConfig.options[:colors][:source] = color
+      MyConfig.options[:colors][:source] = color.to_sym
     end
 
     def symbols(color)
-      MyConfig.options[:colors][:symbols] = color
+      MyConfig.options[:colors][:symbols] = color.to_sym
     end
   end
 end
