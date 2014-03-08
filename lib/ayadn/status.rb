@@ -162,5 +162,8 @@ module Ayadn
     def self.not_mutable
       "\nThis parameter is not modifiable for the time being, sorry.\n".color(:red)
     end
+    def self.must_be_integer
+      "\nThis paramater must be an integer between 1 and 200.\n".color(:red)
+    end
   end
 end

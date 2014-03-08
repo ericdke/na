@@ -386,6 +386,14 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.set_counts
+      <<-USAGE
+      Set ITEM to retrieve NUMBER of elements by default.
+
+      Example: ayadn set count unified 100
+      \n\n
+      USAGE
+    end
 
 
 
