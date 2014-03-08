@@ -352,17 +352,16 @@ module Ayadn
       \n\n
       USAGE
     end
-    def self.config
+    def self.set
       <<-USAGE
-      Configure a parameter and save it.
+      Set (configure) a parameter and save it.
 
-      Example: ayadn -cf colors mentions blue
+      Example: ayadn set color mentions blue
 
       See the list of configurable parameters with: ayadn -sg
       \n\n
       USAGE
     end
-
 
 
 

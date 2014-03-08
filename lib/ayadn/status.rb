@@ -120,6 +120,9 @@ module Ayadn
     def self.error_missing_hashtag
       "\nYou have to specify one or more hashtag(s).\n".color(:red)
     end
+    def self.error_missing_parameters
+      "\nYou have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values.\n".color(:red)
+    end
     def self.empty_list
       "\n\nThe list is empty.\n\n".color(:red)
     end
@@ -149,6 +152,9 @@ module Ayadn
     end
     def self.message
       "\n#{MyConfig.config[:message_max_length]} characters maximum. Markdown links will be resolved.\n\n"
+    end
+    def self.method_missing(meth, args)
+      "\nThe command '#{meth} #{args}' doesn't exist.\n".color(:red)
     end
   end
 end

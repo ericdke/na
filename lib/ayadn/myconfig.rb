@@ -140,11 +140,10 @@ module Ayadn
       f.close
     end
 
-    def self.save_config(options)
-      @config[:paths][:config] + "/config.yml"
-      # f = File.new(@config[:paths][:config] + "/config.yml", "w")
-      # f.write(options.to_yaml)
-      # f.close
+    def self.save_config
+      f = File.new(@config[:paths][:config] + "/config.yml", "w")
+      f.write(@options.to_yaml)
+      f.close
     end
 
     def self.defaults

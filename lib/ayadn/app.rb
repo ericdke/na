@@ -345,7 +345,8 @@ module Ayadn
       ayadn.reply(post_id)
     end
 
-    desc "set PARAM VALUE", "Set a parameter and save it. Example: ayadn set color mentions blue"
+    desc "set PARAM(S) VALUE", "Set/configure a parameter and save it. Example: ayadn set color mentions blue"
+    long_desc Descriptions.set
     subcommand "set", Set
 
   end
