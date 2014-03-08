@@ -12,6 +12,7 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
+      timeline_config.log(args)
       timeline_config.save
     end
 
@@ -38,6 +39,7 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
+      color_config.log(args)
       color_config.save
     end
 
@@ -60,11 +62,37 @@ module Ayadn
         0
       end
     end
+    def log(args)
+      Logs.rec.info "New value for '#{args[0]}' in 'Timeline' => #{args[1]}"
+    end
     def save
       MyConfig.save_config
     end
     def directed(value)
       MyConfig.options[:timeline][:directed] = value
+    end
+    def deleted(value)
+      #MyConfig.options[:timeline][:deleted] = value
+      abort(Status.not_mutable)
+    end
+    def html(value)
+      MyConfig.options[:timeline][:html] = value
+    end
+    def annotations(value)
+      #MyConfig.options[:timeline][:annotations] = value
+      abort(Status.not_mutable)
+    end
+    def show_source(value)
+      MyConfig.options[:timeline][:show_source] = value
+    end
+    def show_symbols(value)
+      MyConfig.options[:timeline][:show_symbols] = value
+    end
+    def show_real_name(value)
+      MyConfig.options[:timeline][:show_real_name] = value
+    end
+    def show_date(value)
+      MyConfig.options[:timeline][:show_date] = value
     end
   end
 
@@ -80,6 +108,10 @@ module Ayadn
         puts Status.error_missing_parameters
         abort(Status.valid_colors(colors_list))
       end
+    end
+
+    def log(args)
+      Logs.rec.info "New value for '#{args[0]}' in 'Colors' => #{args[1]}"
     end
 
     def save

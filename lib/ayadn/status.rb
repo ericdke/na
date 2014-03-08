@@ -159,5 +159,8 @@ module Ayadn
     def self.valid_colors(colors_list)
       "\nThe valid colors are: #{colors_list}\n".color(:cyan)
     end
+    def self.not_mutable
+      "\nThis parameter is not modifiable for the time being, sorry.\n".color(:red)
+    end
   end
 end
