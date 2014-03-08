@@ -588,6 +588,9 @@ module Ayadn
           doing(options)
           unless options[:raw]
             list = @api.get_followings(username)
+            if MyConfig.options[:backup][:auto_save_lists]
+              FileOps.save_followings_list(list)
+            end
             unless list.empty?
               get_list(:followings, list, username)
               Databases.add_to_users_db_from_list(list)
@@ -619,6 +622,9 @@ module Ayadn
           doing(options)
           unless options[:raw]
             list = @api.get_followers(username)
+            if MyConfig.options[:backup][:auto_save_lists]
+              FileOps.save_followers_list(list)
+            end
             unless list.empty?
               get_list(:followers, list, username)
               Databases.add_to_users_db_from_list(list)
@@ -648,6 +654,9 @@ module Ayadn
         doing(options)
         unless options[:raw]
           list = @api.get_muted
+          if MyConfig.options[:backup][:auto_save_lists]
+            FileOps.save_muted_list(list)
+          end
           unless list.empty?
             get_list(:muted, list, nil)
             Databases.add_to_users_db_from_list(list)
@@ -977,6 +986,9 @@ module Ayadn
 	        reply = messenger.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to]))
 	        puts Status.posting
 	        resp = messenger.send_reply(reply, post_id)
+          if MyConfig.options[:backup][:auto_save_sent_posts]
+            FileOps.save_post(resp)
+          end
 	        @view.clear_screen
 	        puts Status.done
 	        stream = @api.get_convo(post_id, {})
