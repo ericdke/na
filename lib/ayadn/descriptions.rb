@@ -352,7 +352,16 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.config
+      <<-USAGE
+      Configure a parameter and save it.
 
+      Example: ayadn -cf colors mentions blue
+
+      See the list of configurable parameters with: ayadn -sg
+      \n\n
+      USAGE
+    end
 
 
 

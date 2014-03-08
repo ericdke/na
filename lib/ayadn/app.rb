@@ -2,7 +2,7 @@ module Ayadn
   class App < Thor
     package_name "ayadn"
 
-    %w{action api descriptions endpoints cnx view workers myconfig post status extend databases fileops logs pinboard}.each { |r| require_relative "#{r}" }
+    %w{action api descriptions endpoints cnx view workers myconfig post status extend databases fileops logs pinboard set}.each { |r| require_relative "#{r}" }
 
     desc "unified", "Show your Unified Stream, aka your App.net timeline (ayadn -u)"
     map "-u" => :unified
@@ -341,12 +341,12 @@ module Ayadn
     map "-r" => :reply
     long_desc Descriptions.reply
     def reply(post_id)
-      a = Action.new
-      a.reply(post_id)
+      ayadn = Action.new
+      ayadn.reply(post_id)
     end
 
-
-
+    desc "set PARAM VALUE", "Set a parameter and save it. Example: ayadn set color mentions blue"
+    subcommand "set", Set
 
   end
 end
