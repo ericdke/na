@@ -3,8 +3,16 @@ module Ayadn
   class Set < Thor
 
     desc "timeline ITEM TRUE/FALSE", "Set ITEM to be activated or not"
+    long_desc Descriptions.set_timeline
     def timeline(*args)
-      puts args
+      timeline_config = SetTimeline.new
+      if args[0]
+        param = timeline_config.validate(args[1])
+        timeline_config.send(args[0], param)
+      else
+        abort(Status.error_missing_parameters)
+      end
+      timeline_config.save
     end
 
     desc "count ITEM NUMBER", "Set ITEM to retrieve NUMBER of elements by default"
@@ -25,9 +33,8 @@ module Ayadn
     def color(*args)
       color_config = SetColor.new
       if args[0]
-        param = args[1]
-        color_config.validate(param)
-        color_config.send(args[0](param))
+        color_config.validate(args[1])
+        color_config.send(args[0], args[1])
       else
         abort(Status.error_missing_parameters)
       end
@@ -38,11 +45,30 @@ module Ayadn
     def backup(*args)
       puts args
     end
+  end
 
+  class SetTimeline
+    def initialize
+      MyConfig.load_config
+      Logs.create_logger
+    end
+    def validate(value)
+      case value
+      when "TRUE", "true", "1", "yes"
+        1
+      when "FALSE", "false", "0", "no"
+        0
+      end
+    end
+    def save
+      MyConfig.save_config
+    end
+    def directed(value)
+      MyConfig.options[:timeline][:directed] = value
+    end
   end
 
   class SetColor
-
     def initialize
       MyConfig.load_config
       Logs.create_logger
@@ -103,7 +129,5 @@ module Ayadn
     def symbols(color)
       MyConfig.options[:colors][:symbols] = color
     end
-
   end
-
 end

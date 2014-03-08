@@ -370,6 +370,14 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.set_timeline
+      <<-USAGE
+      Set ITEM to true or false.
+
+      Example: ayadn set directed true
+      \n\n
+      USAGE
+    end
 
 
 
