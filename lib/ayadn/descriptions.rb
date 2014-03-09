@@ -60,7 +60,7 @@ module Ayadn
       <<-USAGE
       Show @username's posts.
 
-      Example: ayadn -po @ericd
+      Example: ayadn -up @ericd
       \n\n
       USAGE
     end
@@ -172,7 +172,7 @@ module Ayadn
       <<-USAGE
       Show detailed informations about post n°POST.
 
-      Example: ayadn -pi 23365251
+      Example: ayadn -di 23365251
       \n\n
       USAGE
     end

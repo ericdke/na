@@ -167,9 +167,20 @@ module Ayadn
     end
 
     def get_files_list(options)
-      resp = get_parsed_response(Endpoints.new.files_list(options))
-      #check_error(resp)
-      resp
+      array_of_hashes = []
+      unless options[:all]
+        resp = get_parsed_response(Endpoints.new.files_list(options))
+        resp['data'].each { |p| array_of_hashes << p }
+      else
+        options = {:count => 200, :before_id => nil}
+        loop do
+          resp = get_parsed_response(Endpoints.new.files_list(options))
+          resp['data'].each { |p| array_of_hashes << p }
+          break unless resp['meta']['more']
+          options = {:count => 200, :before_id => resp['meta']['min_id']}
+        end
+      end
+      array_of_hashes
     end
 
     def star(post_id)

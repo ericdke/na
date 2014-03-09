@@ -140,8 +140,8 @@ module Ayadn
       puts build_files_list(list)
     end
 
-    def build_files_list(list) #meta+data
-      data = list['data'].reverse
+    def build_files_list(list)
+      data = list.reverse
       view = "\n"
       data.each do |file|
         view << "ID\t\t".color(:cyan)

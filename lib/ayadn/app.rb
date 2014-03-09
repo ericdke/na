@@ -76,13 +76,13 @@ module Ayadn
       Action.new.mentions(username, options)
     end
 
-    desc "posts @USERNAME", "Show posts of @username (ayadn -po @username)"
-    map "-po" => :posts
+    desc "userposts @USERNAME", "Show posts of @username (ayadn -up @username)"
+    map "-up" => :userposts
     long_desc Descriptions.posts
     option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
     option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
     option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
-    def posts(*username)
+    def userposts(*username)
       Action.new.posts(username, options)
     end
 
@@ -192,8 +192,8 @@ module Ayadn
       Action.new.userinfo(username, options)
     end
 
-    desc "postinfo POST", "Show detailed informations about a post (ayadn -pi POST)"
-    map "-pi" => :postinfo
+    desc "postinfo POST", "Show detailed informations about a post (ayadn -di POST)"
+    map "-di" => :postinfo
     long_desc Descriptions.postinfo
     option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
     def postinfo(post_id)
@@ -203,8 +203,9 @@ module Ayadn
     desc "files", "List your files (ayadn -fl)"
     map "-fl" => :files
     long_desc Descriptions.files
-    option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
+    option :count, aliases: "-c", type: :numeric, desc: "Specify the number of files to display"
     option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"
+    option :all, aliases: "-a", type: :boolean, desc: "Retrieve the list of all your files"
     def files
       Action.new.files(options)
     end
@@ -345,7 +346,7 @@ module Ayadn
       ayadn.reply(post_id)
     end
 
-    desc "set PARAM(S) VALUE", "Set/configure a parameter and save it. Example: ayadn set color mentions blue"
+    desc "set PARAM(S) VALUE", "Set/configure a parameter and save it (ayadn set color mentions blue)"
     long_desc Descriptions.set
     subcommand "set", Set
 
