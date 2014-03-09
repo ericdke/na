@@ -2,7 +2,7 @@ module Ayadn
   class App < Thor
     package_name "ayadn"
 
-    %w{action api descriptions endpoints cnx view workers myconfig post status extend databases fileops logs pinboard set}.each { |r| require_relative "#{r}" }
+    %w{action api descriptions endpoints cnx view workers myconfig post status extend databases fileops logs pinboard set alias errors}.each { |r| require_relative "#{r}" }
 
     desc "unified", "Show your Unified Stream, aka your App.net timeline (ayadn -u)"
     map "-u" => :unified
@@ -346,9 +346,13 @@ module Ayadn
       ayadn.reply(post_id)
     end
 
-    desc "set PARAM(S) VALUE", "Set/configure a parameter and save it (ayadn set color mentions blue)"
+    desc "set PARAM(S) VALUE", "Set/configure a parameter and save it (ayadn set)"
     long_desc Descriptions.set
     subcommand "set", Set
+
+    desc "alias COMMAND (PARAM)", "Create/delete/list aliases for channels (ayadn alias)"
+    long_desc Descriptions.alias
+    subcommand "alias", Alias
 
   end
 end

@@ -15,7 +15,7 @@ module Ayadn
         stream = @api.get_unified(options)
         render_view(stream, options)
       rescue => e
-        global_error("action/unified", nil, e)
+        Errors.global_error("action/unified", options, e)
       ensure
         Databases.close_all
       end
@@ -27,7 +27,7 @@ module Ayadn
         stream = @api.get_checkins(options)
         render_view(stream, options)
       rescue => e
-        global_error("action/checkins", nil, e)
+        Errors.global_error("action/checkins", options, e)
       ensure
         Databases.close_all
       end
@@ -39,7 +39,7 @@ module Ayadn
         stream = @api.get_global(options)
         render_view(stream, options)
       rescue => e
-        global_error("action/global", nil, e)
+        Errors.global_error("action/global", options, e)
       ensure
         Databases.close_all
       end
@@ -51,7 +51,7 @@ module Ayadn
         stream = @api.get_trending(options)
         render_view(stream, options)
       rescue => e
-        global_error("action/trending", nil, e)
+        Errors.global_error("action/trending", options, e)
       ensure
         Databases.close_all
       end
@@ -63,7 +63,7 @@ module Ayadn
         stream = @api.get_photos(options)
         render_view(stream, options)
       rescue => e
-        global_error("action/photos", nil, e)
+        Errors.global_error("action/photos", options, e)
       ensure
         Databases.close_all
       end
@@ -75,7 +75,7 @@ module Ayadn
         stream = @api.get_conversations(options)
         render_view(stream, options)
       rescue => e
-        global_error("action/conversations", nil, e)
+        Errors.global_error("action/conversations", options, e)
       ensure
         Databases.close_all
       end
@@ -92,7 +92,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/mentions", username, e)
+        Errors.global_error("action/mentions", [username, options], e)
       ensure
         Databases.close_all
       end
@@ -109,7 +109,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/posts", username, e)
+        Errors.global_error("action/posts", [username, options], e)
       ensure
         Databases.close_all
       end
@@ -122,7 +122,7 @@ module Ayadn
         @view.clear_screen
         @view.show_interactions(stream)
       rescue => e
-        global_error("action/interactions", nil, e)
+        Errors.global_error("action/interactions", nil, e)
       ensure
         Databases.close_all
       end
@@ -139,7 +139,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/whatstarred", username, e)
+        Errors.global_error("action/whatstarred", [username, options], e)
       ensure
         Databases.close_all
       end
@@ -159,7 +159,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/whoreposted", post_id, e)
+        Errors.global_error("action/whoreposted", post_id, e)
       ensure
         Databases.close_all
       end
@@ -179,7 +179,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/whostarred", post_id, e)
+        Errors.global_error("action/whostarred", post_id, e)
       ensure
         Databases.close_all
       end
@@ -195,7 +195,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/convo", post_id, e)
+        Errors.global_error("action/convo", [post_id, options], e)
       ensure
         Databases.close_all
       end
@@ -219,7 +219,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/delete", post_id, e)
+        Errors.global_error("action/delete", post_id, e)
       ensure
         Databases.close_all
       end
@@ -244,7 +244,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/unfollow", username, e)
+        Errors.global_error("action/unfollow", username, e)
       ensure
         Databases.close_all
       end
@@ -269,7 +269,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/follow", username, e)
+        Errors.global_error("action/follow", username, e)
       ensure
         Databases.close_all
       end
@@ -294,7 +294,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/unmute", username, e)
+        Errors.global_error("action/unmute", username, e)
       ensure
         Databases.close_all
       end
@@ -319,7 +319,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/mute", username, e)
+        Errors.global_error("action/mute", username, e)
       ensure
         Databases.close_all
       end
@@ -344,7 +344,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/unblock", username, e)
+        Errors.global_error("action/unblock", username, e)
       ensure
         Databases.close_all
       end
@@ -369,7 +369,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/block", username, e)
+        Errors.global_error("action/block", username, e)
       ensure
         Databases.close_all
       end
@@ -393,7 +393,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/unrepost", post_id, e)
+        Errors.global_error("action/unrepost", post_id, e)
       ensure
         Databases.close_all
       end
@@ -417,7 +417,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/unstar", post_id, e)
+        Errors.global_error("action/unstar", post_id, e)
       ensure
         Databases.close_all
       end
@@ -441,7 +441,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/star", post_id, e)
+        Errors.global_error("action/star", post_id, e)
       ensure
         Databases.close_all
       end
@@ -465,7 +465,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/repost", post_id, e)
+        Errors.global_error("action/repost", post_id, e)
       ensure
         Databases.close_all
       end
@@ -477,7 +477,7 @@ module Ayadn
         stream = @api.get_hashtag(hashtag)
         render_view(stream, options)
       rescue => e
-        global_error("action/hashtag", hashtag, e)
+        Errors.global_error("action/hashtag", [hashtag, options], e)
       ensure
         Databases.close_all
       end
@@ -489,7 +489,7 @@ module Ayadn
         stream = @api.get_search(words, options)
         render_view(stream, options)
       rescue => e
-        global_error("action/search", words, e)
+        Errors.global_error("action/search", [words, options], e)
       ensure
         Databases.close_all
       end
@@ -520,7 +520,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/followings", username, e)
+        Errors.global_error("action/followings", [username, options], e)
       ensure
         Databases.close_all
       end
@@ -551,7 +551,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/followers", username, e)
+        Errors.global_error("action/followers", [username, options], e)
       ensure
         Databases.close_all
       end
@@ -577,7 +577,7 @@ module Ayadn
           @view.show_raw(list)
         end
       rescue => e
-        global_error("action/muted", nil, e)
+        Errors.global_error("action/muted", options, e)
       ensure
         Databases.close_all
       end
@@ -600,7 +600,7 @@ module Ayadn
           @view.show_raw(list)
         end
       rescue => e
-        global_error("action/blocked", nil, e)
+        Errors.global_error("action/blocked", options, e)
       ensure
         Databases.close_all
       end
@@ -611,7 +611,7 @@ module Ayadn
         @view.clear_screen
         @view.settings
       rescue => e
-        global_error("action/settings", nil, e)
+        Errors.global_error("action/settings", nil, e)
       ensure
         Databases.close_all
       end
@@ -632,7 +632,7 @@ module Ayadn
           puts Status.error_missing_username
         end
       rescue => e
-        global_error("action/userinfo", username, e)
+        Errors.global_error("action/userinfo", [username, options], e)
       ensure
         Databases.close_all
       end
@@ -661,7 +661,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/postinfo", post_id, e)
+        Errors.global_error("action/postinfo", [post_id, options], e)
       ensure
         Databases.close_all
       end
@@ -678,7 +678,7 @@ module Ayadn
           @view.show_raw(@api.get_files_list(options))
         end
       rescue => e
-        global_error("action/files", nil, e)
+        Errors.global_error("action/files", options, e)
       ensure
         Databases.close_all
       end
@@ -691,7 +691,7 @@ module Ayadn
         @view.clear_screen
         @view.show_channels(resp)
       rescue => e
-        global_error("action/channels", resp, e)
+        Errors.global_error("action/channels", resp, e)
       ensure
         Databases.close_all
       end
@@ -709,7 +709,7 @@ module Ayadn
           #if not int && not in db then err
         end
       rescue => e
-        global_error("action/messages", channel_id, e)
+        Errors.global_error("action/messages", [channel_id, options], e)
       ensure
         Databases.close_all
       end
@@ -745,7 +745,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        global_error("action/pin", [post_id, usertags], e)
+        Errors.global_error("action/pin", [post_id, usertags], e)
       ensure
         Databases.close_all
       end
@@ -763,7 +763,7 @@ module Ayadn
         puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
-        global_error("action/post", args, e)
+        Errors.global_error("action/post", args, e)
       ensure
         Databases.close_all
       end
@@ -785,7 +785,7 @@ module Ayadn
         puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
-        global_error("action/write", lines_array.join(" "), e)
+        Errors.global_error("action/write", lines_array.join(" "), e)
       ensure
         Databases.close_all
       end
@@ -812,7 +812,7 @@ module Ayadn
 	    		puts Status.error_missing_username
 	    	end
     	rescue => e
-        global_error("action/pmess", username, e)
+        Errors.global_error("action/pmess", username, e)
   		ensure
   		  Databases.close_all
     	end
@@ -838,7 +838,7 @@ module Ayadn
     			puts Status.error_missing_channel_id
     		end
     	rescue => e
-        global_error("action/send_to_channel", channel_id, e)
+        Errors.global_error("action/send_to_channel", channel_id, e)
   		ensure
   		  Databases.close_all
     	end
@@ -870,22 +870,10 @@ module Ayadn
 	      	puts Status.error_missing_post_id
 	      end
       rescue => e
-        global_error("action/reply", post_id, e)
+        Errors.global_error("action/reply", post_id, e)
       ensure
         Databases.close_all
       end
-    end
-
-    def global_error(where, args, error)
-      unless args.nil?
-        Logs.rec.error "In #{where}, args: #{args}"
-      else
-        Logs.rec.error "In #{where}:"
-      end
-      Logs.rec.error "#{error}"
-      @view.clear_screen
-      puts "\n\nERROR (see #{MyConfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
-      raise error
     end
 
     def render_view(data, options = {})

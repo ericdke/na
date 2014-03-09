@@ -394,6 +394,48 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.alias
+      <<-USAGE
+      Create, delete and list aliases for channels.
+
+      Examples:
+
+      ayadn alias list
+
+      ayadn alias create 33666 my_alias
+
+      ayadn alias delete my_alias
+
+      (Once an alias is set, you can display the messages in this channel with 'ayadn -ms my_alias', post to it with 'ayadn -se my_alias', etc)
+      \n\n
+      USAGE
+    end
+    def self.alias_create
+      <<-USAGE
+      Creates an alias for a channel.
+
+      Example: ayadn alias create 33666 my_alias
+
+      (Once an alias is set, you can display the messages in this channel with 'ayadn -ms my_alias', post to it with 'ayadn -se my_alias', etc)
+      \n\n
+      USAGE
+    end
+    def self.alias_delete
+      <<-USAGE
+      Deletes a previously created alias.
+
+      Example: ayadn alias delete my_alias
+      \n\n
+      USAGE
+    end
+    def self.alias_list
+      <<-USAGE
+      Lists previously created aliases.
+
+      Example: ayadn alias list
+      \n\n
+      USAGE
+    end
 
 
 

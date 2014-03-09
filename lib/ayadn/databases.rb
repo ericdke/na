@@ -9,13 +9,30 @@ module Ayadn
     def self.open_databases
       @users = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/users.db"
       @index = Daybreak::DB.new "#{MyConfig.config[:paths][:pagination]}/index.db"
+      @aliases = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/aliases.db"
     end
 
     def self.close_all
-      @users.flush
-      @users.close
-      @index.flush
-      @index.close
+      [@users, @index, @aliases].each do |db|
+        db.flush
+        db.close
+      end
+    end
+
+    def self.create_alias(channel_id, channel_alias)
+      @aliases[channel_alias] = channel_id
+    end
+
+    def self.delete_alias(channel_alias)
+      @aliases.delete(channel_alias)
+    end
+
+    def self.get_channel_id(channel_alias)
+      @aliases[channel_alias]
+    end
+
+    def self.get_aliases
+      @aliases
     end
 
     def self.save_indexed_posts(posts)

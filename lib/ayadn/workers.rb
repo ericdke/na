@@ -1,6 +1,15 @@
 module Ayadn
   class Workers
 
+    def build_aliases_list(list)
+      table = init_table
+      table.title = "List of your channel aliases".color(:cyan) + "".color(:white)
+      list.each do |k,v|
+        table << ["#{k}".color(:green), "#{v}".color(:red)]
+      end
+      table
+    end
+
     def build_reposted_list(list, target) #not the same format as wollowings/etc: taks an array of hashes
       table = init_table
       table.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)

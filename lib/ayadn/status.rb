@@ -1,7 +1,7 @@
 module Ayadn
   class Status
     def self.done
-      "Done.\n".color(:green)
+      "\nDone.\n".color(:green)
     end
     def self.downloading
       "Downloading from ADN...\n".inverse
