@@ -264,11 +264,7 @@ module Ayadn
       if res['meta']['code'] == 200
         res
       else
-        Logs.rec.error "From api/check http response"
-        # if res['meta']['code'] == 404
-        #   puts Status.not_found
-        # end
-        raise("#{res}")
+        Errors.global_error("api/check_error", nil, res['meta'])
       end
     end
 

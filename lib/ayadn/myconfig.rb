@@ -102,15 +102,13 @@ module Ayadn
         begin
           @options = YAML.load(File.read(config_file))
         rescue => e
-          Logs.rec.error "From myconfig/load config.yml"
-          Logs.rec.error "#{e}"
+          Errors.global_error("myconfig/load config.yml", nil, e)
         end
       else
         begin
           self.write_config_file(config_file, @options)
         rescue => e
-          Logs.rec.error "From myconfig/create config.yml from defaults"
-          Logs.rec.error "#{e}"
+          Errors.global_error("myconfig/create config.yml from defaults", nil, e)
         end
       end
     end
@@ -123,8 +121,7 @@ module Ayadn
           Dir.mkdir(@config[:paths][target.to_sym]) unless Dir.exists?(@config[:paths][target.to_sym])
         end
       rescue => e
-        Logs.rec.error "From myconfig/create ayadn folders"
-        Logs.rec.error "#{e}"
+        Errors.global_error("myconfig/create ayadn folders", nil, e)
       end
     end
 

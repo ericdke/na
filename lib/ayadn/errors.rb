@@ -11,5 +11,8 @@ module Ayadn
       puts "\n\nERROR (see #{MyConfig.config[:paths][:log]}/ayadn.log)\n".color(:red)
       raise error
     end
+    def self.warn(warning)
+      Logs.rec.warn warning
+    end
   end
 end

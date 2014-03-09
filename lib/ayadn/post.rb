@@ -37,7 +37,7 @@ module Ayadn
         end
       rescue Interrupt
         #temp
-        Logs.rec.warn "Write post: canceled."
+        Errors.warn "Write post: canceled."
         abort("Canceled.")
       end
       post
@@ -95,7 +95,7 @@ module Ayadn
         error_text_empty
         abort("")
       elsif size > max_size
-        Logs.rec.warn "Canceled: too long (#{size - max_size}chars)"
+        Errors.warn "Canceled: too long (#{size - max_size}chars)"
         abort("\n\nCanceled: too long. #{max_size} max, #{size - max_size} characters to remove.\n\n\n".color(:red))
       end
     end
@@ -115,7 +115,7 @@ module Ayadn
 
     def error_text_empty
       puts "\n\nYou must provide some text.\n\n".color(:red)
-      Logs.rec.warn "-Post without text-"
+      Errors.warn "-Post without text-"
     end
 
     def annotations

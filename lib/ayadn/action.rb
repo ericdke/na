@@ -212,8 +212,7 @@ module Ayadn
             puts Status.deleted(post_id)
           else
             puts Status.not_deleted(post_id)
-            Logs.rec.warn "#{Status.not_deleted(post_id)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_deleted(post_id)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_post_id
@@ -237,8 +236,7 @@ module Ayadn
             puts Status.unfollowed(username)
           else
             puts Status.not_unfollowed(username)
-            Logs.rec.warn "#{Status.not_unfollowed(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_unfollowed(username)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_username
@@ -262,8 +260,7 @@ module Ayadn
             puts Status.followed(username)
           else
             puts Status.not_followed(username)
-            Logs.rec.warn "#{Status.not_followed(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_followed(username)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_username
@@ -287,8 +284,7 @@ module Ayadn
             puts Status.unmuted(username)
           else
             puts Status.not_unmuted(username)
-            Logs.rec.warn "#{Status.not_unmuted(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_unmuted(username)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_username
@@ -312,8 +308,7 @@ module Ayadn
             puts Status.muted(username)
           else
             puts Status.not_muted(username)
-            Logs.rec.warn "#{Status.not_muted(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_muted(username)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_username
@@ -337,8 +332,7 @@ module Ayadn
             puts Status.unblocked(username)
           else
             puts Status.not_unblocked(username)
-            Logs.rec.warn "#{Status.not_unblocked(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_unblocked(username)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_username
@@ -362,8 +356,7 @@ module Ayadn
             puts Status.blocked(username)
           else
             puts Status.not_blocked(username)
-            Logs.rec.warn "#{Status.not_blocked(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_blocked(username)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_username
@@ -386,8 +379,7 @@ module Ayadn
             puts Status.unreposted(post_id)
           else
             puts Status.not_unreposted(post_id)
-            Logs.rec.warn "#{Status.not_unreposted(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_unreposted(post_id)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_post_id
@@ -410,8 +402,7 @@ module Ayadn
             puts Status.unstarred(post_id)
           else
             puts Status.not_unstarred(post_id)
-            Logs.rec.warn "#{Status.not_unstarred(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_unstarred(post_id)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_post_id
@@ -434,8 +425,7 @@ module Ayadn
             puts Status.starred(post_id)
           else
             puts Status.not_starred(post_id)
-            Logs.rec.warn "#{Status.not_starred(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_starred(post_id)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_post_id
@@ -458,8 +448,7 @@ module Ayadn
             puts Status.reposted(post_id)
           else
             puts Status.not_reposted(post_id)
-            Logs.rec.warn "#{Status.not_reposted(username)}"
-            Logs.rec.warn "#{resp['meta']}"
+            Errors.warn("#{Status.not_reposted(post_id)} => #{resp['meta']}")
           end
         else
           puts Status.error_missing_post_id
@@ -509,7 +498,7 @@ module Ayadn
               get_list(:followings, list, username)
               Databases.add_to_users_db_from_list(list)
             else
-              Logs.rec.warn "In followings: no data"
+              Errors.warn "In followings: no data"
               abort(Status.empty_list)
             end
           else
@@ -540,7 +529,7 @@ module Ayadn
               get_list(:followers, list, username)
               Databases.add_to_users_db_from_list(list)
             else
-              Logs.rec.warn "In followers: no data"
+              Errors.warn "In followers: no data"
               abort(Status.empty_list)
             end
           else
@@ -569,7 +558,7 @@ module Ayadn
             get_list(:muted, list, nil)
             Databases.add_to_users_db_from_list(list)
           else
-            Logs.rec.warn "In muted: no data"
+            Errors.warn "In muted: no data"
             abort(Status.empty_list)
           end
         else
@@ -592,7 +581,7 @@ module Ayadn
             get_list(:blocked, list, nil)
             Databases.add_to_users_db_from_list(list)
           else
-            Logs.rec.warn "In blocked: no data"
+            Errors.warn "In blocked: no data"
             abort(Status.empty_list)
           end
         else

@@ -12,8 +12,7 @@ module Ayadn
       begin
         Databases.save_indexed_posts(posts)
       rescue => e
-        Logs.rec.error "In view/show_posts_with_index/save_indexed_posts"
-        Logs.rec.error "#{e}"
+        Errors.global_error("view/show_posts_with_index/save_indexed_posts", options, e)
       end
     end
 

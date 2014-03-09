@@ -5,9 +5,7 @@ module Ayadn
       begin
         RestClient.get(url, :verify_ssl => OpenSSL::SSL::VERIFY_NONE) {|response, request, result| response }
       rescue => e
-        Logs.rec.error "From cnx/get #{url}"
-        Logs.rec.error "#{e}"
-        raise e
+        Errors.global_error("cnx/get", url, e)
       end
     end
 
@@ -15,9 +13,7 @@ module Ayadn
       begin
         RestClient::Resource.new(url, :verify_ssl => OpenSSL::SSL::VERIFY_NONE).delete
       rescue => e
-        Logs.rec.error "From cnx/delete #{url}"
-        Logs.rec.error "#{e}"
-        raise e
+        Errors.global_error("cnx/delete", url, e)
       end
     end
 
@@ -25,9 +21,7 @@ module Ayadn
       begin
         RestClient.post url, payload.to_json, :content_type => :json, :accept => :json
       rescue => e
-        Logs.rec.error "From cnx/post #{url}"
-        Logs.rec.error "#{e}"
-        raise e
+        Errors.global_error("cnx/post", url, e)
       end
     end
 

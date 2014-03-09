@@ -42,9 +42,7 @@ module Ayadn
           @index[id] = hash
         end
       rescue => e
-        Logs.rec.error "From fileops/save_indexed_posts"
-        Logs.rec.error "#{e}"
-        raise e
+        Errors.global_error("fileops/save_indexed_posts", nil, e)
       end
     end
 
@@ -55,12 +53,11 @@ module Ayadn
             return values if values[:count] == number
           end
         else
-          raise #temp
+          puts "\nNumber must be in the range of the indexed posts.\n".color(:red)
+          Errors.global_error("fileops/get_post_from_index", number, "out of range")
         end
       rescue => e
-        Logs.rec.error "From fileops/get_post_from_index"
-        Logs.rec.error "#{e}"
-        raise e
+        Errors.global_error("fileops/get_post_from_index", number, e)
       end
     end
 
