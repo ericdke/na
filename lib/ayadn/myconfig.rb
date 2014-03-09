@@ -79,15 +79,11 @@ module Ayadn
       api = API.new
       resp = api.get_config
       api.check_error(resp)
-      f = File.new(api_file, "w")
-      f.write(resp['data'].to_json)
-      f.close
+      File.write(api_file, resp['data'].to_json)
     end
 
     def self.create_identity_file(username)
-      f = File.new(@config[:paths][:config] + "/identity.yml", "w")
-        f.write({identity: username}.to_yaml)
-      f.close
+      File.write(@config[:paths][:config] + "/identity.yml", {identity: username}.to_yaml)
     end
 
     def self.read_identity_file
@@ -96,9 +92,7 @@ module Ayadn
     end
 
     def self.create_version_file
-      vf = File.new(@config[:paths][:config] + "/version.yml", "w")
-        vf.write({version: @config[:version]}.to_yaml)
-      vf.close
+      File.write(@config[:paths][:config] + "/version.yml", {version: @config[:version]}.to_yaml)
     end
 
     def self.create_config_file
@@ -135,15 +129,11 @@ module Ayadn
     end
 
     def self.write_config_file(config_file, options)
-      f = File.new(config_file, "w")
-        f.write(options.to_yaml)
-      f.close
+      File.write(config_file, options.to_yaml)
     end
 
     def self.save_config
-      f = File.new(@config[:paths][:config] + "/config.yml", "w")
-      f.write(@options.to_yaml)
-      f.close
+      File.write(@config[:paths][:config] + "/config.yml", @options.to_yaml)
     end
 
     def self.defaults
