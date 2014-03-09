@@ -300,7 +300,7 @@ module Ayadn
         header << " <".color(MyConfig.options[:colors][:symbols]) if content[:is_reply]
         header << " #{content[:num_stars]}*".color(MyConfig.options[:colors][:symbols]) if content[:is_starred]
         header << " >".color(MyConfig.options[:colors][:symbols]) if content[:num_replies] > 0
-        header << " #{content[:num_reposts]}x".color(MyConfig.options[:colors][:symbols]) if content[:is_repost]
+        header << " #{content[:num_reposts]}x".color(MyConfig.options[:colors][:symbols]) if content[:num_reposts] > 0
       end
       header << "\n"
     end

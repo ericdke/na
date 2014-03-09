@@ -126,11 +126,9 @@ module Ayadn
         if post['repost_of']
           values[:is_repost] = true
           values[:repost_of] = post['repost_of']['id']
-          values[:num_reposts] = post['repost_of']['num_reposts']
         else
           values[:is_repost] = false
           values[:repost_of] = nil
-          values[:num_reposts] = 0
         end
         if post['reply_to']
           values[:is_reply] = true
@@ -140,6 +138,11 @@ module Ayadn
           values[:is_reply] = false
           values[:reply_to] = nil
           values[:num_replies] = 0
+        end
+        if post['num_reposts']
+          values[:num_reposts] = post['num_reposts']
+        else
+          values[:num_reposts] = 0
         end
 
         mentions= []

@@ -150,7 +150,11 @@ module Ayadn
         if post_id.is_integer?
           doing({})
           list = get_data_from_response(@api.get_whoreposted(post_id))
-          get_list(:whoreposted, list, post_id)
+          unless list.empty?
+            get_list(:whoreposted, list, post_id)
+          else
+            puts Status.empty_list
+          end
         else
           puts Status.error_missing_post_id
         end
@@ -166,7 +170,11 @@ module Ayadn
         if post_id.is_integer?
           doing({})
           list = get_data_from_response(@api.get_whostarred(post_id))
-          get_list(:whostarred, list, post_id)
+          unless list.empty?
+            get_list(:whostarred, list, post_id)
+          else
+            puts Status.empty_list
+          end
         else
           puts Status.error_missing_post_id
         end
@@ -640,6 +648,10 @@ module Ayadn
             stream = get_data_from_response(@api.get_user("@#{resp['user']['username']}"))
             puts "POST:\n".inverse
             @view.show_simple_post([resp], options)
+            if resp['repost_of']
+              puts "REPOST OF:\n".inverse
+              @view.show_simple_post([resp['repost_of']], options)
+            end
             puts "AUTHOR:\n".inverse
             @view.show_userinfos(stream)
           else

@@ -63,17 +63,19 @@ module Ayadn
     end
 
     def get_whoreposted(post_id)
-      res = get_parsed_response(Endpoints.new.whoreposted(post_id))
-      resp = get_original_if_repost(res)
-      #check_error(resp)
-      resp
+      get_parsed_response(Endpoints.new.whoreposted(post_id))
+    end
+
+    def get_original_if_repost(resp)
+      if resp['repost_of']
+        resp['repost_of']
+      else
+        resp
+      end
     end
 
     def get_whostarred(post_id)
-      res = get_parsed_response(Endpoints.new.whostarred(post_id))
-      resp = get_original_if_repost(res)
-      #check_error(resp)
-      resp
+      get_parsed_response(Endpoints.new.whostarred(post_id))
     end
 
     def get_convo(post_id, options)
@@ -160,10 +162,7 @@ module Ayadn
     end
 
     def get_details(post_id, options)
-      resp = get_parsed_response(Endpoints.new.single_post(post_id, options))
-      #resp = get_original_if_repost(res['data'])
-      #check_error(resp)
-      resp
+      get_parsed_response(Endpoints.new.single_post(post_id, options))
     end
 
     def get_files_list(options)
@@ -287,13 +286,7 @@ module Ayadn
       JSON.parse(CNX.get_response_from(url))
     end
 
-    def get_original_if_repost(resp)
-      if resp['repost_of']
-        get_data_from_response(get_details(resp['repost_of']['id'], {}))
-      else
-        resp
-      end
-    end
+
 
     def get_data_from_response(response)
       response['data']
