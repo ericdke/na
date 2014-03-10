@@ -3,16 +3,16 @@ module Ayadn
 
     def get_unified(options)
       if options[:new]
-        since_id = Databases.pagination['unified']
-        options = {since_id: since_id}
+        options = {since_id: Databases.pagination['unified']}
       end
       get_parsed_response(Endpoints.new.unified(options))
     end
 
     def get_checkins(options)
-      resp = get_parsed_response(Endpoints.new.checkins(options))
-      #check_error(resp)
-      resp
+      if options[:new]
+        options = {since_id: Databases.pagination['explore:checkins']}
+      end
+      get_parsed_response(Endpoints.new.checkins(options))
     end
 
     def get_global(options)

@@ -20,6 +20,7 @@ module Ayadn
     desc "checkins", "Show the Checkins Stream (ayadn -ck)"
     map "-ck" => :checkins
     long_desc Descriptions.checkins
+    option :new, aliases: "-n", type: :boolean, desc: "Retrieve only new posts since your last visit"
     option :count, aliases: "-c", type: :numeric, desc: "Specify the number of posts to retrieve"
     option :index, aliases: "-i", type: :boolean, desc: "Use an ordered index instead of the posts ids"
     option :raw, aliases: "-x", type: :boolean, desc: "Outputs the App.net raw JSON response"

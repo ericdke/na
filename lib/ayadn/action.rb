@@ -14,11 +14,7 @@ module Ayadn
         doing(options)
         stream = @api.get_unified(options)
         if options[:new]
-          unless stream['meta']['max_id'].to_i > Databases.pagination['unified'].to_i
-            @view.clear_screen
-            puts Status.no_new_posts
-            exit
-          end
+          no_new_posts unless compare_pagination(stream, 'unified')
         end
         save_max_id(stream)
         render_view(stream, options)
@@ -29,10 +25,23 @@ module Ayadn
       end
     end
 
+    def compare_pagination(stream, title)
+      stream['meta']['max_id'].to_i > Databases.pagination[title].to_i
+    end
+
+    def no_new_posts
+      @view.clear_screen
+      puts Status.no_new_posts
+      exit
+    end
+
     def checkins(options)
       begin
         doing(options)
         stream = @api.get_checkins(options)
+        if options[:new]
+          no_new_posts unless compare_pagination(stream, 'explore:checkins')
+        end
         save_max_id(stream)
         render_view(stream, options)
       rescue => e
