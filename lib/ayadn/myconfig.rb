@@ -15,7 +15,9 @@ module Ayadn
       deleted = arg[:deleted] || @options[:timeline][:deleted]
       html = arg[:html] || @options[:timeline][:html]
       annotations = arg[:annotations] || @options[:timeline][:annotations]
-      if arg[:recent_message]
+      if arg[:since_id]
+        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&since_id=#{arg[:since_id]}"
+      elsif arg[:recent_message]
         "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&include_recent_message=#{arg[:recent_message]}"
       else
         "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}"

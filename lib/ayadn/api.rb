@@ -2,9 +2,11 @@ module Ayadn
   class API
 
     def get_unified(options)
-      resp = get_parsed_response(Endpoints.new.unified(options))
-      #check_error(resp)
-      resp
+      if options[:new]
+        since_id = Databases.pagination['unified']
+        options = {since_id: since_id}
+      end
+      get_parsed_response(Endpoints.new.unified(options))
     end
 
     def get_checkins(options)

@@ -24,7 +24,7 @@ module Ayadn
     end
 
     def unified(options)
-      if options[:count]
+      if options[:count] || options[:since_id]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:unified]})

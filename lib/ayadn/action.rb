@@ -13,6 +13,13 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_unified(options)
+        if options[:new]
+          unless stream['meta']['max_id'].to_i > Databases.pagination['unified'].to_i
+            @view.clear_screen
+            puts Status.no_new_posts
+            exit
+          end
+        end
         save_max_id(stream)
         render_view(stream, options)
       rescue => e

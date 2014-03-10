@@ -168,5 +168,8 @@ module Ayadn
     def self.must_be_integer
       "\nThis paramater must be an integer between 1 and 200.\n".color(:red)
     end
+    def self.no_new_posts
+      "\nNo new posts since your last visit.\n\n".color(:cyan)
+    end
   end
 end
