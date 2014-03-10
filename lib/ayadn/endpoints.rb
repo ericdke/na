@@ -25,81 +25,81 @@ module Ayadn
 
     def unified(options)
       if options[:count] || options[:since_id]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:unified]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:unified]})
       end
       "#{@posts_url}stream/unified?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
     def checkins(options)
       if options[:count] || options[:since_id]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:checkins]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:checkins]})
       end
       "#{@posts_url}stream/explore/checkins?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
     def global(options)
       if options[:count] || options[:since_id]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:global]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:global]})
       end
       "#{@posts_url}stream/global?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
     def trending(options)
       if options[:count] || options[:since_id]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:trending]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:trending]})
       end
       "#{@posts_url}stream/explore/trending?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
     def photos(options)
       if options[:count] || options[:since_id]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:photos]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:photos]})
       end
       "#{@posts_url}stream/explore/photos?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
     def conversations(options)
       if options[:count] || options[:since_id]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:conversations]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:conversations]})
       end
       "#{@posts_url}stream/explore/conversations?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
     def mentions(username, options)
       if options[:count] || options[:since_id]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:mentions]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:mentions]})
       end
       "#{@users_url}#{username}/mentions/?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
     def posts(username, options)
       if options[:count] || options[:since_id]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:posts]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:posts]})
       end
       "#{@users_url}#{username}/posts/?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
     def whatstarred(username, options)
       if options[:count] || options[:since_id]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:default]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:default]})
       end
       "#{@users_url}#{username}/stars/?access_token=#{MyConfig.user_token}#{@options_list}"
     end
@@ -118,9 +118,9 @@ module Ayadn
 
     def convo(post_id, options)
       if options[:count]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:convo]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:convo]})
       end
       "#{@posts_url}#{post_id}/replies/?access_token=#{MyConfig.user_token}#{@options_list}"
     end
@@ -147,9 +147,9 @@ module Ayadn
 
     def search(words, options)
       if options[:count]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:search]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:search]})
       end
       "#{@posts_url}search?text=#{words}&access_token=#{MyConfig.user_token}#{@options_list}"
     end
@@ -159,15 +159,15 @@ module Ayadn
     end
 
     def single_post(post_id, options)
-      @options_list = MyConfig.build_query_options(options)
+      @options_list = MyConfig.build_query(options)
       "#{@posts_url}#{post_id}?access_token=#{MyConfig.user_token}#{@options_list}"
     end
 
     def files_list(options)
       if options[:count]
-        @options_list = MyConfig.build_query_options(options)
+        @options_list = MyConfig.build_query(options)
       else
-        @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:files]})
+        @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:files]})
       end
       "#{@users_url}me/files?access_token=#{MyConfig.user_token}#{@options_list}"
     end
@@ -197,11 +197,11 @@ module Ayadn
     end
 
     def channels(options)
-      "#{@channels_url}?access_token=#{MyConfig.user_token}#{MyConfig.build_query_options(options)}"
+      "#{@channels_url}?access_token=#{MyConfig.user_token}#{MyConfig.build_query(options)}"
     end
 
     def messages(channel_id, options)
-      "#{@channels_url}#{channel_id}/messages?access_token=#{MyConfig.user_token}#{MyConfig.build_query_options(options)}"
+      "#{@channels_url}#{channel_id}/messages?access_token=#{MyConfig.user_token}#{MyConfig.build_query(options)}"
     end
 
   end

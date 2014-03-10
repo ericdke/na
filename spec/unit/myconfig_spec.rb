@@ -49,36 +49,36 @@ describe Ayadn::MyConfig do
 			expect(File).to exist(cfg[:paths][:config] + "/version.yml")
 		end
 	end
-	describe ".build_query_options" do
+	describe ".build_query" do
 		it 'returns a URL with count=12' do
-			expect(Ayadn::MyConfig.build_query_options({count: 12})).to match /count=12/
+			expect(Ayadn::MyConfig.build_query({count: 12})).to match /count=12/
 		end
 		it 'returns a URL with count=50' do
-			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /count=50/
+			expect(Ayadn::MyConfig.build_query(Ayadn::MyConfig.options)).to match /count=50/
 		end
 		it 'returns a URL with directed=0' do
-			expect(Ayadn::MyConfig.build_query_options({directed: 0})).to match /directed=0/
+			expect(Ayadn::MyConfig.build_query({directed: 0})).to match /directed=0/
 		end
 		it 'returns a URL with directed=1' do
-			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /directed=1/
+			expect(Ayadn::MyConfig.build_query(Ayadn::MyConfig.options)).to match /directed=1/
 		end
 		it 'returns a URL with deleted=1' do
-			expect(Ayadn::MyConfig.build_query_options({deleted: 1})).to match /deleted=1/
+			expect(Ayadn::MyConfig.build_query({deleted: 1})).to match /deleted=1/
 		end
 		it 'returns a URL with deleted=0' do
-			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /deleted=0/
+			expect(Ayadn::MyConfig.build_query(Ayadn::MyConfig.options)).to match /deleted=0/
 		end
 		it 'returns a URL with html=1' do
-			expect(Ayadn::MyConfig.build_query_options({html: 1})).to match /html=1/
+			expect(Ayadn::MyConfig.build_query({html: 1})).to match /html=1/
 		end
 		it 'returns a URL with html=0' do
-			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /html=0/
+			expect(Ayadn::MyConfig.build_query(Ayadn::MyConfig.options)).to match /html=0/
 		end
 		it 'returns a URL with annotations=0' do
-			expect(Ayadn::MyConfig.build_query_options({annotations: 0})).to match /annotations=0/
+			expect(Ayadn::MyConfig.build_query({annotations: 0})).to match /annotations=0/
 		end
 		it 'returns a URL with annotations=1' do
-			expect(Ayadn::MyConfig.build_query_options(Ayadn::MyConfig.options)).to match /annotations=1/
+			expect(Ayadn::MyConfig.build_query(Ayadn::MyConfig.options)).to match /annotations=1/
 		end
 	end
 end

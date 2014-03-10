@@ -9,7 +9,7 @@ module Ayadn
       attr_reader :user_token
     end
 
-    def self.build_query_options(arg)
+    def self.build_query(arg)
       count = arg[:count] || @options[:counts][:default] #default as a backup, but real value comes from Endpoints
       directed = arg[:directed] || @options[:timeline][:directed]
       deleted = arg[:deleted] || @options[:timeline][:deleted]
