@@ -341,9 +341,9 @@ module Ayadn
     desc "reply POST", "Reply to post n°POST (ayadn -r POST)"
     map "-r" => :reply
     long_desc Descriptions.reply
-    def reply(post_id)
+    def reply(id)
       ayadn = Action.new
-      ayadn.reply(post_id)
+      ayadn.reply(id)
     end
 
     desc "set PARAM(S) VALUE", "Set/configure a parameter and save it (ayadn set)"

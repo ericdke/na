@@ -833,31 +833,43 @@ module Ayadn
     	end
     end
 
+    def length_of_index
+      Databases.get_index_length
+    end
+
+    def get_post_from_index(id)
+      Databases.get_post_from_index(id)
+    end
+
+    def get_real_post_id(post_id)
+      id = post_id.to_i
+      if id > 0 && id <= length_of_index
+        resp = get_post_from_index(id)
+        post_id = resp[:id]
+      end
+      post_id
+    end
+
     def reply(post_id)
       begin
-      	if post_id.is_integer?
-	      	puts Status.replying_to(post_id)
-	      	#resp = @api.get_details(post_id, {})
-	      	#replied_to = @api.get_original_if_repost(resp['data'])
-	      	replied_to = @api.get_details(post_id, {})
-	        messenger = Post.new
-	        puts Status.reply
-	        lines_array = messenger.compose
-	        messenger.check_post_length(lines_array)
-	        @view.clear_screen
-	        reply = messenger.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to]))
-	        puts Status.posting
-	        resp = messenger.send_reply(reply, post_id)
-          if MyConfig.options[:backup][:auto_save_sent_posts]
-            FileOps.save_post(resp)
-          end
-	        @view.clear_screen
-	        puts Status.done
-	        stream = @api.get_convo(post_id, {})
-	        render_view(stream, {})
-	      else
-	      	puts Status.error_missing_post_id
-	      end
+        post_id = get_real_post_id(post_id)
+      	puts Status.replying_to(post_id)
+      	replied_to = @api.get_details(post_id, {})
+        messenger = Post.new
+        puts Status.reply
+        lines_array = messenger.compose
+        messenger.check_post_length(lines_array)
+        @view.clear_screen
+        reply = messenger.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to]))
+        puts Status.posting
+        resp = messenger.send_reply(reply, post_id)
+        if MyConfig.options[:backup][:auto_save_sent_posts]
+          FileOps.save_post(resp)
+        end
+        @view.clear_screen
+        puts Status.done
+        stream = @api.get_convo(post_id, {})
+        render_view(stream, {})
       rescue => e
         Errors.global_error("action/reply", post_id, e)
       ensure

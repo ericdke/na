@@ -285,6 +285,8 @@ module Ayadn
       Show recent messages in a channel.
 
       Example: ayadn -ms 46217
+
+      If you've set an alias for the channel, you can display its messages with 'ayadn -ms my_alias'
       \n\n
       USAGE
     end
@@ -335,6 +337,8 @@ module Ayadn
       Example: ayadn -se 46217
 
       Enters the writing mode where you will type your message.
+
+      If you've set an alias for the channel, you can post to it with 'ayadn -se my_alias'
       \n\n
       USAGE
     end
@@ -346,9 +350,13 @@ module Ayadn
 
       Enters the writing mode where you will type your reply.
 
-      Mentions will be detected and your text will be inserted appropriately.
+      Mentions and/or username will be detected and your text will be inserted appropriately.
 
       If you reply to a repost, Ayadn will automatically replace it by the original post.
+
+      If you just viewed a stream with the -i (--index) option, you can also reply to a post by its index.
+
+      Example: ayadn -r 3
       \n\n
       USAGE
     end

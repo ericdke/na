@@ -46,6 +46,10 @@ module Ayadn
       end
     end
 
+    def self.get_index_length
+      @index.length
+    end
+
     def self.get_post_from_index(number)
       begin
         unless number > @index.length || number <= 0
