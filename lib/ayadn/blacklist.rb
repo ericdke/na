@@ -39,7 +39,7 @@ module Ayadn
         type, target = args[0], args[1]
         case type
         when 'mention', 'mentions'
-          target = Workers.add_arobase_if_absent(target)
+          target = Workers.add_arobase_if_absent([target])
           Databases.add_mention_to_blacklist(target)
         when 'client', 'source'
           Databases.add_client_to_blacklist(target)
@@ -57,7 +57,7 @@ module Ayadn
         type, target = args[0], args[1]
         case type
         when 'mention', 'mentions'
-          target = Workers.add_arobase_if_absent(target)
+          target = Workers.add_arobase_if_absent([target])
           Databases.remove_from_blacklist(target)
         when 'client', 'source', 'hashtag', 'tag'
           Databases.remove_from_blacklist(target)

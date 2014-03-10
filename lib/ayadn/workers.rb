@@ -111,6 +111,27 @@ module Ayadn
 
       data.each.with_index(1) do |post, index|
 
+        next if Databases.blacklist[post['source']['name']]
+        hashtags = extract_hashtags(post)
+        @skip = false
+        hashtags.each do |h|
+          if Databases.blacklist[h]
+            @skip = true
+            break
+          end
+        end
+        next if @skip
+        mentions= []
+        post['entities']['mentions'].each { |m| mentions << m['name'] }
+        mentions.each do |m|
+          if Databases.blacklist["@" + m]
+            @skip = true
+            break
+          end
+        end
+        next if @skip
+
+
         values = {
           count: index,
           id: post['id'].to_i,
@@ -125,6 +146,10 @@ module Ayadn
           source_link: post['source']['link'],
           canonical_url: post['canonical_url']
         }
+
+        values[:tags] = hashtags
+
+        values[:links] = extract_links(post)
 
         unless post['text'].nil?
           values[:raw_text] = post['text']
@@ -163,16 +188,8 @@ module Ayadn
           values[:num_reposts] = 0
         end
 
-        mentions= []
-
-        post['entities']['mentions'].each { |m| mentions << m['name'] }
         values[:mentions] = mentions
         values[:directed_to] = mentions.first || false
-
-        values[:tags] = extract_hashtags(post)
-
-        values[:links] = extract_links(post)
-
         values[:checkins], values[:has_checkins] = extract_checkins(post)
 
         posts[post['id'].to_i] = values
