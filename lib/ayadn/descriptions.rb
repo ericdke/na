@@ -14,9 +14,9 @@ module Ayadn
     end
     def self.unified
       <<-USAGE
-      Show your Unified Stream, aka your App.net timeline.
+      Show your App.net timeline, aka the Unified Stream.
 
-      Example: ayadn -u
+      Example: ayadn -tl
       \n\n
       USAGE
     end

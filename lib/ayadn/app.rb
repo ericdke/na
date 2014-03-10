@@ -4,16 +4,16 @@ module Ayadn
 
     %w{action api descriptions endpoints cnx view workers myconfig post status extend databases fileops logs pinboard set alias errors blacklist}.each { |r| require_relative "#{r}" }
 
-    desc "unified", "Show your Unified Stream, aka your App.net timeline (ayadn -u)"
-    map "-u" => :unified
-    map "timeline" => :unified
-    map "-tl" => :unified
+    desc "timeline", "Show your App.net timeline, aka the Unified Stream (ayadn -tl)"
+    map "unified" => :timeline
+    map "-u" => :timeline
+    map "-tl" => :timeline
     long_desc Descriptions.unified
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
-    def unified
+    def timeline
       Action.new.unified(options)
     end
 
