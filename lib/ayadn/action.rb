@@ -13,6 +13,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_unified(options)
+        save_max_id(stream)
         render_view(stream, options)
       rescue => e
         Errors.global_error("action/unified", options, e)
@@ -25,6 +26,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_checkins(options)
+        save_max_id(stream)
         render_view(stream, options)
       rescue => e
         Errors.global_error("action/checkins", options, e)
@@ -37,6 +39,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_global(options)
+        save_max_id(stream)
         render_view(stream, options)
       rescue => e
         Errors.global_error("action/global", options, e)
@@ -49,6 +52,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_trending(options)
+        save_max_id(stream)
         render_view(stream, options)
       rescue => e
         Errors.global_error("action/trending", options, e)
@@ -61,6 +65,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_photos(options)
+        save_max_id(stream)
         render_view(stream, options)
       rescue => e
         Errors.global_error("action/photos", options, e)
@@ -73,6 +78,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_conversations(options)
+        save_max_id(stream)
         render_view(stream, options)
       rescue => e
         Errors.global_error("action/conversations", options, e)
@@ -87,6 +93,7 @@ module Ayadn
           username = Workers.add_arobase_if_absent(username)
           doing(options)
           stream = @api.get_mentions(username, options)
+          save_max_id(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_username
@@ -104,6 +111,7 @@ module Ayadn
           username = Workers.add_arobase_if_absent(username)
           doing(options)
           stream = @api.get_posts(username, options)
+          save_max_id(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_username
@@ -190,6 +198,7 @@ module Ayadn
         if post_id.is_integer?
           doing(options)
           stream = @api.get_convo(post_id, options)
+          save_max_id(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_post_id
@@ -464,6 +473,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_hashtag(hashtag)
+        save_max_id(stream)
         render_view(stream, options)
       rescue => e
         Errors.global_error("action/hashtag", [hashtag, options], e)
@@ -704,6 +714,7 @@ module Ayadn
         if channel_id.is_integer?
           doing
           resp = @api.get_messages(channel_id, options)
+          save_max_id(resp)
           render_view(resp, options)
         else
           puts Status.error_missing_channel_id
@@ -945,6 +956,10 @@ module Ayadn
       when :blocked
         @view.show_list_blocked(list)
       end
+    end
+
+    def save_max_id(stream)
+      Databases.save_max_id(stream['meta']['marker']['name'], stream['meta']['max_id'])
     end
 
   end

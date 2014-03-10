@@ -40,7 +40,7 @@ module Ayadn
       begin
         init
         puts "\e[H\e[2J"
-        list = Databases.get_aliases
+        list = Databases.aliases
         unless list.empty? || list.nil?
           puts Workers.new.build_aliases_list(list)
           puts "\n"

@@ -233,7 +233,7 @@ module Ayadn
         unless ch['writers']['user_ids'].empty?
           usernames = []
           ch['writers']['user_ids'].each do |id|
-            db = Databases.get_from_users_db(id)
+            db = Databases.users[id]
             unless db.nil?
               usernames << "@" + db.keys.first
             else

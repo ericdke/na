@@ -3,20 +3,25 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :index
+      attr_accessor :users, :index, :pagination, :aliases
     end
 
     def self.open_databases
       @users = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/users.db"
       @index = Daybreak::DB.new "#{MyConfig.config[:paths][:pagination]}/index.db"
+      @pagination = Daybreak::DB.new "#{MyConfig.config[:paths][:pagination]}/pagination.db"
       @aliases = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/aliases.db"
     end
 
     def self.close_all
-      [@users, @index, @aliases].each do |db|
+      [@users, @index, @pagination, @aliases].each do |db|
         db.flush
         db.close
       end
+    end
+
+    def self.save_max_id(name, max_id)
+      @pagination[name] = max_id
     end
 
     def self.create_alias(channel_id, channel_alias)
@@ -29,10 +34,6 @@ module Ayadn
 
     def self.get_channel_id(channel_alias)
       @aliases[channel_alias]
-    end
-
-    def self.get_aliases
-      @aliases
     end
 
     def self.save_indexed_posts(posts)
@@ -73,14 +74,6 @@ module Ayadn
 
     def self.add_to_users_db(id, username, name)
       @users[id] = {username => name}
-    end
-
-    def self.get_from_users_db(id)
-      @users[id]
-    end
-
-    def self.load_users_db
-      @users
     end
 
   end
