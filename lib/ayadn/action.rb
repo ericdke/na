@@ -711,16 +711,11 @@ module Ayadn
 
     def messages(channel_id, options)
       begin
-        if channel_id.is_integer?
-          doing
-          resp = @api.get_messages(channel_id, options)
-          save_max_id(resp)
-          render_view(resp, options)
-        else
-          puts Status.error_missing_channel_id
-          #TODO: replace with get from aliased channel
-          #if not int && not in db then err
-        end
+        channel_id = get_channel_id_from_alias(channel_id)
+        doing
+        resp = @api.get_messages(channel_id, options)
+        save_max_id(resp)
+        render_view(resp, options)
       rescue => e
         Errors.global_error("action/messages", [channel_id, options], e)
       ensure
@@ -833,23 +828,20 @@ module Ayadn
 
     def send_to_channel(channel_id)
     	begin
-    		if channel_id.is_integer?
-    			messenger = Post.new
-    			puts Status.post
-    			lines_array = messenger.compose
-    			messenger.check_message_length(lines_array)
-    			@view.clear_screen
-    			puts Status.posting
-    			resp = messenger.send_message(channel_id, lines_array.join("\n"))
-          if MyConfig.options[:backup][:auto_save_sent_messages]
-            FileOps.save_message(resp)
-          end
-    			@view.clear_screen
-    			puts Status.yourpost
-    			@view.show_posted(resp)
-    		else
-    			puts Status.error_missing_channel_id
-    		end
+        channel_id = get_channel_id_from_alias(channel_id)
+  			messenger = Post.new
+  			puts Status.post
+  			lines_array = messenger.compose
+  			messenger.check_message_length(lines_array)
+  			@view.clear_screen
+  			puts Status.posting
+  			resp = messenger.send_message(channel_id, lines_array.join("\n"))
+        if MyConfig.options[:backup][:auto_save_sent_messages]
+          FileOps.save_message(resp)
+        end
+  			@view.clear_screen
+  			puts Status.yourpost
+  			@view.show_posted(resp)
     	rescue => e
         Errors.global_error("action/send_to_channel", channel_id, e)
   		ensure
@@ -956,6 +948,13 @@ module Ayadn
       when :blocked
         @view.show_list_blocked(list)
       end
+    end
+
+    def get_channel_id_from_alias(channel_id)
+      unless channel_id.is_integer?
+        channel_id = Databases.get_channel_id(channel_id)
+      end
+      channel_id
     end
 
     def save_max_id(stream)

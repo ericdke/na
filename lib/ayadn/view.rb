@@ -370,9 +370,25 @@ module Ayadn
       bucket = @workers.build_channels(resp['data'])
       bucket.each do |ch|
         view << "\n"
-        view << "ID: ".color(:cyan)
-        view << "#{ch.id}".color(MyConfig.options[:colors][:id])
-        view << "\n"
+        ch_alias = false
+        Databases.aliases.each do |k,v|
+          if v == "#{ch.id}"
+            ch_alias = k
+            break
+          end
+        end
+        if ch_alias
+          view << "ID: ".color(:cyan)
+          view << "#{ch.id}".color(MyConfig.options[:colors][:id])
+          view << "\n"
+          view << "Alias: ".color(:cyan)
+          view << "#{ch_alias}".color(MyConfig.options[:colors][:username])
+          view << "\n"
+        else
+          view << "ID: ".color(:cyan)
+          view << "#{ch.id}".color(MyConfig.options[:colors][:id])
+          view << "\n"
+        end
         view << "Messages: ".color(:cyan)
         view << "#{ch.num_messages}".color(MyConfig.options[:colors][:symbols])
         view << "\n"
