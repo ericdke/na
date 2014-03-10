@@ -677,14 +677,10 @@ module Ayadn
       begin
         resp = @api.get_file(file_id)
         file = resp['data']
-        if file['public']
-          FileOps.download_url(file['name'], file['url_short'])
-          puts Status.downloaded(file['name'])
-        else
-          puts "File is private."
-        end
+        FileOps.download_url(file['name'], file['url'])
+        puts Status.downloaded(file['name'])
       rescue => e
-        Errors.global_error("action/download", file_id, e)
+        Errors.global_error("action/download", [file_id, file['url']], e)
       ensure
         Databases.close_all
       end
