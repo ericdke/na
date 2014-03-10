@@ -142,6 +142,9 @@ module Ayadn
           username = Workers.add_arobase_if_absent(username)
           doing(options)
           stream = @api.get_posts(username, options)
+          if options[:new]
+            no_new_posts unless compare_pagination(stream, 'posts')
+          end
           save_max_id(stream)
           render_view(stream, options)
         else
@@ -173,6 +176,10 @@ module Ayadn
           username = Workers.add_arobase_if_absent(username)
           doing(options)
           stream = @api.get_whatstarred(username, options)
+          if options[:new]
+            no_new_posts unless compare_pagination(stream, 'whatstarred')
+          end
+          Databases.save_max_id('whatstarred', stream['meta']['max_id'])
           render_view(stream, options)
         else
           puts Status.error_missing_username

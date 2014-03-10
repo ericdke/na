@@ -58,15 +58,17 @@ module Ayadn
     end
 
     def get_posts(username, options)
-      resp = get_parsed_response(Endpoints.new.posts(username, options))
-      #check_error(resp)
-      resp
+      if options[:new]
+        options = {since_id: Databases.pagination['posts']}
+      end
+      get_parsed_response(Endpoints.new.posts(username, options))
     end
 
     def get_whatstarred(username, options)
-      resp = get_parsed_response(Endpoints.new.whatstarred(username, options))
-      #check_error(resp)
-      resp
+      if options[:new]
+        options = {since_id: Databases.pagination['whatstarred']}
+      end
+      get_parsed_response(Endpoints.new.whatstarred(username, options))
     end
 
     def get_interactions

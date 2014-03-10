@@ -86,6 +86,7 @@ module Ayadn
     desc "userposts @USERNAME", "Show posts of @username (ayadn -up @username)"
     map "-up" => :userposts
     long_desc Descriptions.posts
+    option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -103,6 +104,7 @@ module Ayadn
     desc "whatstarred @USERNAME", "Show posts starred by @username (ayadn -was @username)"
     map "-was" => :whatstarred
     long_desc Descriptions.whatstarred
+    option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
