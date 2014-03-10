@@ -2,7 +2,7 @@ module Ayadn
 
   class Set < Thor
 
-    desc "timeline ITEM TRUE/FALSE", "Set ITEM to be activated or not"
+    desc "set timeline ITEM TRUE/FALSE", "Set ITEM to be activated or not"
     long_desc Descriptions.set_timeline
     def timeline(*args)
       timeline_config = SetTimeline.new
@@ -16,7 +16,7 @@ module Ayadn
       timeline_config.save
     end
 
-    desc "count ITEM NUMBER", "Set ITEM to retrieve NUMBER of elements by default"
+    desc "set count ITEM NUMBER", "Set ITEM to retrieve NUMBER of elements by default"
     long_desc Descriptions.set_counts
     map "counts" => :count
     def count(*args)
@@ -37,7 +37,7 @@ module Ayadn
     #   puts args
     # end
 
-    desc "color ITEM COLOR", "Set ITEM to COLOR"
+    desc "set color ITEM COLOR", "Set ITEM to COLOR"
     long_desc Descriptions.set_color
     map "colors" => :color
     def color(*args)
@@ -52,7 +52,7 @@ module Ayadn
       color_config.save
     end
 
-    desc "backup ITEM TRUE/FALSE", "Set ITEM to be activated or not"
+    desc "set backup ITEM TRUE/FALSE", "Set ITEM to be activated or not"
     long_desc Descriptions.set_backup
     def backup(*args)
       backup_config = SetBackup.new

@@ -3,7 +3,7 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :index, :pagination, :aliases
+      attr_accessor :users, :index, :pagination, :aliases, :blacklist
     end
 
     def self.open_databases
@@ -11,13 +11,27 @@ module Ayadn
       @index = Daybreak::DB.new "#{MyConfig.config[:paths][:pagination]}/index.db"
       @pagination = Daybreak::DB.new "#{MyConfig.config[:paths][:pagination]}/pagination.db"
       @aliases = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/aliases.db"
+      @blacklist = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/blacklist.db"
     end
 
     def self.close_all
-      [@users, @index, @pagination, @aliases].each do |db|
+      [@users, @index, @pagination, @aliases, @blacklist].each do |db|
         db.flush
         db.close
       end
+    end
+
+    def self.add_mention_to_blacklist(target)
+      @blacklist[target] = :mention
+    end
+    def self.add_client_to_blacklist(target)
+      @blacklist[target] = :client
+    end
+    def self.add_hashtag_to_blacklist(target)
+      @blacklist[target] = :hashtag
+    end
+    def self.remove_from_blacklist(target)
+      @blacklist.delete(target)
     end
 
     def self.save_max_id(name, max_id)

@@ -2,7 +2,7 @@ module Ayadn
   class App < Thor
     package_name "ayadn"
 
-    %w{action api descriptions endpoints cnx view workers myconfig post status extend databases fileops logs pinboard set alias errors}.each { |r| require_relative "#{r}" }
+    %w{action api descriptions endpoints cnx view workers myconfig post status extend databases fileops logs pinboard set alias errors blacklist}.each { |r| require_relative "#{r}" }
 
     desc "unified", "Show your Unified Stream, aka your App.net timeline (ayadn -u)"
     map "-u" => :unified
@@ -368,6 +368,10 @@ module Ayadn
       ayadn = Action.new
       ayadn.download(file_id)
     end
+
+    desc "blacklist COMMAND (PARAM)", "Manage your blacklist (ayadn blacklist)"
+    long_desc Descriptions.blacklist
+    subcommand "blacklist", Blacklist
 
   end
 end

@@ -1,7 +1,7 @@
 module Ayadn
   class Alias < Thor
 
-    desc "create CHANNEL ALIAS", "Creates an alias for a channel"
+    desc "alias create CHANNEL ALIAS", "Creates an alias for a channel"
     long_desc Descriptions.alias_create
     def create(*args)
       begin
@@ -20,7 +20,7 @@ module Ayadn
       end
     end
 
-    desc "delete ALIAS", "Deletes a previously created alias"
+    desc "alias delete ALIAS", "Deletes a previously created alias"
     long_desc Descriptions.alias_delete
     def delete(*args)
       begin
@@ -34,7 +34,7 @@ module Ayadn
       end
     end
 
-    desc "list", "List previously created aliases"
+    desc "alias list", "List previously created aliases"
     long_desc Descriptions.alias_list
     def list
       begin

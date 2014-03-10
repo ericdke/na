@@ -171,5 +171,11 @@ module Ayadn
     def self.no_new_posts
       "\nNo new posts since your last visit.\n\n".color(:cyan)
     end
+    def self.type_and_target_missing
+      "\nYou have to submit a TYPE (mention, hashtag, client name) and a TARGET (a @username, a hashtag, a client name)\n\n".color(:red)
+    end
+    def self.wrong_arguments
+      "\nYou have to submit valid arguments.\n\n".color(:red)
+    end
   end
 end

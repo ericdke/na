@@ -10,6 +10,15 @@ module Ayadn
       table
     end
 
+    def build_blacklist_list(list)
+      table = init_table
+      table.title = "Your blacklist".color(:cyan) + "".color(:white)
+      list.each do |k,v|
+        table << ["#{v.capitalize}".color(:green), "#{k}".color(:red)]
+      end
+      table
+    end
+
     def build_reposted_list(list, target) #not the same format as wollowings/etc: taks an array of hashes
       table = init_table
       table.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)

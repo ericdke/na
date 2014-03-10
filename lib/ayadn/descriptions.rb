@@ -468,8 +468,64 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.blacklist
+      <<-USAGE
+      Manage your blacklist: add to, remove from, and show the list.
 
+      Examples:
 
+      ayadn blacklist list
+
+      ayadn blacklist add mention @shmuck
+
+      ayadn blacklist add hashtag sports
+
+      ayadn blacklist add client IFTTT
+
+      ayadn blacklist remove mention @shmuck
+
+      ayadn blacklist remove hashtag sports
+
+      ayadn blacklist remove client IFTTT
+      \n\n
+      USAGE
+    end
+    def self.blacklist_add
+      <<-USAGE
+      Adds a mention, hashtag or client to your blacklist.
+
+      Examples:
+
+      ayadn blacklist add mention @shmuck
+
+      ayadn blacklist add hashtag sports
+
+      ayadn blacklist add client IFTTT
+      \n\n
+      USAGE
+    end
+    def self.blacklist_remove
+      <<-USAGE
+      Removes a mention, hashtag or client from your blacklist.
+
+      Examples:
+
+      ayadn blacklist remove mention @shmuck
+
+      ayadn blacklist remove hashtag sports
+
+      ayadn blacklist remove client IFTTT
+      \n\n
+      USAGE
+    end
+    def self.blacklist_list
+      <<-USAGE
+      Lists the content of your blacklist.
+
+      Example: ayadn blacklist list
+      \n\n
+      USAGE
+    end
 
 
 
