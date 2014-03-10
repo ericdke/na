@@ -354,5 +354,13 @@ module Ayadn
     long_desc Descriptions.alias
     subcommand "alias", Alias
 
+    desc "download FILE", "Download the file with id FILE (ayadn -df 23344556)"
+    map "-df" => :download
+    long_desc Descriptions.download
+    def download(file_id)
+      ayadn = Action.new
+      ayadn.download(file_id)
+    end
+
   end
 end

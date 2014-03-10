@@ -673,6 +673,23 @@ module Ayadn
       end
     end
 
+    def download(file_id)
+      begin
+        resp = @api.get_file(file_id)
+        file = resp['data']
+        if file['public']
+          FileOps.download_url(file['name'], file['url_short'])
+          puts Status.downloaded(file['name'])
+        else
+          puts "File is private."
+        end
+      rescue => e
+        Errors.global_error("action/download", file_id, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
     def channels
       begin
         doing

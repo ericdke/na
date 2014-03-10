@@ -3,6 +3,9 @@ module Ayadn
     def self.done
       "\nDone.\n".color(:green)
     end
+    def self.downloaded(name)
+      "\nFile downloaded in #{MyConfig.config[:paths][:downloads]}/#{name}\n".color(:green)
+    end
     def self.downloading
       "Downloading from ADN...\n".inverse
     end

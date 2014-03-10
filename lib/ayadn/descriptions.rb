@@ -181,6 +181,8 @@ module Ayadn
       List the files in your ADN storage.
 
       Example: ayadn -fl
+
+      You can then download a file with its id: 'ayadn -df 23344556'
       \n\n
       USAGE
     end
@@ -441,6 +443,16 @@ module Ayadn
       Lists previously created aliases.
 
       Example: ayadn alias list
+      \n\n
+      USAGE
+    end
+    def self.download
+      <<-USAGE
+      Download the file with id FILE.
+
+      Example: ayadn -df 23344556
+
+      You can list your files with 'ayadn -fl'
       \n\n
       USAGE
     end

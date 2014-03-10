@@ -24,6 +24,11 @@ module Ayadn
       File.write(MyConfig.config[:paths][:lists] + "/muted.json", mt.to_json)
     end
 
+    def self.download_url(name, url)
+      file = CNX.get(url)
+      File.write(MyConfig.config[:paths][:downloads] + "/#{name}", file)
+    end
+
     private
 
     def get_users(list)

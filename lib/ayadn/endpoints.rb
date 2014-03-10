@@ -19,6 +19,10 @@ module Ayadn
       "https://account.app.net/oauth/authenticate?client_id=#{MyConfig::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
     end
 
+    def file(file_id)
+      "#{@files_url}#{file_id}?access_token=#{MyConfig.user_token}"
+    end
+
     def unified(options)
       if options[:count]
         @options_list = MyConfig.build_query_options(options)

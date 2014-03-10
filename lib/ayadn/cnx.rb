@@ -1,6 +1,10 @@
 module Ayadn
   class CNX
 
+    def self.get(url)
+      RestClient.get(url)
+    end
+
     def self.get_response_from(url)
       begin
         RestClient.get(url, :verify_ssl => OpenSSL::SSL::VERIFY_NONE) {|response, request, result| response }

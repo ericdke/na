@@ -182,6 +182,10 @@ module Ayadn
       array_of_hashes
     end
 
+    def get_file(file_id)
+      get_parsed_response(Endpoints.new.file(file_id))
+    end
+
     def star(post_id)
       JSON.parse(CNX.post(Endpoints.new.star(post_id)))
     end
