@@ -51,23 +51,14 @@ module Ayadn
     end
 
     def get_mentions(username, options)
-      if options[:new]
-        options = {since_id: Databases.pagination['mentions']}
-      end
       get_parsed_response(Endpoints.new.mentions(username, options))
     end
 
     def get_posts(username, options)
-      if options[:new]
-        options = {since_id: Databases.pagination['posts']}
-      end
       get_parsed_response(Endpoints.new.posts(username, options))
     end
 
     def get_whatstarred(username, options)
-      if options[:new]
-        options = {since_id: Databases.pagination['whatstarred']}
-      end
       get_parsed_response(Endpoints.new.whatstarred(username, options))
     end
 
@@ -94,9 +85,7 @@ module Ayadn
     end
 
     def get_convo(post_id, options)
-      resp = get_parsed_response(Endpoints.new.convo(post_id, options))
-      #check_error(resp)
-      resp
+      get_parsed_response(Endpoints.new.convo(post_id, options))
     end
 
     def get_hashtag(hashtag)
@@ -266,6 +255,9 @@ module Ayadn
     end
 
     def get_messages(channel_id, options)
+      if options[:new]
+        options = {since_id: Databases.pagination["channel:#{channel_id}"]}
+      end
       get_parsed_response(Endpoints.new.messages(channel_id, options))
     end
 

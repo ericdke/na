@@ -78,7 +78,7 @@ module Ayadn
     end
 
     def mentions(username, options)
-      if options[:count] || options[:since_id]
+      if options[:count]
         @options_list = MyConfig.build_query(options)
       else
         @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:mentions]})
@@ -87,7 +87,7 @@ module Ayadn
     end
 
     def posts(username, options)
-      if options[:count] || options[:since_id]
+      if options[:count]
         @options_list = MyConfig.build_query(options)
       else
         @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:posts]})
@@ -96,7 +96,7 @@ module Ayadn
     end
 
     def whatstarred(username, options)
-      if options[:count] || options[:since_id]
+      if options[:count]
         @options_list = MyConfig.build_query(options)
       else
         @options_list = MyConfig.build_query({count: MyConfig.options[:counts][:default]})

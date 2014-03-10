@@ -121,10 +121,6 @@ module Ayadn
           username = Workers.add_arobase_if_absent(username)
           doing(options)
           stream = @api.get_mentions(username, options)
-          if options[:new]
-            no_new_posts unless compare_pagination(stream, 'mentions')
-          end
-          save_max_id(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_username
@@ -142,10 +138,6 @@ module Ayadn
           username = Workers.add_arobase_if_absent(username)
           doing(options)
           stream = @api.get_posts(username, options)
-          if options[:new]
-            no_new_posts unless compare_pagination(stream, 'posts')
-          end
-          save_max_id(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_username
@@ -176,10 +168,6 @@ module Ayadn
           username = Workers.add_arobase_if_absent(username)
           doing(options)
           stream = @api.get_whatstarred(username, options)
-          if options[:new]
-            no_new_posts unless compare_pagination(stream, 'whatstarred')
-          end
-          Databases.save_max_id('whatstarred', stream['meta']['max_id'])
           render_view(stream, options)
         else
           puts Status.error_missing_username
@@ -236,7 +224,6 @@ module Ayadn
         if post_id.is_integer?
           doing(options)
           stream = @api.get_convo(post_id, options)
-          save_max_id(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_post_id
@@ -511,7 +498,6 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_hashtag(hashtag)
-        save_max_id(stream)
         render_view(stream, options)
       rescue => e
         Errors.global_error("action/hashtag", [hashtag, options], e)
@@ -752,6 +738,9 @@ module Ayadn
         channel_id = get_channel_id_from_alias(channel_id)
         doing
         resp = @api.get_messages(channel_id, options)
+        if options[:new]
+          no_new_posts unless compare_pagination(resp, "channel:#{channel_id}")
+        end
         save_max_id(resp)
         render_view(resp, options)
       rescue => e
@@ -996,17 +985,7 @@ module Ayadn
     end
 
     def save_max_id(stream)
-      name = stream['meta']['marker']['name']
-      if name =~ /mentions/
-        name = 'mentions'
-      elsif name =~ /posts/
-        name = 'posts'
-      elsif name =~ /replies/
-        name = 'replies'
-      elsif name =~ /channel/
-        name = 'channel'
-      end
-      Databases.save_max_id(name, stream['meta']['max_id'])
+      Databases.save_max_id(stream['meta']['marker']['name'], stream['meta']['max_id'])
     end
 
   end

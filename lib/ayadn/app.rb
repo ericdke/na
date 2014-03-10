@@ -75,7 +75,6 @@ module Ayadn
     desc "mentions @USERNAME", "Show posts containing a mention of a @username (ayadn -m @username)"
     map "-m" => :mentions
     long_desc Descriptions.mentions
-    option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -86,7 +85,6 @@ module Ayadn
     desc "userposts @USERNAME", "Show posts of @username (ayadn -up @username)"
     map "-up" => :userposts
     long_desc Descriptions.posts
-    option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -104,7 +102,6 @@ module Ayadn
     desc "whatstarred @USERNAME", "Show posts starred by @username (ayadn -was @username)"
     map "-was" => :whatstarred
     long_desc Descriptions.whatstarred
-    option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -306,6 +303,7 @@ module Ayadn
     desc "messages CHANNEL", "Show messages in a CHANNEL (ayadn -ms CHANNEL)"
     map "-ms" => :messages
     long_desc Descriptions.messages
+    option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: "Specify the number of messages to retrieve"
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def messages(channel_id)
