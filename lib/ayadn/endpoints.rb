@@ -42,7 +42,7 @@ module Ayadn
     end
 
     def global(options)
-      if options[:count]
+      if options[:count] || options[:since_id]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:global]})
@@ -51,7 +51,7 @@ module Ayadn
     end
 
     def trending(options)
-      if options[:count]
+      if options[:count] || options[:since_id]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:trending]})
@@ -60,7 +60,7 @@ module Ayadn
     end
 
     def photos(options)
-      if options[:count]
+      if options[:count] || options[:since_id]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:photos]})
@@ -69,7 +69,7 @@ module Ayadn
     end
 
     def conversations(options)
-      if options[:count]
+      if options[:count] || options[:since_id]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:conversations]})
@@ -78,7 +78,7 @@ module Ayadn
     end
 
     def mentions(username, options)
-      if options[:count]
+      if options[:count] || options[:since_id]
         @options_list = MyConfig.build_query_options(options)
       else
         @options_list = MyConfig.build_query_options({count: MyConfig.options[:counts][:mentions]})

@@ -16,18 +16,28 @@ module Ayadn
     end
 
     def get_global(options)
-      resp = get_parsed_response(Endpoints.new.global(options))
-      #check_error(resp)
-      resp
+      if options[:new]
+        options = {since_id: Databases.pagination['global']}
+      end
+      get_parsed_response(Endpoints.new.global(options))
     end
 
     def get_trending(options)
+      if options[:new]
+        options = {since_id: Databases.pagination['explore:trending']}
+      end
       get_explore(:trending, options)
     end
     def get_photos(options)
+      if options[:new]
+        options = {since_id: Databases.pagination['explore:photos']}
+      end
       get_explore(:photos, options)
     end
     def get_conversations(options)
+      if options[:new]
+        options = {since_id: Databases.pagination['explore:replies']}
+      end
       get_explore(:conversations, options)
     end
 
@@ -41,9 +51,10 @@ module Ayadn
     end
 
     def get_mentions(username, options)
-      resp = get_parsed_response(Endpoints.new.mentions(username, options))
-      #check_error(resp)
-      resp
+      if options[:new]
+        options = {since_id: Databases.pagination['mentions']}
+      end
+      get_parsed_response(Endpoints.new.mentions(username, options))
     end
 
     def get_posts(username, options)

@@ -55,6 +55,9 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_global(options)
+        if options[:new]
+          no_new_posts unless compare_pagination(stream, 'global')
+        end
         save_max_id(stream)
         render_view(stream, options)
       rescue => e
@@ -68,6 +71,9 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_trending(options)
+        if options[:new]
+          no_new_posts unless compare_pagination(stream, 'explore:trending')
+        end
         save_max_id(stream)
         render_view(stream, options)
       rescue => e
@@ -81,6 +87,9 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_photos(options)
+        if options[:new]
+          no_new_posts unless compare_pagination(stream, 'explore:photos')
+        end
         save_max_id(stream)
         render_view(stream, options)
       rescue => e
@@ -94,6 +103,9 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_conversations(options)
+        if options[:new]
+          no_new_posts unless compare_pagination(stream, 'explore:replies')
+        end
         save_max_id(stream)
         render_view(stream, options)
       rescue => e
@@ -109,6 +121,9 @@ module Ayadn
           username = Workers.add_arobase_if_absent(username)
           doing(options)
           stream = @api.get_mentions(username, options)
+          if options[:new]
+            no_new_posts unless compare_pagination(stream, 'mentions')
+          end
           save_max_id(stream)
           render_view(stream, options)
         else
@@ -974,7 +989,17 @@ module Ayadn
     end
 
     def save_max_id(stream)
-      Databases.save_max_id(stream['meta']['marker']['name'], stream['meta']['max_id'])
+      name = stream['meta']['marker']['name']
+      if name =~ /mentions/
+        name = 'mentions'
+      elsif name =~ /posts/
+        name = 'posts'
+      elsif name =~ /replies/
+        name = 'replies'
+      elsif name =~ /channel/
+        name = 'channel'
+      end
+      Databases.save_max_id(name, stream['meta']['max_id'])
     end
 
   end

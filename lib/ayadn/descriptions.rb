@@ -1,5 +1,17 @@
 module Ayadn
   class Descriptions
+    def self.options_new
+      "Retrieve only new posts since your last visit"
+    end
+    def self.options_count
+      "Specify the number of posts to retrieve"
+    end
+    def self.options_index
+      "Use an ordered index instead of the posts ids"
+    end
+    def self.options_raw
+      "Outputs the App.net raw JSON response"
+    end
     def self.unified
       <<-USAGE
       Show your Unified Stream, aka your App.net timeline.
