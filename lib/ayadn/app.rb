@@ -4,7 +4,7 @@ module Ayadn
 
     %w{action api descriptions endpoints cnx view workers myconfig post status extend databases fileops logs pinboard set alias errors blacklist}.each { |r| require_relative "#{r}" }
 
-    desc "timeline", "Show your App.net timeline, aka the Unified Stream (ayadn -tl)"
+    desc "timeline", "Show your App.net timeline, aka the Unified Stream (shortcut: -tl)"
     map "unified" => :timeline
     map "-u" => :timeline
     map "-tl" => :timeline
@@ -17,7 +17,7 @@ module Ayadn
       Action.new.unified(options)
     end
 
-    desc "checkins", "Show the Checkins Stream (ayadn -ck)"
+    desc "checkins", "Show the Checkins Stream (shortcut: -ck)"
     map "-ck" => :checkins
     long_desc Descriptions.checkins
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
@@ -28,7 +28,7 @@ module Ayadn
       Action.new.checkins(options)
     end
 
-    desc "global", "Show the Global Stream (ayadn -gl)"
+    desc "global", "Show the Global Stream (shortcut: -gl)"
     map "-gl" => :global
     long_desc Descriptions.global
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
@@ -39,7 +39,7 @@ module Ayadn
       Action.new.global(options)
     end
 
-    desc "trending", "Show the Trending Stream (ayadn -tr)"
+    desc "trending", "Show the Trending Stream (shortcut: -tr)"
     map "-tr" => :trending
     long_desc Descriptions.trending
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
@@ -50,7 +50,7 @@ module Ayadn
       Action.new.trending(options)
     end
 
-    desc "photos", "Show the Photos Stream (ayadn -ph)"
+    desc "photos", "Show the Photos Stream (shortcut: -ph)"
     map "-ph" => :photos
     long_desc Descriptions.photos
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
@@ -61,7 +61,7 @@ module Ayadn
       Action.new.photos(options)
     end
 
-    desc "conversations", "Show the Conversations Stream (ayadn -cq)"
+    desc "conversations", "Show the Conversations Stream (shortcut: -cq)"
     map "-cq" => :conversations
     long_desc Descriptions.conversations
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
@@ -72,7 +72,7 @@ module Ayadn
       Action.new.conversations(options)
     end
 
-    desc "mentions @USERNAME", "Show posts containing a mention of a @username (ayadn -m @username)"
+    desc "mentions @USERNAME", "Show posts containing a mention of a @username (shortcut: -m)"
     map "-m" => :mentions
     long_desc Descriptions.mentions
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
@@ -82,7 +82,7 @@ module Ayadn
       Action.new.mentions(username, options)
     end
 
-    desc "userposts @USERNAME", "Show posts of @username (ayadn -up @username)"
+    desc "userposts @USERNAME", "Show posts of @username (shortcut: -up)"
     map "-up" => :userposts
     long_desc Descriptions.posts
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
@@ -92,14 +92,14 @@ module Ayadn
       Action.new.posts(username, options)
     end
 
-    desc "interactions", "Show your recent ADN activity (ayadn -int)"
+    desc "interactions", "Show your recent ADN activity (shortcut: -int)"
     map "-int" => :interactions
     long_desc Descriptions.interactions
     def interactions
       Action.new.interactions
     end
 
-    desc "whatstarred @USERNAME", "Show posts starred by @username (ayadn -was @username)"
+    desc "whatstarred @USERNAME", "Show posts starred by @username (shortcut: -was)"
     map "-was" => :whatstarred
     long_desc Descriptions.whatstarred
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
@@ -109,21 +109,21 @@ module Ayadn
       Action.new.whatstarred(username, options)
     end
 
-    desc "whoreposted POST", "List users who reposted a post (ayadn -wor POST)"
+    desc "whoreposted POST", "List users who reposted a post (shortcut: -wor)"
     map "-wor" => :whoreposted
     long_desc Descriptions.whoreposted
     def whoreposted(post_id)
       Action.new.whoreposted(post_id)
     end
 
-    desc "whostarred POST", "List users who starred a post (ayadn -wos POST)"
+    desc "whostarred POST", "List users who starred a post (shortcut: -wos)"
     map "-wos" => :whostarred
     long_desc Descriptions.whostarred
     def whostarred(post_id)
       Action.new.whostarred(post_id)
     end
 
-    desc "convo POST", "Show the conversation thread around a post (ayadn -co POST)"
+    desc "convo POST", "Show the conversation thread around a post (shortcut: -co)"
     map "-co" => :convo
     map "thread" => :convo
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
@@ -133,7 +133,7 @@ module Ayadn
       Action.new.convo(post_id, options)
     end
 
-    desc "followings @USERNAME", "List users @username is following (ayadn -fg @username)"
+    desc "followings @USERNAME", "List users @username is following (shortcut: -fg)"
     map "-fg" => :followings
     long_desc Descriptions.followings
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -141,7 +141,7 @@ module Ayadn
       Action.new.followings(username, options)
     end
 
-    desc "followers @USERNAME", "List users following @username (ayadn -fr @username)"
+    desc "followers @USERNAME", "List users following @username (shortcut: -fr)"
     map "-fr" => :followers
     long_desc Descriptions.followers
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -149,7 +149,7 @@ module Ayadn
       Action.new.followers(username, options)
     end
 
-    desc "muted", "List the users you muted (ayadn -mtd)"
+    desc "muted", "List the users you muted (shortcut: -mtd)"
     map "-mtd" => :muted
     long_desc Descriptions.muted
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -157,7 +157,7 @@ module Ayadn
       Action.new.muted(options)
     end
 
-    desc "blocked", "List the users you blocked (ayadn -bkd)"
+    desc "blocked", "List the users you blocked (shortcut: -bkd)"
     map "-bkd" => :blocked
     long_desc Descriptions.blocked
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -165,7 +165,7 @@ module Ayadn
       Action.new.blocked(options)
     end
 
-    desc "hashtag HASHTAG", "Show recent posts containing #HASHTAG (ayadn -t hashtag)"
+    desc "hashtag HASHTAG", "Show recent posts containing #HASHTAG (shortcut: -t)"
     map "-t" => :hashtag
     long_desc Descriptions.hashtag
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -173,7 +173,7 @@ module Ayadn
       Action.new.hashtag(hashtag, options)
     end
 
-    desc "search WORD(S)", "Show recents posts containing WORD(S) (ayadn -s word1 word2 ...)"
+    desc "search WORD(S)", "Show recents posts containing WORD(S) (shortcut: -s)"
     map "-s" => :search
     long_desc Descriptions.search
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
@@ -183,14 +183,14 @@ module Ayadn
       Action.new.search(words.join(","), options)
     end
 
-    desc "settings", "List current Ayadn settings (ayadn -sg)"
+    desc "settings", "List current Ayadn settings (shortcut: -sg)"
     map "-sg" => :settings
     long_desc Descriptions.settings
     def settings
       Action.new.view_settings
     end
 
-    desc "userinfo @USERNAME", "Show detailed informations about @username (ayadn -ui @username)"
+    desc "userinfo @USERNAME", "Show detailed informations about @username (shortcut: -ui)"
     map "-ui" => :userinfo
     long_desc Descriptions.userinfo
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -198,7 +198,7 @@ module Ayadn
       Action.new.userinfo(username, options)
     end
 
-    desc "postinfo POST", "Show detailed informations about a post (ayadn -di POST)"
+    desc "postinfo POST", "Show detailed informations about a post (shortcut: -di)"
     map "-di" => :postinfo
     long_desc Descriptions.postinfo
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
@@ -206,7 +206,7 @@ module Ayadn
       Action.new.postinfo(post_id, options)
     end
 
-    desc "files", "List your files (ayadn -fl)"
+    desc "files", "List your files (shortcut: -fl)"
     map "-fl" => :files
     long_desc Descriptions.files
     option :count, aliases: "-c", type: :numeric, desc: "Specify the number of files to display"
@@ -216,91 +216,91 @@ module Ayadn
       Action.new.files(options)
     end
 
-    desc "delete POST", "Delete a post (ayadn -del POST)"
+    desc "delete POST", "Delete a post (shortcut: -del)"
     map "-del" => :delete
     long_desc Descriptions.delete
     def delete(post_id)
       Action.new.delete(post_id)
     end
 
-    desc "unfollow @USERNAME", "Unfollow @username (ayadn -unf @username)"
+    desc "unfollow @USERNAME", "Unfollow @username (shortcut: -unf)"
     map "-unf" => :unfollow
     long_desc Descriptions.unfollow
     def unfollow(*username)
       Action.new.unfollow(username)
     end
 
-    desc "unmute @USERNAME", "Unmute @username (ayadn -unm @username)"
+    desc "unmute @USERNAME", "Unmute @username (shortcut: -unm)"
     map "-unm" => :unmute
     long_desc Descriptions.unmute
     def unmute(*username)
       Action.new.unmute(username)
     end
 
-    desc "unblock @USERNAME", "Unblock @username (ayadn -unb @username)"
+    desc "unblock @USERNAME", "Unblock @username (shortcut: -unb)"
     map "-unb" => :unblock
     long_desc Descriptions.unblock
     def unblock(*username)
       Action.new.unblock(username)
     end
 
-    desc "unrepost POST", "Unrepost a post (ayadn -unr POST)"
+    desc "unrepost POST", "Unrepost a post (shortcut: -unr)"
     map "-unr" => :unrepost
     long_desc Descriptions.unrepost
     def unrepost(post_id)
       Action.new.unrepost(post_id)
     end
 
-    desc "unstar POST", "Unstar a post (ayadn -uns POST)"
+    desc "unstar POST", "Unstar a post (shortcut: -uns)"
     map "-uns" => :unstar
     long_desc Descriptions.unstar
     def unstar(post_id)
       Action.new.unstar(post_id)
     end
 
-    desc "star POST", "Star a post (ayadn -st POST)"
+    desc "star POST", "Star a post (shortcut: -st)"
     map "-st" => :star
     long_desc Descriptions.star
     def star(post_id)
       Action.new.star(post_id)
     end
 
-    desc "repost POST", "Repost a post (ayadn -rp POST)"
+    desc "repost POST", "Repost a post (shortcut: -rp)"
     map "-rp" => :repost
     long_desc Descriptions.repost
     def repost(post_id)
       Action.new.repost(post_id)
     end
 
-    desc "follow @USERNAME", "Follow @username (ayadn -fo @username)"
+    desc "follow @USERNAME", "Follow @username (shortcut: -fo)"
     map "-fo" => :follow
     long_desc Descriptions.follow
     def follow(*username)
       Action.new.follow(username)
     end
 
-    desc "mute @USERNAME", "Mute @username (ayadn -mu @username)"
+    desc "mute @USERNAME", "Mute @username (shortcut: -mu)"
     map "-mu" => :mute
     long_desc Descriptions.mute
     def mute(*username)
       Action.new.mute(username)
     end
 
-    desc "block @USERNAME", "Block @username (ayadn -bl @username)"
+    desc "block @USERNAME", "Block @username (shortcut: -bl)"
     map "-bl" => :block
     long_desc Descriptions.block
     def block(*username)
       Action.new.block(username)
     end
 
-    desc "channels", "List your active channels (ayadn -ch)"
+    desc "channels", "List your active channels (shortcut: -ch)"
     map "-ch" => :channels
     long_desc Descriptions.channels
     def channels
       Action.new.channels
     end
 
-    desc "messages CHANNEL", "Show messages in a CHANNEL (ayadn -ms CHANNEL)"
+    desc "messages CHANNEL", "Show messages in a CHANNEL (shortcut: -ms)"
     map "-ms" => :messages
     long_desc Descriptions.messages
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
@@ -310,20 +310,20 @@ module Ayadn
       Action.new.messages(channel_id, options)
     end
 
-    desc "pin POST TAG(S)", "Export a post's link and text with tags to Pinboard (ayadn pin POST tag1 tag2 ...)"
+    desc "pin POST TAG(S)", "Export a post's link and text with tags to Pinboard"
     long_desc Descriptions.pin
     def pin(post_id, *tags)
       Action.new.pin(post_id, tags)
     end
 
-    desc "post Your text", "Simple post to App.net (ayadn -p Hello from Ayadn!)"
+    desc "post Your text", "Simple post to App.net (shortcut: -p)"
     map "-p" => :post
     long_desc Descriptions.post
     def post(*args)
       Action.new.post(args)
     end
 
-    desc "write", "Multi-line post to App.net (ayadn -w)"
+    desc "write", "Multi-line post to App.net (shortcut: -w)"
     map "compose" => :write
     map "-w" => :write
     long_desc Descriptions.write
@@ -331,21 +331,21 @@ module Ayadn
       Action.new.write
     end
 
-    desc "pmess @USERNAME", "Send a private message to @username (ayadn -pm @username)"
+    desc "pmess @USERNAME", "Send a private message to @username (shortcut: -pm)"
     map "-pm" => :pmess
     long_desc Descriptions.pmess
     def pmess(*username)
       Action.new.pmess(username)
     end
 
-    desc "send CHANNEL", "Send a message to a CHANNEL (ayadn -se CHANNEL)"
+    desc "send CHANNEL", "Send a message to a CHANNEL (shortcut: -se)"
     map "-se" => :send_to_channel
     long_desc Descriptions.send_to_channel
     def send_to_channel(channel_id)
       Action.new.send_to_channel(channel_id)
     end
 
-    desc "reply POST", "Reply to post n°POST (ayadn -r POST)"
+    desc "reply POST", "Reply to post n°POST (shortcut: -r)"
     map "-r" => :reply
     long_desc Descriptions.reply
     def reply(id)
@@ -353,15 +353,15 @@ module Ayadn
       ayadn.reply(id)
     end
 
-    desc "set PARAM(S) VALUE", "Set/configure a parameter and save it (ayadn set)"
+    desc "set PARAM(S) VALUE", "Set/configure a parameter and save it"
     long_desc Descriptions.set
     subcommand "set", Set
 
-    desc "alias COMMAND (PARAM)", "Create/delete/list aliases for channels (ayadn alias)"
+    desc "alias COMMAND (PARAM)", "Create/delete/list aliases for channels"
     long_desc Descriptions.alias
     subcommand "alias", Alias
 
-    desc "download FILE", "Download the file with id FILE (ayadn -df 23344556)"
+    desc "download FILE", "Download the file with id FILE (shortcut: -df)"
     map "-df" => :download
     long_desc Descriptions.download
     def download(file_id)
@@ -369,7 +369,7 @@ module Ayadn
       ayadn.download(file_id)
     end
 
-    desc "blacklist COMMAND (PARAM)", "Manage your blacklist (ayadn blacklist)"
+    desc "blacklist COMMAND (PARAM)", "Manage your blacklist"
     long_desc Descriptions.blacklist
     subcommand "blacklist", Blacklist
 
