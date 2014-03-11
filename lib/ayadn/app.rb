@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Ayadn
   class App < Thor
     package_name "ayadn"
@@ -373,11 +374,19 @@ module Ayadn
     long_desc Descriptions.blacklist
     subcommand "blacklist", Blacklist
 
-    desc "nowplaying", "Post the track you're listening to (ayadn -np)"
+    desc "nowplaying", "Post the current iTunes track (ayadn -np)"
     map "-np" => :nowplaying
     long_desc Descriptions.nowplaying
     def nowplaying
       Action.new.nowplaying
+    end
+
+    desc "random", "Show random posts from App.net (ayadn -rnd)"
+    map "-rnd" => :random
+    option :wait, aliases: "-w", type: :numeric, desc: "In seconds, time to wait before next page"
+    long_desc Descriptions.random_posts
+    def random
+      Action.new.random_posts(options)
     end
 
   end

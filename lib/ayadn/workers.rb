@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Ayadn
   class Workers
 
@@ -115,18 +116,25 @@ module Ayadn
         end
         next if @skip
 
+        if post['user'].has_key?('name')
+          name = post['user']['name'].to_s.force_encoding("UTF-8")
+        else
+          name = "(no name)"
+        end
+
+        source = post['source']['name'].to_s.force_encoding("UTF-8")
 
         values = {
           count: index,
           id: post['id'].to_i,
-          name: post['user']['name'] || "(no name)",
+          name: name,
           thread_id: post['thread_id'],
           username: post['user']['username'],
           handle: "@" + post['user']['username'],
           type: post['user']['type'],
           date: parsed_time(post['created_at']),
           you_starred: post['you_starred'],
-          source_name: post['source']['name'],
+          source_name: source,
           source_link: post['source']['link'],
           canonical_url: post['canonical_url']
         }

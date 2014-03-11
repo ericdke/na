@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Ayadn
   class Blacklist < Thor
     desc "blacklist add TYPE TARGET", "Adds a mention, hashtag or client to your blacklist"

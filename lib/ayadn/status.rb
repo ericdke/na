@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Ayadn
   class Status
     def self.done
@@ -191,6 +192,9 @@ module Ayadn
     end
     def self.empty_fields
       "\nCanceled: couldn't get enough information (empty field).\n\n".color(:red)
+    end
+    def self.canceled
+      "\nCanceled.\n\n".color(:cyan)
     end
   end
 end

@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Ayadn
   class Descriptions
     def self.options_new
@@ -533,6 +534,14 @@ module Ayadn
       Example: ayadn -np
 
       Works only with iTunes and Mac Os X.
+      \n\n
+      USAGE
+    end
+    def self.random_posts
+      <<-USAGE
+      Show random posts from App.net. Just for fun ;)
+
+      Example: ayadn -rnd
       \n\n
       USAGE
     end

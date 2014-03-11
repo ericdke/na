@@ -1,3 +1,4 @@
+# encoding: utf-8
 class String
   def is_integer?
     self.to_i.to_s == self
