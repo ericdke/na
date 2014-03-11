@@ -35,8 +35,8 @@ module Ayadn
       @blacklist.delete(target)
     end
 
-    def self.save_max_id(name, max_id)
-      @pagination[name] = max_id
+    def self.save_max_id(stream)
+      @pagination[stream['meta']['marker']['name']] = stream['meta']['max_id']
     end
 
     def self.create_alias(channel_id, channel_alias)
@@ -81,6 +81,10 @@ module Ayadn
 
     def self.add_to_users_db(id, username, name)
       @users[id] = {username => name}
+    end
+
+    def self.has_new?(stream, title)
+      stream['meta']['max_id'].to_i > @pagination[title].to_i
     end
 
   end

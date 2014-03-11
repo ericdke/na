@@ -3,14 +3,14 @@ module Ayadn
   class API
 
     def get_unified(options)
-      if options[:new]
+      if options[:new] || options[:scroll]
         options = {since_id: Databases.pagination['unified']}
       end
       get_parsed_response(Endpoints.new.unified(options))
     end
 
     def get_checkins(options)
-      if options[:new]
+      if options[:new] || options[:scroll]
         options = {since_id: Databases.pagination['explore:checkins']}
       end
       get_parsed_response(Endpoints.new.checkins(options))
@@ -24,19 +24,19 @@ module Ayadn
     end
 
     def get_trending(options)
-      if options[:new]
+      if options[:new] || options[:scroll]
         options = {since_id: Databases.pagination['explore:trending']}
       end
       get_explore(:trending, options)
     end
     def get_photos(options)
-      if options[:new]
+      if options[:new] || options[:scroll]
         options = {since_id: Databases.pagination['explore:photos']}
       end
       get_explore(:photos, options)
     end
     def get_conversations(options)
-      if options[:new]
+      if options[:new] || options[:scroll]
         options = {since_id: Databases.pagination['explore:replies']}
       end
       get_explore(:conversations, options)
@@ -207,7 +207,7 @@ module Ayadn
     end
 
     def get_messages(channel_id, options)
-      if options[:new]
+      if options[:new] || options[:scroll]
         options = {since_id: Databases.pagination["channel:#{channel_id}"]}
       end
       get_parsed_response(Endpoints.new.messages(channel_id, options))

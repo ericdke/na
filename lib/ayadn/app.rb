@@ -3,13 +3,14 @@ module Ayadn
   class App < Thor
     package_name "ayadn"
 
-    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist}.each { |r| require_relative "#{r}" }
+    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll}.each { |r| require_relative "#{r}" }
 
     desc "timeline", "Show your App.net timeline, aka the Unified Stream (shortcut: -tl)"
     map "unified" => :timeline
     map "-u" => :timeline
     map "-tl" => :timeline
     long_desc Descriptions.unified
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
@@ -21,6 +22,7 @@ module Ayadn
     desc "checkins", "Show the Checkins Stream (shortcut: -ck)"
     map "-ck" => :checkins
     long_desc Descriptions.checkins
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
@@ -44,6 +46,7 @@ module Ayadn
     desc "trending", "Show the Trending Stream (shortcut: -tr)"
     map "-tr" => :trending
     long_desc Descriptions.trending
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
@@ -55,6 +58,7 @@ module Ayadn
     desc "photos", "Show the Photos Stream (shortcut: -ph)"
     map "-ph" => :photos
     long_desc Descriptions.photos
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
@@ -66,6 +70,7 @@ module Ayadn
     desc "conversations", "Show the Conversations Stream (shortcut: -cq)"
     map "-cq" => :conversations
     long_desc Descriptions.conversations
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index

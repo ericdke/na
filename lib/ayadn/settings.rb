@@ -186,7 +186,7 @@ module Ayadn
         scroll: {
           countdown_1: 5,
           countdown_2: 15,
-          timer: 0.5
+          timer: 0.7
         }
       }
     end

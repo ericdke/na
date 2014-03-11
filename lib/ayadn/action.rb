@@ -15,10 +15,13 @@ module Ayadn
         doing(options)
         stream = @api.get_unified(options)
         if options[:new]
-          no_new_posts unless compare_pagination(stream, 'unified')
+          no_new_posts unless Databases.has_new?(stream, 'unified')
         end
-        save_max_id(stream)
+        Databases.save_max_id(stream)
         render_view(stream, options)
+        if options[:scroll]
+          Scroll.new(@api, @view).unified(options)
+        end
       rescue => e
         Errors.global_error("action/unified", options, e)
       ensure
@@ -72,10 +75,13 @@ module Ayadn
         doing(options)
         stream = @api.get_checkins(options)
         if options[:new]
-          no_new_posts unless compare_pagination(stream, 'explore:checkins')
+          no_new_posts unless Databases.has_new?(stream, 'explore:checkins')
         end
-        save_max_id(stream)
+        Databases.save_max_id(stream)
         render_view(stream, options)
+        if options[:scroll]
+          Scroll.new(@api, @view).checkins(options)
+        end
       rescue => e
         Errors.global_error("action/checkins", options, e)
       ensure
@@ -88,22 +94,12 @@ module Ayadn
         doing(options)
         stream = @api.get_global(options)
         if options[:new]
-          no_new_posts unless compare_pagination(stream, 'global')
+          no_new_posts unless Databases.has_new?(stream, 'global')
         end
-        save_max_id(stream)
+        Databases.save_max_id(stream)
         render_view(stream, options)
         if options[:scroll]
-          options = {:count => 200, :since_id => nil}
-          loop do
-            begin
-              scroll_global(options)
-            rescue Interrupt
-              puts Status.canceled
-              exit
-            rescue => e
-              raise e
-            end
-          end
+          Scroll.new(@api, @view).global(options)
         end
       rescue => e
         Errors.global_error("action/global", options, e)
@@ -112,25 +108,18 @@ module Ayadn
       end
     end
 
-    def scroll_global(options)
-      stream = @api.get_global(options)
-      save_max_id(stream)
-      unless compare_pagination(stream, 'global')
-        @view.show_posts(stream['data'], options)
-      end
-      sleep Settings.options[:scroll][:timer]
-      options = {:count => 200, :since_id => stream['meta']['max_id']}
-    end
-
     def trending(options)
       begin
         doing(options)
         stream = @api.get_trending(options)
         if options[:new]
-          no_new_posts unless compare_pagination(stream, 'explore:trending')
+          no_new_posts unless Databases.has_new?(stream, 'explore:trending')
         end
-        save_max_id(stream)
+        Databases.save_max_id(stream)
         render_view(stream, options)
+        if options[:scroll]
+          Scroll.new(@api, @view).trending(options)
+        end
       rescue => e
         Errors.global_error("action/trending", options, e)
       ensure
@@ -143,10 +132,13 @@ module Ayadn
         doing(options)
         stream = @api.get_photos(options)
         if options[:new]
-          no_new_posts unless compare_pagination(stream, 'explore:photos')
+          no_new_posts unless Databases.has_new?(stream, 'explore:photos')
         end
-        save_max_id(stream)
+        Databases.save_max_id(stream)
         render_view(stream, options)
+        if options[:scroll]
+          Scroll.new(@api, @view).photos(options)
+        end
       rescue => e
         Errors.global_error("action/photos", options, e)
       ensure
@@ -159,10 +151,13 @@ module Ayadn
         doing(options)
         stream = @api.get_conversations(options)
         if options[:new]
-          no_new_posts unless compare_pagination(stream, 'explore:replies')
+          no_new_posts unless Databases.has_new?(stream, 'explore:replies')
         end
-        save_max_id(stream)
+        Databases.save_max_id(stream)
         render_view(stream, options)
+        if options[:scroll]
+          Scroll.new(@api, @view).conversations(options)
+        end
       rescue => e
         Errors.global_error("action/conversations", options, e)
       ensure
@@ -794,10 +789,13 @@ module Ayadn
         doing
         resp = @api.get_messages(channel_id, options)
         if options[:new]
-          no_new_posts unless compare_pagination(resp, "channel:#{channel_id}")
+          no_new_posts unless Databases.has_new?(resp, "channel:#{channel_id}")
         end
-        save_max_id(resp)
+        Databases.save_max_id(resp)
         render_view(resp, options)
+        if options[:scroll]
+          Scroll.new(@api, @view).messages(channel_id, options)
+        end
       rescue => e
         Errors.global_error("action/messages", [channel_id, options], e)
       ensure
@@ -1065,13 +1063,7 @@ module Ayadn
       channel_id
     end
 
-    def save_max_id(stream)
-      Databases.save_max_id(stream['meta']['marker']['name'], stream['meta']['max_id'])
-    end
 
-    def compare_pagination(stream, title)
-      stream['meta']['max_id'].to_i > Databases.pagination[title].to_i
-    end
 
     def no_new_posts
       @view.clear_screen
