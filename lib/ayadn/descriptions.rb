@@ -526,7 +526,16 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.nowplaying
+      <<-USAGE
+      Post the track you're listening to.
 
+      Example: ayadn -np
+
+      Works only with iTunes and Mac Os X.
+      \n\n
+      USAGE
+    end
 
 
 

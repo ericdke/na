@@ -892,6 +892,31 @@ module Ayadn
       end
     end
 
+    def nowplaying
+      unless Settings.config[:platform] =~ /darwin/
+        puts Status.error_only_osx
+        exit
+      end
+      track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
+      album = `osascript -e 'tell application "iTunes"' -e 'set trackAlbum to album of current track' -e 'return trackAlbum' -e 'end tell'`
+      artist = `osascript -e 'tell application "iTunes"' -e 'set trackArtist to artist of current track' -e 'return trackArtist' -e 'end tell'`
+      track.chomp!
+      artist.chomp!
+      album.chomp!
+      if track.length == 0 || artist.length == 0 || album.length == 0
+        puts Status.empty_fields
+        exit
+      end
+      @view.clear_screen
+      text_to_post = "#nowplaying '#{track}' from '#{album}' by #{artist}"
+      puts "\nAyadn will post this for you:\n".color(:cyan)
+      puts text_to_post + "\n\n"
+      puts "Do you confirm? (y/N) ".color(:yellow)
+      abort("\nCanceled.\n\n".color(:red)) unless STDIN.getch == ("y" || "Y")
+      puts "\n"
+      post([text_to_post])
+    end
+
     private
 
     def length_of_index

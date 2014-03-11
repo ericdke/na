@@ -373,5 +373,12 @@ module Ayadn
     long_desc Descriptions.blacklist
     subcommand "blacklist", Blacklist
 
+    desc "nowplaying", "Post the track you're listening to (ayadn -np)"
+    map "-np" => :nowplaying
+    long_desc Descriptions.nowplaying
+    def nowplaying
+      Action.new.nowplaying
+    end
+
   end
 end
