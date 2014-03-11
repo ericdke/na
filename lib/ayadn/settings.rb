@@ -10,7 +10,7 @@ module Ayadn
 
     def self.load_config
       @options = self.defaults # overridden later in the method by the loaded file
-      home = Dir.home + "/ayadn2/data" #temp, will be /ayadn/data in v1
+      home = Dir.home + "/ayadn2/data" #temp, will be /ayadn in v1
       @user_token = File.read(File.expand_path("../../../token", __FILE__)).chomp #temp
       @config = {
         paths: {
@@ -35,6 +35,16 @@ module Ayadn
       self.create_version_file
       self.create_api_file
 
+      self.set_identity
+    end
+
+    def self.save_config
+      File.write(@config[:paths][:config] + "/config.yml", @options.to_yaml)
+    end
+
+    private
+
+    def self.set_identity
       unless File.exist?(@config[:paths][:config] + "/identity.yml")
         resp = API.new.get_user("me")
         username = resp['data']['username']
@@ -43,7 +53,6 @@ module Ayadn
       else
         @config[:identity] = self.read_identity_file
       end
-
       @config[:handle] = "@" + @config[:identity]
     end
 
@@ -57,15 +66,20 @@ module Ayadn
       else
         self.new_api_file(api_file)
       end
-      content = JSON.parse(File.read(api_file))
-      @config[:post_max_length] = content['post']['text_max_length']
-      @config[:message_max_length] = content['message']['text_max_length']
+      self.read_api(api_file)
     end
+
     def self.new_api_file(api_file)
       api = API.new
       resp = api.get_config
       api.check_response_meta_code(resp)
       File.write(api_file, resp['data'].to_json)
+    end
+
+    def self.read_api(api_file)
+      content = JSON.parse(File.read(api_file))
+      @config[:post_max_length] = content['post']['text_max_length']
+      @config[:message_max_length] = content['message']['text_max_length']
     end
 
     def self.create_identity_file(username)
@@ -113,10 +127,6 @@ module Ayadn
 
     def self.write_config_file(config_file, options)
       File.write(config_file, options.to_yaml)
-    end
-
-    def self.save_config
-      File.write(@config[:paths][:config] + "/config.yml", @options.to_yaml)
     end
 
     def self.defaults
