@@ -32,6 +32,7 @@ module Ayadn
     desc "global", "Show the Global Stream (shortcut: -gl)"
     map "-gl" => :global
     long_desc Descriptions.global
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
@@ -374,14 +375,14 @@ module Ayadn
     long_desc Descriptions.blacklist
     subcommand "blacklist", Blacklist
 
-    desc "nowplaying", "Post the current iTunes track (ayadn -np)"
+    desc "nowplaying", "Post the current iTunes track (shortcut: -np)"
     map "-np" => :nowplaying
     long_desc Descriptions.nowplaying
     def nowplaying
       Action.new.nowplaying
     end
 
-    desc "random", "Show random posts from App.net (ayadn -rnd)"
+    desc "random", "Show random posts from App.net (shortcut: -rnd)"
     map "-rnd" => :random
     option :wait, aliases: "-w", type: :numeric, desc: "In seconds, time to wait before next page"
     long_desc Descriptions.random_posts

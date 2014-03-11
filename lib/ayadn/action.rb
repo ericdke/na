@@ -92,6 +92,27 @@ module Ayadn
         end
         save_max_id(stream)
         render_view(stream, options)
+        if options[:scroll]
+          options = {:count => 200, :since_id => nil}
+          loop do
+            begin
+              stream = @api.get_global(options)
+              save_max_id(stream)
+              unless compare_pagination(stream, 'global')
+                @view.show_posts(stream['data'], options)
+              # else
+              #   puts "\rNo new post since your last visit."
+              end
+              sleep 0.5 # to be configurable
+              options = {:count => 200, :since_id => stream['meta']['max_id']}
+            rescue Interrupt
+              puts Status.canceled
+              exit
+            rescue => e
+              raise e
+            end
+          end
+        end
       rescue => e
         Errors.global_error("action/global", options, e)
       ensure

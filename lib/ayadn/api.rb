@@ -17,7 +17,7 @@ module Ayadn
     end
 
     def get_global(options)
-      if options[:new]
+      if options[:new] || options[:scroll]
         options = {since_id: Databases.pagination['global']}
       end
       get_parsed_response(Endpoints.new.global(options))
