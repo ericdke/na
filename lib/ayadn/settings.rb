@@ -182,6 +182,11 @@ module Ayadn
           auto_save_sent_posts: false,
           auto_save_sent_messages: false,
           auto_save_lists: false
+        },
+        scroll: {
+          countdown_1: 5,
+          countdown_2: 15,
+          timer: 0.5
         }
       }
     end

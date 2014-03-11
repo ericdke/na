@@ -96,15 +96,7 @@ module Ayadn
           options = {:count => 200, :since_id => nil}
           loop do
             begin
-              stream = @api.get_global(options)
-              save_max_id(stream)
-              unless compare_pagination(stream, 'global')
-                @view.show_posts(stream['data'], options)
-              # else
-              #   puts "\rNo new post since your last visit."
-              end
-              sleep 0.5 # to be configurable
-              options = {:count => 200, :since_id => stream['meta']['max_id']}
+              scroll_global(options)
             rescue Interrupt
               puts Status.canceled
               exit
@@ -118,6 +110,16 @@ module Ayadn
       ensure
         Databases.close_all
       end
+    end
+
+    def scroll_global(options)
+      stream = @api.get_global(options)
+      save_max_id(stream)
+      unless compare_pagination(stream, 'global')
+        @view.show_posts(stream['data'], options)
+      end
+      sleep Settings.options[:scroll][:timer]
+      options = {:count => 200, :since_id => stream['meta']['max_id']}
     end
 
     def trending(options)
