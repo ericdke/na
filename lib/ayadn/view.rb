@@ -75,11 +75,11 @@ module Ayadn
 
     def show_settings
       table = Terminal::Table.new do |t|
-        t.style = { :width => MyConfig.options[:formats][:table][:width] }
+        t.style = { :width => Settings.options[:formats][:table][:width] }
         t.title = "Current Ayadn settings".color(:cyan)
         t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
         @iter = 0
-        MyConfig.options.each do |k,v|
+        Settings.options.each do |k,v|
           v.each do |x,y|
             t << :separator if @iter >= 1
             unless y.is_a?(Hash)
@@ -97,9 +97,9 @@ module Ayadn
     end
 
     def show_userinfos(content)
-      view = "Real name\t\t".color(:cyan) + content['name'].color(MyConfig.options[:colors][:name])
+      view = "Real name\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
 
-      view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color(MyConfig.options[:colors][:username])
+      view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
 
       view << "\n\nID\t\t\t".color(:cyan) + content['id'].color(:yellow)
       view << "\nURL\t\t\t".color(:cyan) + content['canonical_url'].color(:yellow)
@@ -125,24 +125,24 @@ module Ayadn
 
       #view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)
 
-      unless content['username'] == MyConfig.config[:identity]
+      unless content['username'] == Settings.config[:identity]
         if content['you_follow']
-          view << "\n\nYou follow ".color(:cyan) + "@#{content['username']}".color(MyConfig.options[:colors][:username])
+          view << "\n\nYou follow ".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
         else
-          view << "\n\nYou don't follow ".color(:cyan) + "@#{content['username']}".color(MyConfig.options[:colors][:username])
+          view << "\n\nYou don't follow ".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
         end
         if content['follows_you']
-          view << "\n" + "@#{content['username']}".color(MyConfig.options[:colors][:username]) + " follows you".color(:cyan)
+          view << "\n" + "@#{content['username']}".color(Settings.options[:colors][:username]) + " follows you".color(:cyan)
         else
-          view << "\n" + "@#{content['username']}".color(MyConfig.options[:colors][:username]) + " doesn't follow you".color(:cyan)
+          view << "\n" + "@#{content['username']}".color(Settings.options[:colors][:username]) + " doesn't follow you".color(:cyan)
         end
       end
 
       if content['you_muted']
-        view << "\nYou muted " + "@#{content['username']}".color(MyConfig.options[:colors][:username])
+        view << "\nYou muted " + "@#{content['username']}".color(Settings.options[:colors][:username])
       end
       if content['you_blocked']
-        view << "\nYou blocked " + "@#{content['username']}".color(MyConfig.options[:colors][:username])
+        view << "\nYou blocked " + "@#{content['username']}".color(Settings.options[:colors][:username])
       end
 
       #view << "\n\nAvatar URL\t\t".color(:cyan) + content['avatar_image']['url']
@@ -168,28 +168,28 @@ module Ayadn
         end
         if ch_alias
           view << "ID: ".color(:cyan)
-          view << "#{ch.id}".color(MyConfig.options[:colors][:id])
+          view << "#{ch.id}".color(Settings.options[:colors][:id])
           view << "\n"
           view << "Alias: ".color(:cyan)
-          view << "#{ch_alias}".color(MyConfig.options[:colors][:username])
+          view << "#{ch_alias}".color(Settings.options[:colors][:username])
           view << "\n"
         else
           view << "ID: ".color(:cyan)
-          view << "#{ch.id}".color(MyConfig.options[:colors][:id])
+          view << "#{ch.id}".color(Settings.options[:colors][:id])
           view << "\n"
         end
         view << "Messages: ".color(:cyan)
-        view << "#{ch.num_messages}".color(MyConfig.options[:colors][:symbols])
+        view << "#{ch.num_messages}".color(Settings.options[:colors][:symbols])
         view << "\n"
         view << "Owner: ".color(:cyan)
-        view << "@#{ch.owner['username']}".color(MyConfig.options[:colors][:username])
+        view << "@#{ch.owner['username']}".color(Settings.options[:colors][:username])
         # + (#{ch.owner['name']}) if ch.owner['name']
         view << "\n"
         view << "Writers: ".color(:cyan)
-        view << "#{ch.writers}".color(MyConfig.options[:colors][:name])
+        view << "#{ch.writers}".color(Settings.options[:colors][:name])
         view << "\n"
         view << "Type: ".color(:cyan)
-        view << "#{ch.type}".color(MyConfig.options[:colors][:source])
+        view << "#{ch.type}".color(Settings.options[:colors][:source])
         view << "\n"
         #view << "You follow this channel" if ch.you_subscribed
         #view << "\n"
@@ -216,8 +216,8 @@ module Ayadn
       posts = @workers.build_posts(data.reverse)
       posts.each do |id,content|
         count = "%03d" % content[:count]
-        @view << count.color(MyConfig.options[:colors][:index])
-        @view << ": ".color(MyConfig.options[:colors][:index])
+        @view << count.color(Settings.options[:colors][:index])
+        @view << ": ".color(Settings.options[:colors][:index])
         @view << build_content(content)
       end
       return posts, @view
@@ -227,7 +227,7 @@ module Ayadn
       @view = ""
       posts = @workers.build_posts(data.reverse)
       posts.each do |id,content|
-        @view << content[:id].to_s.color(MyConfig.options[:colors][:id]) + " "
+        @view << content[:id].to_s.color(Settings.options[:colors][:id]) + " "
         @view << build_content(content)
       end
       @view
@@ -237,7 +237,7 @@ module Ayadn
       inter = ""
       data.reverse.each do |event|
         users_array = []
-        inter << "#{@workers.parsed_time(event['event_date'])}".color(MyConfig.options[:colors][:date])
+        inter << "#{@workers.parsed_time(event['event_date'])}".color(Settings.options[:colors][:date])
         inter << " => "
         event['users'].each do |u|
           users_array << "@" + u['username']
@@ -275,18 +275,18 @@ module Ayadn
       view = "\n"
       data.each do |file|
         view << "ID\t\t".color(:cyan)
-        view << file['id'].color(MyConfig.options[:colors][:id])
+        view << file['id'].color(Settings.options[:colors][:id])
         view << "\n"
         view << "Name\t\t".color(:cyan)
-        view << file['name'].color(MyConfig.options[:colors][:name])
+        view << file['name'].color(Settings.options[:colors][:name])
         view << "\n"
         view << "Kind\t\t".color(:cyan)
-        view << file['kind'].color(MyConfig.options[:colors][:username])
-        view << " (#{file['mime_type']})".color(MyConfig.options[:colors][:username]) if file['mime_type']
+        view << file['kind'].color(Settings.options[:colors][:username])
+        view << " (#{file['mime_type']})".color(Settings.options[:colors][:username]) if file['mime_type']
         if file['image_info']
           view << "\n"
           view << "Dimensions\t".color(:cyan)
-          view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color(MyConfig.options[:colors][:username])
+          view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color(Settings.options[:colors][:username])
         end
         view << "\n"
         view << "Size\t\t".color(:cyan)
@@ -296,16 +296,16 @@ module Ayadn
         view << @workers.parsed_time(file['created_at']).color(:green)
         view << "\n"
         view << "Source\t\t".color(:cyan)
-        view << file['source']['name'].color(MyConfig.options[:colors][:source])
+        view << file['source']['name'].color(Settings.options[:colors][:source])
         view << "\n"
         view << "State\t\t".color(:cyan)
         if file['public']
-          view << "Public".color(MyConfig.options[:colors][:id])
+          view << "Public".color(Settings.options[:colors][:id])
           view << "\n"
           view << "Link\t\t".color(:cyan)
-          view << file['url_short'].color(MyConfig.options[:colors][:link])
+          view << file['url_short'].color(Settings.options[:colors][:link])
         else
-          view << "Private".color(MyConfig.options[:colors][:id])
+          view << "Private".color(Settings.options[:colors][:id])
         end
 
         view << "\n\n"
@@ -326,7 +326,7 @@ module Ayadn
       unless content[:links].empty?
         view << "\n"
         content[:links].each do |link|
-          view << link.color(MyConfig.options[:colors][:link])
+          view << link.color(Settings.options[:colors][:link])
           view << "\n"
         end
       end
@@ -335,24 +335,24 @@ module Ayadn
 
     def build_header(content)
       header = ""
-      header << content[:handle].color(MyConfig.options[:colors][:username])
-      if MyConfig.options[:timeline][:show_real_name]
+      header << content[:handle].color(Settings.options[:colors][:username])
+      if Settings.options[:timeline][:show_real_name]
         header << " "
-        header << content[:name].color(MyConfig.options[:colors][:name])
+        header << content[:name].color(Settings.options[:colors][:name])
       end
-      if MyConfig.options[:timeline][:show_date]
+      if Settings.options[:timeline][:show_date]
         header << " "
-        header << content[:date].color(MyConfig.options[:colors][:date])
+        header << content[:date].color(Settings.options[:colors][:date])
       end
-      if MyConfig.options[:timeline][:show_source]
+      if Settings.options[:timeline][:show_source]
         header << " "
-        header << "[#{content[:source_name]}]".color(MyConfig.options[:colors][:source])
+        header << "[#{content[:source_name]}]".color(Settings.options[:colors][:source])
       end
-      if MyConfig.options[:timeline][:show_symbols]
-        header << " <".color(MyConfig.options[:colors][:symbols]) if content[:is_reply]
-        header << " #{content[:num_stars]}*".color(MyConfig.options[:colors][:symbols]) if content[:is_starred]
-        header << " >".color(MyConfig.options[:colors][:symbols]) if content[:num_replies] > 0
-        header << " #{content[:num_reposts]}x".color(MyConfig.options[:colors][:symbols]) if content[:num_reposts] > 0
+      if Settings.options[:timeline][:show_symbols]
+        header << " <".color(Settings.options[:colors][:symbols]) if content[:is_reply]
+        header << " #{content[:num_stars]}*".color(Settings.options[:colors][:symbols]) if content[:is_starred]
+        header << " >".color(Settings.options[:colors][:symbols]) if content[:num_replies] > 0
+        header << " #{content[:num_reposts]}x".color(Settings.options[:colors][:symbols]) if content[:num_reposts] > 0
       end
       header << "\n"
     end
@@ -363,7 +363,7 @@ module Ayadn
       else
         num_dots = 10
       end
-      hd = (".".color(MyConfig.options[:colors][:dots])) * num_dots
+      hd = (".".color(Settings.options[:colors][:dots])) * num_dots
       hd << "\n"
       formatted = { header: hd }
       content[:checkins].each do |key, val|
@@ -372,7 +372,7 @@ module Ayadn
 
       chk = formatted[:header]
       unless formatted[:name].nil?
-        chk << formatted[:name].color(MyConfig.options[:colors][:dots])
+        chk << formatted[:name].color(Settings.options[:colors][:dots])
         chk << "\n"
       end
       unless formatted[:address].nil?

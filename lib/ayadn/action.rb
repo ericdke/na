@@ -4,7 +4,7 @@ module Ayadn
     def initialize
       @api = API.new
       @view = View.new
-      MyConfig.load_config
+      Settings.load_config
       Logs.create_logger
       Databases.open_databases
     end
@@ -515,7 +515,7 @@ module Ayadn
           doing(options)
           unless options[:raw]
             list = @api.get_followings(username)
-            if MyConfig.options[:backup][:auto_save_lists]
+            if Settings.options[:backup][:auto_save_lists]
               FileOps.save_followings_list(list)
             end
             unless list.empty?
@@ -546,7 +546,7 @@ module Ayadn
           doing(options)
           unless options[:raw]
             list = @api.get_followers(username)
-            if MyConfig.options[:backup][:auto_save_lists]
+            if Settings.options[:backup][:auto_save_lists]
               FileOps.save_followers_list(list)
             end
             unless list.empty?
@@ -575,7 +575,7 @@ module Ayadn
         doing(options)
         unless options[:raw]
           list = @api.get_muted
-          if MyConfig.options[:backup][:auto_save_lists]
+          if Settings.options[:backup][:auto_save_lists]
             FileOps.save_muted_list(list)
           end
           unless list.empty?
@@ -781,7 +781,7 @@ module Ayadn
         @view.clear_screen
         puts Status.posting
         resp = Post.new.post(args)
-        if MyConfig.options[:backup][:auto_save_sent_posts]
+        if Settings.options[:backup][:auto_save_sent_posts]
           FileOps.save_post(resp)
         end
         @view.clear_screen
@@ -803,7 +803,7 @@ module Ayadn
         @view.clear_screen
         puts Status.posting
         resp = writer.send_post(lines_array.join("\n"))
-        if MyConfig.options[:backup][:auto_save_sent_posts]
+        if Settings.options[:backup][:auto_save_sent_posts]
           FileOps.save_post(resp)
         end
         @view.clear_screen
@@ -826,7 +826,7 @@ module Ayadn
 	    		@view.clear_screen
 	    		puts Status.posting
 	    		resp = messenger.send_pm(username, lines_array.join("\n"))
-          if MyConfig.options[:backup][:auto_save_sent_messages]
+          if Settings.options[:backup][:auto_save_sent_messages]
             FileOps.save_message(resp)
           end
 	    		@view.clear_screen
@@ -852,7 +852,7 @@ module Ayadn
   			@view.clear_screen
   			puts Status.posting
   			resp = messenger.send_message(channel_id, lines_array.join("\n"))
-        if MyConfig.options[:backup][:auto_save_sent_messages]
+        if Settings.options[:backup][:auto_save_sent_messages]
           FileOps.save_message(resp)
         end
   			@view.clear_screen
@@ -878,7 +878,7 @@ module Ayadn
         reply = messenger.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to]))
         puts Status.posting
         resp = messenger.send_reply(reply, post_id)
-        if MyConfig.options[:backup][:auto_save_sent_posts]
+        if Settings.options[:backup][:auto_save_sent_posts]
           FileOps.save_post(resp)
         end
         @view.clear_screen

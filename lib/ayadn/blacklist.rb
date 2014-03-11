@@ -32,7 +32,7 @@ module Ayadn
 
   class BlacklistWorkers
     def initialize
-      MyConfig.load_config
+      Settings.load_config
       Databases.open_databases
     end
     def add(args)

@@ -10,7 +10,7 @@ module Ayadn
     end
 
     def compose
-      case MyConfig.config[:platform]
+      case Settings.config[:platform]
       when /mswin|mingw|cygwin/
         post = classic
       else
@@ -51,7 +51,7 @@ module Ayadn
 
     def send_pm(username, text)
       url = Endpoints.new.pm_url
-      url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
+      url << "?include_post_annotations=1&access_token=#{Ayadn::Settings.user_token}"
       send_content(url, payload_pm(username, text))
     end
 
@@ -71,17 +71,17 @@ module Ayadn
     end
 
     def send_content(url, payload)
-      url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
+      url << "?include_post_annotations=1&access_token=#{Ayadn::Settings.user_token}"
       JSON.parse(CNX.post(url, payload))
     end
 
     def check_post_length(lines_array)
-      max_size = MyConfig.config[:post_max_length]
+      max_size = Settings.config[:post_max_length]
       check_length(lines_array, max_size)
     end
 
     def check_message_length(lines_array)
-      max_size = MyConfig.config[:message_max_length]
+      max_size = Settings.config[:message_max_length]
       check_length(lines_array, max_size)
     end
 
@@ -132,7 +132,7 @@ module Ayadn
         "value" => { "url" => "http://ayadn-app.net" }
         },
         "type" => "com.ayadn.client",
-        "value" => { "version" => "#{MyConfig.config[:version]}" }
+        "value" => { "version" => "#{Settings.config[:version]}" }
       ]
     end
 

@@ -7,11 +7,11 @@ module Ayadn
     end
 
     def self.open_databases
-      @users = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/users.db"
-      @index = Daybreak::DB.new "#{MyConfig.config[:paths][:pagination]}/index.db"
-      @pagination = Daybreak::DB.new "#{MyConfig.config[:paths][:pagination]}/pagination.db"
-      @aliases = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/aliases.db"
-      @blacklist = Daybreak::DB.new "#{MyConfig.config[:paths][:db]}/blacklist.db"
+      @users = Daybreak::DB.new "#{Settings.config[:paths][:db]}/users.db"
+      @index = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/index.db"
+      @pagination = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/pagination.db"
+      @aliases = Daybreak::DB.new "#{Settings.config[:paths][:db]}/aliases.db"
+      @blacklist = Daybreak::DB.new "#{Settings.config[:paths][:db]}/blacklist.db"
     end
 
     def self.close_all

@@ -69,14 +69,14 @@ module Ayadn
 
   class SetBackup
     def initialize
-      MyConfig.load_config
+      Settings.load_config
       Logs.create_logger
     end
     def log(args)
       Logs.rec.info "New value for '#{args[0]}' in 'Backup' => #{args[1]}"
     end
     def save
-      MyConfig.save_config
+      Settings.save_config
     end
     def validate(value)
       case value
@@ -87,26 +87,26 @@ module Ayadn
       end
     end
     def auto_save_sent_posts(value)
-      MyConfig.options[:backup][:auto_save_sent_posts] = value
+      Settings.options[:backup][:auto_save_sent_posts] = value
     end
     def auto_save_sent_messages(value)
-      MyConfig.options[:backup][:auto_save_sent_messages] = value
+      Settings.options[:backup][:auto_save_sent_messages] = value
     end
     def auto_save_lists(value)
-      MyConfig.options[:backup][:auto_save_lists] = value
+      Settings.options[:backup][:auto_save_lists] = value
     end
   end
 
   class SetCounts
     def initialize
-      MyConfig.load_config
+      Settings.load_config
       Logs.create_logger
     end
     def log(args)
       Logs.rec.info "New value for '#{args[0]}' in 'Counts' => #{args[1]}"
     end
     def save
-      MyConfig.save_config
+      Settings.save_config
     end
     def validate(value)
       if value.is_integer?
@@ -121,58 +121,58 @@ module Ayadn
       end
     end
     def default(value)
-      MyConfig.options[:counts][:default] = value
+      Settings.options[:counts][:default] = value
     end
     def unified(value)
-      MyConfig.options[:counts][:unified] = value
+      Settings.options[:counts][:unified] = value
     end
     def global(value)
-      MyConfig.options[:counts][:global] = value
+      Settings.options[:counts][:global] = value
     end
     def checkins(value)
-      MyConfig.options[:counts][:checkins] = value
+      Settings.options[:counts][:checkins] = value
     end
     def conversations(value)
-      MyConfig.options[:counts][:conversations] = value
+      Settings.options[:counts][:conversations] = value
     end
     def photos(value)
-      MyConfig.options[:counts][:photos] = value
+      Settings.options[:counts][:photos] = value
     end
     def trending(value)
-      MyConfig.options[:counts][:trending] = value
+      Settings.options[:counts][:trending] = value
     end
     def mentions(value)
-      MyConfig.options[:counts][:mentions] = value
+      Settings.options[:counts][:mentions] = value
     end
     def convo(value)
-      MyConfig.options[:counts][:convo] = value
+      Settings.options[:counts][:convo] = value
     end
     def posts(value)
-      MyConfig.options[:counts][:posts] = value
+      Settings.options[:counts][:posts] = value
     end
     def messages(value)
-      MyConfig.options[:counts][:messages] = value
+      Settings.options[:counts][:messages] = value
     end
     def search(value)
-      MyConfig.options[:counts][:search] = value
+      Settings.options[:counts][:search] = value
     end
     def whoreposted(value)
-      MyConfig.options[:counts][:whoreposted] = value
+      Settings.options[:counts][:whoreposted] = value
     end
     def whostarred(value)
-      MyConfig.options[:counts][:whostarred] = value
+      Settings.options[:counts][:whostarred] = value
     end
     def whatstarred(value)
-      MyConfig.options[:counts][:whatstarred] = value
+      Settings.options[:counts][:whatstarred] = value
     end
     def files(value)
-      MyConfig.options[:counts][:files] = value
+      Settings.options[:counts][:files] = value
     end
   end
 
   class SetTimeline
     def initialize
-      MyConfig.load_config
+      Settings.load_config
       Logs.create_logger
     end
     def validate(value)
@@ -187,39 +187,39 @@ module Ayadn
       Logs.rec.info "New value for '#{args[0]}' in 'Timeline' => #{args[1]}"
     end
     def save
-      MyConfig.save_config
+      Settings.save_config
     end
     def directed(value)
-      MyConfig.options[:timeline][:directed] = value
+      Settings.options[:timeline][:directed] = value
     end
     def deleted(value)
-      #MyConfig.options[:timeline][:deleted] = value
+      #Settings.options[:timeline][:deleted] = value
       abort(Status.not_mutable)
     end
     def html(value)
-      MyConfig.options[:timeline][:html] = value
+      Settings.options[:timeline][:html] = value
     end
     def annotations(value)
-      #MyConfig.options[:timeline][:annotations] = value
+      #Settings.options[:timeline][:annotations] = value
       abort(Status.not_mutable)
     end
     def show_source(value)
-      MyConfig.options[:timeline][:show_source] = value
+      Settings.options[:timeline][:show_source] = value
     end
     def show_symbols(value)
-      MyConfig.options[:timeline][:show_symbols] = value
+      Settings.options[:timeline][:show_symbols] = value
     end
     def show_real_name(value)
-      MyConfig.options[:timeline][:show_real_name] = value
+      Settings.options[:timeline][:show_real_name] = value
     end
     def show_date(value)
-      MyConfig.options[:timeline][:show_date] = value
+      Settings.options[:timeline][:show_date] = value
     end
   end
 
   class SetColor
     def initialize
-      MyConfig.load_config
+      Settings.load_config
       Logs.create_logger
     end
 
@@ -236,51 +236,51 @@ module Ayadn
     end
 
     def save
-      MyConfig.save_config
+      Settings.save_config
     end
 
     def id(color)
-      MyConfig.options[:colors][:id] = color.to_sym
+      Settings.options[:colors][:id] = color.to_sym
     end
 
     def index(color)
-      MyConfig.options[:colors][:index] = color.to_sym
+      Settings.options[:colors][:index] = color.to_sym
     end
 
     def username(color)
-      MyConfig.options[:colors][:username] = color.to_sym
+      Settings.options[:colors][:username] = color.to_sym
     end
 
     def name(color)
-      MyConfig.options[:colors][:name] = color.to_sym
+      Settings.options[:colors][:name] = color.to_sym
     end
 
     def date(color)
-      MyConfig.options[:colors][:date] = color.to_sym
+      Settings.options[:colors][:date] = color.to_sym
     end
 
     def link(color)
-      MyConfig.options[:colors][:link] = color.to_sym
+      Settings.options[:colors][:link] = color.to_sym
     end
 
     def dots(color)
-      MyConfig.options[:colors][:dots] = color.to_sym
+      Settings.options[:colors][:dots] = color.to_sym
     end
 
     def hashtags(color)
-      MyConfig.options[:colors][:hashtags] = color.to_sym
+      Settings.options[:colors][:hashtags] = color.to_sym
     end
 
     def mentions(color)
-      MyConfig.options[:colors][:mentions] = color.to_sym
+      Settings.options[:colors][:mentions] = color.to_sym
     end
 
     def source(color)
-      MyConfig.options[:colors][:source] = color.to_sym
+      Settings.options[:colors][:source] = color.to_sym
     end
 
     def symbols(color)
-      MyConfig.options[:colors][:symbols] = color.to_sym
+      Settings.options[:colors][:symbols] = color.to_sym
     end
   end
 end

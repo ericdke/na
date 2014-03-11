@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Ayadn::Post do
   before do
-    Ayadn::MyConfig.load_config
+    Ayadn::Settings.load_config
     Ayadn::Logs.create_logger
   end
   let(:post) { Ayadn::Post.new }

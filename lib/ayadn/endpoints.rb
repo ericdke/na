@@ -16,129 +16,129 @@ module Ayadn
     end
 
     def authorize_url
-      "https://account.app.net/oauth/authenticate?client_id=#{MyConfig::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
+      "https://account.app.net/oauth/authenticate?client_id=#{Settings::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
     end
 
     def file(file_id)
-      "#{@files_url}#{file_id}?access_token=#{MyConfig.user_token}"
+      "#{@files_url}#{file_id}?access_token=#{Settings.user_token}"
     end
 
     def unified(options)
       if options[:count] || options[:since_id]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:unified]})
+        @options_list = API.build_query({count: Settings.options[:counts][:unified]})
       end
-      "#{@posts_url}stream/unified?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/unified?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def checkins(options)
       if options[:count] || options[:since_id]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:checkins]})
+        @options_list = API.build_query({count: Settings.options[:counts][:checkins]})
       end
-      "#{@posts_url}stream/explore/checkins?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/explore/checkins?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def global(options)
       if options[:count] || options[:since_id]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:global]})
+        @options_list = API.build_query({count: Settings.options[:counts][:global]})
       end
-      "#{@posts_url}stream/global?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/global?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def trending(options)
       if options[:count] || options[:since_id]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:trending]})
+        @options_list = API.build_query({count: Settings.options[:counts][:trending]})
       end
-      "#{@posts_url}stream/explore/trending?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/explore/trending?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def photos(options)
       if options[:count] || options[:since_id]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:photos]})
+        @options_list = API.build_query({count: Settings.options[:counts][:photos]})
       end
-      "#{@posts_url}stream/explore/photos?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/explore/photos?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def conversations(options)
       if options[:count] || options[:since_id]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:conversations]})
+        @options_list = API.build_query({count: Settings.options[:counts][:conversations]})
       end
-      "#{@posts_url}stream/explore/conversations?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}stream/explore/conversations?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def mentions(username, options)
       if options[:count]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:mentions]})
+        @options_list = API.build_query({count: Settings.options[:counts][:mentions]})
       end
-      "#{@users_url}#{username}/mentions/?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@users_url}#{username}/mentions/?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def posts(username, options)
       if options[:count]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:posts]})
+        @options_list = API.build_query({count: Settings.options[:counts][:posts]})
       end
-      "#{@users_url}#{username}/posts/?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@users_url}#{username}/posts/?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def whatstarred(username, options)
       if options[:count]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:default]})
+        @options_list = API.build_query({count: Settings.options[:counts][:default]})
       end
-      "#{@users_url}#{username}/stars/?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@users_url}#{username}/stars/?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def interactions
-      "#{@users_url}me/interactions?access_token=#{MyConfig.user_token}"
+      "#{@users_url}me/interactions?access_token=#{Settings.user_token}"
     end
 
     def whoreposted(post_id)
-      "#{@posts_url}#{post_id}/reposters/?access_token=#{MyConfig.user_token}"
+      "#{@posts_url}#{post_id}/reposters/?access_token=#{Settings.user_token}"
     end
 
     def whostarred(post_id)
-      "#{@posts_url}#{post_id}/stars/?access_token=#{MyConfig.user_token}"
+      "#{@posts_url}#{post_id}/stars/?access_token=#{Settings.user_token}"
     end
 
     def convo(post_id, options)
       if options[:count]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:convo]})
+        @options_list = API.build_query({count: Settings.options[:counts][:convo]})
       end
-      "#{@posts_url}#{post_id}/replies/?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}#{post_id}/replies/?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def followings(username, options)
-      "#{@users_url}#{username}/following/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+      "#{@users_url}#{username}/following/?access_token=#{Settings.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
     end
 
     def followers(username, options)
-      "#{@users_url}#{username}/followers/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+      "#{@users_url}#{username}/followers/?access_token=#{Settings.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
     end
 
     def muted(options)
-      "#{@users_url}me/muted/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+      "#{@users_url}me/muted/?access_token=#{Settings.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
     end
 
     def blocked(options)
-      "#{@users_url}me/blocked/?access_token=#{MyConfig.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
+      "#{@users_url}me/blocked/?access_token=#{Settings.user_token}&count=#{options[:count]}&before_id=#{options[:before_id]}"
     end
 
     def hashtag(hashtag)
@@ -149,59 +149,59 @@ module Ayadn
       if options[:count]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:search]})
+        @options_list = API.build_query({count: Settings.options[:counts][:search]})
       end
-      "#{@posts_url}search?text=#{words}&access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}search?text=#{words}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def user(username)
-      "#{@users_url}#{username}?access_token=#{MyConfig.user_token}"
+      "#{@users_url}#{username}?access_token=#{Settings.user_token}"
     end
 
     def single_post(post_id, options)
       @options_list = API.build_query(options)
-      "#{@posts_url}#{post_id}?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@posts_url}#{post_id}?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def files_list(options)
       if options[:count]
         @options_list = API.build_query(options)
       else
-        @options_list = API.build_query({count: MyConfig.options[:counts][:files]})
+        @options_list = API.build_query({count: Settings.options[:counts][:files]})
       end
-      "#{@users_url}me/files?access_token=#{MyConfig.user_token}#{@options_list}"
+      "#{@users_url}me/files?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def delete_post(post_id)
-      "#{@posts_url}#{post_id}?access_token=#{MyConfig.user_token}"
+      "#{@posts_url}#{post_id}?access_token=#{Settings.user_token}"
     end
 
     def follow(username)
-      "#{@users_url}#{username}/follow?access_token=#{MyConfig.user_token}"
+      "#{@users_url}#{username}/follow?access_token=#{Settings.user_token}"
     end
 
     def mute(username)
-      "#{@users_url}#{username}/mute?access_token=#{MyConfig.user_token}"
+      "#{@users_url}#{username}/mute?access_token=#{Settings.user_token}"
     end
 
     def block(username)
-      "#{@users_url}#{username}/block?access_token=#{MyConfig.user_token}"
+      "#{@users_url}#{username}/block?access_token=#{Settings.user_token}"
     end
 
     def repost(post_id)
-      "#{@posts_url}#{post_id}/repost?access_token=#{MyConfig.user_token}"
+      "#{@posts_url}#{post_id}/repost?access_token=#{Settings.user_token}"
     end
 
     def star(post_id)
-      "#{@posts_url}#{post_id}/star?access_token=#{MyConfig.user_token}"
+      "#{@posts_url}#{post_id}/star?access_token=#{Settings.user_token}"
     end
 
     def channels(options)
-      "#{@channels_url}?access_token=#{MyConfig.user_token}#{API.build_query(options)}"
+      "#{@channels_url}?access_token=#{Settings.user_token}#{API.build_query(options)}"
     end
 
     def messages(channel_id, options)
-      "#{@channels_url}#{channel_id}/messages?access_token=#{MyConfig.user_token}#{API.build_query(options)}"
+      "#{@channels_url}#{channel_id}/messages?access_token=#{Settings.user_token}#{API.build_query(options)}"
     end
 
   end

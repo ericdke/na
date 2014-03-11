@@ -225,11 +225,11 @@ module Ayadn
     end
 
     def self.build_query(arg)
-      count = arg[:count] || MyConfig.options[:counts][:default]
-      directed = arg[:directed] || MyConfig.options[:timeline][:directed]
-      deleted = arg[:deleted] || MyConfig.options[:timeline][:deleted]
-      html = arg[:html] || MyConfig.options[:timeline][:html]
-      annotations = arg[:annotations] || MyConfig.options[:timeline][:annotations]
+      count = arg[:count] || Settings.options[:counts][:default]
+      directed = arg[:directed] || Settings.options[:timeline][:directed]
+      deleted = arg[:deleted] || Settings.options[:timeline][:deleted]
+      html = arg[:html] || Settings.options[:timeline][:html]
+      annotations = arg[:annotations] || Settings.options[:timeline][:annotations]
       if arg[:since_id]
         "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&since_id=#{arg[:since_id]}"
       elsif arg[:recent_message]

@@ -80,9 +80,9 @@ module Ayadn
     def build_users_list(list, table)
       list.each_with_index do |obj, index|
         unless obj[:name].nil?
-          table << [ "@#{obj[:username]} ".color(MyConfig.options[:colors][:username]), "#{obj[:name]}" ]
+          table << [ "@#{obj[:username]} ".color(Settings.options[:colors][:username]), "#{obj[:name]}" ]
         else
-          table << [ "@#{obj[:username]} ".color(MyConfig.options[:colors][:username]), "" ]
+          table << [ "@#{obj[:username]} ".color(Settings.options[:colors][:username]), "" ]
         end
         table << :separator unless index + 1 == list.length
       end
@@ -213,10 +213,10 @@ module Ayadn
               Databases.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
             end
           end
-          usernames << MyConfig.config[:handle] unless usernames.length == 1 && usernames.first == MyConfig.config[:handle]
+          usernames << Settings.config[:handle] unless usernames.length == 1 && usernames.first == Settings.config[:handle]
           writers = usernames.join(", ")
         else
-          writers = MyConfig.config[:handle]
+          writers = Settings.config[:handle]
         end
         if ch['has_unread']
           unread = "This channel has unread message(s)"
@@ -246,8 +246,8 @@ module Ayadn
 
     def colorize_text(text)
       content = Array.new
-      hashtag_color = MyConfig.options[:colors][:hashtags]
-      mention_color = MyConfig.options[:colors][:mentions]
+      hashtag_color = Settings.options[:colors][:hashtags]
+      mention_color = Settings.options[:colors][:mentions]
       text.scan(/^.+[\r\n]*/) do |word|
         if word =~ /#\w+/
           content << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
@@ -262,7 +262,7 @@ module Ayadn
 
     def init_table
       Terminal::Table.new do |t|
-        t.style = { :width => MyConfig.options[:formats][:table][:width] }
+        t.style = { :width => Settings.options[:formats][:table][:width] }
       end
     end
 

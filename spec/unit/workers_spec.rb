@@ -6,7 +6,7 @@ require 'io/console'
 describe Ayadn::Workers do
 
   before do
-    Ayadn::MyConfig.load_config
+    Ayadn::Settings.load_config
     Ayadn::Logs.create_logger
     Ayadn::Databases.open_databases
   end

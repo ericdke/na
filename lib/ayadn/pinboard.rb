@@ -2,7 +2,7 @@ module Ayadn
   class PinBoard
 
     def has_credentials_file?
-      File.exist?(Ayadn::MyConfig.config[:paths][:db] + '/ayadn_pinboard.db')
+      File.exist?(Ayadn::Settings.config[:paths][:db] + '/ayadn_pinboard.db')
     end
 
     def ask_credentials
@@ -18,7 +18,7 @@ module Ayadn
     end
 
     def load_credentials
-      decode(File.read(Ayadn::MyConfig.config[:paths][:db] + '/ayadn_pinboard.db'))
+      decode(File.read(Ayadn::Settings.config[:paths][:db] + '/ayadn_pinboard.db'))
     end
 
     def pin(data)
@@ -33,7 +33,7 @@ module Ayadn
     end
 
     def save_credentials(encoded_pinboard_credentials)
-      File.write(Ayadn::MyConfig.config[:paths][:db] + '/ayadn_pinboard.db', encoded_pinboard_credentials)
+      File.write(Ayadn::Settings.config[:paths][:db] + '/ayadn_pinboard.db', encoded_pinboard_credentials)
     end
 
     def encode(username, password)

@@ -4,9 +4,9 @@ module Ayadn
       attr_accessor :rec
     end
     def self.create_logger
-      @rec = Logger.new(MyConfig.config[:paths][:log] + "/ayadn.log", 'monthly')
+      @rec = Logger.new(Settings.config[:paths][:log] + "/ayadn.log", 'monthly')
       @rec.formatter = proc do |severity, datetime, progname, msg|
-        "#{MyConfig.config[:version]} #{datetime} -- #{msg}\n"
+        "#{Settings.config[:version]} #{datetime} -- #{msg}\n"
       end
     end
   end

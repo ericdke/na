@@ -4,7 +4,7 @@ module Ayadn
       "\nDone.\n".color(:green)
     end
     def self.downloaded(name)
-      "\nFile downloaded in #{MyConfig.config[:paths][:downloads]}/#{name}\n".color(:green)
+      "\nFile downloaded in #{Settings.config[:paths][:downloads]}/#{name}\n".color(:green)
     end
     def self.downloading
       "Downloading from ADN...\n".inverse
@@ -148,13 +148,13 @@ module Ayadn
       "\nType your text. ".color(:cyan) + "[ENTER] ".color(:green) + "to validate, ".color(:cyan) + "[CTRL+C] ".color(:red) + "to cancel.\n\n".color(:cyan)
     end
     def self.reply
-      "\n#{MyConfig.config[:post_max_length]} ".color(:yellow) + "characters maximum. If the original post has mentions, you text will be inserted after the first one. Markdown links are supported.\n\n"
+      "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum. If the original post has mentions, you text will be inserted after the first one. Markdown links are supported.\n\n"
     end
     def self.post
-      "\n#{MyConfig.config[:post_max_length]} ".color(:yellow) + "characters maximum. Markdown links are supported.\n\n"
+      "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum. Markdown links are supported.\n\n"
     end
     def self.message
-      "\n#{MyConfig.config[:message_max_length]} ".color(:yellow) + "characters maximum. Markdown links are supported.\n\n"
+      "\n#{Settings.config[:message_max_length]} ".color(:yellow) + "characters maximum. Markdown links are supported.\n\n"
     end
     def self.method_missing(meth, args)
       "\nThe command '#{meth} #{args}' doesn't exist.\n".color(:red)

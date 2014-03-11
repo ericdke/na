@@ -57,7 +57,7 @@ module Ayadn
     private
 
     def init
-      MyConfig.load_config
+      Settings.load_config
       Logs.create_logger
       Databases.open_databases
     end
