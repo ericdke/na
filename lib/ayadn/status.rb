@@ -177,5 +177,14 @@ module Ayadn
     def self.wrong_arguments
       "\nYou have to submit valid arguments.\n\n".color(:red)
     end
+    def self.no_pin_creds
+      "\nAyadn couldn't find your Pinboard credentials.\n".color(:red)
+    end
+    def self.pin_creds_saved
+      "\n\nCredentials successfully encoded and saved in database.\n\n".color(:green)
+    end
+    def self.saving_pin
+      "\nSaving post text and links to Pinboard...\n\n".color(:yellow)
+    end
   end
 end

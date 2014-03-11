@@ -18,7 +18,7 @@ describe Ayadn::View do
   describe "#settings" do
     it 'outputs the settings' do
       printed = capture_stdout do
-        Ayadn::View.new.settings
+        Ayadn::View.new.show_settings
       end
       expect(printed).to include "Ayadn settings"
       expect(printed).to include "timeline"

@@ -72,9 +72,7 @@ module Ayadn
 
     def send_content(url, payload)
       url << "?include_post_annotations=1&access_token=#{Ayadn::MyConfig.user_token}"
-      resp = CNX.post(url, payload)
-      API.check_http_error(resp)
-      JSON.parse(resp)
+      JSON.parse(CNX.post(url, payload))
     end
 
     def check_post_length(lines_array)

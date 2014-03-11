@@ -8,6 +8,7 @@ module Ayadn
       end
       blacklist = BlacklistWorkers.new
       blacklist.add(args)
+      puts Status.done
     end
 
     desc "blacklist remove TYPE TARGET", "Removes a mention, hashtag or client from your blacklist"
@@ -18,6 +19,7 @@ module Ayadn
       end
       blacklist = BlacklistWorkers.new
       blacklist.remove(args)
+      puts Status.done
     end
 
     desc "blacklist list", "List the content of your blacklist"
@@ -26,7 +28,6 @@ module Ayadn
       blacklist = BlacklistWorkers.new
       blacklist.list
     end
-
   end
 
   class BlacklistWorkers
@@ -39,7 +40,7 @@ module Ayadn
         type, target = args[0], args[1]
         case type
         when 'mention', 'mentions'
-          target = Workers.add_arobase_if_absent([target])
+          target = Workers.add_arobase_if_missing([target])
           Databases.add_mention_to_blacklist(target)
         when 'client', 'source'
           Databases.add_client_to_blacklist(target)
@@ -57,7 +58,7 @@ module Ayadn
         type, target = args[0], args[1]
         case type
         when 'mention', 'mentions'
-          target = Workers.add_arobase_if_absent([target])
+          target = Workers.add_arobase_if_missing([target])
           Databases.remove_from_blacklist(target)
         when 'client', 'source', 'hashtag', 'tag'
           Databases.remove_from_blacklist(target)

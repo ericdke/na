@@ -29,15 +29,6 @@ describe Ayadn::Workers do
 
   let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
-  describe "#build_users_array" do
-    it "changes stored list into array of hashes" do
-      resp = Ayadn::Workers.new.build_users_array(list)
-      expect(resp[0][:username]).to eq "bond"
-      expect(resp[0][:you_follow]).to be true
-      expect(resp[1][:name]).to eq "Mr Test"
-    end
-  end
-
   describe "#build_followers_list" do
     it 'builds the followers table list' do
       printed = capture_stdout do
@@ -84,12 +75,12 @@ describe Ayadn::Workers do
     end
   end
 
-  describe ".add_arobase_if_absent" do
+  describe ".add_arobase_if_missing" do
     it 'adds @ to username' do
-      expect(Ayadn::Workers.add_arobase_if_absent(["user"])).to eq "@user"
+      expect(Ayadn::Workers.add_arobase_if_missing(["user"])).to eq "@user"
     end
     it 'does nothing to @username' do
-      expect(Ayadn::Workers.add_arobase_if_absent(["@user"])).to eq "@user"
+      expect(Ayadn::Workers.add_arobase_if_missing(["@user"])).to eq "@user"
     end
   end
 end

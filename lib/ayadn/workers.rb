@@ -19,7 +19,7 @@ module Ayadn
       table
     end
 
-    def build_reposted_list(list, target) #not the same format as wollowings/etc: taks an array of hashes
+    def build_reposted_list(list, target)
       table = init_table
       table.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
       users_list = []
@@ -76,22 +76,6 @@ module Ayadn
       users_list = build_users_array(list)
       build_users_list(users_list, table)
     end
-
-    def init_table
-      Terminal::Table.new do |t|
-        t.style = { :width => MyConfig.options[:formats][:table][:width] }
-      end
-    end
-
-    def build_users_array(list)
-      users_list = []
-      list.each do |key, value|
-        users_list << {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3]}
-      end
-      users_list
-    end
-
-
 
     def build_users_list(list, table)
       list.each_with_index do |obj, index|
@@ -210,6 +194,86 @@ module Ayadn
       tags
     end
 
+    def build_channels(data)
+      channels = []
+      data.each { |ch| channels << ch }
+      bucket = []
+      #puts "Downloading new channels and unknown users ids, please wait...\n\n"
+      chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
+      channels.each do |ch|
+        unless ch['writers']['user_ids'].empty?
+          usernames = []
+          ch['writers']['user_ids'].each do |id|
+            db = Databases.users[id]
+            unless db.nil?
+              usernames << "@" + db.keys.first
+            else
+              resp = API.new.get_user(id)
+              usernames << "@" + resp['data']['username']
+              Databases.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
+            end
+          end
+          usernames << MyConfig.config[:handle] unless usernames.length == 1 && usernames.first == MyConfig.config[:handle]
+          writers = usernames.join(", ")
+        else
+          writers = MyConfig.config[:handle]
+        end
+        if ch['has_unread']
+          unread = "This channel has unread message(s)"
+        else
+          unread = "No unread messages"
+        end
+        bucket << chan.new(ch['id'], ch['counts']['messages'], ch['counts']['subscribers'], ch['type'], ch['owner'], ch['annotations'], ch['readers'], ch['editors'], writers, ch['you_subscribed'], unread, ch['recent_message_id'], ch['recent_message'])
+      end
+      bucket
+    end
+
+    def parsed_time(string)
+      "#{string[0...10]} #{string[11...19]}"
+    end
+
+    def self.add_arobase_if_missing(username) # expects an array of username(s), works on the first one and outputs a string
+      unless username.first == "me"
+        username = username.first.chars.to_a
+        username.unshift("@") unless username.first == "@"
+      else
+        username = "me".chars.to_a
+      end
+      username.join
+    end
+
+    private
+
+    def colorize_text(text)
+      content = Array.new
+      hashtag_color = MyConfig.options[:colors][:hashtags]
+      mention_color = MyConfig.options[:colors][:mentions]
+      text.scan(/^.+[\r\n]*/) do |word|
+        if word =~ /#\w+/
+          content << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
+        elsif word =~ /@\w+/
+          content << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
+        else
+          content << word
+        end
+      end
+      content.join()
+    end
+
+    def init_table
+      Terminal::Table.new do |t|
+        t.style = { :width => MyConfig.options[:formats][:table][:width] }
+      end
+    end
+
+    def build_users_array(list)
+      users_list = []
+      list.each do |key, value|
+        users_list << {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3]}
+      end
+      users_list
+    end
+
     def extract_checkins(post)
       has_checkins = false
       checkins = {}
@@ -247,71 +311,6 @@ module Ayadn
         end
       end
       return checkins, has_checkins
-    end
-
-    def build_channels(data)
-      channels = []
-      data.each { |ch| channels << ch }
-      bucket = []
-      #puts "Downloading new channels and unknown users ids, please wait...\n\n"
-      chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
-      channels.each do |ch|
-        unless ch['writers']['user_ids'].empty?
-          usernames = []
-          ch['writers']['user_ids'].each do |id|
-            db = Databases.users[id]
-            unless db.nil?
-              usernames << "@" + db.keys.first
-            else
-              resp = API.new.get_user(id)
-              usernames << "@" + resp['data']['username']
-              Databases.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
-            end
-          end
-          usernames << MyConfig.config[:handle] unless usernames.length == 1 && usernames.first == MyConfig.config[:handle]
-          writers = usernames.join(", ")
-        else
-          writers = MyConfig.config[:handle]
-        end
-        if ch['has_unread']
-          unread = "This channel has unread message(s)"
-        else
-          unread = "No unread messages"
-        end
-        bucket << chan.new(ch['id'], ch['counts']['messages'], ch['counts']['subscribers'], ch['type'], ch['owner'], ch['annotations'], ch['readers'], ch['editors'], writers, ch['you_subscribed'], unread, ch['recent_message_id'], ch['recent_message'])
-      end
-      bucket
-    end
-
-
-    def parsed_time(string)
-      "#{string[0...10]} #{string[11...19]}"
-    end
-
-    def colorize_text(text)
-      content = Array.new
-      hashtag_color = MyConfig.options[:colors][:hashtags]
-      mention_color = MyConfig.options[:colors][:mentions]
-      text.scan(/^.+[\r\n]*/) do |word|
-        if word =~ /#\w+/
-          content << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
-        elsif word =~ /@\w+/
-          content << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
-        else
-          content << word
-        end
-      end
-      content.join()
-    end
-
-    def self.add_arobase_if_absent(username) # expects an array of username(s), works on the first one and outputs a string
-      unless username.first == "me"
-        username = username.first.chars.to_a
-        username.unshift("@") unless username.first == "@"
-      else
-        username = "me".chars.to_a
-      end
-      username.join
     end
 
   end

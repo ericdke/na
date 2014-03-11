@@ -25,16 +25,6 @@ module Ayadn
       end
     end
 
-    def compare_pagination(stream, title)
-      stream['meta']['max_id'].to_i > Databases.pagination[title].to_i
-    end
-
-    def no_new_posts
-      @view.clear_screen
-      puts Status.no_new_posts
-      exit
-    end
-
     def checkins(options)
       begin
         doing(options)
@@ -118,7 +108,7 @@ module Ayadn
     def mentions(username, options)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           doing(options)
           stream = @api.get_mentions(username, options)
           render_view(stream, options)
@@ -135,7 +125,7 @@ module Ayadn
     def posts(username, options)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           doing(options)
           stream = @api.get_posts(username, options)
           render_view(stream, options)
@@ -152,9 +142,9 @@ module Ayadn
     def interactions
       begin
         doing({})
-        stream = get_data_from_response(@api.get_interactions)
+        stream = @api.get_interactions
         @view.clear_screen
-        @view.show_interactions(stream)
+        @view.show_interactions(stream['data'])
       rescue => e
         Errors.global_error("action/interactions", nil, e)
       ensure
@@ -165,7 +155,7 @@ module Ayadn
     def whatstarred(username, options)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           doing(options)
           stream = @api.get_whatstarred(username, options)
           render_view(stream, options)
@@ -183,9 +173,9 @@ module Ayadn
       begin
         if post_id.is_integer?
           doing({})
-          list = get_data_from_response(@api.get_whoreposted(post_id))
-          unless list.empty?
-            get_list(:whoreposted, list, post_id)
+          list = @api.get_whoreposted(post_id)
+          unless list['data'].empty?
+            get_list(:whoreposted, list['data'], post_id)
           else
             puts Status.empty_list
           end
@@ -203,9 +193,9 @@ module Ayadn
       begin
         if post_id.is_integer?
           doing({})
-          list = get_data_from_response(@api.get_whostarred(post_id))
-          unless list.empty?
-            get_list(:whostarred, list, post_id)
+          list = @api.get_whostarred(post_id)
+          unless list['data'].empty?
+            get_list(:whostarred, list['data'], post_id)
           else
             puts Status.empty_list
           end
@@ -261,7 +251,7 @@ module Ayadn
     def unfollow(username)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           @view.clear_screen
           puts Status.unfollowing(username)
           resp = @api.unfollow(username)
@@ -285,7 +275,7 @@ module Ayadn
     def follow(username)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           @view.clear_screen
           puts Status.following(username)
           resp = @api.follow(username)
@@ -309,7 +299,7 @@ module Ayadn
     def unmute(username)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           @view.clear_screen
           puts Status.unmuting(username)
           resp = @api.unmute(username)
@@ -333,7 +323,7 @@ module Ayadn
     def mute(username)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           @view.clear_screen
           puts Status.muting(username)
           resp = @api.mute(username)
@@ -357,7 +347,7 @@ module Ayadn
     def unblock(username)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           @view.clear_screen
           puts Status.unblocking(username)
           resp = @api.unblock(username)
@@ -381,7 +371,7 @@ module Ayadn
     def block(username)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           @view.clear_screen
           puts Status.blocking(username)
           resp = @api.block(username)
@@ -521,7 +511,7 @@ module Ayadn
     def followings(username, options)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           doing(options)
           unless options[:raw]
             list = @api.get_followings(username)
@@ -552,7 +542,7 @@ module Ayadn
     def followers(username, options)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           doing(options)
           unless options[:raw]
             list = @api.get_followers(username)
@@ -632,7 +622,7 @@ module Ayadn
     def view_settings
       begin
         @view.clear_screen
-        @view.settings
+        @view.show_settings
       rescue => e
         Errors.global_error("action/settings", nil, e)
       ensure
@@ -643,11 +633,11 @@ module Ayadn
     def userinfo(username, options)
       begin
         unless username.empty?
-          username = Workers.add_arobase_if_absent(username)
+          username = Workers.add_arobase_if_missing(username)
           doing(options)
           unless options[:raw]
-            stream = get_data_from_response(@api.get_user(username))
-            get_infos(stream)
+            stream = @api.get_user(username)
+            get_infos(stream['data'])
           else
             @view.show_raw(@api.get_user(username))
           end
@@ -764,18 +754,18 @@ module Ayadn
           post_url = resp['canonical_url']
           handle = "@" + resp['user']['username']
           post_text = "From: #{handle} -- Text: #{text} -- Links: #{links.join(" ")}"
-          gandalf = Ayadn::PinBoard.new
-          unless gandalf.has_credentials_file?
-            puts "\nAyadn couldn't find your Pinboard credentials.\n".color(:red)
-            gandalf.save_credentials(gandalf.ask_credentials)
-            puts "\n\nCredentials successfully encoded and saved in database.\n\n".color(:green)
+          pinner = Ayadn::PinBoard.new
+          unless pinner.has_credentials_file?
+            puts Status.no_pin_creds
+            pinner.ask_credentials
+            puts Status.pin_creds_saved
           end
-          credentials = gandalf.decode(gandalf.load_credentials)
-          ring = Struct.new(:username, :password, :url, :tags, :text, :description)
-          hobbit = ring.new(credentials[0], credentials[1], post_url, usertags.join(","), post_text, links[0])
-          puts "\nSaving post text and links to Pinboard...\n\n".color(:yellow)
-          gandalf.pin(hobbit)
-          puts "Done!\n\n".color(:green)
+          credentials = pinner.load_credentials
+          maker = Struct.new(:username, :password, :url, :tags, :text, :description)
+          bookmark = maker.new(credentials[0], credentials[1], post_url, usertags.join(","), post_text, links[0])
+          puts Status.saving_pin
+          pinner.pin(bookmark)
+          puts Status.done
         else
           puts Status.error_missing_post_id
         end
@@ -839,7 +829,6 @@ module Ayadn
           if MyConfig.options[:backup][:auto_save_sent_messages]
             FileOps.save_message(resp)
           end
-	    		# TODO: CNX returns True if... failure, so change this soon!
 	    		@view.clear_screen
 	    		puts Status.yourpost
 	    		@view.show_posted(resp)
@@ -876,23 +865,6 @@ module Ayadn
     	end
     end
 
-    def length_of_index
-      Databases.get_index_length
-    end
-
-    def get_post_from_index(id)
-      Databases.get_post_from_index(id)
-    end
-
-    def get_real_post_id(post_id)
-      id = post_id.to_i
-      if id > 0 && id <= length_of_index
-        resp = get_post_from_index(id)
-        post_id = resp[:id]
-      end
-      post_id
-    end
-
     def reply(post_id)
       begin
         post_id = get_real_post_id(post_id)
@@ -918,6 +890,25 @@ module Ayadn
       ensure
         Databases.close_all
       end
+    end
+
+    private
+
+    def length_of_index
+      Databases.get_index_length
+    end
+
+    def get_post_from_index(id)
+      Databases.get_post_from_index(id)
+    end
+
+    def get_real_post_id(post_id)
+      id = post_id.to_i
+      if id > 0 && id <= length_of_index
+        resp = get_post_from_index(id)
+        post_id = resp[:id]
+      end
+      post_id
     end
 
     def render_view(data, options = {})
@@ -986,6 +977,16 @@ module Ayadn
 
     def save_max_id(stream)
       Databases.save_max_id(stream['meta']['marker']['name'], stream['meta']['max_id'])
+    end
+
+    def compare_pagination(stream, title)
+      stream['meta']['max_id'].to_i > Databases.pagination[title].to_i
+    end
+
+    def no_new_posts
+      @view.clear_screen
+      puts Status.no_new_posts
+      exit
     end
 
   end

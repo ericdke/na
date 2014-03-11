@@ -51,13 +51,9 @@ module Ayadn
     end
 
     def self.save_indexed_posts(posts)
-      begin
-        @index.clear
-        posts.each do |id, hash|
-          @index[id] = hash
-        end
-      rescue => e
-        Errors.global_error("fileops/save_indexed_posts", nil, e)
+      @index.clear
+      posts.each do |id, hash|
+        @index[id] = hash
       end
     end
 
@@ -66,17 +62,13 @@ module Ayadn
     end
 
     def self.get_post_from_index(number)
-      begin
-        unless number > @index.length || number <= 0
-          @index.to_h.each do |id, values|
-            return values if values[:count] == number
-          end
-        else
-          puts "\nNumber must be in the range of the indexed posts.\n".color(:red)
-          Errors.global_error("fileops/get_post_from_index", number, "out of range")
+      unless number > @index.length || number <= 0
+        @index.to_h.each do |id, values|
+          return values if values[:count] == number
         end
-      rescue => e
-        Errors.global_error("fileops/get_post_from_index", number, e)
+      else
+        puts "\nNumber must be in the range of the indexed posts.\n".color(:red)
+        Errors.global_error("databases/get_post_from_index", number, "out of range")
       end
     end
 

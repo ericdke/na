@@ -9,21 +9,6 @@ module Ayadn
       attr_reader :user_token
     end
 
-    def self.build_query(arg)
-      count = arg[:count] || @options[:counts][:default] #default as a backup, but real value comes from Endpoints
-      directed = arg[:directed] || @options[:timeline][:directed]
-      deleted = arg[:deleted] || @options[:timeline][:deleted]
-      html = arg[:html] || @options[:timeline][:html]
-      annotations = arg[:annotations] || @options[:timeline][:annotations]
-      if arg[:since_id]
-        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&since_id=#{arg[:since_id]}"
-      elsif arg[:recent_message]
-        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&include_recent_message=#{arg[:recent_message]}"
-      else
-        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}"
-      end
-    end
-
     def self.load_config
       @options = self.defaults # overridden later in the method by the loaded file
       home = Dir.home + "/ayadn2/data" #temp, will be /ayadn/data in v1
@@ -80,7 +65,7 @@ module Ayadn
     def self.new_api_file(api_file)
       api = API.new
       resp = api.get_config
-      api.check_error(resp)
+      api.check_response_meta_code(resp)
       File.write(api_file, resp['data'].to_json)
     end
 

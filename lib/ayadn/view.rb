@@ -7,41 +7,12 @@ module Ayadn
 
     def show_posts_with_index(data, options)
       posts, view = build_stream_with_index(data, options)
-      #puts "\n"
       puts view
-      begin
-        Databases.save_indexed_posts(posts)
-      rescue => e
-        Errors.global_error("view/show_posts_with_index/save_indexed_posts", options, e)
-      end
+      Databases.save_indexed_posts(posts)
     end
 
     def show_posts(data, options)
-      view = build_stream_without_index(data, options)
-      #puts "\n"
-      puts view
-    end
-
-    def build_stream_with_index(data, options) #expects an array
-      @view = ""
-      posts = @workers.build_posts(data.reverse)
-      posts.each do |id,content|
-        count = "%03d" % content[:count]
-        @view << count.color(MyConfig.options[:colors][:index])
-        @view << ": ".color(MyConfig.options[:colors][:index])
-        @view << build_content(content)
-      end
-      return posts, @view
-    end
-
-    def build_stream_without_index(data, options) #expects an array
-      @view = ""
-      posts = @workers.build_posts(data.reverse)
-      posts.each do |id,content|
-        @view << content[:id].to_s.color(MyConfig.options[:colors][:id]) + " "
-        @view << build_content(content)
-      end
-      @view
+      puts build_stream_without_index(data, options)
     end
 
     def show_raw(stream)
@@ -98,91 +69,11 @@ module Ayadn
       puts build_interactions_stream(stream)
     end
 
-    def build_interactions_stream(data)
-      inter = ""
-      data.reverse.each do |event|
-        users_array = []
-        inter << "#{@workers.parsed_time(event['event_date'])}".color(MyConfig.options[:colors][:date])
-        inter << " => "
-        event['users'].each do |u|
-          users_array << "@" + u['username']
-        end
-        case event['action']
-          when "follow", "unfollow"
-            inter << "#{users_array.join(", ")} ".color(:magenta)
-            inter << "#{event['action']}ed you".color(:green)
-          when "mute", "unmute"
-            inter << "#{users_array.join(", ")} ".color(:magenta)
-            inter << "#{event['action']}d you".color(:green)
-          when "star", "unstar"
-            inter << "#{users_array.join(", ")} ".color(:magenta)
-            inter << "#{event['action']}red post #{event['objects'][0]['id']}".color(:green)
-          when "repost", "unrepost"
-            inter << "#{users_array.join(", ")} ".color(:magenta)
-            inter << "#{event['action']}ed post ".color(:green)
-            inter << "#{event['objects'][0]['id']}".color(:red)
-          when "reply"
-            inter << "#{users_array.join(", ")} ".color(:magenta)
-            inter << "replied to post ".color(:green)
-            inter << "#{event['objects'][0]['id']}".color(:red)
-          when "welcome"
-            inter << "App.net ".color(:cyan)
-            inter << "welcomed ".color(:green)
-            inter << "you!".color(:yellow)
-        end
-        inter << "\n\n"
-      end
-      inter
-    end
-
     def show_files_list(list)
       puts build_files_list(list)
     end
 
-    def build_files_list(list)
-      data = list.reverse
-      view = "\n"
-      data.each do |file|
-        view << "ID\t\t".color(:cyan)
-        view << file['id'].color(MyConfig.options[:colors][:id])
-        view << "\n"
-        view << "Name\t\t".color(:cyan)
-        view << file['name'].color(MyConfig.options[:colors][:name])
-        view << "\n"
-        view << "Kind\t\t".color(:cyan)
-        view << file['kind'].color(MyConfig.options[:colors][:username])
-        view << " (#{file['mime_type']})".color(MyConfig.options[:colors][:username]) if file['mime_type']
-        if file['image_info']
-          view << "\n"
-          view << "Dimensions\t".color(:cyan)
-          view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color(MyConfig.options[:colors][:username])
-        end
-        view << "\n"
-        view << "Size\t\t".color(:cyan)
-        view << file['size'].to_filesize.color(:yellow)
-        view << "\n"
-        view << "Date\t\t".color(:cyan)
-        view << @workers.parsed_time(file['created_at']).color(:green)
-        view << "\n"
-        view << "Source\t\t".color(:cyan)
-        view << file['source']['name'].color(MyConfig.options[:colors][:source])
-        view << "\n"
-        view << "State\t\t".color(:cyan)
-        if file['public']
-          view << "Public".color(MyConfig.options[:colors][:id])
-          view << "\n"
-          view << "Link\t\t".color(:cyan)
-          view << file['url_short'].color(MyConfig.options[:colors][:link])
-        else
-          view << "Private".color(MyConfig.options[:colors][:id])
-        end
-
-        view << "\n\n"
-      end
-      view
-    end
-
-    def settings
+    def show_settings
       table = Terminal::Table.new do |t|
         t.style = { :width => MyConfig.options[:formats][:table][:width] }
         t.title = "Current Ayadn settings".color(:cyan)
@@ -261,6 +152,165 @@ module Ayadn
       end
 
       puts view
+    end
+
+    def show_channels(resp)
+      view = ""
+      bucket = @workers.build_channels(resp['data'])
+      bucket.each do |ch|
+        view << "\n"
+        ch_alias = false
+        Databases.aliases.each do |k,v|
+          if v == "#{ch.id}"
+            ch_alias = k
+            break
+          end
+        end
+        if ch_alias
+          view << "ID: ".color(:cyan)
+          view << "#{ch.id}".color(MyConfig.options[:colors][:id])
+          view << "\n"
+          view << "Alias: ".color(:cyan)
+          view << "#{ch_alias}".color(MyConfig.options[:colors][:username])
+          view << "\n"
+        else
+          view << "ID: ".color(:cyan)
+          view << "#{ch.id}".color(MyConfig.options[:colors][:id])
+          view << "\n"
+        end
+        view << "Messages: ".color(:cyan)
+        view << "#{ch.num_messages}".color(MyConfig.options[:colors][:symbols])
+        view << "\n"
+        view << "Owner: ".color(:cyan)
+        view << "@#{ch.owner['username']}".color(MyConfig.options[:colors][:username])
+        # + (#{ch.owner['name']}) if ch.owner['name']
+        view << "\n"
+        view << "Writers: ".color(:cyan)
+        view << "#{ch.writers}".color(MyConfig.options[:colors][:name])
+        view << "\n"
+        view << "Type: ".color(:cyan)
+        view << "#{ch.type}".color(MyConfig.options[:colors][:source])
+        view << "\n"
+        #view << "You follow this channel" if ch.you_subscribed
+        #view << "\n"
+        #view << ch.unread
+        #view << "\n"
+        unless ch.recent_message.nil?
+          view << "Most recent messsage: ".color(:cyan)
+          view << "\n"
+          view << "---\n#{ch.recent_message['text']}\n---"
+        end
+        view << "\n\n"
+      end
+      puts view
+    end
+
+    def clear_screen
+      puts "\e[H\e[2J"
+    end
+
+    private
+
+    def build_stream_with_index(data, options) #expects an array
+      @view = ""
+      posts = @workers.build_posts(data.reverse)
+      posts.each do |id,content|
+        count = "%03d" % content[:count]
+        @view << count.color(MyConfig.options[:colors][:index])
+        @view << ": ".color(MyConfig.options[:colors][:index])
+        @view << build_content(content)
+      end
+      return posts, @view
+    end
+
+    def build_stream_without_index(data, options) #expects an array
+      @view = ""
+      posts = @workers.build_posts(data.reverse)
+      posts.each do |id,content|
+        @view << content[:id].to_s.color(MyConfig.options[:colors][:id]) + " "
+        @view << build_content(content)
+      end
+      @view
+    end
+
+    def build_interactions_stream(data)
+      inter = ""
+      data.reverse.each do |event|
+        users_array = []
+        inter << "#{@workers.parsed_time(event['event_date'])}".color(MyConfig.options[:colors][:date])
+        inter << " => "
+        event['users'].each do |u|
+          users_array << "@" + u['username']
+        end
+        case event['action']
+          when "follow", "unfollow"
+            inter << "#{users_array.join(", ")} ".color(:magenta)
+            inter << "#{event['action']}ed you".color(:green)
+          when "mute", "unmute"
+            inter << "#{users_array.join(", ")} ".color(:magenta)
+            inter << "#{event['action']}d you".color(:green)
+          when "star", "unstar"
+            inter << "#{users_array.join(", ")} ".color(:magenta)
+            inter << "#{event['action']}red post #{event['objects'][0]['id']}".color(:green)
+          when "repost", "unrepost"
+            inter << "#{users_array.join(", ")} ".color(:magenta)
+            inter << "#{event['action']}ed post ".color(:green)
+            inter << "#{event['objects'][0]['id']}".color(:red)
+          when "reply"
+            inter << "#{users_array.join(", ")} ".color(:magenta)
+            inter << "replied to post ".color(:green)
+            inter << "#{event['objects'][0]['id']}".color(:red)
+          when "welcome"
+            inter << "App.net ".color(:cyan)
+            inter << "welcomed ".color(:green)
+            inter << "you!".color(:yellow)
+        end
+        inter << "\n\n"
+      end
+      inter
+    end
+
+    def build_files_list(list)
+      data = list.reverse
+      view = "\n"
+      data.each do |file|
+        view << "ID\t\t".color(:cyan)
+        view << file['id'].color(MyConfig.options[:colors][:id])
+        view << "\n"
+        view << "Name\t\t".color(:cyan)
+        view << file['name'].color(MyConfig.options[:colors][:name])
+        view << "\n"
+        view << "Kind\t\t".color(:cyan)
+        view << file['kind'].color(MyConfig.options[:colors][:username])
+        view << " (#{file['mime_type']})".color(MyConfig.options[:colors][:username]) if file['mime_type']
+        if file['image_info']
+          view << "\n"
+          view << "Dimensions\t".color(:cyan)
+          view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color(MyConfig.options[:colors][:username])
+        end
+        view << "\n"
+        view << "Size\t\t".color(:cyan)
+        view << file['size'].to_filesize.color(:yellow)
+        view << "\n"
+        view << "Date\t\t".color(:cyan)
+        view << @workers.parsed_time(file['created_at']).color(:green)
+        view << "\n"
+        view << "Source\t\t".color(:cyan)
+        view << file['source']['name'].color(MyConfig.options[:colors][:source])
+        view << "\n"
+        view << "State\t\t".color(:cyan)
+        if file['public']
+          view << "Public".color(MyConfig.options[:colors][:id])
+          view << "\n"
+          view << "Link\t\t".color(:cyan)
+          view << file['url_short'].color(MyConfig.options[:colors][:link])
+        else
+          view << "Private".color(MyConfig.options[:colors][:id])
+        end
+
+        view << "\n\n"
+      end
+      view
     end
 
     def build_content(content)
@@ -363,68 +413,6 @@ module Ayadn
       end
 
       chk.chomp
-    end
-
-    def show_channels(resp)
-      view = ""
-      bucket = @workers.build_channels(resp['data'])
-      bucket.each do |ch|
-        view << "\n"
-        ch_alias = false
-        Databases.aliases.each do |k,v|
-          if v == "#{ch.id}"
-            ch_alias = k
-            break
-          end
-        end
-        if ch_alias
-          view << "ID: ".color(:cyan)
-          view << "#{ch.id}".color(MyConfig.options[:colors][:id])
-          view << "\n"
-          view << "Alias: ".color(:cyan)
-          view << "#{ch_alias}".color(MyConfig.options[:colors][:username])
-          view << "\n"
-        else
-          view << "ID: ".color(:cyan)
-          view << "#{ch.id}".color(MyConfig.options[:colors][:id])
-          view << "\n"
-        end
-        view << "Messages: ".color(:cyan)
-        view << "#{ch.num_messages}".color(MyConfig.options[:colors][:symbols])
-        view << "\n"
-        view << "Owner: ".color(:cyan)
-        view << "@#{ch.owner['username']}".color(MyConfig.options[:colors][:username])
-        # + (#{ch.owner['name']}) if ch.owner['name']
-        view << "\n"
-        view << "Writers: ".color(:cyan)
-        view << "#{ch.writers}".color(MyConfig.options[:colors][:name])
-        view << "\n"
-        view << "Type: ".color(:cyan)
-        view << "#{ch.type}".color(MyConfig.options[:colors][:source])
-        view << "\n"
-        #view << "You follow this channel" if ch.you_subscribed
-        #view << "\n"
-        #view << ch.unread
-        #view << "\n"
-        unless ch.recent_message.nil?
-          view << "Most recent messsage: ".color(:cyan)
-          view << "\n"
-          view << "---\n#{ch.recent_message['text']}\n---"
-        end
-        view << "\n\n"
-      end
-      puts view
-    end
-
-
-
-
-    def clear_line
-      print "\r                                            \n"
-    end
-
-    def clear_screen
-      puts "\e[H\e[2J"
     end
 
   end

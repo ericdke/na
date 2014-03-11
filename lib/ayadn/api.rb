@@ -45,9 +45,7 @@ module Ayadn
       url = Endpoints.new.trending(options) if explore == :trending
       url = Endpoints.new.photos(options) if explore == :photos
       url = Endpoints.new.conversations(options) if explore == :conversations
-      resp = get_parsed_response(url)
-      #check_error(resp)
-      resp
+      get_parsed_response(url)
     end
 
     def get_mentions(username, options)
@@ -63,21 +61,11 @@ module Ayadn
     end
 
     def get_interactions
-      resp = get_parsed_response(Endpoints.new.interactions)
-      #check_error(resp)
-      resp
+      get_parsed_response(Endpoints.new.interactions)
     end
 
     def get_whoreposted(post_id)
       get_parsed_response(Endpoints.new.whoreposted(post_id))
-    end
-
-    def get_original_if_repost(resp)
-      if resp['repost_of']
-        resp['repost_of']
-      else
-        resp
-      end
     end
 
     def get_whostarred(post_id)
@@ -89,15 +77,11 @@ module Ayadn
     end
 
     def get_hashtag(hashtag)
-      resp = get_parsed_response(Endpoints.new.hashtag(hashtag))
-      #check_error(resp)
-      resp
+      get_parsed_response(Endpoints.new.hashtag(hashtag))
     end
 
     def get_search(words, options)
-      resp = get_parsed_response(Endpoints.new.search(words, options))
-      #check_error(resp)
-      resp
+      get_parsed_response(Endpoints.new.search(words, options))
     end
 
     def get_followings(username)
@@ -116,19 +100,6 @@ module Ayadn
       build_list(nil, :blocked)
     end
 
-    def get_list_url(username, target, options)
-      case target
-      when :followings
-        Endpoints.new.followings(username, options)
-      when :followers
-        Endpoints.new.followers(username, options)
-      when :muted
-        Endpoints.new.muted(options)
-      when :blocked
-        Endpoints.new.blocked(options)
-      end
-    end
-
     def get_raw_list(username, target)
       options = {:count => 200, :before_id => nil}
       big = []
@@ -142,27 +113,8 @@ module Ayadn
       big
     end
 
-    def build_list(username, target)
-      options = {:count => 200, :before_id => nil}
-      big_hash = {}
-      loop do
-        url = get_list_url(username, target, options)
-        resp = get_parsed_response(url)
-        users_hash = {}
-        resp['data'].each do |item|
-          users_hash[item['id']] = [item['username'], item['name'], item['you_follow'], item['follows_you']]
-        end
-        big_hash.merge!(users_hash)
-        break if resp['meta']['min_id'] == nil
-        options = {:count => 200, :before_id => resp['meta']['min_id']}
-      end
-      big_hash
-    end
-
     def get_user(username)
-      resp = get_parsed_response(Endpoints.new.user(username))
-      #check_error(resp)
-      resp
+      get_parsed_response(Endpoints.new.user(username))
     end
 
     def get_details(post_id, options)
@@ -232,7 +184,6 @@ module Ayadn
 
     def unrepost(post_id)
       resp = JSON.parse(CNX.delete(Endpoints.new.repost(post_id)))
-      #check_error(resp)
       if resp['data']['repost_of']
         JSON.parse(CNX.delete(Endpoints.new.repost(resp['data']['repost_of']['id'])))
       else
@@ -246,9 +197,9 @@ module Ayadn
       # big = []
       # loop do
       #   resp = get_parsed_response(Endpoints.new.channels(options))
-      #   #check_error(resp)
+      #   #check_response_meta_code(resp)
       #   big << resp
-      #   break if resp['meta']['min_id'] == nil || resp['meta']['more'] == false
+      #   break if resp['meta']['more'] == false
       #   options = {:count => 200, :before_id => resp['meta']['min_id']}
       # end
       # big
@@ -265,38 +216,71 @@ module Ayadn
       get_parsed_response(Endpoints.new.config_api_url)
     end
 
-    def self.check_http_error(resp)
-      unless resp.code == 200
-        raise "#{resp}"
-      end
-    end
-
-    def check_error(res)
+    def check_response_meta_code(res)
       if res['meta']['code'] == 200
         res
       else
-        Errors.global_error("api/check_error", nil, res['meta'])
+        Errors.global_error("api/check_response_meta_code", nil, res['meta'])
       end
     end
 
-    def empty_data
-      puts "\e[H\e[2J"
-      #puts Status.empty_list
-      raise Status.empty_list
+    def self.build_query(arg)
+      count = arg[:count] || MyConfig.options[:counts][:default]
+      directed = arg[:directed] || MyConfig.options[:timeline][:directed]
+      deleted = arg[:deleted] || MyConfig.options[:timeline][:deleted]
+      html = arg[:html] || MyConfig.options[:timeline][:html]
+      annotations = arg[:annotations] || MyConfig.options[:timeline][:annotations]
+      if arg[:since_id]
+        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&since_id=#{arg[:since_id]}"
+      elsif arg[:recent_message]
+        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&include_recent_message=#{arg[:recent_message]}"
+      else
+        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}"
+      end
     end
 
-    def get_raw_response(url)
-      CNX.get_response_from(url)
-    end
+    private
 
     def get_parsed_response(url)
       JSON.parse(CNX.get_response_from(url))
     end
 
+    def get_original_if_repost(resp)
+      if resp['repost_of']
+        resp['repost_of']
+      else
+        resp
+      end
+    end
 
+    def build_list(username, target)
+      options = {:count => 200, :before_id => nil}
+      big_hash = {}
+      loop do
+        url = get_list_url(username, target, options)
+        resp = get_parsed_response(url)
+        users_hash = {}
+        resp['data'].each do |item|
+          users_hash[item['id']] = [item['username'], item['name'], item['you_follow'], item['follows_you']]
+        end
+        big_hash.merge!(users_hash)
+        break if resp['meta']['min_id'] == nil
+        options = {:count => 200, :before_id => resp['meta']['min_id']}
+      end
+      big_hash
+    end
 
-    def get_data_from_response(response)
-      response['data']
+    def get_list_url(username, target, options)
+      case target
+      when :followings
+        Endpoints.new.followings(username, options)
+      when :followers
+        Endpoints.new.followers(username, options)
+      when :muted
+        Endpoints.new.muted(options)
+      when :blocked
+        Endpoints.new.blocked(options)
+      end
     end
 
   end
