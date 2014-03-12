@@ -15,5 +15,8 @@ module Ayadn
     def self.warn(warning)
       Logs.rec.warn warning
     end
+    def self.info(msg)
+      Logs.rec.info msg
+    end
   end
 end

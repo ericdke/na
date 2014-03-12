@@ -51,14 +51,16 @@ module Ayadn
       File.write(@config[:paths][:config] + "/config.yml", @options.to_yaml)
     end
 
-    #private
-
     def self.has_token_file?
       File.exist?(@config[:paths][:auth] + "/token")
     end
 
     def self.read_token_file
       File.read(@config[:paths][:auth] + "/token")
+    end
+
+    def self.has_identity_file?
+      File.exist?(@config[:paths][:config] + "/identity.yml")
     end
 
     def self.config_file
@@ -76,6 +78,27 @@ module Ayadn
         rescue => e
           Errors.global_error("myconfig/create config.yml from defaults", nil, e)
         end
+      end
+    end
+
+    def self.create_config_folders
+      #todo: unless version file exists + more checks
+      begin
+        FileUtils.mkdir_p(@config[:paths][:home]) unless Dir.exists?(@config[:paths][:home])
+        %w{log db pagination config auth downloads backup posts messages lists}.each do |target|
+          Dir.mkdir(@config[:paths][target.to_sym]) unless Dir.exists?(@config[:paths][target.to_sym])
+        end
+      rescue => e
+        Errors.global_error("myconfig/create ayadn folders", nil, e)
+      end
+    end
+
+    def self.create_token_file(token)
+      unless token.nil? || token.empty?
+        File.write(@config[:paths][:auth] + "/token", token)
+      else
+        puts Status.wtf
+        exit
       end
     end
 
@@ -113,6 +136,12 @@ module Ayadn
       self.read_api(api_file)
     end
 
+    def self.create_version_file
+      File.write(@config[:paths][:config] + "/version.yml", {version: @config[:version]}.to_yaml)
+    end
+
+    private
+
     def self.new_api_file(api_file)
       api = API.new
       resp = api.get_config
@@ -130,41 +159,12 @@ module Ayadn
       YAML.load(File.read(@config[:paths][:config] + "/identity.yml"))
     end
 
-    def self.has_identity_file?
-      File.exist?(@config[:paths][:config] + "/identity.yml")
-    end
-
-    def self.create_version_file
-      File.write(@config[:paths][:config] + "/version.yml", {version: @config[:version]}.to_yaml)
-    end
-
     def self.has_version_file?
       File.exist?(@config[:paths][:config] + "/version.yml")
     end
 
     def self.read_version_file
       YAML.load(File.read(@config[:paths][:config] + "/version.yml"))
-    end
-
-    def self.create_token_file(token)
-      unless token.nil? || token.empty?
-        File.write(@config[:paths][:auth] + "/token", token)
-      else
-        puts Status.wtf
-        exit
-      end
-    end
-
-    def self.create_config_folders
-      #todo: unless version file exists + more checks
-      begin
-        FileUtils.mkdir_p(@config[:paths][:home]) unless Dir.exists?(@config[:paths][:home])
-        %w{log db pagination config auth downloads backup posts messages lists}.each do |target|
-          Dir.mkdir(@config[:paths][target.to_sym]) unless Dir.exists?(@config[:paths][target.to_sym])
-        end
-      rescue => e
-        Errors.global_error("myconfig/create ayadn folders", nil, e)
-      end
     end
 
     def self.write_config_file(config_file, options)
