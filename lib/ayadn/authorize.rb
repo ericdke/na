@@ -7,22 +7,27 @@ module Ayadn
     end
 
     def authorize
+      puts "\e[H\e[2J"
       if FileOps.old_ayadn?
-        # ask if delete
-        # if no, give up
+        puts "\nAn old version of Ayadn has been detected and will be deleted. Install and authorize the new version? [y/N]\n".color(:red)
+        print "> "
+        answer = STDIN.getch
+        unless answer.downcase == "y"
+          puts Status.canceled
+          exit
+        end
+        puts "\nDeleting old version...\n".color(:green)
+        Dir.rmdir(Dir.home + "/ayadn")
       end
       if Settings.has_token_file?
-        if Settings.has_identity_file?
-          # already installed
-          # alert and ask if continue with current
-          # if yes, cancel, if no, authorize new user
-        else
-          # already logged but not installed
-          # say something's wrong
-          # authorize new user
+        puts "\nYou're already authorized. If you authorize again, your config file will be deleted. Are you sure you want to authorize a new account? [y/N]\n".color(:red)
+        print "> "
+        answer = STDIN.getch
+        unless answer.downcase == "y"
+          puts Status.canceled
+          exit
         end
       end
-
       show_link
       token = STDIN.gets.chomp()
       puts "\n\nOk! Creating Ayadn folders...\n".color(:green)
@@ -45,8 +50,8 @@ module Ayadn
       puts "\nPlease click this URL, or open a browser then copy/paste it:\n".color(:cyan)
       puts Endpoints.new.authorize_url
       puts "\n"
-      puts "Login on this page with your App.net account to authorize Ayadn.\n".color(:cyan)
-      puts "You will be redirected to a page showing a 'user token'.\n".color(:cyan)
+      puts "On this page, log in with your App.net account to authorize Ayadn.\n".color(:cyan)
+      puts "You will then be redirected to a page showing a 'user token' (a secret code).\n".color(:cyan)
       puts "Copy it then paste it here:\n".color(:yellow)
       print "> "
     end
