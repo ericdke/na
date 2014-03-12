@@ -1,10 +1,12 @@
 # encoding: utf-8
 module Ayadn
   class Scroll
+
     def initialize(api, view)
       @api = api
       @view = view
     end
+
     def global(options)
       options = check_raw(options)
       loop do
@@ -19,13 +21,13 @@ module Ayadn
           end
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
-          puts Status.canceled
-          exit
+          canceled
         rescue => e
           raise e
         end
       end
     end
+
     def unified(options)
       options = check_raw(options)
       loop do
@@ -40,13 +42,13 @@ module Ayadn
           end
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
-          puts Status.canceled
-          exit
+          canceled
         rescue => e
           raise e
         end
       end
     end
+
     def conversations(options)
       options = check_raw(options)
       loop do
@@ -61,13 +63,13 @@ module Ayadn
           end
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
-          puts Status.canceled
-          exit
+          canceled
         rescue => e
           raise e
         end
       end
     end
+
     def trending(options)
       options = check_raw(options)
       loop do
@@ -82,13 +84,13 @@ module Ayadn
           end
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
-          puts Status.canceled
-          exit
+          canceled
         rescue => e
           raise e
         end
       end
     end
+
     def checkins(options)
       options = check_raw(options)
       loop do
@@ -103,13 +105,13 @@ module Ayadn
           end
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
-          puts Status.canceled
-          exit
+          canceled
         rescue => e
           raise e
         end
       end
     end
+
     def photos(options)
       options = check_raw(options)
       loop do
@@ -124,13 +126,13 @@ module Ayadn
           end
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
-          puts Status.canceled
-          exit
+          canceled
         rescue => e
           raise e
         end
       end
     end
+
     def messages(options)
       options = check_raw(options)
       loop do
@@ -145,8 +147,7 @@ module Ayadn
           end
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
-          puts Status.canceled
-          exit
+          canceled
         rescue => e
           raise e
         end
@@ -162,6 +163,11 @@ module Ayadn
         options = {count: 200, since_id: nil, scroll: true}
       end
     end
+
+    def options_hash(stream)
+      {:count => 50, :since_id => stream['meta']['max_id'], scroll: true}
+    end
+
     def show(stream, options)
       unless options[:raw]
         @view.show_posts(stream['data'], options)
@@ -169,8 +175,10 @@ module Ayadn
         puts stream
       end
     end
-    def options_hash(stream)
-      {:count => 50, :since_id => stream['meta']['max_id'], scroll: true}
+
+    def canceled
+      puts Status.canceled
+      exit
     end
   end
 end

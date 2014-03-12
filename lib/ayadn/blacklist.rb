@@ -34,6 +34,8 @@ module Ayadn
   class BlacklistWorkers
     def initialize
       Settings.load_config
+      Settings.get_token
+      Settings.init_config
       Databases.open_databases
     end
     def add(args)

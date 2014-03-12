@@ -126,7 +126,7 @@ module Ayadn
 
       #view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)
 
-      unless content['username'] == Settings.config[:identity]
+      unless content['username'] == Settings.config[:identity][:username]
         if content['you_follow']
           view << "\n\nYou follow ".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
         else

@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Ayadn::Post do
   before do
     Ayadn::Settings.load_config
+    Settings.get_token
+    Settings.init_config
     Ayadn::Logs.create_logger
   end
   let(:post) { Ayadn::Post.new }

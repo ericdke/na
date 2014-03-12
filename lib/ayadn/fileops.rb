@@ -30,6 +30,10 @@ module Ayadn
       File.write(Settings.config[:paths][:downloads] + "/#{name}", file)
     end
 
+    def self.old_ayadn?
+      Dir.home + "/ayadn/data"
+    end
+
     private
 
     def get_users(list)

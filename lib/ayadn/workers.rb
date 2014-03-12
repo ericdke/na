@@ -221,10 +221,10 @@ module Ayadn
               Databases.add_to_users_db(id, resp['data']['username'], resp['data']['name'])
             end
           end
-          usernames << Settings.config[:handle] unless usernames.length == 1 && usernames.first == Settings.config[:handle]
+          usernames << Settings.config[:identity][:handle] unless usernames.length == 1 && usernames.first == Settings.config[:identity][:handle]
           writers = usernames.join(", ")
         else
-          writers = Settings.config[:handle]
+          writers = Settings.config[:identity][:handle]
         end
         if ch['has_unread']
           unread = "This channel has unread message(s)"

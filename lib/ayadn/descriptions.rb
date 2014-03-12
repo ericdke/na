@@ -545,7 +545,20 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.authorize
+      <<-USAGE
+      Authorize Ayadn to access your App.net account.
 
+      On Mac OS X, your browser will open and an App.net login page asking to authorize Ayadn will show up.
+
+      On other systems, Ayadn will give you a link that you will open yourself.
+
+      After a successful login, you will be redirected to the Ayadn authorization page.
+
+      Copy the token and paste it into Ayadn.
+      \n\n
+      USAGE
+    end
 
 
 

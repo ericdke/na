@@ -70,6 +70,8 @@ module Ayadn
   class SetBackup
     def initialize
       Settings.load_config
+      Settings.get_token
+      Settings.init_config
       Logs.create_logger
     end
     def log(args)
@@ -100,6 +102,8 @@ module Ayadn
   class SetCounts
     def initialize
       Settings.load_config
+      Settings.get_token
+      Settings.init_config
       Logs.create_logger
     end
     def log(args)
@@ -173,6 +177,8 @@ module Ayadn
   class SetTimeline
     def initialize
       Settings.load_config
+      Settings.get_token
+      Settings.init_config
       Logs.create_logger
     end
     def validate(value)
@@ -220,6 +226,8 @@ module Ayadn
   class SetColor
     def initialize
       Settings.load_config
+      Settings.get_token
+      Settings.init_config
       Logs.create_logger
     end
 

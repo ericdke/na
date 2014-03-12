@@ -59,6 +59,8 @@ module Ayadn
 
     def init
       Settings.load_config
+      Settings.get_token
+      Settings.init_config
       Logs.create_logger
       Databases.open_databases
     end

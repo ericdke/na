@@ -6,6 +6,8 @@ module Ayadn
       @api = API.new
       @view = View.new
       Settings.load_config
+      Settings.get_token
+      Settings.init_config
       Logs.create_logger
       Databases.open_databases
     end
@@ -27,10 +29,6 @@ module Ayadn
       ensure
         Databases.close_all
       end
-    end
-
-    def winsize
-      IO.console.winsize
     end
 
     def random_posts(options = {wait: 5})
@@ -1063,7 +1061,9 @@ module Ayadn
       channel_id
     end
 
-
+    def winsize
+      IO.console.winsize
+    end
 
     def no_new_posts
       @view.clear_screen

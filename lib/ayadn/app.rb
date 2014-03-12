@@ -3,7 +3,7 @@ module Ayadn
   class App < Thor
     package_name "ayadn"
 
-    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll}.each { |r| require_relative "#{r}" }
+    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize}.each { |r| require_relative "#{r}" }
 
     desc "timeline", "Show your App.net timeline, aka the Unified Stream (shortcut: -tl)"
     map "unified" => :timeline
@@ -393,6 +393,12 @@ module Ayadn
     long_desc Descriptions.random_posts
     def random
       Action.new.random_posts(options)
+    end
+
+    desc "authorize", "Authorize Ayadn to access your App.net account"
+    long_desc Descriptions.authorize
+    def authorize
+      Authorize.new.authorize
     end
 
   end

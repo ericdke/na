@@ -7,6 +7,8 @@ describe Ayadn::View do
 
   before do
     Ayadn::Settings.load_config
+    Settings.get_token
+    Settings.init_config
     Ayadn::Logs.create_logger
     Ayadn::Databases.open_databases
   end

@@ -10,9 +10,7 @@ module Ayadn
     end
 
     def self.load_config
-      @options = self.defaults # overridden later in the method by the loaded file
-      home = Dir.home + "/ayadn2/data" #temp, will be /ayadn in v1
-      @user_token = File.read(File.expand_path("../../../token", __FILE__)).chomp #temp
+      home = Dir.home + "/ayadn2" #temp, will be /ayadn in v1
       @config = {
         paths: {
           home: home,
@@ -27,34 +25,79 @@ module Ayadn
           messages: "#{home}/backup/messages",
           lists: "#{home}/backup/lists"
         },
-        version: VERSION,
-        platform: RbConfig::CONFIG['host_os']
+        identity: {}
       }
+      @options = self.defaults
+    end
 
-      self.create_config_folders
-      self.create_config_file
-      self.create_version_file
-      self.create_api_file
+    def self.get_token
+      if self.has_token_file?
+        @user_token = self.read_token_file
+      else
+        puts Status.not_authorized
+        exit
+      end
+    end
 
+    def self.init_config
+      @config[:version] = VERSION
+      @config[:platform] = RbConfig::CONFIG['host_os']
+      self.config_file
       self.set_identity
+      self.create_api_file
     end
 
     def self.save_config
       File.write(@config[:paths][:config] + "/config.yml", @options.to_yaml)
     end
 
-    private
+    #private
+
+    def self.has_token_file?
+      File.exist?(@config[:paths][:auth] + "/token")
+    end
+
+    def self.read_token_file
+      File.read(@config[:paths][:auth] + "/token")
+    end
+
+    def self.config_file
+      config_file = @config[:paths][:config] + "/config.yml"
+      if File.exists?(config_file)
+        # TODO: system to merge existing config file when future category are added
+        begin
+          @options = YAML.load(File.read(config_file))
+        rescue => e
+          Errors.global_error("myconfig/load config.yml", nil, e)
+        end
+      else
+        begin
+          self.write_config_file(config_file, @options)
+        rescue => e
+          Errors.global_error("myconfig/create config.yml from defaults", nil, e)
+        end
+      end
+    end
 
     def self.set_identity
+      identity = self.read_identity_file
+      @config[:identity][:username] = identity[:identity][:username]
+      @config[:identity][:id] = identity[:identity][:id]
+      @config[:identity][:handle] = identity[:identity][:handle]
+    end
+
+    def self.create_identity_file
       unless File.exist?(@config[:paths][:config] + "/identity.yml")
         resp = API.new.get_user("me")
         username = resp['data']['username']
-        self.create_identity_file(username)
-        @config[:identity] = username
-      else
-        @config[:identity] = self.read_identity_file
+        id = resp['data']['id']
+        handle = "@" + username
+        @config[:identity][:username] = username
+        @config[:identity][:handle] = handle
+        @config[:identity][:id] = id
+        blob = {identity: {username: username, id: id, handle: handle}}
+        File.write(@config[:paths][:config] + "/identity.yml", blob.to_yaml)
       end
-      @config[:handle] = "@" + @config[:identity]
     end
 
     def self.create_api_file
@@ -83,34 +126,32 @@ module Ayadn
       @config[:message_max_length] = content['message']['text_max_length']
     end
 
-    def self.create_identity_file(username)
-      File.write(@config[:paths][:config] + "/identity.yml", {identity: username}.to_yaml)
+    def self.read_identity_file
+      YAML.load(File.read(@config[:paths][:config] + "/identity.yml"))
     end
 
-    def self.read_identity_file
-      content = YAML.load(File.read(@config[:paths][:config] + "/identity.yml"))
-      content[:identity]
+    def self.has_identity_file?
+      File.exist?(@config[:paths][:config] + "/identity.yml")
     end
 
     def self.create_version_file
       File.write(@config[:paths][:config] + "/version.yml", {version: @config[:version]}.to_yaml)
     end
 
-    def self.create_config_file
-      config_file = @config[:paths][:config] + "/config.yml"
-      if File.exists?(config_file)
-        # TODO: system to merge existing config file when future category are added
-        begin
-          @options = YAML.load(File.read(config_file))
-        rescue => e
-          Errors.global_error("myconfig/load config.yml", nil, e)
-        end
+    def self.has_version_file?
+      File.exist?(@config[:paths][:config] + "/version.yml")
+    end
+
+    def self.read_version_file
+      YAML.load(File.read(@config[:paths][:config] + "/version.yml"))
+    end
+
+    def self.create_token_file(token)
+      unless token.nil? || token.empty?
+        File.write(@config[:paths][:auth] + "/token", token)
       else
-        begin
-          self.write_config_file(config_file, @options)
-        rescue => e
-          Errors.global_error("myconfig/create config.yml from defaults", nil, e)
-        end
+        puts Status.wtf
+        exit
       end
     end
 
