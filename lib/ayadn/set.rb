@@ -7,8 +7,15 @@ module Ayadn
     def timeline(*args)
       timeline_config = SetTimeline.new
       if args[0]
-        param = timeline_config.validate(args[1])
-        timeline_config.send(args[0], param)
+        begin
+          param = timeline_config.validate(args[1])
+          timeline_config.send(args[0], param)
+        rescue NoMethodError
+          puts Status.error_missing_parameters
+          exit
+        rescue => e
+          raise e
+        end
       else
         abort(Status.error_missing_parameters)
       end
@@ -22,8 +29,15 @@ module Ayadn
     def count(*args)
       counts_config = SetCounts.new
       if args[0]
-        param = counts_config.validate(args[1])
-        counts_config.send(args[0], param)
+        begin
+          param = counts_config.validate(args[1])
+          counts_config.send(args[0], param)
+        rescue NoMethodError
+          puts Status.error_missing_parameters
+          exit
+        rescue => e
+          raise e
+        end
       else
         abort(Status.error_missing_parameters)
       end
@@ -40,11 +54,20 @@ module Ayadn
     desc "set color ITEM COLOR", "Set ITEM to COLOR"
     long_desc Descriptions.set_color
     map "colors" => :color
+    map "colour" => :color
+    map "colours" => :color
     def color(*args)
       color_config = SetColor.new
       if args[0]
-        color_config.validate(args[1])
-        color_config.send(args[0], args[1])
+        begin
+          color_config.validate(args[1])
+          color_config.send(args[0], args[1])
+        rescue NoMethodError
+          puts Status.error_missing_parameters
+          exit
+        rescue => e
+          raise e
+        end
       else
         abort(Status.error_missing_parameters)
       end
@@ -57,8 +80,15 @@ module Ayadn
     def backup(*args)
       backup_config = SetBackup.new
       if args[0]
-        param = backup_config.validate(args[1])
-        backup_config.send(args[0], param)
+        begin
+          param = backup_config.validate(args[1])
+          backup_config.send(args[0], param)
+        rescue NoMethodError
+          puts Status.error_missing_parameters
+          exit
+        rescue => e
+          raise e
+        end
       else
         abort(Status.error_missing_parameters)
       end

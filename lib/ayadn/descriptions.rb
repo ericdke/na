@@ -547,7 +547,7 @@ module Ayadn
     end
     def self.authorize
       <<-USAGE
-      Authorize Ayadn to access your App.net account.
+      Authorize Ayadn to access your App.net account / switch to another account.
 
       Ayadn will give you a link to an App.net login page asking to authorize Ayadn.
 

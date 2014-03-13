@@ -395,7 +395,7 @@ module Ayadn
       Action.new.random_posts(options)
     end
 
-    desc "authorize", "Authorize Ayadn to access your App.net account"
+    desc "authorize", "Authorize Ayadn / switch current account"
     long_desc Descriptions.authorize
     def authorize
       Authorize.new.authorize

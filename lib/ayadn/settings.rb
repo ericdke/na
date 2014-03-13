@@ -163,7 +163,7 @@ module Ayadn
           }
         },
         colors: {
-          id: :red,
+          id: :blue,
           index: :red,
           username: :green,
           name: :magenta,
@@ -172,7 +172,7 @@ module Ayadn
           dots: :blue,
           hashtags: :cyan,
           mentions: :red,
-          source: :blue,
+          source: :cyan,
           symbols: :green
         },
         backup: {
