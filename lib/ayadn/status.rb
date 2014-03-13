@@ -194,7 +194,7 @@ module Ayadn
       "\nCanceled: couldn't get enough information (empty field).\n\n".color(:red)
     end
     def self.canceled
-      "\nCanceled.\n\n".color(:cyan)
+      "\n\nCanceled.\n\n".color(:cyan)
     end
     def self.not_authorized
       "\nYou need to authorize Ayadn before using it.\n\nPlease run 'ayadn authorize' :)\n\n".color(:red)

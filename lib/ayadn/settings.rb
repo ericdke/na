@@ -10,7 +10,9 @@ module Ayadn
     end
 
     def self.load_config
-      home = Dir.home + "/ayadn2" #temp, will be /ayadn in v1
+      db = Daybreak::DB.new(Dir.home + "/ayadn2/accounts.db")
+      active = db['ACTIVE']
+      home = db[active][:path]
       @config = {
         paths: {
           home: home,
@@ -25,8 +27,13 @@ module Ayadn
           messages: "#{home}/backup/messages",
           lists: "#{home}/backup/lists"
         },
-        identity: {}
+        identity: {
+          id: db[active][:id],
+          username: db[active][:username],
+          handle: db[active][:handle]
+        }
       }
+      db.close
       @options = self.defaults
     end
 
@@ -43,7 +50,6 @@ module Ayadn
       @config[:version] = VERSION
       @config[:platform] = RbConfig::CONFIG['host_os']
       self.config_file
-      self.set_identity
       self.create_api_file
     end
 
@@ -57,10 +63,6 @@ module Ayadn
 
     def self.read_token_file
       File.read(@config[:paths][:auth] + "/token")
-    end
-
-    def self.has_identity_file?
-      File.exist?(@config[:paths][:config] + "/identity.yml")
     end
 
     def self.config_file
@@ -78,48 +80,6 @@ module Ayadn
         rescue => e
           Errors.global_error("myconfig/create config.yml from defaults", nil, e)
         end
-      end
-    end
-
-    def self.create_config_folders
-      #todo: unless version file exists + more checks
-      begin
-        FileUtils.mkdir_p(@config[:paths][:home]) unless Dir.exists?(@config[:paths][:home])
-        %w{log db pagination config auth downloads backup posts messages lists}.each do |target|
-          Dir.mkdir(@config[:paths][target.to_sym]) unless Dir.exists?(@config[:paths][target.to_sym])
-        end
-      rescue => e
-        Errors.global_error("myconfig/create ayadn folders", nil, e)
-      end
-    end
-
-    def self.create_token_file(token)
-      unless token.nil? || token.empty?
-        File.write(@config[:paths][:auth] + "/token", token)
-      else
-        puts Status.wtf
-        exit
-      end
-    end
-
-    def self.set_identity
-      identity = self.read_identity_file
-      @config[:identity][:username] = identity[:identity][:username]
-      @config[:identity][:id] = identity[:identity][:id]
-      @config[:identity][:handle] = identity[:identity][:handle]
-    end
-
-    def self.create_identity_file
-      unless File.exist?(@config[:paths][:config] + "/identity.yml")
-        resp = API.new.get_user("me")
-        username = resp['data']['username']
-        id = resp['data']['id']
-        handle = "@" + username
-        @config[:identity][:username] = username
-        @config[:identity][:handle] = handle
-        @config[:identity][:id] = id
-        blob = {identity: {username: username, id: id, handle: handle}}
-        File.write(@config[:paths][:config] + "/identity.yml", blob.to_yaml)
       end
     end
 
@@ -153,10 +113,6 @@ module Ayadn
       content = JSON.parse(File.read(api_file))
       @config[:post_max_length] = content['post']['text_max_length']
       @config[:message_max_length] = content['message']['text_max_length']
-    end
-
-    def self.read_identity_file
-      YAML.load(File.read(@config[:paths][:config] + "/identity.yml"))
     end
 
     def self.has_version_file?
@@ -225,8 +181,6 @@ module Ayadn
           auto_save_lists: false
         },
         scroll: {
-          countdown_1: 5,
-          countdown_2: 15,
           timer: 0.7
         }
       }
