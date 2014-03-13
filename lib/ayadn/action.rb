@@ -775,7 +775,7 @@ module Ayadn
         @view.clear_screen
         @view.show_channels(resp)
       rescue => e
-        Errors.global_error("action/channels", resp, e)
+        Errors.global_error("action/channels", resp['meta'], e)
       ensure
         Databases.close_all
       end

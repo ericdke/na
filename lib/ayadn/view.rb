@@ -182,10 +182,12 @@ module Ayadn
         view << "Messages: ".color(:cyan)
         view << "#{ch.num_messages}".color(Settings.options[:colors][:symbols])
         view << "\n"
-        view << "Owner: ".color(:cyan)
-        view << "@#{ch.owner['username']}".color(Settings.options[:colors][:username])
-        # + (#{ch.owner['name']}) if ch.owner['name']
-        view << "\n"
+        if ch.owner
+          view << "Owner: ".color(:cyan)
+          view << "@#{ch.owner['username']}".color(Settings.options[:colors][:username])
+          # + (#{ch.owner['name']}) if ch.owner['name']
+          view << "\n"
+        end
         view << "Writers: ".color(:cyan)
         view << "#{ch.writers}".color(Settings.options[:colors][:name])
         view << "\n"

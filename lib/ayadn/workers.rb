@@ -206,7 +206,7 @@ module Ayadn
       channels = []
       data.each { |ch| channels << ch }
       bucket = []
-      #puts "Downloading new channels and unknown users ids, please wait...\n\n"
+      puts "Downloading new channels and unknown users ids.\nThis is a one time operation, ids are recorded in a databse.\n\nPlease wait, it could take a while if you have many channels...".color(:cyan)
       chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
       channels.each do |ch|
         unless ch['writers']['user_ids'].empty?
@@ -233,6 +233,7 @@ module Ayadn
         end
         bucket << chan.new(ch['id'], ch['counts']['messages'], ch['counts']['subscribers'], ch['type'], ch['owner'], ch['annotations'], ch['readers'], ch['editors'], writers, ch['you_subscribed'], unread, ch['recent_message_id'], ch['recent_message'])
       end
+      puts "\e[H\e[2J"
       bucket
     end
 

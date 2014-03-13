@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{App.net command-line client.}
   spec.description   = %q{App.net command-line client: toolbox to access and manage your ADN data, show your streams, manage conversations, star/follow/repost... and many, many more.}
   spec.homepage      = "http://ayadn-app.net"
-  spec.license       = "Custom"
+  spec.license       = "MIT"
 
   spec.bindir        = 'bin'
   spec.files         = `git ls-files`.split("\n")
@@ -35,5 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "guard-rspec", ">= 4.2"
   spec.add_development_dependency "fakefs", ">= 0.5"
 
-  spec.post_install_message = "Thanks for installing Ayadn! Please run 'ayadn auth' to login with your App.net credentials."
+  spec.post_install_message = "Thanks for installing Ayadn! Please run 'ayadn authorize' to login with your App.net credentials."
 end
