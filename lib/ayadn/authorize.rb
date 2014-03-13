@@ -7,20 +7,20 @@ module Ayadn
 
     def authorize
       puts "\e[H\e[2J"
-      # if FileOps.old_ayadn?
-      #   puts "\nAn old version of Ayadn has been detected and will be deleted. Install and authorize the new version? [y/N]\n".color(:red)
-      #   print "> "
-      #   answer = STDIN.getch
-      #   unless answer.downcase == "y"
-      #     puts Status.canceled
-      #     exit
-      #   end
-      #   puts "\nDeleting old version...\n".color(:green)
-      #   Dir.rmdir(Dir.home + "/ayadn")
-      # end
-      home_path = Dir.home + "/ayadn2" #temp
-      accounts_db = Daybreak::DB.new("#{home_path}/accounts.db")
+      if FileOps.old_ayadn?
+        puts "\nAn old version of Ayadn has been detected and will be deleted. Install and authorize the new version? [y/N]\n".color(:red)
+        print "> "
+        answer = STDIN.getch
+        unless answer.downcase == "y"
+          puts Status.canceled
+          exit
+        end
+        puts "\nDeleting old version...\n".color(:green)
+        FileUtils.remove_dir(Dir.home + "/ayadn")
+      end
+      home_path = Dir.home + "/ayadn"
       if File.exist?("#{home_path}/accounts.db")
+        accounts_db = Daybreak::DB.new("#{home_path}/accounts.db")
         active = accounts_db['ACTIVE']
         puts "\nYou're already authorized with username '#{accounts_db[active][:handle]}'.\n".color(:red)
         puts "Are you sure you want to login with another account? [y/N]\n".color(:yellow)
@@ -64,6 +64,8 @@ module Ayadn
           exit
         else
           puts "\nThis account isn't in the database. Going on...\n".color(:red)
+          accounts_db.flush
+          accounts_db.close
         end
       end
       model = Struct.new(:resp, :username, :id, :handle, :home_path, :user_path)
@@ -93,6 +95,7 @@ module Ayadn
       puts "Saving user token...\n".color(:green)
       create_token_file(user, token)
       puts "Creating user account for #{user.handle}...\n".color(:green)
+      accounts_db = Daybreak::DB.new("#{home_path}/accounts.db")
       create_account(user, accounts_db)
       puts "Creating configuration...\n".color(:green)
       Settings.load_config

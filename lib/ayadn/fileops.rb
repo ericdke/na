@@ -31,7 +31,7 @@ module Ayadn
     end
 
     def self.old_ayadn?
-      Dir.home + "/ayadn/data"
+      Dir.exist?(Dir.home + "/ayadn/data")
     end
 
     private

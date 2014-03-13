@@ -10,7 +10,7 @@ module Ayadn
     end
 
     def self.load_config
-      db = Daybreak::DB.new(Dir.home + "/ayadn2/accounts.db")
+      db = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
       active = db['ACTIVE']
       home = db[active][:path]
       @config = {
