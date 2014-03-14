@@ -122,7 +122,7 @@ module Ayadn
         "type" => "com.ayadn.client",
         "value" => {
           "+net.app.core.user" => {
-              "user_id" => "@ayadn",
+              "user_id" => "#{Settings.config[:identity][:handle]}",
               "format" => "basic"
             }
           }

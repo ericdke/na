@@ -2,15 +2,6 @@ require 'spec_helper'
 require 'base64'
 
 describe Ayadn::PinBoard do
-	let(:gandalf) { Ayadn::PinBoard.new }
-	describe "#encode" do
-		it "encodes username and password" do
-			expect(gandalf.encode("mistertest", "t37t")).to eq "AyadnPinboard bWlzdGVydGVzdDp0Mzd0"
-		end
-	end
-	describe "#decode" do
-	  it "decodes the encoded credentials" do
-	    expect(gandalf.decode("AyadnPinboard bWlzdGVydGVzdDp0Mzd0")).to eq ["mistertest", "t37t"]
-	  end
-	end
+	#let(:gandalf) { Ayadn::PinBoard.new }
+
 end

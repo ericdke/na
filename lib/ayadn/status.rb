@@ -157,9 +157,9 @@ module Ayadn
     def self.message
       "\n#{Settings.config[:message_max_length]} ".color(:yellow) + "characters maximum. Markdown links are supported.\n\n"
     end
-    def self.method_missing(meth, args)
-      "\nThe command '#{meth} #{args}' doesn't exist.\n".color(:red)
-    end
+    # def self.method_missing(meth, args)
+    #   "\nThe command '#{meth} #{args}' doesn't exist.\n".color(:red)
+    # end
     def self.valid_colors(colors_list)
       "\nThe valid colors are: #{colors_list}\n".color(:cyan)
     end

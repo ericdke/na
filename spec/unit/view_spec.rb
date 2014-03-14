@@ -7,8 +7,8 @@ describe Ayadn::View do
 
   before do
     Ayadn::Settings.load_config
-    Settings.get_token
-    Settings.init_config
+    Ayadn::Settings.get_token
+    Ayadn::Settings.init_config
     Ayadn::Logs.create_logger
     Ayadn::Databases.open_databases
   end
@@ -36,7 +36,7 @@ describe Ayadn::View do
       printed = capture_stdout do
         Ayadn::View.new.show_posts(stream['data'], {})
       end
-      expect(printed).to include "\e[31m23184500\e[0m"
+      expect(printed).to include "23184500"
       expect(printed).to include "\e[0m\n\nBacker of the Day"
     end
   end
@@ -46,7 +46,7 @@ describe Ayadn::View do
       printed = capture_stdout do
         Ayadn::View.new.show_posts_with_index(stream['data'], {})
       end
-      expect(printed).to include "\e[31m001\e[0m\e[31m:"
+      expect(printed).to include "001"
       expect(printed).to include "\e[0m\n\nBacker of the Day"
     end
   end
