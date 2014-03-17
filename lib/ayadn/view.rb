@@ -17,7 +17,8 @@ module Ayadn
     end
 
     def show_raw(stream)
-      puts stream.to_json
+      #puts stream.to_json
+      jj stream
     end
 
     def show_simple_post(post, options)

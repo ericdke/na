@@ -30,5 +30,13 @@ module Ayadn
       end
     end
 
+    def self.put(url, payload = nil)
+      begin
+        RestClient.put url, payload.to_json, :content_type => :json, :accept => :json
+      rescue => e
+        Errors.global_error("cnx/put", url, e)
+      end
+    end
+
   end
 end

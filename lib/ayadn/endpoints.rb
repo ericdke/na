@@ -17,7 +17,7 @@ module Ayadn
     end
 
     def authorize_url
-      "https://account.app.net/oauth/authenticate?client_id=#{Settings::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic stream write_post follow public_messages messages files&include_marker=1"
+      "https://account.app.net/oauth/authenticate?client_id=#{Settings::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic stream write_post follow public_messages messages files update_profile&include_marker=1"
     end
 
     def file(file_id)
@@ -156,7 +156,7 @@ module Ayadn
     end
 
     def user(username)
-      "#{@users_url}#{username}?access_token=#{Settings.user_token}"
+      "#{@users_url}#{username}?access_token=#{Settings.user_token}&include_user_annotations=1"
     end
 
     def single_post(post_id, options)

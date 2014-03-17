@@ -119,7 +119,7 @@ module Ayadn
     def annotations
       [
         {
-        "type" => "com.ayadn.client",
+        "type" => "com.ayadn.user",
         "value" => {
           "+net.app.core.user" => {
               "user_id" => "#{Settings.config[:identity][:handle]}",
@@ -129,10 +129,17 @@ module Ayadn
         },
         {
         "type" => "com.ayadn.client",
-        "value" => { "url" => "http://ayadn-app.net" }
-        },
-        "type" => "com.ayadn.client",
-        "value" => { "version" => "#{Settings.config[:version]}" }
+        "value" => {
+          "url" => "http://ayadn-app.net",
+          "author" => {
+              "name" => "Eric Dejonckheere",
+              "username" => "ericd",
+              "id" => "69904",
+              "email" => "eric@aya.io"
+            },
+          "version" => "#{Settings.config[:version]}"
+          }
+        }
       ]
     end
 
