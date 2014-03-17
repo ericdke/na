@@ -39,6 +39,17 @@ module Ayadn
           accounts_db.close
           exit
         end
+
+        # #list = []
+        # accounts_db.keys.each do |u|
+        #   #list << u
+        #   #puts u[:username] if u[:username]
+        #   puts u
+        # end
+        # accounts_db.close
+
+      #
+      #end
         puts "\n\nType your account username (without the @).\n\nIf Ayadn doesn't know it already, you will be prompted with a link to an authorization page.\n".color(:yellow)
         print "> "
         begin
