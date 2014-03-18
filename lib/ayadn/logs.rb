@@ -7,8 +7,26 @@ module Ayadn
     def self.create_logger
       @rec = Logger.new(Settings.config[:paths][:log] + "/ayadn.log", 'monthly')
       @rec.formatter = proc do |severity, datetime, progname, msg|
-        "#{Settings.config[:version]} #{datetime} -- #{msg}\n"
+        "#{datetime} (#{Settings.config[:version]}) #{severity} -- #{msg}\n"
       end
     end
+
+    # unused (experiment)
+    def self.send_log(from, args, content)
+      begin
+        log = {
+          "platform" => "#{Settings.config[:platform]}",
+          "date" => Time.now,
+          "version" => "#{Settings.config[:version]}",
+          "source" => from,
+          "args" => args,
+          "content" => content
+        }
+        Post.new.send_log(log)
+      rescue => e
+        @rec.warn("Unable to send log.")
+      end
+    end
+
   end
 end

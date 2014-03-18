@@ -16,7 +16,13 @@ module Ayadn
           exit
         end
         puts "\nDeleting old version...\n".color(:green)
-        FileUtils.remove_dir(Dir.home + "/ayadn")
+        begin
+          old_dir = Dir.home + "/ayadn"
+          FileUtils.remove_dir(old_dir)
+        rescue => e
+          puts "Unable to remove folder: #{old_dir}\n\n".color(:red)
+          raise e
+        end
       end
       home_path = Dir.home + "/ayadn"
       if File.exist?("#{home_path}/accounts.db")
@@ -27,17 +33,11 @@ module Ayadn
         print "> "
         begin
           answer = STDIN.getch
+          cancel(accounts_db) unless answer.downcase == "y"
         rescue Interrupt
-          puts Status.canceled
-          accounts_db.close
-          exit
+          cancel(accounts_db)
         rescue => e
           raise e
-        end
-        unless answer.downcase == "y"
-          puts Status.canceled
-          accounts_db.close
-          exit
         end
 
         # #list = []
@@ -50,14 +50,12 @@ module Ayadn
 
       #
       #end
-        puts "\n\nType your account username (without the @).\n\nIf Ayadn doesn't know it already, you will be prompted with a link to an authorization page.\n".color(:yellow)
+        puts "\n\nType your account username.\n\nIf Ayadn doesn't know it already, you will be prompted with a link to an authorization page.\n".color(:yellow)
         print "> "
         begin
           answer = STDIN.gets.chomp()
         rescue Interrupt
-          puts Status.canceled
-          accounts_db.close
-          exit
+          cancel(accounts_db)
         rescue => e
           raise e
         end
@@ -66,17 +64,16 @@ module Ayadn
           accounts_db.close
           exit
         end
+        answer = Workers.remove_arobase_if_present(answer)
         if accounts_db[answer]
           puts "Switching to account @#{answer}...".color(:green)
           accounts_db['ACTIVE'] = answer
-          accounts_db.flush
-          accounts_db.close
+          close_db(accounts_db)
           puts Status.done
           exit
         else
           puts "\nThis account isn't in the database. Going on...\n".color(:red)
-          accounts_db.flush
-          accounts_db.close
+          close_db(accounts_db)
         end
       end
       model = Struct.new(:resp, :username, :id, :handle, :home_path, :user_path)
@@ -84,9 +81,7 @@ module Ayadn
       begin
         token = STDIN.gets.chomp()
       rescue Interrupt
-        puts Status.canceled
-        accounts_db.close
-        exit
+        cancel(accounts_db)
       rescue => e
         raise e
       end
@@ -109,6 +104,8 @@ module Ayadn
       accounts_db = Daybreak::DB.new("#{home_path}/accounts.db")
       create_account(user, accounts_db)
       puts "Creating configuration...\n".color(:green)
+
+      #now we have a configuration available
       Settings.load_config
       Logs.create_logger
       install
@@ -129,8 +126,7 @@ module Ayadn
     def create_account(user, accounts_db)
       accounts_db[user.username] = {username: user.username, id: user.id, handle: user.handle, path: user.user_path}
       accounts_db['ACTIVE'] = user.username
-      accounts_db.flush
-      accounts_db.close
+      close_db(accounts_db)
     end
 
     def create_token_file(user, token)
@@ -165,6 +161,16 @@ module Ayadn
       print "> "
     end
 
+    def cancel(accounts_db)
+      puts Status.canceled
+      accounts_db.close
+      exit
+    end
+
+    def close_db(db)
+      db.flush
+      db.close
+    end
 
   end
 end

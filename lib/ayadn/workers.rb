@@ -251,6 +251,12 @@ module Ayadn
       username.join
     end
 
+    def self.remove_arobase_if_present(username)
+      username = username.chars.to_a
+      username.shift if username.first == "@"
+      username.join
+    end
+
     private
 
     def colorize_text(text)

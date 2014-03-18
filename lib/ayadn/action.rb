@@ -169,6 +169,7 @@ module Ayadn
           username = Workers.add_arobase_if_missing(username)
           doing(options)
           stream = @api.get_mentions(username, options)
+          user_404(username) if meta_404(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_username
@@ -186,6 +187,7 @@ module Ayadn
           username = Workers.add_arobase_if_missing(username)
           doing(options)
           stream = @api.get_posts(username, options)
+          user_404(username) if meta_404(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_username
@@ -216,6 +218,7 @@ module Ayadn
           username = Workers.add_arobase_if_missing(username)
           doing(options)
           stream = @api.get_whatstarred(username, options)
+          user_404(username) if meta_404(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_username
@@ -272,6 +275,7 @@ module Ayadn
         if post_id.is_integer?
           doing(options)
           stream = @api.get_convo(post_id, options)
+          post_404(post_id) if meta_404(stream)
           render_view(stream, options)
         else
           puts Status.error_missing_post_id
@@ -695,6 +699,7 @@ module Ayadn
           doing(options)
           unless options[:raw]
             stream = @api.get_user(username)
+            user_404(username) if meta_404(stream)
             get_infos(stream['data'])
           else
             @view.show_raw(@api.get_user(username))
@@ -715,8 +720,12 @@ module Ayadn
           doing(options)
           unless options[:raw]
             @view.clear_screen
-            resp = get_data_from_response(@api.get_details(post_id, options))
-            stream = get_data_from_response(@api.get_user("@#{resp['user']['username']}"))
+            response = @api.get_details(post_id, options)
+            post_404(post_id) if meta_404(response)
+            resp = response['data']
+            response = @api.get_user("@#{resp['user']['username']}")
+            user_404(username) if meta_404(response)
+            stream = response['data']
             puts "POST:\n".inverse
             @view.show_simple_post([resp], options)
             if resp['repost_of']
@@ -979,6 +988,22 @@ module Ayadn
     end
 
     private
+
+    def meta_404(stream)
+      stream['meta']['code'] == 404
+    end
+
+    def user_404(username)
+      puts "\nUser #{username} doesn't exist. It could be a deleted account.\n".color(:red)
+      Errors.info("User #{username} doesn't exist")
+      exit
+    end
+
+    def post_404(post_id)
+      puts "\nImpossible to find #{post_id}. This post may have been deleted.\n".color(:red)
+      Errors.info("Impossible to find #{post_id}")
+      exit
+    end
 
     def length_of_index
       Databases.get_index_length

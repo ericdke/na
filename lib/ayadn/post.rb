@@ -60,6 +60,11 @@ module Ayadn
       send_content(url, payload_basic(text))
     end
 
+    def send_log(data)
+      url = Endpoints.new.ayadnlog
+      send_content(url, payload_log(data))
+    end
+
     def send_post(text)
       url = Endpoints.new.posts_url
       send_content(url, payload_basic(text))
@@ -173,6 +178,19 @@ module Ayadn
         "reply_to" => reply_to,
         "entities" => entities,
         "annotations" => annotations
+      }
+    end
+
+    def payload_log(data)
+      extended = annotations
+      extended << {
+          "type" => "com.ayadn.log",
+          "value" => data
+        }
+      {
+        "text" => "#ayadnlog",
+        "entities" => entities,
+        "annotations" => extended
       }
     end
 
