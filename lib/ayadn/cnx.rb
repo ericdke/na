@@ -2,17 +2,16 @@
 module Ayadn
   class CNX
 
-    def self.get(url)
-      RestClient.get(url)
-    end
-
     def self.get_response_from(url)
       begin
         RestClient.get(url) do |response, request, result| #, :verify_ssl => OpenSSL::SSL::VERIFY_NONE
           check(response)
         end
+      rescue SocketError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/get", nil, e)
       rescue => e
-        Errors.global_error("cnx/get", url, e)
+        Errors.global_error("cnx.rb/get", url, e)
       end
     end
 
@@ -53,25 +52,33 @@ module Ayadn
       begin
         RestClient::Resource.new(url).delete
       rescue => e
-        Errors.global_error("cnx/delete", url, e)
+        Errors.global_error("cnx.rb/delete", url, e)
       end
     end
 
-    def self.post(url, payload = nil)
+    def self.post(url, payload)
       begin
         RestClient.post(url, payload.to_json, :content_type => :json, :accept => :json) do |response, request, result|
           check(response)
         end
+      rescue SocketError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/post", nil, e)
       rescue => e
-        Errors.global_error("cnx/post", url, e)
+        Errors.global_error("cnx.rb/post", [url, payload], e)
       end
     end
 
-    def self.put(url, payload = nil)
+    def self.put(url, payload)
       begin
-        RestClient.put url, payload.to_json, :content_type => :json, :accept => :json
+        RestClient.put(url, payload.to_json, :content_type => :json, :accept => :json) do |response, request, result|
+          check(response)
+        end
+      rescue SocketError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/put", nil, e)
       rescue => e
-        Errors.global_error("cnx/put", url, e)
+        Errors.global_error("cnx.rb/put", [url, payload], e)
       end
     end
 

@@ -26,7 +26,7 @@ module Ayadn
     end
 
     def self.download_url(name, url)
-      file = CNX.get(url)
+      file = CNX.get_response_from(url)
       File.write(Settings.config[:paths][:downloads] + "/#{name}", file)
     end
 
