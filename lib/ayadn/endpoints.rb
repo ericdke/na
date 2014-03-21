@@ -24,6 +24,10 @@ module Ayadn
       "#{@files_url}#{file_id}?access_token=#{Settings.user_token}"
     end
 
+    def files
+      "#{@files_url}?access_token=#{Settings.user_token}"
+    end
+
     def unified(options)
       if options[:count] || options[:since_id]
         @options_list = API.build_query(options)

@@ -376,6 +376,14 @@ module Ayadn
       ayadn.download(file_id)
     end
 
+    # desc "attach FILE", "Write a post with an attached file (shortcut: -at)"
+    # map "-at" => :attach
+    # long_desc "TODO" #TODO
+    # def attach(file)
+    #     Action.new.attach(file)
+    # end
+
+
     desc "blacklist COMMAND (PARAM)", "Manage your blacklist"
     long_desc Descriptions.blacklist
     subcommand "blacklist", Blacklist

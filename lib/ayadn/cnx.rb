@@ -56,7 +56,7 @@ module Ayadn
       end
     end
 
-    def self.post(url, payload)
+    def self.post(url, payload = nil)
       begin
         RestClient.post(url, payload.to_json, :content_type => :json, :accept => :json) do |response, request, result|
           check(response)
@@ -68,6 +68,19 @@ module Ayadn
         Errors.global_error("cnx.rb/post", [url, payload], e)
       end
     end
+
+    # def self.upload(url, filepath)
+    #   begin
+    #     RestClient.post(url, :content => File.new(filepath, 'rb'), :content_type => 'multipart/form-data', :content_disposition => 'form-data', :name => "content", :filename => "test.jpg") do |response, request, result|
+    #       check(response)
+    #     end
+    #   rescue SocketError => e
+    #     puts "\nConnection error.".color(:red)
+    #     Errors.global_error("cnx.rb/upload", nil, e)
+    #   rescue => e
+    #     Errors.global_error("cnx.rb/upload", url, e)
+    #   end
+    # end
 
     def self.put(url, payload)
       begin

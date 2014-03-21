@@ -386,10 +386,10 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.muting(username)
           resp = @api.mute(username)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.muted(username)
           else
@@ -885,6 +885,21 @@ module Ayadn
         Databases.close_all
       end
     end
+
+    # def attach(filepath)
+    #   begin
+    #     #test
+    #     puts Endpoints.new.files
+    #     puts filepath.inspect
+
+    #     resp = CNX.upload(Endpoints.new.files, filepath)
+    #     puts resp
+    #   rescue => e
+    #     Errors.global_error("action/attach", filepath, e)
+    #   ensure
+    #     Databases.close_all
+    #   end
+    # end
 
     def pmess(username)
     	begin
