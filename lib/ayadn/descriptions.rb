@@ -177,7 +177,7 @@ module Ayadn
       <<-USAGE
       Show detailed informations about @username.
 
-      Example: ayadn -iu @ericd
+      Example: ayadn -ui @ericd
       \n\n
       USAGE
     end
@@ -185,7 +185,7 @@ module Ayadn
       <<-USAGE
       Show detailed informations about post n°POST.
 
-      Example: ayadn -ip 23365251
+      Example: ayadn -pi 23365251
       \n\n
       USAGE
     end
@@ -203,7 +203,7 @@ module Ayadn
       <<-USAGE
       Delete a post.
 
-      Example: ayadn -del 23365251
+      Example: ayadn -D 23365251
       \n\n
       USAGE
     end
@@ -211,7 +211,7 @@ module Ayadn
       <<-USAGE
       Unfollow a user.
 
-      Example: ayadn -unf @spammer
+      Example: ayadn -UF @spammer
       \n\n
       USAGE
     end
@@ -219,7 +219,7 @@ module Ayadn
       <<-USAGE
       Unmute a user.
 
-      Example: ayadn -unm @ericd
+      Example: ayadn -UM @ericd
       \n\n
       USAGE
     end
@@ -227,7 +227,7 @@ module Ayadn
       <<-USAGE
       Unblock a user.
 
-      Example: ayadn -unb @ericd
+      Example: ayadn -UB @ericd
       \n\n
       USAGE
     end
@@ -235,7 +235,7 @@ module Ayadn
       <<-USAGE
       Unrepost a post.
 
-      Example: ayadn -unr 23365251
+      Example: ayadn -UR 23365251
       \n\n
       USAGE
     end
@@ -243,7 +243,7 @@ module Ayadn
       <<-USAGE
       Unstar a post.
 
-      Example: ayadn -uns 23365251
+      Example: ayadn -US 23365251
       \n\n
       USAGE
     end
@@ -251,7 +251,7 @@ module Ayadn
       <<-USAGE
       Star a post.
 
-      Example: ayadn -st 23365251
+      Example: ayadn -ST 23365251
       \n\n
       USAGE
     end
@@ -259,7 +259,7 @@ module Ayadn
       <<-USAGE
       Repost a post.
 
-      Example: ayadn -rp 23365251
+      Example: ayadn -O 23365251
       \n\n
       USAGE
     end
@@ -267,7 +267,7 @@ module Ayadn
       <<-USAGE
       Follow a user.
 
-      Example: ayadn -fo @ericd
+      Example: ayadn -FO @ericd
       \n\n
       USAGE
     end
@@ -275,7 +275,7 @@ module Ayadn
       <<-USAGE
       Mute a user.
 
-      Example: ayadn -mu @spammer
+      Example: ayadn -MU @spammer
       \n\n
       USAGE
     end
@@ -283,7 +283,7 @@ module Ayadn
       <<-USAGE
       Block a user.
 
-      Example: ayadn -bl @spammer
+      Example: ayadn -BL @spammer
       \n\n
       USAGE
     end
@@ -317,7 +317,7 @@ module Ayadn
       <<-USAGE
       Simple post to App.net.
 
-      Example: ayadn -p Hello from Ayadn!
+      Example: ayadn -P Hello from Ayadn!
 
       You don't have to put quotes around your text.
 
@@ -329,7 +329,7 @@ module Ayadn
       <<-USAGE
       Multi-line post to App.net.
 
-      Example: ayadn -w
+      Example: ayadn -W
 
       Enters the writing mode where you will type your post.
       \n\n
@@ -349,11 +349,11 @@ module Ayadn
       <<-USAGE
       Send a message to a channel.
 
-      Example: ayadn -se 46217
+      Example: ayadn -C 46217
 
       Enters the writing mode where you will type your message.
 
-      If you've set an alias for the channel, you can post to it with 'ayadn -se my_alias'
+      If you've set an alias for the channel, you can post to it with 'ayadn -C my_alias'
       \n\n
       USAGE
     end
@@ -361,7 +361,7 @@ module Ayadn
       <<-USAGE
       Reply to post n°POST.
 
-      Example: ayadn -r 23365251
+      Example: ayadn -R 23365251
 
       Enters the writing mode where you will type your reply.
 
@@ -371,7 +371,7 @@ module Ayadn
 
       If you just viewed a stream with the -i (--index) option, you can also reply to a post by its index.
 
-      Example: ayadn -r 3
+      Example: ayadn -R 3
       \n\n
       USAGE
     end
@@ -423,13 +423,13 @@ module Ayadn
 
       Examples:
 
-      ayadn alias list
+      ayadn -A list
 
-      ayadn alias create 33666 my_alias
+      ayadn -A create 33666 my_alias
 
-      ayadn alias delete my_alias
+      ayadn -A delete my_alias
 
-      (Once an alias is set, you can display the messages in this channel with 'ayadn -ms my_alias', post to it with 'ayadn -se my_alias', etc)
+      (Once an alias is set, you can display the messages in this channel with 'ayadn -ms my_alias', post to it with 'ayadn -C my_alias', etc)
       \n\n
       USAGE
     end
@@ -437,9 +437,9 @@ module Ayadn
       <<-USAGE
       Creates an alias for a channel.
 
-      Example: ayadn alias create 33666 my_alias
+      Example: ayadn -A create 33666 my_alias
 
-      (Once an alias is set, you can display the messages in this channel with 'ayadn -ms my_alias', post to it with 'ayadn -se my_alias', etc)
+      (Once an alias is set, you can display the messages in this channel with 'ayadn -ms my_alias', post to it with 'ayadn -C my_alias', etc)
       \n\n
       USAGE
     end
@@ -447,7 +447,7 @@ module Ayadn
       <<-USAGE
       Deletes a previously created alias.
 
-      Example: ayadn alias delete my_alias
+      Example: ayadn -A delete my_alias
       \n\n
       USAGE
     end
@@ -455,7 +455,7 @@ module Ayadn
       <<-USAGE
       Lists previously created aliases.
 
-      Example: ayadn alias list
+      Example: ayadn -A list
       \n\n
       USAGE
     end
@@ -475,19 +475,19 @@ module Ayadn
 
       Examples:
 
-      ayadn blacklist list
+      ayadn -K list
 
-      ayadn blacklist add mention @shmuck
+      ayadn -K add mention @shmuck
 
-      ayadn blacklist add hashtag sports
+      ayadn -K add hashtag sports
 
-      ayadn blacklist add client IFTTT
+      ayadn -K add client IFTTT
 
-      ayadn blacklist remove mention @shmuck
+      ayadn -K remove mention @shmuck
 
-      ayadn blacklist remove hashtag sports
+      ayadn -K remove hashtag sports
 
-      ayadn blacklist remove client IFTTT
+      ayadn -K remove client IFTTT
       \n\n
       USAGE
     end
@@ -497,11 +497,11 @@ module Ayadn
 
       Examples:
 
-      ayadn blacklist add mention @shmuck
+      ayadn -K add mention @shmuck
 
-      ayadn blacklist add hashtag sports
+      ayadn -K add hashtag sports
 
-      ayadn blacklist add client IFTTT
+      ayadn -K add client IFTTT
       \n\n
       USAGE
     end
@@ -511,11 +511,11 @@ module Ayadn
 
       Examples:
 
-      ayadn blacklist remove mention @shmuck
+      ayadn -K remove mention @shmuck
 
-      ayadn blacklist remove hashtag sports
+      ayadn -K remove hashtag sports
 
-      ayadn blacklist remove client IFTTT
+      ayadn -K remove client IFTTT
       \n\n
       USAGE
     end
@@ -523,7 +523,7 @@ module Ayadn
       <<-USAGE
       Lists the content of your blacklist.
 
-      Example: ayadn blacklist list
+      Example: ayadn -K list
       \n\n
       USAGE
     end
@@ -549,11 +549,13 @@ module Ayadn
       <<-USAGE
       Authorize Ayadn to access your App.net account.
 
-      Ayadn will give you a link to an App.net login page asking to authorize Ayadn.
+      Example: ayadn -auth
+
+      Ayadn will give you a link to an App.net login page.
 
       After a successful login, you will be redirected to the Ayadn user token page.
 
-      Copy the token and paste it into Ayadn.
+      Copy this token and paste it into Ayadn.
       \n\n
       USAGE
     end
@@ -561,7 +563,7 @@ module Ayadn
       <<-USAGE
       Switch between already authorized App.net accounts.
 
-      Example: ayadn switch @myotheraccount
+      Example: ayadn -@ @myotheraccount
       \n\n
       USAGE
     end
