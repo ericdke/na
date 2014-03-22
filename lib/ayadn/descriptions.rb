@@ -121,7 +121,7 @@ module Ayadn
       <<-USAGE
       List users @username is following.
 
-      Example: ayadn -fg @ericd
+      Example: ayadn -fwg @ericd
       \n\n
       USAGE
     end
@@ -129,7 +129,7 @@ module Ayadn
       <<-USAGE
       List users following @username.
 
-      Example: ayadn -fr @ericd
+      Example: ayadn -fwr @ericd
       \n\n
       USAGE
     end
@@ -177,7 +177,7 @@ module Ayadn
       <<-USAGE
       Show detailed informations about @username.
 
-      Example: ayadn -ui @ericd
+      Example: ayadn -iu @ericd
       \n\n
       USAGE
     end
@@ -185,7 +185,7 @@ module Ayadn
       <<-USAGE
       Show detailed informations about post n°POST.
 
-      Example: ayadn -di 23365251
+      Example: ayadn -ip 23365251
       \n\n
       USAGE
     end
@@ -339,7 +339,7 @@ module Ayadn
       <<-USAGE
       Send a private message to @username.
 
-      Example: ayadn -pm @ericd
+      Example: ayadn pm @ericd
 
       Enters the writing mode where you will type your message.
       \n\n
@@ -547,13 +547,21 @@ module Ayadn
     end
     def self.authorize
       <<-USAGE
-      Authorize Ayadn to access your App.net account / switch to another account.
+      Authorize Ayadn to access your App.net account.
 
       Ayadn will give you a link to an App.net login page asking to authorize Ayadn.
 
       After a successful login, you will be redirected to the Ayadn user token page.
 
       Copy the token and paste it into Ayadn.
+      \n\n
+      USAGE
+    end
+    def self.switch
+      <<-USAGE
+      Switch between already authorized App.net accounts.
+
+      Example: ayadn switch @myotheraccount
       \n\n
       USAGE
     end

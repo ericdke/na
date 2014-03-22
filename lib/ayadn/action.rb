@@ -290,10 +290,10 @@ module Ayadn
     def delete(post_id)
       begin
         if post_id.is_integer?
-          @view.clear_screen
+          #@view.clear_screen
           print Status.deleting_post(post_id)
           resp = @api.delete_post(post_id)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.deleted(post_id)
           else
@@ -314,10 +314,10 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.unfollowing(username)
           resp = @api.unfollow(username)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unfollowed(username)
           else
@@ -338,10 +338,10 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.following(username)
           resp = @api.follow(username)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.followed(username)
           else
@@ -362,10 +362,10 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.unmuting(username)
           resp = @api.unmute(username)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unmuted(username)
           else
@@ -410,10 +410,10 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.unblocking(username)
           resp = @api.unblock(username)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unblocked(username)
           else
@@ -434,10 +434,10 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.blocking(username)
           resp = @api.block(username)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.blocked(username)
           else
@@ -457,10 +457,10 @@ module Ayadn
     def unrepost(post_id)
       begin
         if post_id.is_integer?
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.unreposting(post_id)
           resp = @api.unrepost(post_id)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unreposted(post_id)
           else
@@ -480,10 +480,10 @@ module Ayadn
     def unstar(post_id)
       begin
         if post_id.is_integer?
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.unstarring(post_id)
           resp = @api.unstar(post_id)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unstarred(post_id)
           else
@@ -503,10 +503,10 @@ module Ayadn
     def star(post_id)
       begin
         if post_id.is_integer?
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.starring(post_id)
           resp = @api.star(post_id)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.starred(post_id)
           else
@@ -526,10 +526,10 @@ module Ayadn
     def repost(post_id)
       begin
         if post_id.is_integer?
-          @view.clear_screen
+          #@view.clear_screen
           puts Status.reposting(post_id)
           resp = @api.repost(post_id)
-          @view.clear_screen
+          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.reposted(post_id)
           else

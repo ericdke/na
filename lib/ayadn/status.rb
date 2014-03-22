@@ -14,37 +14,37 @@ module Ayadn
       "Posting to ADN...\n".inverse
     end
     def self.deleting_post(post_id)
-      "Deleting post #{post_id}\n".inverse
+      "\nDeleting post #{post_id}\n".inverse
     end
     def self.unfollowing(username)
-      "Unfollowing #{username}\n".inverse
+      "\nUnfollowing #{username}\n".inverse
     end
     def self.following(username)
-      "Following #{username}\n".inverse
+      "\nFollowing #{username}\n".inverse
     end
     def self.unmuting(username)
-      "Unmuting #{username}\n".inverse
+      "\nUnmuting #{username}\n".inverse
     end
     def self.muting(username)
-      "Muting #{username}\n".inverse
+      "\nMuting #{username}\n".inverse
     end
     def self.unblocking(username)
-      "Unblocking #{username}\n".inverse
+      "\nUnblocking #{username}\n".inverse
     end
     def self.blocking(username)
-      "Blocking #{username}\n".inverse
+      "\nBlocking #{username}\n".inverse
     end
     def self.unreposting(post_id)
-      "Unreposting #{post_id}\n".inverse
+      "\nUnreposting #{post_id}\n".inverse
     end
     def self.reposting(post_id)
-      "Reposting #{post_id}\n".inverse
+      "\nReposting #{post_id}\n".inverse
     end
     def self.unstarring(post_id)
-      "Unstarring #{post_id}\n".inverse
+      "\nUnstarring #{post_id}\n".inverse
     end
     def self.starring(post_id)
-      "Starring #{post_id}\n".inverse
+      "\nStarring #{post_id}\n".inverse
     end
     def self.not_deleted(post_id)
       "Could not delete post #{post_id} (post isn't yours, or is already deleted)\n".color(:red)

@@ -3,7 +3,7 @@ module Ayadn
   class App < Thor
     package_name "ayadn"
 
-    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize}.each { |r| require_relative "#{r}" }
+    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch}.each { |r| require_relative "#{r}" }
 
     desc "timeline", "Show your App.net timeline, aka the Unified Stream (shortcut: -tl)"
     map "unified" => :timeline
@@ -55,17 +55,17 @@ module Ayadn
       Action.new.trending(options)
     end
 
-    desc "photos", "Show the Photos Stream (shortcut: -ph)"
-    map "-ph" => :photos
-    long_desc Descriptions.photos
-    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
-    option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
-    option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
-    option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
-    option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
-    def photos
-      Action.new.photos(options)
-    end
+    # desc "photos", "Show the Photos Stream (shortcut: -ph)"
+    # map "-ph" => :photos
+    # long_desc Descriptions.photos
+    # option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
+    # option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
+    # option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
+    # option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
+    # option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    # def photos
+    #   Action.new.photos(options)
+    # end
 
     desc "conversations", "Show the Conversations Stream (shortcut: -cq)"
     map "-cq" => :conversations
@@ -140,16 +140,16 @@ module Ayadn
       Action.new.convo(post_id, options)
     end
 
-    desc "followings @USERNAME", "List users @username is following (shortcut: -fg)"
-    map "-fg" => :followings
+    desc "followings @USERNAME", "List users @username is following (shortcut: -fwg)"
+    map "-fwg" => :followings
     long_desc Descriptions.followings
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def followings(*username)
       Action.new.followings(username, options)
     end
 
-    desc "followers @USERNAME", "List users following @username (shortcut: -fr)"
-    map "-fr" => :followers
+    desc "followers @USERNAME", "List users following @username (shortcut: -fwr)"
+    map "-fwr" => :followers
     long_desc Descriptions.followers
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def followers(*username)
@@ -197,16 +197,16 @@ module Ayadn
       Action.new.view_settings
     end
 
-    desc "userinfo @USERNAME", "Show detailed informations about @username (shortcut: -ui)"
-    map "-ui" => :userinfo
+    desc "userinfo @USERNAME", "Show detailed informations about @username (shortcut: -iu)"
+    map "-iu" => :userinfo
     long_desc Descriptions.userinfo
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def userinfo(*username)
       Action.new.userinfo(username, options)
     end
 
-    desc "postinfo POST", "Show detailed informations about a post (shortcut: -di)"
-    map "-di" => :postinfo
+    desc "postinfo POST", "Show detailed informations about a post (shortcut: -ip)"
+    map "-ip" => :postinfo
     long_desc Descriptions.postinfo
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def postinfo(post_id)
@@ -338,15 +338,15 @@ module Ayadn
       Action.new.write
     end
 
-    desc "pmess @USERNAME", "Send a private message to @username (shortcut: -pm)"
-    map "-pm" => :pmess
+    desc "pm @USERNAME", "Send a private message to @username"
+    map "-pm" => :pm
     long_desc Descriptions.pmess
-    def pmess(*username)
+    def pm(*username)
       Action.new.pmess(username)
     end
 
-    desc "send CHANNEL", "Send a message to a CHANNEL (shortcut: -se)"
-    map "-se" => :send_to_channel
+    desc "send CHANNEL", "Send a message to a CHANNEL (shortcut: -sc)"
+    map "-sc" => :send_to_channel
     long_desc Descriptions.send_to_channel
     def send_to_channel(channel_id)
       Action.new.send_to_channel(channel_id)
@@ -403,10 +403,17 @@ module Ayadn
       Action.new.random_posts(options)
     end
 
-    desc "authorize", "Authorize Ayadn / switch current account"
+    desc "authorize", "Authorize Ayadn"
+    map "-auth" => :authorize
     long_desc Descriptions.authorize
     def authorize
       Authorize.new.authorize
+    end
+
+    desc "switch @USERNAME", "Switch between authorized App.net accounts"
+    long_desc Descriptions.switch
+    def switch(*username)
+      Switch.new.switch(username)
     end
 
   end
