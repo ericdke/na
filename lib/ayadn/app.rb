@@ -363,7 +363,7 @@ module Ayadn
     long_desc Descriptions.set
     subcommand "set", Set
 
-    desc "alias COMMAND (PARAM)", "Create/delete/list aliases for channels"
+    desc "alias COMMAND (PARAM)", "Create/delete/list aliases for channels (-A)"
     map "-A" => :alias
     long_desc Descriptions.alias
     subcommand "alias", Alias
@@ -385,7 +385,7 @@ module Ayadn
     # end
 
 
-    desc "blacklist COMMAND (PARAM)", "Manage your blacklist"
+    desc "blacklist COMMAND (PARAM)", "Manage your blacklist (-K)"
     map "-K" => :blacklist
     long_desc Descriptions.blacklist
     subcommand "blacklist", Blacklist
@@ -405,14 +405,14 @@ module Ayadn
       Action.new.random_posts(options)
     end
 
-    desc "authorize", "Authorize Ayadn"
+    desc "authorize", "Authorize Ayadn (-auth)"
     map "-auth" => :authorize
     long_desc Descriptions.authorize
     def authorize
       Authorize.new.authorize
     end
 
-    desc "switch @USERNAME", "Switch between authorized App.net accounts"
+    desc "switch @USERNAME", "Switch between authorized App.net accounts (-@)"
     map "-@" => :switch
     long_desc Descriptions.switch
     def switch(*username)
