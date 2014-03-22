@@ -414,9 +414,14 @@ module Ayadn
 
     desc "switch @USERNAME", "Switch between authorized App.net accounts (-@)"
     map "-@" => :switch
+    option :list, aliases: "-l", type: :boolean, desc: "List authorized accounts"
     long_desc Descriptions.switch
     def switch(*username)
-      Switch.new.switch(username)
+      unless options[:list]
+        Switch.new.switch(username)
+      else
+        Switch.new.list
+      end
     end
 
   end

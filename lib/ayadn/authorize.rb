@@ -4,7 +4,7 @@ module Ayadn
     def authorize
       puts "\e[H\e[2J"
       if FileOps.old_ayadn?
-        puts "\nAn old version of Ayadn has been detected and will be deleted. Install and authorize the new version? [y/N]\n".color(:red)
+        puts "\nAn obsolete version of Ayadn has been detected and will be deleted. Install and authorize the new version? [y/N]\n".color(:red)
         print "> "
         answer = STDIN.getch
         unless answer.downcase == "y"

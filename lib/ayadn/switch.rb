@@ -1,12 +1,35 @@
 # encoding: utf-8
 module Ayadn
   class Switch
+    def list
+      home_path = Dir.home + "/ayadn"
+      if File.exist?("#{home_path}/accounts.db")
+        accounts_db = Daybreak::DB.new("#{home_path}/accounts.db")
+        active = accounts_db['ACTIVE']
+        begin
+          puts "\nCurrently authorized accounts:\n".color(:cyan)
+          accounts_db.each do |acc|
+            next if acc[0] == 'ACTIVE'
+            if acc[1][:username] == active
+              puts "#{acc[1][:handle]}".color(:red)
+            else
+              puts "#{acc[1][:handle]}".color(:green)
+            end
+          end
+          puts "\n"
+        ensure
+          close_db(accounts_db)
+        end
+      else
+        please
+      end
+    end
     def switch(user)
       if user.empty? || user.nil?
         puts "\n\nOops, something went wrong, I couldn't get your username. Please try again.\n\n".color(:red)
         exit
       end
-      puts "\e[H\e[2J"
+      #puts "\e[H\e[2J"
       username = Workers.remove_arobase_if_present(user.first)
       home_path = Dir.home + "/ayadn"
       if File.exist?("#{home_path}/accounts.db")
@@ -27,10 +50,12 @@ module Ayadn
           cancel(accounts_db)
         end
       else
-        puts "\nPlease run 'ayadn authorize' first.\n".color(:red)
-        exit
+        please
       end
     end
+
+    private
+
     def cancel(accounts_db)
       accounts_db.close
       exit
@@ -38,6 +63,10 @@ module Ayadn
     def close_db(db)
       db.flush
       db.close
+    end
+    def please
+      puts "\nPlease run 'ayadn authorize' first.\n".color(:red)
+      exit
     end
   end
 end

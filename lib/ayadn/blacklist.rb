@@ -74,7 +74,12 @@ module Ayadn
     end
     def list
       begin
-        puts Workers.new.build_blacklist_list(Databases.blacklist)
+        list = Databases.blacklist
+        unless list.empty?
+          puts Workers.new.build_blacklist_list(list)
+        else
+          abort(Status.empty_list)
+        end
       ensure
         Databases.close_all
       end
