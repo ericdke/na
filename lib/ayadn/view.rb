@@ -159,7 +159,7 @@ module Ayadn
     def show_channels(resp)
       view = ""
       bucket = @workers.build_channels(resp['data'])
-      bucket.each do |ch|
+      bucket.reverse.each do |ch|
         view << "\n"
         ch_alias = false
         Databases.aliases.each do |k,v|
@@ -168,16 +168,12 @@ module Ayadn
             break
           end
         end
+        view << "ID: ".color(:cyan)
+        view << "#{ch.id}".color(Settings.options[:colors][:id])
+        view << "\n"
         if ch_alias
-          view << "ID: ".color(:cyan)
-          view << "#{ch.id}".color(Settings.options[:colors][:id])
-          view << "\n"
           view << "Alias: ".color(:cyan)
           view << "#{ch_alias}".color(Settings.options[:colors][:username])
-          view << "\n"
-        else
-          view << "ID: ".color(:cyan)
-          view << "#{ch.id}".color(Settings.options[:colors][:id])
           view << "\n"
         end
         view << "Messages: ".color(:cyan)
@@ -193,19 +189,50 @@ module Ayadn
         view << "#{ch.writers}".color(Settings.options[:colors][:name])
         view << "\n"
         view << "Type: ".color(:cyan)
-        view << "#{ch.type}".color(Settings.options[:colors][:source])
+        view << "#{ch.type}".color(Settings.options[:colors][:id])
         view << "\n"
-        #view << "You follow this channel" if ch.you_subscribed
-        #view << "\n"
-        #view << ch.unread
-        #view << "\n"
-        unless ch.recent_message.nil?
-          view << "Most recent messsage: ".color(:cyan)
+        if ch.type == "net.patter-app.room"
+          ann = ch.annotations.select {|a| a['type'] == "net.patter-app.settings"}
+          view << "Name: ".color(:cyan)
+          view << "#{ann[0]['value']['name']}".color(Settings.options[:colors][:link])
           view << "\n"
-          view << "---\n#{ch.recent_message['text']}\n---"
+          view << "Description: ".color(:cyan)
+          view << "#{ann[0]['value']['blurb']}".color(Settings.options[:colors][:username])
+          view << "\n"
+          ann = ch.annotations.select {|a| a['type'] == "net.app.core.fallback_url"}
+          view << "URL: ".color(:cyan)
+          view << "#{ann[0]['value']['url']}".color(Settings.options[:colors][:link])
+          view << "\n"
+        end
+        if ch.type == "net.app.core.broadcast"
+          ann = ch.annotations.select {|a| a['type'] == "net.app.core.broadcast.metadata"}
+          view << "Title: ".color(:cyan)
+          view << "#{ann[0]['value']['title']}".color(Settings.options[:colors][:link])
+          view << "\n"
+          view << "Description: ".color(:cyan)
+          view << "#{ann[0]['value']['description']}".color(Settings.options[:colors][:username])
+          view << "\n"
+          ann = ch.annotations.select {|a| a['type'] == "net.app.core.fallback_url"}
+          view << "URL: ".color(:cyan)
+          view << "#{ann[0]['value']['url']}".color(Settings.options[:colors][:link])
+          view << "\n"
+        end
+        unless ch.recent_message.nil?
+          unless ch.recent_message['text'].nil?
+            view << "Most recent message (#{Workers.new.parsed_time(ch.recent_message['created_at'])}): ".color(:cyan)
+            view << "\n"
+            view << "---\n#{ch.recent_message['text']}\n---"
+          end
+        end
+        if ch.type == "net.paste-app.clips"
+          ann = ch.recent_message['annotations'].select {|a| a['type'] == "net.paste-app.clip"}
+          view << "\n\n"
+          view << ann[0]['value']['content']
+          view << "\n"
         end
         view << "\n\n"
       end
+      view << "\nYour account is currently linked to #{bucket.length} channels.\n\n".color(:green)
       puts view
     end
 
