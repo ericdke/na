@@ -215,6 +215,15 @@ module Ayadn
 
     private
 
+    def get_broadcast_alias_from_id(event_id)
+      al = Databases.get_alias_from_id(event_id)
+      unless al.nil?
+        al
+      else
+        event_id
+      end
+    end
+
     def build_stream_with_index(data, options) #expects an array
       @view = ""
       posts = @workers.build_posts(data.reverse)
@@ -247,6 +256,16 @@ module Ayadn
           users_array << "@" + u['username']
         end
         case event['action']
+          when "broadcast_subscribe"
+            broadcast = get_broadcast_alias_from_id(event['objects'][0]['id'])
+            inter << "#{users_array.join(", ")} ".color(:magenta)
+            inter << "subscribed to your broadcast ".color(:green)
+            inter << "#{broadcast}".color(:red)
+          when "broadcast_unsubscribe"
+            broadcast = get_broadcast_alias_from_id(event['objects'][0]['id'])
+            inter << "#{users_array.join(", ")} ".color(:magenta)
+            inter << "unsubscribed from your broadcast ".color(:green)
+            inter << "#{broadcast}".color(:red)
           when "follow", "unfollow"
             inter << "#{users_array.join(", ")} ".color(:magenta)
             inter << "#{event['action']}ed you".color(:green)
@@ -255,7 +274,8 @@ module Ayadn
             inter << "#{event['action']}d you".color(:green)
           when "star", "unstar"
             inter << "#{users_array.join(", ")} ".color(:magenta)
-            inter << "#{event['action']}red post #{event['objects'][0]['id']}".color(:green)
+            inter << "#{event['action']}red post ".color(:green)
+            inter << "#{event['objects'][0]['id']}".color(:red)
           when "repost", "unrepost"
             inter << "#{users_array.join(", ")} ".color(:magenta)
             inter << "#{event['action']}ed post ".color(:green)

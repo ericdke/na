@@ -199,14 +199,18 @@ module Ayadn
       end
     end
 
-    def interactions
+    def interactions(options)
       begin
-        doing({})
+        doing(options)
         stream = @api.get_interactions
-        @view.clear_screen
-        @view.show_interactions(stream['data'])
+        unless options[:raw]
+          @view.clear_screen
+          @view.show_interactions(stream['data'])
+        else
+          @view.show_raw(stream)
+        end
       rescue => e
-        Errors.global_error("action/interactions", nil, e)
+        Errors.global_error("action/interactions", options, e)
       ensure
         Databases.close_all
       end

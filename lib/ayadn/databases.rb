@@ -51,6 +51,13 @@ module Ayadn
       @aliases[channel_alias]
     end
 
+    def self.get_alias_from_id(channel_id)
+      @aliases.each do |al, id|
+        return al if id == channel_id
+      end
+      nil
+    end
+
     def self.save_indexed_posts(posts)
       @index.clear
       posts.each do |id, hash|

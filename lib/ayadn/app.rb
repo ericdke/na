@@ -102,8 +102,9 @@ module Ayadn
     desc "interactions", "Show your recent ADN activity (shortcut: -int)"
     map "-int" => :interactions
     long_desc Descriptions.interactions
+    option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def interactions
-      Action.new.interactions
+      Action.new.interactions(options)
     end
 
     desc "whatstarred @USERNAME", "Show posts starred by @username (shortcut: -was)"
