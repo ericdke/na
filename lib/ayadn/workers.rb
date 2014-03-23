@@ -200,6 +200,7 @@ module Ayadn
           end
         end
       end
+      links.uniq!
       links
     end
 
