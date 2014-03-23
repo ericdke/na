@@ -17,7 +17,31 @@ module Ayadn
       <<-USAGE
       Show your App.net timeline, aka the Unified Stream.
 
-      Example: ayadn -tl
+      Basic usage:
+
+      ayadn timeline
+
+      ayadn -tl
+
+      Retrieves only 5 posts:
+
+      ayadn -tl -c5
+
+      Shows index instead of post numbers:
+
+      ayadn -tl -i
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -tl -i -c30
+
+      Scroll the stream:
+
+      ayadn -tl -s
+
+      Show only new posts:
+
+      ayadn -tl -n
       \n\n
       USAGE
     end
@@ -25,7 +49,31 @@ module Ayadn
       <<-USAGE
       Show the Checkins Stream.
 
-      Example: ayadn -ck
+      Basic usage:
+
+      ayadn checkins
+
+      ayadn -ck
+
+      Retrieves only 5 posts:
+
+      ayadn -ck -c5
+
+      Shows index instead of post numbers:
+
+      ayadn -ck -i
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -ck -i -c30
+
+      Scroll the stream:
+
+      ayadn -ck -s
+
+      Show only new posts:
+
+      ayadn -ck -n
       \n\n
       USAGE
     end
@@ -33,7 +81,31 @@ module Ayadn
       <<-USAGE
       Show the Global Stream.
 
-      Example: ayadn -gl
+      Basic usage:
+
+      ayadn global
+
+      ayadn -gl
+
+      Retrieves only 5 posts:
+
+      ayadn -gl -c5
+
+      Shows index instead of post numbers:
+
+      ayadn -gl -i
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -gl -i -c30
+
+      Scroll the stream:
+
+      ayadn -gl -s
+
+      Show only new posts:
+
+      ayadn -gl -n
       \n\n
       USAGE
     end
@@ -41,7 +113,31 @@ module Ayadn
       <<-USAGE
       Show the Trending Stream.
 
-      Example: ayadn -tr
+      Basic usage:
+
+      ayadn trending
+
+      ayadn -tr
+
+      Retrieves only 5 posts:
+
+      ayadn -tr -c5
+
+      Shows index instead of post numbers:
+
+      ayadn -tr -i
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -tr -i -c30
+
+      Scroll the stream:
+
+      ayadn -tr -s
+
+      Show only new posts:
+
+      ayadn -tr -n
       \n\n
       USAGE
     end
@@ -49,7 +145,31 @@ module Ayadn
       <<-USAGE
       Show the Photos Stream.
 
-      Example: ayadn -ph
+      Basic usage:
+
+      ayadn photos
+
+      ayadn -ph
+
+      Retrieves only 5 posts:
+
+      ayadn -ph -c5
+
+      Shows index instead of post numbers:
+
+      ayadn -ph -i
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -ph -i -c30
+
+      Scroll the stream:
+
+      ayadn -ph -s
+
+      Show only new posts:
+
+      ayadn -ph -n
       \n\n
       USAGE
     end
@@ -57,7 +177,31 @@ module Ayadn
       <<-USAGE
       Show the Conversations Stream.
 
-      Example: ayadn -cq
+      Basic usage:
+
+      ayadn conversations
+
+      ayadn -cq
+
+      Retrieves only 5 posts:
+
+      ayadn -cq -c5
+
+      Shows index instead of post numbers:
+
+      ayadn -cq -i
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -cq -i -c30
+
+      Scroll the stream:
+
+      ayadn -cq -s
+
+      Show only new posts:
+
+      ayadn -cq -n
       \n\n
       USAGE
     end
@@ -65,7 +209,23 @@ module Ayadn
       <<-USAGE
       Show posts containing a mention of @username.
 
-      Example: ayadn -m @ericd
+      Basic usage:
+
+      ayadn mentions @ericd
+
+      ayadn -m @ericd
+
+      Retrieves only 5 posts:
+
+      ayadn -m -c5 @ericd
+
+      Shows index instead of post numbers:
+
+      ayadn -m -i @ericd
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -m -i -c30 @ericd
       \n\n
       USAGE
     end
@@ -73,7 +233,23 @@ module Ayadn
       <<-USAGE
       Show @username's posts.
 
-      Example: ayadn -up @ericd
+      Basic usage:
+
+      ayadn userposts @ericd
+
+      ayadn -up @ericd
+
+      Retrieves only 5 posts:
+
+      ayadn -up -c5 @ericd
+
+      Shows index instead of post numbers:
+
+      ayadn -up -i @ericd
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -up -i -c30 @ericd
       \n\n
       USAGE
     end
@@ -81,15 +257,35 @@ module Ayadn
       <<-USAGE
       Show posts starred by @username.
 
-      Example: ayadn -was @ericd
+      Basic usage:
+
+      ayadn whatstarred @ericd
+
+      ayadn -was @ericd
+
+      Retrieves only 5 posts:
+
+      ayadn -was -c5 @ericd
+
+      Shows index instead of post numbers:
+
+      ayadn -was -i @ericd
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -was -i -c30 @ericd
       \n\n
       USAGE
     end
     def self.interactions
       <<-USAGE
-      Show your recent ADN activity.
+      Show your recent ADN interactions.
 
-      Example: ayadn -int
+      Usage:
+
+      ayadn interactions
+
+      ayadn -int
       \n\n
       USAGE
     end
@@ -97,7 +293,11 @@ module Ayadn
       <<-USAGE
       List users who reposted post n°POST.
 
-      Example: ayadn -wor 22790201
+      Usage:
+
+      ayadn whoreposted 22790201
+
+      ayadn -wor 22790201
       \n\n
       USAGE
     end
@@ -105,7 +305,11 @@ module Ayadn
       <<-USAGE
       List users who starred post n°POST.
 
-      Example: ayadn -wos 22790201
+      Usage:
+
+      ayadn whostarred 22790201
+
+      ayadn -wos 22790201
       \n\n
       USAGE
     end
@@ -113,7 +317,15 @@ module Ayadn
       <<-USAGE
       Show the conversation thread around post n°POST.
 
-      Example: ayadn -co 23362788
+      Usage:
+
+      ayadn convo 23362788
+
+      ayadn -co 23362788
+
+      Show index instead of post numbers:
+
+      ayadn -co -i 23362788
       \n\n
       USAGE
     end
@@ -121,7 +333,11 @@ module Ayadn
       <<-USAGE
       List users @username is following.
 
-      Example: ayadn -fwg @ericd
+      Usage:
+
+      ayadn followings @ericd
+
+      ayadn -fwg @ericd
       \n\n
       USAGE
     end
@@ -129,7 +345,11 @@ module Ayadn
       <<-USAGE
       List users following @username.
 
-      Example: ayadn -fwr @ericd
+      Usage:
+
+      ayadn followers @ericd
+
+      ayadn -fwr @ericd
       \n\n
       USAGE
     end
@@ -137,7 +357,11 @@ module Ayadn
       <<-USAGE
       List the users you muted.
 
-      Example: ayadn -mtd
+      Usage:
+
+      ayadn muted
+
+      ayadn -mtd
       \n\n
       USAGE
     end
@@ -145,15 +369,23 @@ module Ayadn
       <<-USAGE
       List the users you blocked.
 
-      Example: ayadn -bkd
+      Usage:
+
+      ayadn blocked
+
+      ayadn -bkd
       \n\n
       USAGE
     end
     def self.hashtag
       <<-USAGE
-      Show recent posts containing #HASHTAG.
+      Show recent posts containing HASHTAG.
 
-      Example: ayadn -t thememonday
+      Usage:
+
+      ayadn hashtag thememonday
+
+      ayadn -t thememonday
       \n\n
       USAGE
     end
@@ -161,7 +393,23 @@ module Ayadn
       <<-USAGE
       Show recents posts containing WORD(S).
 
-      Example: ayadn -s screenshot iterm
+      Basic usage:
+
+      ayadn search screenshot iterm
+
+      ayadn -s screenshot iterm
+
+      Retrieves only 5 posts:
+
+      ayadn -s -c5 screenshot iterm
+
+      Shows index instead of post numbers:
+
+      ayadn -s -i screenshot iterm
+
+      Shows index and retrieves 30 posts:
+
+      ayadn -s -i -c30 screenshot iterm
       \n\n
       USAGE
     end
@@ -169,7 +417,11 @@ module Ayadn
       <<-USAGE
       List current Ayadn settings.
 
-      Example: ayadn -sg
+      Usage:
+
+      ayadn settings
+
+      ayadn -sg
       \n\n
       USAGE
     end
@@ -177,7 +429,11 @@ module Ayadn
       <<-USAGE
       Show detailed informations about @username.
 
-      Example: ayadn -ui @ericd
+      Usage:
+
+      ayadn userinfo @ericd
+
+      ayadn -ui @ericd
       \n\n
       USAGE
     end
@@ -185,7 +441,11 @@ module Ayadn
       <<-USAGE
       Show detailed informations about post n°POST.
 
-      Example: ayadn -pi 23365251
+      Usage:
+
+      ayadn postinfo 23365251
+
+      ayadn -pi 23365251
       \n\n
       USAGE
     end
@@ -193,7 +453,19 @@ module Ayadn
       <<-USAGE
       List the files in your ADN storage.
 
-      Example: ayadn -fl
+      Basic usage:
+
+      ayadn files
+
+      ayadn -fl
+
+      Retrieves only 5 files:
+
+      ayadn -fl -c5
+
+      Retrieves all files:
+
+      ayadn -fl -a
 
       You can then download a file with its id: 'ayadn -df 23344556'
       \n\n
@@ -203,7 +475,11 @@ module Ayadn
       <<-USAGE
       Delete a post.
 
-      Example: ayadn -D 23365251
+      Usage:
+
+      ayadn delete 23365251
+
+      ayadn -D 23365251
       \n\n
       USAGE
     end
@@ -211,7 +487,11 @@ module Ayadn
       <<-USAGE
       Unfollow a user.
 
-      Example: ayadn -UF @spammer
+      Usage:
+
+      ayadn unfollow @spammer
+
+      ayadn -UF @spammer
       \n\n
       USAGE
     end
@@ -219,7 +499,11 @@ module Ayadn
       <<-USAGE
       Unmute a user.
 
-      Example: ayadn -UM @ericd
+      Usage:
+
+      ayadn unmute @ericd
+
+      ayadn -UM @ericd
       \n\n
       USAGE
     end
@@ -227,7 +511,11 @@ module Ayadn
       <<-USAGE
       Unblock a user.
 
-      Example: ayadn -UB @ericd
+      Usage:
+
+      ayadn unblock @notspammeractually
+
+      ayadn -UB @notspammeractually
       \n\n
       USAGE
     end
@@ -235,7 +523,11 @@ module Ayadn
       <<-USAGE
       Unrepost a post.
 
-      Example: ayadn -UR 23365251
+      Usage:
+
+      ayadn unrepost 23365251
+
+      ayadn -UR 23365251
       \n\n
       USAGE
     end
@@ -243,7 +535,11 @@ module Ayadn
       <<-USAGE
       Unstar a post.
 
-      Example: ayadn -US 23365251
+      Usage:
+
+      ayadn unstar 23365251
+
+      ayadn -US 23365251
       \n\n
       USAGE
     end
@@ -251,7 +547,11 @@ module Ayadn
       <<-USAGE
       Star a post.
 
-      Example: ayadn -ST 23365251
+      Usage:
+
+      ayadn star 23365251
+
+      ayadn -ST 23365251
       \n\n
       USAGE
     end
@@ -259,7 +559,11 @@ module Ayadn
       <<-USAGE
       Repost a post.
 
-      Example: ayadn -O 23365251
+      Usage:
+
+      ayadn repost 23365251
+
+      ayadn -O 23365251
       \n\n
       USAGE
     end
@@ -267,7 +571,11 @@ module Ayadn
       <<-USAGE
       Follow a user.
 
-      Example: ayadn -FO @ericd
+      Usage:
+
+      ayadn follow @ericd
+
+      ayadn -FO @ericd
       \n\n
       USAGE
     end
@@ -275,7 +583,11 @@ module Ayadn
       <<-USAGE
       Mute a user.
 
-      Example: ayadn -MU @spammer
+      Usage:
+
+      ayadn mute @spammer
+
+      ayadn -MU @spammer
       \n\n
       USAGE
     end
@@ -283,7 +595,11 @@ module Ayadn
       <<-USAGE
       Block a user.
 
-      Example: ayadn -BL @spammer
+      Usage:
+
+      ayadn block @spammer
+
+      ayadn -BL @spammer
       \n\n
       USAGE
     end
@@ -291,7 +607,11 @@ module Ayadn
       <<-USAGE
       List your active channels.
 
-      Example: ayadn -ch
+      Usage:
+
+      ayadn channels
+
+      ayadn -ch
       \n\n
       USAGE
     end
@@ -299,7 +619,19 @@ module Ayadn
       <<-USAGE
       Show recent messages in a channel.
 
-      Example: ayadn -ms 46217
+      Basic usage:
+
+      ayadn messages 46217
+
+      ayadn -ms 46217
+
+      Retrieves only 5 messages:
+
+      ayadn -ms -c5 46217
+
+      Retrieves only new messages:
+
+      ayadn -ms -n 46217
 
       If you've set an alias for the channel, you can display its messages with 'ayadn -ms my_alias'
       \n\n
@@ -309,7 +641,9 @@ module Ayadn
       <<-USAGE
       Export a POST's link and text with tags to Pinboard.
 
-      Example: ayadn pin 23365251 screenshot iTerm
+      Usage:
+
+      ayadn pin 23365251 screenshot iterm
       \n\n
       USAGE
     end
@@ -317,11 +651,17 @@ module Ayadn
       <<-USAGE
       Simple post to App.net.
 
-      Example: ayadn -P Hello from Ayadn!
+      Usage:
 
-      You don't have to put quotes around your text.
+      ayadn post 'Hello from Ayadn!'
 
-      Note: the 'write' method is recommended over this one (more secure and offers multi-line support).
+      ayadn -P 'Hello from Ayadn!'
+
+      ayadn -P Watching a movie with friends
+
+      You don't have to put quotes around your text, but it's better to do it.
+
+      The 'write' method is recommended over this one: it's more secure and offers multi-line support.
       \n\n
       USAGE
     end
@@ -329,9 +669,13 @@ module Ayadn
       <<-USAGE
       Multi-line post to App.net.
 
-      Example: ayadn -W
+      Usage:
 
-      Enters the writing mode where you will type your post.
+      ayadn write
+
+      ayadn -W
+
+      It enters the writing mode where you will type your post.
       \n\n
       USAGE
     end
@@ -339,9 +683,11 @@ module Ayadn
       <<-USAGE
       Send a private message to @username.
 
-      Example: ayadn pm @ericd
+      Usage:
 
-      Enters the writing mode where you will type your message.
+      ayadn pm @ericd
+
+      It enters the writing mode where you will type your message.
       \n\n
       USAGE
     end
@@ -349,9 +695,13 @@ module Ayadn
       <<-USAGE
       Send a message to a channel.
 
-      Example: ayadn -C 46217
+      Usage:
 
-      Enters the writing mode where you will type your message.
+      ayadn send 46217
+
+      ayadn -C 46217
+
+      It enters the writing mode where you will type your message.
 
       If you've set an alias for the channel, you can post to it with 'ayadn -C my_alias'
       \n\n
@@ -361,9 +711,13 @@ module Ayadn
       <<-USAGE
       Reply to post n°POST.
 
-      Example: ayadn -R 23365251
+      Usage:
 
-      Enters the writing mode where you will type your reply.
+      ayadn reply 23365251
+
+      ayadn -R 23365251
+
+      It enters the writing mode where you will type your reply.
 
       Mentions and/or username will be detected and your text will be inserted appropriately.
 
@@ -419,7 +773,7 @@ module Ayadn
     end
     def self.alias
       <<-USAGE
-      Create, delete and list aliases for channels.
+      Create, delete and list aliases for channels. Shortcut: '-A'.
 
       Examples:
 
@@ -435,7 +789,7 @@ module Ayadn
     end
     def self.alias_create
       <<-USAGE
-      Creates an alias for a channel.
+      Creates an alias for a channel. Shortcut: '-A'.
 
       Example: ayadn -A create 33666 my_alias
 
@@ -445,7 +799,7 @@ module Ayadn
     end
     def self.alias_delete
       <<-USAGE
-      Deletes a previously created alias.
+      Deletes a previously created alias. Shortcut: '-A'.
 
       Example: ayadn -A delete my_alias
       \n\n
@@ -453,7 +807,7 @@ module Ayadn
     end
     def self.alias_list
       <<-USAGE
-      Lists previously created aliases.
+      Lists previously created aliases. Shortcut: '-A'.
 
       Example: ayadn -A list
       \n\n
@@ -463,15 +817,19 @@ module Ayadn
       <<-USAGE
       Download the file with id FILE.
 
-      Example: ayadn -df 23344556
+      Usage:
 
-      You can list your files with 'ayadn -fl'
+      ayadn download 23344556
+
+      ayadn -df 23344556
+
+      (you can list your files with 'ayadn -fl')
       \n\n
       USAGE
     end
     def self.blacklist
       <<-USAGE
-      Manage your blacklist: add to, remove from, and show the list.
+      Manage your blacklist: add to, remove from the list; show the list. Shortcut: '-K'.
 
       Examples:
 
@@ -493,7 +851,7 @@ module Ayadn
     end
     def self.blacklist_add
       <<-USAGE
-      Adds a mention, hashtag or client to your blacklist.
+      Adds a mention, hashtag or client to your blacklist. Shortcut: '-K'.
 
       Examples:
 
@@ -507,7 +865,7 @@ module Ayadn
     end
     def self.blacklist_remove
       <<-USAGE
-      Removes a mention, hashtag or client from your blacklist.
+      Removes a mention, hashtag or client from your blacklist. Shortcut: '-K'.
 
       Examples:
 
@@ -521,7 +879,7 @@ module Ayadn
     end
     def self.blacklist_list
       <<-USAGE
-      Lists the content of your blacklist.
+      Lists the content of your blacklist. Shortcut: '-K'.
 
       Example: ayadn -K list
       \n\n
@@ -531,17 +889,29 @@ module Ayadn
       <<-USAGE
       Post the track you're listening to.
 
-      Example: ayadn -np
+      Usage:
 
-      Works only with iTunes and Mac Os X.
+      ayadn nowplaying
+
+      ayadn -np
+
+      (works only with iTunes and Mac Os X)
       \n\n
       USAGE
     end
     def self.random_posts
       <<-USAGE
-      Show random posts from App.net. Just for fun ;)
+      Show random posts from App.net.
 
-      Example: ayadn -rnd
+      Usage:
+
+      ayadn random
+
+      ayadn -rnd
+
+      With 'wait 2 seconds' option:
+
+      ayadn -rnd -w2
       \n\n
       USAGE
     end
@@ -549,7 +919,11 @@ module Ayadn
       <<-USAGE
       Authorize Ayadn to access your App.net account.
 
-      Example: ayadn -auth
+      Usage:
+
+      ayadn authorize
+
+      ayadn -auth
 
       Ayadn will give you a link to an App.net login page.
 
@@ -563,7 +937,15 @@ module Ayadn
       <<-USAGE
       Switch between already authorized App.net accounts.
 
-      Example: ayadn -@ @myotheraccount
+      Usage:
+
+      ayadn switch @myotheraccount
+
+      ayadn -@ @myotheraccount
+
+      With 'list accounts' option:
+
+      ayadn -@ -l
       \n\n
       USAGE
     end
