@@ -841,6 +841,8 @@ module Ayadn
 
       ayadn -K add client IFTTT
 
+      ayadn -K add client 'Spammy Unknown Client'
+
       ayadn -K remove mention @shmuck
 
       ayadn -K remove hashtag sports
@@ -860,6 +862,8 @@ module Ayadn
       ayadn -K add hashtag sports
 
       ayadn -K add client IFTTT
+
+      ayadn -K add client 'Spammy Unknown Client'
       \n\n
       USAGE
     end

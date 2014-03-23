@@ -20,6 +20,7 @@ module Ayadn
           raise e
         end
       end
+      home_path = Dir.home + "/ayadn"
       model = Struct.new(:resp, :username, :id, :handle, :home_path, :user_path)
       show_link
       begin

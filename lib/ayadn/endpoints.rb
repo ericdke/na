@@ -17,7 +17,7 @@ module Ayadn
     end
 
     def authorize_url
-      "https://account.app.net/oauth/authenticate?client_id=#{Settings::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic stream write_post follow public_messages messages files update_profile&include_marker=1"
+      "https://account.app.net/oauth/authenticate?client_id=#{Settings::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic,stream,write_post,follow,public_messages,messages,files,update_profile&include_marker=1"
     end
 
     def token_info
