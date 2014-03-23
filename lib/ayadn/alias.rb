@@ -15,7 +15,7 @@ module Ayadn
         end
         if channel.is_integer?
           Databases.create_alias(channel, channel_alias)
-          Logs.rec.info "Added alias #{channel_alias} for channel #{channel}."
+          Logs.rec.info "Added alias '#{channel_alias}' for channel #{channel}."
           puts Status.done
         else
           puts Status.error_missing_channel_id
@@ -34,7 +34,7 @@ module Ayadn
         init
         unless args.empty?
           Databases.delete_alias(args[0])
-          Logs.rec.info "Deleted alias #{args[0]}."
+          Logs.rec.info "Deleted alias '#{args[0]}'."
           puts Status.done
         else
           puts Status.wrong_arguments
@@ -60,7 +60,7 @@ module Ayadn
         end
         if File.exist?(new_db)
           Databases.import_aliases(new_db)
-          Logs.rec.info "Imported #{new_db} values in aliases database."
+          Logs.rec.info "Imported '#{new_db}' values in aliases database."
           puts Status.done
         else
           puts "\nFile '#{new_db}' doesn't exist.".color(:red)
