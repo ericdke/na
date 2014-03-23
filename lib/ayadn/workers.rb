@@ -193,6 +193,13 @@ module Ayadn
     def extract_links(post)
       links = []
       post['entities']['links'].each { |l| links << l['url'] }
+      unless post['annotations'].empty?
+        post['annotations'].each do |ann|
+          if ann['type'] == "net.app.core.oembed"
+            links << ann['value']['embeddable_url'] if ann['value']['embeddable_url']
+          end
+        end
+      end
       links
     end
 
@@ -313,15 +320,15 @@ module Ayadn
               end
             end
             unless obj['value']['factual_id'].nil?
-                checkins[:factual_id] = obj['value']['factual_id']
+              checkins[:factual_id] = obj['value']['factual_id']
             end
             unless obj['value']['longitude'].nil?
-                checkins[:longitude] = obj['value']['longitude']
-                checkins[:latitude] = obj['value']['latitude']
+              checkins[:longitude] = obj['value']['longitude']
+              checkins[:latitude] = obj['value']['latitude']
             end
-          when "net.app.core.oembed"
-            has_checkins = true
-                checkins[:embeddable_url] = obj['value']['embeddable_url']
+          #when "net.app.core.oembed"
+            #has_checkins = true
+            #checkins[:embeddable_url] = obj['value']['embeddable_url']
           end
         end
       end
