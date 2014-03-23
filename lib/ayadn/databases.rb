@@ -56,6 +56,12 @@ module Ayadn
       @aliases[channel_alias]
     end
 
+    def self.import_aliases(aliases)
+      new_aliases = Daybreak::DB.new aliases
+      new_aliases.each {|al,id| @aliases[al] = id}
+      new_aliases.close
+    end
+
     def self.get_alias_from_id(channel_id)
       @aliases.each do |al, id|
         return al if id == channel_id

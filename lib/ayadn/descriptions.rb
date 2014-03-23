@@ -815,6 +815,18 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.alias_import
+      <<-USAGE
+      Imports an aliases database from a backed up Ayadn account.
+
+      Usage:
+
+      ayadn alias import '/Users/blah/ayadn/blah/db/aliases.db'
+
+      ayadn -A import '/Users/blah/backups/aliases.db'
+      \n\n
+      USAGE
+    end
     def self.alias_list
       <<-USAGE
       Lists previously created aliases.

@@ -35,6 +35,25 @@ module Ayadn
       end
     end
 
+    desc "alias import DATABASE", "Imports an aliases database from a backed up Ayadn account"
+    long_desc Descriptions.alias_import
+    def import(database)
+      begin
+        init
+        new_db = File.realpath(database)
+        if File.exist?(new_db)
+          Databases.import_aliases(new_db)
+          puts Status.done
+        else
+          puts "\nFile '#{new_db}' doesn't exist.".color(:red)
+        end
+      rescue => e
+        Errors.global_error("alias/import", database, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
     desc "alias list", "List previously created aliases"
     long_desc Descriptions.alias_list
     def list
