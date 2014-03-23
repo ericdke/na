@@ -712,6 +712,7 @@ module Ayadn
             end
           else
             @view.show_raw(@api.get_user(username))
+            #@view.show_raw(@api.get_token_info)
           end
         else
           puts Status.error_missing_username
@@ -733,8 +734,10 @@ module Ayadn
             post_404(post_id) if meta_404(response)
             resp = response['data']
             response = @api.get_user("@#{resp['user']['username']}")
-            token = @api.get_token_info
             user_404(username) if meta_404(response)
+            if response['data']['username'] == Settings.config[:identity][:username]
+              token = @api.get_token_info
+            end
             stream = response['data']
             puts "POST:\n".inverse
             @view.show_simple_post([resp], options)
@@ -743,7 +746,11 @@ module Ayadn
               @view.show_simple_post([resp['repost_of']], options)
             end
             puts "AUTHOR:\n".inverse
-            @view.show_userinfos(stream, token['data'])
+            if response['data']['username'] == Settings.config[:identity][:username]
+              @view.show_userinfos(stream, token['data'])
+            else
+              @view.show_userinfos(stream, nil)
+            end
           else
             @view.show_raw(@api.get_details(post_id, options))
           end
