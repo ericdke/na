@@ -44,6 +44,7 @@ module Ayadn
       Settings.load_config
       Settings.get_token
       Settings.init_config
+      Logs.create_logger
       Databases.open_databases
     end
     def import(database)
@@ -51,8 +52,10 @@ module Ayadn
         new_db = File.realpath(database)
         if File.exist?(new_db)
           Databases.import_blacklist(new_db)
+          Logs.rec.info "Imported #{new_db} values in blacklist database."
         else
-          puts "\nFile '#{new_db}' doesn't exist.".color(:red)
+          puts "\nFile '#{new_db}' doesn't exist.\n\n".color(:red)
+          Logs.rec.warn "File '#{new_db}' doesn't exist."
         end
       ensure
         Databases.close_all
@@ -65,10 +68,13 @@ module Ayadn
         when 'mention', 'mentions'
           target = Workers.add_arobase_if_missing([target])
           Databases.add_mention_to_blacklist(target)
+          Logs.rec.info "Added #{target} to blacklist of mentions."
         when 'client', 'source'
           Databases.add_client_to_blacklist(target)
+          Logs.rec.info "Added #{target} to blacklist of clients."
         when 'hashtag', 'tag'
           Databases.add_hashtag_to_blacklist(target)
+          Logs.rec.info "Added #{target} to blacklist of hashtags."
         else
           puts Status.wrong_arguments
         end
@@ -83,8 +89,10 @@ module Ayadn
         when 'mention', 'mentions'
           target = Workers.add_arobase_if_missing([target])
           Databases.remove_from_blacklist(target)
+          Logs.rec.info "Removed #{target} from blacklist of mentions."
         when 'client', 'source', 'hashtag', 'tag'
           Databases.remove_from_blacklist(target)
+          Logs.rec.info "Removed #{type}:#{target} from blacklist."
         else
           puts Status.wrong_arguments
         end
