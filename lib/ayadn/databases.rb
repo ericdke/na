@@ -34,6 +34,11 @@ module Ayadn
     def self.remove_from_blacklist(target)
       @blacklist.delete(target)
     end
+    def self.import_blacklist(blacklist)
+      new_list = Daybreak::DB.new blacklist
+      new_list.each {|name,type| @blacklist[name] = type}
+      new_list.close
+    end
 
     def self.save_max_id(stream)
       @pagination[stream['meta']['marker']['name']] = stream['meta']['max_id']

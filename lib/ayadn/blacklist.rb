@@ -29,6 +29,14 @@ module Ayadn
       blacklist = BlacklistWorkers.new
       blacklist.list
     end
+
+    desc "blacklist import DATABASE", "Imports a blacklist database from another Ayadn account"
+    long_desc Descriptions.blacklist_import
+    def import(database)
+      blacklist = BlacklistWorkers.new
+      blacklist.import(database)
+      puts Status.done
+    end
   end
 
   class BlacklistWorkers
@@ -37,6 +45,18 @@ module Ayadn
       Settings.get_token
       Settings.init_config
       Databases.open_databases
+    end
+    def import(database)
+      begin
+        new_db = File.realpath(database)
+        if File.exist?(new_db)
+          Databases.import_blacklist(new_db)
+        else
+          puts "\nFile '#{new_db}' doesn't exist.".color(:red)
+        end
+      ensure
+        Databases.close_all
+      end
     end
     def add(args)
       begin

@@ -773,9 +773,11 @@ module Ayadn
     end
     def self.alias
       <<-USAGE
-      Create, delete and list aliases for channels. Shortcut: '-A'.
+      Create, delete and list aliases for channels.
 
-      Examples:
+      Usage:
+
+      ayadn alias list
 
       ayadn -A list
 
@@ -789,9 +791,13 @@ module Ayadn
     end
     def self.alias_create
       <<-USAGE
-      Creates an alias for a channel. Shortcut: '-A'.
+      Creates an alias for a channel.
 
-      Example: ayadn -A create 33666 my_alias
+      Usage:
+
+      ayadn alias create 33666 my_alias
+
+      ayadn -A create 33666 my_alias
 
       (Once an alias is set, you can display the messages in this channel with 'ayadn -ms my_alias', post to it with 'ayadn -C my_alias', etc)
       \n\n
@@ -799,17 +805,25 @@ module Ayadn
     end
     def self.alias_delete
       <<-USAGE
-      Deletes a previously created alias. Shortcut: '-A'.
+      Deletes a previously created alias.
 
-      Example: ayadn -A delete my_alias
+      Usage:
+
+      ayadn alias delete my_alias
+
+      ayadn -A delete my_alias
       \n\n
       USAGE
     end
     def self.alias_list
       <<-USAGE
-      Lists previously created aliases. Shortcut: '-A'.
+      Lists previously created aliases.
 
-      Example: ayadn -A list
+      Usage:
+
+      ayadn alias list
+
+      ayadn -A list
       \n\n
       USAGE
     end
@@ -829,21 +843,23 @@ module Ayadn
     end
     def self.blacklist
       <<-USAGE
-      Manage your blacklist: add to, remove from the list; show the list. Shortcut: '-K'.
+      Manage your blacklist: add to, remove from the list; show the list.
 
-      Examples:
+      Usage:
+
+      ayadn blacklist list
 
       ayadn -K list
 
       ayadn -K add mention @shmuck
 
-      ayadn -K add hashtag sports
+      ayadn blacklist add hashtag sports
 
       ayadn -K add client IFTTT
 
       ayadn -K add client 'Spammy Unknown Client'
 
-      ayadn -K remove mention @shmuck
+      ayadn blacklist remove mention @shmuck
 
       ayadn -K remove hashtag sports
 
@@ -853,9 +869,11 @@ module Ayadn
     end
     def self.blacklist_add
       <<-USAGE
-      Adds a mention, hashtag or client to your blacklist. Shortcut: '-K'.
+      Adds a mention, hashtag or client to your blacklist.
 
-      Examples:
+      Usage:
+
+      ayadn blacklist add mention @shmuck
 
       ayadn -K add mention @shmuck
 
@@ -869,9 +887,11 @@ module Ayadn
     end
     def self.blacklist_remove
       <<-USAGE
-      Removes a mention, hashtag or client from your blacklist. Shortcut: '-K'.
+      Removes a mention, hashtag or client from your blacklist.
 
-      Examples:
+      Usage:
+
+      ayadn blacklist remove mention @shmuck
 
       ayadn -K remove mention @shmuck
 
@@ -881,11 +901,27 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.blacklist_import
+      <<-USAGE
+      Imports a blacklist database from another Ayadn account.
+
+      Usage:
+
+      ayadn blacklist import '/Users/blah/ayadn/blah/db/blacklist.db'
+
+      ayadn -K import '/Users/blah/backups/blacklist.db'
+      \n\n
+      USAGE
+    end
     def self.blacklist_list
       <<-USAGE
-      Lists the content of your blacklist. Shortcut: '-K'.
+      Lists the content of your blacklist.
 
-      Example: ayadn -K list
+      Usage:
+
+      ayadn blacklist list
+
+      ayadn -K list
       \n\n
       USAGE
     end
