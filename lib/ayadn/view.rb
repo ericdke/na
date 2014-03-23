@@ -126,11 +126,10 @@ module Ayadn
       view << "\n\nFollowing\t\t".color(:cyan) + content['counts']['following'].to_s.color(:green)
       view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:green)
 
-      view << "\n\nFile size limit\t\t".color(:cyan) + "#{(token['limits']['max_file_size'] / 1000000)} MB".color(:red)
-      view << ("\nFollowing limit\t\t".color(:cyan) + "#{token['limits']['following']} users".color(:red)) if token['limits']['following']
-
-      view << "\n\nStorage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(:red)
-      view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(:green)
+      if content['username'] == Settings.config[:identity][:username]
+        view << "\n\nStorage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(:red)
+        view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(:green)
+      end
 
       #view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)
 

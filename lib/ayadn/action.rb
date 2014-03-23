@@ -703,9 +703,13 @@ module Ayadn
           doing(options)
           unless options[:raw]
             stream = @api.get_user(username)
-            token = @api.get_token_info
             user_404(username) if meta_404(stream)
-            get_infos(stream['data'], token['data'])
+            if stream['data']['username'] == Settings.config[:identity][:username]
+              token = @api.get_token_info
+              get_infos(stream['data'], token['data'])
+            else
+              get_infos(stream['data'], nil)
+            end
           else
             @view.show_raw(@api.get_user(username))
           end
