@@ -99,7 +99,11 @@ module Ayadn
     end
 
     def show_userinfos(content, token)
-      view = "Name\t\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
+      if content['name']
+        view = "Name\t\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
+      else
+        view = "Name\t\t\t".color(:cyan) + "(no name)".color(:red)
+      end
 
       view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:id])
 
