@@ -773,7 +773,7 @@ module Ayadn
     end
     def self.alias
       <<-USAGE
-      Create, delete and list aliases for channels.
+      Manage your channel aliases. Commands: create, delete, list, import.
 
       Usage:
 
@@ -784,6 +784,8 @@ module Ayadn
       ayadn -A create 33666 my_alias
 
       ayadn -A delete my_alias
+
+      ayadn -A import '/Users/blah/backups/aliases.db'
 
       (Once an alias is set, you can display the messages in this channel with 'ayadn -ms my_alias', post to it with 'ayadn -C my_alias', etc)
       \n\n
@@ -855,7 +857,7 @@ module Ayadn
     end
     def self.blacklist
       <<-USAGE
-      Manage your blacklist: add to, remove from the list; show the list.
+      Manage your blacklist. Commands: add, remove, list, import.
 
       Usage:
 
@@ -876,6 +878,8 @@ module Ayadn
       ayadn -K remove hashtag sports
 
       ayadn -K remove client IFTTT
+
+      ayadn -K import '/Users/blah/backups/blacklist.db'
       \n\n
       USAGE
     end

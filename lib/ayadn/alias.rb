@@ -7,7 +7,12 @@ module Ayadn
     def create(*args)
       begin
         init
-        channel, channel_alias = args[0], args[1]
+        unless args.empty?
+          channel, channel_alias = args[0], args[1]
+        else
+          puts Status.wrong_arguments
+          exit
+        end
         if channel.is_integer?
           Databases.create_alias(channel, channel_alias)
           puts Status.done
@@ -26,8 +31,13 @@ module Ayadn
     def delete(*args)
       begin
         init
-        Databases.delete_alias(args[0])
-        puts Status.done
+        unless args.empty?
+          Databases.delete_alias(args[0])
+          puts Status.done
+        else
+          puts Status.wrong_arguments
+          exit
+        end
       rescue => e
         Errors.global_error("alias/delete", args, e)
       ensure
@@ -40,7 +50,12 @@ module Ayadn
     def import(database)
       begin
         init
-        new_db = File.realpath(database)
+        unless database.nil?
+          new_db = File.realpath(database)
+        else
+          puts Status.wrong_arguments
+          exit
+        end
         if File.exist?(new_db)
           Databases.import_aliases(new_db)
           puts Status.done
