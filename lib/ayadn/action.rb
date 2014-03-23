@@ -703,8 +703,9 @@ module Ayadn
           doing(options)
           unless options[:raw]
             stream = @api.get_user(username)
+            token = @api.get_token_info
             user_404(username) if meta_404(stream)
-            get_infos(stream['data'])
+            get_infos(stream['data'], token['data'])
           else
             @view.show_raw(@api.get_user(username))
           end
@@ -728,6 +729,7 @@ module Ayadn
             post_404(post_id) if meta_404(response)
             resp = response['data']
             response = @api.get_user("@#{resp['user']['username']}")
+            token = @api.get_token_info
             user_404(username) if meta_404(response)
             stream = response['data']
             puts "POST:\n".inverse
@@ -737,7 +739,7 @@ module Ayadn
               @view.show_simple_post([resp['repost_of']], options)
             end
             puts "AUTHOR:\n".inverse
-            @view.show_userinfos(stream)
+            @view.show_userinfos(stream, token['data'])
           else
             @view.show_raw(@api.get_details(post_id, options))
           end
@@ -1075,9 +1077,9 @@ module Ayadn
       @view.show_simple_stream(stream)
     end
 
-    def get_infos(stream)
+    def get_infos(stream, token)
       @view.clear_screen
-      @view.show_userinfos(stream)
+      @view.show_userinfos(stream, token)
     end
 
     def get_list(what, list, target)

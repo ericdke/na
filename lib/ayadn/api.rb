@@ -65,6 +65,10 @@ module Ayadn
       get_parsed_response(Endpoints.new.interactions)
     end
 
+    def get_token_info
+      get_parsed_response(Endpoints.new.token_info)
+    end
+
     def get_whoreposted(post_id)
       get_parsed_response(Endpoints.new.whoreposted(post_id))
     end

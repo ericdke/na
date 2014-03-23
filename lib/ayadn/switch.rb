@@ -40,7 +40,7 @@ module Ayadn
           cancel(accounts_db)
         end
         if accounts_db[username]
-          puts "Switching to account @#{username}...".color(:green)
+          puts "\nSwitching to account @#{username}...".color(:green)
           accounts_db['ACTIVE'] = username
           close_db(accounts_db)
           puts Status.done

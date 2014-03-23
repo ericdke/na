@@ -98,13 +98,14 @@ module Ayadn
       puts table
     end
 
-    def show_userinfos(content)
-      view = "Real name\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
+    def show_userinfos(content, token)
+      view = "Name\t\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
 
-      view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
+      view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:id])
 
-      view << "\n\nID\t\t\t".color(:cyan) + content['id'].color(:yellow)
-      view << "\nURL\t\t\t".color(:cyan) + content['canonical_url'].color(:yellow)
+      view << "\n\nID\t\t\t".color(:cyan) + content['id'].color(Settings.options[:colors][:username])
+
+      view << "\n\nURL\t\t\t".color(:cyan) + content['canonical_url'].color(Settings.options[:colors][:link])
 
       unless content['verified_domain'].nil?
         if content['verified_domain'] =~ (/http/ || /https/)
@@ -112,18 +113,24 @@ module Ayadn
         else
           domain = "http://#{content['verified_domain']}"
         end
-        view << "\nVerified domain\t\t".color(:cyan) + domain.color(:yellow)
+        view << "\nVerified domain\t\t".color(:cyan) + domain.color(Settings.options[:colors][:link])
       end
 
 
-      view << "\nAccount creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(:yellow)
-      view << "\nTimeZone\t\t".color(:cyan) + content['timezone'].color(:yellow)
-      view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(:yellow)
+      view << "\n\nAccount creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(:green)
+      view << "\n\nTimeZone\t\t".color(:cyan) + content['timezone'].color(:green)
+      view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(:green)
 
-      view << "\n\nPosts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(:yellow)
+      view << "\n\nPosts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(:green)
 
-      view << "\n\nFollowing\t\t".color(:cyan) + content['counts']['following'].to_s.color(:yellow)
-      view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:yellow)
+      view << "\n\nFollowing\t\t".color(:cyan) + content['counts']['following'].to_s.color(:green)
+      view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:green)
+
+      view << "\n\nFile size limit\t\t".color(:cyan) + "#{(token['limits']['max_file_size'] / 1000000)} MB".color(:red)
+      view << ("\nFollowing limit\t\t".color(:cyan) + "#{token['limits']['following']} users".color(:red)) if token['limits']['following']
+
+      view << "\n\nStorage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(:red)
+      view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(:green)
 
       #view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)
 
@@ -138,14 +145,28 @@ module Ayadn
         else
           view << "\n" + "@#{content['username']}".color(Settings.options[:colors][:username]) + " doesn't follow you".color(:cyan)
         end
+        if content['you_muted']
+          view << "\nYou muted " + "@#{content['username']}".color(Settings.options[:colors][:username])
+        end
+        if content['you_blocked']
+          view << "\nYou blocked " + "@#{content['username']}".color(Settings.options[:colors][:username])
+        end
       end
 
-      if content['you_muted']
-        view << "\nYou muted " + "@#{content['username']}".color(Settings.options[:colors][:username])
+      unless content['annotations'].empty?
+        view << "\n"
       end
-      if content['you_blocked']
-        view << "\nYou blocked " + "@#{content['username']}".color(Settings.options[:colors][:username])
+      content['annotations'].each do |anno|
+        case anno['type']
+        when "net.app.core.directory.blog"
+          view << "\nBlog\t\t\t".color(:cyan) + "#{anno['value']['url']}".color(Settings.options[:colors][:link])
+        when "net.app.core.directory.twitter"
+          view << "\nTwitter\t\t\t".color(:cyan) + "#{anno['value']['username']}".color(:green)
+        when "com.appnetizens.userinput.birthday"
+          view << "\nBirthday\t\t".color(:cyan) + "#{anno['value']['birthday']}".color(:green)
+        end
       end
+
 
       #view << "\n\nAvatar URL\t\t".color(:cyan) + content['avatar_image']['url']
 
@@ -154,6 +175,7 @@ module Ayadn
       end
 
       puts view
+
     end
 
     def show_channels(resp)
