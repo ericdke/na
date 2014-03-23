@@ -943,7 +943,7 @@ module Ayadn
 
       ayadn -@ @myotheraccount
 
-      With 'list accounts' option:
+      List your authorized accounts:
 
       ayadn -@ -l
       \n\n
