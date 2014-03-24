@@ -300,6 +300,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.deleted(post_id)
+            Logs.rec.info "Deleted post #{post_id}."
           else
             puts Status.not_deleted(post_id)
             Errors.warn("#{Status.not_deleted(post_id)} => #{resp['meta']}")
@@ -324,6 +325,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unfollowed(username)
+            Logs.rec.info "Unfollowed #{username}."
           else
             puts Status.not_unfollowed(username)
             Errors.warn("#{Status.not_unfollowed(username)} => #{resp['meta']}")
@@ -348,6 +350,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.followed(username)
+            Logs.rec.info "Followed #{username}."
           else
             puts Status.not_followed(username)
             Errors.warn("#{Status.not_followed(username)} => #{resp['meta']}")
@@ -372,6 +375,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unmuted(username)
+            Logs.rec.info "Unmuted #{username}."
           else
             puts Status.not_unmuted(username)
             Errors.warn("#{Status.not_unmuted(username)} => #{resp['meta']}")
@@ -396,6 +400,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.muted(username)
+            Logs.rec.info "Muted #{username}."
           else
             puts Status.not_muted(username)
             Errors.warn("#{Status.not_muted(username)} => #{resp['meta']}")
@@ -420,6 +425,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unblocked(username)
+            Logs.rec.info "Unblocked #{username}."
           else
             puts Status.not_unblocked(username)
             Errors.warn("#{Status.not_unblocked(username)} => #{resp['meta']}")
@@ -444,6 +450,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.blocked(username)
+            Logs.rec.info "Blocked #{username}."
           else
             puts Status.not_blocked(username)
             Errors.warn("#{Status.not_blocked(username)} => #{resp['meta']}")
@@ -467,6 +474,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unreposted(post_id)
+            Logs.rec.info "Unreposted #{post_id}."
           else
             puts Status.not_unreposted(post_id)
             Errors.warn("#{Status.not_unreposted(post_id)} => #{resp['meta']}")
@@ -490,6 +498,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.unstarred(post_id)
+            Logs.rec.info "Unstarred #{post_id}."
           else
             puts Status.not_unstarred(post_id)
             Errors.warn("#{Status.not_unstarred(post_id)} => #{resp['meta']}")
@@ -513,6 +522,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.starred(post_id)
+            Logs.rec.info "Starred #{post_id}."
           else
             puts Status.not_starred(post_id)
             Errors.warn("#{Status.not_starred(post_id)} => #{resp['meta']}")
@@ -536,6 +546,7 @@ module Ayadn
           #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.reposted(post_id)
+            Logs.rec.info "Reposted #{post_id}."
           else
             puts Status.not_reposted(post_id)
             Errors.warn("#{Status.not_reposted(post_id)} => #{resp['meta']}")
