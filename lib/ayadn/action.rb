@@ -524,14 +524,19 @@ module Ayadn
         if post_id.is_integer?
           #@view.clear_screen
           puts Status.unstarring(post_id)
-          resp = @api.unstar(post_id)
           #@view.clear_screen
-          if resp['meta']['code'] == 200
-            puts Status.unstarred(post_id)
-            Logs.rec.info "Unstarred #{post_id}."
+          resp = @api.get_details(post_id)
+          if resp['data']['you_starred']
+            resp = @api.unstar(post_id)
+            if resp['meta']['code'] == 200
+              puts Status.unstarred(post_id)
+              Logs.rec.info "Unstarred #{post_id}."
+            else
+              puts Status.not_unstarred(post_id)
+              Errors.warn("#{Status.not_unstarred(post_id)} => #{resp['meta']}")
+            end
           else
-            puts Status.not_unstarred(post_id)
-            Errors.warn("#{Status.not_unstarred(post_id)} => #{resp['meta']}")
+            puts "\nThis isn't one of your starred posts.\n\n".color(:red)
           end
         else
           puts Status.error_missing_post_id
