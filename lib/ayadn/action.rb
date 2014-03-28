@@ -553,6 +553,11 @@ module Ayadn
         if post_id.is_integer?
           #@view.clear_screen
           puts Status.starring(post_id)
+          resp = @api.get_details(post_id)
+          if resp['data']['you_starred']
+            puts "\nYou already starred this post.\n".color(:red)
+            exit
+          end
           resp = @api.star(post_id)
           #@view.clear_screen
           if resp['meta']['code'] == 200
@@ -579,7 +584,7 @@ module Ayadn
           puts Status.reposting(post_id)
           resp = @api.get_details(post_id)
           if resp['data']['you_reposted']
-            puts "\nYou already reposted this post.\n\n".color(:red)
+            puts "\nYou already reposted this post.\n".color(:red)
             exit
           end
           if resp['data']['repost_of']

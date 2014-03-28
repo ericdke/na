@@ -105,7 +105,9 @@ module Ayadn
       Logs.create_logger
     end
     def log(args)
-      Logs.rec.info "New value for '#{args[0]}' in 'Backup' => #{args[1]}"
+      x = "New value for '#{args[0]}' in 'Backup' => #{args[1]}"
+      puts "\n#{x}\n".color(:cyan)
+      Logs.rec.info x
     end
     def save
       Settings.save_config
@@ -137,7 +139,9 @@ module Ayadn
       Logs.create_logger
     end
     def log(args)
-      Logs.rec.info "New value for '#{args[0]}' in 'Counts' => #{args[1]}"
+      x = "New value for '#{args[0]}' in 'Counts' => #{args[1]}"
+      puts "\n#{x}\n".color(:cyan)
+      Logs.rec.info x
     end
     def save
       Settings.save_config
@@ -220,7 +224,9 @@ module Ayadn
       end
     end
     def log(args)
-      Logs.rec.info "New value for '#{args[0]}' in 'Timeline' => #{args[1]}"
+      x = "New value for '#{args[0]}' in 'Timeline' => #{args[1]}"
+      puts "\n#{x}\n".color(:cyan)
+      Logs.rec.info x
     end
     def save
       Settings.save_config
@@ -270,7 +276,9 @@ module Ayadn
     end
 
     def log(args)
-      Logs.rec.info "New value for '#{args[0]}' in 'Colors' => #{args[1]}"
+      x = "New value for '#{args[0]}' in 'Colors' => #{args[1]}"
+      puts "\n#{x}\n".color(:cyan)
+      Logs.rec.info x
     end
 
     def save
