@@ -50,7 +50,10 @@ module Ayadn
 
     def self.delete(url)
       begin
-        RestClient::Resource.new(url).delete
+        #RestClient::Resource.new(url).delete
+        RestClient.delete(url) do |response, request, result|
+          check(response)
+        end
       rescue => e
         Errors.global_error("cnx.rb/delete", url, e)
       end
