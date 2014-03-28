@@ -499,8 +499,12 @@ module Ayadn
           resp = @api.unrepost(post_id)
           #@view.clear_screen
           if resp['meta']['code'] == 200
-            puts Status.unreposted(post_id)
-            Logs.rec.info "Unreposted #{post_id}."
+            if resp['data']['you_reposted']
+              puts Status.unreposted(post_id)
+              Logs.rec.info "Unreposted #{post_id}."
+            else
+              puts "\nThis post isn't one of your reposts.\n\n".color(:red)
+            end
           else
             puts Status.not_unreposted(post_id)
             Errors.warn("#{Status.not_unreposted(post_id)} => #{resp['meta']}")
