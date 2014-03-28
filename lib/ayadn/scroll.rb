@@ -72,6 +72,29 @@ module Ayadn
       end
     end
 
+    def posts(username, options)
+      options = check_raw(options)
+      user = @api.get_user(username)
+      id = user['data']['id']
+      loop do
+        begin
+          stream = @api.get_posts(username, options)
+          if Databases.has_new?(stream, "posts:#{id}")
+            show(stream, options)
+          end
+          unless stream['meta']['max_id'].nil?
+            Databases.save_max_id(stream)
+            options = options_hash(stream)
+          end
+          sleep Settings.options[:scroll][:timer]
+        rescue Interrupt
+          canceled
+        rescue => e
+          raise e
+        end
+      end
+    end
+
     def conversations(options)
       options = check_raw(options)
       loop do

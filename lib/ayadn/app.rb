@@ -92,6 +92,7 @@ module Ayadn
     desc "userposts @USERNAME", "Show posts of @username (-up)"
     map "-up" => :userposts
     long_desc Descriptions.posts
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
