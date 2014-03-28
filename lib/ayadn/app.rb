@@ -119,8 +119,9 @@ module Ayadn
     desc "whoreposted POST", "List users who reposted a post (-wor)"
     map "-wor" => :whoreposted
     long_desc Descriptions.whoreposted
+    option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def whoreposted(post_id)
-      Action.new.whoreposted(post_id)
+      Action.new.whoreposted(post_id, options)
     end
 
     desc "whostarred POST", "List users who starred a post (-wos)"

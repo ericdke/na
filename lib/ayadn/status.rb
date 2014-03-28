@@ -202,5 +202,8 @@ module Ayadn
     def self.wtf
       "\nSomething wrong happened. :(\n\n".color(:red)
     end
+    def self.redirecting
+      "\nPost is a repost. Redirecting...\n\n".color(:cyan)
+    end
   end
 end
