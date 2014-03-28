@@ -127,8 +127,9 @@ module Ayadn
     desc "whostarred POST", "List users who starred a post (-wos)"
     map "-wos" => :whostarred
     long_desc Descriptions.whostarred
+    option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def whostarred(post_id)
-      Action.new.whostarred(post_id)
+      Action.new.whostarred(post_id, options)
     end
 
     desc "convo POST", "Show the conversation thread around a post (-co)"

@@ -264,15 +264,25 @@ module Ayadn
       end
     end
 
-    def whostarred(post_id)
+    def whostarred(post_id, options)
       begin
         if post_id.is_integer?
-          doing({})
-          list = @api.get_whostarred(post_id)
-          unless list['data'].empty?
-            get_list(:whostarred, list['data'], post_id)
+          doing(options)
+          resp = @api.get_details(post_id, options)
+          if resp['data']['repost_of']
+            puts Status.redirecting
+            list = @api.get_whostarred(resp['data']['repost_of']['id'])
           else
-            puts Status.empty_list
+            list = @api.get_whostarred(post_id)
+          end
+          unless options[:raw]
+            unless list['data'].empty?
+              get_list(:whostarred, list['data'], post_id)
+            else
+              puts Status.empty_list
+            end
+          else
+            @view.show_raw(list)
           end
         else
           puts Status.error_missing_post_id
