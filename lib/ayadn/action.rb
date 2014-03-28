@@ -249,7 +249,7 @@ module Ayadn
             unless list['data'].empty?
               get_list(:whoreposted, list['data'], post_id)
             else
-              puts Status.empty_list
+              puts "\nNobody reposted this post.\n\n".color(:red)
             end
           else
             @view.show_raw(list)
@@ -279,7 +279,7 @@ module Ayadn
             unless list['data'].empty?
               get_list(:whostarred, list['data'], post_id)
             else
-              puts Status.empty_list
+              puts "\nNobody starred this post.\n\n".color(:red)
             end
           else
             @view.show_raw(list)
@@ -298,7 +298,13 @@ module Ayadn
       begin
         if post_id.is_integer?
           doing(options)
-          stream = @api.get_convo(post_id, options)
+          resp = @api.get_details(post_id, options)
+          if resp['data']['repost_of']
+            puts Status.redirecting
+            stream = @api.get_convo(resp['data']['repost_of']['id'], options)
+          else
+            stream = @api.get_convo(post_id, options)
+          end
           post_404(post_id) if meta_404(stream)
           render_view(stream, options)
         else
