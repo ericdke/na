@@ -577,8 +577,16 @@ module Ayadn
         if post_id.is_integer?
           #@view.clear_screen
           puts Status.reposting(post_id)
+          resp = @api.get_details(post_id)
+          if resp['data']['you_reposted']
+            puts "\nYou already reposted this post.\n\n".color(:red)
+            exit
+          end
+          if resp['data']['repost_of']
+            puts Status.redirecting
+            post_id = resp['data']['repost_of']['id']
+          end
           resp = @api.repost(post_id)
-          #@view.clear_screen
           if resp['meta']['code'] == 200
             puts Status.reposted(post_id)
             Logs.rec.info "Reposted #{post_id}."
