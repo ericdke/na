@@ -170,7 +170,11 @@ module Ayadn
           doing(options)
           stream = @api.get_mentions(username, options)
           user_404(username) if meta_404(stream)
+          Databases.save_max_id(stream)
           render_view(stream, options)
+          if options[:scroll]
+            Scroll.new(@api, @view).mentions(username, options)
+          end
         else
           puts Status.error_missing_username
         end

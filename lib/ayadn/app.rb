@@ -81,6 +81,7 @@ module Ayadn
     desc "mentions @USERNAME", "Show posts containing a mention of a @username (-m)"
     map "-m" => :mentions
     long_desc Descriptions.mentions
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
