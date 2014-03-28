@@ -496,18 +496,18 @@ module Ayadn
         if post_id.is_integer?
           #@view.clear_screen
           puts Status.unreposting(post_id)
-          resp = @api.unrepost(post_id)
-          #@view.clear_screen
-          if resp['meta']['code'] == 200
-            if resp['data']['you_reposted']
+          resp = @api.get_details(post_id)
+          if resp['data']['you_reposted']
+            resp = @api.unrepost(post_id)
+            if resp['meta']['code'] == 200
               puts Status.unreposted(post_id)
               Logs.rec.info "Unreposted #{post_id}."
             else
-              puts "\nThis post isn't one of your reposts.\n\n".color(:red)
+              puts Status.not_unreposted(post_id)
+              Errors.warn("#{Status.not_unreposted(post_id)} => #{resp['meta']}")
             end
           else
-            puts Status.not_unreposted(post_id)
-            Errors.warn("#{Status.not_unreposted(post_id)} => #{resp['meta']}")
+            puts "\nThis post isn't one of your reposts.\n\n".color(:red)
           end
         else
           puts Status.error_missing_post_id
