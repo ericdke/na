@@ -314,7 +314,11 @@ module Ayadn
             stream = @api.get_convo(post_id, options)
           end
           post_404(post_id) if meta_404(stream)
+          Databases.pagination["replies:#{post_id}"] = stream['meta']['max_id']
           render_view(stream, options)
+          if options[:scroll]
+            Scroll.new(@api, @view).convo(post_id, options)
+          end
         else
           puts Status.error_missing_post_id
         end

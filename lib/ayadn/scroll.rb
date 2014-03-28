@@ -95,6 +95,27 @@ module Ayadn
       end
     end
 
+    def convo(post_id, options)
+      options = check_raw(options)
+      loop do
+        begin
+          stream = @api.get_convo(post_id, options)
+          if Databases.has_new?(stream, "replies:#{post_id}")
+            show(stream, options)
+          end
+          unless stream['meta']['max_id'].nil?
+            Databases.save_max_id(stream)
+            options = options_hash(stream)
+          end
+          sleep Settings.options[:scroll][:timer]
+        rescue Interrupt
+          canceled
+        rescue => e
+          raise e
+        end
+      end
+    end
+
     def conversations(options)
       options = check_raw(options)
       loop do

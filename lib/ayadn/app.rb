@@ -137,6 +137,7 @@ module Ayadn
     desc "convo POST", "Show the conversation thread around a post (-co)"
     map "-co" => :convo
     map "thread" => :convo
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     long_desc Descriptions.convo
