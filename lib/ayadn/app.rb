@@ -315,6 +315,7 @@ module Ayadn
     desc "messages CHANNEL", "Show messages in a CHANNEL (-ms)"
     map "-ms" => :messages
     long_desc Descriptions.messages
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: "Specify the number of messages to retrieve"
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
