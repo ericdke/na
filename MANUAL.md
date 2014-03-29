@@ -201,6 +201,10 @@ Show the posts of a specific user.
 
 `ayadn -up @ericd`
 
+You can get your own posts by using *me* instead of *username*:
+
+`ayadn -up me`
+
 ## MESSAGES
 
 Show messages in a CHANNEL.
@@ -220,6 +224,10 @@ Show posts starred by a specific user.
 `ayadn whatstarred @ericd`
 
 `ayadn -was @ericd`
+
+You can get your own stars by using *me* instead of *username*:
+
+`ayadn -was me`
 
 ## CONVO
 
@@ -264,6 +272,10 @@ Show informations about a user.
 `ayadn userinfo @ericd`
 
 `ayadn -ui @ericd`
+
+You can see your own info by using *me* instead of *username*:
+
+`ayadn -ui me`
 
 ## POST INFO
 
@@ -469,9 +481,9 @@ List followers of a user.
 
 `ayadn followers @ericd`
 
-`ayadn followers me`
-
 `ayadn -fwr @ericd`
+
+You can see your own list by using *me* instead of *username*:
 
 `ayadn -fwr me`
 
@@ -481,9 +493,9 @@ List the users a user is following.
 
 `ayadn followings @ericd`
 
-`ayadn followings me`
-
 `ayadn -fwg @ericd`
+
+You can see your own list by using *me* instead of *username*:
 
 `ayadn -fwg me`
 
@@ -580,6 +592,12 @@ Alternative syntax:
 `ayadn -@ ericd`
 
 `ayadn -@ otheraccount`
+
+To list your authorized accounts:
+
+`ayadn -l switch`
+
+`ayadn -@ -l`
 
 ## BLACKLIST
 

@@ -1005,7 +1005,7 @@ module Ayadn
 
       ayadn switch @myotheraccount
 
-      ayadn -@ @myotheraccount
+      ayadn -@ myotheraccount
 
       List your authorized accounts:
 
