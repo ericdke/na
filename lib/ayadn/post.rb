@@ -22,9 +22,14 @@ module Ayadn
 
     def reply(new_post, replied_to)
       replied_to = replied_to.values[0]
-      reply = replied_to[:handle]
+      reply = replied_to[:handle].dup
       reply << " #{new_post}"
-      replied_to[:mentions].map { |m| reply << " @#{m}" }
+      replied_to[:mentions].uniq!
+      replied_to[:mentions].each do |m|
+        next if m == replied_to[:username]
+        next if m == Settings.config[:identity][:username]
+        reply << " @#{m}"
+      end
       reply
     end
 

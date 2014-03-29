@@ -130,7 +130,7 @@ module Ayadn
           name: name,
           thread_id: post['thread_id'],
           username: post['user']['username'],
-          handle: "@" + post['user']['username'],
+          handle: "@#{post['user']['username']}",
           type: post['user']['type'],
           date: parsed_time(post['created_at']),
           you_starred: post['you_starred'],
