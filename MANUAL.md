@@ -575,6 +575,12 @@ Switch between your authorized accounts.
 
 `ayadn switch @otheraccount`
 
+Alternative syntax:
+
+`ayadn -@ ericd`
+
+`ayadn -@ otheraccount`
+
 ## BLACKLIST
 
 The blacklist is a list of users, clients and hashtags that you don't want to ever be displayed.

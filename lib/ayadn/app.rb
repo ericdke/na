@@ -365,7 +365,7 @@ module Ayadn
       ayadn.reply(id)
     end
 
-    desc "set PARAM(S) VALUE", "Set/configure a parameter and save it"
+    desc "set TYPE PARAM VALUE", "Set/configure a parameter and save it"
     long_desc Descriptions.set
     subcommand "set", Set
 
