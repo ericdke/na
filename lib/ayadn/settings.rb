@@ -100,6 +100,11 @@ module Ayadn
       File.write(@config[:paths][:config] + "/version.yml", {version: @config[:version]}.to_yaml)
     end
 
+    def self.restore_defaults
+      self.load_config
+      File.write(@config[:paths][:config] + "/config.yml", @options.to_yaml)
+    end
+
     private
 
     def self.new_api_file(api_file)

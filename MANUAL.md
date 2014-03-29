@@ -717,13 +717,19 @@ Examples:
 
 `ayadn set counts search 100`
 
-`ayadn set timeline directed true`
+`ayadn set timeline directed false`
 
 `ayadn set show_real_name false`
 
 `ayadn set show_date false`
 
+`ayadn set backup auto_save_sent_posts true`
 
+`ayadn set scroll timer 1.5`
+
+To reset the configuration to default values:
+
+`ayadn set defaults`
 
 
 # EXTRAS

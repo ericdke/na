@@ -95,6 +95,14 @@ module Ayadn
       backup_config.log(args)
       backup_config.save
     end
+
+    desc "set defaults", "Sets back the configuration to defaults values"
+    long_desc Descriptions.set_defaults
+    def defaults
+      Settings.restore_defaults
+      puts Status.done
+    end
+
   end
 
   class SetBackup

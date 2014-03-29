@@ -771,6 +771,14 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.set_defaults
+      <<-USAGE
+      Sets back the configuration to default values.
+
+      ayadn set defaults
+      \n\n
+      USAGE
+    end
     def self.alias
       <<-USAGE
       Manage your channel aliases. Commands: create, delete, list, import.
