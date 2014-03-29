@@ -20,9 +20,10 @@ module Ayadn
           no_new_posts unless Databases.has_new?(stream, 'unified')
         end
         Databases.save_max_id(stream)
-        render_view(stream, options)
         if options[:scroll]
           Scroll.new(@api, @view).unified(options)
+        else
+          render_view(stream, options)
         end
       rescue => e
         Errors.global_error("action/unified", options, e)
@@ -76,9 +77,10 @@ module Ayadn
           no_new_posts unless Databases.has_new?(stream, 'explore:checkins')
         end
         Databases.save_max_id(stream)
-        render_view(stream, options)
         if options[:scroll]
           Scroll.new(@api, @view).checkins(options)
+        else
+          render_view(stream, options)
         end
       rescue => e
         Errors.global_error("action/checkins", options, e)
@@ -95,9 +97,10 @@ module Ayadn
           no_new_posts unless Databases.has_new?(stream, 'global')
         end
         Databases.save_max_id(stream)
-        render_view(stream, options)
         if options[:scroll]
           Scroll.new(@api, @view).global(options)
+        else
+          render_view(stream, options)
         end
       rescue => e
         Errors.global_error("action/global", options, e)
@@ -114,9 +117,10 @@ module Ayadn
           no_new_posts unless Databases.has_new?(stream, 'explore:trending')
         end
         Databases.save_max_id(stream)
-        render_view(stream, options)
         if options[:scroll]
           Scroll.new(@api, @view).trending(options)
+        else
+          render_view(stream, options)
         end
       rescue => e
         Errors.global_error("action/trending", options, e)
@@ -133,9 +137,10 @@ module Ayadn
           no_new_posts unless Databases.has_new?(stream, 'explore:photos')
         end
         Databases.save_max_id(stream)
-        render_view(stream, options)
         if options[:scroll]
           Scroll.new(@api, @view).photos(options)
+        else
+          render_view(stream, options)
         end
       rescue => e
         Errors.global_error("action/photos", options, e)
@@ -152,9 +157,10 @@ module Ayadn
           no_new_posts unless Databases.has_new?(stream, 'explore:replies')
         end
         Databases.save_max_id(stream)
-        render_view(stream, options)
         if options[:scroll]
           Scroll.new(@api, @view).conversations(options)
+        else
+          render_view(stream, options)
         end
       rescue => e
         Errors.global_error("action/conversations", options, e)
@@ -171,9 +177,10 @@ module Ayadn
           stream = @api.get_mentions(username, options)
           user_404(username) if meta_404(stream)
           Databases.save_max_id(stream)
-          render_view(stream, options)
           if options[:scroll]
             Scroll.new(@api, @view).mentions(username, options)
+          else
+            render_view(stream, options)
           end
         else
           puts Status.error_missing_username
@@ -193,9 +200,10 @@ module Ayadn
           stream = @api.get_posts(username, options)
           user_404(username) if meta_404(stream)
           Databases.save_max_id(stream)
-          render_view(stream, options)
           if options[:scroll]
             Scroll.new(@api, @view).posts(username, options)
+          else
+            render_view(stream, options)
           end
         else
           puts Status.error_missing_username
@@ -315,9 +323,10 @@ module Ayadn
           end
           post_404(post_id) if meta_404(stream)
           Databases.pagination["replies:#{post_id}"] = stream['meta']['max_id']
-          render_view(stream, options)
           if options[:scroll]
             Scroll.new(@api, @view).convo(post_id, options)
+          else
+            render_view(stream, options)
           end
         else
           puts Status.error_missing_post_id
@@ -887,9 +896,10 @@ module Ayadn
           no_new_posts unless Databases.has_new?(resp, "channel:#{channel_id}")
         end
         Databases.save_max_id(resp)
-        render_view(resp, options)
         if options[:scroll]
           Scroll.new(@api, @view).messages(channel_id, options)
+        else
+          render_view(resp, options)
         end
       rescue => e
         Errors.global_error("action/messages", [channel_id, options], e)

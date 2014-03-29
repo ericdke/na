@@ -239,7 +239,7 @@ module Ayadn
       unless options[:raw]
         @view.show_posts(stream['data'], options)
       else
-        puts stream
+        jj stream
       end
     end
 
