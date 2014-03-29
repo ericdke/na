@@ -200,7 +200,7 @@ module Ayadn
       end
     end
 
-    def messages(options)
+    def messages(channel_id, options)
       options = check_raw(options)
       loop do
         begin

@@ -78,7 +78,7 @@ module Ayadn
       Action.new.conversations(options)
     end
 
-    desc "mentions @USERNAME", "Show posts containing a mention of a @username (-m)"
+    desc "mentions @USERNAME", "Show posts containing a mention of @username (-m)"
     map "-m" => :mentions
     long_desc Descriptions.mentions
     option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
@@ -89,7 +89,7 @@ module Ayadn
       Action.new.mentions(username, options)
     end
 
-    desc "userposts @USERNAME", "Show posts of @username (-up)"
+    desc "userposts @USERNAME", "Show posts by @username (-up)"
     map "-up" => :userposts
     long_desc Descriptions.posts
     option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
