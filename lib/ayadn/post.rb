@@ -38,7 +38,7 @@ module Ayadn
       rescue Interrupt
         #temp
         Errors.warn "Write post: canceled."
-        abort("Canceled.")
+        abort(Status.canceled)
       end
       post
     end
@@ -187,7 +187,7 @@ module Ayadn
           "type" => "com.ayadn.log",
           "value" => data
         }
-      {
+      return {
         "text" => "#ayadnlog",
         "entities" => entities,
         "annotations" => extended

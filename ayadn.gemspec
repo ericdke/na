@@ -35,5 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "guard-rspec", ">= 4.2"
   spec.add_development_dependency "fakefs", ">= 0.5"
 
-  spec.post_install_message = "Thanks for installing Ayadn! Please run 'ayadn -auth' to login with your App.net credentials."
+  spec.post_install_message = "Thank you for installing Ayadn!"
 end
