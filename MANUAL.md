@@ -54,11 +54,9 @@ Just a few examples to give you a hint at the flexible syntax:
 
 `ayadn checkins -c10 -i`
 
-`ayadn --scroll global`
+`ayadn global --scroll`
 
-`ayadn -up @ericd --new`
-
-`ayadn post Hello guys`
+`ayadn -up @ericd`
 
 `ayadn -P 'Hello guys!'`
 
@@ -117,9 +115,7 @@ This is also called the 'Unified stream': it regroups the posts of people you fo
 
 Scroll your timeline with:
 
-`ayadn --scroll timeline`
-
-`ayadn -s -tl`
+`ayadn timeline --scroll`
 
 `ayadn -tl -s`
 
@@ -611,7 +607,7 @@ Alternative syntax:
 
 To list your authorized accounts:
 
-`ayadn -l switch`
+`ayadn switch -l`
 
 `ayadn -@ -l`
 

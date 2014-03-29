@@ -226,6 +226,10 @@ module Ayadn
       Shows index and retrieves 30 posts:
 
       ayadn -m -i -c30 @ericd
+
+      Scroll mentions:
+
+      ayadn -m -s @ericd
       \n\n
       USAGE
     end
@@ -250,6 +254,10 @@ module Ayadn
       Shows index and retrieves 30 posts:
 
       ayadn -up -i -c30 @ericd
+
+      Scroll posts:
+
+      ayadn -up -s @ericd
       \n\n
       USAGE
     end
@@ -326,6 +334,10 @@ module Ayadn
       Show index instead of post numbers:
 
       ayadn -co -i 23362788
+
+      Scroll the conversation:
+
+      ayadn -co -s 23362788
       \n\n
       USAGE
     end
@@ -632,6 +644,10 @@ module Ayadn
       Retrieves only new messages:
 
       ayadn -ms -n 46217
+
+      Scroll messages:
+
+      ayadn -ms -s 46217
 
       If you've set an alias for the channel, you can display its messages with 'ayadn -ms my_alias'
       \n\n
