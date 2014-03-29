@@ -32,43 +32,6 @@ module Ayadn
       end
     end
 
-    def random_posts(options = {wait: 5})
-      begin
-        rows, cols = winsize
-        max_posts = cols / 13
-        @view.clear_screen
-        puts "Fetching random posts, please wait... Quit with [CTRL+C]\n\n".color(:cyan)
-        stream = @api.get_global({count: 1})
-        max_id = stream['meta']['max_id'].to_i
-        @view.clear_screen
-        @counter = 1
-        loop do
-          begin
-            random_post_id = rand(max_id + 1)
-            @resp = get_data_from_response(@api.get_details(random_post_id, {}))
-            next if @resp['is_deleted']
-            @view.show_simple_post([@resp], {})
-            @counter += 1
-            if @counter == max_posts
-              puts "\n(Quit with [CTRL+C])".color(:cyan)
-              sleep options[:wait]
-              @view.clear_screen
-              @counter = 1
-            end
-          rescue Interrupt
-            puts Status.canceled
-            exit
-          rescue => e
-            raise e
-          end
-        end
-      rescue => e
-        Errors.global_error("action/random_posts", @resp, e)
-      ensure
-        Databases.close_all
-      end
-    end
-
     def checkins(options)
       begin
         doing(options)
@@ -1098,6 +1061,43 @@ module Ayadn
       abort("\nCanceled.\n\n".color(:red)) unless STDIN.getch == ("y" || "Y")
       puts "\n"
       post([text_to_post])
+    end
+
+    def random_posts(options = {wait: 5})
+      begin
+        rows, cols = winsize
+        max_posts = cols / 13
+        @view.clear_screen
+        puts "Fetching random posts, please wait... Quit with [CTRL+C]\n\n".color(:cyan)
+        stream = @api.get_global({count: 1})
+        max_id = stream['meta']['max_id'].to_i
+        @view.clear_screen
+        @counter = 1
+        loop do
+          begin
+            random_post_id = rand(max_id + 1)
+            @resp = get_data_from_response(@api.get_details(random_post_id, {}))
+            next if @resp['is_deleted']
+            @view.show_simple_post([@resp], {})
+            @counter += 1
+            if @counter == max_posts
+              puts "\n(Quit with [CTRL+C])".color(:cyan)
+              sleep options[:wait]
+              @view.clear_screen
+              @counter = 1
+            end
+          rescue Interrupt
+            puts Status.canceled
+            exit
+          rescue => e
+            raise e
+          end
+        end
+      rescue => e
+        Errors.global_error("action/random_posts", @resp, e)
+      ensure
+        Databases.close_all
+      end
     end
 
     private
