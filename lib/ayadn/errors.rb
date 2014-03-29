@@ -10,7 +10,8 @@ module Ayadn
       Logs.rec.error "#{error}"
       #puts "\e[H\e[2J"
       puts "\n(Error logged in #{Settings.config[:paths][:log]}/ayadn.log)\n".color(:blue)
-      #raise error
+
+      raise error
       exit
     end
     def self.warn(warning)

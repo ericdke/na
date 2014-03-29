@@ -985,13 +985,13 @@ module Ayadn
       begin
         post_id = get_real_post_id(post_id)
       	puts Status.replying_to(post_id)
-      	replied_to = @api.get_details(post_id, {})
+      	replied_to = @api.get_details(post_id)
         messenger = Post.new
         puts Status.reply
         lines_array = messenger.compose
         messenger.check_post_length(lines_array)
         @view.clear_screen
-        reply = messenger.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to]))
+        reply = messenger.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to['data']]))
         puts Status.posting
         resp = messenger.send_reply(reply, post_id)
         if Settings.options[:backup][:auto_save_sent_posts]

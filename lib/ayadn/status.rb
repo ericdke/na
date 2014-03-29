@@ -80,37 +80,37 @@ module Ayadn
       "Could not block user #{username} (doesn't exist, or is already blocked)\n".color(:red)
     end
     def self.deleted(post_id)
-      "Post #{post_id} has been deleted.\n".color(:green)
+      "\nPost #{post_id} has been deleted.\n".color(:green)
     end
     def self.starred(post_id)
-      "Post #{post_id} has been starred.\n".color(:green)
+      "\nPost #{post_id} has been starred.\n".color(:green)
     end
     def self.unreposted(post_id)
-      "Post #{post_id} has been unreposted.\n".color(:green)
+      "\nPost #{post_id} has been unreposted.\n".color(:green)
     end
     def self.reposted(post_id)
-      "Post #{post_id} has been reposted.\n".color(:green)
+      "\nPost #{post_id} has been reposted.\n".color(:green)
     end
     def self.unstarred(post_id)
-      "Post #{post_id} has been unstarred.\n".color(:green)
+      "\nPost #{post_id} has been unstarred.\n".color(:green)
     end
     def self.unfollowed(username)
-      "User #{username} has been unfollowed.\n".color(:green)
+      "\nUser #{username} has been unfollowed.\n".color(:green)
     end
     def self.followed(username)
-      "User #{username} has been followed.\n".color(:green)
+      "\nUser #{username} has been followed.\n".color(:green)
     end
     def self.unmuted(username)
-      "User #{username} has been unmuted.\n".color(:green)
+      "\nUser #{username} has been unmuted.\n".color(:green)
     end
     def self.muted(username)
-      "User #{username} has been muted.\n".color(:green)
+      "\nUser #{username} has been muted.\n".color(:green)
     end
     def self.unblocked(username)
-      "User #{username} has been unblocked.\n".color(:green)
+      "\nUser #{username} has been unblocked.\n".color(:green)
     end
     def self.blocked(username)
-      "User #{username} has been blocked.\n".color(:green)
+      "\nUser #{username} has been blocked.\n".color(:green)
     end
     def self.error_missing_username
       "\nYou have to specify a username.\n".color(:red)
