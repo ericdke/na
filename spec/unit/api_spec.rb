@@ -2,7 +2,17 @@ require 'spec_helper'
 
 describe Ayadn::API do
 	before do
-    Ayadn::Settings.load_config
+    Ayadn::Settings.stub(:options).and_return({
+        counts: {
+          default: 50
+        },
+        timeline: {
+          directed: 1,
+          deleted: 0,
+          html: 0,
+          annotations: 1
+        }
+      })
   end
   describe ".build_query" do
     it 'returns a URL with count=12' do

@@ -6,15 +6,17 @@ require 'io/console'
 describe Ayadn::Workers do
 
   before do
-    Ayadn::Settings.load_config
-    #Settings.get_token
-    Ayadn::Settings.init_config
-    Ayadn::Logs.create_logger
-    Ayadn::Databases.open_databases
-  end
-
-  after do
-    Ayadn::Databases.close_all
+    Ayadn::Settings.stub(:options).and_return({
+        colors: {
+          hashtags: :cyan,
+          mentions: :red,
+          username: :green
+        },
+        formats: {table: {width: 75}}
+      })
+    Ayadn::Logs.stub(:rec).and_return("logged")
+    Ayadn::Databases.stub(:blacklist).and_return("blacklist")
+    Ayadn::Databases.stub(:users).and_return("users")
   end
 
   let(:data) { JSON.parse(File.read("spec/mock/stream.json")) }

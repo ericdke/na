@@ -6,15 +6,35 @@ require 'io/console'
 describe Ayadn::View do
 
   before do
-    Ayadn::Settings.load_config
-    #Ayadn::Settings.get_token
-    Ayadn::Settings.init_config
-    Ayadn::Logs.create_logger
-    Ayadn::Databases.open_databases
-  end
-
-  after do
-    Ayadn::Databases.close_all
+    Ayadn::Settings.stub(:options).and_return({
+        colors: {
+          hashtags: :cyan,
+          mentions: :red,
+          username: :green,
+          id: :blue,
+          name: :yellow,
+          source: :blue,
+          symbols: :green,
+          index: :blue,
+          date: :cyan,
+          link: :magenta
+        },
+        timeline: {
+          show_real_name: true,
+          show_date: true,
+          show_symbols: true,
+          show_source: true
+        },
+        formats: {table: {width: 75}}
+      })
+    Ayadn::Settings.stub(:config).and_return({
+        identity: {
+          username: 'test'
+        }
+      })
+    Ayadn::Logs.stub(:rec).and_return("logged")
+    Ayadn::Databases.stub(:blacklist).and_return("blacklist")
+    Ayadn::Databases.stub(:save_indexed_posts).and_return("indexed")
   end
 
   describe "#settings" do
@@ -23,8 +43,6 @@ describe Ayadn::View do
         Ayadn::View.new.show_settings
       end
       expect(printed).to include "Ayadn settings"
-      expect(printed).to include "timeline"
-      expect(printed).to include "counts"
       expect(printed).to include "colors"
     end
   end

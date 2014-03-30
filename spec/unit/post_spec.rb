@@ -5,10 +5,15 @@ require 'io/console'
 
 describe Ayadn::Post do
   before do
-    Ayadn::Settings.load_config
-    #Ayadn::Settings.get_token
-    Ayadn::Settings.init_config
-    Ayadn::Logs.create_logger
+    Ayadn::Settings.stub(:config).and_return({
+        identity: {
+          username: 'test'
+        },
+        post_max_length: 256,
+        message_max_length: 2048
+      })
+    Ayadn::Logs.stub(:rec).and_return("logged")
+    Ayadn::Errors.stub(:warn).and_return("warned")
   end
   let(:post) { Ayadn::Post.new }
 
@@ -46,7 +51,6 @@ describe Ayadn::Post do
 
   describe "#post" do
     it "should raise an error if args are empty" do
-      Ayadn::Errors.stub(:warn).and_return("warned")
       printed = capture_stdout do
         post.post([])
       end
