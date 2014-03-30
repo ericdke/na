@@ -95,7 +95,6 @@ module Ayadn
       posts = {}
 
       data.each.with_index(1) do |post, index|
-
         next if Databases.blacklist[post['source']['name']]
         hashtags = extract_hashtags(post)
         @skip = false
@@ -193,7 +192,7 @@ module Ayadn
     def extract_links(post)
       links = []
       post['entities']['links'].each { |l| links << l['url'] }
-      unless post['annotations'].empty?
+      unless post['annotations'].nil? || post['annotations'].empty?
         post['annotations'].each do |ann|
           if ann['type'] == "net.app.core.oembed"
             links << ann['value']['embeddable_url'] if ann['value']['embeddable_url']

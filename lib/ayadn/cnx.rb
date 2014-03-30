@@ -39,6 +39,7 @@ module Ayadn
         Errors.global_error("cnx.rb", response.headers, "METHOD NOT ALLOWED")
       when 429
         puts "\n'Too many requests'".color(:red)
+        puts "\n\nAyadn made too many requests to the App.net API. You should wait at least ".color(:cyan) + "#{response.headers[:retry_after]} ".color(:red) + "seconds before trying again. Maybe you launched a lot of Ayadn instances at the same time? That's no problem, but in this case you should increase the value of the scroll timer (do `ayadn set scroll timer 2.5` for example).".color(:cyan)
         Errors.global_error("cnx.rb", response.headers, "TOO MANY REQUESTS")
       when 500
         puts "\n'App.net server error'".color(:red)

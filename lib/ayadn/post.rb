@@ -56,7 +56,7 @@ module Ayadn
 
     def send_pm(username, text)
       url = Endpoints.new.pm_url
-      url << "?include_post_annotations=1&access_token=#{Ayadn::Settings.user_token}"
+      url << "?include_annotations=1&access_token=#{Ayadn::Settings.user_token}"
       send_content(url, payload_pm(username, text))
     end
 
@@ -81,7 +81,7 @@ module Ayadn
     end
 
     def send_content(url, payload)
-      url << "?include_post_annotations=1&access_token=#{Ayadn::Settings.user_token}"
+      url << "?include_annotations=1&access_token=#{Ayadn::Settings.user_token}"
       JSON.parse(CNX.post(url, payload))
     end
 

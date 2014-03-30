@@ -27,7 +27,7 @@ module Ayadn
     end
 
     def show_posted(resp)
-      puts show_simple_post([resp['data']], {})
+      show_simple_post([resp['data']], {})
     end
 
     def show_simple_stream(stream)

@@ -5,6 +5,7 @@ module Ayadn
       [where, args, error].each do |el|
         self.detokenize(el)
       end
+      Logs.rec.error "#{error}"
       unless args.nil?
         Logs.rec.error "LOCATION: #{where}"
         Logs.rec.error "DATA: #{args}"
@@ -12,7 +13,7 @@ module Ayadn
         Logs.rec.error "LOCATION: #{where}"
       end
       Logs.rec.error "CALLER: #{caller}"
-      Logs.rec.error "#{error}"
+      Logs.rec.error "-----"
       puts "\n(error logged in #{Settings.config[:paths][:log]}/ayadn.log)\n".color(:blue)
       #raise error
       exit
