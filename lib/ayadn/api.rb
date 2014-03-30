@@ -264,11 +264,7 @@ module Ayadn
       loop do
         url = get_list_url(username, target, options)
         resp = get_parsed_response(url)
-        users_hash = {}
-        resp['data'].each do |item|
-          users_hash[item['id']] = [item['username'], item['name'], item['you_follow'], item['follows_you']]
-        end
-        big_hash.merge!(users_hash)
+        big_hash.merge!(Workers.extract_users(resp))
         break if resp['meta']['min_id'] == nil
         options = {:count => 200, :before_id => resp['meta']['min_id']}
       end

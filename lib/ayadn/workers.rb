@@ -264,6 +264,14 @@ module Ayadn
       username.join
     end
 
+    def self.extract_users(resp)
+      users_hash = {}
+      resp['data'].each do |item|
+        users_hash[item['id']] = [item['username'], item['name'], item['you_follow'], item['follows_you']]
+      end
+      users_hash
+    end
+
     private
 
     def colorize_text(text)
@@ -299,7 +307,7 @@ module Ayadn
     def extract_checkins(post)
       has_checkins = false
       checkins = {}
-      unless post['annotations'].nil?
+      unless post['annotations'].nil? || post['annotations'].empty?
         post['annotations'].each do |obj|
           case obj['type']
           when "net.app.core.checkin", "net.app.ohai.location"

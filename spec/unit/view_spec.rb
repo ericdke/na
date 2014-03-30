@@ -37,7 +37,17 @@ describe Ayadn::View do
         Ayadn::View.new.show_posts(stream['data'], {})
       end
       expect(printed).to include "23184500"
-      expect(printed).to include "\e[0m\n\nBacker of the Day"
+      expect(printed).to include "Backer of the Day"
+    end
+  end
+
+  describe "#show_simple_post" do
+    it 'outputs one post' do
+      printed = capture_stdout do
+        Ayadn::View.new.show_simple_post([stream['data'][0]], {})
+      end
+      expect(printed).to include "23187443"
+      expect(printed).to include "Julia Cory"
     end
   end
 
@@ -47,19 +57,7 @@ describe Ayadn::View do
         Ayadn::View.new.show_posts_with_index(stream['data'], {})
       end
       expect(printed).to include "001"
-      expect(printed).to include "\e[0m\n\nBacker of the Day"
-    end
-  end
-
-  let(:user_m) { JSON.parse(File.read("spec/mock/@m.json")) }
-
-  describe "#show_userinfos" do
-    it "outputs user info" do
-      printed = capture_stdout do
-        Ayadn::View.new.show_userinfos(user_m['data'])
-      end
-      expect(printed).to include "Real name\t\t\e[0m\e[35mMartin Jopson"
-      expect(printed).to include "Username\t\t\e[0m\e[32m@m"
+      expect(printed).to include "Backer of the Day"
     end
   end
 
@@ -68,16 +66,25 @@ describe Ayadn::View do
   describe "#show_userinfos" do
     it "outputs user info" do
       printed = capture_stdout do
-        Ayadn::View.new.show_userinfos(user_e['data'])
+        Ayadn::View.new.show_userinfos(user_e['data'], "")
       end
       expect(printed).to include "Sound engineer"
       expect(printed).to include "aya.io"
     end
   end
 
+  let(:followers) { JSON.parse(File.read("spec/mock/fwr_@ayadn.json")) }
 
-
-
+  describe "#show_list_followers" do
+    it "outputs the list of followers" do
+      list = Ayadn::Workers.extract_users(followers[0])
+      printed = capture_stdout do
+        Ayadn::View.new.show_list_followers(list, '@ayadn')
+      end
+      expect(printed).to include "@ericd"
+      expect(printed).to include "Nicolas Maumont"
+    end
+  end
 
 
 
