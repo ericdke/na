@@ -9,7 +9,10 @@ module Ayadn
         end
       rescue SocketError => e
         puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/get", nil, e)
+        Errors.global_error("cnx.rb/get", url, e)
+      rescue SystemCallError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/get", url, e)
       rescue => e
         Errors.global_error("cnx.rb/get", url, e)
       end
@@ -54,6 +57,12 @@ module Ayadn
         RestClient.delete(url) do |response, request, result|
           check(response)
         end
+      rescue SocketError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/delete", url, e)
+      rescue SystemCallError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/delete", url, e)
       rescue => e
         Errors.global_error("cnx.rb/delete", url, e)
       end
@@ -66,7 +75,10 @@ module Ayadn
         end
       rescue SocketError => e
         puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/post", nil, e)
+        Errors.global_error("cnx.rb/post", url, e)
+      rescue SystemCallError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/post", url, e)
       rescue => e
         Errors.global_error("cnx.rb/post", [url, payload], e)
       end
@@ -92,7 +104,10 @@ module Ayadn
         end
       rescue SocketError => e
         puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/put", nil, e)
+        Errors.global_error("cnx.rb/put", url, e)
+      rescue SystemCallError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/put", url, e)
       rescue => e
         Errors.global_error("cnx.rb/put", [url, payload], e)
       end

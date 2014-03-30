@@ -101,7 +101,7 @@ module Ayadn
       size = words_array.join.length
       if size < 1
         error_text_empty
-        abort("")
+        exit
       elsif size > max_size
         Errors.warn "Canceled: too long (#{size - max_size}chars)"
         abort("\n\nCanceled: too long. #{max_size} max, #{size - max_size} characters to remove.\n\n\n".color(:red))
@@ -122,7 +122,7 @@ module Ayadn
     end
 
     def error_text_empty
-      puts "\n\nYou must provide some text.\n\n".color(:red)
+      puts "\n\nYou should provide some text.\n\n".color(:red)
       Errors.warn "-Post without text-"
     end
 
