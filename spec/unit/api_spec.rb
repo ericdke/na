@@ -21,8 +21,14 @@ describe Ayadn::API do
     it 'returns a URL with count=50' do
       expect(Ayadn::API.build_query(Ayadn::Settings.options)).to match /count=50/
     end
+    it 'returns a URL with count=50 (default)' do
+      expect(Ayadn::API.build_query({count: "I'm drunk"})).to match /count=50/
+    end
     it 'returns a URL with directed=0' do
       expect(Ayadn::API.build_query({directed: 0})).to match /directed=0/
+    end
+    it 'returns a URL with directed=0 (default)' do
+      expect(Ayadn::API.build_query({directed: "I'm drunk"})).to match /directed=1/
     end
     it 'returns a URL with directed=1' do
       expect(Ayadn::API.build_query(Ayadn::Settings.options)).to match /directed=1/
