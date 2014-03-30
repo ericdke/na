@@ -7,7 +7,7 @@ describe Ayadn::View do
 
   before do
     Ayadn::Settings.load_config
-    Ayadn::Settings.get_token
+    #Ayadn::Settings.get_token
     Ayadn::Settings.init_config
     Ayadn::Logs.create_logger
     Ayadn::Databases.open_databases
@@ -70,6 +70,12 @@ describe Ayadn::View do
       end
       expect(printed).to include "Sound engineer"
       expect(printed).to include "aya.io"
+      expect(printed).to include "69904"
+      expect(printed).to include "Eric"
+      expect(printed).to include "2013"
+      expect(printed).to include "fr_FR"
+      expect(printed).to include "ritsz"
+      expect(printed).to include "1973"
     end
   end
 
