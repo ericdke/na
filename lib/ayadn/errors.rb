@@ -2,14 +2,17 @@
 module Ayadn
   class Errors
     def self.global_error(where, args, error)
-      unless args.nil?
-        Logs.rec.error "Location: #{where}"
-        Logs.rec.error "Data: #{args}"
-      else
-        Logs.rec.error "Location: #{where}"
+      [where, args, error].each do |el|
+        self.detokenize(el)
       end
+      unless args.nil?
+        Logs.rec.error "LOCATION: #{where}"
+        Logs.rec.error "DATA: #{args}"
+      else
+        Logs.rec.error "LOCATION: #{where}"
+      end
+      Logs.rec.error "CALLER: #{caller}"
       Logs.rec.error "#{error}"
-      #puts "\e[H\e[2J"
       puts "\n(error logged in #{Settings.config[:paths][:log]}/ayadn.log)\n".color(:blue)
       #raise error
       exit
@@ -19,6 +22,12 @@ module Ayadn
     end
     def self.info(msg)
       Logs.rec.info msg
+    end
+
+    private
+
+    def self.detokenize(string)
+      string.to_s.gsub!(/token=[a-zA-Z0-9_-]+/, "token=XXX") unless string.nil?
     end
   end
 end

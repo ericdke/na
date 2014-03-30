@@ -42,7 +42,7 @@ module Ayadn
         end
       rescue Interrupt
         #temp
-        Errors.warn "Write post: canceled."
+        Errors.info "Write post: canceled."
         abort(Status.canceled)
       end
       post
