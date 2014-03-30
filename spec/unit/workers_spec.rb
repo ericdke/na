@@ -18,6 +18,7 @@ describe Ayadn::Workers do
   end
 
   let(:data) { JSON.parse(File.read("spec/mock/stream.json")) }
+  let(:checkins) { JSON.parse(File.read("spec/mock/checkins.json")) }
 
   describe "#build_posts" do
     it "builds posts hash from stream" do
@@ -39,6 +40,12 @@ describe Ayadn::Workers do
       expect(posts[23187443][:checkins]).to be_empty
       expect(posts[23187443].length).to eq 28
     end
+    it "gets oembed link from checkins post" do
+      posts = Ayadn::Workers.new.build_posts(checkins['data'])
+      expect(posts[27101186][:links]).to eq ["https://photos.app.net/27101186/1"]
+      expect(posts[27080492][:links]).to eq ["http://sprintr.co/27080492"]
+      expect(posts[27073989][:links]).to eq ["http://pic.favd.net/27073989", "https://photos.app.net/27073989/1"]
+    end
   end
 
   describe "#extract_hashtags" do
@@ -52,6 +59,22 @@ describe Ayadn::Workers do
     it "extracts links" do
       links = Ayadn::Workers.new.extract_links(data['data'][0])
       expect(links).to eq ['http://feed.500px.com/~r/500px-best/~3/c2tMPEJVf6I/61517259']
+    end
+  end
+
+  describe "#extract_checkins" do
+    it "extracts checkins" do
+      posts = Ayadn::Workers.new.build_posts(checkins['data'])
+      expect(posts.length).to eq 10
+      expect(posts[27101186][:has_checkins]).to be true
+      expect(posts[27101186][:checkins][:name]).to eq "Hobbs State Park"
+      expect(posts[27101186][:checkins][:address]).to eq "21392 E Highway 12"
+      expect(posts[27101186][:checkins][:address_extended]).to be nil
+      expect(posts[27101186][:checkins][:locality]).to eq "Rogers"
+      expect(posts[26947690][:has_checkins]).to be true
+      expect(posts[26947690][:checkins][:categories]).to eq "Landmarks"
+      expect(posts[26947690][:checkins][:country_code]).to eq "us"
+      expect(posts[26947690][:mentions]).to eq ["tuaw"]
     end
   end
 
