@@ -122,6 +122,8 @@ module Ayadn
           stream = @api.get_mentions(username, options)
           user_404(username) if meta_404(stream)
           Databases.save_max_id(stream)
+          options = options.dup
+          options[:in_mentions] = true
           render_view(stream, options)
           Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
         else
@@ -1107,7 +1109,7 @@ module Ayadn
 
     def render_view(data, options = {})
       unless options[:raw]
-        @view.clear_screen
+        #@view.clear_screen
         get_view(data['data'], options)
       else
         @view.show_raw(data)

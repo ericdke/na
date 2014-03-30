@@ -281,7 +281,13 @@ module Ayadn
       posts = @workers.build_posts(data.reverse)
       posts.each do |id,content|
         count = "%03d" % content[:count]
-        @view << count.color(Settings.options[:colors][:index])
+        if content[:username] == Settings.config[:identity][:username]
+          @view << count.color(Settings.options[:colors][:index]).inverse
+        elsif content[:mentions].include?(Settings.config[:identity][:username]) && options[:in_mentions].nil?
+          @view << count.color(Settings.options[:colors][:mentions]).inverse
+        else
+          @view << count.color(Settings.options[:colors][:index])
+        end
         @view << ": ".color(Settings.options[:colors][:index])
         @view << build_content(content)
       end
@@ -292,7 +298,13 @@ module Ayadn
       @view = ""
       posts = @workers.build_posts(data.reverse)
       posts.each do |id,content|
-        @view << content[:id].to_s.color(Settings.options[:colors][:id]) + " "
+        if content[:username] == Settings.config[:identity][:username]
+          @view << content[:id].to_s.color(Settings.options[:colors][:id]).inverse + " "
+        elsif content[:mentions].include?(Settings.config[:identity][:username]) && options[:in_mentions].nil?
+          @view << content[:id].to_s.color(Settings.options[:colors][:mentions]).inverse + " "
+        else
+          @view << content[:id].to_s.color(Settings.options[:colors][:id]) + " "
+        end
         @view << build_content(content)
       end
       @view
