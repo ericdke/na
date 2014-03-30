@@ -2,6 +2,19 @@ module Ayadn
 
   class Set < Thor
 
+    desc "set scroll ITEM VALUE", "Set the waiting time (in seconds, min 0.7) between two requests when scrolling"
+    def scroll(*args)
+      scroll_config = SetScroll.new
+      if args[0]
+        param = scroll_config.validate(args[1])
+        scroll_config.send(args[0], param)
+      else
+        abort(Status.error_missing_parameters)
+      end
+      scroll_config.log(args)
+      scroll_config.save
+    end
+
     desc "set timeline ITEM TRUE/FALSE", "Set ITEM to be activated or not"
     long_desc Descriptions.set_timeline
     def timeline(*args)
@@ -103,6 +116,30 @@ module Ayadn
       puts Status.done
     end
 
+  end
+
+  class SetScroll
+    def initialize
+      Settings.load_config
+      Settings.get_token
+      Settings.init_config
+      Logs.create_logger
+    end
+    def log(args)
+      x = "New value for '#{args[0]}' in 'Scroll' => #{args[1]}"
+      puts "\n#{x}\n".color(:cyan)
+      Logs.rec.info x
+    end
+    def save
+      Settings.save_config
+    end
+    def validate(t)
+      t = t.to_i
+      t >= 0.7 ? t : 1.5
+    end
+    def timer(t)
+      Settings.options[:scroll][:timer] = t
+    end
   end
 
   class SetBackup
