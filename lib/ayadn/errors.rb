@@ -15,6 +15,9 @@ module Ayadn
       #raise error
       exit
     end
+    def self.error(status)
+      Logs.rec.error status
+    end
     def self.warn(warning)
       Logs.rec.warn warning
     end

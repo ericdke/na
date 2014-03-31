@@ -285,17 +285,8 @@ module Ayadn
     def delete(post_id)
       begin
         if post_id.is_integer?
-          #@view.clear_screen
           print Status.deleting_post(post_id)
-          resp = @api.delete_post(post_id)
-          #@view.clear_screen
-          if resp['meta']['code'] == 200
-            puts Status.deleted(post_id)
-            Logs.rec.info "Deleted post #{post_id}."
-          else
-            puts Status.not_deleted(post_id)
-            Errors.warn("#{Status.not_deleted(post_id)} => #{resp['meta']}")
-          end
+          check_has_been_deleted(post_id, @api.delete_post(post_id))
         else
           puts Status.error_missing_post_id
         end
@@ -310,17 +301,8 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          #@view.clear_screen
           puts Status.unfollowing(username)
-          resp = @api.unfollow(username)
-          #@view.clear_screen
-          if resp['meta']['code'] == 200
-            puts Status.unfollowed(username)
-            Logs.rec.info "Unfollowed #{username}."
-          else
-            puts Status.not_unfollowed(username)
-            Errors.warn("#{Status.not_unfollowed(username)} => #{resp['meta']}")
-          end
+          check_has_been_unfollowed(username, @api.unfollow(username))
         else
           puts Status.error_missing_username
         end
@@ -335,17 +317,8 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          #@view.clear_screen
           puts Status.following(username)
-          resp = @api.follow(username)
-          #@view.clear_screen
-          if resp['meta']['code'] == 200
-            puts Status.followed(username)
-            Logs.rec.info "Followed #{username}."
-          else
-            puts Status.not_followed(username)
-            Errors.warn("#{Status.not_followed(username)} => #{resp['meta']}")
-          end
+          check_has_been_followed(username, @api.follow(username))
         else
           puts Status.error_missing_username
         end
@@ -360,17 +333,8 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          #@view.clear_screen
           puts Status.unmuting(username)
-          resp = @api.unmute(username)
-          #@view.clear_screen
-          if resp['meta']['code'] == 200
-            puts Status.unmuted(username)
-            Logs.rec.info "Unmuted #{username}."
-          else
-            puts Status.not_unmuted(username)
-            Errors.warn("#{Status.not_unmuted(username)} => #{resp['meta']}")
-          end
+          check_has_been_unmuted(username, @api.unmute(username))
         else
           puts Status.error_missing_username
         end
@@ -385,17 +349,8 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          #@view.clear_screen
           puts Status.muting(username)
-          resp = @api.mute(username)
-          #@view.clear_screen
-          if resp['meta']['code'] == 200
-            puts Status.muted(username)
-            Logs.rec.info "Muted #{username}."
-          else
-            puts Status.not_muted(username)
-            Errors.warn("#{Status.not_muted(username)} => #{resp['meta']}")
-          end
+          check_has_been_muted(username, @api.mute(username))
         else
           puts Status.error_missing_username
         end
@@ -410,17 +365,8 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          #@view.clear_screen
           puts Status.unblocking(username)
-          resp = @api.unblock(username)
-          #@view.clear_screen
-          if resp['meta']['code'] == 200
-            puts Status.unblocked(username)
-            Logs.rec.info "Unblocked #{username}."
-          else
-            puts Status.not_unblocked(username)
-            Errors.warn("#{Status.not_unblocked(username)} => #{resp['meta']}")
-          end
+          check_has_been_unblocked(username, @api.unblock(username))
         else
           puts Status.error_missing_username
         end
@@ -435,17 +381,8 @@ module Ayadn
       begin
         unless username.empty?
           username = Workers.add_arobase_if_missing(username)
-          #@view.clear_screen
           puts Status.blocking(username)
-          resp = @api.block(username)
-          #@view.clear_screen
-          if resp['meta']['code'] == 200
-            puts Status.blocked(username)
-            Logs.rec.info "Blocked #{username}."
-          else
-            puts Status.not_blocked(username)
-            Errors.warn("#{Status.not_blocked(username)} => #{resp['meta']}")
-          end
+          check_has_been_blocked(username, @api.block(username))
         else
           puts Status.error_missing_username
         end
@@ -456,21 +393,31 @@ module Ayadn
       end
     end
 
+    def repost(post_id)
+      begin
+        if post_id.is_integer?
+          puts Status.reposting(post_id)
+          resp = @api.get_details(post_id)
+          check_if_already_reposted(resp)
+          id = get_original_id(post_id, resp)
+          check_has_been_reposted(id, @api.repost(id))
+        else
+          puts Status.error_missing_post_id
+        end
+      rescue => e
+        Errors.global_error("action/repost", post_id, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
     def unrepost(post_id)
       begin
         if post_id.is_integer?
-          #@view.clear_screen
           puts Status.unreposting(post_id)
           resp = @api.get_details(post_id)
           if resp['data']['you_reposted']
-            resp = @api.unrepost(post_id)
-            if resp['meta']['code'] == 200
-              puts Status.unreposted(post_id)
-              Logs.rec.info "Unreposted #{post_id}."
-            else
-              puts Status.not_unreposted(post_id)
-              Errors.warn("#{Status.not_unreposted(post_id)} => #{resp['meta']}")
-            end
+            check_has_been_unreposted(post_id, @api.unrepost(post_id))
           else
             puts "\nThis post isn't one of your reposts.\n\n".color(:red)
           end
@@ -487,19 +434,10 @@ module Ayadn
     def unstar(post_id)
       begin
         if post_id.is_integer?
-          #@view.clear_screen
           puts Status.unstarring(post_id)
-          #@view.clear_screen
           resp = @api.get_details(post_id)
           if resp['data']['you_starred']
-            resp = @api.unstar(post_id)
-            if resp['meta']['code'] == 200
-              puts Status.unstarred(post_id)
-              Logs.rec.info "Unstarred #{post_id}."
-            else
-              puts Status.not_unstarred(post_id)
-              Errors.warn("#{Status.not_unstarred(post_id)} => #{resp['meta']}")
-            end
+            check_has_been_unstarred(post_id, @api.unstar(post_id))
           else
             puts "\nThis isn't one of your starred posts.\n\n".color(:red)
           end
@@ -516,61 +454,14 @@ module Ayadn
     def star(post_id)
       begin
         if post_id.is_integer?
-          #@view.clear_screen
           puts Status.starring(post_id)
-          resp = @api.get_details(post_id)
-          if resp['data']['you_starred']
-            puts "\nYou already starred this post.\n".color(:red)
-            exit
-          end
-          resp = @api.star(post_id)
-          #@view.clear_screen
-          if resp['meta']['code'] == 200
-            puts Status.starred(post_id)
-            Logs.rec.info "Starred #{post_id}."
-          else
-            puts Status.not_starred(post_id)
-            Errors.warn("#{Status.not_starred(post_id)} => #{resp['meta']}")
-          end
+          check_if_already_starred(@api.get_details(post_id))
+          check_has_been_starred(post_id, @api.star(post_id))
         else
           puts Status.error_missing_post_id
         end
       rescue => e
         Errors.global_error("action/star", post_id, e)
-      ensure
-        Databases.close_all
-      end
-    end
-
-    def repost(post_id)
-      begin
-        if post_id.is_integer?
-          #@view.clear_screen
-          puts Status.reposting(post_id)
-          resp = @api.get_details(post_id)
-          if resp['data']['you_reposted']
-            puts "\nYou already reposted this post.\n".color(:red)
-            exit
-          end
-          if resp['data']['repost_of']
-            puts Status.redirecting
-            id = resp['data']['repost_of']['id']
-            Errors.repost(post_id, id)
-            post_id = id
-          end
-          resp = @api.repost(post_id)
-          if resp['meta']['code'] == 200
-            puts Status.reposted(post_id)
-            Logs.rec.info "Reposted #{post_id}."
-          else
-            puts Status.not_reposted(post_id)
-            Errors.warn("#{Status.not_reposted(post_id)} => #{resp['meta']}")
-          end
-        else
-          puts Status.error_missing_post_id
-        end
-      rescue => e
-        Errors.global_error("action/repost", post_id, e)
       ensure
         Databases.close_all
       end
@@ -1082,6 +973,133 @@ module Ayadn
     end
 
     private
+
+    def get_original_id(post_id, resp)
+      if resp['data']['repost_of']
+        puts Status.redirecting
+        id = resp['data']['repost_of']['id']
+        Errors.repost(post_id, id)
+        return id
+      end
+    end
+
+    def check_if_already_starred(resp)
+      if resp['data']['you_starred']
+        puts "\nYou already starred this post.\n".color(:red)
+        exit
+      end
+    end
+
+    def check_if_already_reposted(resp)
+      if resp['data']['you_reposted']
+        puts "\nYou already reposted this post.\n".color(:red)
+        exit
+      end
+    end
+
+    def check_has_been_starred(post_id, resp)
+      if resp['meta']['code'] == 200
+        puts Status.starred(post_id)
+        Logs.rec.info "Starred #{post_id}."
+      else
+        whine(Status.not_starred(post_id), resp)
+      end
+    end
+
+    def check_has_been_reposted(post_id, resp)
+      if resp['meta']['code'] == 200
+        puts Status.reposted(post_id)
+        Logs.rec.info "Reposted #{post_id}."
+      else
+        whine(Status.not_reposted(post_id), resp)
+      end
+    end
+
+    def check_has_been_blocked(username, resp)
+      if resp['meta']['code'] == 200
+        puts Status.blocked(username)
+        Logs.rec.info "Blocked #{username}."
+      else
+        whine(Status.not_blocked(username), resp)
+      end
+    end
+
+    def check_has_been_muted(username, resp)
+      if resp['meta']['code'] == 200
+        puts Status.muted(username)
+        Logs.rec.info "Muted #{username}."
+      else
+        whine(Status.not_muted(username), resp)
+      end
+    end
+
+    def check_has_been_followed(username, resp)
+      if resp['meta']['code'] == 200
+        puts Status.followed(username)
+        Logs.rec.info "Followed #{username}."
+      else
+        whine(Status.not_followed(username), resp)
+      end
+    end
+
+    def check_has_been_deleted(post_id, resp)
+      if resp['meta']['code'] == 200
+        puts Status.deleted(post_id)
+        Logs.rec.info "Deleted post #{post_id}."
+      else
+        whine(Status.not_deleted(post_id), resp)
+      end
+    end
+
+    def check_has_been_unblocked(username, resp)
+      if resp['meta']['code'] == 200
+        puts Status.unblocked(username)
+        Logs.rec.info "Unblocked #{username}."
+      else
+        whine(Status.not_unblocked(username), resp)
+      end
+    end
+
+    def check_has_been_unstarred(post_id, resp)
+      if resp['meta']['code'] == 200
+        puts Status.unstarred(post_id)
+        Logs.rec.info "Unstarred #{post_id}."
+      else
+        whine(Status.not_unstarred(post_id), resp)
+      end
+    end
+
+    def check_has_been_unreposted(post_id, resp)
+      if resp['meta']['code'] == 200
+        puts Status.unreposted(post_id)
+        Logs.rec.info "Unreposted #{post_id}."
+      else
+        whine(Status.not_unreposted(post_id), resp)
+      end
+    end
+
+    def check_has_been_unmuted(username, resp)
+      if resp['meta']['code'] == 200
+        puts Status.unmuted(username)
+        Logs.rec.info "Unmuted #{username}."
+      else
+        whine(Status.not_unmuted(username), resp)
+      end
+    end
+
+    def check_has_been_unfollowed(username, resp)
+      if resp['meta']['code'] == 200
+        puts Status.unfollowed(username)
+        Logs.rec.info "Unfollowed #{username}."
+      else
+        whine(Status.not_unfollowed(username), resp)
+      end
+    end
+
+    def whine(status, resp)
+      puts status
+      Errors.error("#{status} => #{resp['meta']}")
+    end
 
     def meta_404(stream)
       stream['meta']['code'] == 404
