@@ -198,7 +198,9 @@ module Ayadn
           resp = @api.get_details(post_id, options)
           if resp['data']['repost_of']
             puts Status.redirecting
-            list = @api.get_whoreposted(resp['data']['repost_of']['id'])
+            id = resp['data']['repost_of']['id']
+            Errors.repost(post_id, id)
+            list = @api.get_whoreposted(id)
           else
             list = @api.get_whoreposted(post_id)
           end
@@ -228,7 +230,9 @@ module Ayadn
           resp = @api.get_details(post_id, options)
           if resp['data']['repost_of']
             puts Status.redirecting
-            list = @api.get_whostarred(resp['data']['repost_of']['id'])
+            id = resp['data']['repost_of']['id']
+            Errors.repost(post_id, id)
+            list = @api.get_whostarred(id)
           else
             list = @api.get_whostarred(post_id)
           end
@@ -258,7 +262,9 @@ module Ayadn
           resp = @api.get_details(post_id, options)
           if resp['data']['repost_of']
             puts Status.redirecting
-            stream = @api.get_convo(resp['data']['repost_of']['id'], options)
+            id = resp['data']['repost_of']['id']
+            Errors.repost(post_id, id)
+            stream = @api.get_convo(id, options)
           else
             stream = @api.get_convo(post_id, options)
           end
@@ -548,7 +554,9 @@ module Ayadn
           end
           if resp['data']['repost_of']
             puts Status.redirecting
-            post_id = resp['data']['repost_of']['id']
+            id = resp['data']['repost_of']['id']
+            Errors.repost(post_id, id)
+            post_id = id
           end
           resp = @api.repost(post_id)
           if resp['meta']['code'] == 200
