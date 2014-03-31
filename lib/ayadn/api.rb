@@ -229,9 +229,9 @@ module Ayadn
       end
     end
 
-    def self.build_query(args)
-      arg = {}
-      args.each {|k,v| arg[k] = v if v.to_s.is_integer?}
+    def self.build_query(arg)
+      # arg = {}
+      # args.each {|k,v| arg[k] = v if v.to_s.is_integer?}
       count = arg[:count] || Settings.options[:counts][:default]
       directed = arg[:directed] || Settings.options[:timeline][:directed]
       deleted = arg[:deleted] || Settings.options[:timeline][:deleted]
@@ -239,7 +239,7 @@ module Ayadn
       annotations = arg[:annotations] || Settings.options[:timeline][:annotations]
       if arg[:since_id]
         "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&since_id=#{arg[:since_id]}"
-      elsif args[:recent_message]
+      elsif arg[:recent_message]
         "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&include_recent_message=#{arg[:recent_message]}"
       else
         "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}"
