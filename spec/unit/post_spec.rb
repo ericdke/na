@@ -14,11 +14,11 @@ describe Ayadn::Post do
         message_max_length: 2048,
         version: Ayadn::VERSION
       })
-    Ayadn::Settings.stub(:user_token).and_return("XXX")
-    Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Errors.stub(:warn).and_return("warned")
-    Ayadn::CNX.stub(:get_response_from).and_return(JSON.parse(File.read("spec/mock/stream.json")))
-    Ayadn::CNX.stub(:post).and_return({meta:{code:'200'},data:{}})
+    Ayadn::CNX.stub(:post).and_return(File.read("spec/mock/posted.json"))
+    Ayadn::Logs.stub(:rec).and_return("logged")
+    Ayadn::Databases.stub(:blacklist)
+    Ayadn::Databases.stub(:save_indexed_posts)
   end
 
   let(:post) { Ayadn::Post.new }
@@ -29,15 +29,6 @@ describe Ayadn::Post do
         post.post([])
       end
       expect(printed).to include "You should provide some text."
-    end
-  end
-
-  describe "#post" do
-    it "should post" do
-      printed = capture_stdout do
-        post.post("Hello from RSpec!")
-      end
-      expect(printed).to include "Hello from RSpec"
     end
   end
 
