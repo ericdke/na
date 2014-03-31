@@ -124,8 +124,12 @@ module Ayadn
           Databases.save_max_id(stream)
           options = options.dup
           options[:in_mentions] = true
-          render_view(stream, options)
-          Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
+          unless stream['data'].empty?
+            render_view(stream, options)
+            Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
+          else
+            no_data('mentions')
+          end
         else
           puts Status.error_missing_username
         end
@@ -144,8 +148,12 @@ module Ayadn
           stream = @api.get_posts(username, options)
           user_404(username) if meta_404(stream)
           Databases.save_max_id(stream)
-          render_view(stream, options)
-          Scroll.new(@api, @view).posts(username, options) if options[:scroll]
+          unless stream['data'].empty?
+            render_view(stream, options)
+            Scroll.new(@api, @view).posts(username, options) if options[:scroll]
+          else
+            no_data('posts')
+          end
         else
           puts Status.error_missing_username
         end
@@ -180,7 +188,11 @@ module Ayadn
           doing(options)
           stream = @api.get_whatstarred(username, options)
           user_404(username) if meta_404(stream)
-          render_view(stream, options)
+          unless stream['data'].empty?
+            render_view(stream, options)
+          else
+            no_data('whatstarred')
+          end
         else
           puts Status.error_missing_username
         end
@@ -451,7 +463,11 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_hashtag(hashtag)
-        render_view(stream, options)
+        unless stream['data'].empty?
+          render_view(stream, options)
+        else
+          no_data('hashtag')
+        end
       rescue => e
         Errors.global_error("action/hashtag", [hashtag, options], e)
       ensure
@@ -463,7 +479,11 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_search(words, options)
-        render_view(stream, options)
+        unless stream['data'].empty?
+          render_view(stream, options)
+        else
+          no_data('search')
+        end
       rescue => e
         Errors.global_error("action/search", [words, options], e)
       ensure
@@ -485,8 +505,7 @@ module Ayadn
               get_list(:followings, list, username)
               Databases.add_to_users_db_from_list(list)
             else
-              Errors.warn "In followings: no data"
-              abort(Status.empty_list)
+              no_data('followings')
             end
           else
             list = @api.get_raw_list(username, :followings)
@@ -516,8 +535,7 @@ module Ayadn
               get_list(:followers, list, username)
               Databases.add_to_users_db_from_list(list)
             else
-              Errors.warn "In followers: no data"
-              abort(Status.empty_list)
+              no_data('followers')
             end
           else
             list = @api.get_raw_list(username, :followers)
@@ -545,8 +563,7 @@ module Ayadn
             get_list(:muted, list, nil)
             Databases.add_to_users_db_from_list(list)
           else
-            Errors.warn "In muted: no data"
-            abort(Status.empty_list)
+            no_data('muted')
           end
         else
           list = @api.get_raw_list(nil, :muted)
@@ -568,8 +585,7 @@ module Ayadn
             get_list(:blocked, list, nil)
             Databases.add_to_users_db_from_list(list)
           else
-            Errors.warn "In blocked: no data"
-            abort(Status.empty_list)
+            no_data('blocked')
           end
         else
           list = @api.get_raw_list(nil, :blocked)
@@ -609,7 +625,6 @@ module Ayadn
             end
           else
             @view.show_raw(@api.get_user(username))
-            #@view.show_raw(@api.get_token_info)
           end
         else
           puts Status.error_missing_username
@@ -668,7 +683,11 @@ module Ayadn
         unless options[:raw]
           list = @api.get_files_list(options)
           @view.clear_screen
-          @view.show_files_list(list)
+          unless list.empty?
+            @view.show_files_list(list)
+          else
+            no_data('files')
+          end
         else
           @view.show_raw(@api.get_files_list(options))
         end
@@ -714,8 +733,12 @@ module Ayadn
           no_new_posts unless Databases.has_new?(resp, "channel:#{channel_id}")
         end
         Databases.save_max_id(resp)
-        render_view(resp, options)
-        Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
+        unless resp['data'].empty?
+          render_view(resp, options)
+          Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
+        else
+          no_data('messages')
+        end
       rescue => e
         Errors.global_error("action/messages", [channel_id, options], e)
       ensure
@@ -798,21 +821,6 @@ module Ayadn
         Databases.close_all
       end
     end
-
-    # def attach(filepath)
-    #   begin
-    #     #test
-    #     puts Endpoints.new.files
-    #     puts filepath.inspect
-
-    #     resp = CNX.upload(Endpoints.new.files, filepath)
-    #     puts resp
-    #   rescue => e
-    #     Errors.global_error("action/attach", filepath, e)
-    #   ensure
-    #     Databases.close_all
-    #   end
-    # end
 
     def pmess(username)
     	begin
@@ -1081,6 +1089,11 @@ module Ayadn
     def whine(status, resp)
       puts status
       Errors.error("#{status} => #{resp['meta']}")
+    end
+
+    def no_data(where)
+      Errors.warn "In action/#{where}: no data"
+      abort(Status.empty_list)
     end
 
     def meta_404(stream)
