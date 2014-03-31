@@ -769,6 +769,7 @@ module Ayadn
             @view.show_simple_post([resp], options)
             if resp['repost_of']
               puts "REPOST OF:\n".inverse
+              Errors.repost(post_id, resp['repost_of']['id'])
               @view.show_simple_post([resp['repost_of']], options)
             end
             puts "AUTHOR:\n".inverse
