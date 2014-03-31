@@ -7,10 +7,12 @@ describe Ayadn::Post do
   before do
     Ayadn::Settings.stub(:config).and_return({
         identity: {
-          username: 'test'
+          username: 'test',
+          handle: '@test'
         },
         post_max_length: 256,
-        message_max_length: 2048
+        message_max_length: 2048,
+        version: Ayadn::VERSION
       })
     Ayadn::Settings.stub(:user_token).and_return("XXX")
     Ayadn::Logs.stub(:rec).and_return("logged")

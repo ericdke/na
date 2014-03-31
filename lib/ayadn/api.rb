@@ -230,13 +230,36 @@ module Ayadn
     end
 
     def self.build_query(arg)
-      # arg = {}
-      # args.each {|k,v| arg[k] = v if v.to_s.is_integer?}
-      count = arg[:count] || Settings.options[:counts][:default]
-      directed = arg[:directed] || Settings.options[:timeline][:directed]
-      deleted = arg[:deleted] || Settings.options[:timeline][:deleted]
-      html = arg[:html] || Settings.options[:timeline][:html]
+      count = Settings.options[:counts][:default]
+      if arg[:count]
+        if arg[:count] == 0 || arg[:count] == 1
+          count = arg[:count]
+        end
+      end
+      directed = Settings.options[:timeline][:directed]
+      if arg[:directed]
+        if arg[:directed] == 0 || arg[:directed] == 1
+          directed = arg[:directed]
+        end
+      end
+      deleted = Settings.options[:timeline][:deleted]
+      if arg[:deleted]
+        if arg[:deleted] == 0 || arg[:deleted] == 1
+          deleted = arg[:deleted]
+        end
+      end
+      html = Settings.options[:timeline][:html]
+      if arg[:html]
+        if arg[:html] == 0 || arg[:html] == 1
+          html = arg[:html]
+        end
+      end
       annotations = arg[:annotations] || Settings.options[:timeline][:annotations]
+      if arg[:annotations]
+        if arg[:annotations] == 0 || arg[:annotations] == 1
+          annotations = arg[:annotations]
+        end
+      end
       if arg[:since_id]
         "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&since_id=#{arg[:since_id]}"
       elsif arg[:recent_message]
