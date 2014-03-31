@@ -5,15 +5,12 @@ module Ayadn
       [where, args, error].each do |el|
         self.detokenize(el)
       end
+      Logs.rec.error "--BEGIN--"
       Logs.rec.error "#{error}"
-      unless args.nil?
-        Logs.rec.error "LOCATION: #{where}"
-        Logs.rec.error "DATA: #{args}"
-      else
-        Logs.rec.error "LOCATION: #{where}"
-      end
-      Logs.rec.error "CALLER: #{caller}"
-      Logs.rec.error "-----"
+      Logs.rec.debug "LOCATION: #{where}"
+      Logs.rec.debug "DATA: #{args}" unless args.nil?
+      Logs.rec.debug "STACK: #{caller}"
+      Logs.rec.error "--END--"
       puts "\n(error logged in #{Settings.config[:paths][:log]}/ayadn.log)\n".color(:blue)
       #raise error
       exit
@@ -23,6 +20,9 @@ module Ayadn
     end
     def self.info(msg)
       Logs.rec.info msg
+    end
+    def self.repost(repost, original)
+      Logs.rec.info "Post #{repost} is a repost. Using original: #{original}."
     end
 
     private
