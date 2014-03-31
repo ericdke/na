@@ -16,9 +16,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_unified(options)
-        if options[:new]
-          no_new_posts unless Databases.has_new?(stream, 'unified')
-        end
+        (no_new_posts unless Databases.has_new?(stream, 'unified')) if options[:new]
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).unified(options) if options[:scroll]
@@ -33,9 +31,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_checkins(options)
-        if options[:new]
-          no_new_posts unless Databases.has_new?(stream, 'explore:checkins')
-        end
+        (no_new_posts unless Databases.has_new?(stream, 'explore:checkins')) if options[:new]
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).checkins(options) if options[:scroll]
@@ -50,9 +46,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_global(options)
-        if options[:new]
-          no_new_posts unless Databases.has_new?(stream, 'global')
-        end
+        (no_new_posts unless Databases.has_new?(stream, 'global')) if options[:new]
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).global(options) if options[:scroll]
@@ -67,9 +61,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_trending(options)
-        if options[:new]
-          no_new_posts unless Databases.has_new?(stream, 'explore:trending')
-        end
+        (no_new_posts unless Databases.has_new?(stream, 'explore:trending')) if options[:new]
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).trending(options) if options[:scroll]
@@ -84,9 +76,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_photos(options)
-        if options[:new]
-          no_new_posts unless Databases.has_new?(stream, 'explore:photos')
-        end
+        (no_new_posts unless Databases.has_new?(stream, 'explore:photos')) if options[:new]
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).photos(options) if options[:scroll]
@@ -101,9 +91,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_conversations(options)
-        if options[:new]
-          no_new_posts unless Databases.has_new?(stream, 'explore:replies')
-        end
+        (no_new_posts unless Databases.has_new?(stream, 'explore:replies')) if options[:new]
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).conversations(options) if options[:scroll]
@@ -124,12 +112,9 @@ module Ayadn
         Databases.save_max_id(stream)
         options = options.dup
         options[:in_mentions] = true
-        unless stream['data'].empty?
-          render_view(stream, options)
-          Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
-        else
-          no_data('mentions')
-        end
+        no_data('mentions') if stream['data'].empty?
+        render_view(stream, options)
+        Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
       rescue => e
         Errors.global_error("action/mentions", [username, options], e)
       ensure
@@ -145,12 +130,9 @@ module Ayadn
         stream = @api.get_posts(username, options)
         user_404(username) if meta_404(stream)
         Databases.save_max_id(stream)
-        unless stream['data'].empty?
-          render_view(stream, options)
-          Scroll.new(@api, @view).posts(username, options) if options[:scroll]
-        else
-          no_data('posts')
-        end
+        no_data('posts') if stream['data'].empty?
+        render_view(stream, options)
+        Scroll.new(@api, @view).posts(username, options) if options[:scroll]
       rescue => e
         Errors.global_error("action/posts", [username, options], e)
       ensure
@@ -182,11 +164,7 @@ module Ayadn
         doing(options)
         stream = @api.get_whatstarred(username, options)
         user_404(username) if meta_404(stream)
-        unless stream['data'].empty?
-          render_view(stream, options)
-        else
-          no_data('whatstarred')
-        end
+        stream['data'].empty? ? no_data('whatstarred') : render_view(stream, options)
       rescue => e
         Errors.global_error("action/whatstarred", [username, options], e)
       ensure
@@ -198,14 +176,13 @@ module Ayadn
       begin
         missing_post_id unless post_id.is_integer?
         doing(options)
-        resp = @api.get_details(post_id, options)
         id = get_original_id(post_id, @api.get_details(post_id, options))
         list = @api.get_whoreposted(id)
         unless options[:raw]
           unless list['data'].empty?
             get_list(:whoreposted, list['data'], post_id)
           else
-            puts "\nNobody reposted this post.\n\n".color(:red)
+            puts Status.nobody_reposted
           end
         else
           @view.show_raw(list)
@@ -227,7 +204,7 @@ module Ayadn
           unless list['data'].empty?
             get_list(:whostarred, list['data'], id)
           else
-            puts "\nNobody starred this post.\n\n".color(:red)
+            puts Status.nobody_starred
           end
         else
           @view.show_raw(list)
@@ -365,11 +342,10 @@ module Ayadn
       begin
         missing_post_id unless post_id.is_integer?
         puts Status.unreposting(post_id)
-        resp = @api.get_details(post_id)
-        if resp['data']['you_reposted']
+        if @api.get_details(post_id)['data']['you_reposted']
           check_has_been_unreposted(post_id, @api.unrepost(post_id))
         else
-          puts "\nThis post isn't one of your reposts.\n\n".color(:red)
+          puts Status.not_your_repost
         end
       rescue => e
         Errors.global_error("action/unrepost", post_id, e)
@@ -382,11 +358,10 @@ module Ayadn
       begin
         missing_post_id unless post_id.is_integer?
         puts Status.unstarring(post_id)
-        resp = @api.get_details(post_id)
-        if resp['data']['you_starred']
+        if @api.get_details(post_id)['data']['you_starred']
           check_has_been_unstarred(post_id, @api.unstar(post_id))
         else
-          puts "\nThis isn't one of your starred posts.\n\n".color(:red)
+          puts Status.not_your_starred
         end
       rescue => e
         Errors.global_error("action/unstar", post_id, e)
@@ -412,11 +387,8 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_hashtag(hashtag)
-        unless stream['data'].empty?
-          render_view(stream, options)
-        else
-          no_data('hashtag')
-        end
+        no_data('hashtag') if stream['data'].empty?
+        render_view(stream, options)
       rescue => e
         Errors.global_error("action/hashtag", [hashtag, options], e)
       ensure
@@ -428,11 +400,8 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_search(words, options)
-        unless stream['data'].empty?
-          render_view(stream, options)
-        else
-          no_data('search')
-        end
+        no_data('search') if stream['data'].empty?
+        render_view(stream, options)
       rescue => e
         Errors.global_error("action/search", [words, options], e)
       ensure
@@ -447,18 +416,12 @@ module Ayadn
         doing(options)
         unless options[:raw]
           list = @api.get_followings(username)
-          if Settings.options[:backup][:auto_save_lists]
-            FileOps.save_followings_list(list)
-          end
-          unless list.empty?
-            get_list(:followings, list, username)
-            Databases.add_to_users_db_from_list(list)
-          else
-            no_data('followings')
-          end
+          FileOps.save_followings_list(list)if Settings.options[:backup][:auto_save_lists]
+          no_data('followings') if list.empty?
+          get_list(:followings, list, username)
+          Databases.add_to_users_db_from_list(list)
         else
-          list = @api.get_raw_list(username, :followings)
-          @view.show_raw(list)
+          @view.show_raw(@api.get_raw_list(username, :followings))
         end
       rescue => e
         Errors.global_error("action/followings", [username, options], e)
@@ -474,18 +437,12 @@ module Ayadn
         doing(options)
         unless options[:raw]
           list = @api.get_followers(username)
-          if Settings.options[:backup][:auto_save_lists]
-            FileOps.save_followers_list(list)
-          end
-          unless list.empty?
-            get_list(:followers, list, username)
-            Databases.add_to_users_db_from_list(list)
-          else
-            no_data('followers')
-          end
+          FileOps.save_followers_list(list) if Settings.options[:backup][:auto_save_lists]
+          no_data('followers') if list.empty?
+          get_list(:followers, list, username)
+          Databases.add_to_users_db_from_list(list)
         else
-          list = @api.get_raw_list(username, :followers)
-          @view.show_raw(list)
+          @view.show_raw(@api.get_raw_list(username, :followers))
         end
       rescue => e
         Errors.global_error("action/followers", [username, options], e)
@@ -499,18 +456,12 @@ module Ayadn
         doing(options)
         unless options[:raw]
           list = @api.get_muted
-          if Settings.options[:backup][:auto_save_lists]
-            FileOps.save_muted_list(list)
-          end
-          unless list.empty?
-            get_list(:muted, list, nil)
-            Databases.add_to_users_db_from_list(list)
-          else
-            no_data('muted')
-          end
+          FileOps.save_muted_list(list) if Settings.options[:backup][:auto_save_lists]
+          no_data('muted') if list.empty?
+          get_list(:muted, list, nil)
+          Databases.add_to_users_db_from_list(list)
         else
-          list = @api.get_raw_list(nil, :muted)
-          @view.show_raw(list)
+          @view.show_raw(@api.get_raw_list(nil, :muted))
         end
       rescue => e
         Errors.global_error("action/muted", options, e)
@@ -524,15 +475,11 @@ module Ayadn
         doing(options)
         unless options[:raw]
           list = @api.get_blocked
-          unless list.empty?
-            get_list(:blocked, list, nil)
-            Databases.add_to_users_db_from_list(list)
-          else
-            no_data('blocked')
-          end
+          no_data('blocked') if list.empty?
+          get_list(:blocked, list, nil)
+          Databases.add_to_users_db_from_list(list)
         else
-          list = @api.get_raw_list(nil, :blocked)
-          @view.show_raw(list)
+          @view.show_raw(@api.get_raw_list(nil, :blocked))
         end
       rescue => e
         Errors.global_error("action/blocked", options, e)
@@ -620,11 +567,7 @@ module Ayadn
         unless options[:raw]
           list = @api.get_files_list(options)
           @view.clear_screen
-          unless list.empty?
-            @view.show_files_list(list)
-          else
-            no_data('files')
-          end
+          list.empty? ? no_data('files') : view.show_files_list(list)
         else
           @view.show_raw(@api.get_files_list(options))
         end
@@ -666,16 +609,11 @@ module Ayadn
         channel_id = get_channel_id_from_alias(channel_id)
         doing
         resp = @api.get_messages(channel_id, options)
-        if options[:new]
-          no_new_posts unless Databases.has_new?(resp, "channel:#{channel_id}")
-        end
+        (no_new_posts unless Databases.has_new?(resp, "channel:#{channel_id}")) if options[:new]
         Databases.save_max_id(resp)
-        unless resp['data'].empty?
-          render_view(resp, options)
-          Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
-        else
-          no_data('messages')
-        end
+        no_data('messages') if resp['data'].empty?
+        render_view(resp, options)
+        Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
       rescue => e
         Errors.global_error("action/messages", [channel_id, options], e)
       ensure
@@ -721,9 +659,7 @@ module Ayadn
         @view.clear_screen
         puts Status.posting
         resp = Post.new.post(args)
-        if Settings.options[:backup][:auto_save_sent_posts]
-          FileOps.save_post(resp)
-        end
+        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.yourpost
         @view.show_posted(resp)
@@ -743,9 +679,7 @@ module Ayadn
         @view.clear_screen
         puts Status.posting
         resp = writer.send_post(lines_array.join("\n"))
-        if Settings.options[:backup][:auto_save_sent_posts]
-          FileOps.save_post(resp)
-        end
+        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.yourpost
         @view.show_posted(resp)
@@ -766,9 +700,7 @@ module Ayadn
     		@view.clear_screen
     		puts Status.posting
     		resp = messenger.send_pm(username, lines_array.join("\n"))
-        if Settings.options[:backup][:auto_save_sent_messages]
-          FileOps.save_message(resp)
-        end
+        FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
     		@view.clear_screen
     		puts Status.yourpost
     		@view.show_posted(resp)
@@ -789,9 +721,7 @@ module Ayadn
   			@view.clear_screen
   			puts Status.posting
   			resp = messenger.send_message(channel_id, lines_array.join("\n"))
-        if Settings.options[:backup][:auto_save_sent_messages]
-          FileOps.save_message(resp)
-        end
+        FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
   			@view.clear_screen
   			puts Status.yourpost
   			@view.show_posted(resp)
@@ -815,9 +745,7 @@ module Ayadn
         reply = messenger.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to['data']]))
         puts Status.posting
         resp = messenger.send_reply(reply, post_id)
-        if Settings.options[:backup][:auto_save_sent_posts]
-          FileOps.save_post(resp)
-        end
+        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.done
         stream = @api.get_convo(post_id, {})

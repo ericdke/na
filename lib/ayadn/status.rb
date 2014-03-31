@@ -205,5 +205,17 @@ module Ayadn
     def self.redirecting
       "\nPost is a repost. Redirecting...\n\n".color(:cyan)
     end
+    def self.nobody_reposted
+      "\nNobody reposted this post.\n\n".color(:red)
+    end
+    def self.nobody_starred
+      "\nNobody starred this post.\n\n".color(:red)
+    end
+    def self.not_your_repost
+      "\nThis post isn't one of your reposts.\n\n".color(:red)
+    end
+    def self.not_your_starred
+      "\nThis isn't one of your starred posts.\n\n".color(:red)
+    end
   end
 end
