@@ -25,7 +25,10 @@ describe Ayadn::View do
           show_symbols: true,
           show_source: true
         },
-        formats: {table: {width: 75}}
+        formats: {table: {width: 75}},
+        counts: {
+          default: 33
+        }
       })
     Ayadn::Settings.stub(:config).and_return({
         identity: {

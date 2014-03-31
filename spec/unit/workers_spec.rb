@@ -143,4 +143,5 @@ describe Ayadn::Workers do
       expect(Ayadn::Workers.remove_arobase_if_present("user")).to eq "user"
     end
   end
+
 end

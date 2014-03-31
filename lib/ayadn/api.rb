@@ -254,7 +254,7 @@ module Ayadn
           html = arg[:html]
         end
       end
-      annotations = arg[:annotations] || Settings.options[:timeline][:annotations]
+      annotations = Settings.options[:timeline][:annotations]
       if arg[:annotations]
         if arg[:annotations] == 0 || arg[:annotations] == 1
           annotations = arg[:annotations]

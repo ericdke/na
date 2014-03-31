@@ -85,9 +85,8 @@ module Ayadn
 
     def self.create_api_file
       api_file = @config[:paths][:config] + "/api.json"
-      time_now = Time.now
       if File.exist?(api_file)
-        if ( File.ctime(api_file) < (time_now - 172800) ) #48h in secs
+        if ( File.ctime(api_file) < (Time.now - 172800) ) #48h in secs
           self.new_api_file(api_file)
         end
       else

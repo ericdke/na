@@ -5,6 +5,30 @@ require 'io/console'
 
 describe Ayadn::Post do
   before do
+    Ayadn::Settings.stub(:options).and_return({
+        colors: {
+          hashtags: :cyan,
+          mentions: :red,
+          username: :green,
+          id: :blue,
+          name: :yellow,
+          source: :blue,
+          symbols: :green,
+          index: :blue,
+          date: :cyan,
+          link: :magenta
+        },
+        timeline: {
+          show_real_name: true,
+          show_date: true,
+          show_symbols: true,
+          show_source: true
+        },
+        formats: {table: {width: 75}},
+        counts: {
+          default: 33
+        }
+      })
     Ayadn::Settings.stub(:config).and_return({
         identity: {
           username: 'test',
@@ -14,11 +38,9 @@ describe Ayadn::Post do
         message_max_length: 2048,
         version: Ayadn::VERSION
       })
+    Ayadn::Settings.stub(:user_token).and_return('XXX')
     Ayadn::Errors.stub(:warn).and_return("warned")
-    Ayadn::CNX.stub(:post).and_return(File.read("spec/mock/posted.json"))
     Ayadn::Logs.stub(:rec).and_return("logged")
-    Ayadn::Databases.stub(:blacklist)
-    Ayadn::Databases.stub(:save_indexed_posts)
   end
 
   let(:post) { Ayadn::Post.new }
@@ -31,6 +53,41 @@ describe Ayadn::Post do
       expect(printed).to include "You should provide some text."
     end
   end
+
+  # let(:rest) {RestClient = double}
+  # let(:res) {response = double}
+  # let(:db) {Ayadn::Databases = double}
+
+  # describe "#post" do
+  #   before do
+  #     db.stub(:blacklist) {"x"}
+  #     res.stub(:code) {200}
+  #     rest.stub(:post) {File.read("spec/mock/posted.json")}
+  #   end
+  #   # Those 2 tests return a fake response, but this fake
+  #   # response wouldn't be returned if the tests failed
+  #   # I should intercept what goes into the fake RestClient
+  #   # instead, but have no idea how to do it at the moment ¯\(ツ)/¯
+  #   #
+  #   # As their warning messages are pretty annoying, I disabled
+  #   # them but you can uncomment to run the test
+  #   it "sends a post" do
+  #     a = post.post(["TEST"])
+  #     printed = capture_stdout do
+  #       Ayadn::View.new.show_posted(a)
+  #     end
+  #     expect(printed).to include '@aya_tests'
+  #     expect(printed).to include 'TEST'
+  #   end
+  #   it "sends a message" do
+  #     a = post.send_message(666, 'TEST')
+  #     printed = capture_stdout do
+  #       Ayadn::View.new.show_posted(a)
+  #     end
+  #     expect(printed).to include '@aya_tests'
+  #     expect(printed).to include 'TEST'
+  #   end
+  # end
 
   describe "#reply" do
     it "formats a reply" do
