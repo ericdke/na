@@ -196,22 +196,19 @@ module Ayadn
 
     def whoreposted(post_id, options)
       begin
-        if post_id.is_integer?
-          doing(options)
-          resp = @api.get_details(post_id, options)
-          id = get_original_id(post_id, @api.get_details(post_id, options))
-          list = @api.get_whoreposted(id)
-          unless options[:raw]
-            unless list['data'].empty?
-              get_list(:whoreposted, list['data'], post_id)
-            else
-              puts "\nNobody reposted this post.\n\n".color(:red)
-            end
+        missing_post_id unless post_id.is_integer?
+        doing(options)
+        resp = @api.get_details(post_id, options)
+        id = get_original_id(post_id, @api.get_details(post_id, options))
+        list = @api.get_whoreposted(id)
+        unless options[:raw]
+          unless list['data'].empty?
+            get_list(:whoreposted, list['data'], post_id)
           else
-            @view.show_raw(list)
+            puts "\nNobody reposted this post.\n\n".color(:red)
           end
         else
-          puts Status.error_missing_post_id
+          @view.show_raw(list)
         end
       rescue => e
         Errors.global_error("action/whoreposted", post_id, e)
@@ -222,21 +219,18 @@ module Ayadn
 
     def whostarred(post_id, options)
       begin
-        if post_id.is_integer?
-          doing(options)
-          id = get_original_id(post_id, @api.get_details(post_id, options))
-          list = @api.get_whostarred(id)
-          unless options[:raw]
-            unless list['data'].empty?
-              get_list(:whostarred, list['data'], id)
-            else
-              puts "\nNobody starred this post.\n\n".color(:red)
-            end
+        missing_post_id unless post_id.is_integer?
+        doing(options)
+        id = get_original_id(post_id, @api.get_details(post_id, options))
+        list = @api.get_whostarred(id)
+        unless options[:raw]
+          unless list['data'].empty?
+            get_list(:whostarred, list['data'], id)
           else
-            @view.show_raw(list)
+            puts "\nNobody starred this post.\n\n".color(:red)
           end
         else
-          puts Status.error_missing_post_id
+          @view.show_raw(list)
         end
       rescue => e
         Errors.global_error("action/whostarred", [post_id, id], e)
@@ -247,17 +241,14 @@ module Ayadn
 
     def convo(post_id, options)
       begin
-        if post_id.is_integer?
-          doing(options)
-          id = get_original_id(post_id, @api.get_details(post_id, options))
-          stream = @api.get_convo(id, options)
-          post_404(id) if meta_404(stream)
-          Databases.pagination["replies:#{id}"] = stream['meta']['max_id']
-          render_view(stream, options)
-          Scroll.new(@api, @view).convo(id, options) if options[:scroll]
-        else
-          puts Status.error_missing_post_id
-        end
+        missing_post_id unless post_id.is_integer?
+        doing(options)
+        id = get_original_id(post_id, @api.get_details(post_id, options))
+        stream = @api.get_convo(id, options)
+        post_404(id) if meta_404(stream)
+        Databases.pagination["replies:#{id}"] = stream['meta']['max_id']
+        render_view(stream, options)
+        Scroll.new(@api, @view).convo(id, options) if options[:scroll]
       rescue => e
         Errors.global_error("action/convo", [post_id, id, options], e)
       ensure
@@ -267,12 +258,9 @@ module Ayadn
 
     def delete(post_id)
       begin
-        if post_id.is_integer?
-          print Status.deleting_post(post_id)
-          check_has_been_deleted(post_id, @api.delete_post(post_id))
-        else
-          puts Status.error_missing_post_id
-        end
+        missing_post_id unless post_id.is_integer?
+        print Status.deleting_post(post_id)
+        check_has_been_deleted(post_id, @api.delete_post(post_id))
       rescue => e
         Errors.global_error("action/delete", post_id, e)
       ensure
@@ -360,15 +348,12 @@ module Ayadn
 
     def repost(post_id)
       begin
-        if post_id.is_integer?
-          puts Status.reposting(post_id)
-          resp = @api.get_details(post_id)
-          check_if_already_reposted(resp)
-          id = get_original_id(post_id, resp)
-          check_has_been_reposted(id, @api.repost(id))
-        else
-          puts Status.error_missing_post_id
-        end
+        missing_post_id unless post_id.is_integer?
+        puts Status.reposting(post_id)
+        resp = @api.get_details(post_id)
+        check_if_already_reposted(resp)
+        id = get_original_id(post_id, resp)
+        check_has_been_reposted(id, @api.repost(id))
       rescue => e
         Errors.global_error("action/repost", [post_id, id], e)
       ensure
@@ -378,16 +363,13 @@ module Ayadn
 
     def unrepost(post_id)
       begin
-        if post_id.is_integer?
-          puts Status.unreposting(post_id)
-          resp = @api.get_details(post_id)
-          if resp['data']['you_reposted']
-            check_has_been_unreposted(post_id, @api.unrepost(post_id))
-          else
-            puts "\nThis post isn't one of your reposts.\n\n".color(:red)
-          end
+        missing_post_id unless post_id.is_integer?
+        puts Status.unreposting(post_id)
+        resp = @api.get_details(post_id)
+        if resp['data']['you_reposted']
+          check_has_been_unreposted(post_id, @api.unrepost(post_id))
         else
-          puts Status.error_missing_post_id
+          puts "\nThis post isn't one of your reposts.\n\n".color(:red)
         end
       rescue => e
         Errors.global_error("action/unrepost", post_id, e)
@@ -398,16 +380,13 @@ module Ayadn
 
     def unstar(post_id)
       begin
-        if post_id.is_integer?
-          puts Status.unstarring(post_id)
-          resp = @api.get_details(post_id)
-          if resp['data']['you_starred']
-            check_has_been_unstarred(post_id, @api.unstar(post_id))
-          else
-            puts "\nThis isn't one of your starred posts.\n\n".color(:red)
-          end
+        missing_post_id unless post_id.is_integer?
+        puts Status.unstarring(post_id)
+        resp = @api.get_details(post_id)
+        if resp['data']['you_starred']
+          check_has_been_unstarred(post_id, @api.unstar(post_id))
         else
-          puts Status.error_missing_post_id
+          puts "\nThis isn't one of your starred posts.\n\n".color(:red)
         end
       rescue => e
         Errors.global_error("action/unstar", post_id, e)
@@ -418,13 +397,10 @@ module Ayadn
 
     def star(post_id)
       begin
-        if post_id.is_integer?
-          puts Status.starring(post_id)
-          check_if_already_starred(@api.get_details(post_id))
-          check_has_been_starred(post_id, @api.star(post_id))
-        else
-          puts Status.error_missing_post_id
-        end
+        missing_post_id unless post_id.is_integer?
+        puts Status.starring(post_id)
+        check_if_already_starred(@api.get_details(post_id))
+        check_has_been_starred(post_id, @api.star(post_id))
       rescue => e
         Errors.global_error("action/star", post_id, e)
       ensure
@@ -602,37 +578,34 @@ module Ayadn
 
     def postinfo(post_id, options)
       begin
-        if post_id.is_integer?
-          doing(options)
-          unless options[:raw]
-            @view.clear_screen
-            response = @api.get_details(post_id, options)
-            post_404(post_id) if meta_404(response)
-            resp = response['data']
-            response = @api.get_user("@#{resp['user']['username']}")
-            user_404(username) if meta_404(response)
-            if response['data']['username'] == Settings.config[:identity][:username]
-              token = @api.get_token_info
-            end
-            stream = response['data']
-            puts "POST:\n".inverse
-            @view.show_simple_post([resp], options)
-            if resp['repost_of']
-              puts "REPOST OF:\n".inverse
-              Errors.repost(post_id, resp['repost_of']['id'])
-              @view.show_simple_post([resp['repost_of']], options)
-            end
-            puts "AUTHOR:\n".inverse
-            if response['data']['username'] == Settings.config[:identity][:username]
-              @view.show_userinfos(stream, token['data'])
-            else
-              @view.show_userinfos(stream, nil)
-            end
+        missing_post_id unless post_id.is_integer?
+        doing(options)
+        unless options[:raw]
+          @view.clear_screen
+          response = @api.get_details(post_id, options)
+          post_404(post_id) if meta_404(response)
+          resp = response['data']
+          response = @api.get_user("@#{resp['user']['username']}")
+          user_404(username) if meta_404(response)
+          if response['data']['username'] == Settings.config[:identity][:username]
+            token = @api.get_token_info
+          end
+          stream = response['data']
+          puts "POST:\n".inverse
+          @view.show_simple_post([resp], options)
+          if resp['repost_of']
+            puts "REPOST OF:\n".inverse
+            Errors.repost(post_id, resp['repost_of']['id'])
+            @view.show_simple_post([resp['repost_of']], options)
+          end
+          puts "AUTHOR:\n".inverse
+          if response['data']['username'] == Settings.config[:identity][:username]
+            @view.show_userinfos(stream, token['data'])
           else
-            @view.show_raw(@api.get_details(post_id, options))
+            @view.show_userinfos(stream, nil)
           end
         else
-          puts Status.error_missing_post_id
+          @view.show_raw(@api.get_details(post_id, options))
         end
       rescue => e
         Errors.global_error("action/postinfo", [post_id, options], e)
@@ -714,31 +687,28 @@ module Ayadn
       require 'pinboard'
       require 'base64'
       begin
-        if post_id.is_integer?
-          doing
-          resp = get_data_from_response(@api.get_details(post_id, {}))
-          @view.clear_screen
-          links = Workers.new.extract_links(resp)
-          resp['text'].nil? ? text = "" : text = resp['text']
-          usertags << "ADN"
-          post_url = resp['canonical_url']
-          handle = "@" + resp['user']['username']
-          post_text = "From: #{handle} -- Text: #{text} -- Links: #{links.join(" ")}"
-          pinner = Ayadn::PinBoard.new
-          unless pinner.has_credentials_file?
-            puts Status.no_pin_creds
-            pinner.ask_credentials
-            puts Status.pin_creds_saved
-          end
-          credentials = pinner.load_credentials
-          maker = Struct.new(:username, :password, :url, :tags, :text, :description)
-          bookmark = maker.new(credentials[0], credentials[1], post_url, usertags.join(","), post_text, links[0])
-          puts Status.saving_pin
-          pinner.pin(bookmark)
-          puts Status.done
-        else
-          puts Status.error_missing_post_id
+        missing_post_id unless post_id.is_integer?
+        doing
+        resp = get_data_from_response(@api.get_details(post_id, {}))
+        @view.clear_screen
+        links = Workers.new.extract_links(resp)
+        resp['text'].nil? ? text = "" : text = resp['text']
+        usertags << "ADN"
+        post_url = resp['canonical_url']
+        handle = "@" + resp['user']['username']
+        post_text = "From: #{handle} -- Text: #{text} -- Links: #{links.join(" ")}"
+        pinner = Ayadn::PinBoard.new
+        unless pinner.has_credentials_file?
+          puts Status.no_pin_creds
+          pinner.ask_credentials
+          puts Status.pin_creds_saved
         end
+        credentials = pinner.load_credentials
+        maker = Struct.new(:username, :password, :url, :tags, :text, :description)
+        bookmark = maker.new(credentials[0], credentials[1], post_url, usertags.join(","), post_text, links[0])
+        puts Status.saving_pin
+        pinner.pin(bookmark)
+        puts Status.done
       rescue => e
         Errors.global_error("action/pin", [post_id, usertags], e)
       ensure
@@ -1164,6 +1134,11 @@ module Ayadn
 
     def missing_username
       puts Status.error_missing_username
+      exit
+    end
+
+    def missing_post_id
+      puts Status.error_missing_post_id
       exit
     end
 
