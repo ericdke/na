@@ -232,7 +232,7 @@ module Ayadn
     def self.build_query(arg)
       count = Settings.options[:counts][:default]
       if arg[:count]
-        if arg[:count] == 0 || arg[:count] == 1
+        if arg[:count].to_s.is_integer?
           count = arg[:count]
         end
       end

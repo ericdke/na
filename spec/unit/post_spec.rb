@@ -35,7 +35,7 @@ describe Ayadn::Post do
   describe "#post" do
     it "should post" do
       printed = capture_stdout do
-        post.post(["Hello from RSpec!","It rocks!"])
+        post.post("Hello from RSpec!")
       end
       expect(printed).to include "Hello from RSpec"
     end
