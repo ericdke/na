@@ -116,22 +116,19 @@ module Ayadn
 
     def mentions(username, options)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          doing(options)
-          stream = @api.get_mentions(username, options)
-          user_404(username) if meta_404(stream)
-          Databases.save_max_id(stream)
-          options = options.dup
-          options[:in_mentions] = true
-          unless stream['data'].empty?
-            render_view(stream, options)
-            Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
-          else
-            no_data('mentions')
-          end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        doing(options)
+        stream = @api.get_mentions(username, options)
+        user_404(username) if meta_404(stream)
+        Databases.save_max_id(stream)
+        options = options.dup
+        options[:in_mentions] = true
+        unless stream['data'].empty?
+          render_view(stream, options)
+          Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
         else
-          puts Status.error_missing_username
+          no_data('mentions')
         end
       rescue => e
         Errors.global_error("action/mentions", [username, options], e)
@@ -142,20 +139,17 @@ module Ayadn
 
     def posts(username, options)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          doing(options)
-          stream = @api.get_posts(username, options)
-          user_404(username) if meta_404(stream)
-          Databases.save_max_id(stream)
-          unless stream['data'].empty?
-            render_view(stream, options)
-            Scroll.new(@api, @view).posts(username, options) if options[:scroll]
-          else
-            no_data('posts')
-          end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        doing(options)
+        stream = @api.get_posts(username, options)
+        user_404(username) if meta_404(stream)
+        Databases.save_max_id(stream)
+        unless stream['data'].empty?
+          render_view(stream, options)
+          Scroll.new(@api, @view).posts(username, options) if options[:scroll]
         else
-          puts Status.error_missing_username
+          no_data('posts')
         end
       rescue => e
         Errors.global_error("action/posts", [username, options], e)
@@ -183,18 +177,15 @@ module Ayadn
 
     def whatstarred(username, options)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          doing(options)
-          stream = @api.get_whatstarred(username, options)
-          user_404(username) if meta_404(stream)
-          unless stream['data'].empty?
-            render_view(stream, options)
-          else
-            no_data('whatstarred')
-          end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        doing(options)
+        stream = @api.get_whatstarred(username, options)
+        user_404(username) if meta_404(stream)
+        unless stream['data'].empty?
+          render_view(stream, options)
         else
-          puts Status.error_missing_username
+          no_data('whatstarred')
         end
       rescue => e
         Errors.global_error("action/whatstarred", [username, options], e)
@@ -291,13 +282,10 @@ module Ayadn
 
     def unfollow(username)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          puts Status.unfollowing(username)
-          check_has_been_unfollowed(username, @api.unfollow(username))
-        else
-          puts Status.error_missing_username
-        end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        puts Status.unfollowing(username)
+        check_has_been_unfollowed(username, @api.unfollow(username))
       rescue => e
         Errors.global_error("action/unfollow", username, e)
       ensure
@@ -307,13 +295,10 @@ module Ayadn
 
     def follow(username)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          puts Status.following(username)
-          check_has_been_followed(username, @api.follow(username))
-        else
-          puts Status.error_missing_username
-        end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        puts Status.following(username)
+        check_has_been_followed(username, @api.follow(username))
       rescue => e
         Errors.global_error("action/follow", username, e)
       ensure
@@ -323,13 +308,10 @@ module Ayadn
 
     def unmute(username)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          puts Status.unmuting(username)
-          check_has_been_unmuted(username, @api.unmute(username))
-        else
-          puts Status.error_missing_username
-        end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        puts Status.unmuting(username)
+        check_has_been_unmuted(username, @api.unmute(username))
       rescue => e
         Errors.global_error("action/unmute", username, e)
       ensure
@@ -339,13 +321,10 @@ module Ayadn
 
     def mute(username)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          puts Status.muting(username)
-          check_has_been_muted(username, @api.mute(username))
-        else
-          puts Status.error_missing_username
-        end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        puts Status.muting(username)
+        check_has_been_muted(username, @api.mute(username))
       rescue => e
         Errors.global_error("action/mute", username, e)
       ensure
@@ -355,13 +334,10 @@ module Ayadn
 
     def unblock(username)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          puts Status.unblocking(username)
-          check_has_been_unblocked(username, @api.unblock(username))
-        else
-          puts Status.error_missing_username
-        end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        puts Status.unblocking(username)
+        check_has_been_unblocked(username, @api.unblock(username))
       rescue => e
         Errors.global_error("action/unblock", username, e)
       ensure
@@ -371,13 +347,10 @@ module Ayadn
 
     def block(username)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          puts Status.blocking(username)
-          check_has_been_blocked(username, @api.block(username))
-        else
-          puts Status.error_missing_username
-        end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        puts Status.blocking(username)
+        check_has_been_blocked(username, @api.block(username))
       rescue => e
         Errors.global_error("action/block", username, e)
       ensure
@@ -493,26 +466,23 @@ module Ayadn
 
     def followings(username, options)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          doing(options)
-          unless options[:raw]
-            list = @api.get_followings(username)
-            if Settings.options[:backup][:auto_save_lists]
-              FileOps.save_followings_list(list)
-            end
-            unless list.empty?
-              get_list(:followings, list, username)
-              Databases.add_to_users_db_from_list(list)
-            else
-              no_data('followings')
-            end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        doing(options)
+        unless options[:raw]
+          list = @api.get_followings(username)
+          if Settings.options[:backup][:auto_save_lists]
+            FileOps.save_followings_list(list)
+          end
+          unless list.empty?
+            get_list(:followings, list, username)
+            Databases.add_to_users_db_from_list(list)
           else
-            list = @api.get_raw_list(username, :followings)
-            @view.show_raw(list)
+            no_data('followings')
           end
         else
-          puts Status.error_missing_username
+          list = @api.get_raw_list(username, :followings)
+          @view.show_raw(list)
         end
       rescue => e
         Errors.global_error("action/followings", [username, options], e)
@@ -523,26 +493,23 @@ module Ayadn
 
     def followers(username, options)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          doing(options)
-          unless options[:raw]
-            list = @api.get_followers(username)
-            if Settings.options[:backup][:auto_save_lists]
-              FileOps.save_followers_list(list)
-            end
-            unless list.empty?
-              get_list(:followers, list, username)
-              Databases.add_to_users_db_from_list(list)
-            else
-              no_data('followers')
-            end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        doing(options)
+        unless options[:raw]
+          list = @api.get_followers(username)
+          if Settings.options[:backup][:auto_save_lists]
+            FileOps.save_followers_list(list)
+          end
+          unless list.empty?
+            get_list(:followers, list, username)
+            Databases.add_to_users_db_from_list(list)
           else
-            list = @api.get_raw_list(username, :followers)
-            @view.show_raw(list)
+            no_data('followers')
           end
         else
-          puts Status.error_missing_username
+          list = @api.get_raw_list(username, :followers)
+          @view.show_raw(list)
         end
       rescue => e
         Errors.global_error("action/followers", [username, options], e)
@@ -611,23 +578,20 @@ module Ayadn
 
     def userinfo(username, options)
       begin
-        unless username.empty?
-          username = Workers.add_arobase_if_missing(username)
-          doing(options)
-          unless options[:raw]
-            stream = @api.get_user(username)
-            user_404(username) if meta_404(stream)
-            if stream['data']['username'] == Settings.config[:identity][:username]
-              token = @api.get_token_info
-              get_infos(stream['data'], token['data'])
-            else
-              get_infos(stream['data'], nil)
-            end
+        missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
+        doing(options)
+        unless options[:raw]
+          stream = @api.get_user(username)
+          user_404(username) if meta_404(stream)
+          if stream['data']['username'] == Settings.config[:identity][:username]
+            token = @api.get_token_info
+            get_infos(stream['data'], token['data'])
           else
-            @view.show_raw(@api.get_user(username))
+            get_infos(stream['data'], nil)
           end
         else
-          puts Status.error_missing_username
+          @view.show_raw(@api.get_user(username))
         end
       rescue => e
         Errors.global_error("action/userinfo", [username, options], e)
@@ -824,23 +788,20 @@ module Ayadn
 
     def pmess(username)
     	begin
-    		unless username.empty?
-	    		messenger = Post.new
-	    		puts Status.post
-	    		lines_array = messenger.compose
-	    		messenger.check_message_length(lines_array)
-	    		@view.clear_screen
-	    		puts Status.posting
-	    		resp = messenger.send_pm(username, lines_array.join("\n"))
-          if Settings.options[:backup][:auto_save_sent_messages]
-            FileOps.save_message(resp)
-          end
-	    		@view.clear_screen
-	    		puts Status.yourpost
-	    		@view.show_posted(resp)
-	    	else
-	    		puts Status.error_missing_username
-	    	end
+        missing_username if username.empty?
+    		messenger = Post.new
+    		puts Status.post
+    		lines_array = messenger.compose
+    		messenger.check_message_length(lines_array)
+    		@view.clear_screen
+    		puts Status.posting
+    		resp = messenger.send_pm(username, lines_array.join("\n"))
+        if Settings.options[:backup][:auto_save_sent_messages]
+          FileOps.save_message(resp)
+        end
+    		@view.clear_screen
+    		puts Status.yourpost
+    		@view.show_posted(resp)
     	rescue => e
         Errors.global_error("action/pmess", username, e)
   		ensure
@@ -1198,6 +1159,11 @@ module Ayadn
     def no_new_posts
       @view.clear_screen
       puts Status.no_new_posts
+      exit
+    end
+
+    def missing_username
+      puts Status.error_missing_username
       exit
     end
 
