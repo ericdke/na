@@ -196,14 +196,8 @@ module Ayadn
         if post_id.is_integer?
           doing(options)
           resp = @api.get_details(post_id, options)
-          if resp['data']['repost_of']
-            puts Status.redirecting
-            id = resp['data']['repost_of']['id']
-            Errors.repost(post_id, id)
-            list = @api.get_whoreposted(id)
-          else
-            list = @api.get_whoreposted(post_id)
-          end
+          id = get_original_id(post_id, @api.get_details(post_id, options))
+          list = @api.get_whoreposted(id)
           unless options[:raw]
             unless list['data'].empty?
               get_list(:whoreposted, list['data'], post_id)
@@ -227,18 +221,11 @@ module Ayadn
       begin
         if post_id.is_integer?
           doing(options)
-          resp = @api.get_details(post_id, options)
-          if resp['data']['repost_of']
-            puts Status.redirecting
-            id = resp['data']['repost_of']['id']
-            Errors.repost(post_id, id)
-            list = @api.get_whostarred(id)
-          else
-            list = @api.get_whostarred(post_id)
-          end
+          id = get_original_id(post_id, @api.get_details(post_id, options))
+          list = @api.get_whostarred(id)
           unless options[:raw]
             unless list['data'].empty?
-              get_list(:whostarred, list['data'], post_id)
+              get_list(:whostarred, list['data'], id)
             else
               puts "\nNobody starred this post.\n\n".color(:red)
             end
@@ -249,7 +236,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Errors.global_error("action/whostarred", post_id, e)
+        Errors.global_error("action/whostarred", [post_id, id], e)
       ensure
         Databases.close_all
       end
@@ -259,24 +246,17 @@ module Ayadn
       begin
         if post_id.is_integer?
           doing(options)
-          resp = @api.get_details(post_id, options)
-          if resp['data']['repost_of']
-            puts Status.redirecting
-            id = resp['data']['repost_of']['id']
-            Errors.repost(post_id, id)
-            stream = @api.get_convo(id, options)
-          else
-            stream = @api.get_convo(post_id, options)
-          end
-          post_404(post_id) if meta_404(stream)
-          Databases.pagination["replies:#{post_id}"] = stream['meta']['max_id']
+          id = get_original_id(post_id, @api.get_details(post_id, options))
+          stream = @api.get_convo(id, options)
+          post_404(id) if meta_404(stream)
+          Databases.pagination["replies:#{id}"] = stream['meta']['max_id']
           render_view(stream, options)
-          Scroll.new(@api, @view).convo(post_id, options) if options[:scroll]
+          Scroll.new(@api, @view).convo(id, options) if options[:scroll]
         else
           puts Status.error_missing_post_id
         end
       rescue => e
-        Errors.global_error("action/convo", [post_id, options], e)
+        Errors.global_error("action/convo", [post_id, id, options], e)
       ensure
         Databases.close_all
       end
@@ -405,7 +385,7 @@ module Ayadn
           puts Status.error_missing_post_id
         end
       rescue => e
-        Errors.global_error("action/repost", post_id, e)
+        Errors.global_error("action/repost", [post_id, id], e)
       ensure
         Databases.close_all
       end
@@ -980,6 +960,8 @@ module Ayadn
         id = resp['data']['repost_of']['id']
         Errors.repost(post_id, id)
         return id
+      else
+        return post_id
       end
     end
 
