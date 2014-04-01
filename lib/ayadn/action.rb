@@ -794,16 +794,12 @@ module Ayadn
             @view.show_simple_post([@resp['data']], {})
             counter += 1
             if counter == max_posts
-              wait.downto(1) do |i|
-                print "\r#{sprintf("%02d", i)} sec... QUIT WITH [CTRL+C]".color(:cyan)
-                sleep 1
-              end
+              countdown(wait)
               @view.clear_screen
               counter = 1
             end
           rescue Interrupt
-            puts Status.canceled
-            exit
+            abort(Status.canceled)
           end
         end
       rescue => e
@@ -1092,6 +1088,13 @@ module Ayadn
       puts "\nThis is what will be posted:\n".color(:cyan)
       puts text + "\n\n"
       puts "Do you confirm? (y/N) ".color(:yellow)
+    end
+
+    def countdown(wait)
+      wait.downto(1) do |i|
+        print "\r#{sprintf("%02d", i)} sec... QUIT WITH [CTRL+C]".color(:cyan)
+        sleep 1
+      end
     end
   end
 end
