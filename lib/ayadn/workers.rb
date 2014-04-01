@@ -275,19 +275,24 @@ module Ayadn
     private
 
     def colorize_text(text)
-      content = Array.new
+      words = Array.new
+      sentences = Array.new
       hashtag_color = Settings.options[:colors][:hashtags]
       mention_color = Settings.options[:colors][:mentions]
-      text.scan(/^.+[\r\n]*/) do |word|
-        if word =~ /#\w+/
-          content << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
-        elsif word =~ /@\w+/
-          content << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
-        else
-          content << word
+      text.scan(/^.+[\r\n]*/) do |sentence|
+        sentence.split(' ').each do |word|
+          if word =~ /#\w+/
+            words << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
+          elsif word =~ /@\w+/
+            words << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
+          else
+            words << word
+          end
         end
+        sentences << words.join(' ')
+        words = Array.new
       end
-      content.join()
+      sentences.join("\n")
     end
 
     def init_table

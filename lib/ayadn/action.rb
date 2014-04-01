@@ -416,7 +416,7 @@ module Ayadn
         doing(options)
         unless options[:raw]
           list = @api.get_followings(username)
-          FileOps.save_followings_list(list)if Settings.options[:backup][:auto_save_lists]
+          auto_save_followings(list)
           no_data('followings') if list.empty?
           get_list(:followings, list, username)
           Databases.add_to_users_db_from_list(list)
@@ -437,7 +437,7 @@ module Ayadn
         doing(options)
         unless options[:raw]
           list = @api.get_followers(username)
-          FileOps.save_followers_list(list) if Settings.options[:backup][:auto_save_lists]
+          auto_save_followers(list)
           no_data('followers') if list.empty?
           get_list(:followers, list, username)
           Databases.add_to_users_db_from_list(list)
@@ -456,7 +456,7 @@ module Ayadn
         doing(options)
         unless options[:raw]
           list = @api.get_muted
-          FileOps.save_muted_list(list) if Settings.options[:backup][:auto_save_lists]
+          auto_save_muted(list)
           no_data('muted') if list.empty?
           get_list(:muted, list, nil)
           Databases.add_to_users_db_from_list(list)
@@ -507,7 +507,7 @@ module Ayadn
         unless options[:raw]
           stream = @api.get_user(username)
           user_404(username) if meta_404(stream)
-          if stream['data']['username'] == Settings.config[:identity][:username]
+          if same_username?(stream)
             token = @api.get_token_info
             get_infos(stream['data'], token['data'])
           else
@@ -534,7 +534,7 @@ module Ayadn
           resp = response['data']
           response = @api.get_user("@#{resp['user']['username']}")
           user_404(username) if meta_404(response)
-          if response['data']['username'] == Settings.config[:identity][:username]
+          if same_username?(response)
             token = @api.get_token_info
           end
           stream = response['data']
@@ -1070,5 +1070,18 @@ module Ayadn
       exit
     end
 
+    def auto_save_followings(list)
+      FileOps.save_followings_list(list) if Settings.options[:backup][:auto_save_lists]
+    end
+    def auto_save_followers(list)
+      FileOps.save_followers_list(list) if Settings.options[:backup][:auto_save_lists]
+    end
+    def auto_save_muted(list)
+      FileOps.save_muted_list(list) if Settings.options[:backup][:auto_save_lists]
+    end
+
+    def same_username?(stream)
+      stream['data']['username'] == Settings.config[:identity][:username]
+    end
   end
 end
