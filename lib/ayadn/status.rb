@@ -221,7 +221,7 @@ module Ayadn
       view = "\nEntering the auto posting mode.\n\n".color(:cyan)
       view << "In this mode, each line you type (each time you hit ENTER!) is automatically posted to ADN.\n\n".color(:cyan)
       view << "At any moment, starting now, hit CTRL+C to exit.\n\n".color(:yellow)
-      view << "\n--AUTO POSTING MODE ACTIVATED--\n\n".color(:red).inverse
+      view << "\n\t--AUTO POSTING MODE ACTIVATED--\n\n".color(:red)
     end
   end
 end

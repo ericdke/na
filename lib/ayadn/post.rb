@@ -23,7 +23,7 @@ module Ayadn
     def auto_classic
       loop do
         begin
-          print '>> '
+          print 'ADN >> '.color(:red)
           t = STDIN.gets.chomp
           send_post(t)
           puts Status.done
@@ -36,7 +36,7 @@ module Ayadn
     def auto_readline
       loop do
         begin
-          while buffer = Readline.readline('>> ')
+          while buffer = Readline.readline('ADN >> '.color(:red))
             send_post(buffer)
             puts Status.done
           end
