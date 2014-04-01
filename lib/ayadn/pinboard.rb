@@ -12,8 +12,11 @@ module Ayadn
         pin_username = STDIN.gets.chomp()
         puts "\nPlease enter your Pinboard password (invisible, CTRL+C to cancel): ".color(:green)
         pin_password = STDIN.noecho(&:gets).chomp()
-      rescue Exception
-        puts Status.stopped
+      rescue Interrupt
+        abort(Status.canceled)
+      rescue => e
+        puts Status.wtf
+        Errors.global_error("pinboard/ask_credentials", pin_username, e)
       end
       save_credentials(encode(pin_username, pin_password))
     end

@@ -81,7 +81,7 @@ module Ayadn
 
     def get_token
       begin
-        token = STDIN.gets.chomp()
+        STDIN.gets.chomp()
       rescue Interrupt
         puts Status.canceled
         exit

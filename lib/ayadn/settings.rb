@@ -67,7 +67,7 @@ module Ayadn
 
     def self.config_file
       config_file = @config[:paths][:config] + "/config.yml"
-      if File.exists?(config_file)
+      if File.exist?(config_file)
         # TODO: system to merge existing config file when future category are added
         begin
           @options = YAML.load(File.read(config_file))
