@@ -144,7 +144,7 @@ module Ayadn
 
         unless post['text'].nil?
           values[:raw_text] = post['text']
-          values[:text] = colorize_text(post['text'])
+          values[:text] = colorize_text(post['text'], mentions)
         else
           values[:raw_text] = ""
           values[:text] = "(no text)"
@@ -274,7 +274,9 @@ module Ayadn
 
     private
 
-    def colorize_text(text)
+    def colorize_text(text, mentions)
+      handles = Array.new
+      mentions.each {|username| handles << "@#{username}"}
       words = Array.new
       sentences = Array.new
       hashtag_color = Settings.options[:colors][:hashtags]
@@ -284,7 +286,11 @@ module Ayadn
           if word =~ /#\w+/
             words << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
           elsif word =~ /@\w+/
-            words << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
+            if handles.include?(word)
+              words << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
+            else
+              words << word
+            end
           else
             words << word
           end
