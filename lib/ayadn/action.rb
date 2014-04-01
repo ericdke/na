@@ -567,7 +567,7 @@ module Ayadn
         unless options[:raw]
           list = @api.get_files_list(options)
           @view.clear_screen
-          list.empty? ? no_data('files') : view.show_files_list(list)
+          list.empty? ? no_data('files') : @view.show_files_list(list)
         else
           @view.show_raw(@api.get_files_list(options))
         end
