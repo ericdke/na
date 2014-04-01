@@ -1029,8 +1029,15 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.auto
+      <<-USAGE
+      Auto post every line of input.
 
+      In this mode, each line you type (each time you hit ENTER!) is automatically posted to ADN.
 
-
+      Hit CTRL+C to exit this mode at any moment.
+      \n\n
+      USAGE
+    end
   end
 end

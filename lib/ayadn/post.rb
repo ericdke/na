@@ -20,17 +20,30 @@ module Ayadn
       post
     end
 
-    def reply(new_post, replied_to)
-      replied_to = replied_to.values[0]
-      reply = replied_to[:handle].dup
-      reply << " #{new_post}"
-      replied_to[:mentions].uniq!
-      replied_to[:mentions].each do |m|
-        next if m == replied_to[:username]
-        next if m == Settings.config[:identity][:username]
-        reply << " @#{m}"
+    def auto_classic
+      loop do
+        begin
+          print '>> '
+          t = STDIN.gets.chomp
+          send_post(t)
+          puts Status.done
+        rescue Interrupt
+          abort(Status.canceled)
+        end
       end
-      reply
+    end
+
+    def auto_readline
+      loop do
+        begin
+          while buffer = Readline.readline('>> ')
+            send_post(buffer)
+            puts Status.done
+          end
+        rescue Interrupt
+          abort(Status.canceled)
+        end
+      end
     end
 
     def readline
@@ -52,6 +65,19 @@ module Ayadn
       puts Status.classic
       input_text = STDIN.gets.chomp
       [input_text]
+    end
+
+    def reply(new_post, replied_to)
+      replied_to = replied_to.values[0]
+      reply = replied_to[:handle].dup
+      reply << " #{new_post}"
+      replied_to[:mentions].uniq!
+      replied_to[:mentions].each do |m|
+        next if m == replied_to[:username]
+        next if m == Settings.config[:identity][:username]
+        reply << " @#{m}"
+      end
+      reply
     end
 
     def send_pm(username, text)

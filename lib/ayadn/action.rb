@@ -670,6 +670,26 @@ module Ayadn
       end
     end
 
+    def auto(options)
+      begin
+        @view.clear_screen
+        puts Status.auto
+        poster = Post.new
+        platform = Settings.config[:platform]
+        case platform
+        when /mswin|mingw|cygwin/
+          poster.auto_classic
+        else
+          require "readline"
+          poster.auto_readline
+        end
+      rescue => e
+        Errors.global_error("action/auto post", [options, platform], e)
+      ensure
+        Databases.close_all
+      end
+    end
+
     def write
       begin
         writer = Post.new
@@ -1096,5 +1116,6 @@ module Ayadn
         sleep 1
       end
     end
+
   end
 end

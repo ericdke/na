@@ -365,6 +365,12 @@ module Ayadn
       ayadn.reply(id)
     end
 
+    desc "auto", "Auto post every line of input to App.net"
+    long_desc Descriptions.auto
+    def auto
+        Action.new.auto(options)
+    end
+
     desc "set TYPE PARAM VALUE", "Set/configure a parameter and save it"
     long_desc Descriptions.set
     subcommand "set", Set
