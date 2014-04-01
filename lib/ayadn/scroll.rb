@@ -225,9 +225,9 @@ module Ayadn
 
     def check_raw(options)
       if options[:raw]
-        options = {count: 200, since_id: nil, raw: true, scroll: true}
+        {count: 200, since_id: nil, raw: true, scroll: true}
       else
-        options = {count: 200, since_id: nil, scroll: true}
+        {count: 200, since_id: nil, scroll: true}
       end
     end
 

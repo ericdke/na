@@ -778,7 +778,7 @@ module Ayadn
 
     def random_posts(options)
       begin
-        rows, cols = winsize
+        _, cols = winsize
         max_posts = cols / 12
         @view.clear_screen
         puts "Fetching random posts, please wait...".color(:cyan)

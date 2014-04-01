@@ -109,11 +109,11 @@ module Ayadn
     end
 
     def get_markdown_text(str)
-      str.gsub /\[([^\]]+)\]\(([^)]+)\)/, '\1'
+      str.gsub(/\[([^\]]+)\]\(([^)]+)\)/, '\1')
     end
 
     def markdown_extract(str)
-        result = str.gsub /\[([^\]]+)\]\(([^)]+)\)/, '\1|||\2'
+        result = str.gsub(/\[([^\]]+)\]\(([^)]+)\)/, '\1|||\2')
         result.split('|||') #=> [text, link]
     end
 

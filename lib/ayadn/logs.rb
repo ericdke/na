@@ -23,7 +23,7 @@ module Ayadn
           "content" => content
         }
         Post.new.send_log(log)
-      rescue => e
+      rescue
         @rec.warn("Unable to send log.")
       end
     end
