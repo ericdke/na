@@ -2,11 +2,11 @@ language: ruby
 cache: bundler
 
 rvm:
-  - 2.1.1
-  - 2.0.0
-  - 1.9.3
+  - "2.1.1"
+  - "2.0.0"
+  - "1.9.3"
 
-script: 'rspec'
+
 
 bundler_args: --without development
 
@@ -16,4 +16,4 @@ branches:
 
 notifications:
   email:
-    - dkeaya@gmail.com
+    - ericdejonckheere@gmail.com
