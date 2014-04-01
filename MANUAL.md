@@ -34,6 +34,7 @@
 - [POSTING](#posting)
 	- [POST](#post)
 	- [WRITE](#write)
+	- [AUTO POST](#auto-post)
 	- [REPLY](#reply)
 	- [PM (PRIVATE MESSAGE)](#pm-private-message)
 	- [SEND](#send)
@@ -420,6 +421,18 @@ Hit ENTER to create line breaks and paragraphs.
 Cancel your post with CTRC-C or send it with CTRL-D.
 
 Just type a @username at the beginning of your post if you want to mention a specific user, as you would in any other App.net client.  
+
+## AUTO POST
+
+Auto post every line of input.
+
+In this mode, each line you type (each time you hit ENTER!) is automatically posted to ADN.
+
+You can type anything, including special characters and Markdown links.
+
+Hit CTRL+C to exit this mode at any moment.
+
+The is the funniest way to post to ADN! :)  
 
 ## REPLY
 
