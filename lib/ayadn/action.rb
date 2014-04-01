@@ -788,20 +788,22 @@ module Ayadn
         max_posts = cols / 12
         @view.clear_screen
         puts "Fetching random posts, please wait...".color(:cyan)
-        max_id = @api.get_global({count: 1})['meta']['max_id'].to_i
+        @max_id = @api.get_global({count: 1})['meta']['max_id'].to_i
         @view.clear_screen
         counter = 1
-        @wait = options[:wait] || 5
+        wait = options[:wait] || 5
         loop do
           begin
-            random_post_id = rand(max_id + 1)
-            @resp = get_data_from_response(@api.get_details(random_post_id, {}))
-            next if @resp['is_deleted']
-            @view.show_simple_post([@resp], {})
+            @random_post_id = rand(@max_id)
+            @resp = @api.get_details(@random_post_id, {})
+            next if @resp['data']['is_deleted']
+            @view.show_simple_post([@resp['data']], {})
             counter += 1
             if counter == max_posts
-              puts "\n(Quit with [CTRL+C])".color(:cyan)
-              sleep @wait
+              wait.downto(1) do |i|
+                print "\r#{sprintf("%02d", i)} sec... QUIT WITH [CTRL+C]".color(:cyan)
+                sleep 1
+              end
               @view.clear_screen
               counter = 1
             end
@@ -811,7 +813,7 @@ module Ayadn
           end
         end
       rescue => e
-        Errors.global_error("action/random_posts", @resp, e)
+        Errors.global_error("action/random_posts", [@max_id, @random_post_id, @resp], e)
       ensure
         Databases.close_all
       end
