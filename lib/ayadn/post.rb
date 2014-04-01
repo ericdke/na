@@ -23,7 +23,7 @@ module Ayadn
     def auto_classic
       loop do
         begin
-          print 'ADN >> '.color(:red)
+          print "#{Settings.config[:identity][:handle]} >> ".color(:red)
           t = STDIN.gets.chomp
           send_post(t)
           puts Status.done
@@ -36,7 +36,7 @@ module Ayadn
     def auto_readline
       loop do
         begin
-          while buffer = Readline.readline('ADN >> '.color(:red))
+          while buffer = Readline.readline("#{Settings.config[:identity][:handle]} >> ".color(:red))
             send_post(buffer)
             puts Status.done
           end
