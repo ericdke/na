@@ -737,19 +737,19 @@ module Ayadn
         post_id = get_real_post_id(post_id)
       	puts Status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
-        messenger = Post.new
+        post_404(post_id) if meta_404(replied_to)
+        poster = Post.new
         puts Status.reply
-        lines_array = messenger.compose
-        messenger.check_post_length(lines_array)
+        lines_array = poster.compose
+        poster.check_post_length(lines_array)
         @view.clear_screen
-        reply = messenger.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to['data']]))
+        reply = poster.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to['data']]))
         puts Status.posting
-        resp = messenger.send_reply(reply, post_id)
+        resp = poster.send_reply(reply, post_id)
         FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.done
-        stream = @api.get_convo(post_id, {})
-        render_view(stream, {})
+        render_view(@api.get_convo(post_id, {}), {})
       rescue => e
         Errors.global_error("action/reply", post_id, e)
       ensure
