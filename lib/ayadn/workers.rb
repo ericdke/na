@@ -142,6 +142,16 @@ module Ayadn
 
         values[:links] = extract_links(post)
 
+        if post['repost_of']
+          values[:is_repost] = true
+          values[:repost_of] = post['repost_of']['id']
+          values[:original_poster] = post['repost_of']['user']['username']
+        else
+          values[:is_repost] = false
+          values[:repost_of] = nil
+          values[:original_poster] = post['user']['username']
+        end
+
         unless post['text'].nil?
           values[:raw_text] = post['text']
           values[:text] = colorize_text(post['text'], mentions)
@@ -157,13 +167,7 @@ module Ayadn
           values[:is_starred] = false
           values[:num_stars] = 0
         end
-        if post['repost_of']
-          values[:is_repost] = true
-          values[:repost_of] = post['repost_of']['id']
-        else
-          values[:is_repost] = false
-          values[:repost_of] = nil
-        end
+
         if post['reply_to']
           values[:is_reply] = true
           values[:reply_to] = post['reply_to']
@@ -286,7 +290,7 @@ module Ayadn
           if word =~ /#\w+/
             words << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
           elsif word =~ /@\w+/
-            if handles.include?(word)
+            if handles.include?(word) || word =~ /@\w+[:]/
               words << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
             else
               words << word

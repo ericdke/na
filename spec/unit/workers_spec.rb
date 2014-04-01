@@ -40,7 +40,7 @@ describe Ayadn::Workers do
       expect(posts[23187443][:has_checkins]).to be false
       expect(posts[23187443][:mentions]).to eq []
       expect(posts[23187443][:checkins]).to be_empty
-      expect(posts[23187443].length).to eq 28
+      expect(posts[23187443].length).to eq 29
     end
     it "gets oembed link from checkins post" do
       posts = Ayadn::Workers.new.build_posts(checkins['data'])
