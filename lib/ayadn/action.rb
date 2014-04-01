@@ -758,28 +758,22 @@ module Ayadn
     end
 
     def nowplaying
-      unless Settings.config[:platform] =~ /darwin/
-        puts Status.error_only_osx
-        exit
+      begin
+        abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
+        itunes = get_track_infos
+        itunes.each do |el|
+          abort(Status.empty_fields) if el.length == 0
+        end
+        @view.clear_screen
+        text_to_post = "#nowplaying '#{itunes.track}' from '#{itunes.album}' by #{itunes.artist}"
+        show_nowplaying(text_to_post)
+        abort("\nCanceled.\n\n".color(:red)) unless STDIN.getch == ("y" || "Y")
+        puts "\n"
+        post([text_to_post])
+      rescue => e
+        puts Status.wtf
+        Errors.global_error("action/nowplaying", itunes, e)
       end
-      track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
-      album = `osascript -e 'tell application "iTunes"' -e 'set trackAlbum to album of current track' -e 'return trackAlbum' -e 'end tell'`
-      artist = `osascript -e 'tell application "iTunes"' -e 'set trackArtist to artist of current track' -e 'return trackArtist' -e 'end tell'`
-      track.chomp!
-      artist.chomp!
-      album.chomp!
-      if track.length == 0 || artist.length == 0 || album.length == 0
-        puts Status.empty_fields
-        exit
-      end
-      @view.clear_screen
-      text_to_post = "#nowplaying '#{track}' from '#{album}' by #{artist}"
-      puts "\nAyadn will post this for you:\n".color(:cyan)
-      puts text_to_post + "\n\n"
-      puts "Do you confirm? (y/N) ".color(:yellow)
-      abort("\nCanceled.\n\n".color(:red)) unless STDIN.getch == ("y" || "Y")
-      puts "\n"
-      post([text_to_post])
     end
 
     def random_posts(options)
@@ -1084,6 +1078,20 @@ module Ayadn
 
     def same_username?(stream)
       stream['data']['username'] == Settings.config[:identity][:username]
+    end
+
+    def get_track_infos
+      track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
+      album = `osascript -e 'tell application "iTunes"' -e 'set trackAlbum to album of current track' -e 'return trackAlbum' -e 'end tell'`
+      artist = `osascript -e 'tell application "iTunes"' -e 'set trackArtist to artist of current track' -e 'return trackArtist' -e 'end tell'`
+      maker = Struct.new(:artist, :album, :track)
+      maker.new(artist.chomp!, album.chomp!, track.chomp!)
+    end
+
+    def show_nowplaying(text)
+      puts "\nThis is what will be posted:\n".color(:cyan)
+      puts text + "\n\n"
+      puts "Do you confirm? (y/N) ".color(:yellow)
     end
   end
 end

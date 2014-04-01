@@ -185,7 +185,7 @@ module Ayadn
           auto_save_lists: false
         },
         scroll: {
-          timer: 2
+          timer: 3
         }
       }
     end
