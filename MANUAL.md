@@ -12,11 +12,12 @@
 - [HOW-TO](#how-to)
 - [STREAMS](#streams)
 	- [TIMELINE](#timeline)
-		- [SCROLL](#scroll)
-		- [COUNT](#count)
-		- [INDEX](#index)
-		- [NEW](#new)
-		- [RAW](#raw)
+		- [AVAILABLE OPTIONS](#available-options)
+			- [SCROLL](#scroll)
+			- [COUNT](#count)
+			- [INDEX](#index)
+			- [NEW](#new)
+			- [RAW](#raw)
 	- [GLOBAL](#global)
 	- [CHECKINS](#checkins)
 	- [CONVERSATIONS](#conversations)
@@ -99,7 +100,7 @@ Update:
 
 Please use something like RVM or RBENV to install Ruby if necessary.
 
-You can also use the Ruby shipped with your system but you shouldn't, as it would require root privileges.
+You can also use the Ruby shipped with your system but it's not ideal, as it will probably require root privileges or using the 'sudo' command.
 
 ### WINDOWS
 
@@ -119,7 +120,9 @@ Just run `ayadn authorize` or `ayadn -auth` to register a new user.
 
 `ayadn` shows a list of available commands.  
 
-`ayadn help COMMAND` shows the instructions and available options for a specific command. Examples:  
+`ayadn help COMMAND` shows the instructions and available [options](#available-options) for a specific command. 
+
+Examples:  
 
 `ayadn help post`  
 
@@ -141,7 +144,7 @@ Just a few examples to give you a hint at the flexible syntax:
 
 `ayadn -P 'Hello guys!'`
 
-`ayadn reply 23362460`
+`ayadn -R 23362460`
 
 `ayadn convo 23362788`
 
@@ -157,24 +160,54 @@ Register a new user with `ayadn -auth` at any moment.
 
 You can then switch between accounts:
 
-`ayadn switch @ericd`  
+`ayadn switch @ericd` or `ayadn -@ ericd`  
 
 ## DATA
 
-All Ayadn files and folders are created in your 'home' folder.
+All Ayadn files and folders are created in your 'home' folder. 
 
-Each registered account has its set of folders and databases.
+On Mac OS X, it looks like this:
 
-This is also the repository of the configuration files.  
+	/Users/ericdke/ayadn/ericd
+	├── auth
+	│   └── token
+	├── backup
+	├── config
+	│   ├── api.json
+	│   ├── config.yml
+	│   └── version.yml
+	├── db
+	│   ├── aliases.db
+	│   ├── blacklist.db
+	│   └── users.db
+	├── downloads
+	├── lists
+	├── log
+	│   └── ayadn.log
+	├── messages
+	├── pagination
+	│   ├── index.db
+	│   └── pagination.db
+	└── posts
+
+Each authorized account has its set of folders and databases.
+
+This is also the repository of the configuration file, `config.yml`. 
+
+Although there's the `set` command in Ayadn to configure most parameters, you can also edit the file manually. If anything goes wrong, simply delete `config.yml` and Ayadn will re-create one with default values.
 
 
 # HOW-TO
 
-Note: options are only described once, in the first example for 'timeline'. 
+Note: options are only described once in this manual (in the first example, for 'timeline'). 
 
-They are available for mosts of streams, though. 
+However, options are available for mosts of streams! They're described only once for readability purposes.
 
-You can check if a command has specific options with `ayadn help COMMAND`.  
+**You can check if a command has specific options with `ayadn help COMMAND`.**  
+Most examples will include the 'complete' command followed by the 'shortcut' command. Of course, using Ayadn is way faster with the shortcut commands.
+
+If you're like me, you'll even want to create aliases in bash/zsh or TextExpander snippets for the combinations of Ayadn commands and options you use the most...  
+
 
 # STREAMS
 
@@ -190,9 +223,10 @@ This is also called the 'Unified stream': it regroups the posts of people you fo
 
 `ayadn -tl`
 
-**AVAILABLE OPTIONS:**
 
-### SCROLL
+### AVAILABLE OPTIONS
+
+#### SCROLL
 
 Scroll your timeline with:
 
@@ -200,11 +234,21 @@ Scroll your timeline with:
 
 `ayadn -tl -s`
 
-### COUNT
+Note: Ayadn pulls the stream every 3 seconds by default. 
 
-Ayadn displays a certain number of posts when you request a stream: the default values are defined in your config file.
+It means you can launch up to 3 scroll streams at a time _per account_. 
 
-You can set a specific value for requests with the *count* option:
+You can bring that value down to 1 second if you're using only _one_ scroll stream per account at a time, 2 seconds if you're using _two_ scroll streams, and so on and so forth.
+
+If Ayadn ends up making too many requests to ADN, it will display an alert message with instructions then stop running.
+
+So if you plan on launching many Ayadn scrolling instances at once, you should [set](#set) the timer parameter accordingly (App.net accepts 5000 requests per hour per account maximum).
+
+#### COUNT
+
+Ayadn displays a certain number of posts by default when you request a stream.
+
+With the *count* option, you can set a specific value for each request:
 
 `ayadn --count=10 timeline`
 
@@ -212,7 +256,7 @@ You can set a specific value for requests with the *count* option:
 
 The maximum value is 200 for any stream.
 
-### INDEX
+#### INDEX
 
 Shows an index instead of the posts ids.
 
@@ -220,9 +264,18 @@ Shows an index instead of the posts ids.
 
 `ayadn -tl -i`  
 
-Because it's easier and faster for human beings to use short identifiers.
+This is particularly useful if you're using Ayadn to [reply](#reply) to conversations.
 
-### NEW
+Copy/pasting the post id can be tedious at times, and anyway it's faster to glance at a short number and use it immediately.
+
+Example:
+
+	ayadn -tl -i
+	ayadn -R 33
+
+if 33 is the number of the indexed post you want to reply to.  
+
+#### NEW
 
 Displays only the new posts in the stream since your last visit.
 
@@ -230,11 +283,11 @@ Displays only the new posts in the stream since your last visit.
 
 `ayadn -n -tl`
 
-### RAW
+#### RAW
 
-Displays the raw response from the App.net API instead of the formatted Ayadn output. For debug and learning purposes.  
+Displays the raw response from the App.net API instead of the formatted Ayadn output. For debugging and learning purposes.  
 
-`ayadn -x timeline`
+`ayadn -x -tl`
 
 ## GLOBAL
 
@@ -244,11 +297,17 @@ Display the 'Global stream'.
 
 `ayadn -gl`
 
+Although the 'Global stream' is nowadays infested with spammers, it remains a fantastic source to find new people to interact with.
+
+Ayadn helps you in that task with the [blacklist](#blacklist) command, which allows you to mute posters _per client name_, obliterating suddenly most of the bots and feeds.
+
+You may also want to read the Conversations stream, which contains only posts leading to conversation threads.  
+
 ## CHECKINS
 
 Display the 'Checkins stream'.
 
-Ayadn will show any available geolocalisation data for these posts.
+Ayadn will show any available geolocation data for these posts.
 
 `ayadn checkins`
 
@@ -258,7 +317,7 @@ Ayadn will show any available geolocalisation data for these posts.
 
 Display the 'Conversations stream'.
 
-This is a stream of posts that lead to conversations with real people.
+This is a stream of posts that lead to [conversations](#convo) with real people.
 
 `ayadn conversations`
 
@@ -282,31 +341,33 @@ Display posts containing a mention of @username.
 
 `ayadn -m @ericd`  
 
-You can get your own mentions stream by using *me* instead of *username*:
+You can get your own mentions stream by using *me* instead of *@username*:
 
 `ayadn -m me`
+
+Don't forget that like most streams, Mentions is [scrollable](#scroll): very convenient to know at a glance if we got something new from our friends!
 
 ## POSTS
 
 Show the posts of a specific user.
 
-`ayadn userposts @eric`
+`ayadn userposts @ericd`
 
 `ayadn -up @ericd`
 
-You can get your own posts by using *me* instead of *username*:
+You can get your own posts by using *me* instead of *@username*:
 
 `ayadn -up me`
 
 ## MESSAGES
 
-Show messages in a CHANNEL.
+Show messages in a [channel](#channels).
 
 `ayadn messages 46217`
 
 `ayadn -ms 46217`
 
-You can replace the channel id with its alias if you previously defined one:
+You can replace the channel id with its alias if you previously [defined](#alias) one:
 
 `ayadn -ms mychannelalias`  
 
@@ -318,7 +379,7 @@ Show posts starred by a specific user.
 
 `ayadn -was @ericd`
 
-You can get your own stars by using *me* instead of *username*:
+You can get your own stars by using *me* instead of *@username*:
 
 `ayadn -was me`
 
@@ -334,11 +395,11 @@ Show the conversation thread around a specific post.
 
 Show recent posts containing #HASHTAG(s).
 
-`ayadn hashtag ruby`
+`ayadn hashtag nowplaying`
 
-`ayadn -t ruby`
+`ayadn -t nowplaying`
 
-`ayadn -t ruby json`
+`ayadn -t nowplaying rock`
 
 ## SEARCH
 
@@ -348,11 +409,11 @@ Show recents posts containing WORD(s).
 
 `ayadn -s ruby`
 
-`ayadn -s ruby json`
+`ayadn -s ruby json api`
 
 ## RANDOM
 
-Show random posts from App.net. Just for fun :)
+Show series of random posts from App.net. Just for fun :)
 
 `ayadn random`
 
@@ -366,7 +427,7 @@ Show informations about a user.
 
 `ayadn -ui @ericd`
 
-You can see your own info by using *me* instead of *username*:
+You can see your own info by using *me* instead of *@username*:
 
 `ayadn -ui me`
 
@@ -394,21 +455,17 @@ Simple and fast way to post a short sentence/word to App.net.
 
 You have to put your text between single quotes if you're using punctuation:
 
-`ayadn post 'Hello from Ayadn, guys!'`
-
 `ayadn -P 'Hello from Ayadn, guys!'`
-
-`ayadn -P '@ericd Hello from Ayadn, Eric!'`
 
 But remember you can't then use any `'` character!
 
-So you should rather use the `write` method for posting.
+**So you should rather use either the [write](#write) or the [auto](#auto-post) method for posting.**
 
 ## WRITE
 
 Multi-line post to App.net.
 
-This is the recommended way to post to ADN:
+This is the recommended way to post elaborate text to ADN:
 
 `ayadn write`
 
@@ -426,29 +483,31 @@ Just type a @username at the beginning of your post if you want to mention a spe
 
 Auto post every line of input.
 
+The is the funniest way to post to ADN! :)  
+
+`ayadn auto`
+
 In this mode, each line you type (each time you hit ENTER!) is automatically posted to ADN.
 
-You can type anything, including special characters and Markdown links.
+You can type anything, including special characters and Markdown links, and of course mention anyone: the only thing you can't do from this mode is _replying_ to a post in a thread.
 
-Hit CTRL+C to exit this mode at any moment.
-
-The is the funniest way to post to ADN! :)  
+Hit CTRL+C to exit this mode at any moment.  
 
 ## REPLY
 
 Reply to a specific post.
 
-You must specify the post id:
+- You can reply by specifying the post id:
 
 `ayadn reply 23362460`
 
 `ayadn -R 23362460`
 
-Ayadn will then show you the *write* prompt.
+Ayadn will then show you the [write](#write) prompt.
 
 If you reply to a post containing multiple mentions, your text will be inserted between the leading mention and the other ones.
 
-You can reply to the *index* of the post instead of its *id* if you used the '--index' or '-i' option when viewing a stream.
+- You can also reply to the *index* of the post instead of its *id* _if you used the '--index' or '-i' option_ when previously viewing a stream:
 
 `ayadn -R 3`  
 
@@ -458,7 +517,7 @@ Send a private message to a specific user.
 
 `ayadn pm @ericd`
 
-Ayadn will then show you the *write* prompt.  
+Ayadn will then show you the [write](#write) prompt.  
 
 ## SEND
 
@@ -468,9 +527,9 @@ Send a message to an App.net CHANNEL.
 
 `ayadn -C 46217`
 
-Ayadn will then show you the *write* prompt.
+Ayadn will then show you the [write](#write) prompt.
 
-If you've already created an alias for the channel, you can post to it with:
+If you've already created an [alias](#alias) for the channel, you can post to it with:
 
 `ayadn send mychannelalias`
 
@@ -554,7 +613,7 @@ Unmute a user.
 
 ## BLOCK
 
-Block a user (same as 'mute' but also prevents the blocked user to follow you).
+Block a user (same as [mute](#mute) but also prevents the blocked user to [follow](#follow) you).
 
 `ayadn block @spammer`
 
@@ -570,7 +629,7 @@ Unblock a user.
 
 ## DOWNLOAD
 
-Download a file from your App.net storage (like any file posted with other ADN clients).
+Download a file from your App.net storage (any file posted with other ADN clients).
 
 `ayadn download 23344556`
 
@@ -578,7 +637,7 @@ Download a file from your App.net storage (like any file posted with other ADN c
 
 # LISTS
 
-This section is about generating lists from App.net.
+This section is about getting lists from App.net.
 
 ## FOLLOWERS
 
@@ -588,7 +647,7 @@ List followers of a user.
 
 `ayadn -fwr @ericd`
 
-You can see your own list by using *me* instead of *username*:
+You can see your own list by using *me* instead of *@username*:
 
 `ayadn -fwr me`
 
@@ -600,7 +659,7 @@ List the users a user is following.
 
 `ayadn -fwg @ericd`
 
-You can see your own list by using *me* instead of *username*:
+You can see your own list by using *me* instead of *@username*:
 
 `ayadn -fwg me`
 
@@ -698,7 +757,7 @@ Alternative syntax:
 
 `ayadn -@ otheraccount`
 
-To list your authorized accounts:
+List your authorized accounts:
 
 `ayadn switch -l`
 
