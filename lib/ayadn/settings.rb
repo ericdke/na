@@ -51,6 +51,7 @@ module Ayadn
       @config[:platform] = RbConfig::CONFIG['host_os']
       self.config_file
       self.create_api_file
+      self.create_version_file
     end
 
     def self.save_config

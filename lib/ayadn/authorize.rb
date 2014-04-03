@@ -34,11 +34,9 @@ module Ayadn
 
     def install
       puts "Creating api and config files...\n".color(:green)
-      Errors.info "Creating api and config files..."
-      Settings.init_config
-      puts "Creating version file...\n".color(:green)
+      Errors.info "Creating api, version and config files..."
       Errors.info "Creating version file..."
-      Settings.create_version_file
+      Settings.init_config
     end
 
     def create_account(user, accounts_db)
