@@ -194,7 +194,9 @@ Each authorized account has its set of folders and databases.
 
 This is also the repository of the configuration file, `config.yml`. 
 
-Although there's the `set` command in Ayadn to configure most parameters, you can also edit the file manually. If anything goes wrong, simply delete `config.yml` and Ayadn will re-create one with default values.
+Although there's the `set` command in Ayadn to configure most parameters, you can also edit the file manually.
+
+If you're not sure if your config file is up to date and you want to benefit from the new options in Ayadn, run `ayadn set defaults` and it will create a brand new file with optimal values.
 
 
 # HOW-TO

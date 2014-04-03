@@ -28,7 +28,11 @@ Install:
 
 Update:
 
-`gem update ayadn`
+`gem update ayadn`  
+
+Uninstall:
+
+`gem uninstall ayadn`  
 
 ### OS X, LINUX, BSD
 
@@ -38,9 +42,14 @@ You can also use the Ruby shipped with your system but you shouldn't, as it woul
 
 ### WINDOWS
 
-You have to run one more command:
+You may have to run one more command:
 
 `gem install win32console -v 1.3.2`
+
+### ALPHA-BETA-PRE
+
+Users of alpha, beta or pre-release versions should first uninstall the old versions with `gem uninstall ayadn` then run `ayadn set defaults` after installing version 1.0 (note that this will replace the config file contents).  
+This is only necessary if you installed a pre-1.0 testing version.
 
 # DOCUMENTATION
 
