@@ -168,6 +168,8 @@ All Ayadn files and folders are created in your 'home' folder.
 
 On Mac OS X, it looks like this:
 
+	/Users/ericdke/ayadn/
+	├── accounts.db
 	/Users/ericdke/ayadn/ericd
 	├── auth
 	│   └── token
@@ -194,9 +196,9 @@ Each authorized account has its set of folders and databases.
 
 This is also the repository of the configuration file, `config.yml`. 
 
-Although there's the `set` command in Ayadn to configure most parameters, you can also edit the file manually.
+Although there's the `set` command in Ayadn to configure most parameters, you can of course edit the file manually.
 
-If you're not sure if your config file is up to date and you want to benefit from the new options in Ayadn, run `ayadn set defaults` and it will create a brand new file with optimal values.
+If you're not sure if your config file is up to date or properly filled and you want to benefit from the new options in Ayadn, run `ayadn set defaults` and it will create a brand new file with optimal values.
 
 
 # HOW-TO
