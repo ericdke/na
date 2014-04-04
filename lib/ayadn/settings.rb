@@ -10,7 +10,9 @@ module Ayadn
     end
 
     def self.load_config
-      db = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
+      acc_db = Dir.home + "/ayadn/accounts.db"
+      self.check_for_accounts(acc_db)
+      db = Daybreak::DB.new(acc_db)
       active = db['ACTIVE']
       home = db[active][:path]
       @config = {
@@ -35,6 +37,13 @@ module Ayadn
       }
       db.close
       @options = self.defaults
+    end
+
+    def self.check_for_accounts(acc_db)
+      unless File.exist?(acc_db)
+        puts Status.not_authorized
+        exit
+      end
     end
 
     def self.get_token
