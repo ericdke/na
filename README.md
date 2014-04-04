@@ -1,3 +1,4 @@
+[![Gem Version](https://badge.fury.io/rb/ayadn.svg)](http://badge.fury.io/rb/ayadn) 
 [![Build Status](https://travis-ci.org/ericdke/na.svg?branch=master)](https://travis-ci.org/ericdke/na)
 
 AYADN
