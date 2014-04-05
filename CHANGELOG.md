@@ -1,3 +1,7 @@
+# 1.0.3
+
+- Fixed the bug introduced by the last bugfix (yes, I know... sigh...)
+
 # 1.0.2
 
 - Fixed a critical bug in Reply (when the original post was a repost)
