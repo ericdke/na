@@ -103,10 +103,11 @@ describe Ayadn::Post do
     it "checks normal post length" do
       post.check_post_length(["allo", "wtf"]).should be nil #no error
     end
-
-    # it outputs an error message but it's what we expect
     it "checks excessive post length" do
-      lambda {post.check_post_length(["allo", "wtf dude", "ok whatever pfff", "Black malt berliner weisse, filter. Ibu degrees plato alcohol. ipa hard cider ester infusion conditioning tank. Dry stout bottom fermenting yeast wort chiller wort chiller lager hand pump ! All-malt dunkle bright beer grainy, original gravity wheat beer glass."])}.should raise_error(SystemExit)
+      printed = capture_stderr do
+        lambda {post.check_post_length(["allo", "wtf dude", "ok whatever pfff", "Black malt berliner weisse, filter. Ibu degrees plato alcohol. ipa hard cider ester infusion conditioning tank. Dry stout bottom fermenting yeast wort chiller wort chiller lager hand pump ! All-malt dunkle bright beer grainy, original gravity wheat beer glass."])}.should raise_error(SystemExit)
+      end
+      expect(printed).to include 'Canceled: too long. 256 max, 32 characters to remove.'
     end
   end
 
@@ -114,6 +115,11 @@ describe Ayadn::Post do
     it "checks normal message length" do
       post.check_message_length(["allo", "wtf"]).should be nil #no error
     end
+    it "checks excessive message length" do
+      printed = capture_stderr do
+        lambda {post.check_message_length(["Black malt berliner weisse, filter. Ibu degrees plato alcohol. ipa hard cider ester infusion conditioning tank. Dry stout bottom fermenting yeast wort chiller wort chiller lager hand pump ! All-malt dunkle bright beer grainy, original gravity wheat beer glass!!" * 8])}.should raise_error(SystemExit)
+      end
+      expect(printed).to include 'Canceled: too long. 2048 max, 40 characters to remove.'
+    end
   end
-
 end
