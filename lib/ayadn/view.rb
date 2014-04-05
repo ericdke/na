@@ -455,7 +455,8 @@ module Ayadn
       hd << "\n"
       formatted = { header: hd }
       content[:checkins].each do |key, val|
-          formatted[key] = val unless (val.nil? || !val)
+          #formatted[key] = val unless (val.nil? || !val)
+          formatted[key] = val
       end
 
       formatted[:name] = "" if formatted[:name].nil?
