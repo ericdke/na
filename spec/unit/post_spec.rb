@@ -36,58 +36,36 @@ describe Ayadn::Post do
         },
         post_max_length: 256,
         message_max_length: 2048,
-        version: Ayadn::VERSION
+        version: 'wee'
       })
-    Ayadn::Settings.stub(:user_token).and_return('XXX')
+    Ayadn::Settings.stub(:user_token).and_return('XYZ')
+    Ayadn::Settings.stub(:check_for_accounts)
     Ayadn::Errors.stub(:warn).and_return("warned")
     Ayadn::Logs.stub(:rec).and_return("logged")
   end
 
   let(:post) { Ayadn::Post.new }
+  let(:rest) {Ayadn::CNX = double}
 
   describe "#post" do
+    before do
+      rest.stub(:post).and_return(File.read("spec/mock/posted.json"))
+    end
     it "should raise an error if args are empty" do
       printed = capture_stdout do
         post.post([])
       end
       expect(printed).to include "You should provide some text."
     end
+    it "posts a post" do
+      expect(rest).to receive(:post).with("https://alpha-api.app.net/stream/0/posts/?include_annotations=1&access_token=XYZ", {"text"=>"YOLO", "entities"=>{"parse_markdown_links"=>true, "parse_links"=>true}, "annotations"=>[{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]})
+      x = post.post(['YOLO'])
+    end
+    it "returns the posted post" do
+      x = post.post(['whatever'])
+      expect(x['data']['text']).to eq 'TEST'
+    end
   end
-
-  # let(:rest) {RestClient = double}
-  # let(:res) {response = double}
-  # let(:db) {Ayadn::Databases = double}
-
-  # describe "#post" do
-  #   before do
-  #     db.stub(:blacklist) {"x"}
-  #     res.stub(:code) {200}
-  #     rest.stub(:post) {File.read("spec/mock/posted.json")}
-  #   end
-  #   # Those 2 tests return a fake response, but this fake
-  #   # response wouldn't be returned if the tests failed
-  #   # I should intercept what goes into the fake RestClient
-  #   # instead, but have no idea how to do it at the moment ¯\(ツ)/¯
-  #   #
-  #   # As their warning messages are pretty annoying, I disabled
-  #   # them but you can uncomment to run the test
-  #   it "sends a post" do
-  #     a = post.post(["TEST"])
-  #     printed = capture_stdout do
-  #       Ayadn::View.new.show_posted(a)
-  #     end
-  #     expect(printed).to include '@aya_tests'
-  #     expect(printed).to include 'TEST'
-  #   end
-  #   it "sends a message" do
-  #     a = post.send_message(666, 'TEST')
-  #     printed = capture_stdout do
-  #       Ayadn::View.new.show_posted(a)
-  #     end
-  #     expect(printed).to include '@aya_tests'
-  #     expect(printed).to include 'TEST'
-  #   end
-  # end
 
   describe "#reply" do
     it "formats a reply" do
