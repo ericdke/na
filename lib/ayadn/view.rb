@@ -458,9 +458,14 @@ module Ayadn
           formatted[key] = val unless (val.nil? || !val)
       end
 
+      formatted[:name] = "" if formatted[:name].nil?
       chk = formatted[:header]
-      unless formatted[:name].nil?
+      unless formatted[:name] == ""
         chk << formatted[:name].color(Settings.options[:colors][:dots])
+        chk << "\n"
+      end
+      unless formatted[:title].nil? || formatted[:title] == formatted[:name]
+        chk << formatted[:title]
         chk << "\n"
       end
       unless formatted[:address].nil?
@@ -471,22 +476,37 @@ module Ayadn
         chk << formatted[:address_extended]
         chk << "\n"
       end
-      unless formatted[:country_code].nil?
-        cc = "(#{formatted[:country_code]})".upcase
-      else
-        cc = ""
-      end
+
       unless formatted[:postcode].nil?
         unless formatted[:locality].nil?
-          chk << "#{formatted[:postcode]}, #{formatted[:locality]} #{cc}"
-          chk << "\n"
+          chk << "#{formatted[:postcode]}, #{formatted[:locality]}"
+        else
+          chk << "#{formatted[:postcode]}"
         end
+        chk << "\n"
       else
         unless formatted[:locality].nil?
-          chk << "#{formatted[:locality]} #{cc}"
+          chk << "#{formatted[:locality]}"
           chk << "\n"
         end
       end
+
+      formatted[:country_code].nil? ? cc = "" : cc = formatted[:country_code]
+
+      if formatted[:region].nil?
+        unless cc == ""
+          chk << "(#{cc})".upcase
+          chk << "\n"
+        end
+      else
+        unless cc == ""
+          chk << "#{formatted[:region]} (#{cc.upcase})"
+        else
+          chk << "#{formatted[:region]}"
+        end
+        chk << "\n"
+      end
+
       unless formatted[:website].nil?
         chk << formatted[:website]
         chk << "\n"

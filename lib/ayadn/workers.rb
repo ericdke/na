@@ -349,6 +349,12 @@ module Ayadn
               checkins[:longitude] = obj['value']['longitude']
               checkins[:latitude] = obj['value']['latitude']
             end
+            unless obj['value']['title'].nil?
+              checkins[:title] = obj['value']['title']
+            end
+            unless obj['value']['region'].nil?
+              checkins[:region] = obj['value']['region']
+            end
           #when "net.app.core.oembed"
             #has_checkins = true
             #checkins[:embeddable_url] = obj['value']['embeddable_url']
