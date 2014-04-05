@@ -45,7 +45,7 @@ describe Ayadn::Post do
   end
 
   let(:post) { Ayadn::Post.new }
-  let(:rest) {Ayadn::CNX = double}
+  let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
 
   describe "#post" do
     before do
@@ -102,6 +102,11 @@ describe Ayadn::Post do
   describe "#check_post_length" do
     it "checks normal post length" do
       post.check_post_length(["allo", "wtf"]).should be nil #no error
+    end
+
+    # it outputs an error message but it's what we expect
+    it "checks excessive post length" do
+      lambda {post.check_post_length(["allo", "wtf dude", "ok whatever pfff", "Black malt berliner weisse, filter. Ibu degrees plato alcohol. ipa hard cider ester infusion conditioning tank. Dry stout bottom fermenting yeast wort chiller wort chiller lager hand pump ! All-malt dunkle bright beer grainy, original gravity wheat beer glass."])}.should raise_error(SystemExit)
     end
   end
 
