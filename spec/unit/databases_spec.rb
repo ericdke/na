@@ -30,6 +30,18 @@ describe Ayadn::Databases do
       expect(u['lucy']).to eq 'Lucy Fair'
     end
   end
+  # describe ".save_max_id" do
+  #   it "saves pagination" do
+
+
+  #   end
+  # end
+  # describe ".has_new?" do
+  #   it "check if new posts since last pagination record" do
+  #     stream = {'meta'=>{'max_id'=>33666}}
+
+  #   end
+  # end
   after do
     Ayadn::Databases.users.clear
     Ayadn::Databases.close_all
