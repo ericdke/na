@@ -759,9 +759,11 @@ module Ayadn
       	replied_to = @api.get_details(post_id)
         post_404(post_id) if meta_404(replied_to)
         post_id = get_original_id(post_id, replied_to)
-        if post_id == replied_to['data']['repost_of']['id']
-          replied_to = @api.get_details(post_id)
-          post_404(post_id) if meta_404(replied_to)
+        if replied_to['data']['repost_of']
+          if post_id == replied_to['data']['repost_of']['id']
+            replied_to = @api.get_details(post_id)
+            post_404(post_id) if meta_404(replied_to)
+          end
         end
         poster = Post.new
         puts Status.reply
