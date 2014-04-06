@@ -30,20 +30,54 @@ describe Ayadn::Databases do
       expect(u['lucy']).to eq 'Lucy Fair'
     end
   end
-  # describe ".save_max_id" do
-  #   it "saves pagination" do
-
-
-  #   end
-  # end
-  # describe ".has_new?" do
-  #   it "check if new posts since last pagination record" do
-  #     stream = {'meta'=>{'max_id'=>33666}}
-
-  #   end
-  # end
+  describe ".save_max_id" do
+    it "saves pagination" do
+      stream = {'meta'=>{'max_id'=>'33666','marker'=>{'name'=>'test_stream'}}}
+      Ayadn::Databases.save_max_id(stream)
+      expect(Ayadn::Databases.pagination.keys).to eq ['test_stream']
+      expect(Ayadn::Databases.pagination['test_stream']).to eq '33666'
+    end
+  end
+  describe ".has_new?" do
+    it "check if new posts since last pagination record" do
+      stream = {'meta'=>{'max_id'=>'33666','marker'=>{'name'=>'test_stream'}}}
+      Ayadn::Databases.save_max_id(stream)
+      expect(Ayadn::Databases.has_new?(stream, 'test_stream')).to eq false
+      stream = {'meta'=>{'max_id'=>'42000000','marker'=>{'name'=>'test_stream'}}}
+      expect(Ayadn::Databases.has_new?(stream, 'test_stream')).to eq true
+    end
+  end
+  describe ".save_indexed_posts" do
+    it "saves index" do
+      posts = {'33666' =>{:count=>1},'424242' =>{:count=>2}}
+      Ayadn::Databases.save_indexed_posts(posts)
+      expect(Ayadn::Databases.index['424242'][:count]).to eq 2
+    end
+  end
+  describe ".get_post_from_index" do
+    it "gets post id from index" do
+      posts = {'33666' =>{:count=>1, :id=>33666},'424242' =>{:count=>2, :id=>424242}}
+      Ayadn::Databases.save_indexed_posts(posts)
+      expect(Ayadn::Databases.get_post_from_index(1)).to eq({:count=>1, :id=>33666})
+    end
+  end
+  describe ".create_alias" do
+    it "creates an alias for a channel id" do
+      Ayadn::Databases.create_alias('42','everything')
+      expect(Ayadn::Databases.aliases['everything']).to eq '42'
+    end
+  end
+  describe ".get_alias_from_id" do
+    it "gets an alias from a channel id" do
+      Ayadn::Databases.create_alias('42','everything')
+      expect(Ayadn::Databases.get_alias_from_id('42')).to eq 'everything'
+    end
+  end
   after do
     Ayadn::Databases.users.clear
+    Ayadn::Databases.pagination.clear
+    Ayadn::Databases.index.clear
+    Ayadn::Databases.aliases.clear
     Ayadn::Databases.close_all
   end
 end
