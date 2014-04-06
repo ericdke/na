@@ -134,8 +134,7 @@ module Ayadn
       Settings.save_config
     end
     def validate(t)
-      t = t.to_i
-      t >= 0.7 ? t : 1.5
+      Validators.timer(t)
     end
     def timer(t)
       Settings.options[:scroll][:timer] = t
@@ -158,12 +157,7 @@ module Ayadn
       Settings.save_config
     end
     def validate(value)
-      case value
-      when "TRUE", "true", "1", "yes"
-        true
-      when "FALSE", "false", "0", "no"
-        false
-      end
+      Validators.boolean(value)
     end
     def auto_save_sent_posts(value)
       Settings.options[:backup][:auto_save_sent_posts] = value
@@ -173,6 +167,38 @@ module Ayadn
     end
     def auto_save_lists(value)
       Settings.options[:backup][:auto_save_lists] = value
+    end
+  end
+
+  class Validators
+    def self.boolean(value)
+      case value.downcase
+      when "true", "1", "yes"
+        true
+      when "false", "0", "no"
+        false
+      else
+        abort(Status.error_missing_parameters)
+      end
+    end
+    def self.index_range(min, max, value)
+      x = value.to_i
+      if x >= min && x <= max
+        x
+      else
+        abort(Status.must_be_integer)
+      end
+    end
+    def self.timer(t)
+      t = t.to_i
+      t >= 1 ? t : 3
+    end
+    def self.color(color)
+      colors_list = %w{red green magenta cyan yellow blue white}
+      unless colors_list.include?(color)
+        puts Status.error_missing_parameters
+        abort(Status.valid_colors(colors_list))
+      end
     end
   end
 
@@ -192,16 +218,7 @@ module Ayadn
       Settings.save_config
     end
     def validate(value)
-      if value.is_integer?
-        x = value
-      else
-        x = value.to_i
-      end
-      if x >= 1 && x <= 200
-        x
-      else
-        abort(Status.must_be_integer)
-      end
+      Validators.index_range(1, 200, value)
     end
     def default(value)
       Settings.options[:counts][:default] = value
@@ -261,12 +278,7 @@ module Ayadn
       Logs.create_logger
     end
     def validate(value)
-      case value
-      when "TRUE", "true", "1", "yes"
-        1
-      when "FALSE", "false", "0", "no"
-        0
-      end
+      Validators.boolean(value)
     end
     def log(args)
       x = "New value for '#{args[0]}' in 'Timeline' => #{args[1]}"
@@ -313,11 +325,7 @@ module Ayadn
     end
 
     def validate(color)
-      colors_list = %w{red green magenta cyan yellow blue white}
-      unless colors_list.include?(color)
-        puts Status.error_missing_parameters
-        abort(Status.valid_colors(colors_list))
-      end
+      Validators.color(color)
     end
 
     def log(args)

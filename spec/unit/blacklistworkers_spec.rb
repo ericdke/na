@@ -1,7 +1,5 @@
 require 'spec_helper'
 require 'helpers'
-require 'json'
-require 'io/console'
 
 describe Ayadn::BlacklistWorkers do
   before do
