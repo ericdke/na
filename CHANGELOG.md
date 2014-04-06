@@ -1,3 +1,8 @@
+# 1.0.4 (WIP)
+
+- Fixed 'reply to an indexed stream' for Ruby < 2.1
+- More tests for Databases
+
 # 1.0.3
 
 - Fixed the bug introduced by the last bugfix (yes, I know... sigh...)
