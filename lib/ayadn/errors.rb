@@ -31,7 +31,7 @@ module Ayadn
     private
 
     def self.detokenize(string)
-      string.to_s.gsub!(/token=[a-zA-Z0-9_-]+/, "token=XXX") unless string.nil?
+      string.dup.to_s.gsub!(/token=[a-zA-Z0-9_-]+/, "token=XXX") unless string.nil?
     end
   end
 end

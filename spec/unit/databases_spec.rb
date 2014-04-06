@@ -58,7 +58,9 @@ describe Ayadn::Databases do
     it "gets post id from index" do
       posts = {'33666' =>{:count=>1, :id=>33666},'424242' =>{:count=>2, :id=>424242}}
       Ayadn::Databases.save_indexed_posts(posts)
-      expect(Ayadn::Databases.get_post_from_index(1)).to eq({:count=>1, :id=>33666})
+      r = Ayadn::Databases.get_post_from_index(1)
+      expect(r[:count]).to eq 1
+      expect(r[:id]).to eq 33666
     end
   end
   describe ".create_alias" do

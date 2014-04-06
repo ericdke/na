@@ -82,7 +82,7 @@ module Ayadn
 
     def self.get_post_from_index(number)
       unless number > @index.length || number <= 0
-        @index.to_h.each do |id, values|
+        @index.each do |id, values|
           return values if values[:count] == number
         end
       else
