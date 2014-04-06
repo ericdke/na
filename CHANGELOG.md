@@ -1,7 +1,9 @@
-# 1.0.4 (WIP)
+# 1.0.4
 
 - Fixed 'reply to an indexed stream' for Ruby < 2.1
 - More tests for Databases
+- Tests for Blacklist
+- Tests for Set
 
 # 1.0.3
 
