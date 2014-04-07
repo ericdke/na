@@ -276,8 +276,6 @@ module Ayadn
       users_hash
     end
 
-    private
-
     def colorize_text(text, mentions)
       handles = Array.new
       mentions.each {|username| handles << "@#{username}"}
@@ -311,6 +309,8 @@ module Ayadn
       end
       sentences.join("\n")
     end
+
+    private
 
     def init_table
       Terminal::Table.new do |t|

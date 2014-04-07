@@ -36,7 +36,7 @@ module Ayadn
           if Databases.has_new?(stream, 'unified')
             show(stream, options)
           end
-          unless stream['meta']['max_id'].nil?
+          unless stream['meta']['max_id'].nil?   #check if there isn't lost posts
             Databases.save_max_id(stream)
             options = options_hash(stream)
           end
