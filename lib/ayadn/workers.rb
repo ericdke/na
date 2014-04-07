@@ -290,7 +290,14 @@ module Ayadn
           if word =~ /#\w+/
             words << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
           elsif word =~ /@\w+/
-            if handles.include?(word) || word =~ /@\w+[:]/
+            splitted = word.split(/[:\-;,?!'&`^=+<>*%()]/) if word =~ /[:\-;,?!'&`^=+<>*%()]/
+            if splitted
+              splitted.each {|d| @str = d if d =~ /@\w+/}
+              @str = word if @str.nil?
+            else
+              @str = word
+            end
+            if handles.include?(@str.downcase)
               words << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
             else
               words << word
