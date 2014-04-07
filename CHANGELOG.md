@@ -1,3 +1,8 @@
+# 1.0.5
+
+- Fixed the colorization for mentions
+- Added tests for colorization
+
 # 1.0.4
 
 - Fixed 'reply to an indexed stream' for Ruby < 2.1
