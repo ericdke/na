@@ -5,6 +5,7 @@ group :test do
   gem 'rspec'
   #gem 'fakefs'
   gem 'guard-rspec', require: false
+  gem 'coveralls', require: false
 end
 
 platforms :mswin, :mingw do

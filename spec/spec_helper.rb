@@ -1,3 +1,5 @@
+require 'coveralls'
+Coveralls.wear!
 require 'ayadn'
 #require 'fakefs/spec_helpers'
 

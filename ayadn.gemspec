@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", ">= 2.14"
   spec.add_development_dependency "rb-fsevent", ">= 0.9"
   spec.add_development_dependency "guard-rspec", ">= 4.2"
+  spec.add_development_dependency "coveralls"
   #spec.add_development_dependency "fakefs", ">= 0.5"
 
   spec.post_install_message = "Thank you for installing Ayadn!"
