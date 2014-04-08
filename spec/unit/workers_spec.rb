@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'helpers'
 require 'json'
-require 'io/console'
+#require 'io/console'
 
 describe Ayadn::Workers do
 
