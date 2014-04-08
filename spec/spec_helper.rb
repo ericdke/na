@@ -1,5 +1,5 @@
 require 'ayadn'
-require 'fakefs/spec_helpers'
+#require 'fakefs/spec_helpers'
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -10,5 +10,5 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
-  config.include FakeFS::SpecHelpers, fakefs: true
+  #config.include FakeFS::SpecHelpers, fakefs: true
 end

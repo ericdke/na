@@ -3,7 +3,8 @@ source 'https://rubygems.org'
 group :test do
   gem 'rake'
   gem 'rspec'
-  gem 'fakefs'
+  #gem 'fakefs'
+  gem 'guard-rspec', require: false
 end
 
 platforms :mswin, :mingw do

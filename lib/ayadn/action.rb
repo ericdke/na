@@ -714,7 +714,7 @@ module Ayadn
     	begin
         missing_username if username.empty?
     		messenger = Post.new
-    		puts Status.post
+    		puts Status.message
     		lines_array = messenger.compose
     		messenger.check_message_length(lines_array)
     		@view.clear_screen
@@ -722,7 +722,7 @@ module Ayadn
     		resp = messenger.send_pm(username, lines_array.join("\n"))
         FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
     		@view.clear_screen
-    		puts Status.yourpost
+    		puts Status.yourmessage
     		@view.show_posted(resp)
     	rescue => e
         Errors.global_error("action/pmess", username, e)

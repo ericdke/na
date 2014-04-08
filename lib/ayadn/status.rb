@@ -139,6 +139,9 @@ module Ayadn
     def self.yourpost
       "\nYour post:\n\n".color(:cyan)
     end
+    def self.yourmessage
+      "\nYour message:\n\n".color(:cyan)
+    end
     def self.replying_to(post_id)
       "\nReplying to post #{post_id}...\n".color(:green)
     end

@@ -1,3 +1,7 @@
+# 1.0.6 (WIP)
+
+- Fixed a bug where post_max_chars was displayed instead of message_max_chars
+
 # 1.0.5
 
 - Fixed the colorization for mentions
