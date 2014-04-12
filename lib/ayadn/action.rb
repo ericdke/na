@@ -611,6 +611,10 @@ module Ayadn
         resp = @api.get_messages(channel_id, options)
         (no_new_posts unless Databases.has_new?(resp, "channel:#{channel_id}")) if options[:new]
         Databases.save_max_id(resp)
+        if options[:raw]
+          @view.show_raw(resp)
+          exit
+        end
         no_data('messages') if resp['data'].empty?
         render_view(resp, options)
         Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
