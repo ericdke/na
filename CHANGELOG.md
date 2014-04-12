@@ -1,6 +1,7 @@
-# 1.0.6 (WIP)
+# 1.0.6
 
 - Fixed a bug where post_max_chars was displayed instead of message_max_chars
+- Show raw JSON in messages even if no data
 
 # 1.0.5
 
