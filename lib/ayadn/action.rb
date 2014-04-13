@@ -791,7 +791,7 @@ module Ayadn
 
     def nowplaying
       begin
-        #abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
+        abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
         itunes = get_track_infos
         itunes.each do |el|
           abort(Status.empty_fields) if el.length == 0
