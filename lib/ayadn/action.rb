@@ -607,7 +607,7 @@ module Ayadn
     def messages(channel_id, options)
       begin
         channel_id = get_channel_id_from_alias(channel_id)
-        doing
+        doing(options)
         resp = @api.get_messages(channel_id, options)
         (no_new_posts unless Databases.has_new?(resp, "channel:#{channel_id}")) if options[:new]
         Databases.save_max_id(resp)
@@ -1068,7 +1068,13 @@ module Ayadn
 
     def get_channel_id_from_alias(channel_id)
       unless channel_id.is_integer?
-        channel_id = Databases.get_channel_id(channel_id)
+        orig = channel_id
+        channel_id = Databases.get_channel_id(orig)
+        if channel_id.nil?
+          Errors.warn("Alias '#{orig}' doesn't exist.")
+          puts "\nThis alias doesn't exist.\n\n".color(:red)
+          exit
+        end
       end
       channel_id
     end

@@ -1,3 +1,8 @@
+# 1.0.7
+
+- Machine-only messages in channels are now displayable
+- Don't output "Downloading" if options = raw in messages view
+
 # 1.0.6
 
 - Fixed a bug where post_max_chars was displayed instead of message_max_chars
