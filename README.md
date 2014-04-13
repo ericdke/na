@@ -41,16 +41,17 @@ Please use something like RVM or RBENV to install Ruby if necessary.
 
 You can also use the Ruby shipped with your system but you shouldn't, as it would require root privileges.
 
-### WINDOWS
+### OTHER PLATFORMS
 
-You may have to run one more command:
+Ayadn 1.0.x isn't compatible with Windows: there's too many issues due to external Gems and POSIX-dependant tools.  
 
-`gem install win32console -v 1.3.2`
+That may change in the future...  
 
 ### ALPHA-BETA-PRE
 
+This is only necessary if you installed a pre-1.0 testing version:
+
 Users of alpha, beta or pre-release versions should first uninstall the old versions with `gem uninstall ayadn` then run `ayadn set defaults` after installing version 1.0 (note that this will replace the config file contents).  
-This is only necessary if you installed a pre-1.0 testing version.
 
 # DOCUMENTATION
 

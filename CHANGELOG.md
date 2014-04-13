@@ -4,6 +4,7 @@
 - Don't output "Downloading" if options = raw in messages view
 - Alert message instead of crash when an alias is undefined
 - Removed username in front of ">>" in Auto
+- Compatibility with Windows is broken
 
 # 1.0.6
 

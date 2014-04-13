@@ -679,16 +679,17 @@ module Ayadn
         @view.clear_screen
         puts Status.auto
         poster = Post.new
-        platform = Settings.config[:platform]
-        case platform
-        when /mswin|mingw|cygwin/
-          poster.auto_classic
-        else
+        # platform = Settings.config[:platform]
+        # case platform
+        # when /mswin|mingw|cygwin/
+          # poster.auto_classic
+        # else
           require "readline"
           poster.auto_readline
-        end
+        # end
       rescue => e
-        Errors.global_error("action/auto post", [options, platform], e)
+        #Errors.global_error("action/auto post", [options, platform], e)
+        Errors.global_error("action/auto post", [options], e)
       ensure
         Databases.close_all
       end
@@ -790,7 +791,7 @@ module Ayadn
 
     def nowplaying
       begin
-        abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
+        #abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
         itunes = get_track_infos
         itunes.each do |el|
           abort(Status.empty_fields) if el.length == 0

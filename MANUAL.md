@@ -2,7 +2,6 @@
 	- [RUBY](#ruby)
 	- [AYADN](#ayadn)
 		- [OS X, LINUX, BSD](#os-x-linux-bsd)
-		- [WINDOWS](#windows)
 - [FIRST STEPS](#first-steps)
 	- [AUTHORIZE](#authorize)
 	- [HELP](#help)
@@ -100,13 +99,7 @@ Update:
 
 Please use something like RVM or RBENV to install Ruby if necessary.
 
-You can also use the Ruby shipped with your system but it's not ideal, as it will probably require root privileges or using the 'sudo' command.
-
-### WINDOWS
-
-You have to run one more command:
-
-`gem install win32console -v 1.3.2`
+You can also use the Ruby shipped with your system but it's not ideal, as it will probably require root privileges or using the 'sudo' command.  
 
 # FIRST STEPS
 

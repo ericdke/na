@@ -10,28 +10,28 @@ module Ayadn
     end
 
     def compose
-      case Settings.config[:platform]
-      when /mswin|mingw|cygwin/
-        post = classic
-      else
+      # case Settings.config[:platform]
+      # when /mswin|mingw|cygwin/
+        # post = classic
+      # else
         require "readline"
         post = readline
-      end
-      post
+      # end
+      # post
     end
 
-    def auto_classic
-      loop do
-        begin
-          print "#{Settings.config[:identity][:handle]} >> ".color(:red)
-          t = STDIN.gets.chomp
-          send_post(t)
-          puts Status.done
-        rescue Interrupt
-          abort(Status.canceled)
-        end
-      end
-    end
+    # def auto_classic
+    #   loop do
+    #     begin
+    #       print "#{Settings.config[:identity][:handle]} >> ".color(:red)
+    #       t = STDIN.gets.chomp
+    #       send_post(t)
+    #       puts Status.done
+    #     rescue Interrupt
+    #       abort(Status.canceled)
+    #     end
+    #   end
+    # end
 
     def auto_readline
       loop do
@@ -62,11 +62,11 @@ module Ayadn
       post
     end
 
-    def classic
-      puts Status.classic
-      input_text = STDIN.gets.chomp
-      [input_text]
-    end
+    # def classic
+    #   puts Status.classic
+    #   input_text = STDIN.gets.chomp
+    #   [input_text]
+    # end
 
     def reply(new_post, replied_to)
       replied_to = replied_to.values[0]

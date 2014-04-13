@@ -148,9 +148,9 @@ module Ayadn
     def self.readline
       "\nType your text. ".color(:cyan) + "[CTRL+D] ".color(:green) + "to validate, ".color(:cyan) + "[CTRL+C] ".color(:red) + "to cancel.\n\n".color(:cyan)
     end
-    def self.classic
-      "\nType your text. ".color(:cyan) + "[ENTER] ".color(:green) + "to validate, ".color(:cyan) + "[CTRL+C] ".color(:red) + "to cancel.\n\n".color(:cyan)
-    end
+    # def self.classic
+    #   "\nType your text. ".color(:cyan) + "[ENTER] ".color(:green) + "to validate, ".color(:cyan) + "[CTRL+C] ".color(:red) + "to cancel.\n\n".color(:cyan)
+    # end
     def self.reply
       "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum. If the original post has mentions, you text will be inserted after the first one. Markdown links are supported.\n\n"
     end
