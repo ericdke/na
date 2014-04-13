@@ -36,7 +36,8 @@ module Ayadn
     def auto_readline
       loop do
         begin
-          while buffer = Readline.readline("#{Settings.config[:identity][:handle]} >> ".color(:red))
+          #while buffer = Readline.readline("#{Settings.config[:identity][:handle]} >> ".color(:red))
+          while buffer = Readline.readline(">> ".color(:red))
             send_post(buffer)
             puts Status.done
           end

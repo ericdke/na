@@ -1,7 +1,9 @@
 # 1.0.7
 
-- Machine-only messages in channels are now displayable
+- Machine-only messages in channels are now viewable
 - Don't output "Downloading" if options = raw in messages view
+- Alert message instead of crash when an alias is undefined
+- Removed username in front of ">>" in Auto
 
 # 1.0.6
 
