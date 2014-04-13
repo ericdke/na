@@ -3,7 +3,7 @@
 - Machine-only messages in channels are now viewable
 - Don't output "Downloading" if options = raw in messages view
 - Alert message instead of crash when an alias is undefined
-- Removed username in front of ">>" in Auto
+- Removed username in front of ">>" in Auto (in case the authd user changed)
 - Compatibility with Windows is broken
 
 # 1.0.6
