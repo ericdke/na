@@ -277,18 +277,22 @@ module Ayadn
     end
 
     def colorize_text(text, mentions)
+      reg_split = '[:\-;,?!\'&`^=+<>*%()\/"“”’°£$€.]'
+      reg_tag = '#([A-Za-z0-9_]{1,255})(?![\w+])'
+      reg_mention = '@([A-Za-z0-9_]{1,20})(?![\w+])'
+      reg_sentence = '^.+[\r\n]*'
       handles = Array.new
       mentions.each {|username| handles << "@#{username}"}
       words = Array.new
       sentences = Array.new
       hashtag_color = Settings.options[:colors][:hashtags]
       mention_color = Settings.options[:colors][:mentions]
-      text.scan(/^.+[\r\n]*/) do |sentence|
+      text.scan(/#{reg_sentence}/) do |sentence|
         sentence.split(' ').each do |word|
           if word =~ /#\w+/
-            words << word.gsub(/#([A-Za-z0-9_]{1,255})(?![\w+])/, '#\1'.color(hashtag_color))
+            words << word.gsub(/#{reg_tag}/, '#\1'.color(hashtag_color))
           elsif word =~ /@\w+/
-            splitted = word.split(/[:\-;,?!'&`^=+<>*%()]/) if word =~ /[:\-;,?!'&`^=+<>*%()]/
+            splitted = word.split(/#{reg_split}/) if word =~ /#{reg_split}/
             if splitted
               splitted.each {|d| @str = d if d =~ /@\w+/}
               @str = word if @str.nil?
@@ -296,7 +300,7 @@ module Ayadn
               @str = word
             end
             if handles.include?(@str.downcase)
-              words << word.gsub(/@([A-Za-z0-9_]{1,20})(?![\w+])/, '@\1'.color(mention_color))
+              words << word.gsub(/#{reg_mention}/, '@\1'.color(mention_color))
             else
               words << word
             end

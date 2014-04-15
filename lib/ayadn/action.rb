@@ -805,6 +805,8 @@ module Ayadn
       rescue => e
         puts Status.wtf
         Errors.global_error("action/nowplaying", itunes, e)
+      ensure
+        Databases.close_all
       end
     end
 

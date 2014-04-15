@@ -1,3 +1,8 @@
+# 1.0.8
+
+- Better error messages/logs (specifically when HTTP errors)
+- Token is anonymized if in error logs
+
 # 1.0.7
 
 - Machine-only messages in channels are now viewable
