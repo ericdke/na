@@ -19,34 +19,35 @@ module Ayadn
     end
 
     def self.check(response)
+      message = JSON.parse(response)['meta']['error_message']
       case response.code
       when 200
         response
       when 204
-        puts "\n'No content'".color(:red)
-        Errors.global_error("cnx.rb", response.headers, "NO CONTENT")
+        puts "\n#{message}".color(:red)
+        Errors.global_error("cnx.rb", [message, response.headers], "NO CONTENT")
       when 400
-        puts "\n'Bad request'".color(:red)
-        Errors.global_error("cnx.rb", response.headers, "BAD REQUEST")
+        puts "\n#{message}".color(:red)
+        Errors.global_error("cnx.rb", [message, response.headers], "BAD REQUEST")
       when 401
-        puts "\n'Unauthorized'".color(:red)
-        Errors.global_error("cnx.rb", response.headers, "UNAUTHORIZED")
+        puts "\n#{message}".color(:red)
+        Errors.global_error("cnx.rb", [message, response.headers], "UNAUTHORIZED")
       when 403
-        puts "\n'Forbidden'".color(:red)
-        Errors.global_error("cnx.rb", response.headers, "FORBIDDEN")
+        puts "\n#{message}".color(:red)
+        Errors.global_error("cnx.rb", [message, response.headers], "FORBIDDEN")
       when 405
-        puts "\n'Method not allowed'".color(:red)
-        Errors.global_error("cnx.rb", response.headers, "METHOD NOT ALLOWED")
+        puts "\n#{message}".color(:red)
+        Errors.global_error("cnx.rb", [message, response.headers], "METHOD NOT ALLOWED")
       when 429
-        puts "\n'Too many requests'".color(:red)
+        puts "\n#{message}".color(:red)
         puts "\n\nAyadn made too many requests to the App.net API. You should wait at least ".color(:cyan) + "#{response.headers[:retry_after]} ".color(:red) + "seconds before trying again. Maybe you launched a lot of Ayadn instances at the same time? That's no problem, but in this case you should increase the value of the scroll timer (with `ayadn set scroll timer 5` for example). App.net allows 5000 requests per hour per account maximum.".color(:cyan)
-        Errors.global_error("cnx.rb", response.headers, "TOO MANY REQUESTS")
+        Errors.global_error("cnx.rb", [message, response.headers], "TOO MANY REQUESTS")
       when 500
-        puts "\n'App.net server error'".color(:red)
-        Errors.global_error("cnx.rb", response.headers, "APP.NET SERVER ERROR")
+        puts "\n#{message}".color(:red)
+        Errors.global_error("cnx.rb", [message, response.headers], "APP.NET SERVER ERROR")
       when 507
-        puts "\n'Insufficient storage'".color(:red)
-        Errors.global_error("cnx.rb", response.headers, "INSUFFICIENT STORAGE")
+        puts "\n#{message}".color(:red)
+        Errors.global_error("cnx.rb", [message, response.headers], "INSUFFICIENT STORAGE")
       else
         response
       end

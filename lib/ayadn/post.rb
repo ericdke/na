@@ -15,7 +15,7 @@ module Ayadn
         # post = classic
       # else
         require "readline"
-        post = readline
+        readline
       # end
       # post
     end
