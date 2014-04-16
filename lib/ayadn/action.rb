@@ -791,6 +791,7 @@ module Ayadn
 
     def nowplaying
       begin
+        Databases.close_all
         abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
         itunes = get_track_infos
         itunes.each do |el|
@@ -799,14 +800,19 @@ module Ayadn
         @view.clear_screen
         text_to_post = "#nowplaying '#{itunes.track}' from '#{itunes.album}' by #{itunes.artist}"
         show_nowplaying(text_to_post)
-        abort("\nCanceled.\n\n".color(:red)) unless STDIN.getch == ("y" || "Y")
+        unless STDIN.getch == ("y" || "Y")
+          puts "\nCanceled.\n\n".color(:red)
+          exit
+        end
         puts "\n"
-        post([text_to_post])
+        resp = Post.new.post([text_to_post])
+        puts Status.yourpost
+        @view.show_posted(resp)
       rescue => e
         puts Status.wtf
         Errors.global_error("action/nowplaying", itunes, e)
-      ensure
-        Databases.close_all
+      # ensure
+      #   Databases.close_all
       end
     end
 

@@ -1,3 +1,7 @@
+# 1.0.9
+
+- Fixes the stubborn 'nowplaying' database bug
+
 # 1.0.8
 
 - Better error messages/logs (specifically when HTTP errors)
