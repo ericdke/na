@@ -2,6 +2,8 @@
 
 - Better error messages/logs (specifically when HTTP errors)
 - Token is anonymized if in error logs
+- No more database error when canceling a 'nowplaying' post
+- Better mentions colorization
 
 # 1.0.7
 
