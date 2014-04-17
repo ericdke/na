@@ -1,3 +1,7 @@
+# 1.0.11
+
+- There was a typo in the last version that caused a bug in the PM command
+
 # 1.0.10
 
 - Fixes the help bug (doubled commands)
