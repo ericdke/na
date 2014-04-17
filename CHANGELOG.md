@@ -1,3 +1,7 @@
+# 1.0.10
+
+- Fixes the help bug (doubled commands)
+
 # 1.0.9
 
 - Fixes the stubborn 'nowplaying' database bug

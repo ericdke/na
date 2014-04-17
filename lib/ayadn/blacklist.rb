@@ -1,7 +1,7 @@
 # encoding: utf-8
 module Ayadn
   class Blacklist < Thor
-    desc "blacklist add TYPE TARGET", "Adds a mention, hashtag or client to your blacklist"
+    desc "add TYPE TARGET", "Adds a mention, hashtag or client to your blacklist"
     long_desc Descriptions.blacklist_add
     def add(*args)
       if args.length != 2
@@ -12,7 +12,7 @@ module Ayadn
       puts Status.done
     end
 
-    desc "blacklist remove TYPE TARGET", "Removes a mention, hashtag or client from your blacklist"
+    desc "remove TYPE TARGET", "Removes a mention, hashtag or client from your blacklist"
     long_desc Descriptions.blacklist_remove
     def remove(*args)
       if args.length != 2
@@ -23,14 +23,14 @@ module Ayadn
       puts Status.done
     end
 
-    desc "blacklist list", "List the content of your blacklist"
+    desc "list", "List the content of your blacklist"
     long_desc Descriptions.blacklist_list
     def list
       blacklist = BlacklistWorkers.new
       blacklist.list
     end
 
-    desc "blacklist import DATABASE", "Imports a blacklist database from another Ayadn account"
+    desc "import DATABASE", "Imports a blacklist database from another Ayadn account"
     long_desc Descriptions.blacklist_import
     def import(database)
       blacklist = BlacklistWorkers.new

@@ -2,7 +2,7 @@ module Ayadn
 
   class Set < Thor
 
-    desc "set scroll ITEM VALUE", "Set the waiting time (in seconds, min 0.7) between two requests when scrolling"
+    desc "scroll ITEM VALUE", "Set the waiting time (in seconds, min 0.7) between two requests when scrolling"
     def scroll(*args)
       scroll_config = SetScroll.new
       if args[0]
@@ -15,7 +15,7 @@ module Ayadn
       scroll_config.save
     end
 
-    desc "set timeline ITEM TRUE/FALSE", "Set ITEM to be activated or not"
+    desc "timeline ITEM TRUE/FALSE", "Set ITEM to be activated or not"
     long_desc Descriptions.set_timeline
     def timeline(*args)
       timeline_config = SetTimeline.new
@@ -36,7 +36,7 @@ module Ayadn
       timeline_config.save
     end
 
-    desc "set count ITEM NUMBER", "Set ITEM to retrieve NUMBER of elements by default"
+    desc "count ITEM NUMBER", "Set ITEM to retrieve NUMBER of elements by default"
     long_desc Descriptions.set_counts
     map "counts" => :count
     def count(*args)
@@ -64,7 +64,7 @@ module Ayadn
     #   puts args
     # end
 
-    desc "set color ITEM COLOR", "Set ITEM to COLOR"
+    desc "color ITEM COLOR", "Set ITEM to COLOR"
     long_desc Descriptions.set_color
     map "colors" => :color
     map "colour" => :color
@@ -88,7 +88,7 @@ module Ayadn
       color_config.save
     end
 
-    desc "set backup ITEM TRUE/FALSE", "Set ITEM to be activated or not"
+    desc "backup ITEM TRUE/FALSE", "Set ITEM to be activated or not"
     long_desc Descriptions.set_backup
     def backup(*args)
       backup_config = SetBackup.new
@@ -109,7 +109,7 @@ module Ayadn
       backup_config.save
     end
 
-    desc "set defaults", "Sets back the configuration to defaults values"
+    desc "defaults", "Sets back the configuration to defaults values"
     long_desc Descriptions.set_defaults
     def defaults
       Settings.restore_defaults

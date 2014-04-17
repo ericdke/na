@@ -2,7 +2,7 @@
 module Ayadn
   class Alias < Thor
 
-    desc "alias create CHANNEL ALIAS", "Creates an alias for a channel"
+    desc "create CHANNEL ALIAS", "Creates an alias for a channel"
     long_desc Descriptions.alias_create
     def create(*args)
       begin
@@ -27,7 +27,7 @@ module Ayadn
       end
     end
 
-    desc "alias delete ALIAS", "Deletes a previously created alias"
+    desc "delete ALIAS", "Deletes a previously created alias"
     long_desc Descriptions.alias_delete
     def delete(*args)
       begin
@@ -47,7 +47,7 @@ module Ayadn
       end
     end
 
-    desc "alias import DATABASE", "Imports an aliases database from a backed up Ayadn account"
+    desc "import DATABASE", "Imports an aliases database from a backed up Ayadn account"
     long_desc Descriptions.alias_import
     def import(database)
       begin
@@ -72,7 +72,7 @@ module Ayadn
       end
     end
 
-    desc "alias list", "List previously created aliases"
+    desc "list", "List previously created aliases"
     long_desc Descriptions.alias_list
     def list
       begin
