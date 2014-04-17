@@ -1,6 +1,7 @@
 # 1.0.10
 
 - Fixes the help bug (doubled commands)
+- Auto adds the @ if missing in pm
 
 # 1.0.9
 

@@ -718,6 +718,7 @@ module Ayadn
     def pmess(username)
     	begin
         missing_username if username.empty?
+        username = Workers.add_arobase_if_missing(username)
     		messenger = Post.new
     		puts Status.message
     		lines_array = messenger.compose
