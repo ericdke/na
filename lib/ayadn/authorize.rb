@@ -54,7 +54,7 @@ module Ayadn
       begin
         FileUtils.mkdir_p(user.user_path)
         %w{log db pagination config auth downloads backup posts messages lists}.each do |target|
-          Dir.mkdir("#{user.user_path}/#{target}")
+          Dir.mkdir("#{user.user_path}/#{target}") unless Dir.exist?("#{user.user_path}/#{target}")
         end
       rescue => e
         puts "\nError creating Ayadn #{user.handle} account folders.\n\n"
