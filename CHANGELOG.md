@@ -1,3 +1,7 @@
+# 1.0.12
+
+- Fixed an error in: authorizing an account if its folders already exists
+
 # 1.0.11
 
 - There was a typo in the last version that caused a bug in the PM command
