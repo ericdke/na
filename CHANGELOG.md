@@ -1,3 +1,7 @@
+# 1.0.13
+
+- New layout for '#nowplaying'
+
 # 1.0.12
 
 - Fixed an error in: authorizing an account if its folders already exists

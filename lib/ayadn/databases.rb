@@ -16,6 +16,8 @@ module Ayadn
     end
 
     def self.close_all
+      @pagination.compact if (File.size("#{Settings.config[:paths][:pagination]}/pagination.db") > (250000))
+      @index.compact if (File.size("#{Settings.config[:paths][:pagination]}/index.db") > (250000))
       [@users, @index, @pagination, @aliases, @blacklist].each do |db|
         db.flush
         db.close
