@@ -1,6 +1,7 @@
 # 1.0.13
 
 - New layout for '#nowplaying'
+- Compact index.db and pagination.db if necessary
 
 # 1.0.12
 
