@@ -74,7 +74,7 @@ module Ayadn
     end
 
     def get_user(token)
-      JSON.parse(RestClient.get("https://alpha-api.app.net/stream/0/users/me?access_token=#{token}", :verify_ssl => OpenSSL::SSL::VERIFY_NONE) {|response, request, result| response })
+      JSON.parse(RestClient.get("https://api.app.net/users/me?access_token=#{token}", :verify_ssl => OpenSSL::SSL::VERIFY_NONE) {|response, request, result| response })
     end
 
     def get_token

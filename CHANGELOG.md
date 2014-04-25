@@ -2,6 +2,8 @@
 
 - New layout for '#nowplaying'
 - Compact index.db and pagination.db if necessary
+- New api urls
+- Fix 'download file'
 
 # 1.0.12
 

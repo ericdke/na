@@ -6,13 +6,13 @@ module Ayadn
 
     def initialize
       @ayadn_callback_url = "http://aya.io/ayadn/auth.html"
-      @base_url = "https://alpha-api.app.net/"
-      @config_api_url = @base_url + "stream/0/config"
-      @posts_url = @base_url + "stream/0/posts/"
-      @users_url = @base_url + "stream/0/users/"
-      @files_url = @base_url + "stream/0/files/"
-      @token_url = @base_url + "stream/0/token/"
-      @channels_url = @base_url + "stream/0/channels/"
+      @base_url = "https://api.app.net/"
+      @config_api_url = @base_url + "config"
+      @posts_url = @base_url + "posts/"
+      @users_url = @base_url + "users/"
+      @files_url = @base_url + "files/"
+      @token_url = @base_url + "token/"
+      @channels_url = @base_url + "channels/"
       @pm_url = @channels_url + "pm/messages"
     end
 

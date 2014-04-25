@@ -2,16 +2,16 @@
 module Ayadn
   class Errors
     def self.global_error(where, args, error)
-      elems = []
-      args.each {|arg| elems << self.detokenize(arg)}
+      #elems = []
+      #args.each {|arg| elems << self.detokenize(arg)} #TODO: make it work
       Logs.rec.error "--BEGIN--"
       Logs.rec.error "#{error}"
       Logs.rec.debug "LOCATION: #{where}"
-      Logs.rec.debug "DATA: #{elems}" unless elems.nil?
+      Logs.rec.debug "DATA: #{args}"
       Logs.rec.debug "STACK: #{caller}"
       Logs.rec.error "--END--"
       puts "\n(error logged in #{Settings.config[:paths][:log]}/ayadn.log)\n".color(:blue)
-      #raise error
+      raise error
       exit
     end
     def self.error(status)

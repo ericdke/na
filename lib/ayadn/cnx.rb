@@ -19,7 +19,7 @@ module Ayadn
     end
 
     def self.check(response)
-      message = JSON.parse(response)['meta']['error_message']
+      message = JSON.parse(response)['meta']['error_message'] if response.code != 200
       case response.code
       when 200
         response
