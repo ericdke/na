@@ -800,7 +800,8 @@ module Ayadn
           abort(Status.empty_fields) if el.length == 0
         end
         @view.clear_screen
-        text_to_post = "#nowplaying '#{itunes.track}' from '#{itunes.album}' by #{itunes.artist}"
+        #text_to_post = "#nowplaying '#{itunes.track}' from '#{itunes.album}' by #{itunes.artist}"
+        text_to_post = "#nowplaying\nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         show_nowplaying(text_to_post)
         unless STDIN.getch == ("y" || "Y")
           puts "\nCanceled.\n\n".color(:red)
@@ -1133,7 +1134,7 @@ module Ayadn
     end
 
     def show_nowplaying(text)
-      puts "\nThis is what will be posted:\n".color(:cyan)
+      puts "\nYour post:\n".color(:cyan)
       puts text + "\n\n"
       puts "Do you confirm? (y/N) ".color(:yellow)
     end
