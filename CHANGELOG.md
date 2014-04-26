@@ -1,3 +1,7 @@
+# 1.0.14
+
+- Show who's writing, and who's the recipient
+
 # 1.0.13
 
 - New layout for '#nowplaying'

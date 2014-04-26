@@ -698,7 +698,7 @@ module Ayadn
     def write
       begin
         writer = Post.new
-        puts "\n(Writing as ".color(:cyan) + "#{Settings.config[:identity][:handle]}".color(:green) + ".)".color(:cyan)
+        puts Status.writing
         puts Status.post
         lines_array = writer.compose
         writer.check_post_length(lines_array)
@@ -722,7 +722,7 @@ module Ayadn
         temp = Workers.add_arobase_if_missing(username)
         username = [temp]
     		messenger = Post.new
-        puts "\nMessage from ".color(:cyan) + "#{Settings.config[:identity][:handle]} ".color(:green) + "to ".color(:cyan) + "#{username[0]}".color(:yellow) + ".".color(:cyan)
+        puts Status.message_from(username)
     		puts Status.message
     		lines_array = messenger.compose
     		messenger.check_message_length(lines_array)
@@ -744,6 +744,7 @@ module Ayadn
     	begin
         channel_id = get_channel_id_from_alias(channel_id)
   			messenger = Post.new
+        puts Status.writing
   			puts Status.post
   			lines_array = messenger.compose
   			messenger.check_message_length(lines_array)
@@ -775,6 +776,7 @@ module Ayadn
           end
         end
         poster = Post.new
+        puts Status.writing
         puts Status.reply
         lines_array = poster.compose
         poster.check_post_length(lines_array)
@@ -804,6 +806,7 @@ module Ayadn
         @view.clear_screen
         #text_to_post = "#nowplaying '#{itunes.track}' from '#{itunes.album}' by #{itunes.artist}"
         text_to_post = "#nowplaying\nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
+        puts Status.writing
         show_nowplaying(text_to_post)
         unless STDIN.getch == ("y" || "Y")
           puts "\nCanceled.\n\n".color(:red)
