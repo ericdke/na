@@ -698,6 +698,7 @@ module Ayadn
     def write
       begin
         writer = Post.new
+        puts "\n(Writing as ".color(:cyan) + "#{Settings.config[:identity][:handle]}".color(:green) + ".)".color(:cyan)
         puts Status.post
         lines_array = writer.compose
         writer.check_post_length(lines_array)
@@ -721,6 +722,7 @@ module Ayadn
         temp = Workers.add_arobase_if_missing(username)
         username = [temp]
     		messenger = Post.new
+        puts "\nMessage from ".color(:cyan) + "#{Settings.config[:identity][:handle]} ".color(:green) + "to ".color(:cyan) + "#{username[0]}".color(:yellow) + ".".color(:cyan)
     		puts Status.message
     		lines_array = messenger.compose
     		messenger.check_message_length(lines_array)
