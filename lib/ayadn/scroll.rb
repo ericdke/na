@@ -12,13 +12,8 @@ module Ayadn
       loop do
         begin
           stream = @api.get_global(options)
-          if Databases.has_new?(stream, 'global')
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
+          show_if_new(stream, options, 'global')
+          options = save_then_return(stream, options)
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
           canceled
@@ -33,14 +28,9 @@ module Ayadn
       loop do
         begin
           stream = @api.get_unified(options)
-          if Databases.has_new?(stream, 'unified')
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?   #check if there isn't lost posts
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
-          sleep Settings.options[:scroll][:timer]
+          show_if_new(stream, options, 'unified')
+          options = save_then_return(stream, options)
+          pause
         rescue Interrupt
           canceled
         rescue => e
@@ -56,13 +46,8 @@ module Ayadn
       loop do
         begin
           stream = @api.get_mentions(username, options)
-          if Databases.has_new?(stream, "mentions:#{id}")
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
+          show_if_new(stream, options, "mentions:#{id}")
+          options = save_then_return(stream, options)
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
           canceled
@@ -79,13 +64,8 @@ module Ayadn
       loop do
         begin
           stream = @api.get_posts(username, options)
-          if Databases.has_new?(stream, "posts:#{id}")
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
+          show_if_new(stream, options, "posts:#{id}")
+          options = save_then_return(stream, options)
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
           canceled
@@ -100,13 +80,8 @@ module Ayadn
       loop do
         begin
           stream = @api.get_convo(post_id, options)
-          if Databases.has_new?(stream, "replies:#{post_id}")
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
+          show_if_new(stream, options, "replies:#{post_id}")
+          options = save_then_return(stream, options)
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
           canceled
@@ -121,13 +96,8 @@ module Ayadn
       loop do
         begin
           stream = @api.get_conversations(options)
-          if Databases.has_new?(stream, 'explore:replies')
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
+          show_if_new(stream, options, 'explore:replies')
+          options = save_then_return(stream, options)
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
           canceled
@@ -142,13 +112,8 @@ module Ayadn
       loop do
         begin
           stream = @api.get_trending(options)
-          if Databases.has_new?(stream, 'explore:trending')
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
+          show_if_new(stream, options, 'explore:trending')
+          options = save_then_return(stream, options)
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
           canceled
@@ -163,13 +128,8 @@ module Ayadn
       loop do
         begin
           stream = @api.get_checkins(options)
-          if Databases.has_new?(stream, 'explore:checkins')
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
+          show_if_new(stream, options, 'explore:checkins')
+          options = save_then_return(stream, options)
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
           canceled
@@ -184,13 +144,8 @@ module Ayadn
       loop do
         begin
           stream = @api.get_photos(options)
-          if Databases.has_new?(stream, 'explore:photos')
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
+          show_if_new(stream, options, 'explore:photos')
+          options = save_then_return(stream, options)
           sleep Settings.options[:scroll][:timer]
         rescue Interrupt
           canceled
@@ -205,14 +160,9 @@ module Ayadn
       loop do
         begin
           stream = @api.get_messages(channel_id, options)
-          if Databases.has_new?(stream, "channel:#{channel_id}")
-            show(stream, options)
-          end
-          unless stream['meta']['max_id'].nil?
-            Databases.save_max_id(stream)
-            options = options_hash(stream)
-          end
-          sleep Settings.options[:scroll][:timer]
+          show_if_new(stream, options, "channel:#{channel_id}")
+          options = save_then_return(stream, options)
+          pause
         rescue Interrupt
           canceled
         rescue => e
@@ -222,6 +172,22 @@ module Ayadn
     end
 
     private
+
+    def pause
+      sleep Settings.options[:scroll][:timer]
+    end
+
+    def show_if_new(stream, options, target)
+      show(stream, options) if Databases.has_new?(stream, target)
+    end
+
+    def save_then_return(stream, options)
+      unless stream['meta']['max_id'].nil?
+        Databases.save_max_id(stream)
+        return options_hash(stream)
+      end
+      options
+    end
 
     def check_raw(options)
       if options[:raw]
