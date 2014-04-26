@@ -137,7 +137,7 @@ module Ayadn
       "\n\nStopped.".color(:red)
     end
     def self.writing
-      "\nPosting as ".color(:cyan) + "#{Settings.config[:identity][:handle]}".color(:green) + ".\n".color(:cyan)
+      "\nPosting as ".color(:cyan) + "#{Settings.config[:identity][:handle]}".color(:green) + ".".color(:cyan)
     end
     def self.yourpost
       "\nYour post:\n\n".color(:cyan)
@@ -146,7 +146,7 @@ module Ayadn
       "\nYour message:\n\n".color(:cyan)
     end
     def self.message_from(username)
-      "\nMessage from ".color(:cyan) + "#{Settings.config[:identity][:handle]} ".color(:green) + "to ".color(:cyan) + "#{username[0]}".color(:yellow) + ".\n".color(:cyan)
+      "\nMessage from ".color(:cyan) + "#{Settings.config[:identity][:handle]} ".color(:green) + "to ".color(:cyan) + "#{username[0]}".color(:yellow) + ".".color(:cyan)
     end
     def self.replying_to(post_id)
       "\nReplying to post #{post_id}...\n".color(:green)
@@ -158,13 +158,13 @@ module Ayadn
     #   "\nType your text. ".color(:cyan) + "[ENTER] ".color(:green) + "to validate, ".color(:cyan) + "[CTRL+C] ".color(:red) + "to cancel.\n\n".color(:cyan)
     # end
     def self.reply
-      "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum. If the original post has mentions, you text will be inserted after the first one. Markdown links are supported.\n"
+      "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum.\n"
     end
     def self.post
-      "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum. Markdown links are supported.\n"
+      "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum.\n"
     end
     def self.message
-      "\n#{Settings.config[:message_max_length]} ".color(:yellow) + "characters maximum. Markdown links are supported.\n"
+      "\n#{Settings.config[:message_max_length]} ".color(:yellow) + "characters maximum.\n"
     end
     # def self.method_missing(meth, args)
     #   "\nThe command '#{meth} #{args}' doesn't exist.\n".color(:red)
