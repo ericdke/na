@@ -1,6 +1,7 @@
 # 1.0.14
 
 - Show who's writing, and who's the recipient
+- Less help text when writing, more concise
 
 # 1.0.13
 
