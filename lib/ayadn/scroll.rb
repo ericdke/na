@@ -14,7 +14,7 @@ module Ayadn
           stream = @api.get_global(options)
           show_if_new(stream, options, 'global')
           options = save_then_return(stream, options)
-          sleep Settings.options[:scroll][:timer]
+          pause
         rescue Interrupt
           canceled
         rescue => e
@@ -48,7 +48,7 @@ module Ayadn
           stream = @api.get_mentions(username, options)
           show_if_new(stream, options, "mentions:#{id}")
           options = save_then_return(stream, options)
-          sleep Settings.options[:scroll][:timer]
+          pause
         rescue Interrupt
           canceled
         rescue => e
@@ -66,7 +66,7 @@ module Ayadn
           stream = @api.get_posts(username, options)
           show_if_new(stream, options, "posts:#{id}")
           options = save_then_return(stream, options)
-          sleep Settings.options[:scroll][:timer]
+          pause
         rescue Interrupt
           canceled
         rescue => e
@@ -82,7 +82,7 @@ module Ayadn
           stream = @api.get_convo(post_id, options)
           show_if_new(stream, options, "replies:#{post_id}")
           options = save_then_return(stream, options)
-          sleep Settings.options[:scroll][:timer]
+          pause
         rescue Interrupt
           canceled
         rescue => e
@@ -98,7 +98,7 @@ module Ayadn
           stream = @api.get_conversations(options)
           show_if_new(stream, options, 'explore:replies')
           options = save_then_return(stream, options)
-          sleep Settings.options[:scroll][:timer]
+          pause
         rescue Interrupt
           canceled
         rescue => e
@@ -114,7 +114,7 @@ module Ayadn
           stream = @api.get_trending(options)
           show_if_new(stream, options, 'explore:trending')
           options = save_then_return(stream, options)
-          sleep Settings.options[:scroll][:timer]
+          pause
         rescue Interrupt
           canceled
         rescue => e
@@ -130,7 +130,7 @@ module Ayadn
           stream = @api.get_checkins(options)
           show_if_new(stream, options, 'explore:checkins')
           options = save_then_return(stream, options)
-          sleep Settings.options[:scroll][:timer]
+          pause
         rescue Interrupt
           canceled
         rescue => e
@@ -146,7 +146,7 @@ module Ayadn
           stream = @api.get_photos(options)
           show_if_new(stream, options, 'explore:photos')
           options = save_then_return(stream, options)
-          sleep Settings.options[:scroll][:timer]
+          pause
         rescue Interrupt
           canceled
         rescue => e
