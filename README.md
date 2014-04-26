@@ -1,5 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/ayadn.svg)](http://badge.fury.io/rb/ayadn) 
 [![Build Status](https://travis-ci.org/ericdke/na.svg?branch=master)](https://travis-ci.org/ericdke/na)
+[![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=ericdejonckheere&url=https://github.com/ericdke/na&title=Ayadn&language=&tags=github&category=software)
 
 AYADN
 =====
