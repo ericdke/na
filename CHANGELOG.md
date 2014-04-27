@@ -4,6 +4,7 @@
 - Less help text when writing, more concise
 - The blacklist works better (recorded and compared downcased)
 - Added the Convert database command
+- Export blacklist, alias and settings as JSON
 
 # 1.0.13
 
