@@ -25,9 +25,10 @@ module Ayadn
 
     desc "list", "List the content of your blacklist"
     long_desc Descriptions.blacklist_list
+    option :raw, aliases: "-x", type: :boolean, desc: "Outputs the raw list in CSV"
     def list
       blacklist = BlacklistWorkers.new
-      blacklist.list
+      blacklist.list(options)
     end
 
     desc "import DATABASE", "Imports a blacklist database from another Ayadn account"
@@ -116,20 +117,24 @@ module Ayadn
         Databases.close_all
       end
     end
-    def list
+    def list(options)
       begin
-        show_list
+        show_list(options)
       ensure
         Databases.close_all
       end
     end
 
-    #private
+    private
 
-    def show_list
+    def show_list(options)
       list = Databases.blacklist
       unless list.empty?
-        puts Workers.new.build_blacklist_list(list)
+        if options[:raw]
+          list.each {|v,k| puts "#{v},#{k}"}
+        else
+          puts Workers.new.build_blacklist_list(list)
+        end
       else
         abort(Status.empty_list)
       end

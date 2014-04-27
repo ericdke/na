@@ -488,12 +488,16 @@ module Ayadn
       end
     end
 
-    def view_settings
+    def view_settings(options)
       begin
-        @view.clear_screen
-        @view.show_settings
+        if options[:raw]
+          puts Settings.options.to_json
+        else
+          @view.clear_screen
+          @view.show_settings
+        end
       rescue => e
-        Errors.global_error("action/settings", nil, e)
+        Errors.global_error("action/settings", options, e)
       ensure
         Databases.close_all
       end

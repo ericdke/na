@@ -198,8 +198,9 @@ module Ayadn
     desc "settings", "List current Ayadn settings (-sg)"
     map "-sg" => :settings
     long_desc Descriptions.settings
+    option :raw, aliases: "-x", type: :boolean, desc: "Outputs the raw list in JSON"
     def settings
-      Action.new.view_settings
+      Action.new.view_settings(options)
     end
 
     desc "userinfo @USERNAME", "Show detailed informations about @username (-ui)"

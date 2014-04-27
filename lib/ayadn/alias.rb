@@ -74,14 +74,21 @@ module Ayadn
 
     desc "list", "List previously created aliases"
     long_desc Descriptions.alias_list
+    option :raw, aliases: "-x", type: :boolean, desc: "Outputs the raw list in JSON"
     def list
       begin
         init
-        puts "\e[H\e[2J"
         list = Databases.aliases
         unless list.empty? || list.nil?
-          puts Workers.new.build_aliases_list(list)
-          puts "\n"
+          if options[:raw]
+            h = {}
+            list.each {|k,v| h[k] = v}
+            puts h.to_json
+          else
+            puts "\e[H\e[2J"
+            puts Workers.new.build_aliases_list(list)
+            puts "\n"
+          end
         else
           puts Status.empty_list
         end
