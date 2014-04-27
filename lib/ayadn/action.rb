@@ -94,7 +94,7 @@ module Ayadn
         (no_new_posts unless Databases.has_new?(stream, 'explore:replies')) if options[:new]
         Databases.save_max_id(stream)
         render_view(stream, options)
-        Scroll.new(@api, @view).conversations(options) if options[:scroll]
+        Scroll.new(@api, @view).replies(options) if options[:scroll]
       rescue => e
         Errors.global_error("action/conversations", options, e)
       ensure

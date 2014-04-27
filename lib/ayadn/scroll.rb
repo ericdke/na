@@ -7,34 +7,28 @@ module Ayadn
       @view = view
     end
 
-    def global(options)
-      options = check_raw(options)
-      loop do
-        begin
-          stream = @api.get_global(options)
-          show_if_new(stream, options, 'global')
-          options = save_then_return(stream, options)
-          pause
-        rescue Interrupt
-          canceled
-        rescue => e
-          raise e
-        end
+    def method_missing(meth, options)
+      case meth.to_s
+      when 'trending', 'photos', 'checkins', 'replies', 'global', 'unified'
+        scroll_it(meth.to_s, options)
+      else
+        super
       end
     end
 
-    def unified(options)
+    def scroll_it(target, options)
       options = check_raw(options)
+      orig_target = target
       loop do
         begin
-          stream = @api.get_unified(options)
-          show_if_new(stream, options, 'unified')
+          stream = get(target, options)
+          target = "explore:#{target}" if explore?(target)
+          show_if_new(stream, options, target)
+          target = orig_target if target =~ /explore/
           options = save_then_return(stream, options)
           pause
         rescue Interrupt
           canceled
-        rescue => e
-          raise e
         end
       end
     end
@@ -51,8 +45,6 @@ module Ayadn
           pause
         rescue Interrupt
           canceled
-        rescue => e
-          raise e
         end
       end
     end
@@ -69,8 +61,6 @@ module Ayadn
           pause
         rescue Interrupt
           canceled
-        rescue => e
-          raise e
         end
       end
     end
@@ -85,72 +75,6 @@ module Ayadn
           pause
         rescue Interrupt
           canceled
-        rescue => e
-          raise e
-        end
-      end
-    end
-
-    def conversations(options)
-      options = check_raw(options)
-      loop do
-        begin
-          stream = @api.get_conversations(options)
-          show_if_new(stream, options, 'explore:replies')
-          options = save_then_return(stream, options)
-          pause
-        rescue Interrupt
-          canceled
-        rescue => e
-          raise e
-        end
-      end
-    end
-
-    def trending(options)
-      options = check_raw(options)
-      loop do
-        begin
-          stream = @api.get_trending(options)
-          show_if_new(stream, options, 'explore:trending')
-          options = save_then_return(stream, options)
-          pause
-        rescue Interrupt
-          canceled
-        rescue => e
-          raise e
-        end
-      end
-    end
-
-    def checkins(options)
-      options = check_raw(options)
-      loop do
-        begin
-          stream = @api.get_checkins(options)
-          show_if_new(stream, options, 'explore:checkins')
-          options = save_then_return(stream, options)
-          pause
-        rescue Interrupt
-          canceled
-        rescue => e
-          raise e
-        end
-      end
-    end
-
-    def photos(options)
-      options = check_raw(options)
-      loop do
-        begin
-          stream = @api.get_photos(options)
-          show_if_new(stream, options, 'explore:photos')
-          options = save_then_return(stream, options)
-          pause
-        rescue Interrupt
-          canceled
-        rescue => e
-          raise e
         end
       end
     end
@@ -165,13 +89,37 @@ module Ayadn
           pause
         rescue Interrupt
           canceled
-        rescue => e
-          raise e
         end
       end
     end
 
     private
+
+    def get(target, options)
+      case target
+      when 'global'
+        @api.get_global(options)
+      when 'unified'
+        @api.get_unified(options)
+      when 'trending'
+        @api.get_trending(options)
+      when 'photos'
+        @api.get_photos(options)
+      when 'checkins'
+        @api.get_checkins(options)
+      when 'replies'
+        @api.get_conversations(options)
+      end
+    end
+
+    def explore?(target)
+      case target
+      when 'trending', 'photos', 'checkins', 'replies'
+        true
+      else
+        false
+      end
+    end
 
     def pause
       sleep Settings.options[:scroll][:timer]
