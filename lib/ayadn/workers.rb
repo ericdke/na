@@ -292,13 +292,7 @@ module Ayadn
           if word =~ /#\w+/
             words << word.gsub(/#{reg_tag}/, '#\1'.color(hashtag_color))
           elsif word =~ /@\w+/
-            splitted = word.split(/#{reg_split}/) if word =~ /#{reg_split}/
-            if splitted
-              splitted.each {|d| @str = d if d =~ /@\w+/}
-              @str = word if @str.nil?
-            else
-              @str = word
-            end
+            @str = def_str(word, reg_split)
             if handles.include?(@str.downcase)
               words << word.gsub(/#{reg_mention}/, '@\1'.color(mention_color))
             else
@@ -315,6 +309,17 @@ module Ayadn
     end
 
     private
+
+    def def_str(word, reg_split)
+      splitted = word.split(/#{reg_split}/) if word =~ /#{reg_split}/
+      if splitted
+        splitted.each {|d| @str = d if d =~ /@\w+/}
+        return word if @str.nil?
+        @str
+      else
+        word
+      end
+    end
 
     def init_table
       Terminal::Table.new do |t|
