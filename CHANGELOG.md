@@ -2,6 +2,8 @@
 
 - Show who's writing, and who's the recipient
 - Less help text when writing, more concise
+- The blacklist works better (recorded and compared downcased)
+- Added the Convert database command
 
 # 1.0.13
 

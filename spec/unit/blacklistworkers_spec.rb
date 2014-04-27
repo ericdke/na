@@ -53,20 +53,20 @@ describe Ayadn::BlacklistWorkers do
     it "adds a client to the blacklist" do
       k = Ayadn::BlacklistWorkers.new
       k.add(['client', 'IFTTT'])
-      expect(Ayadn::Databases.blacklist['IFTTT']).to eq :client
+      expect(Ayadn::Databases.blacklist['ifttt']).to eq :client
       expect(File.read('spec/mock/ayadn.log')).to include "(wee) INFO -- Added 'IFTTT' to blacklist of clients."
     end
     it "adds a client to the blacklist" do
       k = Ayadn::BlacklistWorkers.new
       k.add(['source', 'Zapier'])
-      expect(Ayadn::Databases.blacklist['Zapier']).to eq :client
+      expect(Ayadn::Databases.blacklist['zapier']).to eq :client
       expect(File.read('spec/mock/ayadn.log')).to include "(wee) INFO -- Added 'Zapier' to blacklist of clients."
     end
     it "adds a hashtag to the blacklist" do
       k = Ayadn::BlacklistWorkers.new
-      k.add(['hashtag', 'sports'])
+      k.add(['hashtag', 'Sports'])
       expect(Ayadn::Databases.blacklist['sports']).to eq :hashtag
-      expect(File.read('spec/mock/ayadn.log')).to include "(wee) INFO -- Added 'sports' to blacklist of hashtags."
+      expect(File.read('spec/mock/ayadn.log')).to include "(wee) INFO -- Added 'Sports' to blacklist of hashtags."
     end
     it "adds a hashtag to the blacklist" do
       k = Ayadn::BlacklistWorkers.new
@@ -76,9 +76,9 @@ describe Ayadn::BlacklistWorkers do
     end
     it "adds a mention to the blacklist" do
       k = Ayadn::BlacklistWorkers.new
-      k.add(['mention', 'mrtest'])
+      k.add(['mention', 'mrTest'])
       expect(Ayadn::Databases.blacklist['@mrtest']).to eq :mention
-      expect(File.read('spec/mock/ayadn.log')).to include "(wee) INFO -- Added '@mrtest' to blacklist of mentions."
+      expect(File.read('spec/mock/ayadn.log')).to include "(wee) INFO -- Added '@mrTest' to blacklist of mentions."
     end
     it "adds a mention to the blacklist" do
       k = Ayadn::BlacklistWorkers.new
@@ -92,11 +92,11 @@ describe Ayadn::BlacklistWorkers do
     it "removes a client from the blacklist" do
       k = Ayadn::BlacklistWorkers.new
       k.add(['client', 'IFTTT'])
-      expect(Ayadn::Databases.blacklist['IFTTT']).to eq :client
+      expect(Ayadn::Databases.blacklist['ifttt']).to eq :client
       expect(File.read('spec/mock/ayadn.log')).to include "(wee) INFO -- Added 'IFTTT' to blacklist of clients."
       k = Ayadn::BlacklistWorkers.new
       k.remove(['client', 'IFTTT'])
-      expect(Ayadn::Databases.blacklist['IFTTT']).to eq nil
+      expect(Ayadn::Databases.blacklist['ifttt']).to eq nil
       expect(File.read('spec/mock/ayadn.log')).to include "(wee) INFO -- Removed 'client:IFTTT' from blacklist."
     end
   end

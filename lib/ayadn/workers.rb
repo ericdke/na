@@ -95,11 +95,11 @@ module Ayadn
       posts = {}
 
       data.each.with_index(1) do |post, index|
-        next if Databases.blacklist[post['source']['name']]
+        next if Databases.blacklist[post['source']['name'].downcase]
         hashtags = extract_hashtags(post)
         @skip = false
         hashtags.each do |h|
-          if Databases.blacklist[h]
+          if Databases.blacklist[h.downcase]
             @skip = true
             break
           end
@@ -108,7 +108,7 @@ module Ayadn
         mentions= []
         post['entities']['mentions'].each { |m| mentions << m['name'] }
         mentions.each do |m|
-          if Databases.blacklist["@" + m]
+          if Databases.blacklist["@" + m.downcase]
             @skip = true
             break
           end

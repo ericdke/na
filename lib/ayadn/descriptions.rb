@@ -911,6 +911,8 @@ module Ayadn
       <<-USAGE
       Adds a mention, hashtag or client to your blacklist.
 
+      You don't have to respect the case as all data is recorded downcase.
+
       Usage:
 
       ayadn blacklist add mention @shmuck
@@ -928,6 +930,8 @@ module Ayadn
     def self.blacklist_remove
       <<-USAGE
       Removes a mention, hashtag or client from your blacklist.
+
+      You don't have to respect the case as all data is recorded downcase.
 
       Usage:
 
@@ -950,6 +954,18 @@ module Ayadn
       ayadn blacklist import '/Users/blah/ayadn/blah/db/blacklist.db'
 
       ayadn -K import '/Users/blah/backups/blacklist.db'
+      \n\n
+      USAGE
+    end
+    def self.blacklist_convert
+      <<-USAGE
+      Convert your current blacklist database to the new format. Useful if you used the blacklist command prior to Ayadn 10.0.13.
+
+      Usage:
+
+      ayadn blacklist convert
+
+      ayadn -K convert
       \n\n
       USAGE
     end

@@ -37,6 +37,15 @@ module Ayadn
       blacklist.import(database)
       puts Status.done
     end
+
+    desc "convert", "Convert your current blacklist database to the new format"
+    long_desc Descriptions.blacklist_convert
+    def convert
+      blacklist = BlacklistWorkers.new
+      blacklist.convert
+      puts Status.done
+    end
+
   end
 
   class BlacklistWorkers
@@ -57,6 +66,13 @@ module Ayadn
           puts "\nFile '#{new_db}' doesn't exist.\n\n".color(:red)
           Logs.rec.warn "File '#{new_db}' doesn't exist."
         end
+      ensure
+        Databases.close_all
+      end
+    end
+    def convert
+      begin
+        Databases.convert_blacklist
       ensure
         Databases.close_all
       end
@@ -102,14 +118,20 @@ module Ayadn
     end
     def list
       begin
-        list = Databases.blacklist
-        unless list.empty?
-          puts Workers.new.build_blacklist_list(list)
-        else
-          abort(Status.empty_list)
-        end
+        show_list
       ensure
         Databases.close_all
+      end
+    end
+
+    #private
+
+    def show_list
+      list = Databases.blacklist
+      unless list.empty?
+        puts Workers.new.build_blacklist_list(list)
+      else
+        abort(Status.empty_list)
       end
     end
   end

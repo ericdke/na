@@ -25,23 +25,32 @@ module Ayadn
     end
 
     def self.add_mention_to_blacklist(target)
-      @blacklist[target] = :mention
+      @blacklist[target.downcase] = :mention
     end
     def self.add_client_to_blacklist(target)
-      @blacklist[target] = :client
+      @blacklist[target.downcase] = :client
     end
     def self.add_hashtag_to_blacklist(target)
-      @blacklist[target] = :hashtag
+      @blacklist[target.downcase] = :hashtag
     end
     def self.remove_from_blacklist(target)
-      @blacklist.delete(target)
+      @blacklist.delete(target.downcase)
     end
     def self.import_blacklist(blacklist)
       new_list = Daybreak::DB.new blacklist
       new_list.each {|name,type| @blacklist[name] = type}
       new_list.close
     end
-
+    def self.convert_blacklist
+      dummy = {}
+      @blacklist.each do |v,k|
+        dummy[v.downcase] = k
+      end
+      @blacklist.clear
+      dummy.each do |v,k|
+        @blacklist[v] = k
+      end
+    end
     def self.save_max_id(stream)
       @pagination[stream['meta']['marker']['name']] = stream['meta']['max_id']
     end
