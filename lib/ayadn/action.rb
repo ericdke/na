@@ -388,7 +388,11 @@ module Ayadn
         doing(options)
         stream = @api.get_hashtag(hashtag)
         no_data('hashtag') if stream['data'].empty?
-        render_view(stream, options)
+        if options[:extract]
+          view_all_hashtag_links(stream, hashtag)
+        else
+          render_view(stream, options)
+        end
       rescue => e
         Errors.global_error("action/hashtag", [hashtag, options], e)
       ensure
@@ -401,7 +405,11 @@ module Ayadn
         doing(options)
         stream = @api.get_search(words, options)
         no_data('search') if stream['data'].empty?
-        render_view(stream, options)
+        if options[:extract]
+          view_all_search_links(stream, words)
+        else
+          render_view(stream, options)
+        end
       rescue => e
         Errors.global_error("action/search", [words, options], e)
       ensure
@@ -1153,6 +1161,34 @@ module Ayadn
         print "\r#{sprintf("%02d", i)} sec... QUIT WITH [CTRL+C]".color(:cyan)
         sleep 1
       end
+    end
+
+    def links_from_posts(stream)
+      links = []
+      worker = Workers.new
+      stream['data'].each do |post|
+        from = worker.extract_links(post)
+        from.each {|l| links << l}
+      end
+      links.uniq!
+    end
+
+    def show_links(links)
+      links.each {|l| puts "#{l}\n".color(Settings.options[:colors][:link])}
+    end
+
+    def view_all_hashtag_links(stream, hashtag)
+      links = links_from_posts(stream)
+      @view.clear_screen
+      puts "Links from posts containing hashtag '##{hashtag}': \n".color(:cyan)
+      show_links(links)
+    end
+
+    def view_all_search_links(stream, words)
+      links = links_from_posts(stream)
+      @view.clear_screen
+      puts "Links from posts containing word(s) '#{words}': \n".color(:cyan)
+      show_links(links)
     end
 
   end

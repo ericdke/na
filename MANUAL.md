@@ -17,6 +17,7 @@
 			- [INDEX](#index)
 			- [NEW](#new)
 			- [RAW](#raw)
+			- [EXTRACT](#extract)
 	- [GLOBAL](#global)
 	- [CHECKINS](#checkins)
 	- [CONVERSATIONS](#conversations)
@@ -284,7 +285,21 @@ Displays only the new posts in the stream since your last visit.
 
 Displays the raw response from the App.net API instead of the formatted Ayadn output. For debugging and learning purposes.  
 
+`ayadn --raw timeline`
+
 `ayadn -x -tl`
+
+#### EXTRACT
+
+Extracts all links from posts resulting of a search by word(s) or by hashtag.
+
+`ayadn tag --extract instagram`
+
+`ayadn -t -e instagram`
+
+`ayadn search --extract ruby gem`  
+
+`ayadn -s -e ruby gem`  
 
 ## GLOBAL
 

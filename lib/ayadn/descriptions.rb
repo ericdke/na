@@ -13,6 +13,9 @@ module Ayadn
     def self.options_raw
       "Outputs the App.net raw JSON response"
     end
+    def self.options_extract
+      "Extract links from each object"
+    end
     def self.unified
       <<-USAGE
       Show your App.net timeline, aka the Unified Stream.

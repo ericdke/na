@@ -181,6 +181,7 @@ module Ayadn
     map "-t" => :hashtag
     long_desc Descriptions.hashtag
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
     def hashtag(hashtag)
       Action.new.hashtag(hashtag, options)
     end
@@ -191,6 +192,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
     def search(*words)
       Action.new.search(words.join(","), options)
     end

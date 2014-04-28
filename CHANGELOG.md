@@ -5,6 +5,7 @@
 - The blacklist works better (recorded and compared downcased)
 - Added the Convert blacklist command
 - Export blacklist as CSV, aliases and settings as JSON
+- New option: 'extract'. Extracts all links from results of a search by word or by hashtag.
 
 # 1.0.13 - 'Charlotte'
 
