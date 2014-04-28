@@ -239,6 +239,13 @@ module Ayadn
       Action.new.delete(post_id)
     end
 
+    desc "delete_m CHANNEL MESSAGE", "Delete a message (-DM)"
+    map "-DM" => :delete_m
+    long_desc Descriptions.delete_m
+    def delete_m(*args)
+      Action.new.delete_m(args)
+    end
+
     desc "unfollow @USERNAME", "Unfollow @username (-UF)"
     map "-UF" => :unfollow
     long_desc Descriptions.unfollow

@@ -16,6 +16,9 @@ module Ayadn
     def self.deleting_post(post_id)
       "\nDeleting post #{post_id}\n".inverse
     end
+    def self.deleting_message(message_id)
+      "\nDeleting message #{message_id}\n".inverse
+    end
     def self.unfollowing(username)
       "\nUnfollowing #{username}\n".inverse
     end
@@ -82,6 +85,9 @@ module Ayadn
     def self.deleted(post_id)
       "\nPost #{post_id} has been deleted.\n".color(:green)
     end
+    def self.deleted_m(message_id)
+      "\nMessage #{message_id} has been deleted.\n".color(:green)
+    end
     def self.starred(post_id)
       "\nPost #{post_id} has been starred.\n".color(:green)
     end
@@ -117,6 +123,9 @@ module Ayadn
     end
     def self.error_missing_post_id
       "\nYou have to specify a post id.\n".color(:red)
+    end
+    def self.error_missing_message_id
+      "\nYou have to specify a message id.\n".color(:red)
     end
     def self.error_missing_channel_id
       "\nYou have to specify a channel id.\n".color(:red)

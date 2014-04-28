@@ -185,6 +185,10 @@ module Ayadn
       "#{@posts_url}#{post_id}?access_token=#{Settings.user_token}"
     end
 
+    def delete_message(channel_id, message_id)
+      "#{@channels_url}/#{channel_id}/messages/#{message_id}?access_token=#{Settings.user_token}"
+    end
+
     def follow(username)
       "#{@users_url}#{username}/follow?access_token=#{Settings.user_token}"
     end

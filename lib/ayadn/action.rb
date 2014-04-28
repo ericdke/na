@@ -250,6 +250,22 @@ module Ayadn
       end
     end
 
+    def delete_m(args)
+      begin
+        missing_message_id unless args.length == 2
+        message_id = args[1]
+        missing_message_id unless message_id.is_integer?
+        channel_id = get_channel_id_from_alias(args[0])
+        print Status.deleting_message(message_id)
+        resp = @api.delete_message(channel_id, message_id)
+        check_message_has_been_deleted(message_id, resp)
+      rescue => e
+        Errors.global_error("action/delete message", message_id, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
     def unfollow(username)
       begin
         missing_username if username.empty?
@@ -955,6 +971,15 @@ module Ayadn
       end
     end
 
+    def check_message_has_been_deleted(message_id, resp)
+      if resp['meta']['code'] == 200
+        puts Status.deleted_m(message_id)
+        Logs.rec.info "Deleted message #{message_id}."
+      else
+        whine(Status.not_deleted(message_id), resp)
+      end
+    end
+
     def check_has_been_unblocked(username, resp)
       if resp['meta']['code'] == 200
         puts Status.unblocked(username)
@@ -1130,6 +1155,11 @@ module Ayadn
 
     def missing_post_id
       puts Status.error_missing_post_id
+      exit
+    end
+
+    def missing_message_id
+      puts Status.error_missing_message_id
       exit
     end
 

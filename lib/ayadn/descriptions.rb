@@ -498,6 +498,20 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.delete_m
+      <<-USAGE
+      Delete a message (private message or message in a channel).
+
+      Usage:
+
+      ayadn delete_m 42666 3365251
+
+      ayadn -DM 42666 3365251
+
+      ayadn -DM my_channel_alias 3365251
+      \n\n
+      USAGE
+    end
     def self.unfollow
       <<-USAGE
       Unfollow a user.

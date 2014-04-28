@@ -42,6 +42,7 @@
 	- [SEND](#send)
 - [ACTIONS](#actions)
 	- [DELETE](#delete)
+	- [DELETE MESSAGE](#delete-message)
 	- [REPOST](#repost)
 	- [UNREPOST](#unrepost)
 	- [STAR](#star)
@@ -573,6 +574,18 @@ Delete a post.
 `ayadn delete 23365251`
 
 `ayadn -D 23365251`
+
+## DELETE MESSAGE
+
+Delete a message. 
+
+You have to specify channel id (or alias) then message number.
+
+`ayadn delete_m 42666 3365251`
+
+`ayadn -DM 42666 3365251`
+
+`ayadn -DM my_alias 3365251`
 
 ## REPOST
 

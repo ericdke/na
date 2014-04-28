@@ -171,6 +171,10 @@ module Ayadn
       JSON.parse(CNX.delete(Endpoints.new.delete_post(post_id)))
     end
 
+    def delete_message(channel_id, message_id)
+      JSON.parse(CNX.delete(Endpoints.new.delete_message(channel_id, message_id)))
+    end
+
     def unstar(post_id)
       JSON.parse(CNX.delete(Endpoints.new.star(post_id)))
     end
