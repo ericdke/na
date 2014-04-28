@@ -114,6 +114,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
     def whatstarred(*username)
       Action.new.whatstarred(username, options)
     end
@@ -428,6 +429,16 @@ module Ayadn
       else
         Switch.new.list
       end
+    end
+
+    desc "version", "Shows the current Ayadn version (-v)"
+    map "-v" => :version
+    def version
+      puts "\nAYADN\n".color(:red)
+      puts "Version: ".color(:cyan) + "#{VERSION}\n".color(:green)
+      puts "Readme: ".color(:cyan) + "https://github.com/ericdke/na/blob/master/README.md".color(:yellow)
+      puts "Manual: ".color(:cyan) + "https://github.com/ericdke/na/blob/master/MANUAL.md".color(:yellow)
+      puts "\n"
     end
 
   end

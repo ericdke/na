@@ -3,9 +3,10 @@
 - Show who's writing, and who's the recipient
 - Less help text when writing, more concise
 - The blacklist works better (recorded and compared downcased)
-- Added the Convert blacklist command
+- New command: convert blacklist
 - Export blacklist as CSV, aliases and settings as JSON
-- New option: 'extract'. Extracts all links from results of a search by word or by hashtag.
+- New option: 'extract'. Extracts all links from results of a search by word or by hashtag, or from the 'what starred' command
+- New command: show current version
 
 # 1.0.13 - 'Charlotte'
 

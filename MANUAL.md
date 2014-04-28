@@ -291,7 +291,7 @@ Displays the raw response from the App.net API instead of the formatted Ayadn ou
 
 #### EXTRACT
 
-Extracts all links from posts resulting of a search by word(s) or by hashtag.
+Extracts all links from posts.
 
 `ayadn hashtag --extract instagram`
 
@@ -300,6 +300,10 @@ Extracts all links from posts resulting of a search by word(s) or by hashtag.
 `ayadn search --extract ruby gem`  
 
 `ayadn -s -e ruby gem`  
+
+`ayadn whatstarred @ericd -e`
+
+`ayadn -was -e ericd`
 
 ## GLOBAL
 

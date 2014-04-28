@@ -164,7 +164,12 @@ module Ayadn
         doing(options)
         stream = @api.get_whatstarred(username, options)
         user_404(username) if meta_404(stream)
-        stream['data'].empty? ? no_data('whatstarred') : render_view(stream, options)
+        no_data('whatstarred') if stream['data'].empty?
+        if options[:extract]
+          view_all_stars_links(stream)
+        else
+          render_view(stream, options)
+        end
       rescue => e
         Errors.global_error("action/whatstarred", [username, options], e)
       ensure
@@ -1171,6 +1176,7 @@ module Ayadn
         from.each {|l| links << l}
       end
       links.uniq!
+      links
     end
 
     def show_links(links)
@@ -1188,6 +1194,13 @@ module Ayadn
       links = links_from_posts(stream)
       @view.clear_screen
       puts "Links from posts containing word(s) '#{words}': \n".color(:cyan)
+      show_links(links)
+    end
+
+    def view_all_stars_links(stream)
+      links = links_from_posts(stream)
+      @view.clear_screen
+      puts "Links from your starred posts: \n".color(:cyan)
       show_links(links)
     end
 
