@@ -54,17 +54,17 @@ module Ayadn
       Action.new.trending(options)
     end
 
-    # desc "photos", "Show the Photos Stream (-ph)"
-    # map "-ph" => :photos
-    # long_desc Descriptions.photos
-    # option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
-    # option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
-    # option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
-    # option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
-    # option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
-    # def photos
-    #   Action.new.photos(options)
-    # end
+    desc "photos", "Show the Photos Stream (-ph)"
+    map "-ph" => :photos
+    long_desc Descriptions.photos
+    option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
+    option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
+    option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
+    option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
+    option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    def photos
+      Action.new.photos(options)
+    end
 
     desc "conversations", "Show the Conversations Stream (-cq)"
     map "-cq" => :conversations

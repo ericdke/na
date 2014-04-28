@@ -7,6 +7,7 @@
 - Export blacklist as CSV, aliases and settings as JSON
 - New option: 'extract'. Extracts all links from results of a search by word or by hashtag, or from the 'what starred' command
 - New command: show current version
+- New command: photos stream. Wasn't sure if it's of any interest...
 
 # 1.0.13 - 'Charlotte'
 

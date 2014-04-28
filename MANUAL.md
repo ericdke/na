@@ -22,6 +22,7 @@
 	- [CHECKINS](#checkins)
 	- [CONVERSATIONS](#conversations)
 	- [TRENDING](#trending)
+	- [PHOTOS](#photos)
 	- [MENTIONS](#mentions)
 	- [POSTS](#posts)
 	- [MESSAGES](#messages)
@@ -348,6 +349,16 @@ This is a stream of trending posts.
 `ayadn trending`
 
 `ayadn -tr`
+
+## PHOTOS
+
+Display the 'Photos stream'.
+
+This is a stream of posts including a picture.
+
+`ayadn photos`
+
+`ayadn -ph`  
 
 ## MENTIONS
 
