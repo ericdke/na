@@ -293,7 +293,7 @@ Displays the raw response from the App.net API instead of the formatted Ayadn ou
 
 Extracts all links from posts resulting of a search by word(s) or by hashtag.
 
-`ayadn tag --extract instagram`
+`ayadn hashtag --extract instagram`
 
 `ayadn -t -e instagram`
 
