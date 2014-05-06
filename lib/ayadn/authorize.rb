@@ -28,7 +28,7 @@ module Ayadn
       puts "Saving user token...\n".color(:green)
       create_token_file(user)
       puts "Creating user account for #{user.handle}...\n".color(:green)
-      accounts_db = Daybreak::DB.new("#{user.home_path}/accounts.db")
+      accounts_db = Databases.init("#{user.home_path}/accounts.db")
       create_account(user, accounts_db)
     end
 

@@ -8,11 +8,11 @@ module Ayadn
     end
 
     def self.open_databases
-      @users = Daybreak::DB.new "#{Settings.config[:paths][:db]}/users.db"
-      @index = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/index.db"
-      @pagination = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/pagination.db"
-      @aliases = Daybreak::DB.new "#{Settings.config[:paths][:db]}/aliases.db"
-      @blacklist = Daybreak::DB.new "#{Settings.config[:paths][:db]}/blacklist.db"
+      @users = self.init "#{Settings.config[:paths][:db]}/users.db"
+      @index = self.init "#{Settings.config[:paths][:pagination]}/index.db"
+      @pagination = self.init "#{Settings.config[:paths][:pagination]}/pagination.db"
+      @aliases = self.init "#{Settings.config[:paths][:db]}/aliases.db"
+      @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
     end
 
     def self.close_all
@@ -21,6 +21,16 @@ module Ayadn
       [@users, @index, @pagination, @aliases, @blacklist].each do |db|
         db.flush
         db.close
+      end
+    end
+
+    def self.init(path)
+      winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20', 'mingw32']
+      case RbConfig::CONFIG['host_os']
+      when *winPlatforms
+        abort("\nSorry, Ayadn doesn't work on Windows.\n\n".color(:red))
+      else
+        Daybreak::DB.new "#{path}"
       end
     end
 
@@ -37,7 +47,7 @@ module Ayadn
       @blacklist.delete(target.downcase)
     end
     def self.import_blacklist(blacklist)
-      new_list = Daybreak::DB.new blacklist
+      new_list = self.init blacklist
       new_list.each {|name,type| @blacklist[name] = type}
       new_list.close
     end
@@ -68,7 +78,7 @@ module Ayadn
     end
 
     def self.import_aliases(aliases)
-      new_aliases = Daybreak::DB.new aliases
+      new_aliases = self.init aliases
       new_aliases.each {|al,id| @aliases[al] = id}
       new_aliases.close
     end

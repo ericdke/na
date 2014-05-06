@@ -12,7 +12,7 @@ module Ayadn
     def self.load_config
       acc_db = Dir.home + "/ayadn/accounts.db"
       self.check_for_accounts(acc_db)
-      db = Daybreak::DB.new(acc_db)
+      db = Databases.init acc_db
       active = db['ACTIVE']
       home = db[active][:path]
       @config = {

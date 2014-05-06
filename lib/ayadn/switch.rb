@@ -4,7 +4,7 @@ module Ayadn
     def list
       home_path = Dir.home + "/ayadn"
       if File.exist?("#{home_path}/accounts.db")
-        accounts_db = Daybreak::DB.new("#{home_path}/accounts.db")
+        accounts_db = Databases.init("#{home_path}/accounts.db")
         active = accounts_db['ACTIVE']
         begin
           puts "\nCurrently authorized accounts:\n".color(:cyan)
@@ -33,7 +33,7 @@ module Ayadn
       username = Workers.remove_arobase_if_present(user.first)
       home_path = Dir.home + "/ayadn"
       if File.exist?("#{home_path}/accounts.db")
-        accounts_db = Daybreak::DB.new("#{home_path}/accounts.db")
+        accounts_db = Databases.init("#{home_path}/accounts.db")
         active = accounts_db['ACTIVE']
         if username == accounts_db[active][:username]
           puts "\nYou're already authorized with username '#{accounts_db[active][:handle]}'.\n".color(:red)
