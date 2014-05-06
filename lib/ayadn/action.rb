@@ -379,8 +379,11 @@ module Ayadn
       begin
         missing_post_id unless post_id.is_integer?
         puts Status.unstarring(post_id)
-        if @api.get_details(post_id)['data']['you_starred']
-          check_has_been_unstarred(post_id, @api.unstar(post_id))
+        resp = @api.get_details(post_id)
+        id = get_original_id(post_id, resp)
+        resp = @api.get_details(id)
+        if resp['data']['you_starred']
+          check_has_been_unstarred(id, @api.unstar(id))
         else
           puts Status.not_your_starred
         end
@@ -395,8 +398,10 @@ module Ayadn
       begin
         missing_post_id unless post_id.is_integer?
         puts Status.starring(post_id)
-        check_if_already_starred(@api.get_details(post_id))
-        check_has_been_starred(post_id, @api.star(post_id))
+        resp = @api.get_details(post_id)
+        check_if_already_starred(resp)
+        id = get_original_id(post_id, resp)
+        check_has_been_starred(id, @api.star(id))
       rescue => e
         Errors.global_error("action/star", post_id, e)
       ensure

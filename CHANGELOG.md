@@ -1,3 +1,7 @@
+# 1.1.1 - 'State Of The Union'
+
+- Star and unstar a reposted post
+
 # 1.1.0 - 'Leviathan'
 
 - Show who's writing, and who's the recipient

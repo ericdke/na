@@ -83,22 +83,22 @@ module Ayadn
       "Could not block user #{username} (doesn't exist, or is already blocked)\n".color(:red)
     end
     def self.deleted(post_id)
-      "\nPost #{post_id} has been deleted.\n".color(:green)
+      "Post #{post_id} has been deleted.\n".color(:green)
     end
     def self.deleted_m(message_id)
       "\nMessage #{message_id} has been deleted.\n".color(:green)
     end
     def self.starred(post_id)
-      "\nPost #{post_id} has been starred.\n".color(:green)
+      "Post #{post_id} has been starred.\n".color(:green)
     end
     def self.unreposted(post_id)
-      "\nPost #{post_id} has been unreposted.\n".color(:green)
+      "Post #{post_id} has been unreposted.\n".color(:green)
     end
     def self.reposted(post_id)
-      "\nPost #{post_id} has been reposted.\n".color(:green)
+      "Post #{post_id} has been reposted.\n".color(:green)
     end
     def self.unstarred(post_id)
-      "\nPost #{post_id} has been unstarred.\n".color(:green)
+      "Post #{post_id} has been unstarred.\n".color(:green)
     end
     def self.unfollowed(username)
       "\nUser #{username} has been unfollowed.\n".color(:green)
