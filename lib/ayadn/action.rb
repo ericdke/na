@@ -842,7 +842,6 @@ module Ayadn
           abort(Status.empty_fields) if el.length == 0
         end
         @view.clear_screen
-        #text_to_post = "#nowplaying '#{itunes.track}' from '#{itunes.album}' by #{itunes.artist}"
         text_to_post = "#nowplaying\nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         puts Status.writing
         show_nowplaying(text_to_post)
@@ -857,8 +856,6 @@ module Ayadn
       rescue => e
         puts Status.wtf
         Errors.global_error("action/nowplaying", itunes, e)
-      # ensure
-      #   Databases.close_all
       end
     end
 
@@ -1184,6 +1181,11 @@ module Ayadn
 
     def get_track_infos
       track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
+      if track.empty?
+        puts "\nCanceled: unable to get info from iTunes.\n".color(:red)
+        Errors.warn "Nowplaying canceled: unable to get info from iTunes."
+        exit
+      end
       album = `osascript -e 'tell application "iTunes"' -e 'set trackAlbum to album of current track' -e 'return trackAlbum' -e 'end tell'`
       artist = `osascript -e 'tell application "iTunes"' -e 'set trackArtist to artist of current track' -e 'return trackArtist' -e 'end tell'`
       maker = Struct.new(:artist, :album, :track)

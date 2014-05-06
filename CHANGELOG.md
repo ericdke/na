@@ -1,6 +1,7 @@
 # 1.1.1 - 'State Of The Union'
 
 - Star and unstar a reposted post
+- Nowplaying: Error message if iTunes is closed or not playing any track
 
 # 1.1.0 - 'Leviathan'
 
