@@ -1,4 +1,4 @@
-# 1.1.1 - 'State Of The Union'
+# 1.1.1 - 'State Of The Onion'
 
 - Star and unstar a reposted post
 - Nowplaying shows an error message if iTunes is closed or not currently playing any track
