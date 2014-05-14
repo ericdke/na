@@ -36,27 +36,9 @@ Uninstall:
 
 `gem uninstall ayadn`  
 
-### OS X, LINUX, BSD
-
-Please use something like RVM or RBENV to install Ruby if necessary.
-
-You can also use the Ruby shipped with your system but you shouldn't, as it would require root privileges.
-
-### OTHER PLATFORMS
-
-Ayadn 1.0.x isn't compatible with Windows: there's too many issues due to external Gems and POSIX-dependant tools.  
-
-That may change in the future...  
-
-### ALPHA-BETA-PRE
-
-This is only necessary if you installed a pre-1.0 testing version:
-
-Users of alpha, beta or pre-release versions should first uninstall the old versions with `gem uninstall ayadn` then run `ayadn set defaults` after installing version 1.0 (note that this will replace the config file contents).  
-
 # DOCUMENTATION
 
-Read the [manual](https://github.com/ericdke/na/blob/master/MANUAL.md).
+[Read the docs at ayadn-app.net/doc](http://ayadn-app.net/doc/)
 
 # CONTACT
 
@@ -65,3 +47,5 @@ Author: [@ericd](http://app.net/ericd)
 App account: [@ayadn](http://app.net/ayadn)
 
 Website: [ayadn-app.net](http://ayadn-app.net)
+
+ADN Directory: [Ayadn](https://directory.app.net/app/345/ayadn/)
