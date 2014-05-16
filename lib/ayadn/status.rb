@@ -8,46 +8,46 @@ module Ayadn
       "\nFile downloaded in #{Settings.config[:paths][:downloads]}/#{name}\n".color(:green)
     end
     def self.downloading
-      "Downloading from ADN...\n".inverse
+      "Downloading from ADN...".inverse
     end
     def self.posting
-      "Posting to ADN...\n".inverse
+      "Posting to ADN...".inverse
     end
     def self.deleting_post(post_id)
-      "\nDeleting post #{post_id}\n".inverse
+      "\nDeleting post #{post_id}".inverse
     end
     def self.deleting_message(message_id)
-      "\nDeleting message #{message_id}\n".inverse
+      "\nDeleting message #{message_id}".inverse
     end
     def self.unfollowing(username)
-      "\nUnfollowing #{username}\n".inverse
+      "\nUnfollowing #{username}".inverse
     end
     def self.following(username)
-      "\nFollowing #{username}\n".inverse
+      "\nFollowing #{username}".inverse
     end
     def self.unmuting(username)
-      "\nUnmuting #{username}\n".inverse
+      "\nUnmuting #{username}".inverse
     end
     def self.muting(username)
-      "\nMuting #{username}\n".inverse
+      "\nMuting #{username}".inverse
     end
     def self.unblocking(username)
-      "\nUnblocking #{username}\n".inverse
+      "\nUnblocking #{username}".inverse
     end
     def self.blocking(username)
-      "\nBlocking #{username}\n".inverse
+      "\nBlocking #{username}".inverse
     end
     def self.unreposting(post_id)
-      "\nUnreposting #{post_id}\n".inverse
+      "\nUnreposting #{post_id}".inverse
     end
     def self.reposting(post_id)
-      "\nReposting #{post_id}\n".inverse
+      "\nReposting #{post_id}".inverse
     end
     def self.unstarring(post_id)
-      "\nUnstarring #{post_id}\n".inverse
+      "\nUnstarring #{post_id}".inverse
     end
     def self.starring(post_id)
-      "\nStarring #{post_id}\n".inverse
+      "\nStarring #{post_id}".inverse
     end
     def self.not_deleted(post_id)
       "Could not delete post #{post_id} (post isn't yours, or is already deleted)\n".color(:red)
@@ -83,22 +83,22 @@ module Ayadn
       "Could not block user #{username} (doesn't exist, or is already blocked)\n".color(:red)
     end
     def self.deleted(post_id)
-      "Post #{post_id} has been deleted.\n".color(:green)
+      "\nPost #{post_id} has been deleted.\n".color(:green)
     end
     def self.deleted_m(message_id)
       "\nMessage #{message_id} has been deleted.\n".color(:green)
     end
     def self.starred(post_id)
-      "Post #{post_id} has been starred.\n".color(:green)
+      "\nPost #{post_id} has been starred.\n".color(:green)
     end
     def self.unreposted(post_id)
-      "Post #{post_id} has been unreposted.\n".color(:green)
+      "\nPost #{post_id} has been unreposted.\n".color(:green)
     end
     def self.reposted(post_id)
-      "Post #{post_id} has been reposted.\n".color(:green)
+      "\nPost #{post_id} has been reposted.\n".color(:green)
     end
     def self.unstarred(post_id)
-      "Post #{post_id} has been unstarred.\n".color(:green)
+      "\nPost #{post_id} has been unstarred.\n".color(:green)
     end
     def self.unfollowed(username)
       "\nUser #{username} has been unfollowed.\n".color(:green)
@@ -149,10 +149,10 @@ module Ayadn
       "\nPosting as ".color(:cyan) + "#{Settings.config[:identity][:handle]}".color(:green) + ".".color(:cyan)
     end
     def self.yourpost
-      "\nYour post:\n\n".color(:cyan)
+      "Your post:\n\n".color(:cyan)
     end
     def self.yourmessage
-      "\nYour message:\n\n".color(:cyan)
+      "Your message:\n\n".color(:cyan)
     end
     def self.message_from(username)
       "\nMessage from ".color(:cyan) + "#{Settings.config[:identity][:handle]} ".color(:green) + "to ".color(:cyan) + "#{username[0]}".color(:yellow) + ".".color(:cyan)
