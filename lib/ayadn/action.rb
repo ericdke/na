@@ -226,8 +226,7 @@ module Ayadn
         missing_post_id unless post_id.is_integer?
         doing(options)
         id = get_original_id(post_id, @api.get_details(post_id, options))
-        stream = @api.get_convo(id, options)
-        post_404(id) if meta_404(stream)
+        stream = get_convo id, options
         Databases.pagination["replies:#{id}"] = stream['meta']['max_id']
         render_view(stream, options)
         Scroll.new(@api, @view).convo(id, options) if options[:scroll]
@@ -236,6 +235,12 @@ module Ayadn
       ensure
         Databases.close_all
       end
+    end
+
+    def get_convo id, options
+      stream = @api.get_convo(id, options)
+      post_404(id) if meta_404(stream)
+      stream
     end
 
     def delete(post_id)

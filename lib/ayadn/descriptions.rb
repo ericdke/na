@@ -896,6 +896,46 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.mark
+      <<-USAGE
+      Bookmark a conversation and manage your bookmarks.
+
+      Usage:
+
+      ayadn mark add 30594331
+
+      ayadn mark add 30594331 convo_name
+
+      ayadn mark get 30594331
+
+      ayadn mark list
+
+      ayadn mark delete 30594331
+
+      ayadn mark rename 30594331 'convo name'
+
+      ayadn mark rename 'convo name' 'other name'
+
+      ayadn mark export 30594331
+
+      ayadn mark export all
+      \n\n
+      USAGE
+    end
+    def self.mark_add
+      <<-USAGE
+      Add a conversation to your conversations bookmarks.
+
+      Usage:
+
+      ayadn mark add 30594331
+
+      ayadn mark add 30594331 convo_name
+
+      You don't have to specify the root post of the conversation, any post within the thread will work.
+      \n\n
+      USAGE
+    end
     def self.blacklist
       <<-USAGE
       Manage your blacklist. Commands: add, remove, list, import.
