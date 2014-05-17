@@ -25,9 +25,9 @@ module Ayadn
           auth: "#{home}/auth",
           downloads: "#{home}/downloads",
           backup: "#{home}/backup",
-          posts: "#{home}/backup/posts",
-          messages: "#{home}/backup/messages",
-          lists: "#{home}/backup/lists"
+          posts: "#{home}/posts",
+          messages: "#{home}/messages",
+          lists: "#{home}/lists"
         },
         identity: {
           id: db[active][:id],

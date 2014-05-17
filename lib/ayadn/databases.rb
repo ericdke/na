@@ -4,7 +4,7 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :index, :pagination, :aliases, :blacklist
+      attr_accessor :users, :index, :pagination, :aliases, :blacklist, :bookmarks
     end
 
     def self.open_databases
@@ -13,12 +13,12 @@ module Ayadn
       @pagination = self.init "#{Settings.config[:paths][:pagination]}/pagination.db"
       @aliases = self.init "#{Settings.config[:paths][:db]}/aliases.db"
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
+      @bookmarks = self.init "#{Settings.config[:paths][:db]}/bookmarks.db"
     end
 
     def self.close_all
-      @pagination.compact if (File.size("#{Settings.config[:paths][:pagination]}/pagination.db") > (250000))
-      @index.compact if (File.size("#{Settings.config[:paths][:pagination]}/index.db") > (250000))
-      [@users, @index, @pagination, @aliases, @blacklist].each do |db|
+      [@users, @index, @pagination, @aliases, @blacklist, @bookmarks].each do |db|
+        db.compact
         db.flush
         db.close
       end
@@ -124,6 +124,10 @@ module Ayadn
 
     def self.has_new?(stream, title)
       stream['meta']['max_id'].to_i > @pagination[title].to_i
+    end
+
+    def self.add_bookmark bookmark
+      @bookmarks[bookmark[:id]] = bookmark
     end
 
   end
