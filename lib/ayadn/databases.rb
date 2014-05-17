@@ -18,9 +18,11 @@ module Ayadn
 
     def self.close_all
       [@users, @index, @pagination, @aliases, @blacklist, @bookmarks].each do |db|
-        db.compact
-        db.flush
-        db.close
+        unless db.nil?
+          db.compact
+          db.flush
+          db.close
+        end
       end
     end
 
