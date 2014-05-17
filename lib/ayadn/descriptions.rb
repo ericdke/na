@@ -906,19 +906,11 @@ module Ayadn
 
       ayadn mark add 30594331 convo_name
 
-      ayadn mark get 30594331
-
       ayadn mark list
 
       ayadn mark delete 30594331
 
-      ayadn mark rename 30594331 'convo name'
-
       ayadn mark rename 'convo name' 'other name'
-
-      ayadn mark export 30594331
-
-      ayadn mark export all
       \n\n
       USAGE
     end
