@@ -91,6 +91,26 @@ module Ayadn
       end
     end
 
+    desc "rename POST_ID TITLE", "Rename bookmark POST_ID"
+    long_desc Descriptions.mark_rename
+    def rename *args
+      begin
+        init
+        unless args.empty? || args[1].nil?
+          post_id, new_title = args[0], args[1]
+        else
+          abort Status.wrong_arguments
+        end
+        abort Status.error_missing_post_id unless post_id.is_integer?
+        Databases.rename_bookmark post_id, new_title
+        puts Status.done
+      rescue => e
+        Errors.global_error("mark/rename", args, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
     private
 
     def make_entry content

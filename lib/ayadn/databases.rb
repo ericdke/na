@@ -134,6 +134,10 @@ module Ayadn
       @bookmarks.delete post_id
     end
 
+    def self.rename_bookmark post_id, new_title
+      @bookmarks[post_id][:title] = new_title
+    end
+
   end
 
 end

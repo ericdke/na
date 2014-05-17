@@ -956,6 +956,16 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.mark_rename
+      <<-USAGE
+      Rename a bookmarked conversation.
+
+      Usage:
+
+      ayadn mark rename 30594331 'new title'
+      \n\n
+      USAGE
+    end
     def self.blacklist
       <<-USAGE
       Manage your blacklist. Commands: add, remove, list, import.
