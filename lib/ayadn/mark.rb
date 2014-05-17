@@ -57,13 +57,13 @@ module Ayadn
     def make_entry content
       entry = ""
       entry << "Bookmarked post id:\t#{content[:id]}\n"
+      entry << "Title:\t\t\t#{content[:title]}\n" unless content[:title].is_integer?
       entry << "Date of post:\t\t#{content[:first_date]}\n"
       entry << "Date of bookmark:\t#{content[:mark_date]}\n"
       entry << "Posts in convo:\t\t#{content[:size]}\n"
       entry << "Original poster:\t@#{content[:first_poster]}\n"
       entry << "Last poster:\t\t@#{content[:last_poster]}\n"
       entry << "Posters:\t\t#{content[:users].join(', ')}\n"
-      entry << "Title:\t\t\t#{content[:title]}\n" unless content[:title].is_integer?
       entry << "Alpha link:\t\t#{content[:url]}\n"
       entry << "Original text:\t\t#{content[:root_colorized_text]}\n"
     end
