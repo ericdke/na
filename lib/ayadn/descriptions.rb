@@ -930,7 +930,7 @@ module Ayadn
 
       ayadn mark add 30594331
 
-      ayadn mark add 30594331 convo_name
+      ayadn mark add 30594331 'title'
 
       You don't have to specify the root post of the conversation, any post within the thread will work.
       \n\n
