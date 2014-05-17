@@ -391,7 +391,7 @@ module Ayadn
     long_desc Descriptions.alias
     subcommand "alias", Alias
 
-    desc "mark COMMAND PARAM", "Bookmark a conversation / manage your bookmarks"
+    desc "mark POST (TITLE)", "Bookmark a conversation / manage bookmarks"
     long_desc Descriptions.mark
     subcommand "mark", Mark
 
