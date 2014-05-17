@@ -936,6 +936,16 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.mark_list
+      <<-USAGE
+      List your bookmarked conversations.
+
+      Usage:
+
+      ayadn mark list
+      \n\n
+      USAGE
+    end
     def self.blacklist
       <<-USAGE
       Manage your blacklist. Commands: add, remove, list, import.

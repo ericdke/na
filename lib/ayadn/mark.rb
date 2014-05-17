@@ -54,30 +54,54 @@ module Ayadn
       end
     end
 
+    desc "list", "List your bookmarked conversations"
+    long_desc Descriptions.mark_list
+    def list
+      begin
+        init
+        list = []
+        Databases.bookmarks.each {|i,v| list << v}
+        puts "\n"
+        list.each {|marked| puts make_entry marked; puts "\n"}
+      rescue => e
+        Errors.global_error("mark/list", nil, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
     private
 
     def make_entry content
       entry = ""
       entry << "Post id:".color(:cyan)
-      entry << "\t#{content[:id]}\n"
+      entry << "\t#{content[:id]}\n".color(Settings.options[:colors][:id])
       unless content[:title].is_integer?
         entry << "Title:".color(:cyan)
-        entry << "\t\t#{content[:title]}\n"
+        entry << "\t\t#{content[:title]}\n".color(Settings.options[:colors][:id])
       end
       entry << "Date:".color(:cyan)
-      entry << "\t\t#{content[:first_date]}\n"
-      entry << "Bookmarked:".color(:cyan)
-      entry << "\t#{content[:mark_date]}\n"
+      entry << "\t\t#{content[:first_date]}\n".color(Settings.options[:colors][:date])
+      # entry << "Bookmarked:".color(:cyan)
+      # entry << "\t#{content[:mark_date]}\n".color(Settings.options[:colors][:date])
       entry << "Posts:".color(:cyan)
-      entry << "\t\t#{content[:size]}\n"
+      entry << "\t\t#{content[:size]}\n".color(Settings.options[:colors][:name])
       entry << "Posters:".color(:cyan)
-      entry << "\t#{content[:users].join(', ')}\n"
+      entry << "\t#{content[:users].join(', ')}\n".color(Settings.options[:colors][:mentions])
       # entry << "First:\t\t@#{content[:first_poster]}\n"
       # entry << "Last:\t\t@#{content[:last_poster]}\n"
       entry << "Link:".color(:cyan)
-      entry << "\t\t#{content[:url]}\n"
+      entry << "\t\t#{content[:url]}\n".color(Settings.options[:colors][:link])
       entry << "Beginning:".color(:cyan)
-      entry << "\t#{content[:root_colorized_text][0..60]} [...]\n"
+      entry << "\t#{content[:root_colorized_text][0..40]} [...]\n"
+    end
+
+    def init
+      Settings.load_config
+      Settings.get_token
+      Settings.init_config
+      Logs.create_logger
+      Databases.open_databases
     end
 
   end
