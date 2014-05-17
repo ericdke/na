@@ -130,6 +130,10 @@ module Ayadn
       @bookmarks[bookmark[:id]] = bookmark
     end
 
+    def self.delete_bookmark post_id
+      @bookmarks.delete post_id
+    end
+
   end
 
 end

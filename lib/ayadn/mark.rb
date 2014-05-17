@@ -19,8 +19,8 @@ module Ayadn
         stream = action.get_convo post_id, options
         posts = workers.build_posts(stream['data'].reverse)
         posts.each do |id, post|
-          users << "@#{post[:original_poster]}"
-          post[:mentions].each {|mention| users << "@#{mention}"}
+          users << "#{post[:original_poster]}"
+          post[:mentions].each {|mention| users << "#{mention}"}
           bucket << post
         end
         users.uniq!
@@ -56,15 +56,36 @@ module Ayadn
 
     desc "list", "List your bookmarked conversations"
     long_desc Descriptions.mark_list
+    option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def list
       begin
         init
         list = []
         Databases.bookmarks.each {|i,v| list << v}
+        if options[:raw]
+          jj JSON.parse(list.to_json)
+          exit
+        end
         puts "\n"
         list.each {|marked| puts make_entry marked; puts "\n"}
       rescue => e
         Errors.global_error("mark/list", nil, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
+    desc "delete POST_ID", "Delete entry POST_ID from your bookmarked conversations"
+    long_desc Descriptions.mark_delete
+    def delete *args
+      begin
+        init
+        args.empty? ? abort(Status.wrong_arguments) : post_id = args[0]
+        abort Status.error_missing_post_id unless post_id.is_integer?
+        Databases.delete_bookmark post_id
+        puts Status.done
+      rescue => e
+        Errors.global_error("mark/delete", args, e)
       ensure
         Databases.close_all
       end
@@ -75,7 +96,7 @@ module Ayadn
     def make_entry content
       entry = ""
       entry << "Post id:".color(:cyan)
-      entry << "\t#{content[:id]}\n".color(Settings.options[:colors][:id])
+      entry << "\t#{content[:id]}\n".color(Settings.options[:colors][:username])
       unless content[:title].is_integer?
         entry << "Title:".color(:cyan)
         entry << "\t\t#{content[:title]}\n".color(Settings.options[:colors][:id])
@@ -87,13 +108,16 @@ module Ayadn
       entry << "Posts:".color(:cyan)
       entry << "\t\t#{content[:size]}\n".color(Settings.options[:colors][:name])
       entry << "Posters:".color(:cyan)
-      entry << "\t#{content[:users].join(', ')}\n".color(Settings.options[:colors][:mentions])
+      posters = []
+      content[:users].each {|mention| posters << "@#{mention}"}
+      entry << "\t#{posters.join(', ')}\n".color(Settings.options[:colors][:mentions])
       # entry << "First:\t\t@#{content[:first_poster]}\n"
       # entry << "Last:\t\t@#{content[:last_poster]}\n"
       entry << "Link:".color(:cyan)
       entry << "\t\t#{content[:url]}\n".color(Settings.options[:colors][:link])
       entry << "Beginning:".color(:cyan)
-      entry << "\t#{content[:root_colorized_text][0..40]} [...]\n"
+      text = content[:root_colorized_text].gsub(/[\r\n]/, ' ')
+      entry << "\t#{text[0..60]} [...]\n"
     end
 
     def init

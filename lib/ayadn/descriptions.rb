@@ -946,6 +946,16 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.mark_delete
+      <<-USAGE
+      Delete entry from your bookmarked conversations.
+
+      Usage:
+
+      ayadn mark delete 30594331
+      \n\n
+      USAGE
+    end
     def self.blacklist
       <<-USAGE
       Manage your blacklist. Commands: add, remove, list, import.
