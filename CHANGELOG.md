@@ -1,3 +1,8 @@
+# 1.1.3 - 'Kevin'
+
+- Bookmark a conversation
+- List, delete, rename bookmarks
+
 # 1.1.2 - 'Anders'
 
 - URL for the docs

@@ -91,7 +91,7 @@ module Ayadn
       end
     end
 
-    desc "rename POST_ID TITLE", "Rename bookmark POST_ID"
+    desc "rename POST_ID NEW_TITLE", "Rename bookmark POST_ID"
     long_desc Descriptions.mark_rename
     def rename *args
       begin
