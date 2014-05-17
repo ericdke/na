@@ -9,6 +9,7 @@ module Ayadn
         unless args.empty?
           post_id, convo_title = args[0], args[1]
         else
+          init
           abort Status.wrong_arguments
         end
         abort Status.error_missing_post_id unless post_id.is_integer?
