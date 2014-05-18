@@ -176,10 +176,10 @@ module Ayadn
       Settings.save_config
     end
     def filter value
-      Settings.options[:nicerank][:filter] = value
+      Settings.options[:nicerank][:filter] = Validators.boolean(value)
     end
     def filter_unranked value
-      Settings.options[:nicerank][:filter_unranked] = value
+      Settings.options[:nicerank][:filter_unranked] = Validators.boolean(value)
     end
     def threshold value
       Settings.options[:nicerank][:threshold] = value.to_f

@@ -75,7 +75,7 @@ describe Ayadn::View do
   describe "#show_posts_with_index" do
     it 'outputs the indexed stream' do
       printed = capture_stdout do
-        Ayadn::View.new.show_posts_with_index(stream['data'], {})
+        Ayadn::View.new.show_posts_with_index(stream['data'], {}, {})
       end
       expect(printed).to include "001"
       expect(printed).to include "Backer of the Day"

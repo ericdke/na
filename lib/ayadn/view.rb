@@ -22,7 +22,7 @@ module Ayadn
     end
 
     def show_simple_post(post, options)
-      view = build_stream_without_index(post, options)
+      view = build_stream_without_index(post, options, {})
       puts view
     end
 
