@@ -297,6 +297,21 @@ module Ayadn
     def build_stream_without_index(data, options, niceranks) #expects an array
       @view = ""
       posts = @workers.build_posts(data.reverse, niceranks)
+
+      if options[:filter] == true # only if this option is true in Action (only global for now)
+        unless Settings.options[:nicerank].nil? #in case config file not initialized
+          filtered = {}
+          if Settings.options[:nicerank][:filter] == true
+            posts.each do |id,content|
+              (next if content[:nicerank] == false) if Settings.options[:nicerank][:filter_unranked] == true
+              next if content[:nicerank] < Settings.options[:nicerank][:threshold]
+              filtered[id] = content
+            end
+            posts = filtered
+          end
+        end
+      end
+
       posts.each do |id,content|
         if content[:username] == Settings.config[:identity][:username]
           @view << content[:id].to_s.color(Settings.options[:colors][:id]).inverse + " "

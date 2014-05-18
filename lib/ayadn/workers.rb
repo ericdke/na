@@ -121,13 +121,6 @@ module Ayadn
           rank = false
         end
 
-        unless Settings.options[:nicerank].nil?
-          if Settings.options[:nicerank][:filter] == true
-            (next if rank == false) if Settings.options[:nicerank][:filter_unranked] == true
-            next if rank < Settings.options[:nicerank][:threshold]
-          end
-        end
-
         if post['user'].has_key?('name')
           name = post['user']['name'].to_s.force_encoding("UTF-8")
         else

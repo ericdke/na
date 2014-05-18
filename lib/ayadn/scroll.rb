@@ -22,7 +22,7 @@ module Ayadn
       loop do
         begin
           stream = get(target, options)
-          if target == 'global'
+          if options[:filter] == true
             unless stream['data'].empty?
               niceranks = @api.get_niceranks stream
             else
@@ -141,21 +141,33 @@ module Ayadn
     def save_then_return(stream, options)
       unless stream['meta']['max_id'].nil?
         Databases.save_max_id(stream)
-        return options_hash(stream)
+        return options_hash(stream, options)
       end
       options
     end
 
     def check_raw(options)
       if options[:raw]
-        {count: 200, since_id: nil, raw: true, scroll: true}
+        if options[:filter] == true
+          {count: 200, since_id: nil, raw: true, scroll: true, filter: true}
+        else
+          {count: 200, since_id: nil, raw: true, scroll: true}
+        end
       else
-        {count: 200, since_id: nil, scroll: true}
+        if options[:filter] == true
+          {count: 200, since_id: nil, scroll: true, filter: true}
+        else
+          {count: 200, since_id: nil, scroll: true}
+        end
       end
     end
 
-    def options_hash(stream)
-      {:count => 50, :since_id => stream['meta']['max_id'], scroll: true}
+    def options_hash(stream, options)
+      if options[:filter] == true
+        {:count => 50, :since_id => stream['meta']['max_id'], scroll: true, filter: true}
+      else
+        {:count => 50, :since_id => stream['meta']['max_id'], scroll: true}
+      end
     end
 
     def show(stream, options, niceranks)
