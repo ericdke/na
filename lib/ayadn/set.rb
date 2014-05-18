@@ -15,7 +15,8 @@ module Ayadn
       scroll_config.save
     end
 
-    desc "nicerank ITEM VALUE", "Set NiceRank values"
+    desc "nicerank ITEM VALUE", "Set NiceRank filter values"
+    long_desc Descriptions.set_nicerank
     def nicerank *args
       nicerank_config = SetNiceRank.new
       if args[0]

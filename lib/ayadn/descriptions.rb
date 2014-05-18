@@ -806,6 +806,20 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.set_nicerank
+      <<-USAGE
+      Set NiceRank values.
+
+      Examples:
+
+      ayadn set nicerank filter true
+
+      ayadn set nicerank filter_unranked true
+
+      ayadn set timeline show_nicerank true
+      \n\n
+      USAGE
+    end
     def self.set_defaults
       <<-USAGE
       Sets back the configuration to default values.
