@@ -221,7 +221,7 @@ module Ayadn
       "\nSomething wrong happened. :(\n\n".color(:red)
     end
     def self.redirecting
-      "\nPost is a repost. Redirecting...\n\n".color(:cyan)
+      "\nPost is a repost. Redirecting...\n".color(:cyan)
     end
     def self.nobody_reposted
       "\nNobody reposted this post.\n\n".color(:red)
