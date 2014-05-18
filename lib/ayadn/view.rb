@@ -276,9 +276,31 @@ module Ayadn
       end
     end
 
+    def filter_nicerank posts, options
+      if options[:filter] == true # only if this option is true in Action (only global for now)
+        unless Settings.options[:nicerank].nil? #in case config file not initialized
+          if Settings.options[:nicerank][:filter] == true
+            filtered = {}
+            posts.each do |id,content|
+              (next if content[:nicerank] == false) if Settings.options[:nicerank][:filter_unranked] == true
+              next if content[:nicerank] < Settings.options[:nicerank][:threshold]
+              filtered[id] = content
+            end
+            return filtered
+          end
+          return posts
+        end
+        return posts
+      end
+      return posts
+    end
+
     def build_stream_with_index(data, options, niceranks) #expects an array
       @view = ""
       posts = @workers.build_posts(data.reverse, niceranks)
+
+      posts = filter_nicerank posts, options
+
       posts.each do |id,content|
         count = "%03d" % content[:count]
         if content[:username] == Settings.config[:identity][:username]
@@ -298,19 +320,7 @@ module Ayadn
       @view = ""
       posts = @workers.build_posts(data.reverse, niceranks)
 
-      if options[:filter] == true # only if this option is true in Action (only global for now)
-        unless Settings.options[:nicerank].nil? #in case config file not initialized
-          filtered = {}
-          if Settings.options[:nicerank][:filter] == true
-            posts.each do |id,content|
-              (next if content[:nicerank] == false) if Settings.options[:nicerank][:filter_unranked] == true
-              next if content[:nicerank] < Settings.options[:nicerank][:threshold]
-              filtered[id] = content
-            end
-            posts = filtered
-          end
-        end
-      end
+      posts = filter_nicerank posts, options
 
       posts.each do |id,content|
         if content[:username] == Settings.config[:identity][:username]
