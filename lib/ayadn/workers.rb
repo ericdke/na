@@ -90,7 +90,7 @@ module Ayadn
       table
     end
 
-    def build_posts(data)
+    def build_posts(data, niceranks = {})
       # builds a hash of hashes, each hash is a normalized post with post id as a key
       posts = {}
 
@@ -115,6 +115,16 @@ module Ayadn
         end
         next if @skip
 
+        if niceranks[post['user']['id'].to_i]
+          rank = niceranks[post['user']['id'].to_i][:rank]
+        else
+          rank = false
+        end
+        if Settings.options[:nicerank][:filter]
+          (next unless rank) if Settings.options[:nicerank][:filter_unranked]
+          next if rank < Settings.options[:nicerank][:threshold]
+        end
+
         if post['user'].has_key?('name')
           name = post['user']['name'].to_s.force_encoding("UTF-8")
         else
@@ -129,6 +139,8 @@ module Ayadn
           name: name,
           thread_id: post['thread_id'],
           username: post['user']['username'],
+          user_id: post['user']['id'].to_i,
+          nicerank: rank,
           handle: "@#{post['user']['username']}",
           type: post['user']['type'],
           date: parsed_time(post['created_at']),

@@ -46,9 +46,10 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_global(options)
+        niceranks = @api.get_niceranks stream
         (no_new_posts unless Databases.has_new?(stream, 'global')) if options[:new]
         Databases.save_max_id(stream)
-        render_view(stream, options)
+        render_view(stream, options, niceranks)
         Scroll.new(@api, @view).global(options) if options[:scroll]
       rescue => e
         Errors.global_error("action/global", options, e)
@@ -1075,10 +1076,9 @@ module Ayadn
       post_id
     end
 
-    def render_view(data, options = {})
+    def render_view(data, options = {}, niceranks = {})
       unless options[:raw]
-        #@view.clear_screen
-        get_view(data['data'], options)
+        get_view(data['data'], options, niceranks)
       else
         @view.show_raw(data)
       end
@@ -1095,12 +1095,12 @@ module Ayadn
       response['data']
     end
 
-    def get_view(stream, options = {})
+    def get_view(stream, options = {}, niceranks = {})
       @view.clear_screen
       if options[:index]
-        @view.show_posts_with_index(stream, options)
+        @view.show_posts_with_index(stream, options, niceranks)
       else
-        @view.show_posts(stream, options)
+        @view.show_posts(stream, options, niceranks)
       end
     end
 

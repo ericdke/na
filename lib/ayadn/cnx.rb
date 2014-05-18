@@ -2,6 +2,22 @@
 module Ayadn
   class CNX
 
+    def self.get url
+      begin
+        RestClient.get(url) do |response, request, result|
+          response
+        end
+      rescue SocketError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/get", url, e)
+      rescue SystemCallError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error("cnx.rb/get", url, e)
+      rescue => e
+        Errors.global_error("cnx.rb/get", url, e)
+      end
+    end
+
     def self.get_response_from(url)
       begin
         RestClient.get(url) do |response, request, result| #, :verify_ssl => OpenSSL::SSL::VERIFY_NONE

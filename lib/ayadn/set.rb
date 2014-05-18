@@ -15,6 +15,18 @@ module Ayadn
       scroll_config.save
     end
 
+    desc "nicerank ITEM VALUE", "Set NiceRank values"
+    def nicerank *args
+      nicerank_config = SetNiceRank.new
+      if args[0]
+        nicerank_config.send(args[0], args[1])
+      else
+        abort(Status.error_missing_parameters)
+      end
+      nicerank_config.log(args)
+      nicerank_config.save
+    end
+
     desc "timeline ITEM TRUE/FALSE", "Set ITEM to be activated or not"
     long_desc Descriptions.set_timeline
     def timeline(*args)
@@ -138,6 +150,32 @@ module Ayadn
     end
     def timer(t)
       Settings.options[:scroll][:timer] = t
+    end
+  end
+
+  class SetNiceRank
+    def initialize
+      Settings.load_config
+      Settings.get_token
+      Settings.init_config
+      Logs.create_logger
+    end
+    def log(args)
+      x = "New value for '#{args[0]}' in 'NiceRank' => #{args[1]}"
+      puts "\n#{x}\n".color(:cyan)
+      Logs.rec.info x
+    end
+    def save
+      Settings.save_config
+    end
+    def filter value
+      Settings.options[:nicerank][:filter] = value
+    end
+    def filter_unranked value
+      Settings.options[:nicerank][:filter_unranked] = value
+    end
+    def threshold value
+      Settings.options[:nicerank][:threshold] = value.to_f
     end
   end
 
@@ -313,6 +351,9 @@ module Ayadn
     end
     def show_date(value)
       Settings.options[:timeline][:show_date] = value
+    end
+    def show_nicerank value
+      Settings.options[:timeline][:show_nicerank] = value
     end
   end
 

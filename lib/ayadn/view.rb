@@ -6,14 +6,14 @@ module Ayadn
       @workers = Workers.new
     end
 
-    def show_posts_with_index(data, options)
-      posts, view = build_stream_with_index(data, options)
+    def show_posts_with_index(data, options, niceranks = {})
+      posts, view = build_stream_with_index(data, options, niceranks)
       puts view
       Databases.save_indexed_posts(posts)
     end
 
-    def show_posts(data, options)
-      puts build_stream_without_index(data, options)
+    def show_posts(data, options, niceranks = {})
+      puts build_stream_without_index(data, options, niceranks)
     end
 
     def show_raw(stream)
@@ -276,9 +276,9 @@ module Ayadn
       end
     end
 
-    def build_stream_with_index(data, options) #expects an array
+    def build_stream_with_index(data, options, niceranks) #expects an array
       @view = ""
-      posts = @workers.build_posts(data.reverse)
+      posts = @workers.build_posts(data.reverse, niceranks)
       posts.each do |id,content|
         count = "%03d" % content[:count]
         if content[:username] == Settings.config[:identity][:username]
@@ -294,9 +294,9 @@ module Ayadn
       return posts, @view
     end
 
-    def build_stream_without_index(data, options) #expects an array
+    def build_stream_without_index(data, options, niceranks) #expects an array
       @view = ""
-      posts = @workers.build_posts(data.reverse)
+      posts = @workers.build_posts(data.reverse, niceranks)
       posts.each do |id,content|
         if content[:username] == Settings.config[:identity][:username]
           @view << content[:id].to_s.color(Settings.options[:colors][:id]).inverse + " "
@@ -428,6 +428,12 @@ module Ayadn
         header << " "
         header << content[:name].color(Settings.options[:colors][:name])
       end
+
+      if Settings.options[:timeline][:show_nicerank] && content[:nicerank]
+        header << " "
+        header << "(#{content[:nicerank]})".color(Settings.options[:colors][:name])
+      end
+
       if Settings.options[:timeline][:show_date]
         header << " "
         header << content[:date].color(Settings.options[:colors][:date])

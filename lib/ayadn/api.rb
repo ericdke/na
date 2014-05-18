@@ -200,6 +200,24 @@ module Ayadn
       end
     end
 
+    def get_niceranks stream
+      ranks, user_ids, table, niceranks = [], [], {}, {}
+      stream['data'].each do |post|
+        user_ids << post['user']['id'].to_i
+        table[post['user']['id'].to_i] = post['user']['username']
+      end
+      user_ids.uniq!
+      resp = JSON.parse(CNX.get "http://api.search-adn.net/user/nicerank?ids=#{user_ids.join(',')}")
+      ranks = resp['data']
+      ranks.each do |obj|
+        niceranks[obj['user_id']] = {
+          username: table[obj['user_id']],
+          rank: obj['rank']
+        }
+      end
+      niceranks
+    end
+
     def get_channels
       options = {:count => 200, :recent_message => 1, :annotations => 1, :before_id => nil}
       get_parsed_response(Endpoints.new.channels(options))

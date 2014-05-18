@@ -151,7 +151,8 @@ module Ayadn
           show_source: true,
           show_symbols: true,
           show_real_name: true,
-          show_date: true
+          show_date: true,
+          show_nicerank: false
         },
         counts: {
           default: 50,
@@ -196,6 +197,11 @@ module Ayadn
         },
         scroll: {
           timer: 3
+        },
+        nicerank: {
+          threshold: 2.0,
+          filter: false,
+          filter_unranked: false
         }
       }
     end
