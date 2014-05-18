@@ -448,8 +448,7 @@ module Ayadn
       puts "\nAYADN\n".color(:red)
       puts "Version:\t".color(:cyan) + "#{VERSION}\n".color(:green)
       puts "Changelog:\t".color(:cyan) + "https://github.com/ericdke/na/blob/master/CHANGELOG.md\n".color(:yellow)
-      puts "Readme:\t\t".color(:cyan) + "https://github.com/ericdke/na/blob/master/README.md".color(:yellow)
-      puts "Manual:\t\t".color(:cyan) + "https://github.com/ericdke/na/blob/master/MANUAL.md".color(:yellow)
+      puts "Docs:\t\t".color(:cyan) + "http://ayadn-app.net/doc/".color(:yellow)
       puts "\n"
     end
 
