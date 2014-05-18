@@ -188,7 +188,8 @@ module Ayadn
           hashtags: :cyan,
           mentions: :red,
           source: :cyan,
-          symbols: :green
+          symbols: :green,
+          nicerank: :cyan
         },
         backup: {
           auto_save_sent_posts: false,
@@ -199,7 +200,7 @@ module Ayadn
           timer: 3
         },
         nicerank: {
-          threshold: 2.0,
+          threshold: 2.1,
           filter: false,
           filter_unranked: false
         }
