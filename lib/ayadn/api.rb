@@ -208,6 +208,7 @@ module Ayadn
       end
       user_ids.uniq!
       resp = JSON.parse(CNX.get "http://api.search-adn.net/user/nicerank?ids=#{user_ids.join(',')}")
+      return {} if resp['meta']['code'] != 200
       ranks = resp['data']
       ranks.each do |obj|
         niceranks[obj['user_id']] = {
