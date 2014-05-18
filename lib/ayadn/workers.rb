@@ -120,9 +120,12 @@ module Ayadn
         else
           rank = false
         end
-        if Settings.options[:nicerank][:filter]
-          (next unless rank) if Settings.options[:nicerank][:filter_unranked]
-          next if rank < Settings.options[:nicerank][:threshold]
+
+        unless Settings.options[:nicerank].nil?
+          if Settings.options[:nicerank][:filter] == true
+            (next unless rank) if Settings.options[:nicerank][:filter_unranked]
+            next if rank < Settings.options[:nicerank][:threshold]
+          end
         end
 
         if post['user'].has_key?('name')

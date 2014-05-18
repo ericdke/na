@@ -7,23 +7,32 @@ module Ayadn
       @view = view
     end
 
-    def method_missing(meth, options)
+    def method_missing(meth, options, niceranks = {})
       case meth.to_s
       when 'trending', 'photos', 'checkins', 'replies', 'global', 'unified'
-        scroll_it(meth.to_s, options)
+        scroll_it(meth.to_s, options, niceranks)
       else
         super
       end
     end
 
-    def scroll_it(target, options)
+    def scroll_it(target, options, niceranks)
       options = check_raw(options)
       orig_target = target
       loop do
         begin
           stream = get(target, options)
+          if target == 'global'
+            unless stream['data'].empty?
+              niceranks = @api.get_niceranks stream
+            else
+             niceranks = {}
+            end
+          else
+            niceranks = {}
+          end
           target = "explore:#{target}" if explore?(target)
-          show_if_new(stream, options, target)
+          show_if_new(stream, options, target, niceranks)
           target = orig_target if target =~ /explore/
           options = save_then_return(stream, options)
           pause
@@ -125,8 +134,8 @@ module Ayadn
       sleep Settings.options[:scroll][:timer]
     end
 
-    def show_if_new(stream, options, target)
-      show(stream, options) if Databases.has_new?(stream, target)
+    def show_if_new(stream, options, target, niceranks = {})
+      show(stream, options, niceranks) if Databases.has_new?(stream, target)
     end
 
     def save_then_return(stream, options)
@@ -149,9 +158,9 @@ module Ayadn
       {:count => 50, :since_id => stream['meta']['max_id'], scroll: true}
     end
 
-    def show(stream, options)
+    def show(stream, options, niceranks)
       unless options[:raw]
-        @view.show_posts(stream['data'], options)
+        @view.show_posts(stream['data'], options, niceranks)
       else
         jj stream
       end

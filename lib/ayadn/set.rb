@@ -159,6 +159,13 @@ module Ayadn
       Settings.get_token
       Settings.init_config
       Logs.create_logger
+      unless Settings.options[:nicerank]
+        Settings.options[:nicerank] = {
+          threshold: 2.0,
+          filter: false,
+          filter_unranked: false
+        }
+      end
     end
     def log(args)
       x = "New value for '#{args[0]}' in 'NiceRank' => #{args[1]}"
