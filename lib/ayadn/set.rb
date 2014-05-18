@@ -364,6 +364,16 @@ module Ayadn
       Settings.options[:timeline][:show_date] = value
     end
     def show_nicerank value
+      unless Settings.options[:nicerank]
+        Settings.options[:nicerank] = {
+          threshold: 2.1,
+          filter: false,
+          filter_unranked: false
+        }
+      end
+      unless Settings.options[:colors][:nicerank]
+        Settings.options[:colors][:nicerank] = :cyan
+      end
       Settings.options[:timeline][:show_nicerank] = value
     end
   end
