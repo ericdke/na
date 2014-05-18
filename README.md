@@ -17,7 +17,7 @@ Ayadn is configurable: colors, timelines, durations, aliases, etc.
 
 You can also specify many options, like show the raw JSON instead of the formatted response, show only a number of most recents posts, show only new posts, etc.
 
-There's also exclusive features, like the Blacklist: feed this mini database with usernames, client names or hashtags and Ayadn will never show you any post containing any of these elements.
+There's also two exclusive antispam and filtering features: a blacklist, and Jason Irwin's NiceRank.
 
 Last but not least: Ayadn supports multiple ADN accounts! Authorize as many accounts as you wish and simply switch between them with a keystroke.  
 
