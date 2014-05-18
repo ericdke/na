@@ -109,6 +109,8 @@ module Ayadn
       Show only new posts:
 
       ayadn -gl -n
+
+      See `ayadn set` for the NiceRank filter.
       \n\n
       USAGE
     end

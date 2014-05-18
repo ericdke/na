@@ -1,3 +1,7 @@
+# 1.2.0 - 'Jason'
+
+- @matigo's NiceRank filter for the Global stream
+
 # 1.1.3 - 'Kevin'
 
 - Bookmark a conversation
