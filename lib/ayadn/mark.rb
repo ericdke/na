@@ -137,7 +137,7 @@ module Ayadn
       entry << "Link:".color(:cyan)
       entry << "\t\t#{content[:url]}\n".color(Settings.options[:colors][:link])
       entry << "Beginning:".color(:cyan)
-      text = content[:root_colorized_text].gsub(/[\r\n]/, ' ')
+      text = content[:root_text].gsub(/[\r\n]/, ' ')
       entry << "\t#{text[0..60]} [...]\n"
     end
 
