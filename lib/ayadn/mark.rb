@@ -138,7 +138,11 @@ module Ayadn
       entry << "\t\t#{content[:url]}\n".color(Settings.options[:colors][:link])
       entry << "Beginning:".color(:cyan)
       text = content[:root_text].gsub(/[\r\n]/, ' ')
-      entry << "\t#{text[0..60]} [...]\n"
+      if text.length <= 60
+        entry << "\t#{text[0..60]}\n"
+      else
+        entry << "\t#{text[0..60]} [...]\n"
+      end
     end
 
     def init
