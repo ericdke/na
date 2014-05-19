@@ -282,8 +282,12 @@ module Ayadn
           if Settings.options[:nicerank][:filter] == true
             filtered = {}
             posts.each do |id,content|
-              (next if content[:nicerank] == false) if Settings.options[:nicerank][:filter_unranked] == true
-              next if content[:nicerank] < Settings.options[:nicerank][:threshold]
+              if Settings.options[:nicerank][:filter_unranked] == true
+                next if content[:nicerank] == false
+              end
+              unless content[:nicerank] == false
+                next if content[:nicerank] < Settings.options[:nicerank][:threshold]
+              end
               filtered[id] = content
             end
             return filtered
