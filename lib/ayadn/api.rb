@@ -201,7 +201,7 @@ module Ayadn
     end
 
     def get_niceranks stream
-      ranks, user_ids, table, niceranks = [], [], {}, {}
+      user_ids, table, niceranks = [], [], {}, {}
       stream['data'].each do |post|
         user_ids << post['user']['id'].to_i
         table[post['user']['id'].to_i] = post['user']['username']
