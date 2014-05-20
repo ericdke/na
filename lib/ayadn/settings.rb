@@ -200,7 +200,7 @@ module Ayadn
           timer: 3
         },
         nicerank: {
-          threshold: 2.1,
+          threshold: 2,
           filter: false,
           filter_unranked: false
         }

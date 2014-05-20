@@ -1,3 +1,9 @@
+# 1.2.1 - 'Vinz'
+
+- Fixed the exclusion bug in NiceRank filters
+- Improved the truncation in Mark list
+- Changes to match changes in NiceRank API
+
 # 1.2.0 - 'Jason'
 
 - @matigo's NiceRank filter for the Global stream
