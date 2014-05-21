@@ -2,6 +2,7 @@
 
 - No more empty lines in the scroll
 - Spinner while waiting for posts (false by default)
+- Hashtags support accented characters
 
 # 1.2.1 - 'Vinz'
 
