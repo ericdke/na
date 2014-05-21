@@ -1,6 +1,7 @@
 # 1.2.2 - 'Chris'
 
 - No more empty lines in the scroll
+- Spinner while waiting for posts (false by default)
 
 # 1.2.1 - 'Vinz'
 

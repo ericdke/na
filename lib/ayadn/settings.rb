@@ -152,7 +152,8 @@ module Ayadn
           show_symbols: true,
           show_real_name: true,
           show_date: true,
-          show_nicerank: false
+          show_nicerank: false,
+          show_spinner: false
         },
         counts: {
           default: 50,

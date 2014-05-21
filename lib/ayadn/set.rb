@@ -376,6 +376,9 @@ module Ayadn
       end
       Settings.options[:timeline][:show_nicerank] = value
     end
+    def show_spinner value
+      Settings.options[:timeline][:show_spinner] = value
+    end
   end
 
   class SetColor

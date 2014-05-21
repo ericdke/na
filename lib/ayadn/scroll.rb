@@ -5,6 +5,7 @@ module Ayadn
     def initialize(api, view)
       @api = api
       @view = view
+      @chars = %w{ | / - \\ }
     end
 
     def method_missing(meth, options, niceranks = {})
@@ -35,7 +36,7 @@ module Ayadn
           show_if_new(stream, options, target, niceranks)
           target = orig_target if target =~ /explore/
           options = save_then_return(stream, options)
-          pause
+          countdown
         rescue Interrupt
           canceled
         end
@@ -51,7 +52,7 @@ module Ayadn
           stream = @api.get_mentions(username, options)
           show_if_new(stream, options, "mentions:#{id}")
           options = save_then_return(stream, options)
-          pause
+          countdown
         rescue Interrupt
           canceled
         end
@@ -67,7 +68,7 @@ module Ayadn
           stream = @api.get_posts(username, options)
           show_if_new(stream, options, "posts:#{id}")
           options = save_then_return(stream, options)
-          pause
+          countdown
         rescue Interrupt
           canceled
         end
@@ -81,7 +82,7 @@ module Ayadn
           stream = @api.get_convo(post_id, options)
           show_if_new(stream, options, "replies:#{post_id}")
           options = save_then_return(stream, options)
-          pause
+          countdown
         rescue Interrupt
           canceled
         end
@@ -95,7 +96,7 @@ module Ayadn
           stream = @api.get_messages(channel_id, options)
           show_if_new(stream, options, "channel:#{channel_id}")
           options = save_then_return(stream, options)
-          pause
+          countdown
         rescue Interrupt
           canceled
         end
@@ -103,6 +104,27 @@ module Ayadn
     end
 
     private
+
+    def countdown
+      if Settings.options[:timeline][:show_spinner] == true
+        waiting
+      else
+        pause
+      end
+    end
+
+    def clear
+      print("\r")
+      print(" ".ljust(5))
+      print("\r")
+    end
+
+    def spin
+      print(@chars[0])          # Print the next character...
+      sleep(0.1)                # ...wait 100ms...
+      print("\b")               # ...move the cursor back by one...
+      @chars.push(@chars.shift) # ...rotate the characters array.
+    end
 
     def get(target, options)
       case target
@@ -127,6 +149,13 @@ module Ayadn
         true
       else
         false
+      end
+    end
+
+    def waiting
+      interval = Settings.options[:scroll][:timer] * 10
+      interval.times do
+        spin
       end
     end
 
