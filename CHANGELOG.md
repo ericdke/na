@@ -1,3 +1,7 @@
+# 1.2.2 - 'Chris'
+
+- No more empty lines in the scroll
+
 # 1.2.1 - 'Vinz'
 
 - Fixed the exclusion bug in NiceRank filters

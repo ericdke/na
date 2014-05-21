@@ -8,12 +8,13 @@ module Ayadn
 
     def show_posts_with_index(data, options, niceranks = {})
       posts, view = build_stream_with_index(data, options, niceranks)
-      puts view
+      puts view unless view == ""
       Databases.save_indexed_posts(posts)
     end
 
     def show_posts(data, options, niceranks = {})
-      puts build_stream_without_index(data, options, niceranks)
+      resp = build_stream_without_index(data, options, niceranks)
+      puts resp unless resp == ""
     end
 
     def show_raw(stream)
