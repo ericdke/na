@@ -286,7 +286,8 @@ module Ayadn
 
     def colorize_text(text, mentions)
       reg_split = '[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]'
-      reg_tag = '#([A-Za-z0-9_]{1,255})(?![\w+])'
+      #reg_tag = '#([A-Za-z0-9_]{1,255})(?![\w+])'
+      reg_tag = '#([[:alpha:]0-9_]{1,255})(?![\w+])'
       reg_mention = '@([A-Za-z0-9_]{1,20})(?![\w+])'
       reg_sentence = '^.+[\r\n]*'
       handles = Array.new
