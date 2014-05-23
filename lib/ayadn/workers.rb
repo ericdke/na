@@ -162,7 +162,7 @@ module Ayadn
 
         unless post['text'].nil?
           values[:raw_text] = post['text']
-          values[:text] = colorize_text(post['text'], mentions)
+          values[:text] = colorize_text(post['text'], mentions, hashtags)
         else
           values[:raw_text] = ""
           values[:text] = "(no text)"
@@ -284,7 +284,7 @@ module Ayadn
       users_hash
     end
 
-    def colorize_text(text, mentions)
+    def colorize_text(text, mentions, hashtags)
       reg_split = '[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]'
       #reg_tag = '#([A-Za-z0-9_]{1,255})(?![\w+])'
       reg_tag = '#([[:alpha:]0-9_]{1,255})(?![\w+])'
@@ -299,7 +299,23 @@ module Ayadn
       text.scan(/#{reg_sentence}/) do |sentence|
         sentence.split(' ').each do |word|
           if word =~ /#\w+/
-            words << word.gsub(/#{reg_tag}/, '#\1'.color(hashtag_color))
+            slices = word.split('#')
+            has_h = false
+            slices.each do |tag|
+              if hashtags.include? tag.downcase
+                has_h = true
+              end
+            end
+            if has_h == true
+              if slices.length > 1
+                word = slices.join('#')
+                words << word.gsub(/#{reg_tag}/, '#\1'.color(hashtag_color))
+              else
+                words << word.gsub(/#{reg_tag}/, '#\1'.color(hashtag_color))
+              end
+            else
+              words << word
+            end
           elsif word =~ /@\w+/
             @str = def_str(word, reg_split)
             if handles.include?(@str.downcase)

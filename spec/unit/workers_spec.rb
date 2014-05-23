@@ -149,7 +149,7 @@ describe Ayadn::Workers do
     it "colorizes mentions and hashtags" do
       text = regex_post['data']['text']
       mentions = regex_post['data']['entities']['mentions']
-      expect(Ayadn::Workers.new.colorize_text(text, mentions)).to eq "\e[36m#test\e[0m \e[36m#regex\e[0m\n@aya_tests's \e[36m#true\e[0m\n(@aya_tests) \e[36m#true\e[0m\n@AyA_TeSts \e[36m#true\e[0m\n@aya_test \e[36m#false\e[0m\naya@aya_tests.yolo \e[36m#false\e[0m\n-@aya_tests:ohai! \e[36m#true\e[0m\ntext,@aya_tests,txt \e[36m#true\e[0m"
+      expect(Ayadn::Workers.new.colorize_text(text, mentions, ['false', 'true', 'test', 'regex'])).to eq "\e[36m#test\e[0m \e[36m#regex\e[0m\n@aya_tests's \e[36m#true\e[0m\n(@aya_tests) \e[36m#true\e[0m\n@AyA_TeSts \e[36m#true\e[0m\n@aya_test \e[36m#false\e[0m\naya@aya_tests.yolo \e[36m#false\e[0m\n-@aya_tests:ohai! \e[36m#true\e[0m\ntext,@aya_tests,txt \e[36m#true\e[0m"
     end
   end
 

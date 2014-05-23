@@ -1,3 +1,7 @@
+# 1.2.3 - 'Taylor'
+
+- Text containing '#' but not an hashtag: not colorized
+
 # 1.2.2 - 'Chris'
 
 - No more empty lines in the scroll
