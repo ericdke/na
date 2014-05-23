@@ -302,7 +302,8 @@ module Ayadn
             slices = word.split('#')
             has_h = false
             slices.each do |tag|
-              if hashtags.include? tag.downcase
+              bit = tag.downcase.scan(/[[:alpha:]0-9_]/).join('')
+              if hashtags.include? bit
                 has_h = true
               end
             end
