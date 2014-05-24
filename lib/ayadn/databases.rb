@@ -40,10 +40,14 @@ module Ayadn
       end
     end
     def self.add_client_to_blacklist(target)
-      @blacklist[target.downcase] = :client
+      target.each do |source|
+        @blacklist[source.downcase] = :client
+      end
     end
     def self.add_hashtag_to_blacklist(target)
-      @blacklist[target.downcase] = :hashtag
+      target.each do |tag|
+        @blacklist[tag.downcase] = :hashtag
+      end
     end
     def self.remove_from_blacklist(target)
       @blacklist.delete(target.downcase)

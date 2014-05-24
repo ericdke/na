@@ -81,19 +81,17 @@ module Ayadn
     def add(args)
       begin
         type = args.shift
-        target = args
         case type
         when 'mention', 'mentions'
-          target = Workers.add_arobases_to_usernames target
+          target = Workers.add_arobases_to_usernames args
           Databases.add_mention_to_blacklist(target)
           Logs.rec.info "Added '#{target}' to blacklist of mentions."
-
         when 'client', 'source'
-          Databases.add_client_to_blacklist(target)
-          Logs.rec.info "Added '#{target}' to blacklist of clients."
+          Databases.add_client_to_blacklist(args)
+          Logs.rec.info "Added '#{args}' to blacklist of clients."
         when 'hashtag', 'tag'
-          Databases.add_hashtag_to_blacklist(target)
-          Logs.rec.info "Added '#{target}' to blacklist of hashtags."
+          Databases.add_hashtag_to_blacklist(args)
+          Logs.rec.info "Added '#{args}' to blacklist of hashtags."
         else
           puts Status.wrong_arguments
         end
