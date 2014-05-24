@@ -50,7 +50,9 @@ module Ayadn
       end
     end
     def self.remove_from_blacklist(target)
-      @blacklist.delete(target.downcase)
+      target.each do |el|
+        @blacklist.delete(el.downcase)
+      end
     end
     def self.import_blacklist(blacklist)
       new_list = self.init blacklist

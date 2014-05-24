@@ -15,7 +15,7 @@ module Ayadn
     desc "remove TYPE TARGET", "Removes a mention, hashtag or client from your blacklist"
     long_desc Descriptions.blacklist_remove
     def remove(*args)
-      if args.length != 2
+      if args.length < 2
         puts Status.type_and_target_missing
       end
       blacklist = BlacklistWorkers.new
@@ -101,15 +101,15 @@ module Ayadn
     end
     def remove(args)
       begin
-        type, target = args[0], args[1]
+        type = args.shift
         case type
         when 'mention', 'mentions'
-          target = Workers.add_arobase_if_missing([target])
+          target = Workers.add_arobases_to_usernames args
           Databases.remove_from_blacklist(target)
           Logs.rec.info "Removed '#{target}' from blacklist of mentions."
         when 'client', 'source', 'hashtag', 'tag'
-          Databases.remove_from_blacklist(target)
-          Logs.rec.info "Removed '#{type}:#{target}' from blacklist."
+          Databases.remove_from_blacklist(args)
+          Logs.rec.info "Removed '#{type}:#{args}' from blacklist."
         else
           puts Status.wrong_arguments
         end
