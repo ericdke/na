@@ -1,6 +1,7 @@
 # 1.2.3 - 'Taylor'
 
 - Text containing '#' but not an hashtag: not colorized
+- Add/remove several elements to/from blacklist at once
 
 # 1.2.2 - 'Chris'
 
