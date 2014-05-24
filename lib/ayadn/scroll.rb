@@ -18,11 +18,6 @@ module Ayadn
     end
 
     def scroll_it(target, options, niceranks)
-      if Settings.options[:timeline][:show_debug] == true
-        @counter = 0
-        @iter = 1
-        @now = Time.now
-      end
       options = check_raw(options)
       orig_target = target
       loop do
@@ -32,33 +27,15 @@ module Ayadn
             unless stream['data'].empty?
               niceranks = @api.get_niceranks stream
             else
-              if Settings.options[:timeline][:show_debug] == true
-                niceranks = {no: true}
-              else
-                niceranks = {}
-              end
+              niceranks = {}
             end
           else
             niceranks = {}
           end
 
-          if Settings.options[:timeline][:show_debug] == true
-            puts "\n++++++\nStream meta:\t#{stream['meta']}\nOptions:\t#{options.inspect}\nTarget:\t\t#{target.inspect}\nPosts:\t\t#{stream['data'].length}\n+++++\n\n".color(Settings.options[:colors][:debug])
-          end
-
-          if options[:filter] == true
-            if Settings.options[:timeline][:show_debug] == true
-              if niceranks[:no] == true
-                puts "\n---- No NiceRank call ----\n".color(Settings.options[:colors][:debug])
-                niceranks = {}
-              else
-                elapsed = (Time.now - @now)
-                @counter += niceranks.length
-                @iter += 1
-                puts "--------\n*NiceRank stats*\nCall:\t\t##{@iter}\nIDs:\t\t#{niceranks.length}\nContent:\t#{niceranks.inspect}\nStarted:\t#{@now}\nNow:\t\t#{Time.now}\nElapsed:\t#{(elapsed / 60).round}mins\nIDs fetched:\t#{@counter}\n----------\n\n".color(Settings.options[:colors][:debug])
-              end
-            end
-          end
+          # if Settings.options[:timeline][:show_debug] == true
+          #   puts "\n++++++\nStream meta:\t#{stream['meta']}\nOptions:\t#{options.inspect}\nTarget:\t\t#{target.inspect}\nPosts:\t\t#{stream['data'].length}\n+++++\n\n".color(Settings.options[:colors][:debug])
+          # end
 
           target = "explore:#{target}" if explore?(target)
           show_if_new(stream, options, target, niceranks)

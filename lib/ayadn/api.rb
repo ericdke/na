@@ -207,23 +207,49 @@ module Ayadn
         table[post['user']['id'].to_i] = post['user']['username']
       end
       user_ids.uniq!
-      req = "http://api.search-adn.net/user/nicerank?ids=#{user_ids.join(',')}"
-      resp = JSON.parse(CNX.get req)
-      if resp['meta']['code'] != 200
-        if Settings.options[:timeline][:show_debug] == true
-          puts "\n\n*****\nError NiceRank\n#{resp.inspect}\n#{req.inspect}\n*****\n\n".color(Settings.options[:colors][:debug])
+
+      db_ranks = Databases.get_niceranks user_ids
+      get_these = []
+      db_ranks.each do |id,ranks|
+        if ranks.nil?
+          get_these << id
+        else
+          niceranks[id] = {
+          username: ranks[:username],
+          rank: ranks[:rank]
+          }
         end
-        Errors.warn "NiceRank: ERROR CODE #{resp['meta']['code']}"
-        Errors.warn "NiceRank: REQUEST #{req.inspect}"
-        Errors.warn "NiceRank: RESPONSE #{resp.inspect}"
-        return {}
       end
-      resp['data'].each do |obj|
-        niceranks[obj['user_id']] = {
-          username: table[obj['user_id']],
-          rank: obj['rank']
-        }
+
+      if Settings.options[:timeline][:show_debug] == true
+        puts "\n=====\nNiceRanks from DB:\t#{niceranks}\n"
+        puts "IDs to get:\t\t#{get_these}\n=====\n"
       end
+
+      unless get_these.empty?
+        req = "http://api.search-adn.net/user/nicerank?ids=#{get_these.join(',')}"
+        resp = JSON.parse(CNX.get req)
+        if resp['meta']['code'] != 200
+          if Settings.options[:timeline][:show_debug] == true
+            puts "\n\n*****\nError NiceRank\n#{resp.inspect}\n#{req.inspect}\n*****\n\n".color(Settings.options[:colors][:debug])
+          end
+          Errors.warn "NiceRank: ERROR CODE #{resp['meta']['code']}"
+          Errors.warn "NiceRank: REQUEST #{req.inspect}"
+          Errors.warn "NiceRank: RESPONSE #{resp.inspect}"
+          return {}
+        end
+        resp['data'].each do |obj|
+          niceranks[obj['user_id']] = {
+            username: table[obj['user_id']],
+            rank: obj['rank']
+          }
+        end
+        if Settings.options[:timeline][:show_debug] == true
+          puts "\n=====\nNiceRanks:\t#{niceranks}\n"
+          puts "=====\n\n"
+        end
+      end
+      Databases.add_niceranks niceranks
       niceranks
     end
 

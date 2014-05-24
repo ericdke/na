@@ -4,7 +4,7 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :index, :pagination, :aliases, :blacklist, :bookmarks
+      attr_accessor :users, :index, :pagination, :aliases, :blacklist, :bookmarks, :nicerank
     end
 
     def self.open_databases
@@ -14,10 +14,11 @@ module Ayadn
       @aliases = self.init "#{Settings.config[:paths][:db]}/aliases.db"
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
       @bookmarks = self.init "#{Settings.config[:paths][:db]}/bookmarks.db"
+      @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
     end
 
     def self.close_all
-      [@users, @index, @pagination, @aliases, @blacklist, @bookmarks].each do |db|
+      [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank].each do |db|
           db.compact
           db.flush
           db.close
@@ -25,13 +26,27 @@ module Ayadn
     end
 
     def self.init(path)
-      winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20', 'mingw32']
-      case RbConfig::CONFIG['host_os']
-      when *winPlatforms
-        abort("\nSorry, Ayadn doesn't work on Windows.\n\n".color(:red))
-      else
+      # winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20', 'mingw32']
+      # case RbConfig::CONFIG['host_os']
+      # when *winPlatforms
+      #   abort("\nSorry, Ayadn doesn't work on Windows.\n\n".color(:red))
+      # else
         Daybreak::DB.new "#{path}"
+      # end
+    end
+
+    def self.add_niceranks niceranks
+      niceranks.each do |id,infos|
+        @nicerank[id] = infos
       end
+    end
+
+    def self.get_niceranks user_ids
+      ids = {}
+      user_ids.each do |id|
+        ids[id] = @nicerank[id]
+      end
+      ids
     end
 
     def self.add_mention_to_blacklist(target)

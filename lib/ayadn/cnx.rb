@@ -30,7 +30,7 @@ module Ayadn
     def self.get_response_from(url)
       begin
         RestClient.get(url) do |response, request, result| #, :verify_ssl => OpenSSL::SSL::VERIFY_NONE
-          debug(response, url) if Settings.options[:timeline][:show_debug] == true
+          #debug(response, url) if Settings.options[:timeline][:show_debug] == true
           check(response)
         end
       rescue SocketError => e
