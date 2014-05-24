@@ -153,7 +153,8 @@ module Ayadn
           show_real_name: true,
           show_date: true,
           show_nicerank: false,
-          show_spinner: false
+          show_spinner: false,
+          show_debug: false
         },
         counts: {
           default: 50,
@@ -190,7 +191,8 @@ module Ayadn
           mentions: :red,
           source: :cyan,
           symbols: :green,
-          nicerank: :cyan
+          nicerank: :cyan,
+          debug: :red
         },
         backup: {
           auto_save_sent_posts: false,

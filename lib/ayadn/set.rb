@@ -379,6 +379,12 @@ module Ayadn
     def show_spinner value
       Settings.options[:timeline][:show_spinner] = value
     end
+    def show_debug value
+      unless Settings.options[:colors][:debug]
+        Settings.options[:colors][:debug] = :cyan
+      end
+      Settings.options[:timeline][:show_debug] = value
+    end
   end
 
   class SetColor
@@ -445,6 +451,10 @@ module Ayadn
 
     def symbols(color)
       Settings.options[:colors][:symbols] = color.to_sym
+    end
+
+    def debug(color)
+      Settings.options[:colors][:debug] = color.to_sym
     end
   end
 end

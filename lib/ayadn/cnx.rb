@@ -5,6 +5,7 @@ module Ayadn
     def self.get url
       begin
         RestClient.get(url) do |response, request, result|
+          debug(response, url) if Settings.options[:timeline][:show_debug] == true
           response
         end
       rescue SocketError => e
@@ -18,9 +19,18 @@ module Ayadn
       end
     end
 
+    def self.debug response, url
+      puts "\n\n%%%%%"
+      puts "Url:\t\t#{url}"
+      puts "Resp:\t\t#{response.code}"
+      puts "Headers:\t#{response.headers}"
+      puts "%%%%%\n\n"
+    end
+
     def self.get_response_from(url)
       begin
         RestClient.get(url) do |response, request, result| #, :verify_ssl => OpenSSL::SSL::VERIFY_NONE
+          debug(response, url) if Settings.options[:timeline][:show_debug] == true
           check(response)
         end
       rescue SocketError => e
@@ -73,6 +83,7 @@ module Ayadn
       begin
         #RestClient::Resource.new(url).delete
         RestClient.delete(url) do |response, request, result|
+          debug(response, url) if Settings.options[:timeline][:show_debug] == true
           check(response)
         end
       rescue SocketError => e
@@ -89,6 +100,7 @@ module Ayadn
     def self.post(url, payload = nil)
       begin
         RestClient.post(url, payload.to_json, :content_type => :json, :accept => :json) do |response, request, result|
+          debug(response, url) if Settings.options[:timeline][:show_debug] == true
           check(response)
         end
       rescue SocketError => e
@@ -105,6 +117,7 @@ module Ayadn
     def self.put(url, payload)
       begin
         RestClient.put(url, payload.to_json, :content_type => :json, :accept => :json) do |response, request, result|
+          debug(response, url) if Settings.options[:timeline][:show_debug] == true
           check(response)
         end
       rescue SocketError => e

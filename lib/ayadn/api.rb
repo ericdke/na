@@ -207,8 +207,17 @@ module Ayadn
         table[post['user']['id'].to_i] = post['user']['username']
       end
       user_ids.uniq!
-      resp = JSON.parse(CNX.get "http://api.search-adn.net/user/nicerank?ids=#{user_ids.join(',')}")
-      return {} if resp['meta']['code'] != 200
+      req = "http://api.search-adn.net/user/nicerank?ids=#{user_ids.join(',')}"
+      resp = JSON.parse(CNX.get req)
+      if resp['meta']['code'] != 200
+        if Settings.options[:timeline][:show_debug] == true
+          puts "\n\n*****\nError NiceRank\n#{resp.inspect}\n#{req.inspect}\n*****\n\n".color(Settings.options[:colors][:debug])
+        end
+        Errors.warn "NiceRank: ERROR CODE #{resp['meta']['code']}"
+        Errors.warn "NiceRank: REQUEST #{req.inspect}"
+        Errors.warn "NiceRank: RESPONSE #{resp.inspect}"
+        return {}
+      end
       resp['data'].each do |obj|
         niceranks[obj['user_id']] = {
           username: table[obj['user_id']],
