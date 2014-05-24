@@ -262,16 +262,35 @@ module Ayadn
 
     def self.add_arobase_if_missing(username) # expects an array of username(s), works on the first one and outputs a string
       unless username.first == "me"
-        username = username.first.chars.to_a
+        username = username.first.chars
         username.unshift("@") unless username.first == "@"
       else
-        username = "me".chars.to_a
+        username = "me".chars
       end
       username.join
     end
 
+    def self.add_arobases_to_usernames args
+      args.map! do |username|
+        if username == 'me'
+          self.who_am_i
+        else
+          temp = username.chars
+          temp.unshift("@") unless temp.first == "@"
+          temp.join
+        end
+      end
+      args
+    end
+
+    def self.who_am_i
+      db = Databases.init(Dir.home + "/ayadn/accounts.db")
+      active = db['ACTIVE']
+      db[active][:handle]
+    end
+
     def self.remove_arobase_if_present(username)
-      username = username.chars.to_a
+      username = username.chars
       username.shift if username.first == "@"
       username.join
     end

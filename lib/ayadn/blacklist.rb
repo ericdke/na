@@ -4,7 +4,7 @@ module Ayadn
     desc "add TYPE TARGET", "Adds a mention, hashtag or client to your blacklist"
     long_desc Descriptions.blacklist_add
     def add(*args)
-      if args.length != 2
+      if args.length < 2
         puts Status.type_and_target_missing
       end
       blacklist = BlacklistWorkers.new
@@ -80,12 +80,14 @@ module Ayadn
     end
     def add(args)
       begin
-        type, target = args[0], args[1]
+        type = args.shift
+        target = args
         case type
         when 'mention', 'mentions'
-          target = Workers.add_arobase_if_missing([target])
+          target = Workers.add_arobases_to_usernames target
           Databases.add_mention_to_blacklist(target)
           Logs.rec.info "Added '#{target}' to blacklist of mentions."
+
         when 'client', 'source'
           Databases.add_client_to_blacklist(target)
           Logs.rec.info "Added '#{target}' to blacklist of clients."

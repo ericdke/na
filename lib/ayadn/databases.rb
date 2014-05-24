@@ -35,7 +35,9 @@ module Ayadn
     end
 
     def self.add_mention_to_blacklist(target)
-      @blacklist[target.downcase] = :mention
+      target.each do |username|
+        @blacklist[username.downcase] = :mention
+      end
     end
     def self.add_client_to_blacklist(target)
       @blacklist[target.downcase] = :client
