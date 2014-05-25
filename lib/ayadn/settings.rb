@@ -81,6 +81,12 @@ module Ayadn
         # TODO: system to merge existing config file when future category are added
         begin
           @options = YAML.load(File.read(config_file))
+          if @options[:timeline][:show_debug].nil?
+            @options[:timeline][:show_debug] = false
+          end
+          if @options[:nicerank][:threshold]
+            @options[:nicerank][:threshold] = @options[:nicerank][:threshold].round
+          end
         rescue => e
           Errors.global_error("myconfig/load config.yml", nil, e)
         end
@@ -153,7 +159,7 @@ module Ayadn
           show_real_name: true,
           show_date: true,
           show_nicerank: false,
-          show_spinner: false,
+          show_spinner: true,
           show_debug: false
         },
         counts: {

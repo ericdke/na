@@ -2,8 +2,11 @@
 
 - Text containing '#' but not an hashtag: not colorized
 - Add/remove several elements to/from blacklist at once
-- Cached results for NiceRank
-- NiceRank filter works better ('is_human' field)
+- Cached results for NiceRank (expire = 24h)
+- NiceRank filter works better
+- NiceRank logs missed users ids in a separate file
+- Option for showing debug messages
+- Show spinner = true
 
 # 1.2.2 - 'Chris'
 

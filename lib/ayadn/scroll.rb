@@ -75,6 +75,14 @@ module Ayadn
       loop do
         begin
           stream = @api.get_mentions(username, options)
+
+          if Settings.options[:timeline][:show_debug] == true
+            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
+            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
+            puts "Target:\t\t#{username}\n".color(Settings.options[:colors][:debug])
+            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
+          end
+
           show_if_new(stream, options, "mentions:#{id}")
           options = save_then_return(stream, options)
           countdown
@@ -91,6 +99,14 @@ module Ayadn
       loop do
         begin
           stream = @api.get_posts(username, options)
+
+          if Settings.options[:timeline][:show_debug] == true
+            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
+            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
+            puts "Target:\t\t#{username}\n".color(Settings.options[:colors][:debug])
+            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
+          end
+
           show_if_new(stream, options, "posts:#{id}")
           options = save_then_return(stream, options)
           countdown
@@ -105,6 +121,14 @@ module Ayadn
       loop do
         begin
           stream = @api.get_convo(post_id, options)
+
+          if Settings.options[:timeline][:show_debug] == true
+            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
+            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
+            puts "Target:\t\t#{post_id}\n".color(Settings.options[:colors][:debug])
+            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
+          end
+
           show_if_new(stream, options, "replies:#{post_id}")
           options = save_then_return(stream, options)
           countdown
@@ -119,6 +143,14 @@ module Ayadn
       loop do
         begin
           stream = @api.get_messages(channel_id, options)
+
+          if Settings.options[:timeline][:show_debug] == true
+            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
+            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
+            puts "Target:\t\t#{channel_id}\n".color(Settings.options[:colors][:debug])
+            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
+          end
+
           show_if_new(stream, options, "channel:#{channel_id}")
           options = save_then_return(stream, options)
           countdown
