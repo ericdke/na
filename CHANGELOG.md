@@ -1,3 +1,7 @@
+# 1.2.4 - 'Stoopid me'
+
+- Fix the copy/paste error in Settings
+
 # 1.2.3 - 'Taylor'
 
 - Text containing '#' but not an hashtag: not colorized
