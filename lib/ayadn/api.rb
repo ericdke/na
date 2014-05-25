@@ -231,7 +231,8 @@ module Ayadn
       end
 
       if Settings.options[:timeline][:show_debug] == true
-        puts "\n=====\nNiceRanks\nFrom DB:\t#{niceranks}".color(Settings.options[:colors][:debug])
+        puts "=====\nNiceRanks\n".color(Settings.options[:colors][:debug])
+        puts "From DB:\t#{niceranks}\n".color(Settings.options[:colors][:debug])
         puts "To get:\t\t#{get_these}\n=====\n".color(Settings.options[:colors][:debug])
       end
 
@@ -242,18 +243,17 @@ module Ayadn
         #Error handling
         if resp['meta']['code'] != 200
           if Settings.options[:timeline][:show_debug] == true
-            puts "\n*****\nError NiceRank\t#{resp.inspect}\n*****\n".color(Settings.options[:colors][:debug])
+            puts "=====\nNiceRank:\tError #{resp['meta']['code']} (#{resp['meta']['time']})\n=====\n".color(Settings.options[:colors][:debug])
           end
-          Errors.warn "NiceRank: REQUEST #{req.inspect}"
-          Errors.warn "NiceRank: RESPONSE #{resp.inspect}"
+          Errors.nr "REQUESTED: #{get_these.join(' ')}"
 
           ###DEBUG
           @iter += 1
 
           if niceranks
             if Settings.options[:timeline][:show_debug] == true
-              puts "\n=====\nNiceRanks:\t#{niceranks}".color(Settings.options[:colors][:debug])
-              puts "=====\n\n".color(Settings.options[:colors][:debug])
+              puts "=====\nNiceRanks:\t#{niceranks}".color(Settings.options[:colors][:debug])
+              puts "=====\n".color(Settings.options[:colors][:debug])
             end
 
             #return niceranks
@@ -281,9 +281,9 @@ module Ayadn
           }
         end
         if Settings.options[:timeline][:show_debug] == true
-          puts "\n=====\nNiceRanks:\t#{niceranks}".color(Settings.options[:colors][:debug])
+          puts "=====\nNiceRanks:\t#{niceranks}".color(Settings.options[:colors][:debug])
           puts "Resp:\t\t#{resp}".color(Settings.options[:colors][:debug])
-          puts "=====\n\n".color(Settings.options[:colors][:debug])
+          puts "=====\n".color(Settings.options[:colors][:debug])
         end
       end
       Databases.add_niceranks niceranks

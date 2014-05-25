@@ -28,6 +28,9 @@ module Ayadn
     def self.repost(repost, original)
       Logs.rec.info "Post #{repost} is a repost. Using original: #{original}."
     end
+    def self.nr msg
+      Logs.nr.warn msg
+    end
 
     private
 

@@ -2,6 +2,8 @@
 
 - Text containing '#' but not an hashtag: not colorized
 - Add/remove several elements to/from blacklist at once
+- Cached results for NiceRank
+- NiceRank filter works better ('is_human' field)
 
 # 1.2.2 - 'Chris'
 

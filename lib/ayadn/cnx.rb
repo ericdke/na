@@ -6,7 +6,8 @@ module Ayadn
       begin
         RestClient.get(url) do |response, request, result|
           debug(response, url) if Settings.options[:timeline][:show_debug] == true
-          response
+          #response
+          check_nr response, url
         end
       rescue SocketError => e
         puts "\nConnection error.".color(:red)
@@ -19,13 +20,25 @@ module Ayadn
       end
     end
 
+    def self.check_nr response, url
+      case response.code
+      when 200
+        response
+      when 204
+        puts "\nError: the NiceRank filter made too many requests to the server. You may either wait for a little while before scrolling the filtered Global again, or set the scroll timer to a greater value (example: `ayadn set scroll timer 5`). You can also let the unranked posts appear in the stream if you prefer (see http://ayadn-app.net/doc).\n".color(:red)
+        Errors.global_error("cnx.rb/get", [url, response.inspect, response.headers], "NiceRank: TOO MANY REQUESTS")
+      else
+        response
+      end
+    end
+
     def self.debug response, url
-      puts "\n%%%%%".color(Settings.options[:colors][:debug])
-      puts "Url:\t\t#{url}".color(Settings.options[:colors][:debug])
-      #puts "Resp:\t\t#{response.code}".color(Settings.options[:colors][:debug])
-      puts "Headers:\t#{response.headers}".color(Settings.options[:colors][:debug])
-      #puts "Remaining:\t#{response.headers[:x_ratelimit_remaining]}".color(Settings.options[:colors][:debug])
-      puts "%%%%%\n".color(Settings.options[:colors][:debug])
+      puts ":::::".color(Settings.options[:colors][:debug])
+      puts "Url:\t\t#{url}\n".color(Settings.options[:colors][:debug])
+      #puts "Resp:\t\t#{response.code}\n".color(Settings.options[:colors][:debug])
+      puts "Headers:\t#{response.headers}\n".color(Settings.options[:colors][:debug])
+      puts "Remaining:\t#{response.headers[:x_ratelimit_remaining]}".color(Settings.options[:colors][:debug])
+      puts ":::::\n".color(Settings.options[:colors][:debug])
     end
 
     def self.get_response_from(url)

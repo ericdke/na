@@ -39,7 +39,9 @@ module Ayadn
               niceranks, @iter = @api.get_niceranks stream, @iter
               ###DEBUG
               if Settings.options[:timeline][:show_debug] == true
-                puts "@@@@@\nADN calls:\t#{@adn}\nNiceRank calls:\t#{@iter}\n@@@@@\n".color(Settings.options[:colors][:debug])
+                puts "@@@@@\nADN calls:\t#{@adn}\n".color(Settings.options[:colors][:debug])
+                puts "NiceRank calls:\t#{@iter}".color(Settings.options[:colors][:debug])
+                puts "@@@@@\n".color(Settings.options[:colors][:debug])
               end
             else
               niceranks = {}
@@ -49,7 +51,10 @@ module Ayadn
           end
 
           if Settings.options[:timeline][:show_debug] == true
-            puts "\n++++++\nStream meta:\t#{stream['meta']}\nOptions:\t#{options.inspect}\nTarget:\t\t#{target.inspect}\nPosts:\t\t#{stream['data'].length}\n+++++\n\n".color(Settings.options[:colors][:debug])
+            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
+            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
+            puts "Target:\t\t#{target.inspect}\n".color(Settings.options[:colors][:debug])
+            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
           end
 
           target = "explore:#{target}" if explore?(target)
