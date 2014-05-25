@@ -45,7 +45,7 @@ module Ayadn
     def global(settings)
       begin
         options = settings.dup
-        options[:filter] = true
+        options[:filter] = true if Settings.options[:nicerank][:filter] == true
         doing(options)
         stream = @api.get_global(options)
 
