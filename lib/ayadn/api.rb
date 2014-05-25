@@ -200,7 +200,12 @@ module Ayadn
       end
     end
 
-    def get_niceranks stream
+    ###DEBUG
+    #def get_niceranks stream
+    def get_niceranks stream, iter
+      ###DEBUG
+      @iter = iter
+
       user_ids, table, niceranks = [], {}, {}
       stream['data'].each do |post|
         user_ids << post['user']['id'].to_i
@@ -213,44 +218,79 @@ module Ayadn
       db_ranks.each do |id,ranks|
         if ranks.nil?
           get_these << id
+        elsif (Time.now - ranks[:cached]) > 86400 # 24 hours cache
+          get_these << id
         else
           niceranks[id] = {
           username: ranks[:username],
-          rank: ranks[:rank]
+          rank: ranks[:rank],
+          is_human: ranks[:is_human],
+          cached: ranks[:cached]
           }
         end
       end
 
       if Settings.options[:timeline][:show_debug] == true
-        puts "\n=====\nNiceRanks from DB:\t#{niceranks}\n"
-        puts "IDs to get:\t\t#{get_these}\n=====\n"
+        puts "\n=====\nNiceRanks\nFrom DB:\t#{niceranks}".color(Settings.options[:colors][:debug])
+        puts "To get:\t\t#{get_these}\n=====\n".color(Settings.options[:colors][:debug])
       end
 
       unless get_these.empty?
         req = "http://api.search-adn.net/user/nicerank?ids=#{get_these.join(',')}"
         resp = JSON.parse(CNX.get req)
+
+        #Error handling
         if resp['meta']['code'] != 200
           if Settings.options[:timeline][:show_debug] == true
-            puts "\n\n*****\nError NiceRank\n#{resp.inspect}\n#{req.inspect}\n*****\n\n".color(Settings.options[:colors][:debug])
+            puts "\n*****\nError NiceRank\t#{resp.inspect}\n*****\n".color(Settings.options[:colors][:debug])
           end
-          Errors.warn "NiceRank: ERROR CODE #{resp['meta']['code']}"
           Errors.warn "NiceRank: REQUEST #{req.inspect}"
           Errors.warn "NiceRank: RESPONSE #{resp.inspect}"
-          return {}
+
+          ###DEBUG
+          @iter += 1
+
+          if niceranks
+            if Settings.options[:timeline][:show_debug] == true
+              puts "\n=====\nNiceRanks:\t#{niceranks}".color(Settings.options[:colors][:debug])
+              puts "=====\n\n".color(Settings.options[:colors][:debug])
+            end
+
+            #return niceranks
+
+            ###DEBUG
+            return niceranks, @iter
+          else
+
+            # return {}
+
+            ###DEBUG
+            return {}, @iter
+          end
         end
+
+        ###DEBUG
+        @iter += 1
+
         resp['data'].each do |obj|
           niceranks[obj['user_id']] = {
             username: table[obj['user_id']],
-            rank: obj['rank']
+            rank: obj['rank'],
+            is_human: obj['is_human'],
+            cached: Time.now
           }
         end
         if Settings.options[:timeline][:show_debug] == true
-          puts "\n=====\nNiceRanks:\t#{niceranks}\n"
-          puts "=====\n\n"
+          puts "\n=====\nNiceRanks:\t#{niceranks}".color(Settings.options[:colors][:debug])
+          puts "Resp:\t\t#{resp}".color(Settings.options[:colors][:debug])
+          puts "=====\n\n".color(Settings.options[:colors][:debug])
         end
       end
       Databases.add_niceranks niceranks
-      niceranks
+
+      ###DEBUG
+      #niceranks
+      return niceranks, @iter
     end
 
     def get_channels

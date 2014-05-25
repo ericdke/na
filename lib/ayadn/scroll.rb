@@ -20,12 +20,27 @@ module Ayadn
     def scroll_it(target, options, niceranks)
       options = check_raw(options)
       orig_target = target
+
+      ###DEBUG
+      @iter = 0
+      @adn = 1
+
       loop do
         begin
           stream = get(target, options)
+
+          ###DEBUG
+          @adn += 1
+
           if options[:filter] == true
             unless stream['data'].empty?
-              niceranks = @api.get_niceranks stream
+              ###DEBUG
+              #niceranks = @api.get_niceranks stream
+              niceranks, @iter = @api.get_niceranks stream, @iter
+              ###DEBUG
+              if Settings.options[:timeline][:show_debug] == true
+                puts "@@@@@\nADN calls:\t#{@adn}\nNiceRank calls:\t#{@iter}\n@@@@@\n".color(Settings.options[:colors][:debug])
+              end
             else
               niceranks = {}
             end
@@ -33,9 +48,9 @@ module Ayadn
             niceranks = {}
           end
 
-          # if Settings.options[:timeline][:show_debug] == true
-          #   puts "\n++++++\nStream meta:\t#{stream['meta']}\nOptions:\t#{options.inspect}\nTarget:\t\t#{target.inspect}\nPosts:\t\t#{stream['data'].length}\n+++++\n\n".color(Settings.options[:colors][:debug])
-          # end
+          if Settings.options[:timeline][:show_debug] == true
+            puts "\n++++++\nStream meta:\t#{stream['meta']}\nOptions:\t#{options.inspect}\nTarget:\t\t#{target.inspect}\nPosts:\t\t#{stream['data'].length}\n+++++\n\n".color(Settings.options[:colors][:debug])
+          end
 
           target = "explore:#{target}" if explore?(target)
           show_if_new(stream, options, target, niceranks)

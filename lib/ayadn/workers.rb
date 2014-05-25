@@ -117,8 +117,10 @@ module Ayadn
 
         if niceranks[post['user']['id'].to_i]
           rank = niceranks[post['user']['id'].to_i][:rank]
+          is_human = niceranks[post['user']['id'].to_i][:is_human]
         else
           rank = false
+          is_human = 'unknown'
         end
 
         if post['user'].has_key?('name')
@@ -137,6 +139,7 @@ module Ayadn
           username: post['user']['username'],
           user_id: post['user']['id'].to_i,
           nicerank: rank,
+          is_human: is_human,
           handle: "@#{post['user']['username']}",
           type: post['user']['type'],
           date: parsed_time(post['created_at']),

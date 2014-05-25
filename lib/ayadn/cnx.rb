@@ -20,17 +20,18 @@ module Ayadn
     end
 
     def self.debug response, url
-      puts "\n\n%%%%%"
-      puts "Url:\t\t#{url}"
-      puts "Resp:\t\t#{response.code}"
-      puts "Headers:\t#{response.headers}"
-      puts "%%%%%\n\n"
+      puts "\n%%%%%".color(Settings.options[:colors][:debug])
+      puts "Url:\t\t#{url}".color(Settings.options[:colors][:debug])
+      #puts "Resp:\t\t#{response.code}".color(Settings.options[:colors][:debug])
+      puts "Headers:\t#{response.headers}".color(Settings.options[:colors][:debug])
+      #puts "Remaining:\t#{response.headers[:x_ratelimit_remaining]}".color(Settings.options[:colors][:debug])
+      puts "%%%%%\n".color(Settings.options[:colors][:debug])
     end
 
     def self.get_response_from(url)
       begin
         RestClient.get(url) do |response, request, result| #, :verify_ssl => OpenSSL::SSL::VERIFY_NONE
-          #debug(response, url) if Settings.options[:timeline][:show_debug] == true
+          debug(response, url) if Settings.options[:timeline][:show_debug] == true
           check(response)
         end
       rescue SocketError => e
