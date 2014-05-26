@@ -20,12 +20,29 @@ module Ayadn
     def self.close_all
 
       if @nicerank.size > 5000
-        limit = if Settings.options[:nicerank][:cache]
-          Time.now - Settings.options[:nicerank][:cache]
-        else
-          Time.now - 259200
-        end
+        limit = Time.now - 432000
         @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
+        if @nicerank.size > 5000
+          limit = Time.now - 86400
+          @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
+        end
+      end
+
+      if Settings.options[:timeline][:show_debug] == true
+        puts "/////\nSETTINGS\n"
+        jj JSON.parse((Settings.config).to_json)
+        jj JSON.parse((Settings.options).to_json)
+        puts "/////\n\n"
+
+        puts ">>>>>\nDATABASES\n"
+        [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank].each do |db|
+          puts "Path:\t#{db.file}\nLength:\t#{db.size}\nSize:\t#{db.bytesize / 1024}KB"
+        end
+        puts ">>>>>\n\n"
+
+        puts "^^^^^\nTOKEN\n"
+        puts Settings.user_token
+        puts "^^^^^\n\n"
       end
 
       [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank].each do |db|

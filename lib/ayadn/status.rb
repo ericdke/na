@@ -8,10 +8,10 @@ module Ayadn
       "\nFile downloaded in #{Settings.config[:paths][:downloads]}/#{name}\n".color(:green)
     end
     def self.downloading
-      "Downloading from ADN...".inverse
+      "Downloading from ADN...\n\n".inverse
     end
     def self.posting
-      "Posting to ADN...".inverse
+      "Posting to ADN...\n\n".inverse
     end
     def self.deleting_post(post_id)
       "\nDeleting post #{post_id}".inverse

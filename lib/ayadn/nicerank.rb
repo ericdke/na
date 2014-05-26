@@ -96,6 +96,7 @@ module Ayadn
     def got niceranks
       deb = "=====\n"
       deb << "NiceRanks:\t#{niceranks}\n\n"
+      deb << "DB size:\t#{Databases.nicerank.size}\n"
       deb << "=====\n"
       puts deb.color(Settings.options[:colors][:debug])
     end
