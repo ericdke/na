@@ -26,22 +26,17 @@ module Ayadn
         begin
           stream = get(target, options)
 
-          if options[:filter] == true
+          # if options[:filter] == true
             unless stream['data'].empty?
               niceranks = @nr.get_ranks stream
             else
               niceranks = {}
             end
-          else
-            niceranks = {}
-          end
+          # else
+          #   niceranks = {}
+          # end
 
-          if @show_debug == true
-            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
-            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
-            puts "Target:\t\t#{target.inspect}\n".color(Settings.options[:colors][:debug])
-            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
-          end
+          debug_stream(stream, options, target) if @show_debug == true
 
           target = "explore:#{target}" if explore?(target)
           show_if_new(stream, options, target, niceranks)
@@ -62,12 +57,7 @@ module Ayadn
         begin
           stream = @api.get_mentions(username, options)
 
-          if @show_debug == true
-            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
-            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
-            puts "Target:\t\t#{username}\n".color(Settings.options[:colors][:debug])
-            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
-          end
+          debug_stream(stream, options, username) if @show_debug == true
 
           show_if_new(stream, options, "mentions:#{id}")
           options = save_then_return(stream, options)
@@ -86,12 +76,7 @@ module Ayadn
         begin
           stream = @api.get_posts(username, options)
 
-          if @show_debug == true
-            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
-            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
-            puts "Target:\t\t#{username}\n".color(Settings.options[:colors][:debug])
-            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
-          end
+          debug_stream(stream, options, username) if @show_debug == true
 
           show_if_new(stream, options, "posts:#{id}")
           options = save_then_return(stream, options)
@@ -108,12 +93,7 @@ module Ayadn
         begin
           stream = @api.get_convo(post_id, options)
 
-          if @show_debug == true
-            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
-            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
-            puts "Target:\t\t#{post_id}\n".color(Settings.options[:colors][:debug])
-            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
-          end
+          debug_stream(stream, options, post_id) if @show_debug == true
 
           show_if_new(stream, options, "replies:#{post_id}")
           options = save_then_return(stream, options)
@@ -130,12 +110,7 @@ module Ayadn
         begin
           stream = @api.get_messages(channel_id, options)
 
-          if @show_debug == true
-            puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
-            puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
-            puts "Target:\t\t#{channel_id}\n".color(Settings.options[:colors][:debug])
-            puts "Posts:\t\t#{stream['data'].length}\n+++++\n".color(Settings.options[:colors][:debug])
-          end
+          debug_stream(stream, options, channel_id) if @show_debug == true
 
           show_if_new(stream, options, "channel:#{channel_id}")
           options = save_then_return(stream, options)
@@ -147,6 +122,14 @@ module Ayadn
     end
 
     private
+
+    def debug_stream stream, options, target
+      deb = "+++++\nStream meta:\t#{stream['meta']}\n\n"
+      deb << "Options:\t#{options.inspect}\n\n"
+      deb << "Target:\t\t#{target.inspect}\n\n"
+      deb << "Posts:\t\t#{stream['data'].length}\n+++++\n"
+      puts deb.color(Settings.options[:colors][:debug])
+    end
 
     def countdown
       if Settings.options[:timeline][:show_spinner] == true

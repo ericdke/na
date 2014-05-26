@@ -305,7 +305,7 @@ module Ayadn
       @view = ""
       posts = @workers.build_posts(data.reverse, niceranks)
 
-      posts = filter_nicerank posts, options
+      posts = filter_nicerank(posts, options)
 
       posts.each do |id,content|
         count = "%03d" % content[:count]
@@ -326,7 +326,7 @@ module Ayadn
       @view = ""
       posts = @workers.build_posts(data.reverse, niceranks)
 
-      posts = filter_nicerank posts, options
+      posts = filter_nicerank(posts, options)
 
       posts.each do |id,content|
         if content[:username] == Settings.config[:identity][:username]
