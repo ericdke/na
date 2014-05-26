@@ -294,9 +294,9 @@ module Ayadn
 
     def self.remove_arobase_if_present args
       args.map! do |username|
-        username = username.chars
-        username.shift if username.first == "@"
-        username.join
+        temp = username.chars
+        temp.shift if temp.first == "@"
+        temp.join
       end
       args
     end

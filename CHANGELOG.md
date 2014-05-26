@@ -1,6 +1,10 @@
+# 1.2.8 - 'Kirschen'
+
+- No more Ruby 1.9.3
+
 # 1.2.7 - 'Roman'
 
-- Fix the bug in Switch
+- Conform remove_arobase in Switch
 
 # 1.2.6 - 'Saket'
 

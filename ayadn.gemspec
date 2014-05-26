@@ -20,22 +20,22 @@ Gem::Specification.new do |spec|
   spec.executables   = %w{ayadn}
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = '>= 1.9.3'
+  spec.required_ruby_version = '>= 2.0.0'
 
-  spec.add_dependency "thor", ">= 0.18"
-  spec.add_dependency "rest-client", ">= 1.6"
-  spec.add_dependency "rainbow", ">= 2.0"
-  spec.add_dependency "terminal-table", ">= 1.4"
-  spec.add_dependency "daybreak", ">= 0.3"
+  spec.add_dependency "thor", "~> 0.18"
+  spec.add_dependency "rest-client", "~> 1.6"
+  spec.add_dependency "rainbow", "~> 2.0"
+  spec.add_dependency "terminal-table", "~> 1.4"
+  spec.add_dependency "daybreak", "~> 0.3"
   spec.add_dependency "pinboard"
 
-  spec.add_development_dependency "bundler", ">= 1.5"
-  spec.add_development_dependency "rake", ">= 10.1"
-  spec.add_development_dependency "rspec", ">= 2.14"
-  spec.add_development_dependency "rb-fsevent", ">= 0.9"
-  spec.add_development_dependency "guard-rspec", ">= 4.2"
+  spec.add_development_dependency "bundler", "~> 1.5"
+  spec.add_development_dependency "rake", "~> 10.1"
+  spec.add_development_dependency "rspec", "~> 2.14"
+  spec.add_development_dependency "rb-fsevent", "~> 0.9"
+  spec.add_development_dependency "guard-rspec", "~> 4.2"
   spec.add_development_dependency "coveralls"
-  #spec.add_development_dependency "fakefs", ">= 0.5"
+  #spec.add_development_dependency "fakefs", "~> 0.5"
 
   spec.post_install_message = "Thank you for installing Ayadn!"
 end
