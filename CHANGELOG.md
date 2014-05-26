@@ -1,3 +1,7 @@
+# 1.2.7 - 'Roman'
+
+- Fix the bug in Switch
+
 # 1.2.6 - 'Saket'
 
 - NiceRank enabled by default on new installs

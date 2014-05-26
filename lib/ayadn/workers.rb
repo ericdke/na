@@ -292,10 +292,13 @@ module Ayadn
       db[active][:handle]
     end
 
-    def self.remove_arobase_if_present(username)
-      username = username.chars
-      username.shift if username.first == "@"
-      username.join
+    def self.remove_arobase_if_present args
+      args.map! do |username|
+        username = username.chars
+        username.shift if username.first == "@"
+        username.join
+      end
+      args
     end
 
     def self.extract_users(resp)
