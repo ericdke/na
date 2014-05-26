@@ -48,11 +48,7 @@ module Ayadn
         options[:filter] = true if Settings.options[:nicerank][:filter] == true
         doing(options)
         stream = @api.get_global(options)
-
-        ###DEBUG
-        #niceranks = @api.get_niceranks stream
-        niceranks, _ = @api.get_niceranks stream, 0
-
+        niceranks = @api.get_niceranks stream
         (no_new_posts unless Databases.has_new?(stream, 'global')) if options[:new]
         Databases.save_max_id(stream)
         render_view(stream, options, niceranks)

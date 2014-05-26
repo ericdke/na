@@ -21,28 +21,13 @@ module Ayadn
       options = check_raw(options)
       orig_target = target
 
-      ###DEBUG
-      @iter = 0
-      @adn = 1
-
       loop do
         begin
           stream = get(target, options)
 
-          ###DEBUG
-          @adn += 1
-
           if options[:filter] == true
             unless stream['data'].empty?
-              ###DEBUG
-              #niceranks = @api.get_niceranks stream
-              niceranks, @iter = @api.get_niceranks stream, @iter
-              ###DEBUG
-              if Settings.options[:timeline][:show_debug] == true
-                puts "@@@@@\nADN calls:\t#{@adn}\n".color(Settings.options[:colors][:debug])
-                puts "NiceRank calls:\t#{@iter}".color(Settings.options[:colors][:debug])
-                puts "@@@@@\n".color(Settings.options[:colors][:debug])
-              end
+              niceranks = @api.get_niceranks stream
             else
               niceranks = {}
             end

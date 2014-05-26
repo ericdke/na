@@ -200,11 +200,7 @@ module Ayadn
       end
     end
 
-    ###DEBUG
-    #def get_niceranks stream
-    def get_niceranks stream, iter
-      ###DEBUG
-      @iter = iter
+    def get_niceranks stream
 
       user_ids, table, niceranks = [], {}, {}
       stream['data'].each do |post|
@@ -247,31 +243,16 @@ module Ayadn
           end
           Errors.nr "REQUESTED: #{get_these.join(' ')}"
           Errors.nr "RESPONSE: #{resp}"
-
-          ###DEBUG
-          @iter += 1
-
           if niceranks
             if Settings.options[:timeline][:show_debug] == true
               puts "=====\nNiceRanks:\t#{niceranks}".color(Settings.options[:colors][:debug])
               puts "=====\n".color(Settings.options[:colors][:debug])
             end
-
-            #return niceranks
-
-            ###DEBUG
-            return niceranks, @iter
+            return niceranks
           else
-
-            # return {}
-
-            ###DEBUG
-            return {}, @iter
+            return {}
           end
         end
-
-        ###DEBUG
-        @iter += 1
 
         resp['data'].each do |obj|
           niceranks[obj['user_id']] = {
@@ -289,9 +270,7 @@ module Ayadn
       end
       Databases.add_niceranks niceranks
 
-      ###DEBUG
-      #niceranks
-      return niceranks, @iter
+      niceranks
     end
 
     def get_channels
