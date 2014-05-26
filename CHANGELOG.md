@@ -1,8 +1,9 @@
 # 1.2.6 - 'Saket'
 
 - NiceRank enabled by default on new installs
-- Set the NiceRank cache value (in hours)
+- NiceRank cache expires after 48h by default
 - NiceRank cache auto-limits to 5000 users
+- Set the NiceRank cache value (in hours)
 - More debug info
 - Misc fixes related to recent features
 
