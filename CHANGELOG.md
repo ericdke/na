@@ -4,6 +4,7 @@
 - Set the NiceRank cache value (in hours)
 - NiceRank cache auto-limits to 5000 users
 - More debug info
+- Misc fixes related to recent features
 
 # 1.2.5 - 'Bis repetita'
 

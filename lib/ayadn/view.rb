@@ -460,9 +460,11 @@ module Ayadn
         header << content[:name].color(Settings.options[:colors][:name])
       end
 
-      if Settings.options[:timeline][:show_nicerank] && content[:nicerank] && Settings.options[:nicerank][:filter]
-        header << " "
-        header << "[#{content[:nicerank]}]".color(Settings.options[:colors][:nicerank])
+      if Settings.options[:timeline][:show_nicerank] && content[:nicerank]
+        if Settings.options[:nicerank][:filter] == true
+          header << " "
+          header << "[#{content[:nicerank]}]".color(Settings.options[:colors][:nicerank])
+        end
       end
 
       if Settings.options[:timeline][:show_date]

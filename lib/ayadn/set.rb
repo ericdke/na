@@ -377,8 +377,8 @@ module Ayadn
     def show_nicerank value
       unless Settings.options[:nicerank]
         Settings.options[:nicerank] = {
-          threshold: 2.1,
-          filter: false,
+          threshold: 2,
+          filter: true,
           filter_unranked: false
         }
       end
