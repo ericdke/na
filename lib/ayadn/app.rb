@@ -3,7 +3,7 @@ module Ayadn
   class App < Thor
     package_name "Ayadn"
 
-    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark}.each { |r| require_relative "#{r}" }
+    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank}.each { |r| require_relative "#{r}" }
 
     desc "timeline", "Show your App.net timeline, aka the Unified Stream (-tl)"
     map "unified" => :timeline

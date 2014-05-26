@@ -241,5 +241,11 @@ module Ayadn
       view << "At any moment, starting now, hit CTRL+C to exit.\n\n".color(:yellow)
       view << "\n\t--AUTO POSTING MODE ACTIVATED--\n\n".color(:red)
     end
+    def self.reducing db
+      "\nPlease wait while Ayadn is pruning and compacting the #{db} database...\n".color(:cyan)
+    end
+    def self.cache_range
+      "\nPlease enter a number of hours between 3 and 168.\n\n".color(:red)
+    end
   end
 end

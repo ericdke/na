@@ -1,3 +1,9 @@
+# 1.2.6 - 'Saket'
+
+- Set the NiceRank cache value (in hours)
+- NiceRank cache auto-limits to 5000 users
+- NiceRank filter_unranked is deprecated
+
 # 1.2.5 - 'Bis repetita'
 
 - Fix the NiceRank filter staying on true

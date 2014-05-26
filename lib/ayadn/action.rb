@@ -48,11 +48,11 @@ module Ayadn
         options[:filter] = true if Settings.options[:nicerank][:filter] == true
         doing(options)
         stream = @api.get_global(options)
-        niceranks = @api.get_niceranks stream
+        niceranks = NiceRank.new.get_ranks stream
         (no_new_posts unless Databases.has_new?(stream, 'global')) if options[:new]
         Databases.save_max_id(stream)
         render_view(stream, options, niceranks)
-        Scroll.new(@api, @view).global(options, niceranks) if options[:scroll]
+        Scroll.new(@api, @view).global(options) if options[:scroll]
       rescue => e
         Errors.global_error("action/global", options, e)
       ensure

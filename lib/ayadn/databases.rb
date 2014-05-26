@@ -18,6 +18,16 @@ module Ayadn
     end
 
     def self.close_all
+
+      if @nicerank.size > 5000
+        limit = if Settings.options[:nicerank][:cache]
+          Time.now - Settings.options[:nicerank][:cache]
+        else
+          Time.now - 259200
+        end
+        @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
+      end
+
       [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank].each do |db|
           db.flush
           db.compact

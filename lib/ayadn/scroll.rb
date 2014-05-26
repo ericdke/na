@@ -6,28 +6,29 @@ module Ayadn
       @api = api
       @view = view
       @chars = %w{ | / - \\ }
+      @show_debug = Settings.options[:timeline][:show_debug]
     end
 
-    def method_missing(meth, options, niceranks = {})
+    def method_missing(meth, options)
       case meth.to_s
       when 'trending', 'photos', 'checkins', 'replies', 'global', 'unified'
-        scroll_it(meth.to_s, options, niceranks)
+        scroll_it(meth.to_s, options)
       else
         super
       end
     end
 
-    def scroll_it(target, options, niceranks)
+    def scroll_it(target, options)
       options = check_raw(options)
       orig_target = target
-
+      @nr = NiceRank.new
       loop do
         begin
           stream = get(target, options)
 
           if options[:filter] == true
             unless stream['data'].empty?
-              niceranks = @api.get_niceranks stream
+              niceranks = @nr.get_ranks stream
             else
               niceranks = {}
             end
@@ -35,7 +36,7 @@ module Ayadn
             niceranks = {}
           end
 
-          if Settings.options[:timeline][:show_debug] == true
+          if @show_debug == true
             puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
             puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
             puts "Target:\t\t#{target.inspect}\n".color(Settings.options[:colors][:debug])
@@ -61,7 +62,7 @@ module Ayadn
         begin
           stream = @api.get_mentions(username, options)
 
-          if Settings.options[:timeline][:show_debug] == true
+          if @show_debug == true
             puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
             puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
             puts "Target:\t\t#{username}\n".color(Settings.options[:colors][:debug])
@@ -85,7 +86,7 @@ module Ayadn
         begin
           stream = @api.get_posts(username, options)
 
-          if Settings.options[:timeline][:show_debug] == true
+          if @show_debug == true
             puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
             puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
             puts "Target:\t\t#{username}\n".color(Settings.options[:colors][:debug])
@@ -107,7 +108,7 @@ module Ayadn
         begin
           stream = @api.get_convo(post_id, options)
 
-          if Settings.options[:timeline][:show_debug] == true
+          if @show_debug == true
             puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
             puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
             puts "Target:\t\t#{post_id}\n".color(Settings.options[:colors][:debug])
@@ -129,7 +130,7 @@ module Ayadn
         begin
           stream = @api.get_messages(channel_id, options)
 
-          if Settings.options[:timeline][:show_debug] == true
+          if @show_debug == true
             puts "+++++\nStream meta:\t#{stream['meta']}\n".color(Settings.options[:colors][:debug])
             puts "Options:\t#{options.inspect}\n".color(Settings.options[:colors][:debug])
             puts "Target:\t\t#{channel_id}\n".color(Settings.options[:colors][:debug])

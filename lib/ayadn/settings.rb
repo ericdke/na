@@ -204,7 +204,8 @@ module Ayadn
         },
         nicerank: {
           threshold: 2,
-          filter: false,
+          cache: 48,
+          filter: true,
           filter_unranked: false
         }
       }

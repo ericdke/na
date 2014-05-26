@@ -163,7 +163,8 @@ module Ayadn
       unless Settings.options[:nicerank]
         Settings.options[:nicerank] = {
           threshold: 2,
-          filter: false,
+          cache: 48,
+          filter: true,
           filter_unranked: false
         }
       end
@@ -187,6 +188,9 @@ module Ayadn
     end
     def threshold value
       Settings.options[:nicerank][:threshold] = value.to_f
+    end
+    def cache value
+      Settings.options[:nicerank][:cache] = Validators.cache_range value.to_i
     end
   end
 
@@ -236,6 +240,13 @@ module Ayadn
         x
       else
         abort(Status.must_be_integer)
+      end
+    end
+    def self.cache_range value
+      if value >= 3 && value <= 720
+        value.round
+      else
+        abort(Status.cache_range)
       end
     end
     def self.timer(t)

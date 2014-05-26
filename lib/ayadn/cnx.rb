@@ -33,12 +33,11 @@ module Ayadn
     end
 
     def self.debug response, url
-      puts ":::::".color(Settings.options[:colors][:debug])
-      puts "Url:\t\t#{url}\n".color(Settings.options[:colors][:debug])
-      #puts "Resp:\t\t#{response.code}\n".color(Settings.options[:colors][:debug])
-      puts "Headers:\t#{response.headers}\n".color(Settings.options[:colors][:debug])
-      puts "Remaining:\t#{response.headers[:x_ratelimit_remaining]}".color(Settings.options[:colors][:debug])
-      puts ":::::\n".color(Settings.options[:colors][:debug])
+      deb = ":::::\n"
+      deb << "Url:\t\t#{url}\n\n"
+      deb << "Headers:\t#{response.headers}\n"
+      deb << ":::::\n"
+      puts deb.color(Settings.options[:colors][:debug])
     end
 
     def self.get_response_from(url)
