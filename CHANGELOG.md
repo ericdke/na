@@ -1,8 +1,10 @@
 # 1.2.6 - 'Saket'
 
+- NiceRank enabled by default on new installs
 - Set the NiceRank cache value (in hours)
 - NiceRank cache auto-limits to 5000 users
 - NiceRank filter_unranked is deprecated
+- More debug info
 
 # 1.2.5 - 'Bis repetita'
 

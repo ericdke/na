@@ -9,6 +9,13 @@ describe Ayadn::Databases do
           pagination: 'spec/mock/'
         }
       })
+    Ayadn::Settings.stub(:options).and_return(
+        {
+          timeline: {
+            show_debug: false
+          }
+        }
+      )
     Ayadn::Databases.open_databases
   end
   describe ".add_to_users_db" do
