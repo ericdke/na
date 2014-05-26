@@ -246,6 +246,7 @@ module Ayadn
             puts "=====\nNiceRank:\tError #{resp['meta']['code']} (#{resp['meta']['time']})\n=====\n".color(Settings.options[:colors][:debug])
           end
           Errors.nr "REQUESTED: #{get_these.join(' ')}"
+          Errors.nr "RESPONSE: #{resp}"
 
           ###DEBUG
           @iter += 1
