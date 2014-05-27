@@ -140,8 +140,8 @@ describe Ayadn::Workers do
 
   describe ".remove_arobase_if_present" do
     it "removes @ from username" do
-      expect(Ayadn::Workers.remove_arobase_if_present("@user")).to eq "user"
-      expect(Ayadn::Workers.remove_arobase_if_present("user")).to eq "user"
+      expect(Ayadn::Workers.remove_arobase_if_present(["@user"])).to eq ["user"]
+      expect(Ayadn::Workers.remove_arobase_if_present(["user"])).to eq ["user"]
     end
   end
 
