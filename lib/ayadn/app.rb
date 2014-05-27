@@ -195,6 +195,7 @@ module Ayadn
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
     option :users, type: :boolean, desc: 'Search for users.'
+    option :channels, type: :boolean, desc: 'Search for channels.'
     option :annotations, type: :boolean, desc: 'Search for specific annotations in posts.'
     def search(*words)
       Action.new.search(words.join(","), options)

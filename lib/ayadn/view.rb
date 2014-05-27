@@ -182,9 +182,9 @@ module Ayadn
 
     end
 
-    def show_channels(resp)
+    def show_channels(resp, options = {})
       view = ""
-      bucket = @workers.build_channels(resp['data'])
+      bucket = @workers.build_channels(resp['data'], options)
       bucket.reverse.each do |ch|
         view << "\n"
         ch_alias = false
@@ -211,9 +211,11 @@ module Ayadn
           # + (#{ch.owner['name']}) if ch.owner['name']
           view << "\n"
         end
-        view << "Writers: ".color(:cyan)
-        view << "#{ch.writers}".color(Settings.options[:colors][:name])
-        view << "\n"
+        unless options[:channels] # unless the request comes from Search
+          view << "Writers: ".color(:cyan)
+          view << "#{ch.writers}".color(Settings.options[:colors][:name])
+          view << "\n"
+        end
         view << "Type: ".color(:cyan)
         view << "#{ch.type}".color(Settings.options[:colors][:id])
         view << "\n"
@@ -258,7 +260,7 @@ module Ayadn
         end
         view << "\n\n"
       end
-      view << "\nYour account is currently linked to #{bucket.length} channels.\n\n".color(:green)
+      view << "\nYour account is currently linked to #{bucket.length} channels.\n\n".color(:green) unless options[:channels]
       puts view
     end
 

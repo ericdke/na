@@ -1,8 +1,9 @@
 # 1.2.8 - 'Kirschen'
 
 - No more Ruby 1.9.3
-- Search for users: returns a detailed view of users whose bio or name contains the searched word(s)
+- Search for users: returns a detailed view of users whose bio contains the searched word(s)
 - Search for annotations: returns posts containing a specific annotation
+- Search for channels containing word(s) in their description
 
 # 1.2.7 - 'Roman'
 

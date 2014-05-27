@@ -443,6 +443,8 @@ module Ayadn
           @api.search_users words, options
         elsif options[:annotations]
           @api.search_annotations words, options
+        elsif options[:channels]
+          @api.search_channels words, options
         else
           @api.get_search words, options
         end
@@ -453,6 +455,8 @@ module Ayadn
             puts "----------\n\n\n"
             @view.show_userinfos(obj, nil)
           end
+        elsif options[:channels]
+          @view.show_channels stream, options
         else
           if options[:extract]
             view_all_search_links(stream, words)
