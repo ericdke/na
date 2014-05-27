@@ -194,10 +194,10 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
-    option :messages, type: :boolean, desc: 'Search in messages.'
-    option :users, type: :boolean, desc: 'Search for users.'
-    option :channels, type: :boolean, desc: 'Search for channels.'
-    option :annotations, type: :boolean, desc: 'Search for specific annotations in posts.'
+    option :messages, type: :boolean, desc: Descriptions.search_messages
+    option :users, type: :boolean, desc: Descriptions.search_users
+    option :channels, type: :boolean, desc: Descriptions.search_channels
+    option :annotations, type: :boolean, desc: Descriptions.search_annotations
     def search(*words)
       if options[:messages]
         Action.new.search(words, options)

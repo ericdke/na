@@ -444,13 +444,16 @@ module Ayadn
         elsif options[:annotations]
           @api.search_annotations words, options
         elsif options[:channels]
-          @api.search_channels words, options
+          splitted = splitter_all words
+          @api.search_channels splitted.join(','), options
         elsif options[:messages]
           channel_id = get_channel_id_from_alias(words[0])
           words.shift
-          @api.search_messages channel_id, words.join(','), options
+          splitted = splitter_all words.join(' ')
+          @api.search_messages channel_id, splitted.join(','), options
         else
-          @api.get_search words, options
+          splitted = splitter_all words
+          @api.get_search splitted.join(','), options
         end
         no_data('search') if stream['data'].empty?
         if options[:users]
@@ -925,6 +928,10 @@ module Ayadn
     end
 
     private
+
+    def splitter_all words
+      [words].collect {|w| w.split(' ')}
+    end
 
     def get_original_id(post_id, resp)
       if resp['data']['repost_of']

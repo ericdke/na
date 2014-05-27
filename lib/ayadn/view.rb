@@ -480,8 +480,8 @@ module Ayadn
       if Settings.options[:timeline][:show_symbols]
         header << " <".color(Settings.options[:colors][:symbols]) if content[:is_reply]
         header << " #{content[:num_stars]}*".color(Settings.options[:colors][:symbols]) if content[:is_starred]
-        header << " >".color(Settings.options[:colors][:symbols]) if content[:num_replies] > 0
         header << " #{content[:num_reposts]}x".color(Settings.options[:colors][:symbols]) if content[:num_reposts] > 0
+        header << " >".color(Settings.options[:colors][:symbols]) if content[:num_replies] > 0
       end
       header << "\n"
     end

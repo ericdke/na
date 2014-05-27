@@ -414,19 +414,63 @@ module Ayadn
 
       ayadn search screenshot iterm
 
-      ayadn -s screenshot iterm
+      ayadn search screenshot iterm
 
       Retrieves only 5 posts:
 
-      ayadn -s -c5 screenshot iterm
+      ayadn search -c5 screenshot iterm
 
       Shows index instead of post numbers:
 
-      ayadn -s -i screenshot iterm
+      ayadn search -i screenshot iterm
 
       Shows index and retrieves 30 posts:
 
-      ayadn -s -i -c30 screenshot iterm
+      ayadn search -i -c30 screenshot iterm
+      \n\n
+      USAGE
+    end
+    def self.search_messages
+      <<-USAGE
+      Search for WORD(S) in messages, including PMs.
+
+      You have to specify a channel id (or an alias).
+
+      Usage:
+
+      ayadn search --messages 33642 ipad movies
+
+      ayadn search --messages my_alias ipad movies
+      \n\n
+      USAGE
+    end
+    def self.search_users
+      <<-USAGE
+      Search for App.net users by searching WORD(S) in their bio/description.
+
+      Usage:
+
+      ayadn search --users anime
+      \n\n
+      USAGE
+    end
+    def self.search_channels
+      <<-USAGE
+      Search for App.net channels by searching WORD(S) in their description.
+
+      Usage:
+
+      ayadn search --channels movies
+      \n\n
+      USAGE
+    end
+    def self.search_annotations
+      <<-USAGE
+      Search for posts containing a specific App.net annotation.
+
+      Usage:
+
+      ayadn search --annotations net.app.core.crosspost
       \n\n
       USAGE
     end

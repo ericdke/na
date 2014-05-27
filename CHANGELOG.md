@@ -1,10 +1,11 @@
-# 1.2.8 - 'Kirschen'
+# 1.2.8 - 'Hans'
 
 - No more Ruby 1.9.3
-- Search for users: returns a detailed view of users whose bio contains the searched word(s)
+- Search for users: returns a detailed view of users containing word(s) in their bio/description
 - Search for annotations: returns posts containing a specific annotation
 - Search for channels containing word(s) in their description
-- Search for words in channels (including PMs)
+- Search for words in messages (PMs)
+- Better display of the starred and replied_to symbols
 
 # 1.2.7 - 'Roman'
 

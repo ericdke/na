@@ -187,7 +187,7 @@ module Ayadn
       else
         @options_list = API.build_query({count: Settings.options[:counts][:search]})
       end
-      "#{@channels_url}/messages/search?query=#{words}&channel_ids=#{channel_id}&access_token=#{Settings.user_token}#{@options_list}"
+      "#{@channels_url}messages/search?query=#{words}&channel_ids=#{channel_id}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def search_channels words, options
