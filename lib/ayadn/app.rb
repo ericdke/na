@@ -199,11 +199,7 @@ module Ayadn
     option :channels, type: :boolean, desc: 'Search for App.net channels by searching WORD(S) in their description.'
     option :annotations, type: :boolean, desc: 'Search for posts containing a specific App.net annotation.'
     def search(*words)
-      if options[:messages]
-        Action.new.search(words, options)
-      else
-        Action.new.search(words.join(","), options)
-      end
+      Action.new.search(words.join(","), options)
     end
 
     desc "settings", "List current Ayadn settings (-sg)"

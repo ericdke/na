@@ -447,6 +447,7 @@ module Ayadn
           splitted = splitter_all words
           @api.search_channels splitted.join(','), options
         elsif options[:messages]
+          words = words.split(',')
           channel_id = get_channel_id_from_alias(words[0])
           words.shift
           splitted = splitter_all words.join(' ')
