@@ -14,10 +14,10 @@ module Ayadn
       "Posting to ADN...\n\n".inverse
     end
     def self.deleting_post(post_id)
-      "\nDeleting post #{post_id}".inverse
+      "\nDeleting post #{post_id}\n".inverse
     end
     def self.deleting_message(message_id)
-      "\nDeleting message #{message_id}".inverse
+      "\nDeleting message #{message_id}\n".inverse
     end
     def self.unfollowing(username)
       "\nUnfollowing #{username}".inverse
