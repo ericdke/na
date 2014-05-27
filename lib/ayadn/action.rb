@@ -439,12 +439,24 @@ module Ayadn
     def search(words, options)
       begin
         doing(options)
-        stream = @api.get_search(words, options)
-        no_data('search') if stream['data'].empty?
-        if options[:extract]
-          view_all_search_links(stream, words)
+        stream = if options[:users]
+          @api.search_users words, options
         else
-          render_view(stream, options)
+          @api.get_search words, options
+        end
+        no_data('search') if stream['data'].empty?
+        if options[:users]
+          stream['data'].sort_by! {|obj| obj['counts']['followers']}
+          stream['data'].each do |obj|
+            puts "----------\n\n\n"
+            @view.show_userinfos(obj, nil)
+          end
+        else
+          if options[:extract]
+            view_all_search_links(stream, words)
+          else
+            render_view(stream, options)
+          end
         end
       rescue => e
         Errors.global_error("action/search", [words, options], e)

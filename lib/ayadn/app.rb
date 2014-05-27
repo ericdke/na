@@ -194,6 +194,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
+    option :users, type: :boolean, desc: 'Search for users.'
     def search(*words)
       Action.new.search(words.join(","), options)
     end

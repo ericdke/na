@@ -89,6 +89,10 @@ module Ayadn
       get_parsed_response(Endpoints.new.search(words, options))
     end
 
+    def search_users words, options
+      get_parsed_response(Endpoints.new.search_users(words, options))
+    end
+
     def get_followings(username)
       build_list(username, :followings)
     end
