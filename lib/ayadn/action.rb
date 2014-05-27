@@ -441,6 +441,8 @@ module Ayadn
         doing(options)
         stream = if options[:users]
           @api.search_users words, options
+        elsif options[:annotations]
+          @api.search_annotations words, options
         else
           @api.get_search words, options
         end

@@ -172,6 +172,15 @@ module Ayadn
       "#{@users_url}search?q=#{words}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
+    def search_annotations anno, options
+      if options[:count]
+        @options_list = API.build_query(options)
+      else
+        @options_list = API.build_query({count: Settings.options[:counts][:search]})
+      end
+      "#{@posts_url}search?annotation_types=#{anno}&access_token=#{Settings.user_token}#{@options_list}"
+    end
+
     def user(username)
       "#{@users_url}#{username}?access_token=#{Settings.user_token}&include_user_annotations=1"
     end
