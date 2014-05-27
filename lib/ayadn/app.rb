@@ -194,10 +194,10 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
-    option :messages, type: :boolean, desc: Descriptions.search_messages
-    option :users, type: :boolean, desc: Descriptions.search_users
-    option :channels, type: :boolean, desc: Descriptions.search_channels
-    option :annotations, type: :boolean, desc: Descriptions.search_annotations
+    option :messages, type: :boolean, desc: 'Search for WORD(S) in messages, including PMs.'
+    option :users, type: :boolean, desc: 'Search for App.net users by searching WORD(S) in their bio/description.'
+    option :channels, type: :boolean, desc: 'Search for App.net channels by searching WORD(S) in their description.'
+    option :annotations, type: :boolean, desc: 'Search for posts containing a specific App.net annotation.'
     def search(*words)
       if options[:messages]
         Action.new.search(words, options)

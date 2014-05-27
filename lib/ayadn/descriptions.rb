@@ -410,7 +410,7 @@ module Ayadn
       <<-USAGE
       Show recents posts containing WORD(S).
 
-      Basic usage:
+      # Basic usage
 
       ayadn search screenshot iterm
 
@@ -427,11 +427,11 @@ module Ayadn
       Shows index and retrieves 30 posts:
 
       ayadn search -i -c30 screenshot iterm
-      \n\n
-      USAGE
-    end
-    def self.search_messages
-      <<-USAGE
+
+      # Advanced usage
+
+      ## Messages
+
       Search for WORD(S) in messages, including PMs.
 
       You have to specify a channel id (or an alias).
@@ -441,31 +441,25 @@ module Ayadn
       ayadn search --messages 33642 ipad movies
 
       ayadn search --messages my_alias ipad movies
-      \n\n
-      USAGE
-    end
-    def self.search_users
-      <<-USAGE
+
+      ## Users
+
       Search for App.net users by searching WORD(S) in their bio/description.
 
       Usage:
 
       ayadn search --users anime
-      \n\n
-      USAGE
-    end
-    def self.search_channels
-      <<-USAGE
+
+      ## Channels
+
       Search for App.net channels by searching WORD(S) in their description.
 
       Usage:
 
       ayadn search --channels movies
-      \n\n
-      USAGE
-    end
-    def self.search_annotations
-      <<-USAGE
+
+      ## Annotations
+
       Search for posts containing a specific App.net annotation.
 
       Usage:
