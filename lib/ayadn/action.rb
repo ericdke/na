@@ -445,6 +445,10 @@ module Ayadn
           @api.search_annotations words, options
         elsif options[:channels]
           @api.search_channels words, options
+        elsif options[:messages]
+          channel_id = get_channel_id_from_alias(words[0])
+          words.shift
+          @api.search_messages channel_id, words.join(','), options
         else
           @api.get_search words, options
         end

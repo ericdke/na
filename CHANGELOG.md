@@ -4,6 +4,7 @@
 - Search for users: returns a detailed view of users whose bio contains the searched word(s)
 - Search for annotations: returns posts containing a specific annotation
 - Search for channels containing word(s) in their description
+- Search for words in channels (including PMs)
 
 # 1.2.7 - 'Roman'
 

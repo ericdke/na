@@ -101,6 +101,10 @@ module Ayadn
       get_parsed_response(Endpoints.new.search_channels(words, options))
     end
 
+    def search_messages channel_id, words, options
+      get_parsed_response(Endpoints.new.search_messages(channel_id, words, options))
+    end
+
     def get_followings(username)
       build_list(username, :followings)
     end
