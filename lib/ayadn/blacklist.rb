@@ -4,22 +4,16 @@ module Ayadn
     desc "add TYPE TARGET", "Adds a mention, hashtag or client to your blacklist"
     long_desc Descriptions.blacklist_add
     def add(*args)
-      if args.length < 2
-        puts Status.type_and_target_missing
-      end
-      blacklist = BlacklistWorkers.new
-      blacklist.add(args)
+      Action.quit(Status.type_and_target_missing) if args.length < 2
+      BlacklistWorkers.new.add(args)
       puts Status.done
     end
 
     desc "remove TYPE TARGET", "Removes a mention, hashtag or client from your blacklist"
     long_desc Descriptions.blacklist_remove
     def remove(*args)
-      if args.length < 2
-        puts Status.type_and_target_missing
-      end
-      blacklist = BlacklistWorkers.new
-      blacklist.remove(args)
+      Action.quit(Status.type_and_target_missing) if args.length < 2
+      BlacklistWorkers.new.remove(args)
       puts Status.done
     end
 
@@ -27,23 +21,19 @@ module Ayadn
     long_desc Descriptions.blacklist_list
     option :raw, aliases: "-x", type: :boolean, desc: "Outputs the raw list in CSV"
     def list
-      blacklist = BlacklistWorkers.new
-      blacklist.list(options)
+      BlacklistWorkers.new.list(options)
     end
 
     desc "import DATABASE", "Imports a blacklist database from another Ayadn account"
     long_desc Descriptions.blacklist_import
     def import(database)
-      blacklist = BlacklistWorkers.new
-      blacklist.import(database)
-      puts Status.done
+      BlacklistWorkers.new.import(database)
     end
 
     desc "convert", "Convert your current blacklist database to the new format"
     long_desc Descriptions.blacklist_convert
     def convert
-      blacklist = BlacklistWorkers.new
-      blacklist.convert
+      BlacklistWorkers.new.convert
       puts Status.done
     end
 

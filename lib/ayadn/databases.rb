@@ -17,35 +17,24 @@ module Ayadn
       @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
     end
 
+    def self.all_dbs
+      [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank]
+    end
+
     def self.close_all
 
-      if @nicerank.size > 5000
-        limit = Time.now - 432000
+      if @nicerank.size > 10000
+        limit = Time.now - (3600 * 168)
         @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
-        if @nicerank.size > 5000
-          limit = Time.now - 86400
+        if @nicerank.size > 10000
+          limit = Time.now - (3600 * 48)
           @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
         end
       end
 
-      if Settings.options[:timeline][:show_debug] == true
-        puts "/////\nSETTINGS\n"
-        jj JSON.parse((Settings.config).to_json)
-        jj JSON.parse((Settings.options).to_json)
-        puts "/////\n\n"
+      Debug.db all_dbs
 
-        puts ">>>>>\nDATABASES\n"
-        [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank].each do |db|
-          puts "Path:\t#{db.file}\nLength:\t#{db.size}\nSize:\t#{db.bytesize / 1024}KB"
-        end
-        puts ">>>>>\n\n"
-
-        puts "^^^^^\nTOKEN\n"
-        puts Settings.user_token
-        puts "^^^^^\n\n"
-      end
-
-      [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank].each do |db|
+      all_dbs.each do |db|
           db.flush
           db.compact
           db.close
@@ -157,7 +146,7 @@ module Ayadn
           return values if values[:count] == number
         end
       else
-        puts "\nNumber must be in the range of the indexed posts.\n".color(:red)
+        puts Status.must_be_in_index
         Errors.global_error("databases/get_post_from_index", number, "out of range")
       end
     end

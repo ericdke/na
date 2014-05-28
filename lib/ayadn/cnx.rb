@@ -5,8 +5,7 @@ module Ayadn
     def self.get url
       begin
         RestClient.get(url) do |response, request, result|
-          debug(response, url) if Settings.options[:timeline][:show_debug] == true
-          #response
+          Debug.http response, url
           check_nr response, url
         end
       rescue SocketError => e
@@ -25,26 +24,18 @@ module Ayadn
       when 200
         response
       when 204
-        puts "\nError: the NiceRank filter made too many requests to the server. You may either wait for a little while before scrolling the filtered Global again, or set the scroll timer to a greater value (example: `ayadn set scroll timer 5`). You can also let the unranked posts appear in the stream if you prefer (see http://ayadn-app.net/doc).\n".color(:red)
+        puts "\nError: the NiceRank filter made too many requests to the server. You may either wait for a little while before scrolling the filtered Global again, or set the scroll timer to a greater value (example: `ayadn set scroll timer 5`). (see http://ayadn-app.net/doc).\n".color(:red)
         Errors.global_error("cnx.rb/get", [url, response.inspect, response.headers], "NiceRank: TOO MANY REQUESTS")
       else
         response
       end
     end
 
-    def self.debug response, url
-      deb = ":::::\n"
-      deb << "Url:\t\t#{url}\n\n"
-      deb << "Headers:\t#{response.headers}\n"
-      deb << ":::::\n"
-      puts deb.color(Settings.options[:colors][:debug])
-    end
-
     def self.get_response_from(url)
       begin
         RestClient.get(url) do |response, request, result| #, :verify_ssl => OpenSSL::SSL::VERIFY_NONE
-          debug(response, url) if Settings.options[:timeline][:show_debug] == true
-          check(response)
+          Debug.http response, url
+          check response
         end
       rescue SocketError => e
         puts "\nConnection error.".color(:red)
@@ -57,7 +48,7 @@ module Ayadn
       end
     end
 
-    def self.check(response)
+    def self.check response
       message = JSON.parse(response)['meta']['error_message'] if response.code != 200
       case response.code
       when 200
@@ -96,8 +87,8 @@ module Ayadn
       begin
         #RestClient::Resource.new(url).delete
         RestClient.delete(url) do |response, request, result|
-          debug(response, url) if Settings.options[:timeline][:show_debug] == true
-          check(response)
+          Debug.http response, url
+          check response
         end
       rescue SocketError => e
         puts "\nConnection error.".color(:red)
@@ -113,8 +104,8 @@ module Ayadn
     def self.post(url, payload = nil)
       begin
         RestClient.post(url, payload.to_json, :content_type => :json, :accept => :json) do |response, request, result|
-          debug(response, url) if Settings.options[:timeline][:show_debug] == true
-          check(response)
+          Debug.http response, url
+          check response
         end
       rescue SocketError => e
         puts "\nConnection error.".color(:red)
@@ -130,8 +121,8 @@ module Ayadn
     def self.put(url, payload)
       begin
         RestClient.put(url, payload.to_json, :content_type => :json, :accept => :json) do |response, request, result|
-          debug(response, url) if Settings.options[:timeline][:show_debug] == true
-          check(response)
+          Debug.http response, url
+          check response
         end
       rescue SocketError => e
         puts "\nConnection error.".color(:red)

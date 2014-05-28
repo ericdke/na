@@ -4,7 +4,6 @@ module Ayadn
 
     def initialize
       @url = 'http://api.search-adn.net/user/nicerank?ids='
-      @show_debug = Settings.options[:timeline][:show_debug]
     end
 
     def get_ranks stream
@@ -27,6 +26,7 @@ module Ayadn
           expire = Settings.options[:nicerank][:cache] * 3600
         end
       end
+
       db_ranks.each do |id, ranks|
         if ranks.nil? || (Time.now - ranks[:cached]) > expire
           get_these << id
@@ -40,17 +40,17 @@ module Ayadn
         end
       end
 
-      how_many(niceranks, get_these) if @show_debug == true
+      Debug.how_many_ranks niceranks, get_these
 
       unless get_these.empty?
         resp = JSON.parse(CNX.get "#{@url}#{get_these.join(',')}")
 
         if resp['meta']['code'] != 200
-          nr_error(resp) if @show_debug == true
+          Debug.niceranks_error resp
           Errors.nr "REQUESTED: #{get_these.join(' ')}"
           Errors.nr "RESPONSE: #{resp}"
           if niceranks
-            in_pool(niceranks) if @show_debug == true
+            Debug.ranks_pool niceranks
             return niceranks
           else
             return {}
@@ -66,7 +66,7 @@ module Ayadn
           }
         end
 
-        got(niceranks) if @show_debug == true
+        Debug.total_ranks niceranks
       end
 
       Databases.add_niceranks niceranks
@@ -74,36 +74,5 @@ module Ayadn
       niceranks
     end
 
-    private
-
-    def how_many niceranks, get_these
-      deb = "=====\n"
-      deb << "NR from DB:\t#{niceranks}\n\n"
-      deb << "NR to get:\t#{get_these}\n"
-      deb << "=====\n"
-      puts deb.color(Settings.options[:colors][:debug])
-    end
-
-    def in_pool niceranks
-      deb = "=====\n"
-      deb << "NR in pool:\t#{niceranks}\n"
-      deb << "=====\n"
-      puts deb.color(Settings.options[:colors][:debug])
-    end
-
-    def nr_error resp
-      deb = "=====\n"
-      deb << "NR Error:\t#{resp['meta']}"
-      deb << "=====\n"
-      puts deb.color(Settings.options[:colors][:debug])
-    end
-
-    def got niceranks
-      deb = "=====\n"
-      deb << "NiceRanks:\t#{niceranks}\n\n"
-      deb << "DB size:\t#{Databases.nicerank.size}\n"
-      deb << "=====\n"
-      puts deb.color(Settings.options[:colors][:debug])
-    end
   end
 end

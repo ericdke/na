@@ -11,9 +11,7 @@ module Ayadn
       Logs.rec.debug "STACK: #{caller}"
       Logs.rec.error "--END--"
       puts "\n(error logged in #{Settings.config[:paths][:log]}/ayadn.log)\n".color(:blue)
-      if Settings.options[:timeline][:show_debug] == true
-        raise error
-      end
+      Debug.err
       exit
     end
     def self.error(status)

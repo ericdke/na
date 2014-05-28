@@ -3,42 +3,30 @@ module Ayadn
   class API
 
     def get_unified(options)
-      if options[:new] || options[:scroll]
-        options = {since_id: Databases.pagination['unified']}
-      end
+      options = paginate options, 'unified'
       get_parsed_response(Endpoints.new.unified(options))
     end
 
     def get_checkins(options)
-      if options[:new] || options[:scroll]
-        options = {since_id: Databases.pagination['explore:checkins']}
-      end
+      options = paginate options, 'explore:checkins'
       get_parsed_response(Endpoints.new.checkins(options))
     end
 
     def get_global(options)
-      if options[:new] || options[:scroll]
-        options = {since_id: Databases.pagination['global']}
-      end
+      options = paginate options, 'global'
       get_parsed_response(Endpoints.new.global(options))
     end
 
     def get_trending(options)
-      if options[:new] || options[:scroll]
-        options = {since_id: Databases.pagination['explore:trending']}
-      end
+      options = paginate options, 'explore:trending'
       get_explore(:trending, options)
     end
     def get_photos(options)
-      if options[:new] || options[:scroll]
-        options = {since_id: Databases.pagination['explore:photos']}
-      end
+      options = paginate options, 'explore:photos'
       get_explore(:photos, options)
     end
     def get_conversations(options)
-      if options[:new] || options[:scroll]
-        options = {since_id: Databases.pagination['explore:replies']}
-      end
+      options = paginate options, 'explore:replies'
       get_explore(:conversations, options)
     end
 
@@ -125,8 +113,7 @@ module Ayadn
       options = {:count => 200, :before_id => nil}
       big = []
       loop do
-        url = get_list_url(username, target, options)
-        resp = get_parsed_response(url)
+        resp = get_parsed_response(get_list_url(username, target, options))
         big << resp
         break if resp['meta']['min_id'] == nil || resp['meta']['more'] == false
         options = {:count => 200, :before_id => resp['meta']['min_id']}
@@ -231,9 +218,7 @@ module Ayadn
     end
 
     def get_messages(channel_id, options)
-      if options[:new] || options[:scroll]
-        options = {since_id: Databases.pagination["channel:#{channel_id}"]}
-      end
+      options = paginate options, "channel:#{channel_id}"
       get_parsed_response(Endpoints.new.messages(channel_id, options))
     end
 
@@ -291,6 +276,13 @@ module Ayadn
 
     private
 
+    def paginate options, target
+      if options[:new] || options[:scroll]
+        return {since_id: Databases.pagination[target]}
+      end
+      return options
+    end
+
     def get_parsed_response(url)
       JSON.parse(CNX.get_response_from(url))
     end
@@ -307,8 +299,7 @@ module Ayadn
       options = {:count => 200, :before_id => nil}
       big_hash = {}
       loop do
-        url = get_list_url(username, target, options)
-        resp = get_parsed_response(url)
+        resp = get_parsed_response(get_list_url(username, target, options))
         big_hash.merge!(Workers.extract_users(resp))
         break if resp['meta']['min_id'] == nil
         options = {:count => 200, :before_id => resp['meta']['min_id']}

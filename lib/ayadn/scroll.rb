@@ -6,7 +6,6 @@ module Ayadn
       @api = api
       @view = view
       @chars = %w{ | / - \\ }
-      @show_debug = Settings.options[:timeline][:show_debug]
     end
 
     def method_missing(meth, options)
@@ -35,9 +34,7 @@ module Ayadn
           # else
           #   niceranks = {}
           # end
-
-          debug_stream(stream, options, target) if @show_debug == true
-
+          Debug.stream stream, options, target
           target = "explore:#{target}" if explore?(target)
           show_if_new(stream, options, target, niceranks)
           target = orig_target if target =~ /explore/
@@ -56,9 +53,7 @@ module Ayadn
       loop do
         begin
           stream = @api.get_mentions(username, options)
-
-          debug_stream(stream, options, username) if @show_debug == true
-
+          Debug.stream stream, options, username
           show_if_new(stream, options, "mentions:#{id}")
           options = save_then_return(stream, options)
           countdown
@@ -75,9 +70,7 @@ module Ayadn
       loop do
         begin
           stream = @api.get_posts(username, options)
-
-          debug_stream(stream, options, username) if @show_debug == true
-
+          Debug.stream stream, options, username
           show_if_new(stream, options, "posts:#{id}")
           options = save_then_return(stream, options)
           countdown
@@ -92,9 +85,7 @@ module Ayadn
       loop do
         begin
           stream = @api.get_convo(post_id, options)
-
-          debug_stream(stream, options, post_id) if @show_debug == true
-
+          Debug.stream stream, options, post_id
           show_if_new(stream, options, "replies:#{post_id}")
           options = save_then_return(stream, options)
           countdown
@@ -109,9 +100,7 @@ module Ayadn
       loop do
         begin
           stream = @api.get_messages(channel_id, options)
-
-          debug_stream(stream, options, channel_id) if @show_debug == true
-
+          Debug.stream stream, options, channel_id
           show_if_new(stream, options, "channel:#{channel_id}")
           options = save_then_return(stream, options)
           countdown
@@ -122,14 +111,6 @@ module Ayadn
     end
 
     private
-
-    def debug_stream stream, options, target
-      deb = "+++++\nStream meta:\t#{stream['meta']}\n\n"
-      deb << "Options:\t#{options.inspect}\n\n"
-      deb << "Target:\t\t#{target.inspect}\n\n"
-      deb << "Posts:\t\t#{stream['data'].length}\n+++++\n"
-      puts deb.color(Settings.options[:colors][:debug])
-    end
 
     def countdown
       if Settings.options[:timeline][:show_spinner] == true

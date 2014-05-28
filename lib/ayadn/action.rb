@@ -460,7 +460,7 @@ module Ayadn
         if options[:users]
           stream['data'].sort_by! {|obj| obj['counts']['followers']}
           stream['data'].each do |obj|
-            puts "----------\n\n\n"
+            puts @view.big_separator
             @view.show_userinfos(obj, nil)
           end
         elsif options[:channels]
@@ -1082,13 +1082,13 @@ module Ayadn
     end
 
     def user_404(username)
-      puts "\nUser #{username} doesn't exist. It could be a deleted account.\n".color(:red)
+      puts Status.user_404 username
       Errors.info("User #{username} doesn't exist")
       exit
     end
 
     def post_404(post_id)
-      puts "\nImpossible to find #{post_id}. This post may have been deleted.\n".color(:red)
+      puts Status.post_404 post_id
       Errors.info("Impossible to find #{post_id}")
       exit
     end
@@ -1172,7 +1172,7 @@ module Ayadn
         channel_id = Databases.get_channel_id(orig)
         if channel_id.nil?
           Errors.warn("Alias '#{orig}' doesn't exist.")
-          puts "\nThis alias doesn't exist.\n\n".color(:red)
+          puts Status.no_alias
           exit
         end
       end
@@ -1221,7 +1221,7 @@ module Ayadn
     def get_track_infos
       track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
       if track.empty?
-        puts "\nCanceled: unable to get info from iTunes.\n".color(:red)
+        puts Status.no_itunes
         Errors.warn "Nowplaying canceled: unable to get info from iTunes."
         exit
       end
@@ -1260,24 +1260,26 @@ module Ayadn
     end
 
     def view_all_hashtag_links(stream, hashtag)
-      links = links_from_posts(stream)
       @view.clear_screen
       puts "Links from posts containing hashtag '##{hashtag}': \n".color(:cyan)
-      show_links(links)
+      show_links(links_from_posts(stream))
     end
 
     def view_all_search_links(stream, words)
-      links = links_from_posts(stream)
       @view.clear_screen
       puts "Links from posts containing word(s) '#{words}': \n".color(:cyan)
-      show_links(links)
+      show_links(links_from_posts(stream))
     end
 
     def view_all_stars_links(stream)
-      links = links_from_posts(stream)
       @view.clear_screen
       puts "Links from your starred posts: \n".color(:cyan)
-      show_links(links)
+      show_links(links_from_posts(stream))
+    end
+
+    def self.quit msg
+      puts msg
+      exit
     end
 
   end

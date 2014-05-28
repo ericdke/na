@@ -247,5 +247,20 @@ module Ayadn
     def self.cache_range
       "\nPlease enter a number of hours between 3 and 168.\n\n".color(:red)
     end
+    def self.must_be_in_index
+      "\nNumber must be in the range of the indexed posts.\n".color(:red)
+    end
+    def self.user_404 username
+      "\nUser #{username} doesn't exist. It could be a deleted account.\n".color(:red)
+    end
+    def self.post_404(post_id)
+      "\nImpossible to find #{post_id}. This post may have been deleted.\n".color(:red)
+    end
+    def self.no_alias
+      "\nThis alias doesn't exist.\n\n".color(:red)
+    end
+    def self.no_itunes
+      "\nCanceled: unable to get info from iTunes.\n".color(:red)
+    end
   end
 end

@@ -268,6 +268,16 @@ module Ayadn
       puts "\e[H\e[2J"
     end
 
+    def page msg
+      clear_screen
+      puts msg
+      puts "\n"
+    end
+
+    def big_separator
+      "----------\n\n\n"
+    end
+
     private
 
     def get_broadcast_alias_from_id(event_id)

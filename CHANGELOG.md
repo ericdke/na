@@ -1,3 +1,8 @@
+# 1.2.9 - 'Kirshen'
+
+- NiceRank database auto-limits to 10000 users
+- General code cleaning
+
 # 1.2.8 - 'Hans'
 
 - No more Ruby 1.9.3
