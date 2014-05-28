@@ -24,16 +24,7 @@ module Ayadn
       loop do
         begin
           stream = get(target, options)
-
-          # if options[:filter] == true
-            unless stream['data'].empty?
-              niceranks = @nr.get_ranks stream
-            else
-              niceranks = {}
-            end
-          # else
-          #   niceranks = {}
-          # end
+          stream['data'].empty? ? niceranks = {} : niceranks = @nr.get_ranks(stream)
           Debug.stream stream, options, target
           target = "explore:#{target}" if explore?(target)
           show_if_new(stream, options, target, niceranks)
@@ -48,8 +39,7 @@ module Ayadn
 
     def mentions(username, options)
       options = check_raw(options)
-      user = @api.get_user(username)
-      id = user['data']['id']
+      id = @api.get_user(username)['data']['id']
       loop do
         begin
           stream = @api.get_mentions(username, options)
@@ -65,8 +55,7 @@ module Ayadn
 
     def posts(username, options)
       options = check_raw(options)
-      user = @api.get_user(username)
-      id = user['data']['id']
+      id = @api.get_user(username)['data']['id']
       loop do
         begin
           stream = @api.get_posts(username, options)
@@ -113,11 +102,7 @@ module Ayadn
     private
 
     def countdown
-      if Settings.options[:timeline][:show_spinner] == true
-        waiting
-      else
-        pause
-      end
+      Settings.options[:timeline][:show_spinner] == true ? waiting : pause
     end
 
     def clear
@@ -160,10 +145,7 @@ module Ayadn
     end
 
     def waiting
-      interval = Settings.options[:scroll][:timer] * 10
-      interval.times do
-        spin
-      end
+      (Settings.options[:scroll][:timer] * 10).times { spin }
     end
 
     def pause
@@ -207,11 +189,7 @@ module Ayadn
     end
 
     def show(stream, options, niceranks)
-      unless options[:raw]
-        @view.show_posts(stream['data'], options, niceranks)
-      else
-        jj stream
-      end
+      options[:raw] ? jj stream : @view.show_posts(stream['data'], options, niceranks)
     end
 
     def canceled

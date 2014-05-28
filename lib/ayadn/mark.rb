@@ -139,7 +139,7 @@ module Ayadn
       entry << "Beginning:".color(:cyan)
       text = content[:root_text].gsub(/[\r\n]/, ' ')
       if text.length <= 60
-        entry << "\t#{text[0..60]}\n"
+        entry << "\t#{text}\n"
       else
         entry << "\t#{text[0..60]} [...]\n"
       end

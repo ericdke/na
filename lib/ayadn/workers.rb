@@ -5,18 +5,14 @@ module Ayadn
     def build_aliases_list(list)
       table = init_table
       table.title = "List of your channel aliases".color(:cyan) + "".color(:white)
-      list.each do |k,v|
-        table << ["#{k}".color(:green), "#{v}".color(:red)]
-      end
+      list.each {|k,v| table << ["#{k}".color(:green), "#{v}".color(:red)]}
       table
     end
 
     def build_blacklist_list(list)
       table = init_table
       table.title = "Your blacklist".color(:cyan) + "".color(:white)
-      list.each do |k,v|
-        table << ["#{v.capitalize}".color(:green), "#{k}".color(:red)]
-      end
+      list.each {|k,v| table << ["#{v.capitalize}".color(:green), "#{k}".color(:red)]}
       table
     end
 
@@ -44,10 +40,10 @@ module Ayadn
 
     def build_followings_list(list, target) #takes a hash of users with ayadn format
       table = init_table
-      if target == "me"
-        table.title = "List of users you're following".color(:cyan) + "".color(:white)
+      table.title = if target == "me"
+        "List of users you're following".color(:cyan) + "".color(:white)
       else
-        table.title = "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
+        "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
       end
       users_list = build_users_array(list)
       build_users_list(users_list, table)
@@ -55,10 +51,10 @@ module Ayadn
 
     def build_followers_list(list, target)
       table = init_table
-      if target == "me"
-        table.title = "List of your followers".color(:cyan) + "".color(:white)
+      table.title = if target == "me"
+        "List of your followers".color(:cyan) + "".color(:white)
       else
-        table.title = "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
+        "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
       end
       users_list = build_users_array(list)
       build_users_list(users_list, table)

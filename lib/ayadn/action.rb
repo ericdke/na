@@ -874,9 +874,7 @@ module Ayadn
         Databases.close_all
         abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
         itunes = get_track_infos
-        itunes.each do |el|
-          abort(Status.empty_fields) if el.length == 0
-        end
+        itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
         @view.clear_screen
         text_to_post = "#nowplaying\nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         puts Status.writing
@@ -886,9 +884,8 @@ module Ayadn
           exit
         end
         puts "\n"
-        resp = Post.new.post([text_to_post])
         puts Status.yourpost
-        @view.show_posted(resp)
+        @view.show_posted(Post.new.post([text_to_post]))
       rescue => e
         puts Status.wtf
         Errors.global_error("action/nowplaying", itunes, e)

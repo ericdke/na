@@ -8,9 +8,9 @@ module Ayadn
 
     def ask_credentials
       begin
-        puts "Please enter your Pinboard username (CTRL+C to cancel): ".color(:green)
+        puts Status.pin_username
         pin_username = STDIN.gets.chomp()
-        puts "\nPlease enter your Pinboard password (invisible, CTRL+C to cancel): ".color(:green)
+        puts Status.pin_password
         pin_password = STDIN.noecho(&:gets).chomp()
       rescue Interrupt
         abort(Status.canceled)

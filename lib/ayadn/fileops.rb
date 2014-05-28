@@ -38,9 +38,7 @@ module Ayadn
 
     def get_users(list)
       h = {}
-      list.each do |k,v|
-        h[k] = { username: v[0], name: v[1] }
-      end
+      list.each {|k,v| h[k] = { username: v[0], name: v[1] }}
       h
     end
 

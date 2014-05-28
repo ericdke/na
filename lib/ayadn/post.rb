@@ -56,8 +56,7 @@ module Ayadn
           post << buffer
         end
       rescue Interrupt
-        #temp
-        Errors.info "Write post: canceled."
+        #Errors.info "Write post: canceled."
         abort(Status.canceled)
       end
       post
@@ -93,10 +92,10 @@ module Ayadn
       send_content(url, payload_basic(text))
     end
 
-    def send_log(data)
-      url = Endpoints.new.ayadnlog
-      send_content(url, payload_log(data))
-    end
+    # def send_log(data)
+    #   url = Endpoints.new.ayadnlog
+    #   send_content(url, payload_log(data))
+    # end
 
     def send_post(text)
       url = Endpoints.new.posts_url
@@ -114,13 +113,11 @@ module Ayadn
     end
 
     def check_post_length(lines_array)
-      max_size = Settings.config[:post_max_length]
-      check_length(lines_array, max_size)
+      check_length(lines_array, Settings.config[:post_max_length])
     end
 
     def check_message_length(lines_array)
-      max_size = Settings.config[:message_max_length]
-      check_length(lines_array, max_size)
+      check_length(lines_array, Settings.config[:message_max_length])
     end
 
     def check_length(lines_array, max_size)
@@ -132,7 +129,7 @@ module Ayadn
         exit
       elsif size > max_size
         Errors.warn "Canceled: too long (#{size - max_size}chars)"
-        abort("\n\nCanceled: too long. #{max_size} max, #{size - max_size} characters to remove.\n\n\n".color(:red))
+        abort(Status.too_long(size, max_size))
       end
     end
 
@@ -150,7 +147,7 @@ module Ayadn
     end
 
     def error_text_empty
-      puts "\n\nYou should provide some text.\n\n".color(:red)
+      puts Status.no_text
       Errors.warn "-Post without text-"
     end
 
@@ -214,18 +211,18 @@ module Ayadn
       }
     end
 
-    def payload_log(data)
-      extended = annotations
-      extended << {
-          "type" => "com.ayadn.log",
-          "value" => data
-        }
-      return {
-        "text" => "#ayadnlog",
-        "entities" => entities,
-        "annotations" => extended
-      }
-    end
+    # def payload_log(data)
+    #   extended = annotations
+    #   extended << {
+    #       "type" => "com.ayadn.log",
+    #       "value" => data
+    #     }
+    #   return {
+    #     "text" => "#ayadnlog",
+    #     "entities" => entities,
+    #     "annotations" => extended
+    #   }
+    # end
 
   end
 end

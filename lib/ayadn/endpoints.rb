@@ -33,82 +33,82 @@ module Ayadn
     end
 
     def unified(options)
-      if options[:count] || options[:since_id]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count] || options[:since_id]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:unified]})
+        API.build_query({count: Settings.options[:counts][:unified]})
       end
       "#{@posts_url}stream/unified?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def checkins(options)
-      if options[:count] || options[:since_id]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count] || options[:since_id]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:checkins]})
+        API.build_query({count: Settings.options[:counts][:checkins]})
       end
       "#{@posts_url}stream/explore/checkins?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def global(options)
-      if options[:count] || options[:since_id]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count] || options[:since_id]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:global]})
+        API.build_query({count: Settings.options[:counts][:global]})
       end
       "#{@posts_url}stream/global?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def trending(options)
-      if options[:count] || options[:since_id]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count] || options[:since_id]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:trending]})
+        API.build_query({count: Settings.options[:counts][:trending]})
       end
       "#{@posts_url}stream/explore/trending?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def photos(options)
-      if options[:count] || options[:since_id]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count] || options[:since_id]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:photos]})
+        API.build_query({count: Settings.options[:counts][:photos]})
       end
       "#{@posts_url}stream/explore/photos?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def conversations(options)
-      if options[:count] || options[:since_id]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count] || options[:since_id]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:conversations]})
+        API.build_query({count: Settings.options[:counts][:conversations]})
       end
       "#{@posts_url}stream/explore/conversations?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def mentions(username, options)
-      if options[:count]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:mentions]})
+        API.build_query({count: Settings.options[:counts][:mentions]})
       end
       "#{@users_url}#{username}/mentions/?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def posts(username, options)
-      if options[:count]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:posts]})
+        API.build_query({count: Settings.options[:counts][:posts]})
       end
       "#{@users_url}#{username}/posts/?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def whatstarred(username, options)
-      if options[:count]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:default]})
+        API.build_query({count: Settings.options[:counts][:default]})
       end
       "#{@users_url}#{username}/stars/?access_token=#{Settings.user_token}#{@options_list}"
     end
@@ -126,10 +126,10 @@ module Ayadn
     end
 
     def convo(post_id, options)
-      if options[:count]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:convo]})
+        API.build_query({count: Settings.options[:counts][:convo]})
       end
       "#{@posts_url}#{post_id}/replies/?access_token=#{Settings.user_token}#{@options_list}"
     end
@@ -155,37 +155,37 @@ module Ayadn
     end
 
     def search(words, options)
-      if options[:count]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:search]})
+        API.build_query({count: Settings.options[:counts][:search]})
       end
       "#{@posts_url}search?text=#{words}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def search_users words, options
-      if options[:count]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:search]})
+        API.build_query({count: Settings.options[:counts][:search]})
       end
       "#{@users_url}search?q=#{words}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def search_annotations anno, options
-      if options[:count]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:search]})
+        API.build_query({count: Settings.options[:counts][:search]})
       end
       "#{@posts_url}search?annotation_types=#{anno}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def search_messages channel_id, words, options
-      if options[:count]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:search]})
+        API.build_query({count: Settings.options[:counts][:search]})
       end
       "#{@channels_url}messages/search?query=#{words}&channel_ids=#{channel_id}&access_token=#{Settings.user_token}#{@options_list}"
     end
@@ -200,15 +200,14 @@ module Ayadn
     end
 
     def single_post(post_id, options)
-      @options_list = API.build_query(options)
-      "#{@posts_url}#{post_id}?access_token=#{Settings.user_token}#{@options_list}"
+      "#{@posts_url}#{post_id}?access_token=#{Settings.user_token}#{API.build_query(options)}"
     end
 
     def files_list(options)
-      if options[:count]
-        @options_list = API.build_query(options)
+      @options_list = if options[:count]
+        API.build_query(options)
       else
-        @options_list = API.build_query({count: Settings.options[:counts][:files]})
+        API.build_query({count: Settings.options[:counts][:files]})
       end
       "#{@users_url}me/files?access_token=#{Settings.user_token}#{@options_list}"
     end

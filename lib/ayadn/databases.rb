@@ -52,38 +52,26 @@ module Ayadn
     end
 
     def self.add_niceranks niceranks
-      niceranks.each do |id,infos|
-        @nicerank[id] = infos
-      end
+      niceranks.each {|id,infos| @nicerank[id] = infos}
     end
 
     def self.get_niceranks user_ids
       ids = {}
-      user_ids.each do |id|
-        ids[id] = @nicerank[id]
-      end
+      user_ids.each {|id| ids[id] = @nicerank[id]}
       ids
     end
 
     def self.add_mention_to_blacklist(target)
-      target.each do |username|
-        @blacklist[username.downcase] = :mention
-      end
+      target.each {|username| @blacklist[username.downcase] = :mention}
     end
     def self.add_client_to_blacklist(target)
-      target.each do |source|
-        @blacklist[source.downcase] = :client
-      end
+      target.each {|source| @blacklist[source.downcase] = :client}
     end
     def self.add_hashtag_to_blacklist(target)
-      target.each do |tag|
-        @blacklist[tag.downcase] = :hashtag
-      end
+      target.each {|tag| @blacklist[tag.downcase] = :hashtag}
     end
     def self.remove_from_blacklist(target)
-      target.each do |el|
-        @blacklist.delete(el.downcase)
-      end
+      target.each {|el| @blacklist.delete(el.downcase)}
     end
     def self.import_blacklist(blacklist)
       new_list = self.init blacklist
@@ -92,13 +80,9 @@ module Ayadn
     end
     def self.convert_blacklist
       dummy = {}
-      @blacklist.each do |v,k|
-        dummy[v.downcase] = k
-      end
+      @blacklist.each {|v,k| dummy[v.downcase] = k}
       @blacklist.clear
-      dummy.each do |v,k|
-        @blacklist[v] = k
-      end
+      dummy.each {|v,k| @blacklist[v] = k}
     end
     def self.save_max_id(stream)
       @pagination[stream['meta']['marker']['name']] = stream['meta']['max_id']
@@ -123,17 +107,13 @@ module Ayadn
     end
 
     def self.get_alias_from_id(channel_id)
-      @aliases.each do |al, id|
-        return al if id == channel_id
-      end
+      @aliases.each {|al, id| return al if id == channel_id}
       nil
     end
 
     def self.save_indexed_posts(posts)
       @index.clear
-      posts.each do |id, hash|
-        @index[id] = hash
-      end
+      posts.each {|id, hash| @index[id] = hash}
     end
 
     def self.get_index_length
@@ -142,9 +122,7 @@ module Ayadn
 
     def self.get_post_from_index(number)
       unless number > @index.length || number <= 0
-        @index.each do |id, values|
-          return values if values[:count] == number
-        end
+        @index.each {|id, values| return values if values[:count] == number}
       else
         puts Status.must_be_in_index
         Errors.global_error("databases/get_post_from_index", number, "out of range")
@@ -152,9 +130,7 @@ module Ayadn
     end
 
     def self.add_to_users_db_from_list(list)
-      list.each do |id, content_array|
-        @users[id] = {content_array[0] => content_array[1]}
-      end
+      list.each { |id, content_array| @users[id] = {content_array[0] => content_array[1]} }
     end
 
     def self.add_to_users_db(id, username, name)

@@ -262,5 +262,17 @@ module Ayadn
     def self.no_itunes
       "\nCanceled: unable to get info from iTunes.\n".color(:red)
     end
+    def self.pin_username
+      "Please enter your Pinboard username (CTRL+C to cancel): ".color(:green)
+    end
+    def self.pin_password
+      "\nPlease enter your Pinboard password (invisible, CTRL+C to cancel): ".color(:green)
+    end
+    def self.too_long size, max_size
+      "\n\nCanceled: too long. #{max_size} max, #{size - max_size} characters to remove.\n\n\n".color(:red)
+    end
+    def self.no_text
+      "\n\nYou should provide some text.\n\n".color(:red)
+    end
   end
 end
