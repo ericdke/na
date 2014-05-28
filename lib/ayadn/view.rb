@@ -23,8 +23,7 @@ module Ayadn
     end
 
     def show_simple_post(post, options)
-      view = build_stream_without_index(post, options, {})
-      puts view
+      puts build_stream_without_index(post, options, {})
     end
 
     def show_posted(resp)
@@ -282,11 +281,7 @@ module Ayadn
 
     def get_broadcast_alias_from_id(event_id)
       al = Databases.get_alias_from_id(event_id)
-      unless al.nil?
-        al
-      else
-        event_id
-      end
+      al.nil? ? event_id : al
     end
 
     def filter_nicerank posts, options
@@ -315,10 +310,7 @@ module Ayadn
 
     def build_stream_with_index(data, options, niceranks) #expects an array
       @view = ""
-      posts = @workers.build_posts(data.reverse, niceranks)
-
-      posts = filter_nicerank(posts, options)
-
+      posts = filter_nicerank(@workers.build_posts(data.reverse, niceranks), options)
       posts.each do |id,content|
         count = "%03d" % content[:count]
         if content[:username] == Settings.config[:identity][:username]
@@ -336,10 +328,7 @@ module Ayadn
 
     def build_stream_without_index(data, options, niceranks) #expects an array
       @view = ""
-      posts = @workers.build_posts(data.reverse, niceranks)
-
-      posts = filter_nicerank(posts, options)
-
+      posts = filter_nicerank(@workers.build_posts(data.reverse, niceranks), options)
       posts.each do |id,content|
         if content[:username] == Settings.config[:identity][:username]
           @view << content[:id].to_s.color(Settings.options[:colors][:id]).inverse + " "

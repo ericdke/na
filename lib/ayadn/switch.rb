@@ -1,6 +1,7 @@
 # encoding: utf-8
 module Ayadn
   class Switch
+
     def list
       home_path = Dir.home + "/ayadn"
       if File.exist?("#{home_path}/accounts.db")
@@ -24,6 +25,7 @@ module Ayadn
         please
       end
     end
+
     def switch(user)
       if user.empty? || user.nil?
         puts "\n\nOops, something went wrong, I couldn't get your username. Please try again.\n\n".color(:red)

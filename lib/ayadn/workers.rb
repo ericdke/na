@@ -56,22 +56,19 @@ module Ayadn
       else
         "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
       end
-      users_list = build_users_array(list)
-      build_users_list(users_list, table)
+      build_users_list(build_users_array(list), table)
     end
 
     def build_muted_list(list)
       table = init_table
       table.title = "List of users you muted".color(:cyan) + "".color(:white)
-      users_list = build_users_array(list)
-      build_users_list(users_list, table)
+      build_users_list(build_users_array(list), table)
     end
 
     def build_blocked_list(list)
       table = init_table
       table.title = "List of users you blocked".color(:cyan) + "".color(:white)
-      users_list = build_users_array(list)
-      build_users_list(users_list, table)
+      build_users_list(build_users_array(list), table)
     end
 
     def build_users_list(list, table)
@@ -142,12 +139,14 @@ module Ayadn
           you_starred: post['you_starred'],
           source_name: source,
           source_link: post['source']['link'],
-          canonical_url: post['canonical_url']
+          canonical_url: post['canonical_url'],
+          tags: hashtags,
+          links: extract_links(post),
+          mentions: mentions,
+          directed_to: mentions.first || false
         }
 
-        values[:tags] = hashtags
-
-        values[:links] = extract_links(post)
+        values[:checkins], values[:has_checkins] = extract_checkins(post)
 
         if post['repost_of']
           values[:is_repost] = true
@@ -190,10 +189,6 @@ module Ayadn
           values[:num_reposts] = 0
         end
 
-        values[:mentions] = mentions
-        values[:directed_to] = mentions.first || false
-        values[:checkins], values[:has_checkins] = extract_checkins(post)
-
         posts[post['id'].to_i] = values
 
       end
@@ -221,8 +216,6 @@ module Ayadn
     end
 
     def build_channels(data, options = {})
-      channels = []
-      data.each { |ch| channels << ch }
       bucket = []
       if options[:channels]
         puts "Downloading list of channels and their users credentials.\n\nPlease wait, it could take a while if there are many results and users...".color(:cyan)
@@ -230,7 +223,7 @@ module Ayadn
         puts "Downloading new channels and unknown users ids.\nThis is a one time operation, ids are being recorded in a database.\n\nPlease wait, it could take a while if you have many channels...".color(:cyan)
       end
       chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
-      channels.each do |ch|
+      data.each do |ch|
         unless ch['writers']['user_ids'].empty?
           usernames = []
           ch['writers']['user_ids'].each do |id|
@@ -315,10 +308,8 @@ module Ayadn
       reg_tag = '#([[:alpha:]0-9_]{1,255})(?![\w+])'
       reg_mention = '@([A-Za-z0-9_]{1,20})(?![\w+])'
       reg_sentence = '^.+[\r\n]*'
-      handles = Array.new
+      handles, words, sentences = [], [], []
       mentions.each {|username| handles << "@#{username}"}
-      words = Array.new
-      sentences = Array.new
       hashtag_color = Settings.options[:colors][:hashtags]
       mention_color = Settings.options[:colors][:mentions]
       text.scan(/#{reg_sentence}/) do |sentence|
@@ -327,15 +318,11 @@ module Ayadn
             slices = word.split('#')
             has_h = false
             slices.each do |tag|
-              bit = tag.downcase.scan(/[[:alpha:]0-9_]/).join('')
-              if hashtags.include? bit
-                has_h = true
-              end
+              has_h = true if hashtags.include?(tag.downcase.scan(/[[:alpha:]0-9_]/).join(''))
             end
             if has_h == true
               if slices.length > 1
-                word = slices.join('#')
-                words << word.gsub(/#{reg_tag}/, '#\1'.color(hashtag_color))
+                words << slices.join('#').gsub(/#{reg_tag}/, '#\1'.color(hashtag_color))
               else
                 words << word.gsub(/#{reg_tag}/, '#\1'.color(hashtag_color))
               end

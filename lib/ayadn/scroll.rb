@@ -189,7 +189,11 @@ module Ayadn
     end
 
     def show(stream, options, niceranks)
-      options[:raw] ? jj stream : @view.show_posts(stream['data'], options, niceranks)
+      if options[:raw]
+        jj stream
+      else
+        @view.show_posts(stream['data'], options, niceranks)
+      end
     end
 
     def canceled
