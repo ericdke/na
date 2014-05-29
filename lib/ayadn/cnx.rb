@@ -12,14 +12,19 @@ module Ayadn
       rescue SocketError => e
         if working == true
           working = false
-          sleep 2
+          sleep 0.5
           retry
         end
         Errors.nr "URL: #{url}"
         return {'meta' => {'code' => 666}, 'data' => "#{e}"}.to_json
       rescue SystemCallError => e
-        puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/get", url, e)
+        if working == true
+          working = false
+          sleep 0.5
+          retry
+        end
+        Errors.nr "URL: #{url}"
+        return {'meta' => {'code' => 666}, 'data' => "#{e}"}.to_json
       rescue => e
         Errors.global_error("cnx.rb/get", url, e)
       end
@@ -46,29 +51,30 @@ module Ayadn
         end
       rescue SocketError => e
         if try_cnx < 4
-          Errors.warn "Impossible to connect to App.net"
-          puts "\n\nImpossible to connect to App.net.\nRetrying in 10 seconds... (#{try_cnx}/3)\n".color(:red)
-          try_cnx += 1
-          sleep 10
-          puts "\e[H\e[2J"
+          try_cnx = retry_adn 10, try_cnx
           retry
         end
         puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/get", url, e)
+        Errors.global_error("cnx.rb/get_response_from", url, e)
       rescue SystemCallError => e
         if try_cnx < 4
-          Errors.warn "Impossible to connect to App.net"
-          puts "\n\nImpossible to connect to App.net.\nRetrying in 15 seconds... (#{try_cnx}/3)\n".color(:red)
-          try_cnx += 1
-          sleep 15
-          puts "\e[H\e[2J"
+          try_cnx = retry_adn 15, try_cnx
           retry
         end
         puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/get", url, e)
+        Errors.global_error("cnx.rb/get_response_from", url, e)
       rescue => e
-        Errors.global_error("cnx.rb/get", url, e)
+        Errors.global_error("cnx.rb/get_response_from", url, e)
       end
+    end
+
+    def self.retry_adn seconds, try_cnx
+      Errors.warn "Unable to connect to App.net"
+      puts "\n\nUnable to connect to App.net\nRetrying in #{seconds} seconds... (#{try_cnx}/3)\n".color(:red)
+      try_cnx += 1
+      sleep seconds
+      puts "\e[H\e[2J"
+      try_cnx
     end
 
     def self.check response
