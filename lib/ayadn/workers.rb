@@ -318,7 +318,7 @@ module Ayadn
           word_chars = word.chars
           sanitized, word = [], []
           word_chars.each do |ch|
-            if UnicodeUtils.char_type(ch) == :Symbol
+            if UnicodeUtils.general_category(ch) == :Other_Symbol
               sanitized << "#{ch} "
             else
               sanitized << ch
