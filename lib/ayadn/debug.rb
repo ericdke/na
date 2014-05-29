@@ -31,9 +31,11 @@ module Ayadn
       end
     end
 
-    def self.err
+    def self.err error
       if Settings.options[:timeline][:show_debug] == true
+        puts "--*--\nTRACE:\n"
         raise error
+        puts "\n--*--\n\n"
       end
     end
 
@@ -59,7 +61,7 @@ module Ayadn
     def self.niceranks_error resp
       if Settings.options[:timeline][:show_debug] == true
         deb = "=====\n"
-        deb << "NR Error:\t#{resp['meta']}"
+        deb << "NR Error:\t#{resp}\n"
         deb << "=====\n"
         puts deb.color(Settings.options[:colors][:debug])
       end

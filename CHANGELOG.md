@@ -1,6 +1,7 @@
 # 1.2.9 - 'Kirshen'
 
 - NiceRank database auto-limits to 10000 users
+- Retry if connection error
 - General code cleaning
 
 # 1.2.8 - 'Hans'

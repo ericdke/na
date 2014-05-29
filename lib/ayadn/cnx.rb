@@ -3,14 +3,20 @@ module Ayadn
   class CNX
 
     def self.get url
+      working = true
       begin
         RestClient.get(url) do |response, request, result|
           Debug.http response, url
           check_nr response, url
         end
       rescue SocketError => e
-        puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/get", url, e)
+        if working == true
+          working = false
+          sleep 2
+          retry
+        end
+        Errors.nr "URL: #{url}"
+        return {'meta' => {'code' => 666}, 'data' => "#{e}"}.to_json
       rescue SystemCallError => e
         puts "\nConnection error.".color(:red)
         Errors.global_error("cnx.rb/get", url, e)
@@ -32,15 +38,32 @@ module Ayadn
     end
 
     def self.get_response_from(url)
+      try_cnx = 1
       begin
         RestClient.get(url) do |response, request, result| #, :verify_ssl => OpenSSL::SSL::VERIFY_NONE
           Debug.http response, url
           check response
         end
       rescue SocketError => e
+        if try_cnx < 4
+          Errors.warn "Impossible to connect to App.net"
+          puts "\n\nImpossible to connect to App.net.\nRetrying in 10 seconds... (#{try_cnx}/3)\n".color(:red)
+          try_cnx += 1
+          sleep 10
+          puts "\e[H\e[2J"
+          retry
+        end
         puts "\nConnection error.".color(:red)
         Errors.global_error("cnx.rb/get", url, e)
       rescue SystemCallError => e
+        if try_cnx < 4
+          Errors.warn "Impossible to connect to App.net"
+          puts "\n\nImpossible to connect to App.net.\nRetrying in 15 seconds... (#{try_cnx}/3)\n".color(:red)
+          try_cnx += 1
+          sleep 15
+          puts "\e[H\e[2J"
+          retry
+        end
         puts "\nConnection error.".color(:red)
         Errors.global_error("cnx.rb/get", url, e)
       rescue => e
