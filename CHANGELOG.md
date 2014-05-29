@@ -1,7 +1,8 @@
-# 1.2.9 - 'Kirshen'
+# 1.2.9 - 'Kirschen'
 
 - NiceRank database auto-limits to 10000 users
 - Better handling of connection errors
+- Better display of emojis
 - General code cleaning
 
 # 1.2.8 - 'Hans'

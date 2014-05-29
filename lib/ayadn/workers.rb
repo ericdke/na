@@ -314,6 +314,18 @@ module Ayadn
       mention_color = Settings.options[:colors][:mentions]
       text.scan(/#{reg_sentence}/) do |sentence|
         sentence.split(' ').each do |word|
+
+          word_chars = word.chars
+          sanitized, word = [], []
+          word_chars.each do |ch|
+            if UnicodeUtils.char_type(ch) == :Symbol
+              sanitized << "#{ch} "
+            else
+              sanitized << ch
+            end
+          end
+          word = sanitized.join
+
           if word =~ /#\w+/
             slices = word.split('#')
             has_h = false
@@ -330,12 +342,21 @@ module Ayadn
               words << word
             end
           elsif word =~ /@\w+/
-            @str = def_str(word, reg_split)
-            if handles.include?(@str.downcase)
-              words << word.gsub(/#{reg_mention}/, '@\1'.color(mention_color))
-            else
-              words << word
+            enc = []
+            warr = word.split(' ')
+            warr.each do |w|
+              @str = def_str(w, reg_split)
+              if handles.include?(@str.downcase)
+                if warr.length == 1
+                  enc << w.gsub(/#{reg_mention}/, '@\1'.color(mention_color))
+                else
+                  enc << " #{w.gsub(/#{reg_mention}/, '@\1'.color(mention_color))}"
+                end
+              else
+                enc << w
+              end
             end
+            words << enc.join
           else
             words << word
           end
