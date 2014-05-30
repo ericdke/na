@@ -1,3 +1,7 @@
+# 1.2.10 - 'Anders'
+
+- Fixed the non-installing unicode_utils Gem
+
 # 1.2.9 - 'Kirschen'
 
 - NiceRank database auto-limits to 10000 users
@@ -66,7 +70,7 @@
 - Bookmark a conversation
 - List, delete, rename bookmarks
 
-# 1.1.2 - 'Anders'
+# 1.1.2 - 'Craig'
 
 - URL for the docs
 
