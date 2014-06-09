@@ -1,7 +1,8 @@
 # encoding: utf-8
 module Ayadn
   class Blacklist < Thor
-    desc "add TYPE TARGET", "Adds a mention, hashtag or client to your blacklist"
+    desc "add TYPE TARGET", "Adds a mention, hashtag, client or username to your blacklist"
+    map "create" => :add
     long_desc Descriptions.blacklist_add
     def add(*args)
       Action.quit(Status.type_and_target_missing) if args.length < 2
@@ -9,7 +10,8 @@ module Ayadn
       puts Status.done
     end
 
-    desc "remove TYPE TARGET", "Removes a mention, hashtag or client from your blacklist"
+    desc "remove TYPE TARGET", "Removes a mention, hashtag, client or username from your blacklist"
+    map "delete" => :remove
     long_desc Descriptions.blacklist_remove
     def remove(*args)
       Action.quit(Status.type_and_target_missing) if args.length < 2
@@ -34,6 +36,12 @@ module Ayadn
     long_desc Descriptions.blacklist_convert
     def convert
       BlacklistWorkers.new.convert
+      puts Status.done
+    end
+
+    desc "clear", "Clear your blacklist database"
+    def clear
+      BlacklistWorkers.new.clear
       puts Status.done
     end
 
@@ -68,10 +76,28 @@ module Ayadn
         Databases.close_all
       end
     end
+    def clear
+      begin
+        puts "\n\nAre you sure you want to erase all the content of your blacklist database?\n\n[y/N]\n".color(:red)
+        input = STDIN.getch
+        if input == 'y' || input == 'Y'
+          Databases.clear_blacklist
+          Logs.rec.info "Cleared the blacklist database."
+        else
+          abort Status.canceled
+        end
+      ensure
+        Databases.close_all
+      end
+    end
     def add(args)
       begin
         type = args.shift
         case type
+        when 'user', 'username', 'account'
+          target = Workers.add_arobases_to_usernames args
+          Databases.add_user_to_blacklist(target)
+          Logs.rec.info "Added '#{target}' to blacklist of users."
         when 'mention', 'mentions'
           target = Workers.add_arobases_to_usernames args
           Databases.add_mention_to_blacklist(target)
@@ -93,6 +119,11 @@ module Ayadn
       begin
         type = args.shift
         case type
+        when 'user', 'username', 'account'
+          temp = Workers.add_arobases_to_usernames args
+          target = temp.map {|u| "-#{u}"}
+          Databases.remove_from_blacklist(target)
+          Logs.rec.info "Removed '#{target}' from blacklist of users."
         when 'mention', 'mentions'
           target = Workers.add_arobases_to_usernames args
           Databases.remove_from_blacklist(target)

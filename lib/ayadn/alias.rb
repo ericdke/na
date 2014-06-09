@@ -3,6 +3,7 @@ module Ayadn
   class Alias < Thor
 
     desc "create CHANNEL ALIAS", "Creates an alias for a channel"
+    map "add" => :create
     long_desc Descriptions.alias_create
     def create(*args)
       begin
@@ -27,6 +28,7 @@ module Ayadn
     end
 
     desc "delete ALIAS", "Deletes a previously created alias"
+    map "remove" => :delete
     long_desc Descriptions.alias_delete
     def delete(*args)
       begin
@@ -89,6 +91,26 @@ module Ayadn
         end
       rescue => e
         Errors.global_error("alias/list", args, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
+    desc "clear", "Clear your aliases database"
+    def clear
+      begin
+        init
+        puts "\n\nAre you sure you want to erase all the content of your aliases database?\n\n[y/N]\n".color(:red)
+        input = STDIN.getch
+        if input == 'y' || input == 'Y'
+          Databases.clear_aliases
+          Logs.rec.info "Cleared the aliases database."
+          puts Status.done
+        else
+          abort Status.canceled
+        end
+      rescue => e
+        Errors.global_error("alias/clear", args, e)
       ensure
         Databases.close_all
       end

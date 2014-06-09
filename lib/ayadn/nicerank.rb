@@ -3,7 +3,7 @@ module Ayadn
   class NiceRank
 
     def initialize
-      @url = 'http://api.search-adn.net/user/nicerank?ids='
+      @url = 'http://api.nice.social/user/nicerank?ids='
     end
 
     def get_ranks stream
@@ -35,6 +35,7 @@ module Ayadn
             username: ranks[:username],
             rank: ranks[:rank],
             is_human: ranks[:is_human],
+            real_person: ranks[:real_person],
             cached: ranks[:cached]
           }
         end
@@ -43,7 +44,7 @@ module Ayadn
       Debug.how_many_ranks niceranks, get_these
 
       unless get_these.empty?
-        resp = JSON.parse(CNX.get "#{@url}#{get_these.join(',')}")
+        resp = JSON.parse(CNX.get "#{@url}#{get_these.join(',')}&show_details=Y")
 
         if resp['meta']['code'] != 200
           Debug.niceranks_error resp
@@ -62,6 +63,7 @@ module Ayadn
             username: table[obj['user_id']],
             rank: obj['rank'],
             is_human: obj['is_human'],
+            real_person: obj['account']['real_person'],
             cached: Time.now
           }
         end

@@ -5,6 +5,7 @@ module Ayadn
     def build_aliases_list(list)
       table = init_table
       table.title = "List of your channel aliases".color(:cyan) + "".color(:white)
+      table.style = {border_x: '~', border_i: '+', border_y: ':'}
       list.each {|k,v| table << ["#{k}".color(:green), "#{v}".color(:red)]}
       table
     end
@@ -12,6 +13,8 @@ module Ayadn
     def build_blacklist_list(list)
       table = init_table
       table.title = "Your blacklist".color(:cyan) + "".color(:white)
+      table.style = {border_x: '~', border_i: '+', border_y: ':'}
+      list = list.sort_by {|k,v| v} # no sort_by! for Daybreak dbs
       list.each {|k,v| table << ["#{v.capitalize}".color(:green), "#{k}".color(:red)]}
       table
     end
@@ -24,6 +27,7 @@ module Ayadn
         obj['name'].nil? ? name = "" : name = obj['name']
         users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you']}
       end
+      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       return users_list, table
     end
 
@@ -35,6 +39,7 @@ module Ayadn
         obj['name'].nil? ? name = "" : name = obj['name']
         users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you']}
       end
+      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       return users_list, table
     end
 
@@ -45,6 +50,7 @@ module Ayadn
       else
         "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
       end
+      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       users_list = build_users_array(list)
       build_users_list(users_list, table)
     end
@@ -56,27 +62,32 @@ module Ayadn
       else
         "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
       end
+      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       build_users_list(build_users_array(list), table)
     end
 
     def build_muted_list(list)
       table = init_table
       table.title = "List of users you muted".color(:cyan) + "".color(:white)
+      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       build_users_list(build_users_array(list), table)
     end
 
     def build_blocked_list(list)
       table = init_table
       table.title = "List of users you blocked".color(:cyan) + "".color(:white)
+      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       build_users_list(build_users_array(list), table)
     end
 
     def build_users_list(list, table)
       list.each_with_index do |obj, index|
+        obj[:username].length > 35 ? username = "#{obj[:username][0...32]}..." : username = obj[:username]
         unless obj[:name].nil?
-          table << [ "@#{obj[:username]} ".color(Settings.options[:colors][:username]), "#{obj[:name]}" ]
+          obj[:name].length > 35 ? name = "#{obj[:name][0...32]}..." : name = obj[:name]
+          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}" ]
         else
-          table << [ "@#{obj[:username]} ".color(Settings.options[:colors][:username]), "" ]
+          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "" ]
         end
         table << :separator unless index + 1 == list.length
       end
@@ -89,6 +100,7 @@ module Ayadn
 
       data.each.with_index(1) do |post, index|
         next if Databases.blacklist[post['source']['name'].downcase]
+        next if Databases.blacklist["-@#{post['user']['username'].downcase}"]
         hashtags = extract_hashtags(post)
         @skip = false
         hashtags.each do |h|
@@ -101,7 +113,7 @@ module Ayadn
         mentions= []
         post['entities']['mentions'].each { |m| mentions << m['name'] }
         mentions.each do |m|
-          if Databases.blacklist["@" + m.downcase]
+          if Databases.blacklist["@#{m.downcase}"]
             @skip = true
             break
           end
@@ -111,9 +123,11 @@ module Ayadn
         if niceranks[post['user']['id'].to_i]
           rank = niceranks[post['user']['id'].to_i][:rank]
           is_human = niceranks[post['user']['id'].to_i][:is_human]
+          real_person = niceranks[post['user']['id'].to_i][:real_person]
         else
           rank = false
           is_human = 'unknown'
+          real_person = nil
         end
 
         if post['user'].has_key?('name')
@@ -133,6 +147,7 @@ module Ayadn
           user_id: post['user']['id'].to_i,
           nicerank: rank,
           is_human: is_human,
+          real_person: real_person,
           handle: "@#{post['user']['username']}",
           type: post['user']['type'],
           date: parsed_time(post['created_at']),

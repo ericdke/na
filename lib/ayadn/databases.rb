@@ -61,6 +61,9 @@ module Ayadn
       ids
     end
 
+    def self.add_user_to_blacklist(target)
+      target.each {|username| @blacklist["-#{username.downcase}"] = :user}
+    end
     def self.add_mention_to_blacklist(target)
       target.each {|username| @blacklist[username.downcase] = :mention}
     end
@@ -94,6 +97,18 @@ module Ayadn
 
     def self.delete_alias(channel_alias)
       @aliases.delete(channel_alias)
+    end
+
+    def self.clear_aliases
+      @aliases.clear
+    end
+
+    def self.clear_blacklist
+      @blacklist.clear
+    end
+
+    def self.clear_bookmarks
+      @bookmarks.clear
     end
 
     def self.get_channel_id(channel_alias)

@@ -76,6 +76,26 @@ module Ayadn
       end
     end
 
+    desc "clear", "Clear your bookmarks database"
+    def clear
+      begin
+        init
+        puts "\n\nAre you sure you want to erase all the content of your bookmarks database?\n\n[y/N]\n".color(:red)
+        input = STDIN.getch
+        if input == 'y' || input == 'Y'
+          Databases.clear_bookmarks
+          Logs.rec.info "Cleared the bookmarks database."
+          puts Status.done
+        else
+          abort Status.canceled
+        end
+      rescue => e
+        Errors.global_error("mark/clear", nil, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
     desc "delete POST_ID", "Delete entry POST_ID from your bookmarked conversations"
     long_desc Descriptions.mark_delete
     def delete *args

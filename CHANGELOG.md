@@ -1,3 +1,13 @@
+# 1.2.11 - 'Fred'
+
+- Updated the NiceRank API url
+- A few gridless grids for readability
+- Silence a user (ayadn -K add user @username)
+- Clear the contents of the aliases database (ayadn -A clear)
+- Clear the contents of the blacklist database (ayadn -K clear)
+- Clear the contents of the bookmarks database (ayadn mark clear)
+
+
 # 1.2.10 - 'Anders'
 
 - Fixed the non-installing unicode_utils Gem

@@ -77,7 +77,7 @@ module Ayadn
 
     def show_settings
       table = Terminal::Table.new do |t|
-        t.style = { :width => Settings.options[:formats][:table][:width] }
+        t.style = { :width => Settings.options[:formats][:table][:width], border_x: ' ', border_i: ' ', border_y: ' ' }
         t.title = "Current Ayadn settings".color(:cyan)
         t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
         @iter = 0
@@ -296,14 +296,13 @@ module Ayadn
               unless content[:nicerank] == false
                 next if content[:nicerank] < Settings.options[:nicerank][:threshold]
                 next if content[:is_human] == false
+                next if content[:real_person] == false
               end
               filtered[id] = content
             end
             return filtered
           end
-          return posts
         end
-        return posts
       end
       return posts
     end
