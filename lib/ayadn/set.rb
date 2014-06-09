@@ -243,7 +243,7 @@ module Ayadn
       end
     end
     def self.cache_range value
-      if value >= 3 && value <= 720
+      if value >= 1 && value <= 168
         value.round
       else
         abort(Status.cache_range)
@@ -254,7 +254,7 @@ module Ayadn
       t >= 1 ? t : 3
     end
     def self.color(color)
-      colors_list = %w{red green magenta cyan yellow blue white}
+      colors_list = %w{red green magenta cyan yellow blue white black}
       unless colors_list.include?(color)
         puts Status.error_missing_parameters
         abort(Status.valid_colors(colors_list))
@@ -452,16 +452,32 @@ module Ayadn
       Settings.options[:colors][:hashtags] = color.to_sym
     end
 
+    def hashtag color
+      hashtags color
+    end
+
     def mentions(color)
       Settings.options[:colors][:mentions] = color.to_sym
+    end
+
+    def mention color
+      mentions color
     end
 
     def source(color)
       Settings.options[:colors][:source] = color.to_sym
     end
 
+    def client color
+      source color
+    end
+
     def symbols(color)
       Settings.options[:colors][:symbols] = color.to_sym
+    end
+
+    def symbol(color)
+      symbols color
     end
 
     def debug(color)

@@ -245,7 +245,7 @@ module Ayadn
       "\nPlease wait while Ayadn is pruning and compacting the #{db} database...\n".color(:cyan)
     end
     def self.cache_range
-      "\nPlease enter a number of hours between 3 and 168.\n\n".color(:red)
+      "\nPlease enter a number of hours between 1 and 168.\n\n".color(:red)
     end
     def self.must_be_in_index
       "\nNumber must be in the range of the indexed posts.\n".color(:red)

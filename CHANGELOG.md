@@ -1,12 +1,15 @@
-# 1.2.11 - 'Fred'
+# 1.3.0 - 'K'
 
 - Updated the NiceRank API url
+- NiceRank filter is more efficient (checks is_human + real_person)
 - A few gridless grids for readability
+- Added several command synonyms     
+Features:
+- New color: black. Depends on your terminal. (ex: ayadn set color date black)
 - Silence a user (ayadn -K add user @username)
 - Clear the contents of the aliases database (ayadn -A clear)
 - Clear the contents of the blacklist database (ayadn -K clear)
 - Clear the contents of the bookmarks database (ayadn mark clear)
-
 
 # 1.2.10 - 'Anders'
 
