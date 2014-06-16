@@ -35,9 +35,9 @@ module Ayadn
       Debug.db all_dbs
 
       all_dbs.each do |db|
-          db.flush
-          db.compact
-          db.close
+        db.flush
+        db.compact
+        db.close
       end
     end
 

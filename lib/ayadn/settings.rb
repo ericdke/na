@@ -203,7 +203,7 @@ module Ayadn
           timer: 3
         },
         nicerank: {
-          threshold: 2,
+          threshold: 2.1,
           cache: 48,
           filter: true,
           filter_unranked: false

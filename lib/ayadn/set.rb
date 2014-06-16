@@ -162,7 +162,7 @@ module Ayadn
       Logs.create_logger
       unless Settings.options[:nicerank]
         Settings.options[:nicerank] = {
-          threshold: 2,
+          threshold: 2.1,
           cache: 48,
           filter: true,
           filter_unranked: false
@@ -173,7 +173,7 @@ module Ayadn
       end
     end
     def log(args)
-      x = "New value for '#{args[0]}' in 'NiceRank' => #{args[1]}"
+      x = "New value for '#{args[0]}' in 'NiceRank' => #{"%1.1f" % args[1].to_f}"
       puts "\n#{x}\n".color(:cyan)
       Logs.rec.info x
     end
@@ -187,7 +187,7 @@ module Ayadn
       Settings.options[:nicerank][:filter_unranked] = Validators.boolean(value)
     end
     def threshold value
-      Settings.options[:nicerank][:threshold] = value.to_f
+      Settings.options[:nicerank][:threshold] = Validators.threshold value
     end
     def cache value
       Settings.options[:nicerank][:cache] = Validators.cache_range value.to_i
@@ -247,6 +247,14 @@ module Ayadn
         value.round
       else
         abort(Status.cache_range)
+      end
+    end
+    def self.threshold value
+      value = value.to_f
+      if value > 0 and value < 5
+        value
+      else
+        abort(Status.threshold)
       end
     end
     def self.timer(t)
@@ -377,7 +385,7 @@ module Ayadn
     def show_nicerank value
       unless Settings.options[:nicerank]
         Settings.options[:nicerank] = {
-          threshold: 2,
+          threshold: 2.1,
           filter: true,
           filter_unranked: false
         }
