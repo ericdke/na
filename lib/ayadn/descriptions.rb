@@ -854,7 +854,7 @@ module Ayadn
 
       ayadn set nicerank filter_unranked true
 
-      ayadn set timeline show_nicerank true
+      ayadn set nicerank threshold 2.1
       \n\n
       USAGE
     end

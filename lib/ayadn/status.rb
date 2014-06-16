@@ -248,7 +248,7 @@ module Ayadn
       "\nPlease enter a number of hours between 1 and 168.\n\n".color(:red)
     end
     def self.threshold
-      "\nPlease enter a value between 0.1 and 4.0, example: 2.1\n\n".color(:red)
+      "\nPlease enter a value between 0.1 and 3.5, example: 2.1\n\n".color(:red)
     end
     def self.must_be_in_index
       "\nNumber must be in the range of the indexed posts.\n".color(:red)

@@ -491,5 +491,9 @@ module Ayadn
     def debug(color)
       Settings.options[:colors][:debug] = color.to_sym
     end
+
+    def nicerank(color)
+      Settings.options[:colors][:nicerank] = color.to_sym
+    end
   end
 end

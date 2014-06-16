@@ -1,3 +1,7 @@
+# 1.3.1 - 'Nico'
+
+- NiceRank threshold is a float again. Default value is 2.1
+
 # 1.3.0 - 'K'
 
 - Updated the NiceRank API url
