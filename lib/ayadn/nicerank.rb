@@ -44,7 +44,12 @@ module Ayadn
       Debug.how_many_ranks niceranks, get_these
 
       unless get_these.empty?
-        resp = JSON.parse(CNX.get "#{@url}#{get_these.join(',')}&show_details=Y")
+        got = CNX.get "#{@url}#{get_these.join(',')}&show_details=Y"
+        unless got.code != 200
+          resp = JSON.parse(got)
+        else
+          resp = JSON.parse({'meta' => {'code' => got.code}}.to_json)
+        end
 
         if resp['meta']['code'] != 200
           Debug.niceranks_error resp
