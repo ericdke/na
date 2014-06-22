@@ -1,3 +1,7 @@
+# 1.3.2 - 'Max'
+
+- Fixed: Global stream crashed if NiceRank was enabled but unreachable
+
 # 1.3.1 - 'Nico'
 
 - NiceRank threshold is a float again. Default value is 2.1
