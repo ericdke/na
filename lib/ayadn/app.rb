@@ -355,7 +355,7 @@ module Ayadn
     map "compose" => :write
     map "-W" => :write
     long_desc Descriptions.write
-    option :embed, aliases: "-e", type: :string, desc: "Embed a picture in the new post"
+    option :embed, aliases: "-e", type: :array, desc: "Embed a picture in the new post"
     def write
       Action.new.write(options)
     end

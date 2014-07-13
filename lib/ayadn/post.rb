@@ -22,7 +22,7 @@ module Ayadn
 
     def send_embedded_picture(dic)
       url = Endpoints.new.posts_url
-      send_content(url, payload_embedded_picture(dic))
+      send_content(url, payload_embedded_picture({'text' => dic['text'], 'data' => dic['data']}))
     end
 
     def payload_embedded_picture(dic)
@@ -31,6 +31,23 @@ module Ayadn
         "entities" => entities,
         "annotations" => annotations_embedded(dic)
       }
+    end
+
+    def annotations_embedded(dic)
+      base = annotations()
+      dic['data'].each do |obj|
+        base << {
+          "type" => "net.app.core.oembed",
+          "value" => {
+             "+net.app.core.file" => {
+                "file_id" => obj['data']['id'],
+                "file_token" => obj['data']['file_token'],
+                "format" => "oembed"
+             }
+          }
+        }
+      end
+      return base
     end
 
     # def auto_classic
@@ -161,21 +178,6 @@ module Ayadn
     def error_text_empty
       puts Status.no_text
       Errors.warn "-Post without text-"
-    end
-
-    def annotations_embedded(dic)
-      base = annotations()
-      base << {
-          "type" => "net.app.core.oembed",
-          "value" => {
-             "+net.app.core.file" => {
-                "file_id" => dic['data']['id'],
-                "file_token" => dic['data']['file_token'],
-                "format" => "oembed"
-             }
-          }
-      }
-      return base
     end
 
     def annotations

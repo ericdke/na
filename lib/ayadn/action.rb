@@ -771,26 +771,26 @@ module Ayadn
 
     def write(options)
       begin
+        if options['embed']
+          files = options['embed'].map do |file|
+            abort(Status.bad_path) unless File.exist?(file)
+            File.absolute_path(file)
+          end
+        end
         require "readline"
         writer = Post.new
         puts Status.writing
         puts Status.post
         lines_array = writer.compose
         writer.check_post_length(lines_array)
+        text = lines_array.join("\n")
         if options['embed']
           @view.clear_screen
           puts Status.uploading
-          path = File.absolute_path(options['embed'])
-          if File.exist? path
-            resp = FileOps.upload(path, Settings.user_token)
-          else
-            abort(Status.bad_path)
-          end
-          response = JSON.load(resp)
-          #code = response['meta']['code']
-          resp = writer.send_embedded_picture({'text' => lines_array.join("\n"), 'file' => path, 'data' => response['data']})
+          uploaded = files.map {|file| JSON.load(FileOps.upload(file, Settings.user_token))}
+          resp = writer.send_embedded_picture({'text' => text, 'file' => files, 'data' => uploaded})
         else
-          resp = writer.send_post(lines_array.join("\n"))
+          resp = writer.send_post(text)
         end
         @view.clear_screen
         puts Status.posting
