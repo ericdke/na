@@ -732,22 +732,6 @@ module Ayadn
       end
     end
 
-    def post(args)
-      begin
-        @view.clear_screen
-        puts Status.posting
-        resp = Post.new.post(args)
-        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
-        @view.clear_screen
-        puts Status.yourpost
-        @view.show_posted(resp)
-      rescue => e
-        Errors.global_error("action/post", args, e)
-      ensure
-        Databases.close_all
-      end
-    end
-
     def auto(options)
       begin
         @view.clear_screen
@@ -769,15 +753,33 @@ module Ayadn
       end
     end
 
+    def post(args, options)
+      begin
+        writer = Post.new
+        @view.clear_screen
+        if options['embed']
+          puts Status.uploading
+          resp = writer.send_embedded(args.join(" "), FileOps.make_paths(options['embed']))
+        else
+          puts Status.posting
+          resp = writer.post(args)
+        end
+        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
+        @view.clear_screen
+        puts Status.yourpost
+        @view.show_posted(resp)
+      rescue => e
+        Errors.global_error("action/post", args, e)
+      ensure
+        Databases.close_all
+      end
+    end
+
     def write(options)
       begin
         if options['embed']
-          files = options['embed'].map do |file|
-            abort(Status.bad_path) unless File.exist?(file)
-            File.absolute_path(file)
-          end
+          files = FileOps.make_paths(options['embed'])
         end
-        require "readline"
         writer = Post.new
         puts Status.writing
         puts Status.post
@@ -787,8 +789,7 @@ module Ayadn
         if options['embed']
           @view.clear_screen
           puts Status.uploading
-          uploaded = files.map {|file| JSON.load(FileOps.upload(file, Settings.user_token))}
-          resp = writer.send_embedded_picture({'text' => text, 'file' => files, 'data' => uploaded})
+          resp = writer.send_embedded(text, files)
         else
           resp = writer.send_post(text)
         end

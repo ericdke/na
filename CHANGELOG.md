@@ -1,3 +1,7 @@
+# 1.3.3 - 'Florian'
+
+- Upload one or several pictures within a post
+
 # 1.3.2 - 'Max'
 
 - Fixed: Global stream crashed if NiceRank was enabled but unreachable

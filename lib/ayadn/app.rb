@@ -347,15 +347,16 @@ module Ayadn
     desc "post Your text", "Simple post to App.net (-P)"
     map "-P" => :post
     long_desc Descriptions.post
+    option :embed, aliases: "-e", type: :array, desc: "Embed one or several pictures in the new post"
     def post(*args)
-      Action.new.post(args)
+      Action.new.post(args, options)
     end
 
     desc "write", "Multi-line post to App.net (-W)"
     map "compose" => :write
     map "-W" => :write
     long_desc Descriptions.write
-    option :embed, aliases: "-e", type: :array, desc: "Embed a picture in the new post"
+    option :embed, aliases: "-e", type: :array, desc: "Embed one or several pictures in the new post"
     def write
       Action.new.write(options)
     end

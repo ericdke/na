@@ -15,17 +15,22 @@ module Ayadn
       # when /mswin|mingw|cygwin/
         # post = classic
       # else
+        require "readline"
         readline
       # end
       # post
     end
 
-    def send_embedded_picture(dic)
-      url = Endpoints.new.posts_url
-      send_content(url, payload_embedded_picture({'text' => dic['text'], 'data' => dic['data']}))
+    def send_embedded text, files
+      send_embedded_pictures({'text' => text, 'data' => FileOps.upload_files(files)})
     end
 
-    def payload_embedded_picture(dic)
+    def send_embedded_pictures(dic)
+      url = Endpoints.new.posts_url
+      send_content(url, payload_embedded(dic))
+    end
+
+    def payload_embedded(dic)
       {
         "text" => dic['text'],
         "entities" => entities,
