@@ -377,9 +377,10 @@ module Ayadn
     desc "reply POST", "Reply to post n°POST (-R)"
     map "-R" => :reply
     long_desc Descriptions.reply
+    option :embed, aliases: "-e", type: :array, desc: "Embed one or several pictures in the new post"
     def reply(id)
       ayadn = Action.new
-      ayadn.reply(id)
+      ayadn.reply(id, options)
     end
 
     desc "auto", "Auto post every line of input to App.net"

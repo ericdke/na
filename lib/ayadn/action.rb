@@ -758,7 +758,7 @@ module Ayadn
         writer = Post.new
         @view.clear_screen
         if options['embed']
-          puts Status.uploading
+          puts Status.uploading(options['embed'])
           resp = writer.send_embedded(args.join(" "), FileOps.make_paths(options['embed']))
         else
           puts Status.posting
@@ -769,7 +769,7 @@ module Ayadn
         puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
-        Errors.global_error("action/post", args, e)
+        Errors.global_error("action/post", [args, options], e)
       ensure
         Databases.close_all
       end
@@ -777,9 +777,7 @@ module Ayadn
 
     def write(options)
       begin
-        if options['embed']
-          files = FileOps.make_paths(options['embed'])
-        end
+        files = FileOps.make_paths(options['embed']) if options['embed']
         writer = Post.new
         puts Status.writing
         puts Status.post
@@ -788,7 +786,7 @@ module Ayadn
         text = lines_array.join("\n")
         if options['embed']
           @view.clear_screen
-          puts Status.uploading
+          puts Status.uploading(options['embed'])
           resp = writer.send_embedded(text, files)
         else
           resp = writer.send_post(text)
@@ -800,7 +798,7 @@ module Ayadn
         puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
-        Errors.global_error("action/write", lines_array.join(" "), e)
+        Errors.global_error("action/write", [lines_array.join(" "), options], e)
       ensure
         Databases.close_all
       end
@@ -852,8 +850,9 @@ module Ayadn
     	end
     end
 
-    def reply(post_id)
+    def reply(post_id, options = {})
       begin
+        files = FileOps.make_paths(options['embed']) if options['embed']
         post_id = get_real_post_id(post_id)
       	puts Status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
@@ -872,14 +871,19 @@ module Ayadn
         poster.check_post_length(lines_array)
         @view.clear_screen
         reply = poster.reply(lines_array.join("\n"), Workers.new.build_posts([replied_to['data']]))
-        puts Status.posting
-        resp = poster.send_reply(reply, post_id)
+        if options['embed']
+          puts Status.uploading(options['embed'])
+          resp = poster.send_reply_embedded(reply, post_id, files)
+        else
+          puts Status.posting
+          resp = poster.send_reply(reply, post_id)
+        end
         FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.done
         render_view(@api.get_convo(post_id, {}), {})
       rescue => e
-        Errors.global_error("action/reply", post_id, e)
+        Errors.global_error("action/reply", [post_id, options], e)
       ensure
         Databases.close_all
       end

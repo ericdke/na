@@ -25,14 +25,32 @@ module Ayadn
       send_embedded_pictures({'text' => text, 'data' => FileOps.upload_files(files)})
     end
 
+    def send_reply_embedded text, reply_to, files
+      send_reply_embedded_pictures({'text' => text, 'reply_to' => reply_to, 'data' => FileOps.upload_files(files)})
+    end
+
     def send_embedded_pictures(dic)
       url = Endpoints.new.posts_url
       send_content(url, payload_embedded(dic))
     end
 
+    def send_reply_embedded_pictures(dic)
+      url = Endpoints.new.posts_url
+      send_content(url, payload_reply_embedded(dic))
+    end
+
     def payload_embedded(dic)
       {
         "text" => dic['text'],
+        "entities" => entities,
+        "annotations" => annotations_embedded(dic)
+      }
+    end
+
+    def payload_reply_embedded(dic)
+      {
+        "text" => dic['text'],
+        "reply_to" => dic['reply_to'],
         "entities" => entities,
         "annotations" => annotations_embedded(dic)
       }

@@ -10,8 +10,9 @@ module Ayadn
     def self.downloading
       "Downloading from ADN...\n\n".inverse
     end
-    def self.uploading
-      "\nUploading file to ADN...\n".color(:cyan)
+    def self.uploading files
+      files.length > 1 ? pl = "s" : pl = ""
+      "\nUploading file#{pl} to ADN...\n".color(:cyan)
     end
     def self.posting
       "Posting to ADN...\n\n".inverse
