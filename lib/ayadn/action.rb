@@ -798,14 +798,15 @@ module Ayadn
         puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
-        Errors.global_error("action/write", [lines_array.join(" "), options], e)
+        Errors.global_error("action/write", [text, options], e)
       ensure
         Databases.close_all
       end
     end
 
-    def pmess(username)
+    def pmess(username, options = {})
     	begin
+        files = FileOps.make_paths(options['embed']) if options['embed']
         missing_username if username.empty?
         temp = Workers.add_arobase_if_missing(username)
         username = [temp]
@@ -814,15 +815,21 @@ module Ayadn
     		puts Status.message
     		lines_array = messenger.compose
     		messenger.check_message_length(lines_array)
+        text = lines_array.join("\n")
     		@view.clear_screen
-    		puts Status.posting
-    		resp = messenger.send_pm(username, lines_array.join("\n"))
+        if options['embed']
+          puts Status.uploading(options['embed'])
+          resp = messenger.send_pm_embedded(username, text, files)
+        else
+          puts Status.posting
+          resp = messenger.send_pm(username, text)
+        end
         FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
     		@view.clear_screen
     		puts Status.yourmessage
     		@view.show_posted(resp)
     	rescue => e
-        Errors.global_error("action/pmess", username, e)
+        Errors.global_error("action/pmess", [username, options], e)
   		ensure
   		  Databases.close_all
     	end

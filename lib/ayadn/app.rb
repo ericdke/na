@@ -363,8 +363,9 @@ module Ayadn
 
     desc "pm @USERNAME", "Send a private message to @username"
     long_desc Descriptions.pmess
+    option :embed, aliases: "-e", type: :array, desc: "Embed one or several pictures in the new post"
     def pm(*username)
-      Action.new.pmess(username)
+      Action.new.pmess(username, options)
     end
 
     desc "send CHANNEL", "Send a message to a CHANNEL (-C)"

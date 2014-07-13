@@ -29,17 +29,27 @@ module Ayadn
       send_reply_embedded_pictures({'text' => text, 'reply_to' => reply_to, 'data' => FileOps.upload_files(files)})
     end
 
-    def send_embedded_pictures(dic)
+    def send_pm_embedded username, text, files
+      send_pm_embedded_pictures({'text' => text, 'username' => username, 'data' => FileOps.upload_files(files)})
+    end
+
+    def send_embedded_pictures dic
       url = Endpoints.new.posts_url
       send_content(url, payload_embedded(dic))
     end
 
-    def send_reply_embedded_pictures(dic)
+    def send_reply_embedded_pictures dic
       url = Endpoints.new.posts_url
       send_content(url, payload_reply_embedded(dic))
     end
 
-    def payload_embedded(dic)
+    def send_pm_embedded_pictures dic
+      url = Endpoints.new.pm_url
+      url << "?include_annotations=1&access_token=#{Ayadn::Settings.user_token}"
+      send_content(url, payload_pm_embedded(dic))
+    end
+
+    def payload_embedded dic
       {
         "text" => dic['text'],
         "entities" => entities,
@@ -47,7 +57,7 @@ module Ayadn
       }
     end
 
-    def payload_reply_embedded(dic)
+    def payload_reply_embedded dic
       {
         "text" => dic['text'],
         "reply_to" => dic['reply_to'],
@@ -56,7 +66,16 @@ module Ayadn
       }
     end
 
-    def annotations_embedded(dic)
+    def payload_pm_embedded dic
+      {
+        "text" => dic['text'],
+        "entities" => entities,
+        "destinations" => dic['username'],
+        "annotations" => annotations_embedded(dic)
+      }
+    end
+
+    def annotations_embedded dic
       base = annotations()
       dic['data'].each do |obj|
         base << {
