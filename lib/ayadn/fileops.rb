@@ -42,26 +42,30 @@ module Ayadn
     end
 
     def self.upload(path, token)
-      file = Regexp.escape(path).gsub!('\.', '.')
-      case File.extname(path).downcase
-      when ".png"
-        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -F 'public=true' -X POST`
-      when ".gif"
-        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/gif" -F 'public=true' -X POST`
-      # when ".json",".txt",".md",".markdown",".mdown",".html",".css",".scss",".sass",".jade",".rb",".py",".sh",".js",".xml",".csv",".styl",".liquid",".ru","yml",".coffee",".php"
-      #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=text/plain" -F 'public=true' -X POST`
-      # when ".zip"
-      #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=application/zip" -F 'public=true' -X POST`
-      # when ".rar"
-      #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content= ile};type=application/rar" -F 'public=true' -X POST`
-      # when ".mp4"
-      #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/mp4" -F 'public=true' -X POST`
-      # when ".mov"
-      #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/quicktime" -F 'public=true' -X POST`
-      # when ".mkv",".mp3",".m4a",".m4v",".wav",".aif",".aiff",".aac",".flac"
-      #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content= ile};type=application/octet-stream" -F 'public=true' -X POST`
-      else #jpg or jpeg or JPG or JPEG, automatically recognized as such
-        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F content=@#{file} -F 'public=true' -X POST`
+      begin
+        file = Regexp.escape(path).gsub!('\.', '.')
+        case File.extname(path).downcase
+        when ".png"
+          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -F 'public=true' -X POST`
+        when ".gif"
+          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/gif" -F 'public=true' -X POST`
+        # when ".json",".txt",".md",".markdown",".mdown",".html",".css",".scss",".sass",".jade",".rb",".py",".sh",".js",".xml",".csv",".styl",".liquid",".ru","yml",".coffee",".php"
+        #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=text/plain" -F 'public=true' -X POST`
+        # when ".zip"
+        #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=application/zip" -F 'public=true' -X POST`
+        # when ".rar"
+        #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content= ile};type=application/rar" -F 'public=true' -X POST`
+        # when ".mp4"
+        #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/mp4" -F 'public=true' -X POST`
+        # when ".mov"
+        #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/quicktime" -F 'public=true' -X POST`
+        # when ".mkv",".mp3",".m4a",".m4v",".wav",".aif",".aiff",".aac",".flac"
+        #   `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content= ile};type=application/octet-stream" -F 'public=true' -X POST`
+        else #jpg or jpeg or JPG or JPEG, automatically recognized as such
+          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F content=@#{file} -F 'public=true' -X POST`
+        end
+      rescue Errno::ENOENT
+        abort(Status.no_curl)
       end
     end
 

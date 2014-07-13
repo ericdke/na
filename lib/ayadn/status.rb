@@ -284,5 +284,8 @@ module Ayadn
     def self.bad_path
       "\n\nCouldn't upload this file (path seems wrong).\n\n".color(:red)
     end
+    def self.no_curl
+      "\n\nAyadn needs 'curl' to upload files. Please install 'curl' (or check that it's properly declared in your $PATH).\n\n".color(:red)
+    end
   end
 end
