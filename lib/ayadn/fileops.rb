@@ -34,6 +34,29 @@ module Ayadn
       Dir.exist?(Dir.home + "/ayadn/data")
     end
 
+    def self.upload(file, token)
+      case File.extname(file).downcase
+      when ".png"
+        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -X POST`
+      when ".gif"
+        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/gif" -X POST`
+      when ".json",".txt",".md",".markdown",".mdown",".html",".css",".scss",".sass",".jade",".rb",".py",".sh",".js",".xml",".csv",".styl",".liquid",".ru","yml",".coffee",".php"
+        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=text/plain" -X POST`
+      when ".zip"
+        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=application/zip" -X POST`
+      when ".rar"
+        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content= ile};type=application/rar" -X POST`
+      when ".mp4"
+        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/mp4" -X POST`
+      when ".mov"
+        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=video/quicktime" -X POST`
+      when ".mkv",".mp3",".m4a",".m4v",".wav",".aif",".aiff",".aac",".flac"
+        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content= ile};type=application/octet-stream" -X POST`
+      else
+        `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F content=@#{file} -X POST`
+      end
+    end
+
     private
 
     def get_users(list)

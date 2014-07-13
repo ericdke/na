@@ -15,10 +15,22 @@ module Ayadn
       # when /mswin|mingw|cygwin/
         # post = classic
       # else
-        require "readline"
         readline
       # end
       # post
+    end
+
+    def send_embedded_picture(dic)
+      url = Endpoints.new.posts_url
+      send_content(url, payload_embedded_picture(dic))
+    end
+
+    def payload_embedded_picture(dic)
+      {
+        "text" => dic['text'],
+        "entities" => entities,
+        "annotations" => annotations_embedded(dic)
+      }
     end
 
     # def auto_classic
@@ -151,6 +163,21 @@ module Ayadn
       Errors.warn "-Post without text-"
     end
 
+    def annotations_embedded(dic)
+      base = annotations()
+      base << {
+          "type" => "net.app.core.oembed",
+          "value" => {
+             "+net.app.core.file" => {
+                "file_id" => dic['data']['id'],
+                "file_token" => dic['data']['file_token'],
+                "format" => "oembed"
+             }
+          }
+      }
+      return base
+    end
+
     def annotations
       [
         {
@@ -184,6 +211,8 @@ module Ayadn
         "parse_links" => true
       }
     end
+
+
 
     def payload_basic(text)
       {

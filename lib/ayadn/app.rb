@@ -355,8 +355,9 @@ module Ayadn
     map "compose" => :write
     map "-W" => :write
     long_desc Descriptions.write
+    option :embed, aliases: "-e", type: :string, desc: "Embed a picture in the new post"
     def write
-      Action.new.write
+      Action.new.write(options)
     end
 
     desc "pm @USERNAME", "Send a private message to @username"

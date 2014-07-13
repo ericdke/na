@@ -10,6 +10,9 @@ module Ayadn
     def self.downloading
       "Downloading from ADN...\n\n".inverse
     end
+    def self.uploading
+      "\nUploading file to ADN...\n".color(:cyan)
+    end
     def self.posting
       "Posting to ADN...\n\n".inverse
     end
@@ -276,6 +279,9 @@ module Ayadn
     end
     def self.no_text
       "\n\nYou should provide some text.\n\n".color(:red)
+    end
+    def self.bad_path
+      "\n\nCouldn't upload this file (path seems wrong).\n\n".color(:red)
     end
   end
 end

@@ -769,16 +769,31 @@ module Ayadn
       end
     end
 
-    def write
+    def write(options)
       begin
+        require "readline"
         writer = Post.new
         puts Status.writing
         puts Status.post
         lines_array = writer.compose
         writer.check_post_length(lines_array)
+        if options['embed']
+          @view.clear_screen
+          puts Status.uploading
+          path = File.absolute_path(options['embed'])
+          if File.exist? path
+            resp = FileOps.upload(path, Settings.user_token)
+          else
+            abort(Status.bad_path)
+          end
+          response = JSON.load(resp)
+          #code = response['meta']['code']
+          resp = writer.send_embedded_picture({'text' => lines_array.join("\n"), 'file' => path, 'data' => response['data']})
+        else
+          resp = writer.send_post(lines_array.join("\n"))
+        end
         @view.clear_screen
         puts Status.posting
-        resp = writer.send_post(lines_array.join("\n"))
         FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.yourpost
