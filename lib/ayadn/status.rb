@@ -12,7 +12,7 @@ module Ayadn
     end
     def self.uploading files
       files.length > 1 ? pl = "s" : pl = ""
-      "\nUploading file#{pl} to ADN...\n".color(:cyan)
+      "\nUploading file#{pl} to ADN...".color(:cyan)
     end
     def self.posting
       "Posting to ADN...\n\n".inverse

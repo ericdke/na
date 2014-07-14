@@ -1,6 +1,6 @@
 # 1.3.3 - 'Florian'
 
-- Upload one or several pictures within a post
+- Embed one or several pictures within a post (write, post, reply, pm)
 
 # 1.3.2 - 'Max'
 
