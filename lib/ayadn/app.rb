@@ -419,8 +419,9 @@ module Ayadn
     desc "nowplaying", "Post the current iTunes track (-np)"
     map "-np" => :nowplaying
     long_desc Descriptions.nowplaying
+    option :no_url, type: :boolean, desc: "Don't append the preview URL at the end of the post"
     def nowplaying
-      Action.new.nowplaying
+      Action.new.nowplaying(options)
     end
 
     desc "random", "Show random posts from App.net (-rnd)"

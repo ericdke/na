@@ -896,16 +896,26 @@ module Ayadn
       end
     end
 
-    def nowplaying
+    def nowplaying(options = {})
       begin
         Databases.close_all
         abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
         itunes = get_track_infos
         itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
         @view.clear_screen
+        unless options['no_url']
+          regex_exotics = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
+          store_artist = itunes.artist.gsub(regex_exotics, ' ').split(' ').join('+')
+          store_track = itunes.track.gsub(regex_exotics, ' ').split(' ').join('+')
+          store_album = itunes.album.gsub(regex_exotics, ' ').split(' ').join('+')
+          itunes_url = "https://itunes.apple.com/search?term=#{store_artist}&term=#{store_track}&term=#{store_album}&media=music&entity=musicTrack"
+          candidate = JSON.load(CNX.download(itunes_url))['results'][0]
+          preview_url = candidate['previewUrl']
+        end
         text_to_post = "#nowplaying\nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         puts Status.writing
-        show_nowplaying(text_to_post)
+        show_nowplaying("\n#{text_to_post}", options)
+        text_to_post += "\n \n[> 30 sec preview](#{preview_url})" unless options['no_url']
         unless STDIN.getch == ("y" || "Y")
           puts "\nCanceled.\n\n".color(:red)
           exit
@@ -1255,9 +1265,14 @@ module Ayadn
       maker.new(artist.chomp!, album.chomp!, track.chomp!)
     end
 
-    def show_nowplaying(text)
+    def show_nowplaying(text, options)
+      puts "\nPlease *verify* the preview URL before posting! If your track isn't in the iTunes store, iTunes will give back a wrong URL instead of an error message...\n" unless options['no_url']
       puts "\nYour post:\n".color(:cyan)
-      puts text + "\n\n"
+      if options['no_url']
+        puts text + "\n\n\n"
+      else
+        puts text + "\n\n(preview url will be inserted here with an icon)\n\n\n"
+      end
       puts "Do you confirm? (y/N) ".color(:yellow)
     end
 

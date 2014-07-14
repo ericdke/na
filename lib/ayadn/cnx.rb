@@ -2,6 +2,14 @@
 module Ayadn
   class CNX
 
+    def self.download url
+      begin
+        RestClient.get(url) {|response, request, result| response}
+      rescue => e
+        Errors.global_error("cnx.rb/download", url, e)
+      end
+    end
+
     def self.get url
       working = true
       begin
