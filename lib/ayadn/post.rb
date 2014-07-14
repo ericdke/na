@@ -49,6 +49,32 @@ module Ayadn
       send_content(url, payload_pm_embedded(dic))
     end
 
+    def send_nowplaying dic
+      send_content(Endpoints.new.posts_url, payload_nowplaying(dic))
+    end
+
+    def payload_nowplaying dic
+      ann = annotations()
+      if dic['visible'] == true
+        ann << {
+          "type" => "net.app.core.oembed",
+          "value" => {
+            "version" => "1.0",
+            "type" => "photo",
+            "width" => dic['width'],
+            "height" => dic['height'],
+            "title" => dic['title'],
+            "url" => dic['artwork']
+          }
+        }
+      end
+      {
+        "text" => dic['text'],
+        "entities" => entities,
+        "annotations" => ann
+      }
+    end
+
     def payload_embedded dic
       {
         "text" => dic['text'],

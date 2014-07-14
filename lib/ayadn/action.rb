@@ -900,31 +900,36 @@ module Ayadn
       begin
         Databases.close_all
         abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
-        itunes = get_track_infos
+        itunes = get_track_infos()
         itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
         @view.clear_screen
         unless options['no_url']
-          regex_exotics = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
-          store_artist = itunes.artist.gsub(regex_exotics, ' ').split(' ').join('+')
-          store_track = itunes.track.gsub(regex_exotics, ' ').split(' ').join('+')
-          store_album = itunes.album.gsub(regex_exotics, ' ').split(' ').join('+')
-          itunes_url = "https://itunes.apple.com/search?term=#{store_artist}&term=#{store_track}&media=music&entity=musicTrack"
-          candidate = JSON.load(CNX.download(itunes_url))['results'][0]
-          preview_url = candidate['previewUrl']
-          preview_track = candidate['trackName']
-          preview_artist = candidate['artistName']
+          store = itunes_request(itunes)
         end
         text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         puts Status.writing
-        show_nowplaying("\n#{text_to_post}", options, preview_track, preview_artist)
-        text_to_post += "\n \n[> 30 sec preview](#{preview_url})" unless options['no_url']
+        show_nowplaying("\n#{text_to_post}", options, store)
+        text_to_post += "\n \n[> 30 sec preview](#{store['preview']})" unless options['no_url']
         unless STDIN.getch == ("y" || "Y")
           puts "\nCanceled.\n\n".color(:red)
           exit
         end
         puts "\n"
         puts Status.yourpost
-        @view.show_posted(Post.new.post([text_to_post]))
+        if options['no_url'].nil?
+          visible, track, artwork = true, store['track'], store['artwork']
+        else
+          visible, track, artwork = false, false, false
+        end
+        dic = {
+          'text' => text_to_post,
+          'title' => track,
+          'artwork' => artwork,
+          'width' => 1200,
+          'height' => 1200,
+          'visible' => visible
+        }
+        @view.show_posted(Post.new.send_nowplaying(dic))
       rescue => e
         puts Status.wtf
         Errors.global_error("action/nowplaying", itunes, e)
@@ -965,6 +970,24 @@ module Ayadn
     end
 
     private
+
+    def itunes_request itunes
+      regex_exotics = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
+      store_artist = itunes.artist.gsub(regex_exotics, ' ').split(' ').join('+')
+      store_track = itunes.track.gsub(regex_exotics, ' ').split(' ').join('+')
+      #store_album = itunes.album.gsub(regex_exotics, ' ').split(' ').join('+')
+      itunes_url = "https://itunes.apple.com/search?term=#{store_artist}&term=#{store_track}&media=music&entity=musicTrack"
+      results = JSON.load(CNX.download(itunes_url))['results']
+      candidate = results[0]
+      {
+        'artist' => candidate['artistName'],
+        'track' => candidate['trackName'],
+        'preview' => candidate['previewUrl'],
+        'artwork' => candidate['artworkUrl100'].gsub('100x100', '1200x1200'),
+        'request' => itunes_url,
+        'results' => results
+      }
+    end
 
     def splitter_all words
       [words].collect {|w| w.split(' ')}
@@ -1267,13 +1290,12 @@ module Ayadn
       maker.new(artist.chomp!, album.chomp!, track.chomp!)
     end
 
-    def show_nowplaying(text, options, preview_track, preview_artist)
-      #puts "\nPlease *verify* the preview URL before posting! If your track isn't in the iTunes store, iTunes will give back a wrong URL instead of an error message...\n" unless options['no_url']
+    def show_nowplaying(text, options, store)
       puts "\nYour post:\n".color(:cyan)
       if options['no_url']
         puts text + "\n\n\n"
       else
-        puts text + "\n\n(preview url for track *#{preview_track}* by *#{preview_artist}* will be inserted here)\n\n\n"
+        puts text + "\n\n(album artwork + preview url for track *#{store['track']}* by *#{store['artist']}* will be inserted here)\n\n\n"
       end
       puts "Do you confirm? (y/N) ".color(:yellow)
     end
