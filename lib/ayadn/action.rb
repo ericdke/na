@@ -912,7 +912,7 @@ module Ayadn
           candidate = JSON.load(CNX.download(itunes_url))['results'][0]
           preview_url = candidate['previewUrl']
         end
-        text_to_post = "#nowplaying\nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
+        text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         puts Status.writing
         show_nowplaying("\n#{text_to_post}", options)
         text_to_post += "\n \n[> 30 sec preview](#{preview_url})" unless options['no_url']
