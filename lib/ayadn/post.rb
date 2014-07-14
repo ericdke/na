@@ -42,9 +42,7 @@ module Ayadn
     end
 
     def send_pm_embedded_pictures dic
-      url = Endpoints.new.pm_url
-      url << "?include_annotations=1&access_token=#{Ayadn::Settings.user_token}"
-      send_content(url, payload_pm_embedded(dic))
+      send_content(Endpoints.new.pm_url, payload_pm_embedded(dic))
     end
 
     def send_nowplaying dic

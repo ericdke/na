@@ -43,7 +43,8 @@ module Ayadn
 
     def self.upload(path, token)
       begin
-        file = Regexp.escape(path).gsub!('\.', '.')
+        temp = Regexp.escape(path).gsub('\.', '.')
+        file = temp.gsub('\-', '-')
         case File.extname(path).downcase
         when ".png"
           `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -F 'public=true' -X POST`

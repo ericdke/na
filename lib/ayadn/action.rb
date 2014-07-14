@@ -975,8 +975,8 @@ module Ayadn
       regex_exotics = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
       store_artist = itunes.artist.gsub(regex_exotics, ' ').split(' ').join('+')
       store_track = itunes.track.gsub(regex_exotics, ' ').split(' ').join('+')
-      #store_album = itunes.album.gsub(regex_exotics, ' ').split(' ').join('+')
-      itunes_url = "https://itunes.apple.com/search?term=#{store_artist}&term=#{store_track}&media=music&entity=musicTrack"
+      store_album = itunes.album.gsub(regex_exotics, ' ').split(' ').join('+')
+      itunes_url = "https://itunes.apple.com/search?term=#{store_artist}&term=#{store_track}&term=#{store_album}&media=music&entity=musicTrack"
       results = JSON.load(CNX.download(itunes_url))['results']
       candidate = results[0]
       {

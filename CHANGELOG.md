@@ -1,3 +1,7 @@
+# 1.4.1 - Fixes
+
+- A few fixes here and there
+
 # 1.4.0 - 'Florian'
 
 - New feature: embed one or several pictures within a post (in write, post, reply, and pm)
