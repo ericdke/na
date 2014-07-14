@@ -932,7 +932,11 @@ module Ayadn
         @view.show_posted(Post.new.send_nowplaying(dic))
       rescue => e
         puts Status.wtf
-        Errors.global_error("action/nowplaying", itunes, e)
+        if options['no_url']
+          Errors.global_error("action/nowplaying", itunes, e)
+        else
+          Errors.global_error("action/nowplaying", [itunes, store, options], e)
+        end
       end
     end
 
@@ -972,11 +976,8 @@ module Ayadn
     private
 
     def itunes_request itunes
-      regex_exotics = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
-      store_artist = itunes.artist.gsub(regex_exotics, ' ').split(' ').join('+')
-      store_track = itunes.track.gsub(regex_exotics, ' ').split(' ').join('+')
-      store_album = itunes.album.gsub(regex_exotics, ' ').split(' ').join('+')
-      itunes_url = "https://itunes.apple.com/search?term=#{store_artist}&term=#{store_track}&term=#{store_album}&media=music&entity=musicTrack"
+      infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
+      itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&term=#{infos[2]}&media=music&entity=musicTrack"
       results = JSON.load(CNX.download(itunes_url))['results']
       candidate = results[0]
       {
@@ -987,6 +988,13 @@ module Ayadn
         'request' => itunes_url,
         'results' => results
       }
+    end
+
+    def itunes_reg arr_of_itunes
+      regex_exotics = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
+      arr_of_itunes.map do |itune|
+        itune.gsub(regex_exotics, ' ').split(' ').join('+')
+      end
     end
 
     def splitter_all words
