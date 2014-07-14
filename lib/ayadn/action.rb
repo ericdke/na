@@ -1295,7 +1295,7 @@ module Ayadn
       if options['no_url']
         puts text + "\n\n\n"
       else
-        puts text + "\n\n(album artwork + preview url for track *#{store['track']}* by *#{store['artist']}* will be inserted here)\n\n\n"
+        puts text + "\n\nAlbum artwork + 30 sec preview for track '#{store['track']}' by '#{store['artist']}' will be inserted in the post.\n\n\n".color(:green)
       end
       puts "Do you confirm? (y/N) ".color(:yellow)
     end

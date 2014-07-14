@@ -64,7 +64,8 @@ module Ayadn
             "width" => dic['width'],
             "height" => dic['height'],
             "title" => dic['title'],
-            "url" => dic['artwork']
+            "url" => dic['artwork'],
+            "embeddable_url" => dic['artwork']
           }
         }
       end
