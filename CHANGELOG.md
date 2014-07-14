@@ -1,7 +1,7 @@
 # 1.4.0 - 'Florian'
 
 - Embed one or several pictures within a post (write, post, reply, pm)
-- Nowplaying inserts preview URL from iTunes Store (you can cancel this option with: `--no-url`)
+- Nowplaying inserts preview URL and album art from iTunes Store (you can cancel this with: `--no-url`)
 
 # 1.3.2 - 'Max'
 

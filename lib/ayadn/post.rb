@@ -34,13 +34,11 @@ module Ayadn
     end
 
     def send_embedded_pictures dic
-      url = Endpoints.new.posts_url
-      send_content(url, payload_embedded(dic))
+      send_content(Endpoints.new.posts_url, payload_embedded(dic))
     end
 
     def send_reply_embedded_pictures dic
-      url = Endpoints.new.posts_url
-      send_content(url, payload_reply_embedded(dic))
+      send_content(Endpoints.new.posts_url, payload_reply_embedded(dic))
     end
 
     def send_pm_embedded_pictures dic
@@ -180,14 +178,11 @@ module Ayadn
     end
 
     def send_pm(username, text)
-      url = Endpoints.new.pm_url
-      url << "?include_annotations=1&access_token=#{Ayadn::Settings.user_token}"
-      send_content(url, payload_pm(username, text))
+      send_content(Endpoints.new.pm_url, payload_pm(username, text))
     end
 
     def send_message(channel_id, text)
-      url = Endpoints.new.messages(channel_id, {})
-      send_content(url, payload_basic(text))
+      send_content(Endpoints.new.messages(channel_id, {}), payload_basic(text))
     end
 
     # def send_log(data)
@@ -196,13 +191,11 @@ module Ayadn
     # end
 
     def send_post(text)
-      url = Endpoints.new.posts_url
-      send_content(url, payload_basic(text))
+      send_content(Endpoints.new.posts_url, payload_basic(text))
     end
 
     def send_reply(text, post_id)
-      url = Endpoints.new.posts_url
-      send_content(url, payload_reply(text, post_id))
+      send_content(Endpoints.new.posts_url, payload_reply(text, post_id))
     end
 
     def send_content(url, payload)
