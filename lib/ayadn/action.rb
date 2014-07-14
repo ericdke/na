@@ -909,7 +909,7 @@ module Ayadn
         text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         puts Status.writing
         show_nowplaying("\n#{text_to_post}", options, store)
-        text_to_post += "\n \n[> 30 sec preview](#{store['preview']})" unless options['no_url']
+        text_to_post += "\n \n[> Listen](#{store['preview']})" unless options['no_url']
         unless STDIN.getch == ("y" || "Y")
           puts "\nCanceled.\n\n".color(:red)
           exit
