@@ -1,6 +1,7 @@
 # 1.4.2 - CNX
 
 - Ayadn is more resilient to connectivity errors
+- Better handling of filenames when uploading
 
 # 1.4.1 - NowPlaying
 
