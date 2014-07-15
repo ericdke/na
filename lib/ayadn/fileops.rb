@@ -41,17 +41,15 @@ module Ayadn
       end
     end
 
-    def self.upload(path, token)
+    def self.upload(file, token)
       begin
-        temp = Regexp.escape(path).gsub('\.', '.')
-        file = temp.gsub('\-', '-')
-        case File.extname(path).downcase
+        case File.extname(file).downcase
         when ".png"
-          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -F 'public=true' -X POST`
+          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@'#{file}';type=image/png" -F 'public=true' -X POST`
         when ".gif"
-          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/gif" -F 'public=true' -X POST`
+          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@'#{file}';type=image/gif" -F 'public=true' -X POST`
         else #jpg or jpeg or JPG or JPEG, automatically recognized as such
-          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F content=@#{file} -F 'public=true' -X POST`
+          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F content=@'#{file}' -F 'public=true' -X POST`
         end
       rescue Errno::ENOENT
         abort(Status.no_curl)
