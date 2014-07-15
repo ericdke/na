@@ -45,10 +45,16 @@ module Ayadn
 
       unless get_these.empty?
         got = CNX.get "#{@url}#{get_these.join(',')}&show_details=Y"
-        unless got.code != 200
-          resp = JSON.parse(got)
+        blank = JSON.parse({'meta' => {'code' => 404}, 'data' => []}.to_json)
+        if got.nil? || got == ""
+          parsed = blank
         else
-          resp = JSON.parse({'meta' => {'code' => got.code}}.to_json)
+          parsed = JSON.parse(got)
+        end
+        if parsed['meta']['code'] != 200
+          resp = blank
+        else
+          resp = parsed
         end
 
         if resp['meta']['code'] != 200

@@ -17,15 +17,7 @@ module Ayadn
           Debug.http response, url
           check_nr response, url
         end
-      rescue SocketError => e
-        if working == true
-          working = false
-          sleep 0.5
-          retry
-        end
-        Errors.nr "URL: #{url}"
-        return {'meta' => {'code' => 666}, 'data' => "#{e}"}.to_json
-      rescue SystemCallError => e
+      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError, RestClient::RequestTimeout => e
         if working == true
           working = false
           sleep 0.5
@@ -57,16 +49,9 @@ module Ayadn
           Debug.http response, url
           check response
         end
-      rescue SocketError => e
+      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError, RestClient::RequestTimeout => e
         if try_cnx < 4
           try_cnx = retry_adn 10, try_cnx
-          retry
-        end
-        puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/get_response_from", url, e)
-      rescue SystemCallError => e
-        if try_cnx < 4
-          try_cnx = retry_adn 15, try_cnx
           retry
         end
         puts "\nConnection error.".color(:red)

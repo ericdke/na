@@ -1,6 +1,10 @@
-# 1.4.1 - Fixes
+# 1.4.2 - CNX
 
-- A few fixes here and there
+- Ayadn is more resilient to connectivity errors
+
+# 1.4.1 - NowPlaying
+
+- A few fixes in the NowPlaying section
 
 # 1.4.0 - 'Florian'
 
