@@ -21,7 +21,7 @@ module Ayadn
         render_view(stream, options)
         Scroll.new(@api, @view).unified(options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/unified", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -36,7 +36,7 @@ module Ayadn
         render_view(stream, options)
         Scroll.new(@api, @view).checkins(options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/checkins", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -56,7 +56,7 @@ module Ayadn
         render_view(stream, options, niceranks)
         Scroll.new(@api, @view).global(options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/global", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -71,7 +71,7 @@ module Ayadn
         render_view(stream, options)
         Scroll.new(@api, @view).trending(options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/trending", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -86,7 +86,7 @@ module Ayadn
         render_view(stream, options)
         Scroll.new(@api, @view).photos(options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/photos", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -101,7 +101,7 @@ module Ayadn
         render_view(stream, options)
         Scroll.new(@api, @view).replies(options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/conversations", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -121,7 +121,7 @@ module Ayadn
         render_view(stream, options)
         Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/mentions", [username, options], e)
+        Errors.global_error({error: e, caller: caller, data: [username, options]})
       ensure
         Databases.close_all
       end
@@ -139,7 +139,7 @@ module Ayadn
         render_view(stream, options)
         Scroll.new(@api, @view).posts(username, options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/posts", [username, options], e)
+        Errors.global_error({error: e, caller: caller, data: [username, options]})
       ensure
         Databases.close_all
       end
@@ -156,7 +156,7 @@ module Ayadn
           @view.show_raw(stream)
         end
       rescue => e
-        Errors.global_error("action/interactions", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -176,7 +176,7 @@ module Ayadn
           render_view(stream, options)
         end
       rescue => e
-        Errors.global_error("action/whatstarred", [username, options], e)
+        Errors.global_error({error: e, caller: caller, data: [username, options]})
       ensure
         Databases.close_all
       end
@@ -198,7 +198,7 @@ module Ayadn
           @view.show_raw(list)
         end
       rescue => e
-        Errors.global_error("action/whoreposted", post_id, e)
+        Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       ensure
         Databases.close_all
       end
@@ -220,7 +220,7 @@ module Ayadn
           @view.show_raw(list)
         end
       rescue => e
-        Errors.global_error("action/whostarred", [post_id, id], e)
+        Errors.global_error({error: e, caller: caller, data: [post_id, id, options]})
       ensure
         Databases.close_all
       end
@@ -236,7 +236,7 @@ module Ayadn
         render_view(stream, options)
         Scroll.new(@api, @view).convo(id, options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/convo", [post_id, id, options], e)
+        Errors.global_error({error: e, caller: caller, data: [post_id, id, options]})
       ensure
         Databases.close_all
       end
@@ -254,7 +254,7 @@ module Ayadn
         print Status.deleting_post(post_id)
         check_has_been_deleted(post_id, @api.delete_post(post_id))
       rescue => e
-        Errors.global_error("action/delete", post_id, e)
+        Errors.global_error({error: e, caller: caller, data: [post_id]})
       ensure
         Databases.close_all
       end
@@ -270,7 +270,7 @@ module Ayadn
         resp = @api.delete_message(channel_id, message_id)
         check_message_has_been_deleted(message_id, resp)
       rescue => e
-        Errors.global_error("action/delete message", message_id, e)
+        Errors.global_error({error: e, caller: caller, data: [message_id]})
       ensure
         Databases.close_all
       end
@@ -283,7 +283,7 @@ module Ayadn
         puts Status.unfollowing(username)
         check_has_been_unfollowed(username, @api.unfollow(username))
       rescue => e
-        Errors.global_error("action/unfollow", username, e)
+        Errors.global_error({error: e, caller: caller, data: [username]})
       ensure
         Databases.close_all
       end
@@ -296,7 +296,7 @@ module Ayadn
         puts Status.following(username)
         check_has_been_followed(username, @api.follow(username))
       rescue => e
-        Errors.global_error("action/follow", username, e)
+        Errors.global_error({error: e, caller: caller, data: [username]})
       ensure
         Databases.close_all
       end
@@ -309,7 +309,7 @@ module Ayadn
         puts Status.unmuting(username)
         check_has_been_unmuted(username, @api.unmute(username))
       rescue => e
-        Errors.global_error("action/unmute", username, e)
+        Errors.global_error({error: e, caller: caller, data: [username]})
       ensure
         Databases.close_all
       end
@@ -322,7 +322,7 @@ module Ayadn
         puts Status.muting(username)
         check_has_been_muted(username, @api.mute(username))
       rescue => e
-        Errors.global_error("action/mute", username, e)
+        Errors.global_error({error: e, caller: caller, data: [username]})
       ensure
         Databases.close_all
       end
@@ -335,7 +335,7 @@ module Ayadn
         puts Status.unblocking(username)
         check_has_been_unblocked(username, @api.unblock(username))
       rescue => e
-        Errors.global_error("action/unblock", username, e)
+        Errors.global_error({error: e, caller: caller, data: [username]})
       ensure
         Databases.close_all
       end
@@ -348,7 +348,7 @@ module Ayadn
         puts Status.blocking(username)
         check_has_been_blocked(username, @api.block(username))
       rescue => e
-        Errors.global_error("action/block", username, e)
+        Errors.global_error({error: e, caller: caller, data: [username]})
       ensure
         Databases.close_all
       end
@@ -363,7 +363,7 @@ module Ayadn
         id = get_original_id(post_id, resp)
         check_has_been_reposted(id, @api.repost(id))
       rescue => e
-        Errors.global_error("action/repost", [post_id, id], e)
+        Errors.global_error({error: e, caller: caller, data: [post_id, id]})
       ensure
         Databases.close_all
       end
@@ -379,7 +379,7 @@ module Ayadn
           puts Status.not_your_repost
         end
       rescue => e
-        Errors.global_error("action/unrepost", post_id, e)
+        Errors.global_error({error: e, caller: caller, data: [post_id]})
       ensure
         Databases.close_all
       end
@@ -398,7 +398,7 @@ module Ayadn
           puts Status.not_your_starred
         end
       rescue => e
-        Errors.global_error("action/unstar", post_id, e)
+        Errors.global_error({error: e, caller: caller, data: [post_id]})
       ensure
         Databases.close_all
       end
@@ -413,7 +413,7 @@ module Ayadn
         id = get_original_id(post_id, resp)
         check_has_been_starred(id, @api.star(id))
       rescue => e
-        Errors.global_error("action/star", post_id, e)
+        Errors.global_error({error: e, caller: caller, data: [post_id]})
       ensure
         Databases.close_all
       end
@@ -430,7 +430,7 @@ module Ayadn
           render_view(stream, options)
         end
       rescue => e
-        Errors.global_error("action/hashtag", [hashtag, options], e)
+        Errors.global_error({error: e, caller: caller, data: [hashtag, options]})
       ensure
         Databases.close_all
       end
@@ -473,7 +473,7 @@ module Ayadn
           end
         end
       rescue => e
-        Errors.global_error("action/search", [words, options], e)
+        Errors.global_error({error: e, caller: caller, data: [words, options]})
       ensure
         Databases.close_all
       end
@@ -494,7 +494,7 @@ module Ayadn
           @view.show_raw(@api.get_raw_list(username, :followings))
         end
       rescue => e
-        Errors.global_error("action/followings", [username, options], e)
+        Errors.global_error({error: e, caller: caller, data: [username, options]})
       ensure
         Databases.close_all
       end
@@ -515,7 +515,7 @@ module Ayadn
           @view.show_raw(@api.get_raw_list(username, :followers))
         end
       rescue => e
-        Errors.global_error("action/followers", [username, options], e)
+        Errors.global_error({error: e, caller: caller, data: [username, options]})
       ensure
         Databases.close_all
       end
@@ -534,7 +534,7 @@ module Ayadn
           @view.show_raw(@api.get_raw_list(nil, :muted))
         end
       rescue => e
-        Errors.global_error("action/muted", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -552,7 +552,7 @@ module Ayadn
           @view.show_raw(@api.get_raw_list(nil, :blocked))
         end
       rescue => e
-        Errors.global_error("action/blocked", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -567,7 +567,7 @@ module Ayadn
           @view.show_settings
         end
       rescue => e
-        Errors.global_error("action/settings", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -591,7 +591,7 @@ module Ayadn
           @view.show_raw(@api.get_user(username))
         end
       rescue => e
-        Errors.global_error("action/userinfo", [username, options], e)
+        Errors.global_error({error: e, caller: caller, data: [username, options]})
       ensure
         Databases.close_all
       end
@@ -629,7 +629,7 @@ module Ayadn
           @view.show_raw(@api.get_details(post_id, options))
         end
       rescue => e
-        Errors.global_error("action/postinfo", [post_id, options], e)
+        Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       ensure
         Databases.close_all
       end
@@ -646,7 +646,7 @@ module Ayadn
           @view.show_raw(@api.get_files_list(options))
         end
       rescue => e
-        Errors.global_error("action/files", options, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -659,7 +659,7 @@ module Ayadn
         FileOps.download_url(file['name'], file['url'])
         puts Status.downloaded(file['name'])
       rescue => e
-        Errors.global_error("action/download", [file_id, file['url']], e)
+        Errors.global_error({error: e, caller: caller, data: [file_id, file['url']]})
       ensure
         Databases.close_all
       end
@@ -672,7 +672,7 @@ module Ayadn
         @view.clear_screen
         @view.show_channels(resp)
       rescue => e
-        Errors.global_error("action/channels", resp['meta'], e)
+        Errors.global_error({error: e, caller: caller, data: [resp['meta']]})
       ensure
         Databases.close_all
       end
@@ -693,7 +693,7 @@ module Ayadn
         render_view(resp, options)
         Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
       rescue => e
-        Errors.global_error("action/messages", [channel_id, options], e)
+        Errors.global_error({error: e, caller: caller, data: [channel_id, options]})
       ensure
         Databases.close_all
       end
@@ -726,7 +726,7 @@ module Ayadn
         pinner.pin(bookmark)
         puts Status.done
       rescue => e
-        Errors.global_error("action/pin", [post_id, usertags], e)
+        Errors.global_error({error: e, caller: caller, data: [post_id, usertags]})
       ensure
         Databases.close_all
       end
@@ -746,8 +746,7 @@ module Ayadn
           poster.auto_readline
         # end
       rescue => e
-        #Errors.global_error("action/auto post", [options, platform], e)
-        Errors.global_error("action/auto post", [options], e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -769,7 +768,7 @@ module Ayadn
         puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
-        Errors.global_error("action/post", [args, options], e)
+        Errors.global_error({error: e, caller: caller, data: [args, options]})
       ensure
         Databases.close_all
       end
@@ -798,7 +797,7 @@ module Ayadn
         puts Status.yourpost
         @view.show_posted(resp)
       rescue => e
-        Errors.global_error("action/write", [text, options], e)
+        Errors.global_error({error: e, caller: caller, data: [text, options]})
       ensure
         Databases.close_all
       end
@@ -829,7 +828,7 @@ module Ayadn
     		puts Status.yourmessage
     		@view.show_posted(resp)
     	rescue => e
-        Errors.global_error("action/pmess", [username, options], e)
+        Errors.global_error({error: e, caller: caller, data: [username, options]})
   		ensure
   		  Databases.close_all
     	end
@@ -851,7 +850,7 @@ module Ayadn
   			puts Status.yourpost
   			@view.show_posted(resp)
     	rescue => e
-        Errors.global_error("action/send_to_channel", channel_id, e)
+        Errors.global_error({error: e, caller: caller, data: [channel_id]})
   		ensure
   		  Databases.close_all
     	end
@@ -890,7 +889,7 @@ module Ayadn
         puts Status.done
         render_view(@api.get_convo(post_id, {}), {})
       rescue => e
-        Errors.global_error("action/reply", [post_id, options], e)
+        Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       ensure
         Databases.close_all
       end
@@ -937,11 +936,7 @@ module Ayadn
         @view.show_posted(Post.new.send_nowplaying(dic))
       rescue => e
         puts Status.wtf
-        if options['no_url']
-          Errors.global_error("action/nowplaying", itunes, e)
-        else
-          Errors.global_error("action/nowplaying", [itunes, store, options], e)
-        end
+        Errors.global_error({error: e, caller: caller, data: [itunes, store, options]})
       end
     end
 
@@ -972,7 +967,7 @@ module Ayadn
           end
         end
       rescue => e
-        Errors.global_error("action/random_posts", [@max_id, @random_post_id, @resp], e)
+        Errors.global_error({error: e, caller: caller, data: [@max_id, @random_post_id, @resp, options]})
       ensure
         Databases.close_all
       end

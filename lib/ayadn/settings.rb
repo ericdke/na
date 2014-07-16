@@ -82,13 +82,13 @@ module Ayadn
         begin
           @options = YAML.load(File.read(config_file))
         rescue => e
-          Errors.global_error("myconfig/load config.yml", nil, e)
+          Errors.global_error({error: e, caller: caller, data: []})
         end
       else
         begin
           self.write_config_file(config_file, @options)
         rescue => e
-          Errors.global_error("myconfig/create config.yml from defaults", nil, e)
+          Errors.global_error({error: e, caller: caller, data: []})
         end
       end
     end

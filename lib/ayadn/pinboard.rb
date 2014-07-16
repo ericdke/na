@@ -16,7 +16,7 @@ module Ayadn
         abort(Status.canceled)
       rescue => e
         puts Status.wtf
-        Errors.global_error("pinboard/ask_credentials", pin_username, e)
+        Errors.global_error({error: e, caller: caller, data: [pin_username]})
       end
       save_credentials(encode(pin_username, pin_password))
     end

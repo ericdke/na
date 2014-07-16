@@ -2,6 +2,7 @@
 
 - NowPlaying album art now has thumbnails for clients that request it
 - NowPlaying doesn't crash if the iTunes Store doesn't respond
+- Better error and events logging
 
 # 1.4.2 - CNX
 

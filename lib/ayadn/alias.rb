@@ -21,7 +21,7 @@ module Ayadn
           puts Status.error_missing_channel_id
         end
       rescue => e
-        Errors.global_error("alias/create", args, e)
+        Errors.global_error({error: e, caller: caller, data: [args]})
       ensure
         Databases.close_all
       end
@@ -41,7 +41,7 @@ module Ayadn
           Action.quit Status.wrong_arguments
         end
       rescue => e
-        Errors.global_error("alias/delete", args, e)
+        Errors.global_error({error: e, caller: caller, data: [args]})
       ensure
         Databases.close_all
       end
@@ -65,7 +65,7 @@ module Ayadn
           puts "\nFile '#{new_db}' doesn't exist.".color(:red)
         end
       rescue => e
-        Errors.global_error("alias/import", database, e)
+        Errors.global_error({error: e, caller: caller, data: [database]})
       ensure
         Databases.close_all
       end
@@ -90,7 +90,7 @@ module Ayadn
           puts Status.empty_list
         end
       rescue => e
-        Errors.global_error("alias/list", args, e)
+        Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
         Databases.close_all
       end
@@ -110,7 +110,7 @@ module Ayadn
           abort Status.canceled
         end
       rescue => e
-        Errors.global_error("alias/clear", args, e)
+        Errors.global_error({error: e, caller: caller, data: []})
       ensure
         Databases.close_all
       end

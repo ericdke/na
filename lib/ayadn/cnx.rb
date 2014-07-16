@@ -6,7 +6,7 @@ module Ayadn
       begin
         RestClient.get(url) {|response, request, result| response}
       rescue => e
-        Errors.global_error("cnx.rb/download", url, e)
+        Errors.global_error({error: e, caller: caller, data: [url, response]})
       end
     end
 
@@ -26,7 +26,7 @@ module Ayadn
         Errors.nr "URL: #{url}"
         return {'meta' => {'code' => 666}, 'data' => "#{e}"}.to_json
       rescue => e
-        Errors.global_error("cnx.rb/get", url, e)
+        Errors.global_error({error: e, caller: caller, data: [url, response]})
       end
     end
 
@@ -36,7 +36,7 @@ module Ayadn
         response
       when 204
         puts "\nError: the NiceRank filter made too many requests to the server. You may either wait for a little while before scrolling the filtered Global again, or set the scroll timer to a greater value (example: `ayadn set scroll timer 5`). (see http://ayadn-app.net/doc).\n".color(:red)
-        Errors.global_error("cnx.rb/get", [url, response.inspect, response.headers], "NiceRank: TOO MANY REQUESTS")
+        Errors.global_error({error: "NiceRank: TOO MANY REQUESTS", caller: caller, data: [url, response.inspect, response.headers]})
       else
         response
       end
@@ -55,9 +55,9 @@ module Ayadn
           retry
         end
         puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/get_response_from", url, e)
+        Errors.global_error({error: e, caller: caller, data: [url]})
       rescue => e
-        Errors.global_error("cnx.rb/get_response_from", url, e)
+        Errors.global_error({error: e, caller: caller, data: [url, response]})
       end
     end
 
@@ -77,29 +77,29 @@ module Ayadn
         response
       when 204
         puts "\n#{message}".color(:red)
-        Errors.global_error("cnx.rb", [message, response.headers], "NO CONTENT")
+        Errors.global_error({error: "NO CONTENT", caller: caller, data: [message, response.headers]})
       when 400
         puts "\n#{message}".color(:red)
-        Errors.global_error("cnx.rb", [message, response.headers], "BAD REQUEST")
+        Errors.global_error({error: "BAD REQUEST", caller: caller, data: [message, response.headers]})
       when 401
         puts "\n#{message}".color(:red)
-        Errors.global_error("cnx.rb", [message, response.headers], "UNAUTHORIZED")
+        Errors.global_error({error: "UNAUTHORIZED", caller: caller, data: [message, response.headers]})
       when 403
         puts "\n#{message}".color(:red)
-        Errors.global_error("cnx.rb", [message, response.headers], "FORBIDDEN")
+        Errors.global_error({error: "FORBIDDEN", caller: caller, data: [message, response.headers]})
       when 405
         puts "\n#{message}".color(:red)
-        Errors.global_error("cnx.rb", [message, response.headers], "METHOD NOT ALLOWED")
+        Errors.global_error({error: "METHOD NOT ALLOWED", caller: caller, data: [message, response.headers]})
       when 429
         puts "\n#{message}".color(:red)
         puts "\n\nAyadn made too many requests to the App.net API. You should wait at least ".color(:cyan) + "#{response.headers[:retry_after]} ".color(:red) + "seconds before trying again. Maybe you launched a lot of Ayadn instances at the same time? That's no problem, but in this case you should increase the value of the scroll timer (with `ayadn set scroll timer 5` for example). App.net allows 5000 requests per hour per account maximum.".color(:cyan)
-        Errors.global_error("cnx.rb", [message, response.headers], "TOO MANY REQUESTS")
+        Errors.global_error({error: "TOO MANY REQUESTS", caller: caller, data: [message, response.headers]})
       when 500
         puts "\n#{message}".color(:red)
-        Errors.global_error("cnx.rb", [message, response.headers], "APP.NET SERVER ERROR")
+        Errors.global_error({error: "APP.NET SERVER ERROR", caller: caller, data: [message, response.headers]})
       when 507
         puts "\n#{message}".color(:red)
-        Errors.global_error("cnx.rb", [message, response.headers], "INSUFFICIENT STORAGE")
+        Errors.global_error({error: "INSUFFICIENT STORAGE", caller: caller, data: [message, response.headers]})
       else
         response
       end
@@ -112,14 +112,11 @@ module Ayadn
           Debug.http response, url
           check response
         end
-      rescue SocketError => e
+      rescue SocketError, SystemCallError => e
         puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/delete", url, e)
-      rescue SystemCallError => e
-        puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/delete", url, e)
+        Errors.global_error({error: e, caller: caller, data: [url]})
       rescue => e
-        Errors.global_error("cnx.rb/delete", url, e)
+        Errors.global_error({error: e, caller: caller, data: [url]})
       end
     end
 
@@ -129,14 +126,11 @@ module Ayadn
           Debug.http response, url
           check response
         end
-      rescue SocketError => e
+      rescue SocketError, SystemCallError => e
         puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/post", url, e)
-      rescue SystemCallError => e
-        puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/post", url, e)
+        Errors.global_error({error: e, caller: caller, data: [url, payload]})
       rescue => e
-        Errors.global_error("cnx.rb/post", [url, payload], e)
+        Errors.global_error({error: e, caller: caller, data: [url, payload]})
       end
     end
 
@@ -146,14 +140,11 @@ module Ayadn
           Debug.http response, url
           check response
         end
-      rescue SocketError => e
+      rescue SocketError, SystemCallError => e
         puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/put", url, e)
-      rescue SystemCallError => e
-        puts "\nConnection error.".color(:red)
-        Errors.global_error("cnx.rb/put", url, e)
+        Errors.global_error({error: e, caller: caller, data: [url, payload]})
       rescue => e
-        Errors.global_error("cnx.rb/put", [url, payload], e)
+        Errors.global_error({error: e, caller: caller, data: [url, payload]})
       end
     end
 

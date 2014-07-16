@@ -1,17 +1,14 @@
 # encoding: utf-8
 module Ayadn
   class Errors
-    def self.global_error(where, args, error)
-      #elems = []
-      #args.each {|arg| elems << self.detokenize(arg)} #TODO: make it work
+    def self.global_error(args)
       Logs.rec.error "--BEGIN--"
-      Logs.rec.error "#{error}"
-      Logs.rec.debug "LOCATION: #{where}"
-      Logs.rec.debug "DATA: #{args}"
-      Logs.rec.debug "STACK: #{caller}"
+      Logs.rec.error "#{args[:error]}"
+      Logs.rec.debug "DATA: #{args[:data]}"
+      Logs.rec.debug "STACK: #{args[:caller]}"
       Logs.rec.error "--END--"
-      puts "\n(error logged in #{Settings.config[:paths][:log]}/ayadn.log)\n".color(:blue)
-      Debug.err error
+      puts "\nError logged in #{Settings.config[:paths][:log]}/ayadn.log\n".color(:blue)
+      Debug.err args[:error]
       exit
     end
     def self.error(status)
@@ -28,12 +25,6 @@ module Ayadn
     end
     def self.nr msg
       Logs.nr.warn msg
-    end
-
-    private
-
-    def self.detokenize(string)
-      string.dup.to_s.gsub!(/token=[a-zA-Z0-9_-]+/, "token=XXX") unless string.nil?
     end
   end
 end

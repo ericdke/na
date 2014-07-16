@@ -230,7 +230,7 @@ module Ayadn
       if res['meta']['code'] == 200
         res
       else
-        Errors.global_error("api/check_response_meta_code", nil, res['meta'])
+        Errors.global_error({error: nil, caller: caller, data: [res['meta']]})
       end
     end
 

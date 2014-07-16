@@ -112,19 +112,19 @@ describe Ayadn::SetCounts do
     end
     it "raises error if incorrect count value" do
       printed = capture_stderr do
-        lambda {Ayadn::SetCounts.new.validate('201')}.should raise_error(SystemExit)
+        expect(lambda {Ayadn::SetCounts.new.validate('201')}).to raise_error(SystemExit)
       end
       expect(printed).to include 'This paramater must be an integer between 1 and 200'
     end
     it "raises error if incorrect count value" do
       printed = capture_stderr do
-        lambda {Ayadn::SetCounts.new.validate('0')}.should raise_error(SystemExit)
+        expect(lambda {Ayadn::SetCounts.new.validate('0')}).to raise_error(SystemExit)
       end
       expect(printed).to include 'This paramater must be an integer between 1 and 200'
     end
     it "raises error if incorrect count value" do
       printed = capture_stderr do
-        lambda {Ayadn::SetCounts.new.validate('yolo')}.should raise_error(SystemExit)
+        expect(lambda {Ayadn::SetCounts.new.validate('yolo')}).to raise_error(SystemExit)
       end
       expect(printed).to include 'This paramater must be an integer between 1 and 200'
     end
@@ -165,7 +165,7 @@ describe Ayadn::SetBackup do
     end
     it "raises error if incorrect boolean" do
       printed = capture_stderr do
-        lambda {Ayadn::SetBackup.new.validate('yolo')}.should raise_error(SystemExit)
+        expect(lambda {Ayadn::SetBackup.new.validate('yolo')}).to raise_error(SystemExit)
       end
       expect(printed).to include "You have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values"
     end

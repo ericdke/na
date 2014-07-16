@@ -24,12 +24,8 @@ module Ayadn
     def self.close_all
 
       if @nicerank.size > 10000
-        limit = Time.now - (3600 * 168)
+        limit = Time.now - (3600 * 48)
         @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
-        if @nicerank.size > 10000
-          limit = Time.now - (3600 * 48)
-          @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
-        end
       end
 
       Debug.db all_dbs
@@ -140,7 +136,7 @@ module Ayadn
         @index.each {|id, values| return values if values[:count] == number}
       else
         puts Status.must_be_in_index
-        Errors.global_error("databases/get_post_from_index", number, "out of range")
+        Errors.global_error({error: "Out of range", caller: caller, data: [number]})
       end
     end
 

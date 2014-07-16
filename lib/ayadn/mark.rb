@@ -49,7 +49,7 @@ module Ayadn
         Logs.rec.info "Added conversation bookmark for post #{bookmark[:id]}."
         puts Status.done
       rescue => e
-        Errors.global_error("mark/add", args, e)
+        Errors.global_error({error: e, caller: caller, data: [args]})
       ensure
         Databases.close_all
       end
@@ -70,7 +70,7 @@ module Ayadn
         puts "\n"
         list.each {|marked| puts make_entry marked; puts "\n"}
       rescue => e
-        Errors.global_error("mark/list", nil, e)
+        Errors.global_error({error: e, caller: caller, data: [args, options]})
       ensure
         Databases.close_all
       end
@@ -90,7 +90,7 @@ module Ayadn
           abort Status.canceled
         end
       rescue => e
-        Errors.global_error("mark/clear", nil, e)
+        Errors.global_error({error: e, caller: caller, data: []})
       ensure
         Databases.close_all
       end
@@ -106,7 +106,7 @@ module Ayadn
         Databases.delete_bookmark post_id
         puts Status.done
       rescue => e
-        Errors.global_error("mark/delete", args, e)
+        Errors.global_error({error: e, caller: caller, data: [args]})
       ensure
         Databases.close_all
       end
@@ -126,7 +126,7 @@ module Ayadn
         Databases.rename_bookmark post_id, new_title
         puts Status.done
       rescue => e
-        Errors.global_error("mark/rename", args, e)
+        Errors.global_error({error: e, caller: caller, data: [args]})
       ensure
         Databases.close_all
       end
