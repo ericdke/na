@@ -1,3 +1,8 @@
+# 1.4.3 - NowPlaying, suite
+
+- NowPlaying album art now has thumbnails for clients that request it
+- NowPlaying doesn't crash if the iTunes Store doesn't respond
+
 # 1.4.2 - CNX
 
 - Ayadn is more resilient to connectivity errors

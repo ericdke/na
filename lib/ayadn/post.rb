@@ -57,7 +57,6 @@ module Ayadn
           "value" => {
             "version" => "1.0",
             "type" => "photo",
-            #"type" => "rich",
             "width" => dic['width'],
             "height" => dic['height'],
             "title" => dic['title'],

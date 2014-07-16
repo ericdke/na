@@ -909,14 +909,16 @@ module Ayadn
         text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         puts Status.writing
         show_nowplaying("\n#{text_to_post}", options, store)
-        text_to_post += "\n \n[> Listen](#{store['preview']})" unless options['no_url']
+        unless options['no_url'] || store['code'] != 200
+          text_to_post += "\n \n[> Listen](#{store['preview']})"
+        end
         unless STDIN.getch == ("y" || "Y")
           puts "\nCanceled.\n\n".color(:red)
           exit
         end
         puts "\n"
         puts Status.yourpost
-        if options['no_url'].nil?
+        unless options['no_url'] || store['code'] != 200
           visible, track, artwork, artwork_thumb = true, store['track'], store['artwork'], store['artwork_thumb']
         else
           visible, track, artwork, artwork_thumb = false, false, false, false
@@ -982,16 +984,24 @@ module Ayadn
       infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
       itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&term=#{infos[2]}&media=music&entity=musicTrack"
       results = JSON.load(CNX.download(itunes_url))['results']
-      candidate = results[0]
-      {
-        'artist' => candidate['artistName'],
-        'track' => candidate['trackName'],
-        'preview' => candidate['previewUrl'],
-        'artwork' => candidate['artworkUrl100'].gsub('100x100', '1200x1200'),
-        'artwork_thumb' => candidate['artworkUrl100'].gsub('100x100', '600x600'),
-        'request' => itunes_url,
-        'results' => results
-      }
+      unless results.empty? || results.nil?
+        candidate = results[0]
+        return {
+          'code' => 200,
+          'artist' => candidate['artistName'],
+          'track' => candidate['trackName'],
+          'preview' => candidate['previewUrl'],
+          'artwork' => candidate['artworkUrl100'].gsub('100x100', '1200x1200'),
+          'artwork_thumb' => candidate['artworkUrl100'].gsub('100x100', '600x600'),
+          'request' => itunes_url,
+          'results' => results
+        }
+      else
+        return {
+          'code' => 404,
+          'request' => itunes_url
+        }
+      end
     end
 
     def itunes_reg arr_of_itunes
@@ -1304,7 +1314,7 @@ module Ayadn
 
     def show_nowplaying(text, options, store)
       puts "\nYour post:\n".color(:cyan)
-      if options['no_url']
+      if options['no_url'] || store['code'] != 200
         puts text + "\n\n\n"
       else
         puts text + "\n\nAlbum artwork + 30 sec preview for track '#{store['track']}' by '#{store['artist']}' will be inserted in the post.\n\n\n".color(:green)
