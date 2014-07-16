@@ -917,16 +917,19 @@ module Ayadn
         puts "\n"
         puts Status.yourpost
         if options['no_url'].nil?
-          visible, track, artwork = true, store['track'], store['artwork']
+          visible, track, artwork, artwork_thumb = true, store['track'], store['artwork'], store['artwork_thumb']
         else
-          visible, track, artwork = false, false, false
+          visible, track, artwork, artwork_thumb = false, false, false, false
         end
         dic = {
           'text' => text_to_post,
           'title' => track,
           'artwork' => artwork,
+          'artwork_thumb' => artwork_thumb,
           'width' => 1200,
           'height' => 1200,
+          'width_thumb' => 200,
+          'height_thumb' => 200,
           'visible' => visible
         }
         @view.show_posted(Post.new.send_nowplaying(dic))
@@ -985,6 +988,7 @@ module Ayadn
         'track' => candidate['trackName'],
         'preview' => candidate['previewUrl'],
         'artwork' => candidate['artworkUrl100'].gsub('100x100', '1200x1200'),
+        'artwork_thumb' => candidate['artworkUrl100'].gsub('100x100', '600x600'),
         'request' => itunes_url,
         'results' => results
       }

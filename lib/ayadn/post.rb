@@ -57,11 +57,17 @@ module Ayadn
           "value" => {
             "version" => "1.0",
             "type" => "photo",
+            #"type" => "rich",
             "width" => dic['width'],
             "height" => dic['height'],
             "title" => dic['title'],
             "url" => dic['artwork'],
-            "embeddable_url" => dic['artwork']
+            "embeddable_url" => dic['artwork'],
+            "provider_url" => "https://itunes.apple.com",
+            "provider_name" => "iTunes",
+            "thumbnail_url" => dic['artwork_thumb'],
+            "thumbnail_width" => dic['width_thumb'],
+            "thumbnail_height" => dic['height_thumb']
           }
         }
       end
