@@ -3,7 +3,7 @@ module Ayadn
   class Errors
     def self.global_error(args)
       Logs.rec.error "--BEGIN--"
-      Logs.rec.error "#{args[:error]}"
+      Logs.rec.error "CAUSE: #{args[:error]}"
       Logs.rec.debug "DATA: #{args[:data]}"
       stack = args[:caller].map do |path|
         splitted = path.split('/')
