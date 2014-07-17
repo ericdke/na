@@ -5,7 +5,14 @@ module Ayadn
       Logs.rec.error "--BEGIN--"
       Logs.rec.error "#{args[:error]}"
       Logs.rec.debug "DATA: #{args[:data]}"
-      Logs.rec.debug "STACK: #{args[:caller]}"
+      stack = args[:caller].map do |path|
+        splitted = path.split('/')
+        file = splitted.pop
+        dir = splitted.pop
+        "#{dir}/#{file}"
+      end
+      Logs.rec.debug "STACK: #{stack}"
+      #Logs.rec.debug "STACK: #{args[:caller]}"
       Logs.rec.error "--END--"
       puts "\nError logged in #{Settings.config[:paths][:log]}/ayadn.log\n".color(:blue)
       Debug.err args[:error]
