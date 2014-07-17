@@ -15,7 +15,7 @@ module Ayadn
       #Logs.rec.debug "STACK: #{args[:caller]}"
       Logs.rec.error "--END--"
       puts "\nError logged in #{Settings.config[:paths][:log]}/ayadn.log\n".color(:blue)
-      Debug.err args[:error]
+      Debug.err(args[:error], stack)
       exit
     end
     def self.error(status)

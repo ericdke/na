@@ -10,6 +10,7 @@ module Ayadn
       Settings.init_config
       Logs.create_logger
       Databases.open_databases
+      at_exit { Databases.close_all }
     end
 
     def unified(options)
@@ -22,8 +23,6 @@ module Ayadn
         Scroll.new(@api, @view).unified(options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -37,17 +36,13 @@ module Ayadn
         Scroll.new(@api, @view).checkins(options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
     def global(settings)
       begin
         options = settings.dup
-        if Settings.options[:nicerank]
-          options[:filter] = true if Settings.options[:nicerank][:filter] == true
-        end
+        options[:filter] = nicerank_true()
         doing(options)
         stream = @api.get_global(options)
         niceranks = NiceRank.new.get_ranks(stream)
@@ -57,8 +52,6 @@ module Ayadn
         Scroll.new(@api, @view).global(options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -72,8 +65,6 @@ module Ayadn
         Scroll.new(@api, @view).trending(options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -87,8 +78,6 @@ module Ayadn
         Scroll.new(@api, @view).photos(options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -102,8 +91,6 @@ module Ayadn
         Scroll.new(@api, @view).replies(options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -122,8 +109,6 @@ module Ayadn
         Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -140,8 +125,6 @@ module Ayadn
         Scroll.new(@api, @view).posts(username, options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -149,16 +132,11 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_interactions
-        unless options[:raw]
-          @view.clear_screen
-          @view.show_interactions(stream['data'])
-        else
-          @view.show_raw(stream)
-        end
+        option_show_raw(stream, options)
+        @view.clear_screen
+        @view.show_interactions(stream['data'])
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -170,65 +148,49 @@ module Ayadn
         stream = @api.get_whatstarred(username, options)
         stop_if_no_user(stream, username)
         stop_if_no_data(stream, 'whatstarred')
-        if options[:extract]
-          view_all_stars_links(stream)
-        else
-          render_view(stream, options)
-        end
+        options[:extract] ? view_all_stars_links(stream) : render_view(stream, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-      ensure
-        Databases.close_all
       end
     end
 
     def whoreposted(post_id, options)
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         doing(options)
         id = get_original_id(post_id, @api.get_details(post_id, options))
         list = @api.get_whoreposted(id)
-        unless options[:raw]
-          unless list['data'].empty?
-            get_list(:whoreposted, list['data'], post_id)
-          else
-            puts Status.nobody_reposted
-          end
+        option_show_raw(list, options)
+        unless list['data'].empty?
+          get_list(:whoreposted, list['data'], post_id)
         else
-          @view.show_raw(list)
+          puts Status.nobody_reposted
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
-      ensure
-        Databases.close_all
       end
     end
 
     def whostarred(post_id, options)
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         doing(options)
         id = get_original_id(post_id, @api.get_details(post_id, options))
         list = @api.get_whostarred(id)
-        unless options[:raw]
-          unless list['data'].empty?
-            get_list(:whostarred, list['data'], id)
-          else
-            puts Status.nobody_starred
-          end
+        option_show_raw(list, options)
+        unless list['data'].empty?
+          get_list(:whostarred, list['data'], id)
         else
-          @view.show_raw(list)
+          puts Status.nobody_starred
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, id, options]})
-      ensure
-        Databases.close_all
       end
     end
 
     def convo(post_id, options)
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         doing(options)
         id = get_original_id(post_id, @api.get_details(post_id, options))
         stream = get_convo id, options
@@ -237,8 +199,6 @@ module Ayadn
         Scroll.new(@api, @view).convo(id, options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, id, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -250,13 +210,11 @@ module Ayadn
 
     def delete(post_id)
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         print Status.deleting_post(post_id)
         check_has_been_deleted(post_id, @api.delete_post(post_id))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -271,8 +229,6 @@ module Ayadn
         check_message_has_been_deleted(message_id, resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [message_id]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -284,8 +240,6 @@ module Ayadn
         check_has_been_unfollowed(username, @api.unfollow(username))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -297,8 +251,6 @@ module Ayadn
         check_has_been_followed(username, @api.follow(username))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -310,8 +262,6 @@ module Ayadn
         check_has_been_unmuted(username, @api.unmute(username))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -323,8 +273,6 @@ module Ayadn
         check_has_been_muted(username, @api.mute(username))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -336,8 +284,6 @@ module Ayadn
         check_has_been_unblocked(username, @api.unblock(username))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -349,14 +295,12 @@ module Ayadn
         check_has_been_blocked(username, @api.block(username))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username]})
-      ensure
-        Databases.close_all
       end
     end
 
     def repost(post_id)
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         puts Status.reposting(post_id)
         resp = @api.get_details(post_id)
         check_if_already_reposted(resp)
@@ -364,14 +308,12 @@ module Ayadn
         check_has_been_reposted(id, @api.repost(id))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, id]})
-      ensure
-        Databases.close_all
       end
     end
 
     def unrepost(post_id)
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         puts Status.unreposting(post_id)
         if @api.get_details(post_id)['data']['you_reposted']
           check_has_been_unreposted(post_id, @api.unrepost(post_id))
@@ -380,14 +322,12 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
-      ensure
-        Databases.close_all
       end
     end
 
     def unstar(post_id)
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         puts Status.unstarring(post_id)
         resp = @api.get_details(post_id)
         id = get_original_id(post_id, resp)
@@ -399,14 +339,12 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
-      ensure
-        Databases.close_all
       end
     end
 
     def star(post_id)
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         puts Status.starring(post_id)
         resp = @api.get_details(post_id)
         check_if_already_starred(resp)
@@ -414,8 +352,6 @@ module Ayadn
         check_has_been_starred(id, @api.star(id))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -431,8 +367,6 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [hashtag, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -474,8 +408,6 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [words, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -484,19 +416,14 @@ module Ayadn
         stop_if_no_username(username)
         username = add_arobase(username)
         doing(options)
-        unless options[:raw]
-          list = @api.get_followings(username)
-          auto_save_followings(list)
-          no_data('followings') if list.empty?
-          get_list(:followings, list, username)
-          Databases.add_to_users_db_from_list(list)
-        else
-          @view.show_raw(@api.get_raw_list(username, :followings))
-        end
+        option_show_raw(@api.get_raw_list(username, :followings), options)
+        list = @api.get_followings(username)
+        auto_save_followings(list)
+        no_data('followings') if list.empty?
+        get_list(:followings, list, username)
+        Databases.add_to_users_db_from_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -505,56 +432,41 @@ module Ayadn
         stop_if_no_username(username)
         username = add_arobase(username)
         doing(options)
-        unless options[:raw]
-          list = @api.get_followers(username)
-          auto_save_followers(list)
-          no_data('followers') if list.empty?
-          get_list(:followers, list, username)
-          Databases.add_to_users_db_from_list(list)
-        else
-          @view.show_raw(@api.get_raw_list(username, :followers))
-        end
+        option_show_raw(@api.get_raw_list(username, :followers), options)
+        list = @api.get_followers(username)
+        auto_save_followers(list)
+        no_data('followers') if list.empty?
+        get_list(:followers, list, username)
+        Databases.add_to_users_db_from_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-      ensure
-        Databases.close_all
       end
     end
 
     def muted(options)
       begin
         doing(options)
-        unless options[:raw]
-          list = @api.get_muted
-          auto_save_muted(list)
-          no_data('muted') if list.empty?
-          get_list(:muted, list, nil)
-          Databases.add_to_users_db_from_list(list)
-        else
-          @view.show_raw(@api.get_raw_list(nil, :muted))
-        end
+        option_show_raw(@api.get_raw_list(nil, :muted), options)
+        list = @api.get_muted
+        auto_save_muted(list)
+        no_data('muted') if list.empty?
+        get_list(:muted, list, nil)
+        Databases.add_to_users_db_from_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
     def blocked(options)
       begin
         doing(options)
-        unless options[:raw]
-          list = @api.get_blocked
-          no_data('blocked') if list.empty?
-          get_list(:blocked, list, nil)
-          Databases.add_to_users_db_from_list(list)
-        else
-          @view.show_raw(@api.get_raw_list(nil, :blocked))
-        end
+        option_show_raw(@api.get_raw_list(nil, :blocked), options)
+        list = @api.get_blocked
+        no_data('blocked') if list.empty?
+        get_list(:blocked, list, nil)
+        Databases.add_to_users_db_from_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -568,8 +480,6 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -578,74 +488,59 @@ module Ayadn
         stop_if_no_username(username)
         username = add_arobase(username)
         doing(options)
-        unless options[:raw]
-          stream = @api.get_user(username)
-          stop_if_no_user(stream, username)
-          if same_username?(stream)
-            token = @api.get_token_info
-            get_infos(stream['data'], token['data'])
-          else
-            get_infos(stream['data'], nil)
-          end
+        option_show_raw(@api.get_user(username), options)
+        stream = @api.get_user(username)
+        stop_if_no_user(stream, username)
+        if same_username?(stream)
+          token = @api.get_token_info
+          get_infos(stream['data'], token['data'])
         else
-          @view.show_raw(@api.get_user(username))
+          get_infos(stream['data'], nil)
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-      ensure
-        Databases.close_all
       end
     end
 
     def postinfo(post_id, options)
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         doing(options)
-        unless options[:raw]
-          @view.clear_screen
-          response = @api.get_details(post_id, options)
-          stop_if_no_post(response, post_id)
-          resp = response['data']
-          response = @api.get_user("@#{resp['user']['username']}")
-          stop_if_no_user(response, response['data']['username'])
-          stream = response['data']
-          puts "POST:\n".inverse
-          @view.show_simple_post([resp], options)
-          if resp['repost_of']
-            puts "REPOST OF:\n".inverse
-            Errors.repost(post_id, resp['repost_of']['id'])
-            @view.show_simple_post([resp['repost_of']], options)
-          end
-          puts "AUTHOR:\n".inverse
-          if response['data']['username'] == Settings.config[:identity][:username]
-            @view.show_userinfos(stream, @api.get_token_info['data'])
-          else
-            @view.show_userinfos(stream, nil)
-          end
+        option_show_raw(@api.get_details(post_id, options), options)
+        @view.clear_screen
+        response = @api.get_details(post_id, options)
+        stop_if_no_post(response, post_id)
+        resp = response['data']
+        response = @api.get_user("@#{resp['user']['username']}")
+        stop_if_no_user(response, response['data']['username'])
+        stream = response['data']
+        puts "POST:\n".inverse
+        @view.show_simple_post([resp], options)
+        if resp['repost_of']
+          puts "REPOST OF:\n".inverse
+          Errors.repost(post_id, resp['repost_of']['id'])
+          @view.show_simple_post([resp['repost_of']], options)
+        end
+        puts "AUTHOR:\n".inverse
+        if response['data']['username'] == Settings.config[:identity][:username]
+          @view.show_userinfos(stream, @api.get_token_info['data'])
         else
-          @view.show_raw(@api.get_details(post_id, options))
+          @view.show_userinfos(stream, nil)
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
-      ensure
-        Databases.close_all
       end
     end
 
     def files(options)
       begin
         doing(options)
-        unless options[:raw]
-          list = @api.get_files_list(options)
-          @view.clear_screen
-          list.empty? ? no_data('files') : @view.show_files_list(list)
-        else
-          @view.show_raw(@api.get_files_list(options))
-        end
+        option_show_raw(@api.get_files_list(options), options)
+        list = @api.get_files_list(options)
+        @view.clear_screen
+        list.empty? ? no_data('files') : @view.show_files_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -656,8 +551,6 @@ module Ayadn
         puts Status.downloaded(file['name'])
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [file_id, file['url']]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -669,8 +562,6 @@ module Ayadn
         @view.show_channels(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [resp['meta']]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -681,17 +572,12 @@ module Ayadn
         resp = @api.get_messages(channel_id, options)
         stop_if_no_new_posts(resp, options, "channel:#{channel_id}")
         Databases.save_max_id(resp)
-        if options[:raw]
-          @view.show_raw(resp)
-          exit
-        end
+        option_show_raw(resp, options)
         stop_if_no_data(resp, 'messages')
         render_view(resp, options)
         Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -699,7 +585,7 @@ module Ayadn
       require 'pinboard'
       require 'base64'
       begin
-        missing_post_id unless post_id.is_integer?
+        stop_if_bad_post_id(post_id)
         doing()
         resp = get_data_from_response(@api.get_details(post_id))
         @view.clear_screen
@@ -722,8 +608,6 @@ module Ayadn
         puts Status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, usertags]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -735,8 +619,6 @@ module Ayadn
         Post.new.auto_readline
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -757,8 +639,6 @@ module Ayadn
         @view.show_posted(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -786,8 +666,6 @@ module Ayadn
         @view.show_posted(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [text, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -877,14 +755,11 @@ module Ayadn
         render_view(@api.get_convo(post_id))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
-      ensure
-        Databases.close_all
       end
     end
 
     def nowplaying(options = {})
       begin
-        Databases.close_all
         abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
         itunes = get_track_infos()
         itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
@@ -949,12 +824,29 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [@max_id, @random_post_id, @resp, options]})
-      ensure
-        Databases.close_all
       end
     end
 
     private
+
+    def nicerank_true
+      if Settings.options[:nicerank]
+        if Settings.options[:nicerank][:filter] == true
+          return true
+        end
+      end
+    end
+
+    def option_show_raw stream, options
+      if options[:raw]
+        @view.show_raw(stream)
+        exit
+      end
+    end
+
+    def stop_if_bad_post_id post_id
+      missing_post_id() unless post_id.is_integer?
+    end
 
     def stop_if_no_data stream, target
       if stream['data'].empty?

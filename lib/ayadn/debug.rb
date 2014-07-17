@@ -36,10 +36,12 @@ module Ayadn
       end
     end
 
-    def self.err error
+    def self.err error, stack
       if Settings.options[:timeline][:show_debug] == true
-        puts "--*--\nTRACE:\n"
+        puts "\n--*--\nERROR:\n"
         raise error
+        puts "\n--*--\nSTACK:\n"
+        puts stack
         puts "\n--*--\n\n"
       end
     end
