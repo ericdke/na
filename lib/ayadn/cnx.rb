@@ -9,10 +9,12 @@ module Ayadn
       rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError, RestClient::RequestTimeout => e
         if working == true
           working = false
-          puts "\nOoops, Last.fm doesn't respond. Trying again in 5 secs.\n".color(:red)
+          puts "\nOoops, '#{url}' didn't respond. Trying again in 5 secs.\n".color(:red)
           sleep 5
           retry
         end
+        puts "\nConnexion error.\n\n".color(:red)
+        Errors.global_error({error: e, caller: caller, data: [url, response]})
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url, response]})
       end
@@ -115,7 +117,6 @@ module Ayadn
 
     def self.delete(url)
       begin
-        #RestClient::Resource.new(url).delete
         RestClient.delete(url) do |response, request, result|
           Debug.http response, url
           check response
