@@ -210,7 +210,7 @@ module Ayadn
       "\nSaving post text and links to Pinboard...\n\n".color(:yellow)
     end
     def self.error_only_osx
-      "\nThis feature only works with Mac OS X and iTunes, sorry.\n\n".color(:red)
+      "\nThis feature only works with iTunes by default. If you've got a Last.fm account, add the option:\n\n`ayadn -np --lastfm` (short: `-l`).\n\n".color(:red)
     end
     def self.empty_fields
       "\nCanceled: couldn't get enough information (empty field).\n\n".color(:red)
