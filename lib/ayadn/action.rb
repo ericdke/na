@@ -698,8 +698,6 @@ module Ayadn
     		@view.show_posted(resp)
     	rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-  		ensure
-  		  Databases.close_all
     	end
     end
 
@@ -720,8 +718,6 @@ module Ayadn
   			@view.show_posted(resp)
     	rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id]})
-  		ensure
-  		  Databases.close_all
     	end
     end
 

@@ -1,3 +1,7 @@
+# 1.4.4 - 'Randolph'
+
+- Fixed a database problem in PM and SEND
+
 # 1.4.3 - 'Sergent Stretch'
 
 - NowPlaying is compatible with iTunes and Last.fm. Default: iTunes. Add `--last-fm` or `-l` to get Last.fm last played track instead
