@@ -626,7 +626,7 @@ module Ayadn
         if options['embed']
           if options['embed'].length > 1 # if args are inversed on the cl
             opts = options['embed'].dup
-            embed = opts.shift
+            embed = [opts.shift]
             text = opts.join(" ")
           else
             embed = options['embed']
