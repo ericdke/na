@@ -1,10 +1,11 @@
 # 1.4.3 - 'Sergent Stretch'
 
+- NowPlaying is compatible with iTunes and Last.fm. Default: iTunes. Add `--last-fm` or `-l` to get Last.fm last played track instead
 - NowPlaying album art now has thumbnails
 - NowPlaying doesn't crash if the iTunes Store doesn't respond
 - Better global error and events logging
-- Automatically fixes the arguments order for 'post' if needed
-- Code cleaning
+- Automatically fixes the arguments order for 'post' if needed when uploading a picture
+- General code cleaning
 
 # 1.4.2 - 'Caligula'
 
