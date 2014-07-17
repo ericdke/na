@@ -81,7 +81,9 @@ module Ayadn
         t.title = "Current Ayadn settings".color(:cyan)
         t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
         @iter = 0
-        Settings.options.each do |k,v|
+        opts = Settings.options.dup
+        opts.each do |k,v|
+          v.delete_if {|ke,va| ke == :deleted || ke == :annotations } # not mutable values
           v.each do |x,y|
             t << :separator if @iter >= 1
             unless y.is_a?(Hash)
@@ -95,6 +97,7 @@ module Ayadn
           end
         end
       end
+      clear_screen()
       puts table
     end
 

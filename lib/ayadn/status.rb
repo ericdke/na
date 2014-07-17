@@ -54,37 +54,37 @@ module Ayadn
       "\nStarring #{post_id}".inverse
     end
     def self.not_deleted(post_id)
-      "Could not delete post #{post_id} (post isn't yours, or is already deleted)\n".color(:red)
+      "\nCould not delete post #{post_id} (post isn't yours, or is already deleted)\n".color(:red)
     end
     def self.not_starred(post_id)
-      "Could not star post #{post_id} (post doesn't exist, or is already starred)\n".color(:red)
+      "\nCould not star post #{post_id} (post doesn't exist, or is already starred)\n".color(:red)
     end
     def self.not_unreposted(post_id)
-      "Could not unrepost post #{post_id} (post isn't yours, isn't a repost, or has been deleted)\n".color(:red)
+      "\nCould not unrepost post #{post_id} (post isn't yours, isn't a repost, or has been deleted)\n".color(:red)
     end
     def self.not_reposted(post_id)
-      "Could not repost post #{post_id} (post has been deleted?)\n".color(:red)
+      "\nCould not repost post #{post_id} (post has been deleted?)\n".color(:red)
     end
     def self.not_unstarred(post_id)
-      "Could not unstar post #{post_id} (post isn't yours, isn't starred, or has been deleted)\n".color(:red)
+      "\nCould not unstar post #{post_id} (post isn't yours, isn't starred, or has been deleted)\n".color(:red)
     end
     def self.not_unfollowed(post_id)
-      "Could not unfollow user #{username} (doesn't exist, or wasn't already followed)\n".color(:red)
+      "\nCould not unfollow user #{username} (doesn't exist, or wasn't already followed)\n".color(:red)
     end
     def self.not_followed(post_id)
-      "Could not follow user #{username} (doesn't exist, or you already follow)\n".color(:red)
+      "\nCould not follow user #{username} (doesn't exist, or you already follow)\n".color(:red)
     end
     def self.not_unmuted(post_id)
-      "Could not unmute user #{username} (doesn't exist, or wasn't already muted)\n".color(:red)
+      "\nCould not unmute user #{username} (doesn't exist, or wasn't already muted)\n".color(:red)
     end
     def self.not_muted(post_id)
-      "Could not mute user #{username} (doesn't exist, or is already muted)\n".color(:red)
+      "\nCould not mute user #{username} (doesn't exist, or is already muted)\n".color(:red)
     end
     def self.not_unblocked(post_id)
-      "Could not unblock user #{username} (doesn't exist, or wasn't already blocked)\n".color(:red)
+      "\nCould not unblock user #{username} (doesn't exist, or wasn't already blocked)\n".color(:red)
     end
     def self.not_blocked(post_id)
-      "Could not block user #{username} (doesn't exist, or is already blocked)\n".color(:red)
+      "\nCould not block user #{username} (doesn't exist, or is already blocked)\n".color(:red)
     end
     def self.deleted(post_id)
       "\nPost #{post_id} has been deleted.\n".color(:green)

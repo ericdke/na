@@ -158,7 +158,9 @@ module Ayadn
       begin
         stop_if_bad_post_id(post_id)
         doing(options)
-        id = get_original_id(post_id, @api.get_details(post_id, options))
+        details = @api.get_details(post_id, options)
+        stop_if_404(details, post_id)
+        id = get_original_id(post_id, details)
         list = @api.get_whoreposted(id)
         option_show_raw(list, options)
         unless list['data'].empty?
@@ -175,7 +177,9 @@ module Ayadn
       begin
         stop_if_bad_post_id(post_id)
         doing(options)
-        id = get_original_id(post_id, @api.get_details(post_id, options))
+        details = @api.get_details(post_id, options)
+        stop_if_404(details, post_id)
+        id = get_original_id(post_id, details)
         list = @api.get_whostarred(id)
         option_show_raw(list, options)
         unless list['data'].empty?
@@ -192,7 +196,9 @@ module Ayadn
       begin
         stop_if_bad_post_id(post_id)
         doing(options)
-        id = get_original_id(post_id, @api.get_details(post_id, options))
+        details = @api.get_details(post_id, options)
+        stop_if_404(details, post_id)
+        id = get_original_id(post_id, details)
         stream = get_convo id, options
         Databases.pagination["replies:#{id}"] = stream['meta']['max_id']
         render_view(stream, options)
@@ -472,12 +478,7 @@ module Ayadn
 
     def view_settings(options)
       begin
-        if options[:raw]
-          puts Settings.options.to_json
-        else
-          @view.clear_screen
-          @view.show_settings
-        end
+        options[:raw] ? (puts Settings.options.to_json) : @view.show_settings
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -491,12 +492,8 @@ module Ayadn
         option_show_raw(@api.get_user(username), options)
         stream = @api.get_user(username)
         stop_if_no_user(stream, username)
-        if same_username?(stream)
-          token = @api.get_token_info
-          get_infos(stream['data'], token['data'])
-        else
-          get_infos(stream['data'], nil)
-        end
+        same_username?(stream) ? token = @api.get_token_info['data'] : token = nil
+        get_infos(stream['data'], token)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -852,6 +849,12 @@ module Ayadn
       if stream['data'].empty?
         Errors.warn "In action/#{target}: no data"
         abort(Status.empty_list)
+      end
+    end
+
+    def stop_if_404 stream, post_id
+      if stream['meta']['code'] == 404
+        abort(Status.post_404(post_id))
       end
     end
 
