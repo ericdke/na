@@ -2,7 +2,7 @@
 
 - NowPlaying album art now has thumbnails
 - NowPlaying doesn't crash if the iTunes Store doesn't respond
-- Better error and events logging
+- Better global error and events logging
 - Automatically fixes the arguments order for 'post' if needed
 - Code cleaning
 

@@ -83,7 +83,7 @@ module Ayadn
         @iter = 0
         opts = Settings.options.dup
         opts.each do |k,v|
-          v.delete_if {|ke,va| ke == :deleted || ke == :annotations } # not mutable values
+          v.delete_if {|ke,_| ke == :deleted || ke == :annotations } # not mutable values
           v.each do |x,y|
             t << :separator if @iter >= 1
             unless y.is_a?(Hash)
