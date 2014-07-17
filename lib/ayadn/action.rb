@@ -825,10 +825,14 @@ module Ayadn
     end
 
     def get_lastfm_track_infos user
-      url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
-      feed = RSS::Parser.parse(CNX.download(url))
-      lfm = feed.items[0].title.split(' – ')
-      return lfm[0], lfm[1]
+      begin
+        url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
+        feed = RSS::Parser.parse(CNX.download(url))
+        lfm = feed.items[0].title.split(' – ')
+        return lfm[0], lfm[1]
+      rescue Interrupt
+        abort(Status.canceled)
+      end
     end
 
     def np_itunes options
