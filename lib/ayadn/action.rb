@@ -553,7 +553,7 @@ module Ayadn
 
     def channels
       begin
-        doing
+        doing()
         resp = @api.get_channels
         @view.clear_screen
         @view.show_channels(resp)
@@ -624,8 +624,16 @@ module Ayadn
         writer = Post.new
         @view.clear_screen
         if options['embed']
-          puts Status.uploading(options['embed'])
-          resp = writer.send_embedded(args.join(" "), FileOps.make_paths(options['embed']))
+          if options['embed'].length > 1 # if args are inversed on the cl
+            opts = options['embed'].dup
+            embed = opts.shift
+            text = opts.join(" ")
+          else
+            embed = options['embed']
+            text = args.join(" ")
+          end
+          puts Status.uploading(embed)
+          resp = writer.send_embedded(text, FileOps.make_paths(embed))
         else
           puts Status.posting
           resp = writer.post(args)
