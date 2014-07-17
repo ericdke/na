@@ -942,6 +942,29 @@ module Ayadn
       end
     end
 
+    def get_itunes_track_infos
+      track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
+      if track.empty?
+        puts Status.no_itunes
+        Errors.warn "Nowplaying canceled: unable to get info from iTunes."
+        exit
+      end
+      album = `osascript -e 'tell application "iTunes"' -e 'set trackAlbum to album of current track' -e 'return trackAlbum' -e 'end tell'`
+      artist = `osascript -e 'tell application "iTunes"' -e 'set trackArtist to artist of current track' -e 'return trackArtist' -e 'end tell'`
+      maker = Struct.new(:artist, :album, :track)
+      maker.new(artist.chomp!, album.chomp!, track.chomp!)
+    end
+
+    def show_nowplaying(text, options, store)
+      puts "\nYour post:\n".color(:cyan)
+      if options['no_url'] || store['code'] != 200
+        puts text + "\n\n\n"
+      else
+        puts text + "\n\n\nThe iTunes Store thinks this track is: ".color(:green) + "'#{store['track']}'".color(:magenta) + " by ".color(:green) + "'#{store['artist']}'".color(:magenta) + ".\n\nAyadn will use these elements to insert album artwork and a link to the track.\n\n".color(:green)
+      end
+      puts "Do you confirm? (y/N) ".color(:yellow)
+    end
+
     def nicerank_true
       if Settings.options[:nicerank]
         if Settings.options[:nicerank][:filter] == true
@@ -1274,29 +1297,6 @@ module Ayadn
 
     def same_username?(stream)
       stream['data']['username'] == Settings.config[:identity][:username]
-    end
-
-    def get_itunes_track_infos
-      track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
-      if track.empty?
-        puts Status.no_itunes
-        Errors.warn "Nowplaying canceled: unable to get info from iTunes."
-        exit
-      end
-      album = `osascript -e 'tell application "iTunes"' -e 'set trackAlbum to album of current track' -e 'return trackAlbum' -e 'end tell'`
-      artist = `osascript -e 'tell application "iTunes"' -e 'set trackArtist to artist of current track' -e 'return trackArtist' -e 'end tell'`
-      maker = Struct.new(:artist, :album, :track)
-      maker.new(artist.chomp!, album.chomp!, track.chomp!)
-    end
-
-    def show_nowplaying(text, options, store)
-      puts "\nYour post:\n".color(:cyan)
-      if options['no_url'] || store['code'] != 200
-        puts text + "\n\n\n"
-      else
-        puts text + "\n\n\nThe iTunes Store thinks this track is: '#{store['track']}' by '#{store['artist']}'.\n\nAlbum artwork and link to artist with these elements will be inserted in the post.\n\n".color(:green)
-      end
-      puts "Do you confirm? (y/N) ".color(:yellow)
     end
 
     def countdown(wait)

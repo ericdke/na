@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Ayadn::VERSION
   spec.author        = "Eric Dejonckheere"
   spec.email         = "eric@aya.io"
-  spec.summary       = %q{App.net command-line client.}
+  spec.summary       = %q{App.net command-line client. See http://ayadn-app.net/doc/}
   spec.description   = %q{App.net command-line client: toolbox to access and manage your ADN data, show your streams, post, manage conversations, star/follow/repost... and many, many more. http://ayadn-app.net/doc/}
   spec.homepage      = "http://ayadn-app.net"
   spec.license       = "MIT"
