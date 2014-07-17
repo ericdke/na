@@ -1288,7 +1288,7 @@ module Ayadn
       if options['no_url'] || store['code'] != 200
         puts text + "\n\n\n"
       else
-        puts text + "\n\nAlbum artwork and link to the iTunes Store for '#{store['track']}' by '#{store['artist']}' will be inserted in the post.\n\n\n".color(:green)
+        puts text + "\n\n\nThe iTunes Store thinks this track is: '#{store['track']}' by '#{store['artist']}'.\n\nAlbum artwork and link to artist with these elements will be inserted in the post.\n\n".color(:green)
       end
       puts "Do you confirm? (y/N) ".color(:yellow)
     end

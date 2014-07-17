@@ -3,8 +3,16 @@ module Ayadn
   class CNX
 
     def self.download url
+      working = true
       begin
         RestClient.get(url) {|response, request, result| response}
+      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError, RestClient::RequestTimeout => e
+        if working == true
+          working = false
+          puts "\nOoops, Last.fm doesn't respond. Trying again in 5 secs.\n".color(:red)
+          sleep 5
+          retry
+        end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url, response]})
       end
