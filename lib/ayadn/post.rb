@@ -11,14 +11,7 @@ module Ayadn
     end
 
     def compose
-      # case Settings.config[:platform]
-      # when /mswin|mingw|cygwin/
-        # post = classic
-      # else
-        require "readline"
-        readline
-      # end
-      # post
+        readline()
     end
 
     def send_embedded text, files

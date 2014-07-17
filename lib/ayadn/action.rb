@@ -612,7 +612,6 @@ module Ayadn
       begin
         @view.clear_screen
         puts Status.auto
-        require "readline"
         Post.new.auto_readline
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
@@ -813,12 +812,9 @@ module Ayadn
           Settings.options[:nowplaying] = {}
           user = create_lastfm_user()
         end
-        puts "\nFetching informations from Last.fm...\n".color(:green)
-        url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
-        feed = RSS::Parser.parse(CNX.download(url))
-        lfm = feed.items[0].title.split(' – ')
-        artist, track = lfm[0], lfm[1]
-        puts "Fetching informations from the Itunes Store...\n".color(:green)
+        puts Status.fetching_from('Last.fm')
+        artist, track = get_lastfm_track_infos(user)
+        puts Status.itunes_store
         store = lastfm_istore_request(artist, track) unless options['no_url']
         text_to_post = "#nowplaying\n \nTitle: ‘#{track}’\nArtist: #{artist}"
         post_nowplaying(text_to_post, store, options)
@@ -826,16 +822,22 @@ module Ayadn
         puts Status.wtf
         Errors.global_error({error: e, caller: caller, data: [lfm, store, options]})
       end
+    end
 
+    def get_lastfm_track_infos user
+      url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
+      feed = RSS::Parser.parse(CNX.download(url))
+      lfm = feed.items[0].title.split(' – ')
+      return lfm[0], lfm[1]
     end
 
     def np_itunes options
       begin
         abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
-        puts "\nFetching informations from iTunes...\n".color(:green)
-        itunes = get_track_infos()
+        puts Status.fetching_from('iTunes')
+        itunes = get_itunes_track_infos()
         itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
-        puts "Fetching informations from the Itunes Store...\n".color(:green)
+        puts Status.itunes_store
         store = itunes_istore_request(itunes) unless options['no_url']
         text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         post_nowplaying(text_to_post, store, options)
@@ -859,7 +861,7 @@ module Ayadn
         unless options['no_url'] || store['code'] != 200
           visible, track, artwork, artwork_thumb = true, store['track'], store['artwork'], store['artwork_thumb']
         else
-          visible, track, artwork, artwork_thumb = false, false, false, false
+          visible, track, artwork, artwork_thumb = false
         end
         dic = {
           'text' => text_to_post,
@@ -892,6 +894,48 @@ module Ayadn
       Settings.options[:nowplaying][:lastfm] = ask_lastfm_user()
       Settings.save_config
       return Settings.options[:nowplaying][:lastfm]
+    end
+
+    def itunes_istore_request itunes
+      infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
+      itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&term=#{infos[2]}&media=music&entity=musicTrack"
+      get_itunes_store(itunes_url)
+    end
+
+    def lastfm_istore_request artist, track
+      infos = itunes_reg([artist, track])
+      itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&media=music&entity=musicTrack"
+      get_itunes_store(itunes_url)
+    end
+
+    def get_itunes_store url
+      results = JSON.load(CNX.download(url))['results']
+      unless results.empty? || results.nil?
+        candidate = results[0]
+        return {
+          'code' => 200,
+          'artist' => candidate['artistName'],
+          'track' => candidate['trackName'],
+          'preview' => candidate['previewUrl'],
+          'link' => candidate['collectionViewUrl'],
+          'artwork' => candidate['artworkUrl100'].gsub('100x100', '1200x1200'),
+          'artwork_thumb' => candidate['artworkUrl100'].gsub('100x100', '600x600'),
+          'request' => url,
+          'results' => results
+        }
+      else
+        return {
+          'code' => 404,
+          'request' => url
+        }
+      end
+    end
+
+    def itunes_reg arr_of_itunes
+      regex_exotics = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
+      arr_of_itunes.map do |itune|
+        itune.gsub(regex_exotics, ' ').split(' ').join('+')
+      end
     end
 
     def nicerank_true
@@ -935,48 +979,6 @@ module Ayadn
         unless Databases.has_new?(stream, title)
           no_new_posts()
         end
-      end
-    end
-
-    def itunes_istore_request itunes
-      infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
-      itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&term=#{infos[2]}&media=music&entity=musicTrack"
-      get_itunes_store(itunes_url)
-    end
-
-    def lastfm_istore_request artist, track
-      infos = itunes_reg([artist, track])
-      itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&media=music&entity=musicTrack"
-      get_itunes_store(itunes_url)
-    end
-
-    def get_itunes_store url
-      results = JSON.load(CNX.download(url))['results']
-      unless results.empty? || results.nil?
-        candidate = results[0]
-        return {
-          'code' => 200,
-          'artist' => candidate['artistName'],
-          'track' => candidate['trackName'],
-          'preview' => candidate['previewUrl'],
-          'link' => candidate['collectionViewUrl'],
-          'artwork' => candidate['artworkUrl100'].gsub('100x100', '1200x1200'),
-          'artwork_thumb' => candidate['artworkUrl100'].gsub('100x100', '600x600'),
-          'request' => url,
-          'results' => results
-        }
-      else
-        return {
-          'code' => 404,
-          'request' => url
-        }
-      end
-    end
-
-    def itunes_reg arr_of_itunes
-      regex_exotics = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
-      arr_of_itunes.map do |itune|
-        itune.gsub(regex_exotics, ' ').split(' ').join('+')
       end
     end
 
@@ -1270,7 +1272,7 @@ module Ayadn
       stream['data']['username'] == Settings.config[:identity][:username]
     end
 
-    def get_track_infos
+    def get_itunes_track_infos
       track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
       if track.empty?
         puts Status.no_itunes

@@ -287,5 +287,11 @@ module Ayadn
     def self.no_curl
       "\n\nAyadn needs 'curl' to upload files. Please install 'curl' (or check that it's properly declared in your $PATH).\n\n".color(:red)
     end
+    def self.itunes_store
+      "Fetching informations from the Itunes Store...\n".color(:green)
+    end
+    def self.fetching_from source
+      "\nFetching informations from #{source}...\n".color(:green)
+    end
   end
 end
