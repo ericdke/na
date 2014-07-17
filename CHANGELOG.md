@@ -1,15 +1,16 @@
-# 1.4.3 - NowPlaying, suite
+# 1.4.3 - 'Sergent Stretch'
 
-- NowPlaying album art now has thumbnails for clients that request it
+- NowPlaying album art now has thumbnails
 - NowPlaying doesn't crash if the iTunes Store doesn't respond
 - Better error and events logging
+- Code cleaning
 
-# 1.4.2 - CNX
+# 1.4.2 - 'Caligula'
 
 - Ayadn is more resilient to connectivity errors
 - Better handling of filenames when uploading
 
-# 1.4.1 - NowPlaying
+# 1.4.1 - 'Oh boy'
 
 - A few fixes in the NowPlaying section
 

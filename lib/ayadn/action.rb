@@ -16,7 +16,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_unified(options)
-        (no_new_posts unless Databases.has_new?(stream, 'unified')) if options[:new]
+        stop_if_no_new_posts(stream, options, 'unified')
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).unified(options) if options[:scroll]
@@ -31,7 +31,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_checkins(options)
-        (no_new_posts unless Databases.has_new?(stream, 'explore:checkins')) if options[:new]
+        stop_if_no_new_posts(stream, options, 'explore:checkins')
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).checkins(options) if options[:scroll]
@@ -50,8 +50,8 @@ module Ayadn
         end
         doing(options)
         stream = @api.get_global(options)
-        niceranks = NiceRank.new.get_ranks stream
-        (no_new_posts unless Databases.has_new?(stream, 'global')) if options[:new]
+        niceranks = NiceRank.new.get_ranks(stream)
+        stop_if_no_new_posts(stream, options, 'global')
         Databases.save_max_id(stream)
         render_view(stream, options, niceranks)
         Scroll.new(@api, @view).global(options) if options[:scroll]
@@ -66,7 +66,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_trending(options)
-        (no_new_posts unless Databases.has_new?(stream, 'explore:trending')) if options[:new]
+        stop_if_no_new_posts(stream, options, 'explore:trending')
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).trending(options) if options[:scroll]
@@ -81,7 +81,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_photos(options)
-        (no_new_posts unless Databases.has_new?(stream, 'explore:photos')) if options[:new]
+        stop_if_no_new_posts(stream, options, 'explore:photos')
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).photos(options) if options[:scroll]
@@ -96,7 +96,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_conversations(options)
-        (no_new_posts unless Databases.has_new?(stream, 'explore:replies')) if options[:new]
+        stop_if_no_new_posts(stream, options, 'explore:replies')
         Databases.save_max_id(stream)
         render_view(stream, options)
         Scroll.new(@api, @view).replies(options) if options[:scroll]
@@ -109,15 +109,15 @@ module Ayadn
 
     def mentions(username, options)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         doing(options)
         stream = @api.get_mentions(username, options)
-        user_404(username) if meta_404(stream)
+        stop_if_no_user(stream, username)
         Databases.save_max_id(stream)
         options = options.dup
         options[:in_mentions] = true
-        no_data('mentions') if stream['data'].empty?
+        stop_if_no_data(stream, 'mentions')
         render_view(stream, options)
         Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
       rescue => e
@@ -129,13 +129,13 @@ module Ayadn
 
     def posts(username, options)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         doing(options)
         stream = @api.get_posts(username, options)
-        user_404(username) if meta_404(stream)
+        stop_if_no_user(stream, username)
         Databases.save_max_id(stream)
-        no_data('posts') if stream['data'].empty?
+        stop_if_no_data(stream, 'mentions')
         render_view(stream, options)
         Scroll.new(@api, @view).posts(username, options) if options[:scroll]
       rescue => e
@@ -164,12 +164,12 @@ module Ayadn
 
     def whatstarred(username, options)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         doing(options)
         stream = @api.get_whatstarred(username, options)
-        user_404(username) if meta_404(stream)
-        no_data('whatstarred') if stream['data'].empty?
+        stop_if_no_user(stream, username)
+        stop_if_no_data(stream, 'whatstarred')
         if options[:extract]
           view_all_stars_links(stream)
         else
@@ -244,7 +244,7 @@ module Ayadn
 
     def get_convo id, options
       stream = @api.get_convo(id, options)
-      post_404(id) if meta_404(stream)
+      stop_if_no_post(stream, id)
       stream
     end
 
@@ -278,8 +278,8 @@ module Ayadn
 
     def unfollow(username)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         puts Status.unfollowing(username)
         check_has_been_unfollowed(username, @api.unfollow(username))
       rescue => e
@@ -291,8 +291,8 @@ module Ayadn
 
     def follow(username)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         puts Status.following(username)
         check_has_been_followed(username, @api.follow(username))
       rescue => e
@@ -304,8 +304,8 @@ module Ayadn
 
     def unmute(username)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         puts Status.unmuting(username)
         check_has_been_unmuted(username, @api.unmute(username))
       rescue => e
@@ -317,8 +317,8 @@ module Ayadn
 
     def mute(username)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         puts Status.muting(username)
         check_has_been_muted(username, @api.mute(username))
       rescue => e
@@ -330,8 +330,8 @@ module Ayadn
 
     def unblock(username)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         puts Status.unblocking(username)
         check_has_been_unblocked(username, @api.unblock(username))
       rescue => e
@@ -343,8 +343,8 @@ module Ayadn
 
     def block(username)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         puts Status.blocking(username)
         check_has_been_blocked(username, @api.block(username))
       rescue => e
@@ -423,7 +423,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_hashtag(hashtag)
-        no_data('hashtag') if stream['data'].empty?
+        stop_if_no_data(stream, 'hashtag')
         if options[:extract]
           view_all_hashtag_links(stream, hashtag)
         else
@@ -456,7 +456,7 @@ module Ayadn
           splitted = splitter_all words
           @api.get_search splitted.join(','), options
         end
-        no_data('search') if stream['data'].empty?
+        stop_if_no_data(stream, 'search')
         if options[:users]
           stream['data'].sort_by! {|obj| obj['counts']['followers']}
           stream['data'].each do |obj|
@@ -481,8 +481,8 @@ module Ayadn
 
     def followings(username, options)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         doing(options)
         unless options[:raw]
           list = @api.get_followings(username)
@@ -502,8 +502,8 @@ module Ayadn
 
     def followers(username, options)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         doing(options)
         unless options[:raw]
           list = @api.get_followers(username)
@@ -575,12 +575,12 @@ module Ayadn
 
     def userinfo(username, options)
       begin
-        missing_username if username.empty?
-        username = Workers.add_arobase_if_missing(username)
+        stop_if_no_username(username)
+        username = add_arobase(username)
         doing(options)
         unless options[:raw]
           stream = @api.get_user(username)
-          user_404(username) if meta_404(stream)
+          stop_if_no_user(stream, username)
           if same_username?(stream)
             token = @api.get_token_info
             get_infos(stream['data'], token['data'])
@@ -604,13 +604,10 @@ module Ayadn
         unless options[:raw]
           @view.clear_screen
           response = @api.get_details(post_id, options)
-          post_404(post_id) if meta_404(response)
+          stop_if_no_post(response, post_id)
           resp = response['data']
           response = @api.get_user("@#{resp['user']['username']}")
-          user_404(username) if meta_404(response)
-          if same_username?(response)
-            token = @api.get_token_info
-          end
+          stop_if_no_user(response, response['data']['username'])
           stream = response['data']
           puts "POST:\n".inverse
           @view.show_simple_post([resp], options)
@@ -621,7 +618,7 @@ module Ayadn
           end
           puts "AUTHOR:\n".inverse
           if response['data']['username'] == Settings.config[:identity][:username]
-            @view.show_userinfos(stream, token['data'])
+            @view.show_userinfos(stream, @api.get_token_info['data'])
           else
             @view.show_userinfos(stream, nil)
           end
@@ -654,8 +651,7 @@ module Ayadn
 
     def download(file_id)
       begin
-        resp = @api.get_file(file_id)
-        file = resp['data']
+        file = @api.get_file(file_id)['data']
         FileOps.download_url(file['name'], file['url'])
         puts Status.downloaded(file['name'])
       rescue => e
@@ -683,13 +679,13 @@ module Ayadn
         channel_id = get_channel_id_from_alias(channel_id)
         doing(options)
         resp = @api.get_messages(channel_id, options)
-        (no_new_posts unless Databases.has_new?(resp, "channel:#{channel_id}")) if options[:new]
+        stop_if_no_new_posts(resp, options, "channel:#{channel_id}")
         Databases.save_max_id(resp)
         if options[:raw]
           @view.show_raw(resp)
           exit
         end
-        no_data('messages') if resp['data'].empty?
+        stop_if_no_data(resp, 'messages')
         render_view(resp, options)
         Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
       rescue => e
@@ -704,13 +700,12 @@ module Ayadn
       require 'base64'
       begin
         missing_post_id unless post_id.is_integer?
-        doing
-        resp = get_data_from_response(@api.get_details(post_id, {}))
+        doing()
+        resp = get_data_from_response(@api.get_details(post_id))
         @view.clear_screen
         links = Workers.new.extract_links(resp)
         resp['text'].nil? ? text = "" : text = resp['text']
         usertags << "ADN"
-        post_url = resp['canonical_url']
         handle = "@" + resp['user']['username']
         post_text = "From: #{handle} -- Text: #{text} -- Links: #{links.join(" ")}"
         pinner = Ayadn::PinBoard.new
@@ -721,7 +716,7 @@ module Ayadn
         end
         credentials = pinner.load_credentials
         maker = Struct.new(:username, :password, :url, :tags, :text, :description)
-        bookmark = maker.new(credentials[0], credentials[1], post_url, usertags.join(","), post_text, links[0])
+        bookmark = maker.new(credentials[0], credentials[1], resp['canonical_url'], usertags.join(","), post_text, links[0])
         puts Status.saving_pin
         pinner.pin(bookmark)
         puts Status.done
@@ -736,15 +731,8 @@ module Ayadn
       begin
         @view.clear_screen
         puts Status.auto
-        poster = Post.new
-        # platform = Settings.config[:platform]
-        # case platform
-        # when /mswin|mingw|cygwin/
-          # poster.auto_classic
-        # else
-          require "readline"
-          poster.auto_readline
-        # end
+        require "readline"
+        Post.new.auto_readline
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       ensure
@@ -806,9 +794,8 @@ module Ayadn
     def pmess(username, options = {})
     	begin
         files = FileOps.make_paths(options['embed']) if options['embed']
-        missing_username if username.empty?
-        temp = Workers.add_arobase_if_missing(username)
-        username = [temp]
+        stop_if_no_username(username)
+        username = [add_arobase(username)]
     		messenger = Post.new
         puts Status.message_from(username)
     		puts Status.message
@@ -862,12 +849,12 @@ module Ayadn
         post_id = get_real_post_id(post_id)
       	puts Status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
-        post_404(post_id) if meta_404(replied_to)
+        stop_if_no_post(replied_to, post_id)
         post_id = get_original_id(post_id, replied_to)
         if replied_to['data']['repost_of']
           if post_id == replied_to['data']['repost_of']['id']
             replied_to = @api.get_details(post_id)
-            post_404(post_id) if meta_404(replied_to)
+            stop_if_no_post(replied_to, post_id)
           end
         end
         poster = Post.new
@@ -887,7 +874,7 @@ module Ayadn
         FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.done
-        render_view(@api.get_convo(post_id, {}), {})
+        render_view(@api.get_convo(post_id))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       ensure
@@ -902,21 +889,15 @@ module Ayadn
         itunes = get_track_infos()
         itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
         @view.clear_screen
-        unless options['no_url']
-          store = itunes_request(itunes)
-        end
+        store = itunes_request(itunes) unless options['no_url']
         text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         puts Status.writing
         show_nowplaying("\n#{text_to_post}", options, store)
         unless options['no_url'] || store['code'] != 200
           text_to_post += "\n \n[> Listen](#{store['preview']})"
         end
-        unless STDIN.getch == ("y" || "Y")
-          puts "\nCanceled.\n\n".color(:red)
-          exit
-        end
-        puts "\n"
-        puts Status.yourpost
+        abort(Status.canceled) unless STDIN.getch == ("y" || "Y")
+        puts "\n#{Status.yourpost}"
         unless options['no_url'] || store['code'] != 200
           visible, track, artwork, artwork_thumb = true, store['track'], store['artwork'], store['artwork_thumb']
         else
@@ -974,6 +955,25 @@ module Ayadn
     end
 
     private
+
+    def stop_if_no_data stream, target
+      if stream['data'].empty?
+        Errors.warn "In action/#{target}: no data"
+        abort(Status.empty_list)
+      end
+    end
+
+    def add_arobase username
+      Workers.add_arobase_if_missing(username)
+    end
+
+    def stop_if_no_new_posts stream, options, title
+      if options[:new]
+        unless Databases.has_new?(stream, title)
+          no_new_posts()
+        end
+      end
+    end
 
     def itunes_request itunes
       infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
@@ -1153,31 +1153,31 @@ module Ayadn
       abort(Status.empty_list)
     end
 
-    def meta_404(stream)
-      stream['meta']['code'] == 404
+    def stop_if_no_user stream, username
+      if stream['meta']['code'] == 404
+        puts Status.user_404(username)
+        Errors.info("User #{username} doesn't exist")
+        exit
+      end
     end
 
-    def user_404(username)
-      puts Status.user_404 username
-      Errors.info("User #{username} doesn't exist")
-      exit
-    end
-
-    def post_404(post_id)
-      puts Status.post_404 post_id
-      Errors.info("Impossible to find #{post_id}")
-      exit
+    def stop_if_no_post stream, post_id
+      if stream['meta']['code'] == 404
+        puts Status.post_404(post_id)
+        Errors.info("Impossible to find #{post_id}")
+        exit
+      end
     end
 
     def length_of_index
       Databases.get_index_length
     end
 
-    def get_post_from_index(id)
-      Databases.get_post_from_index(id)
+    def get_post_from_index id
+      Databases.get_post_from_index id
     end
 
-    def get_real_post_id(post_id)
+    def get_real_post_id post_id
       id = post_id.to_i
       if id > 0 && id <= length_of_index
         resp = get_post_from_index(id)
@@ -1186,11 +1186,11 @@ module Ayadn
       post_id
     end
 
-    def render_view(data, options = {}, niceranks = {})
+    def render_view(stream, options = {}, niceranks = {})
       unless options[:raw]
-        get_view(data['data'], options, niceranks)
+        get_view(stream['data'], options, niceranks)
       else
-        @view.show_raw(data)
+        @view.show_raw(stream)
       end
     end
 
@@ -1265,9 +1265,11 @@ module Ayadn
       exit
     end
 
-    def missing_username
-      puts Status.error_missing_username
-      exit
+    def stop_if_no_username username
+      if username.empty?
+        puts Status.error_missing_username
+        exit
+      end
     end
 
     def missing_post_id

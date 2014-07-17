@@ -120,19 +120,6 @@ module Ayadn
       return base
     end
 
-    # def auto_classic
-    #   loop do
-    #     begin
-    #       print "#{Settings.config[:identity][:handle]} >> ".color(:red)
-    #       t = STDIN.gets.chomp
-    #       send_post(t)
-    #       puts Status.done
-    #     rescue Interrupt
-    #       abort(Status.canceled)
-    #     end
-    #   end
-    # end
-
     def auto_readline
       loop do
         begin
@@ -155,17 +142,10 @@ module Ayadn
           post << buffer
         end
       rescue Interrupt
-        #Errors.info "Write post: canceled."
         abort(Status.canceled)
       end
       post
     end
-
-    # def classic
-    #   puts Status.classic
-    #   input_text = STDIN.gets.chomp
-    #   [input_text]
-    # end
 
     def reply(new_post, replied_to)
       replied_to = replied_to.values[0]
