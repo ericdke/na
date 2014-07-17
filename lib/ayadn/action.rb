@@ -764,41 +764,7 @@ module Ayadn
     end
 
     def nowplaying(options = {})
-      begin
-        abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
-        itunes = get_track_infos()
-        itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
-        @view.clear_screen
-        store = itunes_request(itunes) unless options['no_url']
-        text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
-        puts Status.writing
-        show_nowplaying("\n#{text_to_post}", options, store)
-        unless options['no_url'] || store['code'] != 200
-          text_to_post += "\n \n[> Listen](#{store['preview']})"
-        end
-        abort(Status.canceled) unless STDIN.getch == ("y" || "Y")
-        puts "\n#{Status.yourpost}"
-        unless options['no_url'] || store['code'] != 200
-          visible, track, artwork, artwork_thumb = true, store['track'], store['artwork'], store['artwork_thumb']
-        else
-          visible, track, artwork, artwork_thumb = false, false, false, false
-        end
-        dic = {
-          'text' => text_to_post,
-          'title' => track,
-          'artwork' => artwork,
-          'artwork_thumb' => artwork_thumb,
-          'width' => 1200,
-          'height' => 1200,
-          'width_thumb' => 200,
-          'height_thumb' => 200,
-          'visible' => visible
-        }
-        @view.show_posted(Post.new.send_nowplaying(dic))
-      rescue => e
-        puts Status.wtf
-        Errors.global_error({error: e, caller: caller, data: [itunes, store, options]})
-      end
+      options['lastfm'] ? np_lastfm(options) : np_itunes(options)
     end
 
     def random_posts(options)
@@ -833,6 +799,94 @@ module Ayadn
     end
 
     private
+
+    def np_lastfm options
+      require 'rss'
+      require 'open-uri'
+      if Settings.options[:nowplaying]
+        if Settings.options[:nowplaying][:lastfm]
+          user = Settings.options[:nowplaying][:lastfm]
+        else
+          user = create_lastfm_user()
+        end
+      else
+        Settings.options[:nowplaying] = {}
+        user = create_lastfm_user()
+      end
+      url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
+      open(url) do |rss|
+        feed = RSS::Parser.parse(rss)
+        @lfm = feed.items[0]
+      end
+      lfm = @lfm.title.split(' – ')
+      artist, track = lfm[0], lfm[1]
+      store = lastfm_istore_request(artist, track) unless options['no_url']
+      text_to_post = "#nowplaying\n \nTitle: ‘#{track}’\nArtist: #{artist}"
+      post_nowplaying(text_to_post, store, options)
+    end
+
+    def np_itunes options
+      begin
+        abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
+        itunes = get_track_infos()
+        itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
+        store = itunes_istore_request(itunes) unless options['no_url']
+        text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
+        post_nowplaying(text_to_post, store, options)
+      rescue => e
+        puts Status.wtf
+        Errors.global_error({error: e, caller: caller, data: [itunes, store, options]})
+      end
+    end
+
+    def post_nowplaying text_to_post, store, options
+      begin
+        @view.clear_screen
+        puts Status.writing
+        show_nowplaying("\n#{text_to_post}", options, store)
+        unless options['no_url'] || store['code'] != 200
+          #text_to_post += "\n \n[> Listen](#{store['preview']})"
+          text_to_post += "\n \n[iTunes Store](#{store['link']})"
+        end
+        abort(Status.canceled) unless STDIN.getch == ("y" || "Y")
+        puts "\n#{Status.yourpost}"
+        unless options['no_url'] || store['code'] != 200
+          visible, track, artwork, artwork_thumb = true, store['track'], store['artwork'], store['artwork_thumb']
+        else
+          visible, track, artwork, artwork_thumb = false, false, false, false
+        end
+        dic = {
+          'text' => text_to_post,
+          'title' => track,
+          'artwork' => artwork,
+          'artwork_thumb' => artwork_thumb,
+          'width' => 1200,
+          'height' => 1200,
+          'width_thumb' => 200,
+          'height_thumb' => 200,
+          'visible' => visible
+        }
+        @view.show_posted(Post.new.send_nowplaying(dic))
+      rescue => e
+        puts Status.wtf
+        Errors.global_error({error: e, caller: caller, data: [dic, store, options]})
+      end
+    end
+
+    def ask_lastfm_user
+      puts "\nPlease enter your Last.fm username:\n".color(:cyan)
+      begin
+        STDIN.gets.chomp!
+      rescue Interrupt
+        abort(Status.canceled)
+      end
+    end
+
+    def create_lastfm_user
+      Settings.options[:nowplaying][:lastfm] = ask_lastfm_user()
+      Settings.save_config
+      return Settings.options[:nowplaying][:lastfm]
+    end
 
     def nicerank_true
       if Settings.options[:nicerank]
@@ -878,10 +932,20 @@ module Ayadn
       end
     end
 
-    def itunes_request itunes
+    def itunes_istore_request itunes
       infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
       itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&term=#{infos[2]}&media=music&entity=musicTrack"
-      results = JSON.load(CNX.download(itunes_url))['results']
+      get_itunes_store(itunes_url)
+    end
+
+    def lastfm_istore_request artist, track
+      infos = itunes_reg([artist, track])
+      itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&media=music&entity=musicTrack"
+      get_itunes_store(itunes_url)
+    end
+
+    def get_itunes_store url
+      results = JSON.load(CNX.download(url))['results']
       unless results.empty? || results.nil?
         candidate = results[0]
         return {
@@ -889,15 +953,16 @@ module Ayadn
           'artist' => candidate['artistName'],
           'track' => candidate['trackName'],
           'preview' => candidate['previewUrl'],
+          'link' => candidate['collectionViewUrl'],
           'artwork' => candidate['artworkUrl100'].gsub('100x100', '1200x1200'),
           'artwork_thumb' => candidate['artworkUrl100'].gsub('100x100', '600x600'),
-          'request' => itunes_url,
+          'request' => url,
           'results' => results
         }
       else
         return {
           'code' => 404,
-          'request' => itunes_url
+          'request' => url
         }
       end
     end

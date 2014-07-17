@@ -420,6 +420,7 @@ module Ayadn
     map "-np" => :nowplaying
     long_desc Descriptions.nowplaying
     option :no_url, type: :boolean, desc: "Don't append preview or album art at the end of the post"
+    option :lastfm, aliases: "-l", type: :boolean, desc: "Get current track from Last.fm instead of iTunes"
     def nowplaying
       Action.new.nowplaying(options)
     end
