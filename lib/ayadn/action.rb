@@ -802,34 +802,40 @@ module Ayadn
 
     def np_lastfm options
       require 'rss'
-      require 'open-uri'
-      if Settings.options[:nowplaying]
-        if Settings.options[:nowplaying][:lastfm]
-          user = Settings.options[:nowplaying][:lastfm]
+      begin
+        if Settings.options[:nowplaying]
+          if Settings.options[:nowplaying][:lastfm]
+            user = Settings.options[:nowplaying][:lastfm]
+          else
+            user = create_lastfm_user()
+          end
         else
+          Settings.options[:nowplaying] = {}
           user = create_lastfm_user()
         end
-      else
-        Settings.options[:nowplaying] = {}
-        user = create_lastfm_user()
+        puts "\nFetching informations from Last.fm...\n".color(:green)
+        url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
+        feed = RSS::Parser.parse(CNX.download(url))
+        lfm = feed.items[0].title.split(' – ')
+        artist, track = lfm[0], lfm[1]
+        puts "Fetching informations from the Itunes Store...\n".color(:green)
+        store = lastfm_istore_request(artist, track) unless options['no_url']
+        text_to_post = "#nowplaying\n \nTitle: ‘#{track}’\nArtist: #{artist}"
+        post_nowplaying(text_to_post, store, options)
+      rescue => e
+        puts Status.wtf
+        Errors.global_error({error: e, caller: caller, data: [lfm, store, options]})
       end
-      url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
-      open(url) do |rss|
-        feed = RSS::Parser.parse(rss)
-        @lfm = feed.items[0]
-      end
-      lfm = @lfm.title.split(' – ')
-      artist, track = lfm[0], lfm[1]
-      store = lastfm_istore_request(artist, track) unless options['no_url']
-      text_to_post = "#nowplaying\n \nTitle: ‘#{track}’\nArtist: #{artist}"
-      post_nowplaying(text_to_post, store, options)
+
     end
 
     def np_itunes options
       begin
         abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
+        puts "\nFetching informations from iTunes...\n".color(:green)
         itunes = get_track_infos()
         itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
+        puts "Fetching informations from the Itunes Store...\n".color(:green)
         store = itunes_istore_request(itunes) unless options['no_url']
         text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         post_nowplaying(text_to_post, store, options)
@@ -1282,7 +1288,7 @@ module Ayadn
       if options['no_url'] || store['code'] != 200
         puts text + "\n\n\n"
       else
-        puts text + "\n\nAlbum artwork + 30 sec preview for track '#{store['track']}' by '#{store['artist']}' will be inserted in the post.\n\n\n".color(:green)
+        puts text + "\n\nAlbum artwork and link to the iTunes Store for '#{store['track']}' by '#{store['artist']}' will be inserted in the post.\n\n\n".color(:green)
       end
       puts "Do you confirm? (y/N) ".color(:yellow)
     end
