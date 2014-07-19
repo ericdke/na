@@ -1,3 +1,7 @@
+# 1.4.6 - 'Filepaths'
+
+- Temporary fix for filepaths instability when uploading pictures
+
 # 1.4.5 - 'Sébastien'
 
 - Fixed a crash when iTunes Store URL contained exotic characters
