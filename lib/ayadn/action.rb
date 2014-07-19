@@ -816,7 +816,7 @@ module Ayadn
         post_nowplaying(text_to_post, store, options)
       rescue => e
         puts Status.wtf
-        Errors.global_error({error: e, caller: caller, data: [lfm, store, options]})
+        Errors.global_error({error: e, caller: caller, data: [store, options]})
       end
     end
 
@@ -909,6 +909,7 @@ module Ayadn
     end
 
     def get_itunes_store url
+      url = URI.escape(url)
       results = JSON.load(CNX.download(url))['results']
       unless results.empty? || results.nil?
         candidate = results[0]

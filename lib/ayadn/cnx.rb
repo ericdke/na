@@ -14,9 +14,9 @@ module Ayadn
           retry
         end
         puts "\nConnexion error.\n\n".color(:red)
-        Errors.global_error({error: e, caller: caller, data: [url, response]})
+        Errors.global_error({error: e, caller: caller, data: [url]})
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [url, response]})
+        Errors.global_error({error: e, caller: caller, data: [url]})
       end
     end
 
@@ -36,7 +36,7 @@ module Ayadn
         Errors.nr "URL: #{url}"
         return {'meta' => {'code' => 666}, 'data' => "#{e}"}.to_json
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [url, response]})
+        Errors.global_error({error: e, caller: caller, data: [url]})
       end
     end
 
@@ -67,7 +67,7 @@ module Ayadn
         puts "\nConnection error.".color(:red)
         Errors.global_error({error: e, caller: caller, data: [url]})
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [url, response]})
+        Errors.global_error({error: e, caller: caller, data: [url]})
       end
     end
 
