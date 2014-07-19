@@ -1,4 +1,4 @@
-# 1.4.6 - 'Filepaths'
+# 1.4.6 - 'Roman'
 
 - Temporary fix for filepaths instability when uploading pictures
 
