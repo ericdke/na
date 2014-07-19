@@ -909,8 +909,7 @@ module Ayadn
     end
 
     def get_itunes_store url
-      url = URI.escape(url)
-      results = JSON.load(CNX.download(url))['results']
+      results = JSON.load(CNX.download(URI.escape(url)))['results']
       unless results.empty? || results.nil?
         candidate = results[0]
         return {

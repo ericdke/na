@@ -1,3 +1,7 @@
+# 1.4.5 - 'Sébastien'
+
+- Fixed a crash when iTunes Store URL contained exotic characters
+
 # 1.4.4 - 'Randolph'
 
 - Fixed a database problem in PM and SEND
