@@ -1,3 +1,8 @@
+# 1.4.7 - ''
+
+- (internals) `version` is now a proper command
+
+
 # 1.4.6 - 'Roman'
 
 - Temporary fix for filepaths instability when uploading pictures

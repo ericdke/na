@@ -793,6 +793,18 @@ module Ayadn
       end
     end
 
+    def version
+      begin
+        puts "\nAYADN\n".color(:red)
+        puts "Version:\t".color(:cyan) + "#{VERSION}\n".color(:green)
+        puts "Changelog:\t".color(:cyan) + "https://github.com/ericdke/na/blob/master/CHANGELOG.md\n".color(Settings.options[:colors][:link])
+        puts "Docs:\t\t".color(:cyan) + "http://ayadn-app.net/doc/".color(Settings.options[:colors][:link])
+        puts "\n"
+      rescue => e
+        Errors.global_error({error: e, caller: caller, data: []})
+      end
+    end
+
     private
 
     def np_lastfm options
