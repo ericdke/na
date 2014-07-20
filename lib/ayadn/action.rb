@@ -241,27 +241,27 @@ module Ayadn
     def unfollow(usernames)
       begin
         stop_if_no_username(usernames)
-        users = Workers.at(usernames)
+        users = all_but_me(usernames)
         puts Status.unfollowing(users.join(','))
         users.each do |user|
           resp = @api.unfollow(user)
           check_has_been_unfollowed(user, resp)
-          sleep 1
+          sleep 1 unless users.length == 1
         end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username]})
+        Errors.global_error({error: e, caller: caller, data: [usernames]})
       end
     end
 
     def follow(usernames)
       begin
         stop_if_no_username(usernames)
-        users = Workers.at(usernames)
+        users = all_but_me(usernames)
         puts Status.following(users.join(','))
         users.each do |user|
           resp = @api.follow(user)
           check_has_been_followed(user, resp)
-          sleep 1
+          sleep 1 unless users.length == 1
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [usernames]})
@@ -814,6 +814,11 @@ module Ayadn
     end
 
     private
+
+    def all_but_me usernames
+      all_but_me = usernames.select {|user| user != 'me'}
+      Workers.at(all_but_me)
+    end
 
     def np_lastfm options
       require 'rss'

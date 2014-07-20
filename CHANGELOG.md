@@ -1,7 +1,6 @@
-# 1.4.7 - ''
+# 1.4.7 - 'Nozomi'
 
-- (internals) `version` is now a proper command
-
+- Follow/unfollow several users at a time
 
 # 1.4.6 - 'Roman'
 
