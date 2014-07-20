@@ -201,6 +201,11 @@ module Ayadn
         id = get_original_id(post_id, details)
         stream = get_convo id, options
         Databases.pagination["replies:#{id}"] = stream['meta']['max_id']
+        options = options.dup
+        unless details['data']['reply_to'].nil?
+          options[:reply_to] = details['data']['reply_to'].to_i
+        end
+        options[:post_id] = post_id.to_i
         render_view(stream, options)
         Scroll.new(@api, @view).convo(id, options) if options[:scroll]
       rescue => e

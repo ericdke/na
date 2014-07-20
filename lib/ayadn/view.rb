@@ -332,6 +332,7 @@ module Ayadn
       @view = ""
       posts = filter_nicerank(@workers.build_posts(data.reverse, niceranks), options)
       posts.each do |id,content|
+        content[:id] = arrow(options, content)
         if content[:username] == Settings.config[:identity][:username]
           @view << content[:id].to_s.color(Settings.options[:colors][:id]).inverse + " "
         elsif content[:mentions].include?(Settings.config[:identity][:username]) && options[:in_mentions].nil?
@@ -342,6 +343,15 @@ module Ayadn
         @view << build_content(content)
       end
       @view
+    end
+
+    def arrow options, content
+      if options[:reply_to]
+        return content[:id].to_s.prepend('⬇︎ ') if options[:reply_to] == content[:id]
+        return content[:id].to_s.prepend('⬆︎ ') if options[:post_id] == content[:id]
+        return content[:id]
+      end
+      content[:id]
     end
 
     def build_interactions_stream(data)

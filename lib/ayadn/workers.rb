@@ -97,7 +97,6 @@ module Ayadn
     def build_posts(data, niceranks = {})
       # builds a hash of hashes, each hash is a normalized post with post id as a key
       posts = {}
-
       data.each.with_index(1) do |post, index|
         next if Databases.blacklist[post['source']['name'].downcase]
         next if Databases.blacklist["-@#{post['user']['username'].downcase}"]
