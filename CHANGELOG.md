@@ -1,6 +1,7 @@
 # 1.4.7 - 'Nozomi'
 
 - Follow/unfollow several users at a time
+- In 'convo', both the post id you've requested and the post it replies to are marked with arrows
 
 # 1.4.6 - 'Roman'
 

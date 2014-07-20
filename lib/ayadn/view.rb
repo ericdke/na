@@ -314,7 +314,9 @@ module Ayadn
       @view = ""
       posts = filter_nicerank(@workers.build_posts(data.reverse, niceranks), options)
       posts.each do |id,content|
-        count = "%03d" % content[:count]
+        format = "%03d" % content[:count]
+        arrow = arrow_count(options, content)
+        count = "#{arrow}#{format}"
         if content[:username] == Settings.config[:identity][:username]
           @view << count.color(Settings.options[:colors][:index]).inverse
         elsif content[:mentions].include?(Settings.config[:identity][:username]) && options[:in_mentions].nil?
@@ -332,26 +334,35 @@ module Ayadn
       @view = ""
       posts = filter_nicerank(@workers.build_posts(data.reverse, niceranks), options)
       posts.each do |id,content|
-        content[:id] = arrow(options, content)
+        content[:id] = arrow_id(options, content)
         if content[:username] == Settings.config[:identity][:username]
-          @view << content[:id].to_s.color(Settings.options[:colors][:id]).inverse + " "
+          @view << content[:id].color(Settings.options[:colors][:id]).inverse + " "
         elsif content[:mentions].include?(Settings.config[:identity][:username]) && options[:in_mentions].nil?
-          @view << content[:id].to_s.color(Settings.options[:colors][:mentions]).inverse + " "
+          @view << content[:id].color(Settings.options[:colors][:mentions]).inverse + " "
         else
-          @view << content[:id].to_s.color(Settings.options[:colors][:id]) + " "
+          @view << content[:id].color(Settings.options[:colors][:id]) + " "
         end
         @view << build_content(content)
       end
       @view
     end
 
-    def arrow options, content
+    def arrow_count options, content
+      if options[:reply_to]
+        return '⬇︎ ' if options[:reply_to] == content[:id]
+        return '⬆︎ ' if options[:post_id] == content[:id]
+        return ''
+      end
+      ''
+    end
+
+    def arrow_id options, content
       if options[:reply_to]
         return content[:id].to_s.prepend('⬇︎ ') if options[:reply_to] == content[:id]
         return content[:id].to_s.prepend('⬆︎ ') if options[:post_id] == content[:id]
-        return content[:id]
+        return content[:id].to_s
       end
-      content[:id]
+      content[:id].to_s
     end
 
     def build_interactions_stream(data)
