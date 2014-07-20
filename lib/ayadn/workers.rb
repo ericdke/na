@@ -271,6 +271,18 @@ module Ayadn
       "#{string[0...10]} #{string[11...19]}"
     end
 
+    def self.at usernames
+      usernames.map do |user|
+        if user == 'me'
+          'me'
+        elsif user[0] == '@'
+          user
+        else
+          "@#{user}"
+        end
+      end
+    end
+
     def self.add_arobase_if_missing(username) # expects an array of username(s), works on the first one and outputs a string
       unless username.first == "me"
         username = username.first.chars

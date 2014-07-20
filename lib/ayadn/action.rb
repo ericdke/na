@@ -238,25 +238,33 @@ module Ayadn
       end
     end
 
-    def unfollow(username)
+    def unfollow(usernames)
       begin
-        stop_if_no_username(username)
-        username = add_arobase(username)
-        puts Status.unfollowing(username)
-        check_has_been_unfollowed(username, @api.unfollow(username))
+        stop_if_no_username(usernames)
+        users = Workers.at(usernames)
+        puts Status.unfollowing(users.join(','))
+        users.each do |user|
+          resp = @api.unfollow(user)
+          check_has_been_unfollowed(user, resp)
+          sleep 1
+        end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username]})
       end
     end
 
-    def follow(username)
+    def follow(usernames)
       begin
-        stop_if_no_username(username)
-        username = add_arobase(username)
-        puts Status.following(username)
-        check_has_been_followed(username, @api.follow(username))
+        stop_if_no_username(usernames)
+        users = Workers.at(usernames)
+        puts Status.following(users.join(','))
+        users.each do |user|
+          resp = @api.follow(user)
+          check_has_been_followed(user, resp)
+          sleep 1
+        end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username]})
+        Errors.global_error({error: e, caller: caller, data: [usernames]})
       end
     end
 

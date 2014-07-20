@@ -154,12 +154,12 @@ module Ayadn
       JSON.parse(CNX.post(Endpoints.new.star(post_id)))
     end
 
-    def follow(post_id)
-      JSON.parse(CNX.post(Endpoints.new.follow(post_id)))
+    def follow(username)
+      JSON.parse(CNX.post(Endpoints.new.follow(username)))
     end
 
-    def mute(post_id)
-      JSON.parse(CNX.post(Endpoints.new.mute(post_id)))
+    def mute(username)
+      JSON.parse(CNX.post(Endpoints.new.mute(username)))
     end
 
     def block(username)
