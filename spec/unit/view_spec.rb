@@ -100,18 +100,18 @@ describe Ayadn::View do
     end
   end
 
-  let(:followers) { JSON.parse(File.read("spec/mock/fwr_@ayadn.json")) }
+  # let(:followers) { JSON.parse(File.read("spec/mock/fwr_@ayadn.json")) }
 
-  describe "#show_list_followers" do
-    it "outputs the list of followers" do
-      list = Ayadn::Workers.extract_users(followers[0])
-      printed = capture_stdout do
-        Ayadn::View.new.show_list_followers(list, '@ayadn')
-      end
-      expect(printed).to include "@ericd"
-      expect(printed).to include "Nicolas Maumont"
-    end
-  end
+  # describe "#show_list_followers" do
+  #   it "outputs the list of followers" do
+  #     list = Ayadn::Workers.extract_users(followers[0])
+  #     printed = capture_stdout do
+  #       Ayadn::View.new.show_list_followers(list, '@ayadn')
+  #     end
+  #     expect(printed).to include "@ericd"
+  #     expect(printed).to include "Nicolas Maumont"
+  #   end
+  # end
 
 
 

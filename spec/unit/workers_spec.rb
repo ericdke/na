@@ -81,53 +81,52 @@ describe Ayadn::Workers do
     end
   end
 
-  let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
+  # let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
-  describe "#build_followers_list" do
-    it 'builds the followers table list' do
-      printed = capture_stdout do
-        puts Ayadn::Workers.new.build_followers_list(list, "@test")
-      end
-      #expect(printed).to include "+----"
-      expect(printed).to include "@test"
-      expect(printed).to include "@bond"
-      expect(printed).to include "Mr Test"
-    end
-  end
+  # describe "#build_followers_list" do
+  #   it 'builds the followers table list' do
+  #     printed = capture_stdout do
+  #       puts Ayadn::Workers.new.build_followers_list(list, "@test")
+  #     end
+  #     expect(printed).to include "@test"
+  #     expect(printed).to include "@bond"
+  #     expect(printed).to include "Mr Test"
+  #   end
+  # end
 
-  describe "#build_followings_list" do
-    it 'builds the followings table list' do
-      printed = capture_stdout do
-        puts Ayadn::Workers.new.build_followings_list(list, "@test")
-      end
-      #expect(printed).to include "+~~~~"
-      expect(printed).to include "@test"
-      expect(printed).to include "@bond"
-      expect(printed).to include "Mr Test"
-    end
-  end
+  # describe "#build_followings_list" do
+  #   it 'builds the followings table list' do
+  #     printed = capture_stdout do
+  #       puts Ayadn::Workers.new.build_followings_list(list, "@test")
+  #     end
+  #     #expect(printed).to include "+~~~~"
+  #     expect(printed).to include "@test"
+  #     expect(printed).to include "@bond"
+  #     expect(printed).to include "Mr Test"
+  #   end
+  # end
 
-  describe "#build_muted_list" do
-    it 'builds the muted table list' do
-      printed = capture_stdout do
-        puts Ayadn::Workers.new.build_muted_list(list)
-      end
-      #expect(printed).to include "+----"
-      expect(printed).to include "@bond"
-      expect(printed).to include "Mr Test"
-    end
-  end
+  # describe "#build_muted_list" do
+  #   it 'builds the muted table list' do
+  #     printed = capture_stdout do
+  #       puts Ayadn::Workers.new.build_muted_list(list)
+  #     end
+  #     #expect(printed).to include "+----"
+  #     expect(printed).to include "@bond"
+  #     expect(printed).to include "Mr Test"
+  #   end
+  # end
 
-  describe "#build_blocked_list" do
-    it 'builds the blocked table list' do
-      printed = capture_stdout do
-        puts Ayadn::Workers.new.build_blocked_list(list)
-      end
-      #expect(printed).to include "+----"
-      expect(printed).to include "@bond"
-      expect(printed).to include "Mr Test"
-    end
-  end
+  # describe "#build_blocked_list" do
+  #   it 'builds the blocked table list' do
+  #     printed = capture_stdout do
+  #       puts Ayadn::Workers.new.build_blocked_list(list)
+  #     end
+  #     #expect(printed).to include "+----"
+  #     expect(printed).to include "@bond"
+  #     expect(printed).to include "Mr Test"
+  #   end
+  # end
 
   describe ".add_arobase_if_missing" do
     it 'adds @ to username' do
