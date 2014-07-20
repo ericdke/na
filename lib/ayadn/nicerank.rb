@@ -7,13 +7,21 @@ module Ayadn
     end
 
     def from_ids ids
-      got = CNX.get "#{@url}#{ids.join(',')}&show_details=Y" #TODO: if more than 200 ids
+      blocs, ranks = [], []
       blank = JSON.parse({'meta' => {'code' => 404}, 'data' => []}.to_json)
-      if got.nil? || got == ""
-        blank
-      else
-        JSON.parse(got)
+      until ids.empty?
+        blocs << ids.shift(200)
       end
+      blocs.each do |bloc|
+        got = CNX.get("#{@url}#{bloc.join(',')}&show_details=Y")
+        if got.nil? || got.empty?
+          ranks << [{}]
+        else
+          resps = JSON.parse(got)
+          ranks << resps['data']
+        end
+      end
+      return ranks.flatten!
     end
 
     def get_ranks stream

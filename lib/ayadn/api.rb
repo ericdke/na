@@ -301,7 +301,8 @@ module Ayadn
       loop do
         resp = get_parsed_response(get_list_url(username, target, options))
         abort(Status.user_404(username)) if resp['meta']['code'] == 404
-        big_hash.merge!(Workers.extract_users(resp))
+        users = Workers.extract_users(resp)
+        big_hash.merge!(users)
         break if resp['meta']['min_id'] == nil
         options = {:count => 200, :before_id => resp['meta']['min_id']}
       end

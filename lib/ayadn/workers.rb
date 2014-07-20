@@ -80,35 +80,38 @@ module Ayadn
       build_users_list(build_users_array(list), table)
     end
 
-    def build_users_list(list, table) #TODO: if ranks resp is empty
+    def build_users_list(list, table)
       users = Workers.at(list.map {|obj| obj[:username]})
       ids = list.map {|obj| obj[:id].to_i}
-      ranks = NiceRank.new.from_ids(ids)['data']
+      ranks = NiceRank.new.from_ids(ids)
       indexed_ranks = {}
-      ranks.each {|r| indexed_ranks[r['user_id']] = r }
-      table << ['USERNAME'.color(:red), 'NAME'.color(:red), 'POSTS/DAY'.color(:red), 'LAST POST'.color(:red)]
+      ranks.each do |r|
+        if r.empty?
+          indexed_ranks = false
+          break
+        else
+          indexed_ranks[r['user_id']] = r
+        end
+      end
+      table << ['USERNAME'.color(:red), 'NAME'.color(:red), 'POSTS/DAY'.color(:red)]
       table << :separator
       list.each_with_index do |obj, index|
-        if indexed_ranks[obj[:id].to_i]['user']['posts_day'] == -1
-          posts_day = 0
+        unless indexed_ranks == false
+          details = indexed_ranks[obj[:id].to_i]
+          if details['user']['posts_day'] == -1
+            posts_day = 'ignored'
+          else
+            posts_day = details['user']['posts_day'].round(2).to_s
+          end
         else
-          posts_day = indexed_ranks[obj[:id].to_i]['user']['posts_day'].round(2)
+          posts_day = 'unknown'
         end
-        if indexed_ranks[obj[:id].to_i]['user']['days_idle'] == -1
-          days_idle = 'Never posted'
-        elsif indexed_ranks[obj[:id].to_i]['user']['days_idle'] == 0
-          days_idle = 'Today'
-        elsif indexed_ranks[obj[:id].to_i]['user']['days_idle'] == 1
-          days_idle = 'Yesterday'
+        obj[:username].length > 23 ? username = "#{obj[:username][0..20]}..." : username = obj[:username]
+        unless obj[:name].nil? || obj[:name].empty?
+          obj[:name].length > 23 ? name = "#{obj[:name][0..20]}..." : name = obj[:name]
+          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}", posts_day ]
         else
-          days_idle = "#{indexed_ranks[obj[:id].to_i]['user']['days_idle'].to_s} days ago"
-        end
-        obj[:username].length > 35 ? username = "#{obj[:username][0...32]}..." : username = obj[:username]
-        unless obj[:name].nil?
-          obj[:name].length > 35 ? name = "#{obj[:name][0...32]}..." : name = obj[:name]
-          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}", posts_day, "#{days_idle}" ]
-        else
-          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "", posts_day, "#{days_idle}" ]
+          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "", posts_day ]
         end
         table << :separator unless index + 1 == list.length
       end
