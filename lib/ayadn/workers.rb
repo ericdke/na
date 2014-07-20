@@ -25,7 +25,7 @@ module Ayadn
       users_list = []
       list.each do |obj|
         obj['name'].nil? ? name = "" : name = obj['name']
-        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you']}
+        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id']}
       end
       table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       return users_list, table
@@ -37,7 +37,7 @@ module Ayadn
       users_list = []
       list.each do |obj|
         obj['name'].nil? ? name = "" : name = obj['name']
-        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you']}
+        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id']}
       end
       table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       return users_list, table
@@ -80,14 +80,35 @@ module Ayadn
       build_users_list(build_users_array(list), table)
     end
 
-    def build_users_list(list, table)
+    def build_users_list(list, table) #TODO: if ranks resp is empty
+      users = Workers.at(list.map {|obj| obj[:username]})
+      ids = list.map {|obj| obj[:id].to_i}
+      ranks = NiceRank.new.from_ids(ids)['data']
+      indexed_ranks = {}
+      ranks.each {|r| indexed_ranks[r['user_id']] = r }
+      table << ['USERNAME'.color(:red), 'NAME'.color(:red), 'POSTS/DAY'.color(:red), 'LAST POST'.color(:red)]
+      table << :separator
       list.each_with_index do |obj, index|
+        if indexed_ranks[obj[:id].to_i]['user']['posts_day'] == -1
+          posts_day = 0
+        else
+          posts_day = indexed_ranks[obj[:id].to_i]['user']['posts_day'].round(2)
+        end
+        if indexed_ranks[obj[:id].to_i]['user']['days_idle'] == -1
+          days_idle = 'Never posted'
+        elsif indexed_ranks[obj[:id].to_i]['user']['days_idle'] == 0
+          days_idle = 'Today'
+        elsif indexed_ranks[obj[:id].to_i]['user']['days_idle'] == 1
+          days_idle = 'Yesterday'
+        else
+          days_idle = "#{indexed_ranks[obj[:id].to_i]['user']['days_idle'].to_s} days ago"
+        end
         obj[:username].length > 35 ? username = "#{obj[:username][0...32]}..." : username = obj[:username]
         unless obj[:name].nil?
           obj[:name].length > 35 ? name = "#{obj[:name][0...32]}..." : name = obj[:name]
-          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}" ]
+          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}", posts_day, "#{days_idle}" ]
         else
-          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "" ]
+          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "", posts_day, "#{days_idle}" ]
         end
         table << :separator unless index + 1 == list.length
       end
@@ -415,7 +436,7 @@ module Ayadn
     def build_users_array(list)
       users_list = []
       list.each do |key, value|
-        users_list << {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3]}
+        users_list << {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3], :id => key}
       end
       users_list
     end

@@ -6,6 +6,16 @@ module Ayadn
       @url = 'http://api.nice.social/user/nicerank?ids='
     end
 
+    def from_ids ids
+      got = CNX.get "#{@url}#{ids.join(',')}&show_details=Y" #TODO: if more than 200 ids
+      blank = JSON.parse({'meta' => {'code' => 404}, 'data' => []}.to_json)
+      if got.nil? || got == ""
+        blank
+      else
+        JSON.parse(got)
+      end
+    end
+
     def get_ranks stream
       user_ids, get_these, table, niceranks = [], [], {}, {}
 
