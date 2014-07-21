@@ -17,7 +17,7 @@ module Ayadn
       puts resp unless resp == ""
     end
 
-    def show_raw(stream)
+    def show_raw(stream, options = {})
       #puts stream.to_json
       jj stream
     end

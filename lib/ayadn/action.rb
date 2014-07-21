@@ -132,10 +132,7 @@ module Ayadn
       begin
         doing(options)
         stream = @api.get_interactions
-        if options[:raw]
-          @view.show_raw(stream, options)
-          exit
-        end
+        if_raw_show(stream, options)
         @view.clear_screen
         @view.show_interactions(stream['data'])
       rescue => e
@@ -165,10 +162,7 @@ module Ayadn
         stop_if_404(details, post_id)
         id = get_original_id(post_id, details)
         list = @api.get_whoreposted(id)
-        if options[:raw]
-          @view.show_raw(list, options)
-          exit
-        end
+        if_raw_show(list, options)
         unless list['data'].empty?
           get_list(:whoreposted, list['data'], post_id)
         else
@@ -187,10 +181,7 @@ module Ayadn
         stop_if_404(details, post_id)
         id = get_original_id(post_id, details)
         list = @api.get_whostarred(id)
-        if options[:raw]
-          @view.show_raw(list, options)
-          exit
-        end
+        if_raw_show(list, options)
         unless list['data'].empty?
           get_list(:whostarred, list['data'], id)
         else
@@ -444,10 +435,7 @@ module Ayadn
         stop_if_no_username(username)
         username = add_arobase(username)
         doing(options)
-        if options[:raw]
-          @view.show_raw(@api.get_raw_list(username, :followings), options)
-          exit
-        end
+        if_raw_list(username, :followings, options)
         list = @api.get_followings(username)
         auto_save_followings(list)
         no_data('followings') if list.empty?
@@ -463,10 +451,7 @@ module Ayadn
         stop_if_no_username(username)
         username = add_arobase(username)
         doing(options)
-        if options[:raw]
-          @view.show_raw(@api.get_raw_list(username, :followers), options)
-          exit
-        end
+        if_raw_list(username, :followers, options)
         list = @api.get_followers(username)
         auto_save_followers(list)
         no_data('followers') if list.empty?
@@ -480,10 +465,7 @@ module Ayadn
     def muted(options)
       begin
         doing(options)
-        if options[:raw]
-          @view.show_raw(@api.get_raw_list(nil, :muted), options)
-          exit
-        end
+        if_raw_list(nil, :muted, options)
         list = @api.get_muted
         auto_save_muted(list)
         no_data('muted') if list.empty?
@@ -497,10 +479,7 @@ module Ayadn
     def blocked(options)
       begin
         doing(options)
-        if options[:raw]
-          @view.show_raw(@api.get_raw_list(nil, :blocked), options)
-          exit
-        end
+        if_raw_list(nil, :blocked, options)
         list = @api.get_blocked
         no_data('blocked') if list.empty?
         get_list(:blocked, list, nil)
@@ -541,7 +520,8 @@ module Ayadn
         stop_if_bad_post_id(post_id)
         doing(options)
         if options[:raw]
-          @view.show_raw(@api.get_details(post_id, options), options)
+          details = @api.get_details(post_id, options)
+          @view.show_raw(details, options)
           exit
         end
         @view.clear_screen
@@ -612,10 +592,7 @@ module Ayadn
         resp = @api.get_messages(channel_id, options)
         stop_if_no_new_posts(resp, options, "channel:#{channel_id}")
         Databases.save_max_id(resp)
-        if options[:raw]
-          @view.show_raw(resp, options)
-          exit
-        end
+        if_raw_show(resp, options)
         stop_if_no_data(resp, 'messages')
         render_view(resp, options)
         Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
@@ -852,6 +829,20 @@ module Ayadn
     end
 
     private
+
+    def if_raw_list username, what, options
+      if options[:raw]
+        @view.show_raw(@api.get_raw_list(username, what), options)
+        exit
+      end
+    end
+
+    def if_raw_show what, options
+      if options[:raw]
+        @view.show_raw(what, options)
+        exit
+      end
+    end
 
     def all_but_me usernames
       all_but_me = usernames.select {|user| user != 'me'}
