@@ -6,6 +6,7 @@
 - Users lists include number of posts/day
 - Shortcut for embed pictures is now -E instead of -e
 - Added NowPlaying annotations
+- Documentation is included in the repo
 - A few fixes
 
 # 1.4.6 - 'Roman'

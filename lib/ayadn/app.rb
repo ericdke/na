@@ -5,6 +5,9 @@ module Ayadn
 
     %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug}.each { |r| require_relative "#{r}" }
 
+    ##
+    # These methods are intended to be called from the CLI.
+
     desc "timeline", "Show your App.net timeline, aka the Unified Stream (-tl)"
     map "unified" => :timeline
     map "-tl" => :timeline
