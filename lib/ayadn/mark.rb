@@ -4,6 +4,7 @@ module Ayadn
 
     desc "add POST_ID (TITLE)", "Create a bookmark for this conversation"
     long_desc Descriptions.mark_add
+    map "create" => :add
     def add(*args)
       begin
         unless args.empty?
@@ -97,6 +98,7 @@ module Ayadn
     end
 
     desc "delete POST_ID", "Delete entry POST_ID from your bookmarked conversations"
+    map "remove" => :delete
     long_desc Descriptions.mark_delete
     def delete *args
       begin

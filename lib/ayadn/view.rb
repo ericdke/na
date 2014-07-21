@@ -133,7 +133,7 @@ module Ayadn
       view << "\n\nFollowing\t\t".color(:cyan) + content['counts']['following'].to_s.color(:green)
       view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:green)
 
-      if content['username'] == Settings.config[:identity][:username]
+      if content['username'] == Settings.config[:identity][:username] && !token.nil?
         view << "\n\nStorage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(:red)
         view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(:green)
       end

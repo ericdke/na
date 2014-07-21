@@ -646,14 +646,8 @@ module Ayadn
         writer = Post.new
         @view.clear_screen
         if options['embed']
-          if options['embed'].length > 1 # if args are inversed on the cl
-            opts = options['embed'].dup
-            embed = [opts.shift]
-            text = opts.join(" ")
-          else
-            embed = options['embed']
-            text = args.join(" ")
-          end
+          embed = options['embed']
+          text = args.join(" ")
           puts Status.uploading(embed)
           resp = writer.send_embedded(text, FileOps.make_paths(embed))
         else
