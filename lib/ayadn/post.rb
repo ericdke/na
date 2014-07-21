@@ -46,6 +46,26 @@ module Ayadn
       ann = annotations()
       if dic['visible'] == true
         ann << {
+          "type" => "com.ayadn.nowplaying",
+            "value" => {
+              "title" => dic['title'],
+              "artist" => dic['artist'],
+              "artwork" => dic['artwork'],
+              "link" => dic['link'],
+              "source" => dic['source']
+            }
+        }
+      else
+        ann << {
+          "type" => "com.ayadn.nowplaying",
+            "value" => {
+              "status" => "no-url",
+              "source" => dic['source']
+            }
+        }
+      end
+      if dic['visible'] == true
+        ann << {
           "type" => "net.app.core.oembed",
           "value" => {
             "version" => "1.0",

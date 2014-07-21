@@ -4,6 +4,8 @@
 - In 'convo', both the post id you've requested, and the post it replies to, are marked with arrows
 - Faster users lists generation (followers, etc)
 - Users lists include number of posts/day
+- Shortcut for embed pictures is now -E instead of -e
+- Added NowPlaying annotations
 - A few fixes
 
 # 1.4.6 - 'Roman'

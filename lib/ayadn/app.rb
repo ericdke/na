@@ -347,7 +347,7 @@ module Ayadn
     desc "post Your text", "Simple post to App.net (-P)"
     map "-P" => :post
     long_desc Descriptions.post
-    option :embed, aliases: "-e", type: :array, desc: "Embed one or several pictures in the new post"
+    option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     def post(*args)
       Action.new.post(args, options)
     end
@@ -356,14 +356,14 @@ module Ayadn
     map "compose" => :write
     map "-W" => :write
     long_desc Descriptions.write
-    option :embed, aliases: "-e", type: :array, desc: "Embed one or several pictures in the new post"
+    option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     def write
       Action.new.write(options)
     end
 
     desc "pm @USERNAME", "Send a private message to @username"
     long_desc Descriptions.pmess
-    option :embed, aliases: "-e", type: :array, desc: "Embed one or several pictures in the new post"
+    option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     def pm(*username)
       Action.new.pmess(username, options)
     end
@@ -378,7 +378,7 @@ module Ayadn
     desc "reply POST", "Reply to post n°POST (-R)"
     map "-R" => :reply
     long_desc Descriptions.reply
-    option :embed, aliases: "-e", type: :array, desc: "Embed one or several pictures in the new post"
+    option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     def reply(id)
       ayadn = Action.new
       ayadn.reply(id, options)

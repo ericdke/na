@@ -900,26 +900,33 @@ module Ayadn
         @view.clear_screen
         puts Status.writing
         show_nowplaying("\n#{text_to_post}", options, store)
-        unless options['no_url'] || store['code'] != 200
-          #text_to_post += "\n \n[> Listen](#{store['preview']})"
+        unless options['no_url'] || store.nil?
           text_to_post += "\n \n[iTunes Store](#{store['link']})"
         end
         abort(Status.canceled) unless STDIN.getch == ("y" || "Y")
         puts "\n#{Status.yourpost}"
-        unless options['no_url'] || store['code'] != 200
-          visible, track, artwork, artwork_thumb = true, store['track'], store['artwork'], store['artwork_thumb']
+        unless store.nil? || options['no_url']
+          visible, track, artwork, artwork_thumb, link, artist = true, store['track'], store['artwork'], store['artwork_thumb'], store['link'], store['artist']
         else
-          visible, track, artwork, artwork_thumb = false
+          visible, track, artwork, artwork_thumb, link, artist = false
+        end
+        if options['lastfm']
+          source = 'Last.fm'
+        else
+          source = 'iTunes'
         end
         dic = {
           'text' => text_to_post,
           'title' => track,
+          'artist' => artist,
           'artwork' => artwork,
           'artwork_thumb' => artwork_thumb,
           'width' => 1200,
           'height' => 1200,
           'width_thumb' => 200,
           'height_thumb' => 200,
+          'link' => link,
+          'source' => source,
           'visible' => visible
         }
         @view.show_posted(Post.new.send_nowplaying(dic))
