@@ -414,7 +414,7 @@ module Ayadn
           stream['data'].sort_by! {|obj| obj['counts']['followers']}
           stream['data'].each do |obj|
             puts @view.big_separator
-            @view.show_userinfos(obj, nil)
+            @view.show_userinfos(obj, nil, false)
           end
         elsif options[:channels]
           @view.show_channels stream, options
@@ -503,7 +503,8 @@ module Ayadn
         username = add_arobase(username)
         doing(options)
         if options[:raw]
-          @view.show_raw(@api.get_user(username), options)
+          resp = @api.get_user(username)
+          @view.show_raw(resp, options)
           exit
         end
         stream = @api.get_user(username)
@@ -1268,7 +1269,7 @@ module Ayadn
 
     def get_infos(stream, token)
       @view.clear_screen
-      @view.show_userinfos(stream, token)
+      @view.show_userinfos(stream, token, true)
     end
 
     def get_list(what, list, target)

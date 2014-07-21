@@ -6,6 +6,21 @@ module Ayadn
       @url = 'http://api.nice.social/user/nicerank?ids='
     end
 
+    def get_posts_day ids
+      resp = JSON.parse(CNX.get("#{@url}#{ids.join(',')}&show_details=Y"))
+      if resp.nil? || resp['meta']['code'] != 200
+        []
+      else
+        resp['data'].map do |obj|
+          pday = obj['user']['posts_day'] == -1 ? 0 : obj['user']['posts_day']
+          {
+            id: obj['user_id'],
+            posts_day:pday.round(2)
+          }
+        end
+      end
+    end
+
     def from_ids ids
       blocs, ranks = [], []
       blank = JSON.parse({'meta' => {'code' => 404}, 'data' => []}.to_json)

@@ -101,7 +101,7 @@ module Ayadn
       puts table
     end
 
-    def show_userinfos(content, token)
+    def show_userinfos(content, token, show_ranks = false)
       if content['name']
         view = "Name\t\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
       else
@@ -129,6 +129,16 @@ module Ayadn
       view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(:green)
 
       view << "\n\nPosts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(:green)
+
+
+      unless Settings.options[:nicerank].nil? || show_ranks == false
+        # this is ok for one user, but do not call this in a loop
+        # do call them all at once instead if many
+        ranks = NiceRank.new.get_posts_day([content['id'].to_i])
+        unless ranks.empty?
+          view << "\n\nPosts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(:green)
+        end
+      end
 
       view << "\n\nFollowing\t\t".color(:cyan) + content['counts']['following'].to_s.color(:green)
       view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:green)
