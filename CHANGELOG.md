@@ -1,11 +1,11 @@
 # 1.4.7 - 'Nozomi'
 
+- In 'convo', both the post id you've requested and the post it replies to are marked with arrows
 - Follow/unfollow several users at a time
-- In 'convo', both the post id you've requested, and the post it replies to, are marked with arrows
-- Faster users lists generation (followers, etc)
+- Much faster users lists generation (followers, muted, etc)
 - Users lists include number of posts/day
 - User info (-ui) includes number of posts/day
-- Shortcut for embed pictures is now -E instead of -e
+- Shortcut for embed pictures is now -E (to avoid confusion with the `-e` of extract links option)
 - Added NowPlaying annotations
 - Documentation is included in the repo
 - A few fixes

@@ -38,13 +38,7 @@ module Ayadn
     end
 
     def self.init(path)
-      # winPlatforms = ['mswin', 'mingw', 'mingw_18', 'mingw_19', 'mingw_20', 'mingw32']
-      # case RbConfig::CONFIG['host_os']
-      # when *winPlatforms
-      #   abort("\nSorry, Ayadn doesn't work on Windows.\n\n".color(:red))
-      # else
         Daybreak::DB.new "#{path}"
-      # end
     end
 
     def self.add_niceranks niceranks
