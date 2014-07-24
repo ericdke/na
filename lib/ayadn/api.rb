@@ -239,42 +239,19 @@ module Ayadn
     end
 
     def self.build_query(arg)
-      count = Settings.options[:counts][:default]
-      if arg[:count]
-        if arg[:count].to_s.is_integer?
-          count = arg[:count]
-        end
-      end
-      directed = Settings.options[:timeline][:directed]
-      if arg[:directed]
-        if arg[:directed] == 0 || arg[:directed] == 1
-          directed = arg[:directed]
-        end
-      end
-      deleted = Settings.options[:timeline][:deleted]
-      if arg[:deleted]
-        if arg[:deleted] == 0 || arg[:deleted] == 1
-          deleted = arg[:deleted]
-        end
-      end
-      html = Settings.options[:timeline][:html]
-      if arg[:html]
-        if arg[:html] == 0 || arg[:html] == 1
-          html = arg[:html]
-        end
-      end
-      annotations = Settings.options[:timeline][:annotations]
-      if arg[:annotations]
-        if arg[:annotations] == 0 || arg[:annotations] == 1
-          annotations = arg[:annotations]
-        end
-      end
-      if arg[:since_id]
-        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&since_id=#{arg[:since_id]}"
-      elsif arg[:recent_message]
-        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}&include_recent_message=#{arg[:recent_message]}"
+      if arg[:count].to_s.is_integer?
+        count = arg[:count]
       else
-        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=#{deleted}&include_annotations=#{annotations}"
+        count = Settings.options[:counts][:default]
+      end
+      directed = arg[:directed] || Settings.options[:timeline][:directed]
+      html = arg[:html] || Settings.options[:timeline][:html]
+      if arg[:since_id]
+        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=0&include_annotations=1&since_id=#{arg[:since_id]}"
+      elsif arg[:recent_message]
+        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=0&include_annotations=1&include_recent_message=#{arg[:recent_message]}"
+      else
+        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=0&include_annotations=1"
       end
     end
 

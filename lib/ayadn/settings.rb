@@ -95,6 +95,7 @@ module Ayadn
           conf[:nicerank] = @default_nr if conf[:nicerank].nil? || conf[:nicerank].size != 4
           conf[:timeline][:show_debug] = false if conf[:timeline][:show_debug].nil?
           conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
+          conf[:nowplaying] = {} if conf[:nowplaying].nil?
 
           @options = conf
           self.write_config_file(config_file, @options)
@@ -217,7 +218,8 @@ module Ayadn
         scroll: {
           timer: 3
         },
-        nicerank: @default_nr
+        nicerank: @default_nr,
+        nowplaying: {}
       }
     end
 

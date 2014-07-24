@@ -854,16 +854,7 @@ module Ayadn
     def np_lastfm options
       require 'rss'
       begin
-        if Settings.options[:nowplaying]
-          if Settings.options[:nowplaying][:lastfm]
-            user = Settings.options[:nowplaying][:lastfm]
-          else
-            user = create_lastfm_user()
-          end
-        else
-          Settings.options[:nowplaying] = {}
-          user = create_lastfm_user()
-        end
+        user = Settings.options[:nowplaying][:lastfm] || create_lastfm_user()
         puts Status.fetching_from('Last.fm')
         artist, track = get_lastfm_track_infos(user)
         puts Status.itunes_store
