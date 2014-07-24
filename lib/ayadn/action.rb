@@ -1025,11 +1025,7 @@ module Ayadn
     end
 
     def nicerank_true
-      if Settings.options[:nicerank]
-        if Settings.options[:nicerank][:filter] == true
-          return true
-        end
-      end
+      return true if Settings.options[:nicerank][:filter] == true
     end
 
     def stop_if_bad_post_id post_id

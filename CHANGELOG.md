@@ -1,4 +1,4 @@
-# 1.4.7 - 'Nozomi'
+# 1.5.0 - 'Nozomi'
 
 - In 'convo', both the post id you've requested and the post it replies to are marked with arrows
 - Same feature in the view after a reply
@@ -10,7 +10,7 @@
 - Added NowPlaying annotations
 - Documentation is included in the repo
 - Skipped objects are logged if debug is enabled
-- Force delete obsolete config keys
+- Force delete obsolete config keys / force create mandatory ones (less checks in the code, more stability)
 
 # 1.4.6 - 'Roman'
 

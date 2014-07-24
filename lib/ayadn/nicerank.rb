@@ -49,16 +49,7 @@ module Ayadn
       user_ids.uniq!
 
       db_ranks = Databases.get_niceranks user_ids
-      if Settings.options[:nicerank].nil?
-        expire = 172800 # 48h
-      else
-        if Settings.options[:nicerank][:cache].nil?
-          Settings.options[:nicerank][:cache] = 48
-          expire = 172800
-        else
-          expire = Settings.options[:nicerank][:cache] * 3600
-        end
-      end
+      expire = Settings.options[:nicerank][:cache] * 3600 # Time.now needs seconds
 
       db_ranks.each do |id, ranks|
         if ranks.nil? || (Time.now - ranks[:cached]) > expire

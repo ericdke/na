@@ -83,7 +83,7 @@ module Ayadn
         @iter = 0
         opts = Settings.options.dup
         opts.each do |k,v|
-          v.delete_if {|ke,_| ke == :deleted || ke == :annotations || ke == :show_nicerank } # not mutable values
+          v.delete_if {|ke,_| ke == :deleted || ke == :annotations} # don't show immutable values
           v.each do |x,y|
             t << :separator if @iter >= 1
             unless y.is_a?(Hash)
@@ -131,7 +131,7 @@ module Ayadn
       view << "\n\nPosts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(:green)
 
 
-      unless Settings.options[:nicerank].nil? || show_ranks == false
+      unless show_ranks == false
         # this is ok for one user, but do not call this in a loop
         # do call them all at once instead if many
         ranks = NiceRank.new.get_posts_day([content['id'].to_i])
@@ -298,23 +298,21 @@ module Ayadn
     end
 
     def filter_nicerank posts, options
-      if options[:filter] == true # only if this option is true in Action (only global for now)
-        unless Settings.options[:nicerank].nil? #in case config file not initialized
-          if Settings.options[:nicerank][:filter] == true
-            filtered = {}
-            posts.each do |id,content|
-              if Settings.options[:nicerank][:filter_unranked] == true
-                next if content[:nicerank] == false
-              end
-              unless content[:nicerank] == false
-                next if content[:nicerank] < Settings.options[:nicerank][:threshold]
-                next if content[:is_human] == false
-                next if content[:real_person] == false
-              end
-              filtered[id] = content
+      if options[:filter] == true # if this option is true in Action (it's only for global, actually)
+        if Settings.options[:nicerank][:filter] == true
+          filtered = {}
+          posts.each do |id,content|
+            if Settings.options[:nicerank][:filter_unranked] == true
+              next if content[:nicerank] == false
             end
-            return filtered
+            unless content[:nicerank] == false
+              next if content[:nicerank] < Settings.options[:nicerank][:threshold]
+              next if content[:is_human] == false
+              next if content[:real_person] == false
+            end
+            filtered[id] = content
           end
+          return filtered
         end
       end
       return posts

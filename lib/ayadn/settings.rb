@@ -6,7 +6,7 @@ module Ayadn
 
     class << self
       attr_accessor :options, :config
-      attr_reader :user_token
+      attr_reader :user_token, :default_nr
     end
 
     def self.load_config
@@ -34,6 +34,12 @@ module Ayadn
           username: db[active][:username],
           handle: db[active][:handle]
         }
+      }
+      @default_nr = {
+        threshold: 2.1,
+        cache: 48,
+        filter: true,
+        filter_unranked: false
       }
       db.close
       @options = self.defaults
@@ -78,13 +84,20 @@ module Ayadn
     def self.config_file
       config_file = @config[:paths][:config] + "/config.yml"
       if File.exist?(config_file)
-        # TODO: system to merge existing config file when future category are added
+        # TODO: system to merge existing config file when future categories are added
         begin
           conf = YAML.load(File.read(config_file))
-          # force delete obsolete keys that could be in the user's file
+
+          # force delete obsolete keys (because legacy versions of the config file)
           conf[:timeline].delete_if {|k,_| k == :show_nicerank}
           conf[:colors].delete_if {|k,_| k == :nicerank}
+          # force create mandatory keys (idem)
+          conf[:nicerank] = @default_nr if conf[:nicerank].nil? || conf[:nicerank].size != 4
+          conf[:timeline][:show_debug] = false if conf[:timeline][:show_debug].nil?
+          conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
+
           @options = conf
+          self.write_config_file(config_file, @options)
         rescue => e
           Errors.global_error({error: e, caller: caller, data: []})
         end
@@ -161,21 +174,21 @@ module Ayadn
         },
         counts: {
           default: 50,
-          unified: 50,
-          global: 50,
-          checkins: 50,
+          unified: 100,
+          global: 100,
+          checkins: 100,
           conversations: 50,
           photos: 50,
-          trending: 50,
-          mentions: 50,
-          convo: 50,
-          posts: 50,
+          trending: 100,
+          mentions: 100,
+          convo: 100,
+          posts: 100,
           messages: 50,
-          search: 100,
+          search: 200,
           whoreposted: 50,
           whostarred: 50,
           whatstarred: 100,
-          files: 66
+          files: 100
         },
         formats: {
           table: {
@@ -204,12 +217,7 @@ module Ayadn
         scroll: {
           timer: 3
         },
-        nicerank: {
-          threshold: 2.1,
-          cache: 48,
-          filter: true,
-          filter_unranked: false
-        }
+        nicerank: @default_nr
       }
     end
 

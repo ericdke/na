@@ -154,14 +154,6 @@ module Ayadn
       Settings.get_token
       Settings.init_config
       Logs.create_logger
-      unless Settings.options[:nicerank]
-        Settings.options[:nicerank] = {
-          threshold: 2.1,
-          cache: 48,
-          filter: true,
-          filter_unranked: false
-        }
-      end
     end
     def log(args)
       x = "New value for '#{args[0]}' in 'NiceRank' => #{"%1.1f" % args[1].to_f}"
@@ -377,9 +369,6 @@ module Ayadn
       Settings.options[:timeline][:show_spinner] = value
     end
     def show_debug value
-      unless Settings.options[:colors][:debug]
-        Settings.options[:colors][:debug] = :cyan
-      end
       Settings.options[:timeline][:show_debug] = value
     end
   end
@@ -468,10 +457,6 @@ module Ayadn
 
     def debug(color)
       Settings.options[:colors][:debug] = color.to_sym
-    end
-
-    def nicerank(color)
-      Settings.options[:colors][:nicerank] = color.to_sym
     end
   end
 end
