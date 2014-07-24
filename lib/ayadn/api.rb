@@ -125,6 +125,10 @@ module Ayadn
       get_parsed_response(Endpoints.new.user(username))
     end
 
+    def get_users(usernames)
+      get_parsed_response(Endpoints.new.users(usernames))
+    end
+
     def get_details(post_id, options = {})
       get_parsed_response(Endpoints.new.single_post(post_id, options))
     end

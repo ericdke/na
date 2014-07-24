@@ -1,6 +1,7 @@
 # 1.4.7 - 'Nozomi'
 
 - In 'convo', both the post id you've requested and the post it replies to are marked with arrows
+- Same feature in the view after a reply
 - Follow/unfollow several users at a time
 - Much faster users lists generation (followers, muted, etc)
 - Users lists include number of posts/day

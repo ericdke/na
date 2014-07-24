@@ -195,8 +195,12 @@ module Ayadn
       "#{@channels_url}search?q=#{words}&order=popularity&access_token=#{Settings.user_token}#{@options_list}"
     end
 
-    def user(username)
+    def user(username) # accepts a string
       "#{@users_url}#{username}?access_token=#{Settings.user_token}&include_user_annotations=1"
+    end
+
+    def users(usernames) # accepts an array
+      "#{@users_url}?ids=#{usernames.join(',')}?access_token=#{Settings.user_token}&include_user_annotations=1"
     end
 
     def single_post(post_id, options)

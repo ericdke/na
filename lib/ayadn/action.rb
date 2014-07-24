@@ -541,9 +541,9 @@ module Ayadn
         end
         puts "AUTHOR:\n".inverse
         if response['data']['username'] == Settings.config[:identity][:username]
-          @view.show_userinfos(stream, @api.get_token_info['data'])
+          @view.show_userinfos(stream, @api.get_token_info['data'], true)
         else
-          @view.show_userinfos(stream, nil)
+          @view.show_userinfos(stream, nil, true)
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
@@ -770,7 +770,14 @@ module Ayadn
         FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.done
-        render_view(@api.get_convo(post_id))
+
+        options = options.dup
+        unless resp['data']['reply_to'].nil?
+          options[:reply_to] = resp['data']['reply_to'].to_i
+        end
+        options[:post_id] = resp['data']['id'].to_i
+
+        render_view(@api.get_convo(post_id), options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       end
