@@ -94,16 +94,16 @@ If you've already created an [alias](#alias) for the channel, you can post to it
 
 You can embed one or several pictures in a post (with `post`, `write`, `reply` and `pm`).
 
-Just add the `-E` (or `--embed`) option **at the end** of the command line, followed by one or several file paths separated by spaces.
+Just add the `-e` (or `--embed`) option **at the end** of the command line, followed by one or several file paths separated by spaces.
 
 Accepted file formats are `jpg`, `png` and `gif`.
 
 Examples:
 
 ```
-ayadn -P Meet my cat -E lolcat.jpg
-ayadn -P "@ericd Hey, meet my pets" -E ~/lolcat.jpg ./doge.jpeg
-ayadn -W -E ~/lolcat.png
-ayadn -R 23362460 -E "Desktop/dancing lolcat.gif"
-ayadn pm @ericd -E /users/dad/lol\'cat.JPG /users/mom/my\ doge.PNG
+ayadn -P Meet my cat -e lolcat.jpg
+ayadn -P "@ericd Hey, meet my pets" -e ~/lolcat.jpg ./doge.jpeg
+ayadn -W -e ~/lolcat.png
+ayadn -R 23362460 -e "Desktop/dancing lolcat.gif"
+ayadn pm @ericd -e /users/dad/lol\'cat.JPG /users/mom/my\ doge.PNG
 ```  

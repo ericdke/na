@@ -6,7 +6,6 @@
 - Much faster users lists generation (followers, muted, etc)
 - Users lists include number of posts/day
 - User info (-ui) includes number of posts/day
-- Shortcut for embed pictures is now -E (to avoid confusion with the `-e` of extract links option)
 - Added NowPlaying annotations
 - Documentation is included in the repo
 - Skipped objects are logged if debug is enabled
