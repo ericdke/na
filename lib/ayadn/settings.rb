@@ -80,7 +80,11 @@ module Ayadn
       if File.exist?(config_file)
         # TODO: system to merge existing config file when future category are added
         begin
-          @options = YAML.load(File.read(config_file))
+          conf = YAML.load(File.read(config_file))
+          # force delete obsolete keys that could be in the user's file
+          conf[:timeline].delete_if {|k,_| k == :show_nicerank}
+          conf[:colors].delete_if {|k,_| k == :nicerank}
+          @options = conf
         rescue => e
           Errors.global_error({error: e, caller: caller, data: []})
         end
@@ -152,7 +156,6 @@ module Ayadn
           show_symbols: true,
           show_real_name: true,
           show_date: true,
-          show_nicerank: false,
           show_spinner: true,
           show_debug: false
         },
@@ -191,7 +194,6 @@ module Ayadn
           mentions: :red,
           source: :cyan,
           symbols: :green,
-          nicerank: :cyan,
           debug: :red
         },
         backup: {

@@ -122,13 +122,20 @@ module Ayadn
       # builds a hash of hashes, each hash is a normalized post with post id as a key
       posts = {}
       data.each.with_index(1) do |post, index|
-        next if Databases.blacklist[post['source']['name'].downcase]
-        next if Databases.blacklist["-@#{post['user']['username'].downcase}"]
+        if Databases.blacklist[post['source']['name'].downcase]
+          Debug.skipped({source: post['source']['name']})
+          next
+        end
+        if Databases.blacklist["-@#{post['user']['username'].downcase}"]
+          Debug.skipped({user: post['user']['username']})
+          next
+        end
         hashtags = extract_hashtags(post)
         @skip = false
         hashtags.each do |h|
           if Databases.blacklist[h.downcase]
             @skip = true
+            Debug.skipped({hashtag: h})
             break
           end
         end
@@ -138,6 +145,7 @@ module Ayadn
         mentions.each do |m|
           if Databases.blacklist["@#{m.downcase}"]
             @skip = true
+            Debug.skipped({mention: m})
             break
           end
         end
@@ -354,7 +362,6 @@ module Ayadn
 
     def colorize_text(text, mentions, hashtags)
       reg_split = '[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]'
-      #reg_tag = '#([A-Za-z0-9_]{1,255})(?![\w+])'
       reg_tag = '#([[:alpha:]0-9_]{1,255})(?![\w+])'
       reg_mention = '@([A-Za-z0-9_]{1,20})(?![\w+])'
       reg_sentence = '^.+[\r\n]*'
@@ -480,9 +487,6 @@ module Ayadn
             unless obj['value']['region'].nil?
               checkins[:region] = obj['value']['region']
             end
-          #when "net.app.core.oembed"
-            #has_checkins = true
-            #checkins[:embeddable_url] = obj['value']['embeddable_url']
           end
         end
       end

@@ -2,6 +2,12 @@
 module Ayadn
   class Debug
 
+    def self.skipped dic
+      if Settings.options[:timeline][:show_debug] == true
+        Logs.rec.debug "SKIPPED: #{dic.keys.first.to_s.capitalize} => #{dic.values.first}"
+      end
+    end
+
     def self.http response, url
       if Settings.options[:timeline][:show_debug] == true
         # deb = ":::::\n"

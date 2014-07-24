@@ -9,7 +9,8 @@
 - Shortcut for embed pictures is now -E (to avoid confusion with the `-e` of extract links option)
 - Added NowPlaying annotations
 - Documentation is included in the repo
-- A few fixes
+- Skipped objects are logged if debug is enabled
+- Force delete obsolete config keys
 
 # 1.4.6 - 'Roman'
 

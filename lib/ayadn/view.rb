@@ -83,7 +83,7 @@ module Ayadn
         @iter = 0
         opts = Settings.options.dup
         opts.each do |k,v|
-          v.delete_if {|ke,_| ke == :deleted || ke == :annotations } # not mutable values
+          v.delete_if {|ke,_| ke == :deleted || ke == :annotations || ke == :show_nicerank } # not mutable values
           v.each do |x,y|
             t << :separator if @iter >= 1
             unless y.is_a?(Hash)
@@ -493,14 +493,6 @@ module Ayadn
         header << " "
         header << content[:name].color(Settings.options[:colors][:name])
       end
-
-      if Settings.options[:timeline][:show_nicerank] == true && content[:nicerank]
-        if Settings.options[:nicerank][:filter] == true
-          header << " "
-          header << "[#{content[:nicerank]}]".color(Settings.options[:colors][:nicerank])
-        end
-      end
-
       if Settings.options[:timeline][:show_date]
         header << " "
         header << content[:date].color(Settings.options[:colors][:date])
@@ -528,7 +520,6 @@ module Ayadn
       hd << "\n"
       formatted = { header: hd }
       content[:checkins].each do |key, val|
-          #formatted[key] = val unless (val.nil? || !val)
           formatted[key] = val
       end
 

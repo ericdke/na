@@ -71,12 +71,6 @@ module Ayadn
       counts_config.save
     end
 
-    # desc "format ITEM NUMBER", "Set ITEM parameter to NUMBER by default"
-    # map "formats" => :format
-    # def format(*args)
-    #   puts args
-    # end
-
     desc "color ITEM COLOR", "Set ITEM to COLOR"
     long_desc Descriptions.set_color
     map "colors" => :color
@@ -167,9 +161,6 @@ module Ayadn
           filter: true,
           filter_unranked: false
         }
-      end
-      unless Settings.options[:colors][:nicerank]
-        Settings.options[:colors][:nicerank] = :cyan
       end
     end
     def log(args)
@@ -381,19 +372,6 @@ module Ayadn
     end
     def show_date(value)
       Settings.options[:timeline][:show_date] = value
-    end
-    def show_nicerank value
-      unless Settings.options[:nicerank]
-        Settings.options[:nicerank] = {
-          threshold: 2.1,
-          filter: true,
-          filter_unranked: false
-        }
-      end
-      unless Settings.options[:colors][:nicerank]
-        Settings.options[:colors][:nicerank] = :cyan
-      end
-      Settings.options[:timeline][:show_nicerank] = value
     end
     def show_spinner value
       Settings.options[:timeline][:show_spinner] = value

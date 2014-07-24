@@ -56,13 +56,3 @@ Any user with a NiceRank smaller than this value will be ignored.
 ## Deactivate NiceRank
 
 It's the same as above, with *false* instead of *true*.  
-
-## Show NiceRank
-
-You can view users' NiceRanks in the posts headers:
-
-`ayadn set timeline show_nicerank true`
-
-And change the rank color:
-
-`ayadn set color nicerank red`
