@@ -84,7 +84,6 @@ module Ayadn
     def self.config_file
       config_file = @config[:paths][:config] + "/config.yml"
       if File.exist?(config_file)
-        # TODO: system to merge existing config file when future categories are added
         begin
           conf = YAML.load(File.read(config_file))
 
@@ -94,6 +93,7 @@ module Ayadn
           # force create mandatory keys (idem)
           conf[:nicerank] = @default_nr if conf[:nicerank].nil? || conf[:nicerank].size != 4
           conf[:timeline][:show_debug] = false if conf[:timeline][:show_debug].nil?
+          conf[:timeline][:show_spinner] = true if conf[:timeline][:show_spinner].nil?
           conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
           conf[:nowplaying] = {} if conf[:nowplaying].nil?
 

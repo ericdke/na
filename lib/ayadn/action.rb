@@ -273,47 +273,63 @@ module Ayadn
       end
     end
 
-    def unmute(username)
+    def unmute(usernames)
       begin
-        stop_if_no_username(username)
-        username = add_arobase(username)
-        puts Status.unmuting(username)
-        check_has_been_unmuted(username, @api.unmute(username))
+        stop_if_no_username(usernames)
+        users = all_but_me(usernames)
+        puts Status.unmuting(users.join(','))
+        users.each do |user|
+          resp = @api.unmute(user)
+          check_has_been_unmuted(user, resp)
+          sleep 1 unless users.length == 1
+        end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username]})
+        Errors.global_error({error: e, caller: caller, data: [usernames]})
       end
     end
 
-    def mute(username)
+    def mute(usernames)
       begin
-        stop_if_no_username(username)
-        username = add_arobase(username)
-        puts Status.muting(username)
-        check_has_been_muted(username, @api.mute(username))
+        stop_if_no_username(usernames)
+        users = all_but_me(usernames)
+        puts Status.muting(users.join(','))
+        users.each do |user|
+          resp = @api.mute(user)
+          check_has_been_muted(user, resp)
+          sleep 1 unless users.length == 1
+        end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username]})
+        Errors.global_error({error: e, caller: caller, data: [usernames]})
       end
     end
 
-    def unblock(username)
+    def unblock(usernames)
       begin
-        stop_if_no_username(username)
-        username = add_arobase(username)
-        puts Status.unblocking(username)
-        check_has_been_unblocked(username, @api.unblock(username))
+        stop_if_no_username(usernames)
+        users = all_but_me(usernames)
+        puts Status.unblocking(users.join(','))
+        users.each do |user|
+          resp = @api.unblock(user)
+          check_has_been_unblocked(user, resp)
+          sleep 1 unless users.length == 1
+        end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username]})
+        Errors.global_error({error: e, caller: caller, data: [usernames]})
       end
     end
 
-    def block(username)
+    def block(usernames)
       begin
-        stop_if_no_username(username)
-        username = add_arobase(username)
-        puts Status.blocking(username)
-        check_has_been_blocked(username, @api.block(username))
+        stop_if_no_username(usernames)
+        users = all_but_me(usernames)
+        puts Status.blocking(users.join(','))
+        users.each do |user|
+          resp = @api.block(user)
+          check_has_been_blocked(user, resp)
+          sleep 1 unless users.length == 1
+        end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username]})
+        Errors.global_error({error: e, caller: caller, data: [usernames]})
       end
     end
 
