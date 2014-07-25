@@ -1,3 +1,7 @@
+# 1.5.1 - 'Holograms'
+
+- Improved accuracy of iTunes Store requests for NowPlaying
+
 # 1.5.0 - 'Nozomi'
 
 - In 'convo', both the post id you've requested and the post it replies to are marked with arrows

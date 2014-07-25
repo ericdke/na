@@ -969,19 +969,22 @@ module Ayadn
     def itunes_istore_request itunes
       infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
       itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&term=#{infos[2]}&media=music&entity=musicTrack"
-      get_itunes_store(itunes_url)
+      get_itunes_store(itunes_url, itunes.artist, itunes.track)
     end
 
     def lastfm_istore_request artist, track
       infos = itunes_reg([artist, track])
       itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&media=music&entity=musicTrack"
-      get_itunes_store(itunes_url)
+      get_itunes_store(itunes_url, artist, track)
     end
 
-    def get_itunes_store url
+    def get_itunes_store url, artist, track
       results = JSON.load(CNX.download(URI.escape(url)))['results']
       unless results.empty? || results.nil?
-        candidate = results[0]
+
+        resp = results.select {|obj| obj['artistName'] == artist && obj['trackName'] == track}
+        candidate = resp[0] || results[0]
+
         return {
           'code' => 200,
           'artist' => candidate['artistName'],
