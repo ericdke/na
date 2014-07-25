@@ -1028,7 +1028,7 @@ module Ayadn
       else
         puts text + "\n\n\nThe iTunes Store thinks this track is: ".color(:green) + "'#{store['track']}'".color(:magenta) + " by ".color(:green) + "'#{store['artist']}'".color(:magenta) + ".\n\nAyadn will use these elements to insert album artwork and a link to the track.\n\n".color(:green)
       end
-      puts "Do you confirm? (y/N) ".color(:yellow)
+      puts "Is it ok? (y/N) ".color(:yellow)
     end
 
     def nicerank_true
