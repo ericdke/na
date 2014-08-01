@@ -155,8 +155,12 @@ module Ayadn
     def self.yourpost
       "Your post:\n\n".color(:cyan)
     end
-    def self.yourmessage
-      "Your message:\n\n".color(:cyan)
+    def self.yourmessage username = nil
+      if username.nil?
+        "Your message:\n\n".color(:cyan)
+      else
+        "Your message to ".color(:cyan) + username.color(:green) + ":\n\n".color(:cyan)
+      end
     end
     def self.message_from(username)
       "\nMessage from ".color(:cyan) + "#{Settings.config[:identity][:handle]} ".color(:green) + "to ".color(:cyan) + "#{username[0]}".color(:yellow) + ".".color(:cyan)

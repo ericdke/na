@@ -728,7 +728,7 @@ module Ayadn
         end
         FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
     		@view.clear_screen
-    		puts Status.yourmessage
+    		puts Status.yourmessage(username[0])
     		@view.show_posted(resp)
     	rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
