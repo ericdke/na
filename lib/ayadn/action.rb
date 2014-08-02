@@ -803,6 +803,40 @@ module Ayadn
       options['lastfm'] ? np_lastfm(options) : np_itunes(options)
     end
 
+    def nowwatching(args, options = {})
+      require 'filmbuff'
+      begin
+        title = args.join(' ')
+        puts "\nSearching IMDb for '#{title}'...\n".color(:cyan)
+        filename = "#{args.join('_')}.jpg"
+        imdb = FilmBuff::IMDb.new
+        response = imdb.find_by_title title
+        raise ArgumentError if response.is_a? Array
+        puts "\nSearching for the movie poster...\n".color(:cyan)
+        FileOps.download_url filename, response.poster_url
+        file = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
+        puts "\nMovie poster has been backed up in #{file[0]}\n\n".color(:cyan)
+        text_1 = "#nowwatching #movie\n \n'#{response.title}' (#{response.release_date.year})"
+        max = 243 - text_1.length
+        short = max - 3
+        response.plot.length > max ? plot = "#{response.plot[0..short]}..." : plot = response.plot
+        link = "[IMDb](http://imdb.com/title/#{response.imdb_id}/)"
+        text = "#{text_1}\n \n#{plot}\n \n#{link}\n\n"
+        resp = Post.new.send_embedded(text, file)
+        @view.clear_screen
+        puts Status.posting
+        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
+        @view.clear_screen
+        puts Status.yourpost
+        @view.show_posted(resp)
+      rescue ArgumentError => e
+        puts "\nThe IMDb server didn't find this movie.\n\n"
+      rescue => e
+        puts Status.wtf
+        Errors.global_error({error: e, caller: caller, data: [args, options]})
+      end
+    end
+
     def random_posts(options)
       begin
         _, cols = winsize
