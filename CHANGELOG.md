@@ -1,3 +1,8 @@
+# 1.5.2 - 'Penny'
+
+- New: see the target of your PM when writing a message
+- Fixed: uploading jpg if spaces in filename
+
 # 1.5.1 - 'Holograms'
 
 - Improved accuracy of iTunes Store requests for NowPlaying

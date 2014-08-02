@@ -49,7 +49,7 @@ module Ayadn
         when ".gif"
           `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/gif" -F 'public=true' -X POST`
         else #jpg or jpeg or JPG or JPEG, automatically recognized as such
-          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F content=@#{file} -F 'public=true' -X POST`
+          `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file}" -F 'public=true' -X POST`
         end
       rescue Errno::ENOENT
         abort(Status.no_curl)
