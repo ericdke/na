@@ -3,6 +3,7 @@
 - New: 'nowwatching'. Create a post from a movie title.
 - New: see the target of your PM when writing a message.
 - Fixed: uploading jpg if there were spaces in the filename.
+- General code cleaning and refactoring.
 
 # 1.5.1 - 'Holograms'
 

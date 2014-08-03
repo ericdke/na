@@ -5,7 +5,7 @@ module Ayadn
     map "create" => :add
     long_desc Descriptions.blacklist_add
     def add(*args)
-      Action.quit(Status.type_and_target_missing) if args.length < 2
+      abort(Status.type_and_target_missing) if args.length < 2
       BlacklistWorkers.new.add(args)
       puts Status.done
     end
@@ -14,7 +14,7 @@ module Ayadn
     map "delete" => :remove
     long_desc Descriptions.blacklist_remove
     def remove(*args)
-      Action.quit(Status.type_and_target_missing) if args.length < 2
+      abort(Status.type_and_target_missing) if args.length < 2
       BlacklistWorkers.new.remove(args)
       puts Status.done
     end

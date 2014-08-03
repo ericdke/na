@@ -1,6 +1,7 @@
 # encoding: utf-8
 module Ayadn
   class Errors
+
     def self.global_error(args)
       Logs.rec.error "--BEGIN--"
       Logs.rec.error "CAUSE: #{args[:error]}"
@@ -18,20 +19,36 @@ module Ayadn
       Debug.err(args[:error], stack)
       exit
     end
+
     def self.error(status)
       Logs.rec.error status
     end
+
     def self.warn(warning)
       Logs.rec.warn warning
     end
+
     def self.info(msg)
       Logs.rec.info msg
     end
+
     def self.repost(repost, original)
       Logs.rec.info "Post #{repost} is a repost. Using original: #{original}."
     end
+
     def self.nr msg
       Logs.nr.warn msg
     end
+
+    def self.whine(status, resp)
+      puts status
+      self.error("#{status} => #{resp['meta']}")
+    end
+
+    def self.no_data(where)
+      self.warn "In action/#{where}: no data"
+      abort(Status.empty_list)
+    end
+
   end
 end

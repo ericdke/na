@@ -11,7 +11,7 @@ module Ayadn
         unless args.empty?
           channel, channel_alias = args[0], args[1]
         else
-          Action.quit Status.wrong_arguments
+          abort(Status.wrong_arguments)
         end
         if channel.is_integer?
           Databases.create_alias(channel, channel_alias)
@@ -38,7 +38,7 @@ module Ayadn
           Logs.rec.info "Deleted alias '#{args[0]}'."
           puts Status.done
         else
-          Action.quit Status.wrong_arguments
+          abort(Status.wrong_arguments)
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
@@ -55,7 +55,7 @@ module Ayadn
         unless database.nil?
           new_db = File.realpath(database)
         else
-          Action.quit Status.wrong_arguments
+          abort(Status.wrong_arguments)
         end
         if File.exist?(new_db)
           Databases.import_aliases(new_db)

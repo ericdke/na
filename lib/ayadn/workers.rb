@@ -314,6 +314,17 @@ module Ayadn
       end
     end
 
+    def get_original_id(post_id, resp)
+      if resp['data']['repost_of']
+        puts Status.redirecting
+        id = resp['data']['repost_of']['id']
+        Errors.repost(post_id, id)
+        return id
+      else
+        return post_id
+      end
+    end
+
     def get_channel_id_from_alias(channel_id)
       unless channel_id.is_integer?
         orig = channel_id
@@ -460,6 +471,11 @@ module Ayadn
       end
       links.uniq!
       links
+    end
+
+    def all_but_me usernames
+      arr = usernames.select {|user| user != 'me'}
+      at(arr)
     end
 
     private

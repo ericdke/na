@@ -16,9 +16,9 @@ module Ayadn
 
     def unified(options)
       begin
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_unified(options)
-        stop_if_no_new_posts(stream, options, 'unified')
+        Check.no_new_posts(stream, options, 'unified')
         Databases.save_max_id(stream)
         @view.render(stream, options)
         Scroll.new(@api, @view).unified(options) if options[:scroll]
@@ -29,9 +29,9 @@ module Ayadn
 
     def checkins(options)
       begin
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_checkins(options)
-        stop_if_no_new_posts(stream, options, 'explore:checkins')
+        Check.no_new_posts(stream, options, 'explore:checkins')
         Databases.save_max_id(stream)
         @view.render(stream, options)
         Scroll.new(@api, @view).checkins(options) if options[:scroll]
@@ -44,10 +44,10 @@ module Ayadn
       begin
         options = settings.dup
         options[:filter] = nicerank_true()
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_global(options)
         niceranks = NiceRank.new.get_ranks(stream)
-        stop_if_no_new_posts(stream, options, 'global')
+        Check.no_new_posts(stream, options, 'global')
         Databases.save_max_id(stream)
         @view.render(stream, options, niceranks)
         Scroll.new(@api, @view).global(options) if options[:scroll]
@@ -58,9 +58,9 @@ module Ayadn
 
     def trending(options)
       begin
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_trending(options)
-        stop_if_no_new_posts(stream, options, 'explore:trending')
+        Check.no_new_posts(stream, options, 'explore:trending')
         Databases.save_max_id(stream)
         @view.render(stream, options)
         Scroll.new(@api, @view).trending(options) if options[:scroll]
@@ -71,9 +71,9 @@ module Ayadn
 
     def photos(options)
       begin
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_photos(options)
-        stop_if_no_new_posts(stream, options, 'explore:photos')
+        Check.no_new_posts(stream, options, 'explore:photos')
         Databases.save_max_id(stream)
         @view.render(stream, options)
         Scroll.new(@api, @view).photos(options) if options[:scroll]
@@ -84,9 +84,9 @@ module Ayadn
 
     def conversations(options)
       begin
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_conversations(options)
-        stop_if_no_new_posts(stream, options, 'explore:replies')
+        Check.no_new_posts(stream, options, 'explore:replies')
         Databases.save_max_id(stream)
         @view.render(stream, options)
         Scroll.new(@api, @view).replies(options) if options[:scroll]
@@ -99,11 +99,11 @@ module Ayadn
       begin
         Check.no_username(username)
         username = add_arobase(username)
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_mentions(username, options)
         Check.no_user(stream, username)
         Databases.save_max_id(stream)
-        stop_if_no_data(stream, 'mentions')
+        Check.no_data(stream, 'mentions')
         options = options.dup
         options[:in_mentions] = true
         @view.render(stream, options)
@@ -117,11 +117,11 @@ module Ayadn
       begin
         Check.no_username(username)
         username = add_arobase(username)
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_posts(username, options)
         Check.no_user(stream, username)
         Databases.save_max_id(stream)
-        stop_if_no_data(stream, 'mentions')
+        Check.no_data(stream, 'mentions')
         @view.render(stream, options)
         Scroll.new(@api, @view).posts(username, options) if options[:scroll]
       rescue => e
@@ -131,9 +131,9 @@ module Ayadn
 
     def interactions(options)
       begin
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_interactions
-        if_raw_show(stream, options)
+        show_raw(stream, options)
         @view.clear_screen
         @view.show_interactions(stream['data'])
       rescue => e
@@ -145,10 +145,10 @@ module Ayadn
       begin
         Check.no_username(username)
         username = add_arobase(username)
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_whatstarred(username, options)
         Check.no_user(stream, username)
-        stop_if_no_data(stream, 'whatstarred')
+        Check.no_data(stream, 'whatstarred')
         options[:extract] ? @view.all_stars_links(stream) : @view.render(stream, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
@@ -157,15 +157,15 @@ module Ayadn
 
     def whoreposted(post_id, options)
       begin
-        stop_if_bad_post_id(post_id)
-        doing(options)
+        Check.bad_post_id(post_id)
+        @view.downloading(options)
         details = @api.get_details(post_id, options)
-        stop_if_404(details, post_id)
-        id = get_original_id(post_id, details)
+        Check.no_post(details, post_id)
+        id = @workers.get_original_id(post_id, details)
         list = @api.get_whoreposted(id)
-        if_raw_show(list, options)
+        show_raw(list, options)
         abort(Status.nobody_reposted) if list['data'].empty?
-        get_list(:whoreposted, list['data'], post_id)
+        @view.list(:whoreposted, list['data'], post_id)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       end
@@ -173,15 +173,15 @@ module Ayadn
 
     def whostarred(post_id, options)
       begin
-        stop_if_bad_post_id(post_id)
-        doing(options)
+        Check.bad_post_id(post_id)
+        @view.downloading(options)
         details = @api.get_details(post_id, options)
-        stop_if_404(details, post_id)
-        id = get_original_id(post_id, details)
+        Check.no_post(details, post_id)
+        id = @workers.get_original_id(post_id, details)
         list = @api.get_whostarred(id)
-        if_raw_show(list, options)
+        show_raw(list, options)
         abort(Status.nobody_starred) if list['data'].empty?
-        get_list(:whostarred, list['data'], id)
+        @view.list(:whostarred, list['data'], id)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, id, options]})
       end
@@ -189,11 +189,11 @@ module Ayadn
 
     def convo(post_id, options)
       begin
-        stop_if_bad_post_id(post_id)
-        doing(options)
+        Check.bad_post_id(post_id)
+        @view.downloading(options)
         details = @api.get_details(post_id, options)
-        stop_if_404(details, post_id)
-        id = get_original_id(post_id, details)
+        Check.no_post(details, post_id)
+        id = @workers.get_original_id(post_id, details)
         stream = get_convo id, options
         Databases.pagination["replies:#{id}"] = stream['meta']['max_id']
         options = options.dup
@@ -214,9 +214,9 @@ module Ayadn
 
     def delete(post_id)
       begin
-        stop_if_bad_post_id(post_id)
+        Check.bad_post_id(post_id)
         print Status.deleting_post(post_id)
-        check_has_been_deleted(post_id, @api.delete_post(post_id))
+        Check.has_been_deleted(post_id, @api.delete_post(post_id))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
       end
@@ -230,7 +230,7 @@ module Ayadn
         channel_id = @workers.get_channel_id_from_alias(args[0])
         print Status.deleting_message(message_id)
         resp = @api.delete_message(channel_id, message_id)
-        check_message_has_been_deleted(message_id, resp)
+        Check.message_has_been_deleted(message_id, resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [message_id]})
       end
@@ -239,11 +239,11 @@ module Ayadn
     def unfollow(usernames)
       begin
         Check.no_username(usernames)
-        users = all_but_me(usernames)
+        users = @workers.all_but_me(usernames)
         puts Status.unfollowing(users.join(','))
         users.each do |user|
           resp = @api.unfollow(user)
-          check_has_been_unfollowed(user, resp)
+          Check.has_been_unfollowed(user, resp)
           sleep 1 unless users.length == 1
         end
       rescue => e
@@ -254,11 +254,11 @@ module Ayadn
     def follow(usernames)
       begin
         Check.no_username(usernames)
-        users = all_but_me(usernames)
+        users = @workers.all_but_me(usernames)
         puts Status.following(users.join(','))
         users.each do |user|
           resp = @api.follow(user)
-          check_has_been_followed(user, resp)
+          Check.has_been_followed(user, resp)
           sleep 1 unless users.length == 1
         end
       rescue => e
@@ -269,11 +269,11 @@ module Ayadn
     def unmute(usernames)
       begin
         Check.no_username(usernames)
-        users = all_but_me(usernames)
+        users = @workers.all_but_me(usernames)
         puts Status.unmuting(users.join(','))
         users.each do |user|
           resp = @api.unmute(user)
-          check_has_been_unmuted(user, resp)
+          Check.has_been_unmuted(user, resp)
           sleep 1 unless users.length == 1
         end
       rescue => e
@@ -284,11 +284,11 @@ module Ayadn
     def mute(usernames)
       begin
         Check.no_username(usernames)
-        users = all_but_me(usernames)
+        users = @workers.all_but_me(usernames)
         puts Status.muting(users.join(','))
         users.each do |user|
           resp = @api.mute(user)
-          check_has_been_muted(user, resp)
+          Check.has_been_muted(user, resp)
           sleep 1 unless users.length == 1
         end
       rescue => e
@@ -299,11 +299,11 @@ module Ayadn
     def unblock(usernames)
       begin
         Check.no_username(usernames)
-        users = all_but_me(usernames)
+        users = @workers.all_but_me(usernames)
         puts Status.unblocking(users.join(','))
         users.each do |user|
           resp = @api.unblock(user)
-          check_has_been_unblocked(user, resp)
+          Check.has_been_unblocked(user, resp)
           sleep 1 unless users.length == 1
         end
       rescue => e
@@ -314,11 +314,11 @@ module Ayadn
     def block(usernames)
       begin
         Check.no_username(usernames)
-        users = all_but_me(usernames)
+        users = @workers.all_but_me(usernames)
         puts Status.blocking(users.join(','))
         users.each do |user|
           resp = @api.block(user)
-          check_has_been_blocked(user, resp)
+          Check.has_been_blocked(user, resp)
           sleep 1 unless users.length == 1
         end
       rescue => e
@@ -328,12 +328,12 @@ module Ayadn
 
     def repost(post_id)
       begin
-        stop_if_bad_post_id(post_id)
+        Check.bad_post_id(post_id)
         puts Status.reposting(post_id)
         resp = @api.get_details(post_id)
-        check_if_already_reposted(resp)
-        id = get_original_id(post_id, resp)
-        check_has_been_reposted(id, @api.repost(id))
+        Check.already_reposted(resp)
+        id = @workers.get_original_id(post_id, resp)
+        Check.has_been_reposted(id, @api.repost(id))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, id]})
       end
@@ -341,10 +341,10 @@ module Ayadn
 
     def unrepost(post_id)
       begin
-        stop_if_bad_post_id(post_id)
+        Check.bad_post_id(post_id)
         puts Status.unreposting(post_id)
         if @api.get_details(post_id)['data']['you_reposted']
-          check_has_been_unreposted(post_id, @api.unrepost(post_id))
+          Check.has_been_unreposted(post_id, @api.unrepost(post_id))
         else
           puts Status.not_your_repost
         end
@@ -355,13 +355,13 @@ module Ayadn
 
     def unstar(post_id)
       begin
-        stop_if_bad_post_id(post_id)
+        Check.bad_post_id(post_id)
         puts Status.unstarring(post_id)
         resp = @api.get_details(post_id)
-        id = get_original_id(post_id, resp)
+        id = @workers.get_original_id(post_id, resp)
         resp = @api.get_details(id)
         if resp['data']['you_starred']
-          check_has_been_unstarred(id, @api.unstar(id))
+          Check.has_been_unstarred(id, @api.unstar(id))
         else
           puts Status.not_your_starred
         end
@@ -372,12 +372,12 @@ module Ayadn
 
     def star(post_id)
       begin
-        stop_if_bad_post_id(post_id)
+        Check.bad_post_id(post_id)
         puts Status.starring(post_id)
         resp = @api.get_details(post_id)
-        check_if_already_starred(resp)
-        id = get_original_id(post_id, resp)
-        check_has_been_starred(id, @api.star(id))
+        Check.already_starred(resp)
+        id = @workers.get_original_id(post_id, resp)
+        Check.has_been_starred(id, @api.star(id))
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
       end
@@ -385,9 +385,9 @@ module Ayadn
 
     def hashtag(hashtag, options)
       begin
-        doing(options)
+        @view.downloading(options)
         stream = @api.get_hashtag(hashtag)
-        stop_if_no_data(stream, 'hashtag')
+        Check.no_data(stream, 'hashtag')
         if options[:extract]
           @view.all_hashtag_links(stream, hashtag)
         else
@@ -400,27 +400,24 @@ module Ayadn
 
     def search(words, options)
       begin
-        doing(options)
+        @view.downloading(options)
 
         stream = if options[:users]
           @api.search_users words, options
         elsif options[:annotations]
           @api.search_annotations words, options
         elsif options[:channels]
-          splitted = splitter_all words
-          @api.search_channels splitted.join(','), options
+          @api.search_channels words, options
         elsif options[:messages]
           words = words.split(',')
           channel_id = @workers.get_channel_id_from_alias(words[0])
           words.shift
-          splitted = splitter_all words.join(' ')
-          @api.search_messages channel_id, splitted.join(','), options
+          @api.search_messages channel_id, words.join(','), options
         else
-          splitted = splitter_all words
-          @api.get_search splitted.join(','), options
+          @api.get_search words, options
         end
 
-        stop_if_no_data(stream, 'search')
+        Check.no_data(stream, 'search')
 
         if options[:users]
           stream['data'].sort_by! {|obj| obj['counts']['followers']}
@@ -446,12 +443,12 @@ module Ayadn
       begin
         Check.no_username(username)
         username = add_arobase(username)
-        doing(options)
-        if_raw_list(username, :followings, options)
+        @view.downloading(options)
+        show_raw_list(username, :followings, options)
         list = @api.get_followings(username)
         Check.auto_save_followings(list)
-        no_data('followings') if list.empty?
-        get_list(:followings, list, username)
+        Errors.no_data('followings') if list.empty?
+        @view.list(:followings, list, username)
         Databases.add_to_users_db_from_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
@@ -462,12 +459,12 @@ module Ayadn
       begin
         Check.no_username(username)
         username = add_arobase(username)
-        doing(options)
-        if_raw_list(username, :followers, options)
+        @view.downloading(options)
+        show_raw_list(username, :followers, options)
         list = @api.get_followers(username)
         Check.auto_save_followers(list)
-        no_data('followers') if list.empty?
-        get_list(:followers, list, username)
+        Errors.no_data('followers') if list.empty?
+        @view.list(:followers, list, username)
         Databases.add_to_users_db_from_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
@@ -476,12 +473,12 @@ module Ayadn
 
     def muted(options)
       begin
-        doing(options)
-        if_raw_list(nil, :muted, options)
+        @view.downloading(options)
+        show_raw_list(nil, :muted, options)
         list = @api.get_muted
         Check.auto_save_muted(list)
-        no_data('muted') if list.empty?
-        get_list(:muted, list, nil)
+        Errors.no_data('muted') if list.empty?
+        @view.list(:muted, list, nil)
         Databases.add_to_users_db_from_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
@@ -490,11 +487,11 @@ module Ayadn
 
     def blocked(options)
       begin
-        doing(options)
-        if_raw_list(nil, :blocked, options)
+        @view.downloading(options)
+        show_raw_list(nil, :blocked, options)
         list = @api.get_blocked
-        no_data('blocked') if list.empty?
-        get_list(:blocked, list, nil)
+        Errors.no_data('blocked') if list.empty?
+        @view.list(:blocked, list, nil)
         Databases.add_to_users_db_from_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
@@ -513,7 +510,7 @@ module Ayadn
       begin
         Check.no_username(username)
         username = add_arobase(username)
-        doing(options)
+        @view.downloading(options)
         if options[:raw]
           resp = @api.get_user(username)
           @view.show_raw(resp, options)
@@ -522,7 +519,7 @@ module Ayadn
         stream = @api.get_user(username)
         Check.no_user(stream, username)
         Check.same_username(stream) ? token = @api.get_token_info['data'] : token = nil
-        @view.get_infos(stream['data'], token)
+        @view.infos(stream['data'], token)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -530,8 +527,8 @@ module Ayadn
 
     def postinfo(post_id, options)
       begin
-        stop_if_bad_post_id(post_id)
-        doing(options)
+        Check.bad_post_id(post_id)
+        @view.downloading(options)
         if options[:raw]
           details = @api.get_details(post_id, options)
           @view.show_raw(details, options)
@@ -564,14 +561,14 @@ module Ayadn
 
     def files(options)
       begin
-        doing(options)
+        @view.downloading(options)
         if options[:raw]
           @view.show_raw(@api.get_files_list(options), options)
           exit
         end
         list = @api.get_files_list(options)
         @view.clear_screen
-        list.empty? ? no_data('files') : @view.show_files_list(list)
+        list.empty? ? Errors.no_data('files') : @view.show_files_list(list)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -589,7 +586,7 @@ module Ayadn
 
     def channels
       begin
-        doing()
+        @view.downloading()
         resp = @api.get_channels
         @view.clear_screen
         @view.show_channels(resp)
@@ -601,12 +598,12 @@ module Ayadn
     def messages(channel_id, options)
       begin
         channel_id = @workers.get_channel_id_from_alias(channel_id)
-        doing(options)
+        @view.downloading(options)
         resp = @api.get_messages(channel_id, options)
-        stop_if_no_new_posts(resp, options, "channel:#{channel_id}")
+        Check.no_new_posts(resp, options, "channel:#{channel_id}")
         Databases.save_max_id(resp)
-        if_raw_show(resp, options)
-        stop_if_no_data(resp, 'messages')
+        show_raw(resp, options)
+        Check.no_data(resp, 'messages')
         @view.render(resp, options)
         Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
       rescue => e
@@ -618,8 +615,8 @@ module Ayadn
       require 'pinboard'
       require 'base64'
       begin
-        stop_if_bad_post_id(post_id)
-        doing()
+        Check.bad_post_id(post_id)
+        @view.downloading()
         resp = @api.get_details(post_id)['data']
         @view.clear_screen
         links = @workers.extract_links(resp)
@@ -758,7 +755,7 @@ module Ayadn
       	puts Status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
         Check.no_post(replied_to, post_id)
-        post_id = get_original_id(post_id, replied_to)
+        post_id = @workers.get_original_id(post_id, replied_to)
         if replied_to['data']['repost_of']
           if post_id == replied_to['data']['repost_of']['id']
             replied_to = @api.get_details(post_id)
@@ -851,7 +848,7 @@ module Ayadn
         puts "\nAYADN\n".color(:red)
         puts "Version:\t".color(:cyan) + "#{VERSION}\n".color(:green)
         puts "Changelog:\t".color(:cyan) + "https://github.com/ericdke/na/blob/master/CHANGELOG.md\n".color(Settings.options[:colors][:link])
-        puts "Docs:\t\t".color(:cyan) + "http://ayadn-app.net/doc/".color(Settings.options[:colors][:link])
+        puts "Docs:\t\t".color(:cyan) + "https://github.com/ericdke/na/tree/master/doc".color(Settings.options[:colors][:link])
         puts "\n"
       rescue => e
         Errors.global_error({error: e, caller: caller, data: []})
@@ -860,23 +857,18 @@ module Ayadn
 
     private
 
-    def if_raw_list username, what, options
+    def show_raw_list username, what, options
       if options[:raw]
         @view.show_raw(@api.get_raw_list(username, what), options)
         exit
       end
     end
 
-    def if_raw_show what, options
+    def show_raw what, options
       if options[:raw]
         @view.show_raw(what, options)
         exit
       end
-    end
-
-    def all_but_me usernames
-      all_but_me = usernames.select {|user| user != 'me'}
-      @workers.at(all_but_me)
     end
 
     def np_lastfm options
@@ -1050,210 +1042,8 @@ module Ayadn
       return true if Settings.options[:nicerank][:filter] == true
     end
 
-    def stop_if_bad_post_id post_id
-      abort(Status.error_missing_post_id) unless post_id.is_integer?
-    end
-
-    def stop_if_no_data stream, target
-      if stream['data'].empty?
-        Errors.warn "In action/#{target}: no data"
-        abort(Status.empty_list)
-      end
-    end
-
-    def stop_if_404 stream, post_id
-      if stream['meta']['code'] == 404
-        abort(Status.post_404(post_id))
-      end
-    end
-
     def add_arobase username
       @workers.add_arobase_if_missing(username)
-    end
-
-    def stop_if_no_new_posts stream, options, title
-      if options[:new]
-        unless Databases.has_new?(stream, title)
-          abort(Status.no_new_posts)
-        end
-      end
-    end
-
-    def splitter_all words
-      [words].collect {|w| w.split(' ')}
-    end
-
-    def get_original_id(post_id, resp)
-      if resp['data']['repost_of']
-        puts Status.redirecting
-        id = resp['data']['repost_of']['id']
-        Errors.repost(post_id, id)
-        return id
-      else
-        return post_id
-      end
-    end
-
-    def check_if_already_starred(resp)
-      if resp['data']['you_starred']
-        puts "\nYou already starred this post.\n".color(:red)
-        exit
-      end
-    end
-
-    def check_if_already_reposted(resp)
-      if resp['data']['you_reposted']
-        puts "\nYou already reposted this post.\n".color(:red)
-        exit
-      end
-    end
-
-    def check_has_been_starred(post_id, resp)
-      if resp['meta']['code'] == 200
-        puts Status.starred(post_id)
-        Logs.rec.info "Starred #{post_id}."
-      else
-        whine(Status.not_starred(post_id), resp)
-      end
-    end
-
-    def check_has_been_reposted(post_id, resp)
-      if resp['meta']['code'] == 200
-        puts Status.reposted(post_id)
-        Logs.rec.info "Reposted #{post_id}."
-      else
-        whine(Status.not_reposted(post_id), resp)
-      end
-    end
-
-    def check_has_been_blocked(username, resp)
-      if resp['meta']['code'] == 200
-        puts Status.blocked(username)
-        Logs.rec.info "Blocked #{username}."
-      else
-        whine(Status.not_blocked(username), resp)
-      end
-    end
-
-    def check_has_been_muted(username, resp)
-      if resp['meta']['code'] == 200
-        puts Status.muted(username)
-        Logs.rec.info "Muted #{username}."
-      else
-        whine(Status.not_muted(username), resp)
-      end
-    end
-
-    def check_has_been_followed(username, resp)
-      if resp['meta']['code'] == 200
-        puts Status.followed(username)
-        Logs.rec.info "Followed #{username}."
-      else
-        whine(Status.not_followed(username), resp)
-      end
-    end
-
-    def check_has_been_deleted(post_id, resp)
-      if resp['meta']['code'] == 200
-        puts Status.deleted(post_id)
-        Logs.rec.info "Deleted post #{post_id}."
-      else
-        whine(Status.not_deleted(post_id), resp)
-      end
-    end
-
-    def check_message_has_been_deleted(message_id, resp)
-      if resp['meta']['code'] == 200
-        puts Status.deleted_m(message_id)
-        Logs.rec.info "Deleted message #{message_id}."
-      else
-        whine(Status.not_deleted(message_id), resp)
-      end
-    end
-
-    def check_has_been_unblocked(username, resp)
-      if resp['meta']['code'] == 200
-        puts Status.unblocked(username)
-        Logs.rec.info "Unblocked #{username}."
-      else
-        whine(Status.not_unblocked(username), resp)
-      end
-    end
-
-    def check_has_been_unstarred(post_id, resp)
-      if resp['meta']['code'] == 200
-        puts Status.unstarred(post_id)
-        Logs.rec.info "Unstarred #{post_id}."
-      else
-        whine(Status.not_unstarred(post_id), resp)
-      end
-    end
-
-    def check_has_been_unreposted(post_id, resp)
-      if resp['meta']['code'] == 200
-        puts Status.unreposted(post_id)
-        Logs.rec.info "Unreposted #{post_id}."
-      else
-        whine(Status.not_unreposted(post_id), resp)
-      end
-    end
-
-    def check_has_been_unmuted(username, resp)
-      if resp['meta']['code'] == 200
-        puts Status.unmuted(username)
-        Logs.rec.info "Unmuted #{username}."
-      else
-        whine(Status.not_unmuted(username), resp)
-      end
-    end
-
-    def check_has_been_unfollowed(username, resp)
-      if resp['meta']['code'] == 200
-        puts Status.unfollowed(username)
-        Logs.rec.info "Unfollowed #{username}."
-      else
-        whine(Status.not_unfollowed(username), resp)
-      end
-    end
-
-    def whine(status, resp)
-      puts status
-      Errors.error("#{status} => #{resp['meta']}")
-    end
-
-    def no_data(where)
-      Errors.warn "In action/#{where}: no data"
-      abort(Status.empty_list)
-    end
-
-    def doing(options = {})
-      unless options[:raw]
-        @view.clear_screen
-        print Status.downloading
-      end
-    end
-
-    def get_list(what, list, target)
-      @view.clear_screen
-      case what
-      when :whoreposted
-        @view.show_list_reposted(list, target)
-      when :whostarred
-        @view.show_list_starred(list, target)
-      when :followings
-        @view.show_list_followings(list, target)
-      when :followers
-        @view.show_list_followers(list, target)
-      when :muted
-        @view.show_list_muted(list)
-      when :blocked
-        @view.show_list_blocked(list)
-      end
-    end
-
-    def self.quit msg
-      puts msg
-      exit
     end
 
   end

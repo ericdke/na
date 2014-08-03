@@ -334,9 +334,34 @@ module Ayadn
       show_links(@workers.links_from_posts(stream))
     end
 
-    def get_infos(stream, token)
+    def infos(stream, token)
       clear_screen()
       show_userinfos(stream, token, true)
+    end
+
+    def downloading(options = {})
+      unless options[:raw]
+        @view.clear_screen
+        print Status.downloading
+      end
+    end
+
+    def list(what, list, target)
+      clear_screen()
+      case what
+      when :whoreposted
+        show_list_reposted(list, target)
+      when :whostarred
+        show_list_starred(list, target)
+      when :followings
+        show_list_followings(list, target)
+      when :followers
+        show_list_followers(list, target)
+      when :muted
+        show_list_muted(list)
+      when :blocked
+        show_list_blocked(list)
+      end
     end
 
     def big_separator
