@@ -7,6 +7,7 @@ module Ayadn
       @view = View.new
       @workers = Workers.new
       @stream = Stream.new(@api, @view, @workers)
+      @search = Search.new(@api, @view, @workers)
       Settings.load_config
       Settings.get_token
       Settings.init_config
@@ -292,14 +293,7 @@ module Ayadn
 
     def hashtag(hashtag, options)
       begin
-        @view.downloading(options)
-        stream = @api.get_hashtag(hashtag)
-        Check.no_data(stream, 'hashtag')
-        if options[:extract]
-          @view.all_hashtag_links(stream, hashtag)
-        else
-          @view.render(stream, options)
-        end
+        @search.hashtag(hashtag, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [hashtag, options]})
       end
@@ -307,40 +301,7 @@ module Ayadn
 
     def search(words, options)
       begin
-        @view.downloading(options)
-
-        stream = if options[:users]
-          @api.search_users words, options
-        elsif options[:annotations]
-          @api.search_annotations words, options
-        elsif options[:channels]
-          @api.search_channels words, options
-        elsif options[:messages]
-          words = words.split(',')
-          channel_id = @workers.get_channel_id_from_alias(words[0])
-          words.shift
-          @api.search_messages channel_id, words.join(','), options
-        else
-          @api.get_search words, options
-        end
-
-        Check.no_data(stream, 'search')
-
-        if options[:users]
-          stream['data'].sort_by! {|obj| obj['counts']['followers']}
-          stream['data'].each do |obj|
-            puts @view.big_separator
-            @view.show_userinfos(obj, nil, false)
-          end
-        elsif options[:channels]
-          @view.show_channels stream, options
-        else
-          if options[:extract]
-            @view.all_search_links(stream, words)
-          else
-            @view.render(stream, options)
-          end
-        end
+        @search.find(words, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [words, options]})
       end
@@ -466,7 +427,7 @@ module Ayadn
 
     def channels
       begin
-        @view.downloading()
+        @view.downloading
         resp = @api.get_channels
         @view.clear_screen
         @view.show_channels(resp)
@@ -488,7 +449,7 @@ module Ayadn
       require 'base64'
       begin
         Check.bad_post_id(post_id)
-        @view.downloading()
+        @view.downloading
         resp = @api.get_details(post_id)['data']
         @view.clear_screen
         links = @workers.extract_links(resp)
@@ -665,7 +626,8 @@ module Ayadn
     end
 
     def nowplaying(options = {})
-      options['lastfm'] ? np_lastfm(options) : np_itunes(options)
+      np = NowPlaying.new(@api, @view, @workers)
+      options['lastfm'] ? np.lastfm(options) : np.itunes(options)
     end
 
     def nowwatching(args, options = {})
@@ -683,33 +645,7 @@ module Ayadn
 
     def random_posts(options)
       begin
-        _, cols = @view.winsize
-        max_posts = cols / 12
-        @view.clear_screen
-        puts "Fetching random posts, please wait...".color(:cyan)
-        @max_id = @api.get_global({count: 1})['meta']['max_id'].to_i
-        @view.clear_screen
-        counter = 1
-        wait = options[:wait] || 5
-        loop do
-          begin
-            @random_post_id = rand(@max_id)
-            @resp = @api.get_details(@random_post_id, {})
-            next if @resp['data']['is_deleted']
-            @view.show_simple_post([@resp['data']], {})
-            counter += 1
-            if counter == max_posts
-              wait.downto(1) do |i|
-                print "\r#{sprintf("%02d", i)} sec... QUIT WITH [CTRL+C]".color(:cyan)
-                sleep 1
-              end
-              @view.clear_screen
-              counter = 1
-            end
-          rescue Interrupt
-            abort(Status.canceled)
-          end
-        end
+        @stream.random_posts(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [@max_id, @random_post_id, @resp, options]})
       end
@@ -728,22 +664,6 @@ module Ayadn
     end
 
     private
-
-    def np_lastfm options
-      begin
-        require 'rss'
-        user = Settings.options[:nowplaying][:lastfm] || create_lastfm_user()
-        puts Status.fetching_from('Last.fm')
-        artist, track = get_lastfm_track_infos(user)
-        puts Status.itunes_store
-        store = lastfm_istore_request(artist, track) unless options['no_url']
-        text_to_post = "#nowplaying\n \nTitle: ‘#{track}’\nArtist: #{artist}"
-        post_nowplaying(text_to_post, store, options)
-      rescue => e
-        puts Status.wtf
-        Errors.global_error({error: e, caller: caller, data: [store, options]})
-      end
-    end
 
     def get_lastfm_track_infos user
       begin

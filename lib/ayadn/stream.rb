@@ -205,6 +205,37 @@ module Ayadn
       Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
     end
 
+    def random_posts(options)
+      #_, cols = @view.winsize
+      #max_posts = cols / 16
+      max_posts = 6
+      @view.clear_screen
+      puts "Fetching random posts, please wait...".color(:cyan)
+      @max_id = @api.get_global({count: 1})['meta']['max_id'].to_i
+      @view.clear_screen
+      counter = 1
+      wait = options[:wait] || 5
+      loop do
+        begin
+          @random_post_id = rand(@max_id)
+          @resp = @api.get_details(@random_post_id, {})
+          next if @resp['data']['is_deleted']
+          @view.show_simple_post([@resp['data']], {})
+          counter += 1
+          if counter == max_posts
+            wait.downto(1) do |i|
+              print "\r#{sprintf("%02d", i)} sec... QUIT WITH [CTRL+C]".color(:cyan)
+              sleep 1
+            end
+            @view.clear_screen
+            counter = 1
+          end
+        rescue Interrupt
+          abort(Status.canceled)
+        end
+      end
+    end
+
     private
 
     def show_raw_list username, what, options

@@ -3,8 +3,11 @@ module Ayadn
 
   class NowWatching
 
+    require 'spotlite'
+
     def initialize view
       @view = view
+      @spotlite = Spotlite::Movie
     end
 
     def post args, options
@@ -25,13 +28,16 @@ module Ayadn
     end
 
     def find_by_title args, options = {}
-      require 'spotlite'
-      resp = Spotlite::Movie.find(args.join(' '))
-      options['alt'] ? resp[1] : resp[0]
+      resp = @spotlite.find(args.join(' '))
+      if options['alt']
+        resp[1]
+      else
+        resp[0]
+      end
     end
 
     def format_post response
-      text_1 = "#nowwatching #movie\n \n'#{response.title}' (#{response.release_date.year})"
+      text_1 = "#nowwatching #movie\n \n'#{response.title}' (#{response.year})"
       link = "[IMDb](#{response.url})"
       plot = format_plot(response, text_1)
       "#{text_1}\n \n#{plot}\n \n#{link}\n\n"
