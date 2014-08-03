@@ -140,13 +140,18 @@ module Ayadn
 
     def delete_m(args)
       begin
-        abort(Status.error_missing_message_id) unless args.length == 2
-        message_id = args[1]
-        abort(Status.error_missing_message_id) unless message_id.is_integer?
-        channel_id = @workers.get_channel_id_from_alias(args[0])
-        print Status.deleting_message(message_id)
-        resp = @api.delete_message(channel_id, message_id)
-        Check.message_has_been_deleted(message_id, resp)
+        abort(Status.error_missing_message_id) unless args.length >= 2
+        channel = args[0]
+        args.shift
+        ids = args.select {|message_id| message_id.is_integer?}
+        abort(Status.error_missing_message_id) if ids.empty?
+        channel_id = @workers.get_channel_id_from_alias(channel)
+        ids.each do |message_id|
+          print Status.deleting_message(message_id)
+          resp = @api.delete_message(channel_id, message_id)
+          Check.message_has_been_deleted(message_id, resp)
+          sleep 1 unless ids.length == 1
+        end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [message_id]})
       end
