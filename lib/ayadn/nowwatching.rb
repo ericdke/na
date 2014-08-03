@@ -8,8 +8,8 @@ module Ayadn
     end
 
     def post args, options
-      puts "\nContacting IMDb.com...\n\n".color(:cyan)
-      response = find_by_title(args)
+      puts "\nContacting IMDb.com...".color(:cyan)
+      response = find_by_title(args, options)
       text = format_post(response)
       show_post(text)
       filename = "#{args.join('_')}.jpg"
@@ -24,19 +24,15 @@ module Ayadn
       @view.show_posted(resp)
     end
 
-    def find_by_title args
-      require 'filmbuff'
-      imdb = FilmBuff::IMDb.new
-      response = imdb.find_by_title(args.join(' '))
-      if response.nil? || response.is_a?(Array) || response.release_date.nil?
-        raise ArgumentError
-      end
-      response
+    def find_by_title args, options = {}
+      require 'spotlite'
+      resp = Spotlite::Movie.find(args.join(' '))
+      options['alt'] ? resp[1] : resp[0]
     end
 
     def format_post response
       text_1 = "#nowwatching #movie\n \n'#{response.title}' (#{response.release_date.year})"
-      link = "[IMDb](http://imdb.com/title/#{response.imdb_id}/)"
+      link = "[IMDb](#{response.url})"
       plot = format_plot(response, text_1)
       "#{text_1}\n \n#{plot}\n \n#{link}\n\n"
     end
@@ -44,10 +40,11 @@ module Ayadn
     def format_plot response, text
       max = 250 - text.length  # 250 = 256 - 'IMDb' and 2 spaces
       short = max - 3
-      if response.plot.length > max
-        "#{response.plot[0..short]}..."
+      plot = response.description
+      if plot.length > max
+        "#{plot[0..short]}..."
        else
-        response.plot
+        plot
       end
     end
 

@@ -431,6 +431,7 @@ module Ayadn
     desc "nowwatching", "Create a post from a movie title (-nw)"
     map "-nw" => :nowwatching
     #long_desc Descriptions.nowwatching
+    option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
     def nowwatching(*title)
       Action.new.nowwatching(title, options)
     end
