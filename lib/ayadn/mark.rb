@@ -7,19 +7,20 @@ module Ayadn
     map "create" => :add
     def add(*args)
       begin
+        init
         unless args.empty?
           post_id, convo_title = args[0], args[1]
         else
-          init
           abort Status.wrong_arguments
         end
         abort Status.error_missing_post_id unless post_id.is_integer?
         convo_title = post_id if convo_title.nil?
-        action, workers, view, users, bucket = Action.new, Workers.new, View.new, [], []
+        api, workers, view = API.new, Workers.new, View.new
+        users, bucket = [], []
         view.clear_screen
         puts "\nAnalyzing conversation...\n".inverse
-        stream = action.get_convo post_id, options
-        posts = workers.build_posts(stream['data'].reverse)
+        resp = api.get_convo(post_id, options)
+        posts = workers.build_posts(resp['data'].reverse)
         posts.each do |id, post|
           users << "#{post[:original_poster]}"
           post[:mentions].each {|mention| users << "#{mention}"}

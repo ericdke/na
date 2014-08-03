@@ -5,6 +5,7 @@
 - New: delete several posts at once.
 - New: delete several PMs at once.
 - Fixed: uploading jpg if there were spaces in the filename.
+- Fixed: bookmark convos.
 - General code cleaning and refactoring.
 
 # 1.5.1 - 'Holograms'
