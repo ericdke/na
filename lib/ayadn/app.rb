@@ -419,7 +419,7 @@ module Ayadn
     long_desc Descriptions.blacklist
     subcommand "blacklist", Blacklist
 
-    desc "nowplaying", "Post the current playing track, iTunes or Last.fm (-np)"
+    desc "nowplaying", "Post the current playing track from iTunes or Last.fm (-np)"
     map "-np" => :nowplaying
     long_desc Descriptions.nowplaying
     option :no_url, aliases: "-n", type: :boolean, desc: "Don't append preview or album art at the end of the post"
@@ -428,9 +428,11 @@ module Ayadn
       Action.new.nowplaying(options)
     end
 
-    desc "nowwatching", "Create a post from a movie title (-nw)"
+    desc "nowwatching TITLE", "Create a post from a movie title (-nw)"
+    map "movies" => :nowwatching
+    map "imdb" => :nowwatching
     map "-nw" => :nowwatching
-    #long_desc Descriptions.nowwatching
+    long_desc Descriptions.nowwatching
     option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
     def nowwatching(*title)
       Action.new.nowwatching(title, options)

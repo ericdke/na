@@ -122,6 +122,9 @@ module Ayadn
     def self.blocked(username)
       "\nUser #{username} has been blocked.\n".color(:green)
     end
+    def self.error_missing_title
+      "\nYou have to specify (part of) a movie title.\n".color(:red)
+    end
     def self.error_missing_username
       "\nYou have to specify a username.\n".color(:red)
     end

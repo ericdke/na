@@ -805,6 +805,7 @@ module Ayadn
 
     def nowwatching(args, options = {})
       begin
+        abort(Status.error_missing_title) if args.empty?
         nw = NowWatching.new(@view)
         nw.post(args, options)
       rescue ArgumentError => e

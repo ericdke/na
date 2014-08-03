@@ -1128,6 +1128,36 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.nowwatching
+      <<-USAGE
+      Create a post from (part of) a movie title. Includes movie poster and IMDb url.
+
+      Usage:
+
+      ayadn nowwatching two towers
+
+      ayadn -nw beetlejuice
+
+      If the movie is not the one you're looking for, you can specify the 'alt' option to force find an alternative.
+
+      This is useful for remakes:
+
+      ayadn -nw solaris
+
+      (gives the 2002 version)
+
+      ayadn -nw solaris --alt
+
+      (gives the 1972 version)
+
+      Aliases:
+
+      ayadn movie godfather II
+
+      ayadn imdb -a conan
+      \n\n
+      USAGE
+    end
     def self.random_posts
       <<-USAGE
       Show random posts from App.net.
