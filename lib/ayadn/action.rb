@@ -805,34 +805,8 @@ module Ayadn
 
     def nowwatching(args, options = {})
       begin
-        require 'filmbuff'
-        filename = "#{args.join('_')}.jpg"
-        file = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
-        imdb = FilmBuff::IMDb.new
-        puts "\nContacting IMDb.com...\n\n".color(:cyan)
-        response = imdb.find_by_title(args.join(' '))
-        if response.nil? || response.is_a?(Array) || response.release_date.nil?
-          raise ArgumentError
-        end
-        text_1 = "#nowwatching #movie\n \n'#{response.title}' (#{response.release_date.year})"
-        max = 250 - text_1.length  # 250 = 256 - 'IMDb' and 2 spaces
-        short = max - 3
-        response.plot.length > max ? plot = "#{response.plot[0..short]}..." : plot = response.plot
-        link = "[IMDb](http://imdb.com/title/#{response.imdb_id}/)"
-        text = "#{text_1}\n \n#{plot}\n \n#{link}\n\n"
-        @view.clear_screen
-        puts "\nYour post:\n\n".color(:cyan)
-        puts text
-        puts "\nIs it ok? (y/N)".color(:yellow)
-        abort(Status.canceled) unless STDIN.getch == ("y" || "Y")
-        FileOps.download_url filename, response.poster_url
-        @view.clear_screen
-        puts "\nPosting and uploading the movie poster...\n".color(:green)
-        resp = Post.new.send_embedded(text, file)
-        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
-        @view.clear_screen
-        puts Status.yourpost
-        @view.show_posted(resp)
+        nw = NowWatching.new(@view)
+        nw.post(args, options)
       rescue ArgumentError => e
         puts Status.no_movie
       rescue => e

@@ -1,7 +1,8 @@
-# 1.5.2 - 'Penny'
+# 1.6.0 - 'Penny'
 
-- New: see the target of your PM when writing a message
-- Fixed: uploading jpg if spaces in filename
+- New: 'nowwatching'. Create a post from a movie title.
+- New: see the target of your PM when writing a message.
+- Fixed: uploading jpg if there were spaces in the filename.
 
 # 1.5.1 - 'Holograms'
 
