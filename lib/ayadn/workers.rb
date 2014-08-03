@@ -302,7 +302,7 @@ module Ayadn
       "#{string[0...10]} #{string[11...19]}"
     end
 
-    def at usernames
+    def at usernames #TODO: consolidate
       usernames.map do |user|
         if user == 'me'
           'me'
@@ -355,6 +355,10 @@ module Ayadn
       post_id
     end
 
+    def add_arobase username
+      add_arobase_if_missing(username)
+    end
+
     def add_arobase_if_missing(username) # expects an array of username(s), works on the first one and outputs a string
       unless username.first == "me"
         username = username.first.chars
@@ -365,7 +369,7 @@ module Ayadn
       username.join
     end
 
-    def add_arobases_to_usernames args
+    def add_arobases_to_usernames args #TODO: replace
       args.map do |username|
         if username == 'me'
           who_am_i

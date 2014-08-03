@@ -17,6 +17,13 @@ module Ayadn
       puts resp unless resp == ""
     end
 
+    def if_raw what, options
+      if options[:raw]
+        show_raw(what, options)
+        exit
+      end
+    end
+
     def show_raw(stream, options = {})
       #puts stream.to_json
       jj stream
@@ -341,7 +348,7 @@ module Ayadn
 
     def downloading(options = {})
       unless options[:raw]
-        @view.clear_screen
+        clear_screen()
         print Status.downloading
       end
     end

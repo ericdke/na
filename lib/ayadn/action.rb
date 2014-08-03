@@ -6,6 +6,7 @@ module Ayadn
       @api = API.new
       @view = View.new
       @workers = Workers.new
+      @stream = Stream.new(@api, @view, @workers)
       Settings.load_config
       Settings.get_token
       Settings.init_config
@@ -16,12 +17,7 @@ module Ayadn
 
     def unified(options)
       begin
-        @view.downloading(options)
-        stream = @api.get_unified(options)
-        Check.no_new_posts(stream, options, 'unified')
-        Databases.save_max_id(stream)
-        @view.render(stream, options)
-        Scroll.new(@api, @view).unified(options) if options[:scroll]
+        @stream.unified(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -29,12 +25,7 @@ module Ayadn
 
     def checkins(options)
       begin
-        @view.downloading(options)
-        stream = @api.get_checkins(options)
-        Check.no_new_posts(stream, options, 'explore:checkins')
-        Databases.save_max_id(stream)
-        @view.render(stream, options)
-        Scroll.new(@api, @view).checkins(options) if options[:scroll]
+        @stream.checkins(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -42,28 +33,15 @@ module Ayadn
 
     def global(settings)
       begin
-        options = settings.dup
-        options[:filter] = nicerank_true()
-        @view.downloading(options)
-        stream = @api.get_global(options)
-        niceranks = NiceRank.new.get_ranks(stream)
-        Check.no_new_posts(stream, options, 'global')
-        Databases.save_max_id(stream)
-        @view.render(stream, options, niceranks)
-        Scroll.new(@api, @view).global(options) if options[:scroll]
+        @stream.global(settings)
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [options]})
+        Errors.global_error({error: e, caller: caller, data: [settings]})
       end
     end
 
     def trending(options)
       begin
-        @view.downloading(options)
-        stream = @api.get_trending(options)
-        Check.no_new_posts(stream, options, 'explore:trending')
-        Databases.save_max_id(stream)
-        @view.render(stream, options)
-        Scroll.new(@api, @view).trending(options) if options[:scroll]
+        @stream.trending(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -71,12 +49,7 @@ module Ayadn
 
     def photos(options)
       begin
-        @view.downloading(options)
-        stream = @api.get_photos(options)
-        Check.no_new_posts(stream, options, 'explore:photos')
-        Databases.save_max_id(stream)
-        @view.render(stream, options)
-        Scroll.new(@api, @view).photos(options) if options[:scroll]
+        @stream.photos(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -84,12 +57,7 @@ module Ayadn
 
     def conversations(options)
       begin
-        @view.downloading(options)
-        stream = @api.get_conversations(options)
-        Check.no_new_posts(stream, options, 'explore:replies')
-        Databases.save_max_id(stream)
-        @view.render(stream, options)
-        Scroll.new(@api, @view).replies(options) if options[:scroll]
+        @stream.conversations(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -97,17 +65,7 @@ module Ayadn
 
     def mentions(username, options)
       begin
-        Check.no_username(username)
-        username = add_arobase(username)
-        @view.downloading(options)
-        stream = @api.get_mentions(username, options)
-        Check.no_user(stream, username)
-        Databases.save_max_id(stream)
-        Check.no_data(stream, 'mentions')
-        options = options.dup
-        options[:in_mentions] = true
-        @view.render(stream, options)
-        Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
+        @stream.mentions(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -115,15 +73,7 @@ module Ayadn
 
     def posts(username, options)
       begin
-        Check.no_username(username)
-        username = add_arobase(username)
-        @view.downloading(options)
-        stream = @api.get_posts(username, options)
-        Check.no_user(stream, username)
-        Databases.save_max_id(stream)
-        Check.no_data(stream, 'mentions')
-        @view.render(stream, options)
-        Scroll.new(@api, @view).posts(username, options) if options[:scroll]
+        @stream.posts(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -131,11 +81,7 @@ module Ayadn
 
     def interactions(options)
       begin
-        @view.downloading(options)
-        stream = @api.get_interactions
-        show_raw(stream, options)
-        @view.clear_screen
-        @view.show_interactions(stream['data'])
+        @stream.interactions(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -143,13 +89,7 @@ module Ayadn
 
     def whatstarred(username, options)
       begin
-        Check.no_username(username)
-        username = add_arobase(username)
-        @view.downloading(options)
-        stream = @api.get_whatstarred(username, options)
-        Check.no_user(stream, username)
-        Check.no_data(stream, 'whatstarred')
-        options[:extract] ? @view.all_stars_links(stream) : @view.render(stream, options)
+        @stream.whatstarred(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -157,15 +97,7 @@ module Ayadn
 
     def whoreposted(post_id, options)
       begin
-        Check.bad_post_id(post_id)
-        @view.downloading(options)
-        details = @api.get_details(post_id, options)
-        Check.no_post(details, post_id)
-        id = @workers.get_original_id(post_id, details)
-        list = @api.get_whoreposted(id)
-        show_raw(list, options)
-        abort(Status.nobody_reposted) if list['data'].empty?
-        @view.list(:whoreposted, list['data'], post_id)
+        @stream.whoreposted(post_id, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       end
@@ -173,43 +105,18 @@ module Ayadn
 
     def whostarred(post_id, options)
       begin
-        Check.bad_post_id(post_id)
-        @view.downloading(options)
-        details = @api.get_details(post_id, options)
-        Check.no_post(details, post_id)
-        id = @workers.get_original_id(post_id, details)
-        list = @api.get_whostarred(id)
-        show_raw(list, options)
-        abort(Status.nobody_starred) if list['data'].empty?
-        @view.list(:whostarred, list['data'], id)
+        @stream.whostarred(post_id, options)
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id, id, options]})
+        Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       end
     end
 
     def convo(post_id, options)
       begin
-        Check.bad_post_id(post_id)
-        @view.downloading(options)
-        details = @api.get_details(post_id, options)
-        Check.no_post(details, post_id)
-        id = @workers.get_original_id(post_id, details)
-        stream = get_convo id, options
-        Databases.pagination["replies:#{id}"] = stream['meta']['max_id']
-        options = options.dup
-        options[:reply_to] = details['data']['reply_to'].to_i unless details['data']['reply_to'].nil?
-        options[:post_id] = post_id.to_i
-        @view.render(stream, options)
-        Scroll.new(@api, @view).convo(id, options) if options[:scroll]
+        @stream.convo(post_id, options)
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id, id, options]})
+        Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       end
-    end
-
-    def get_convo id, options
-      stream = @api.get_convo(id, options)
-      Check.no_post(stream, id)
-      stream
     end
 
     def delete(post_id)
@@ -441,15 +348,7 @@ module Ayadn
 
     def followings(username, options)
       begin
-        Check.no_username(username)
-        username = add_arobase(username)
-        @view.downloading(options)
-        show_raw_list(username, :followings, options)
-        list = @api.get_followings(username)
-        Check.auto_save_followings(list)
-        Errors.no_data('followings') if list.empty?
-        @view.list(:followings, list, username)
-        Databases.add_to_users_db_from_list(list)
+        @stream.followings(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -457,15 +356,7 @@ module Ayadn
 
     def followers(username, options)
       begin
-        Check.no_username(username)
-        username = add_arobase(username)
-        @view.downloading(options)
-        show_raw_list(username, :followers, options)
-        list = @api.get_followers(username)
-        Check.auto_save_followers(list)
-        Errors.no_data('followers') if list.empty?
-        @view.list(:followers, list, username)
-        Databases.add_to_users_db_from_list(list)
+        @stream.followers(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -473,13 +364,7 @@ module Ayadn
 
     def muted(options)
       begin
-        @view.downloading(options)
-        show_raw_list(nil, :muted, options)
-        list = @api.get_muted
-        Check.auto_save_muted(list)
-        Errors.no_data('muted') if list.empty?
-        @view.list(:muted, list, nil)
-        Databases.add_to_users_db_from_list(list)
+        @stream.muted(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -487,12 +372,7 @@ module Ayadn
 
     def blocked(options)
       begin
-        @view.downloading(options)
-        show_raw_list(nil, :blocked, options)
-        list = @api.get_blocked
-        Errors.no_data('blocked') if list.empty?
-        @view.list(:blocked, list, nil)
-        Databases.add_to_users_db_from_list(list)
+        @stream.blocked(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -509,7 +389,7 @@ module Ayadn
     def userinfo(username, options)
       begin
         Check.no_username(username)
-        username = add_arobase(username)
+        username = @workers.add_arobase(username)
         @view.downloading(options)
         if options[:raw]
           resp = @api.get_user(username)
@@ -597,15 +477,7 @@ module Ayadn
 
     def messages(channel_id, options)
       begin
-        channel_id = @workers.get_channel_id_from_alias(channel_id)
-        @view.downloading(options)
-        resp = @api.get_messages(channel_id, options)
-        Check.no_new_posts(resp, options, "channel:#{channel_id}")
-        Databases.save_max_id(resp)
-        show_raw(resp, options)
-        Check.no_data(resp, 'messages')
-        @view.render(resp, options)
-        Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
+        @stream.messages(channel_id, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id, options]})
       end
@@ -704,7 +576,7 @@ module Ayadn
     	begin
         files = FileOps.make_paths(options['embed']) if options['embed']
         Check.no_username(username)
-        username = [add_arobase(username)]
+        username = [@workers.add_arobase(username)]
     		messenger = Post.new
         puts Status.message_from(username)
     		puts Status.message
@@ -856,20 +728,6 @@ module Ayadn
     end
 
     private
-
-    def show_raw_list username, what, options
-      if options[:raw]
-        @view.show_raw(@api.get_raw_list(username, what), options)
-        exit
-      end
-    end
-
-    def show_raw what, options
-      if options[:raw]
-        @view.show_raw(what, options)
-        exit
-      end
-    end
 
     def np_lastfm options
       begin
@@ -1036,14 +894,6 @@ module Ayadn
         puts text + "\n\n\nThe iTunes Store thinks this track is: ".color(:green) + "'#{store['track']}'".color(:magenta) + " by ".color(:green) + "'#{store['artist']}'".color(:magenta) + ".\n\nAyadn will use these elements to insert album artwork and a link to the track.\n\n".color(:green)
       end
       puts "Is it ok? (y/N) ".color(:yellow)
-    end
-
-    def nicerank_true
-      return true if Settings.options[:nicerank][:filter] == true
-    end
-
-    def add_arobase username
-      @workers.add_arobase_if_missing(username)
     end
 
   end
