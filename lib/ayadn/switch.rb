@@ -32,7 +32,7 @@ module Ayadn
         exit
       end
       #puts "\e[H\e[2J"
-      username = Workers.remove_arobase_if_present([user.first])[0]
+      username = Workers.new.remove_arobase_if_present([user.first])[0]
       home_path = Dir.home + "/ayadn"
       if File.exist?("#{home_path}/accounts.db")
         accounts_db = Databases.init("#{home_path}/accounts.db")

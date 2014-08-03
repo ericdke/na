@@ -3,7 +3,7 @@ module Ayadn
   class App < Thor
     package_name "Ayadn"
 
-    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug nowwatching}.each { |r| require_relative "#{r}" }
+    %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowwatching}.each { |r| require_relative "#{r}" }
 
     ##
     # These methods are intended to be called from the CLI.

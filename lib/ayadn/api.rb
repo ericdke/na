@@ -2,6 +2,10 @@
 module Ayadn
   class API
 
+    def initialize
+      @workers = Workers.new
+    end
+
     def get_unified(options)
       options = paginate options, 'unified'
       get_parsed_response(Endpoints.new.unified(options))
@@ -282,7 +286,7 @@ module Ayadn
       loop do
         resp = get_parsed_response(get_list_url(username, target, options))
         abort(Status.user_404(username)) if resp['meta']['code'] == 404
-        users = Workers.extract_users(resp)
+        users = @workers.extract_users(resp)
         big_hash.merge!(users)
         break if resp['meta']['min_id'] == nil
         options = {:count => 200, :before_id => resp['meta']['min_id']}

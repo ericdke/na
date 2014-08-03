@@ -54,6 +54,7 @@ module Ayadn
       Settings.init_config
       Logs.create_logger
       Databases.open_databases
+      @workers = Workers.new
     end
     def import(database)
       begin
@@ -95,11 +96,11 @@ module Ayadn
         type = args.shift
         case type
         when 'user', 'username', 'account'
-          target = Workers.add_arobases_to_usernames args
+          target = @workers.add_arobases_to_usernames args
           Databases.add_user_to_blacklist(target)
           Logs.rec.info "Added '#{target}' to blacklist of users."
         when 'mention', 'mentions'
-          target = Workers.add_arobases_to_usernames args
+          target = @workers.add_arobases_to_usernames args
           Databases.add_mention_to_blacklist(target)
           Logs.rec.info "Added '#{target}' to blacklist of mentions."
         when 'client', 'source'
@@ -120,12 +121,12 @@ module Ayadn
         type = args.shift
         case type
         when 'user', 'username', 'account'
-          temp = Workers.add_arobases_to_usernames args
+          temp = @workers.add_arobases_to_usernames args
           target = temp.map {|u| "-#{u}"}
           Databases.remove_from_blacklist(target)
           Logs.rec.info "Removed '#{target}' from blacklist of users."
         when 'mention', 'mentions'
-          target = Workers.add_arobases_to_usernames args
+          target = @workers.add_arobases_to_usernames args
           Databases.remove_from_blacklist(target)
           Logs.rec.info "Removed '#{target}' from blacklist of mentions."
         when 'client', 'source', 'hashtag', 'tag'

@@ -259,7 +259,7 @@ module Ayadn
         end
         unless ch.recent_message.nil?
           unless ch.recent_message['text'].nil?
-            view << "Most recent message (#{Workers.new.parsed_time(ch.recent_message['created_at'])}): ".color(:cyan)
+            view << "Most recent message (#{@workers.parsed_time(ch.recent_message['created_at'])}): ".color(:cyan)
             view << "\n"
             view << "---\n#{ch.recent_message['text']}\n---"
           end
@@ -276,6 +276,28 @@ module Ayadn
       puts view
     end
 
+    def render(stream, options = {}, niceranks = {})
+      unless options[:raw]
+        get(stream['data'], options, niceranks)
+      else
+        show_raw(stream)
+      end
+    end
+
+    def get(stream, options = {}, niceranks = {})
+      clear_screen()
+      if options[:index]
+        show_posts_with_index(stream, options, niceranks)
+      else
+        show_posts(stream, options, niceranks)
+      end
+    end
+
+    def get_simple_view(stream)
+      clear_screen()
+      show_simple_stream(stream)
+    end
+
     def clear_screen
       puts "\e[H\e[2J"
     end
@@ -284,6 +306,37 @@ module Ayadn
       clear_screen
       puts msg
       puts "\n"
+    end
+
+    def winsize
+      IO.console.winsize
+    end
+
+    def show_links(links)
+      links.each {|l| puts "#{l}\n".color(Settings.options[:colors][:link])}
+    end
+
+    def all_hashtag_links(stream, hashtag)
+      clear_screen()
+      puts "Links from posts containing hashtag '##{hashtag}': \n".color(:cyan)
+      show_links(@workers.links_from_posts(stream))
+    end
+
+    def all_search_links(stream, words)
+      clear_screen()
+      puts "Links from posts containing word(s) '#{words}': \n".color(:cyan)
+      show_links(@workers.links_from_posts(stream))
+    end
+
+    def all_stars_links(stream)
+      clear_screen()
+      puts "Links from your starred posts: \n".color(:cyan)
+      show_links(@workers.links_from_posts(stream))
+    end
+
+    def get_infos(stream, token)
+      clear_screen()
+      show_userinfos(stream, token, true)
     end
 
     def big_separator

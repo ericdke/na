@@ -17,6 +17,7 @@ describe Ayadn::Workers do
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
     Ayadn::Databases.stub(:users).and_return("users")
+    @workers = Ayadn::Workers.new
   end
 
   let(:data) { JSON.parse(File.read("spec/mock/stream.json")) }
@@ -25,7 +26,7 @@ describe Ayadn::Workers do
 
   describe "#build_posts" do
     it "builds posts hash from stream" do
-      posts = Ayadn::Workers.new.build_posts(data['data'])
+      posts = @workers.build_posts(data['data'])
       expect(posts.length).to eq 10
       expect(posts[23187363][:name]).to eq 'App.net Staff'
       expect(posts[23184500][:username]).to eq 'wired'
@@ -44,7 +45,7 @@ describe Ayadn::Workers do
       expect(posts[23187443].length).to eq 33
     end
     it "gets oembed link from checkins post" do
-      posts = Ayadn::Workers.new.build_posts(checkins['data'])
+      posts = @workers.build_posts(checkins['data'])
       expect(posts[27101186][:links]).to eq ["https://photos.app.net/27101186/1"]
       expect(posts[27080492][:links]).to eq ["http://sprintr.co/27080492"]
       expect(posts[27073989][:links]).to eq ["http://pic.favd.net/27073989", "https://photos.app.net/27073989/1"]
@@ -53,21 +54,21 @@ describe Ayadn::Workers do
 
   describe "#extract_hashtags" do
     it "extracts hashtags" do
-      tags = Ayadn::Workers.new.extract_hashtags(data['data'][0])
+      tags = @workers.extract_hashtags(data['data'][0])
       expect(tags).to eq ['photography']
     end
   end
 
   describe "#extract_links" do
     it "extracts links" do
-      links = Ayadn::Workers.new.extract_links(data['data'][0])
+      links = @workers.extract_links(data['data'][0])
       expect(links).to eq ['http://feed.500px.com/~r/500px-best/~3/c2tMPEJVf6I/61517259']
     end
   end
 
   describe "#extract_checkins" do
     it "extracts checkins" do
-      posts = Ayadn::Workers.new.build_posts(checkins['data'])
+      posts = @workers.build_posts(checkins['data'])
       expect(posts.length).to eq 10
       expect(posts[27101186][:has_checkins]).to be true
       expect(posts[27101186][:checkins][:name]).to eq "Hobbs State Park"
@@ -86,7 +87,7 @@ describe Ayadn::Workers do
   # describe "#build_followers_list" do
   #   it 'builds the followers table list' do
   #     printed = capture_stdout do
-  #       puts Ayadn::Workers.new.build_followers_list(list, "@test")
+  #       puts @workers.build_followers_list(list, "@test")
   #     end
   #     expect(printed).to include "@test"
   #     expect(printed).to include "@bond"
@@ -97,7 +98,7 @@ describe Ayadn::Workers do
   # describe "#build_followings_list" do
   #   it 'builds the followings table list' do
   #     printed = capture_stdout do
-  #       puts Ayadn::Workers.new.build_followings_list(list, "@test")
+  #       puts @workers.build_followings_list(list, "@test")
   #     end
   #     #expect(printed).to include "+~~~~"
   #     expect(printed).to include "@test"
@@ -109,7 +110,7 @@ describe Ayadn::Workers do
   # describe "#build_muted_list" do
   #   it 'builds the muted table list' do
   #     printed = capture_stdout do
-  #       puts Ayadn::Workers.new.build_muted_list(list)
+  #       puts @workers.build_muted_list(list)
   #     end
   #     #expect(printed).to include "+----"
   #     expect(printed).to include "@bond"
@@ -120,7 +121,7 @@ describe Ayadn::Workers do
   # describe "#build_blocked_list" do
   #   it 'builds the blocked table list' do
   #     printed = capture_stdout do
-  #       puts Ayadn::Workers.new.build_blocked_list(list)
+  #       puts @workers.build_blocked_list(list)
   #     end
   #     #expect(printed).to include "+----"
   #     expect(printed).to include "@bond"
@@ -128,19 +129,19 @@ describe Ayadn::Workers do
   #   end
   # end
 
-  describe ".add_arobase_if_missing" do
+  describe "#add_arobase_if_missing" do
     it 'adds @ to username' do
-      expect(Ayadn::Workers.add_arobase_if_missing(["user"])).to eq "@user"
+      expect(@workers.add_arobase_if_missing(["user"])).to eq "@user"
     end
     it 'does nothing to @username' do
-      expect(Ayadn::Workers.add_arobase_if_missing(["@user"])).to eq "@user"
+      expect(@workers.add_arobase_if_missing(["@user"])).to eq "@user"
     end
   end
 
-  describe ".remove_arobase_if_present" do
+  describe "#remove_arobase_if_present" do
     it "removes @ from username" do
-      expect(Ayadn::Workers.remove_arobase_if_present(["@user"])).to eq ["user"]
-      expect(Ayadn::Workers.remove_arobase_if_present(["user"])).to eq ["user"]
+      expect(@workers.remove_arobase_if_present(["@user"])).to eq ["user"]
+      expect(@workers.remove_arobase_if_present(["user"])).to eq ["user"]
     end
   end
 
@@ -148,7 +149,7 @@ describe Ayadn::Workers do
     it "colorizes mentions and hashtags" do
       text = regex_post['data']['text']
       mentions = regex_post['data']['entities']['mentions']
-      expect(Ayadn::Workers.new.colorize_text(text, mentions, ['false', 'true', 'test', 'regex'])).to eq "\e[36m#test\e[0m \e[36m#regex\e[0m\n@aya_tests's \e[36m#true\e[0m\n(@aya_tests) \e[36m#true\e[0m\n@AyA_TeSts \e[36m#true\e[0m\n@aya_test \e[36m#false\e[0m\naya@aya_tests.yolo \e[36m#false\e[0m\n-@aya_tests:ohai! \e[36m#true\e[0m\ntext,@aya_tests,txt \e[36m#true\e[0m"
+      expect(@workers.colorize_text(text, mentions, ['false', 'true', 'test', 'regex'])).to eq "\e[36m#test\e[0m \e[36m#regex\e[0m\n@aya_tests's \e[36m#true\e[0m\n(@aya_tests) \e[36m#true\e[0m\n@AyA_TeSts \e[36m#true\e[0m\n@aya_test \e[36m#false\e[0m\naya@aya_tests.yolo \e[36m#false\e[0m\n-@aya_tests:ohai! \e[36m#true\e[0m\ntext,@aya_tests,txt \e[36m#true\e[0m"
     end
   end
 

@@ -81,7 +81,7 @@ module Ayadn
     end
 
     def build_users_list(list, table)
-      users = Workers.at(list.map {|obj| obj[:username]})
+      users = at(list.map {|obj| obj[:username]})
       ids = list.map {|obj| obj[:id].to_i}
       ranks = NiceRank.new.from_ids(ids)
       indexed_ranks = {}
@@ -302,7 +302,7 @@ module Ayadn
       "#{string[0...10]} #{string[11...19]}"
     end
 
-    def self.at usernames
+    def at usernames
       usernames.map do |user|
         if user == 'me'
           'me'
@@ -314,7 +314,37 @@ module Ayadn
       end
     end
 
-    def self.add_arobase_if_missing(username) # expects an array of username(s), works on the first one and outputs a string
+    def get_channel_id_from_alias(channel_id)
+      unless channel_id.is_integer?
+        orig = channel_id
+        channel_id = Databases.get_channel_id(orig)
+        if channel_id.nil?
+          Errors.warn("Alias '#{orig}' doesn't exist.")
+          puts Status.no_alias
+          exit
+        end
+      end
+      channel_id
+    end
+
+    def length_of_index
+      Databases.get_index_length
+    end
+
+    def get_post_from_index id
+      Databases.get_post_from_index id
+    end
+
+    def get_real_post_id post_id
+      id = post_id.to_i
+      if id > 0 && id <= length_of_index
+        resp = get_post_from_index(id)
+        post_id = resp[:id]
+      end
+      post_id
+    end
+
+    def add_arobase_if_missing(username) # expects an array of username(s), works on the first one and outputs a string
       unless username.first == "me"
         username = username.first.chars
         username.unshift("@") unless username.first == "@"
@@ -324,26 +354,25 @@ module Ayadn
       username.join
     end
 
-    def self.add_arobases_to_usernames args
-      args.map! do |username|
+    def add_arobases_to_usernames args
+      args.map do |username|
         if username == 'me'
-          self.who_am_i
+          who_am_i
         else
           temp = username.chars
           temp.unshift("@") unless temp.first == "@"
           temp.join
         end
       end
-      args
     end
 
-    def self.who_am_i
+    def who_am_i
       db = Databases.init(Dir.home + "/ayadn/accounts.db")
       active = db['ACTIVE']
       db[active][:handle]
     end
 
-    def self.remove_arobase_if_present args
+    def remove_arobase_if_present args
       args.map! do |username|
         temp = username.chars
         temp.shift if temp.first == "@"
@@ -352,7 +381,7 @@ module Ayadn
       args
     end
 
-    def self.extract_users(resp)
+    def extract_users(resp)
       users_hash = {}
       resp['data'].each do |item|
         users_hash[item['id']] = [item['username'], item['name'], item['you_follow'], item['follows_you']]
@@ -424,6 +453,15 @@ module Ayadn
       sentences.join("\n")
     end
 
+    def links_from_posts(stream)
+      links = []
+      stream['data'].each do |post|
+        extract_links(post).each {|l| links << l}
+      end
+      links.uniq!
+      links
+    end
+
     private
 
     def def_str(word, reg_split)
@@ -444,11 +482,9 @@ module Ayadn
     end
 
     def build_users_array(list)
-      users_list = []
-      list.each do |key, value|
-        users_list << {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3], :id => key}
+      list.map do |key, value|
+        {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3], :id => key}
       end
-      users_list
     end
 
     def extract_checkins(post)
