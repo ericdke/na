@@ -297,5 +297,8 @@ module Ayadn
     def self.fetching_from source
       "\nFetching informations from #{source}...\n".color(:green)
     end
+    def self.no_movie
+      "\nSorry, can't find this movie.\n".color(:blue)
+    end
   end
 end
