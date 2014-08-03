@@ -2,6 +2,7 @@
 
 - New: 'nowwatching'. Create a post from a movie title.
 - New: see the target of your PM when writing a message.
+- New: delete several posts at once.
 - Fixed: uploading jpg if there were spaces in the filename.
 - General code cleaning and refactoring.
 

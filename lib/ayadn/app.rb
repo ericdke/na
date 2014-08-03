@@ -242,7 +242,7 @@ module Ayadn
     desc "delete POST", "Delete a post (-D)"
     map "-D" => :delete
     long_desc Descriptions.delete
-    def delete(post_id)
+    def delete(*post_id)
       Action.new.delete(post_id)
     end
 
