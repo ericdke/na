@@ -72,7 +72,8 @@ module Ayadn
     end
 
     def post
-      filename = "#{@name.downcase.strip.split(' ').join('_')}.jpg"
+      reg = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
+      filename = "#{@name.downcase.strip.gsub(reg, '_').split(' ').join('_')}.jpg"
       FileOps.download_url(filename, @poster_url)
       @view.clear_screen
       puts "\nPosting and uploading the show poster...\n".color(:green)
