@@ -45,7 +45,7 @@ module Ayadn
     end
 
     def format_plot response, text
-      max = 249 - (text.length + Settings.options[:movie][:hashtag].length)  # 249 = 256 - 'IMDb' and 3 spaces
+      max = 239 - (text.length + Settings.options[:movie][:hashtag].length)
       short = max - 3
       plot = response.description
       if plot.length > max
