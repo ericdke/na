@@ -40,7 +40,7 @@ You can modify the hashtag with 'set':
 
 `ayadn set movie hashtag adnmovieclub`
 
-(default is '#movie')
+(default is 'nowwatching')
 
 
 

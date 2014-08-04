@@ -15,7 +15,8 @@ module Ayadn
       response = find_by_title(args, options)
       text = format_post(response)
       show_post(text)
-      filename = "#{args.join('_')}.jpg"
+      reg = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
+      filename = "#{response.title.downcase.strip.gsub(reg, '_').split(' ').join('_')}.jpg"
       FileOps.download_url(filename, response.poster_url)
       @view.clear_screen
       puts "\nPosting and uploading the movie poster...\n".color(:green)

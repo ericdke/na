@@ -1,4 +1,4 @@
-# 1.6.0 - 'Galadriel'
+# 1.6.0 - 'Beetlejuice'
 
 - New command: 'movie'. Create a post from a movie title (with link + movie poster). Customisable hashtag (default: '#nowwatching').
 - New command: 'tvshow'. Create a post from a TV show title (with link + show poster). Customisable hashtag (default: '#nowwatching').
