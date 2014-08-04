@@ -428,10 +428,10 @@ module Ayadn
       Action.new.nowplaying(options)
     end
 
-    desc "movie TITLE", "Create a post from a movie title (-nw)"
+    desc "movie TITLE", "Create a post from a movie title (-NW)"
     map "nowwatching" => :movie
     map "imdb" => :movie
-    map "-nw" => :movie
+    map "-NW" => :movie
     long_desc Descriptions.nowwatching
     option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
     def movie(*title)

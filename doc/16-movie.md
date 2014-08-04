@@ -8,9 +8,9 @@ Usage:
 
 `ayadn movie existenz`
 
-`ayadn -nw beetlejuice`
+`ayadn -NW beetlejuice`
 
-(shortcut is 'nw' because of 'nowwatching')
+(shortcut is 'NW' because of 'nowwatching')
 
 ## ALT
 
@@ -18,11 +18,11 @@ If the movie is not the one you're looking for, you can specify the 'alt' option
 
 This is useful for remakes:
 
-`ayadn -nw solaris`
+`ayadn -NW solaris`
 
 (gives the 2002 version)
 
-`ayadn -nw solaris --alt`
+`ayadn -NW solaris --alt`
 
 (gives the 1972 version)
 
