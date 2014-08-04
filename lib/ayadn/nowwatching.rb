@@ -20,7 +20,13 @@ module Ayadn
       @view.clear_screen
       puts "\nPosting and uploading the movie poster...\n".color(:green)
       file = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
-      resp = Post.new.send_embedded(text, file)
+      dic = {
+        'text' => text,
+        'data' => FileOps.upload_files(file),
+        'title' => response.title,
+        'source' => 'IMDb'
+      }
+      resp = Post.new.send_movie(dic)
       FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
       @view.clear_screen
       puts Status.yourpost

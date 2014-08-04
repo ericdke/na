@@ -42,6 +42,26 @@ module Ayadn
       send_content(Endpoints.new.posts_url, payload_nowplaying(dic))
     end
 
+    def send_movie dic
+      send_content(Endpoints.new.posts_url, payload_movie(dic))
+    end
+
+    def payload_movie dic
+      ann = annotations_embedded(dic)
+      ann << {
+        "type" => "com.ayadn.movie",
+          "value" => {
+            "title" => dic['title'],
+            "source" => dic['source']
+          }
+      }
+      {
+        "text" => dic['text'],
+        "entities" => entities,
+        "annotations" => ann
+      }
+    end
+
     def payload_nowplaying dic
       ann = annotations()
       if dic['visible'] == true
