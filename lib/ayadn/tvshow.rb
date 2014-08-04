@@ -88,7 +88,7 @@ module Ayadn
         'title' => @name,
         'source' => 'TVDb'
       }
-      resp = Post.new.send_movie(dic)
+      resp = Post.new.send_tvshow(dic)
       FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
       @view.clear_screen
       puts Status.yourpost
