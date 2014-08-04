@@ -71,10 +71,14 @@ module Ayadn
       STDIN.getch == ("y" || "Y") ? true : false
     end
 
-    def post
+    def post options = {}
       reg = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
       filename = "#{@name.downcase.strip.gsub(reg, '_').split(' ').join('_')}.jpg"
-      FileOps.download_url(filename, @poster_url)
+      if options['banner']
+        FileOps.download_url(filename, @banner_url)
+      else
+        FileOps.download_url(filename, @poster_url)
+      end
       @view.clear_screen
       puts "\nPosting and uploading the show poster...\n".color(:green)
       file = ["#{Settings.config[:paths][:downloads]}/#{filename}"]

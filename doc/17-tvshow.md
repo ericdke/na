@@ -31,3 +31,14 @@ You can modify the hashtag with 'set':
 `ayadn set tvshow hashtag tvshow`
 
 (default is 'nowwatching')
+
+## BANNER
+
+You can display a banner instead of a poster, with the `--banner` (`-b`) option:
+
+```
+ayadn -TV magnum --banner
+ayadn -TV -b magnum
+```  
+
+

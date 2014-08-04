@@ -666,7 +666,7 @@ module Ayadn
           show_obj = client.find(args.join(' '))
         end
         candidate = client.create_details(show_obj)
-        candidate.ok ? candidate.post : candidate.cancel
+        candidate.ok ? candidate.post(options) : candidate.cancel
       rescue => e
         puts Status.wtf
         Errors.global_error({error: e, caller: caller, data: [args, options]})

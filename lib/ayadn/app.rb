@@ -442,6 +442,7 @@ module Ayadn
     map "-TV" => :tvshow
     long_desc Descriptions.tvshow
     option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
+    option :banner, aliases: "-b", type: :boolean, desc: "Inserts the show banner instead of the show poster"
     def tvshow(*title)
       Action.new.tvshow(title, options)
     end

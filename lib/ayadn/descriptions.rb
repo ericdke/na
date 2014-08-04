@@ -1203,6 +1203,14 @@ module Ayadn
       ayadn set tvshow hashtag tvshow
 
       (default is 'nowwatching')
+
+      Banner:
+
+      Use the `--banner` (-b) options to insert a banner instead of a poster:
+
+      ayadn -TV magnum --banner
+
+      ayadn -TV -b magnum
       \n\n
       USAGE
     end
