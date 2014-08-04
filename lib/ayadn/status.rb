@@ -303,5 +303,11 @@ module Ayadn
     def self.no_movie
       "\nSorry, can't find this movie.\n".color(:blue)
     end
+    def self.no_show
+      "\nSorry, can't find this show.\n".color(:blue)
+    end
+    def self.no_show_infos
+      "\nSorry, can't find informations about this show.\n".color(:blue)
+    end
   end
 end

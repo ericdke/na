@@ -3,7 +3,7 @@ module Ayadn
   class App < Thor
     package_name "Ayadn"
 
-    %w{action stream api search descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowplaying nowwatching}.each { |r| require_relative "#{r}" }
+    %w{action stream api search descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowplaying nowwatching tvshow}.each { |r| require_relative "#{r}" }
 
     ##
     # These methods are intended to be called from the CLI.
@@ -436,6 +436,14 @@ module Ayadn
     option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
     def movie(*title)
       Action.new.nowwatching(title, options)
+    end
+
+    desc "tvshow TITLE", "Create a post from a TV show title (-TV)"
+    map "-TV" => :tvshow
+    long_desc Descriptions.tvshow
+    option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
+    def tvshow(*title)
+      Action.new.tvshow(title, options)
     end
 
     desc "random", "Show random posts from App.net (-rnd)"

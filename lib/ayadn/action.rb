@@ -656,6 +656,23 @@ module Ayadn
       end
     end
 
+    def tvshow(args, options = {})
+      begin
+        abort(Status.error_missing_title) if args.empty?
+        client = TvShow.new
+        if options['alt']
+          show_obj = client.find_alt(args.join(' '))
+        else
+          show_obj = client.find(args.join(' '))
+        end
+        candidate = client.create_details(show_obj)
+        candidate.ok ? candidate.post : candidate.cancel
+      rescue => e
+        puts Status.wtf
+        Errors.global_error({error: e, caller: caller, data: [args, options]})
+      end
+    end
+
     def random_posts(options)
       begin
         @stream.random_posts(options)

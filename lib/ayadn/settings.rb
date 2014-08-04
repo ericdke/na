@@ -96,7 +96,8 @@ module Ayadn
           conf[:timeline][:show_spinner] = true if conf[:timeline][:show_spinner].nil?
           conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
           conf[:nowplaying] = {} if conf[:nowplaying].nil?
-          conf[:movie] = {hashtag: 'movie'} if conf[:movie].nil?
+          conf[:movie] = {hashtag: 'nowwatching'} if conf[:movie].nil?
+          conf[:tvshow] = {hashtag: 'nowwatching'} if conf[:tvshow].nil?
 
           @options = conf
           self.write_config_file(config_file, @options)
@@ -222,7 +223,10 @@ module Ayadn
         nicerank: @default_nr,
         nowplaying: {},
         movie: {
-          hashtag: 'movie'
+          hashtag: 'nowwatching'
+        },
+        tvshow: {
+          hashtag: 'nowwatching'
         }
       }
     end

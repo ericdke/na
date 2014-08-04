@@ -1168,7 +1168,41 @@ module Ayadn
 
       ayadn set movie hashtag adnmovieclub
 
-      (default is 'movie')
+      (default is 'nowwatching')
+      \n\n
+      USAGE
+    end
+    def self.tvshow
+      <<-USAGE
+      Create a post from (part of) a TV show title. Includes show poster and IMDb url.
+
+      Usage:
+
+      ayadn tvshow magnum
+
+      ayadn tvshow game of thrones
+
+      ayadn -TV 24
+
+      If the show is not the one you're looking for, you can specify the 'alt' option to force find an alternative.
+
+      ayadn -TV whose line
+
+      (gives the US version)
+
+      ayadn -TV whose line --alt
+
+      (gives the UK version)
+
+      Hashtag:
+
+      You can modify the hashtag with 'set':
+
+      ayadn set tvshow hashtag showtime
+
+      ayadn set tvshow hashtag tvshow
+
+      (default is 'nowwatching')
       \n\n
       USAGE
     end
