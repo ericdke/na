@@ -23,8 +23,9 @@ The purpose of Ayadn is to let you use all the features of App.net from the cons
 - extract links from conversations, streams, posts, etc
 - list and download your files
 - view (and write to) all your channels including Broadcasts, Patter, Ohai, etc
-- #nowplaying from iTunes or Last.fm, with album art and store link
-- #movie creates a post from a movie title with poster, etc
+- 'nowplaying' from iTunes or Last.fm, with album art and store link
+- 'movie' creates a post from a movie title with poster, etc
+- 'tvshow' creates a post from a TV show title with poster, etc
 - view/send private messages
 - view geolocation data in streams
 - create/manage silent black lists of users, mentions or hashtags
