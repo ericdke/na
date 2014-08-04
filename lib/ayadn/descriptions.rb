@@ -1134,9 +1134,13 @@ module Ayadn
 
       Usage:
 
-      ayadn nowwatching two towers
+      ayadn movie ghost in the shell
+
+      ayadn movie existenz
 
       ayadn -nw beetlejuice
+
+      (shortcut is 'nw' because of 'nowwatching')
 
       If the movie is not the one you're looking for, you can specify the 'alt' option to force find an alternative.
 
@@ -1152,9 +1156,19 @@ module Ayadn
 
       Aliases:
 
-      ayadn movie godfather II
+      ayadn nowwatching godfather II
 
       ayadn imdb -a conan
+
+      Hashtag:
+
+      You can modify the hashtag with 'set':
+
+      ayadn set movie hashtag movietime
+
+      ayadn set movie hashtag adnmovieclub
+
+      (default is 'movie')
       \n\n
       USAGE
     end

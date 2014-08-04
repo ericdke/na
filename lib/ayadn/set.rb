@@ -15,6 +15,19 @@ module Ayadn
       scroll_config.save
     end
 
+    desc "movie ITEM VALUE", "Set values for #movie (nowwatching)"
+    map "nowwatching" => :movie
+    def movie(*args)
+      movie_config = SetMovie.new
+      unless args.length != 2
+        movie_config.send(args[0], args[1])
+      else
+        abort(Status.error_missing_parameters)
+      end
+      movie_config.log(args)
+      movie_config.save
+    end
+
     desc "nicerank ITEM VALUE", "Set NiceRank filter values"
     long_desc Descriptions.set_nicerank
     def nicerank *args
@@ -145,6 +158,26 @@ module Ayadn
     end
     def timer(t)
       Settings.options[:scroll][:timer] = t
+    end
+  end
+
+  class SetMovie
+    def initialize
+      Settings.load_config
+      Settings.get_token
+      Settings.init_config
+      Logs.create_logger
+    end
+    def log(args)
+      x = "New value for '#{args[0]}' in 'Movie' => #{args[1]}"
+      puts "\n#{x}\n".color(:cyan)
+      Logs.rec.info x
+    end
+    def save
+      Settings.save_config
+    end
+    def hashtag(tag)
+      Settings.options[:movie][:hashtag] = tag
     end
   end
 

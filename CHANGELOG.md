@@ -1,6 +1,6 @@
-# 1.6.0 - 'Penny'
+# 1.6.0 - 'Baskerville'
 
-- New: 'nowwatching'. Create a post from a movie title.
+- New command: 'movie' (nowwatching). Create a post from a movie title (with link + movie poster). Customisable hashtag (default: '#movie').
 - New: see the target of your PM when writing a message.
 - New: delete several posts at once.
 - New: delete several PMs at once.

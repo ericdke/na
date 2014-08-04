@@ -37,14 +37,15 @@ module Ayadn
     end
 
     def format_post response
-      text_1 = "#nowwatching #movie\n \n'#{response.title}' (#{response.year})"
+      tag = Settings.options[:movie][:hashtag]
+      text_1 = "'#{response.title}' (#{response.year})"
       link = "[IMDb](#{response.url})"
       plot = format_plot(response, text_1)
-      "#{text_1}\n \n#{plot}\n \n#{link}\n\n"
+      "#{text_1}\n \n#{plot}\n \n#{link}\n \n##{tag}\n\n"
     end
 
     def format_plot response, text
-      max = 250 - text.length  # 250 = 256 - 'IMDb' and 2 spaces
+      max = 249 - (text.length + Settings.options[:movie][:hashtag].length)  # 249 = 256 - 'IMDb' and 3 spaces
       short = max - 3
       plot = response.description
       if plot.length > max
