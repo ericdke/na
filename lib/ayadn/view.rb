@@ -6,6 +6,14 @@ module Ayadn
       @workers = Workers.new
     end
 
+    def show_cursor
+      puts "\e[?25h"
+    end
+
+    def hide_cursor
+      puts "\e[?25l"
+    end
+
     def show_posts_with_index(data, options, niceranks = {})
       posts, view = build_stream_with_index(data, options, niceranks)
       puts view unless view == ""
