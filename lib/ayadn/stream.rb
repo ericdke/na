@@ -88,6 +88,7 @@ module Ayadn
       Check.no_user(stream, username)
       Databases.save_max_id(stream)
       Check.no_data(stream, 'mentions')
+      Settings.options[:skip_blacklist] = true
       @view.render(stream, options)
       Scroll.new(@api, @view).posts(username, options) if options[:scroll]
     end

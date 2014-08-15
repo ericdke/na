@@ -122,18 +122,18 @@ module Ayadn
       # builds a hash of hashes, each hash is a normalized post with post id as a key
       posts = {}
       data.each.with_index(1) do |post, index|
-        if Databases.blacklist[post['source']['name'].downcase]
+        if Databases.blacklist[post['source']['name'].downcase] && Settings.options[:skip_blacklist].nil?
           Debug.skipped({source: post['source']['name']})
           next
         end
-        if Databases.blacklist["-@#{post['user']['username'].downcase}"]
+        if Databases.blacklist["-@#{post['user']['username'].downcase}"] && Settings.options[:skip_blacklist].nil?
           Debug.skipped({user: post['user']['username']})
           next
         end
         hashtags = extract_hashtags(post)
         @skip = false
         hashtags.each do |h|
-          if Databases.blacklist[h.downcase]
+          if Databases.blacklist[h.downcase] && Settings.options[:skip_blacklist].nil?
             @skip = true
             Debug.skipped({hashtag: h})
             break
@@ -143,7 +143,7 @@ module Ayadn
         mentions= []
         post['entities']['mentions'].each { |m| mentions << m['name'] }
         mentions.each do |m|
-          if Databases.blacklist["@#{m.downcase}"]
+          if Databases.blacklist["@#{m.downcase}"] && Settings.options[:skip_blacklist].nil?
             @skip = true
             Debug.skipped({mention: m})
             break

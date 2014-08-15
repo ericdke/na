@@ -1,3 +1,8 @@
+# 1.6.1 - 
+
+- `userposts` displays posts even if the user is blacklisted
+- The cursor is hidden when the scroll spinning wheel is displayed
+
 # 1.6.0 - 'Beetlejuice'
 
 - New command: 'movie'. Create a post from a movie title (with link + movie poster). Customisable hashtag (default: '#nowwatching').
