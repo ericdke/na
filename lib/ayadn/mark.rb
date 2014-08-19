@@ -52,6 +52,8 @@ module Ayadn
         puts Status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
+      ensure
+        Databases.close_all
       end
     end
 
