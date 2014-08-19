@@ -30,6 +30,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def checkins
       Action.new.checkins(options)
     end
@@ -55,6 +56,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def trending
       Action.new.trending(options)
     end
@@ -67,6 +69,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def photos
       Action.new.photos(options)
     end
@@ -79,6 +82,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def conversations
       Action.new.conversations(options)
     end
@@ -90,6 +94,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def mentions(*username)
       Action.new.mentions(username, options)
     end
@@ -147,6 +152,7 @@ module Ayadn
     option :scroll, aliases: "-s", type: :boolean, desc: "Scroll the stream"
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     long_desc Descriptions.convo
     def convo(post_id)
       Action.new.convo(post_id, options)

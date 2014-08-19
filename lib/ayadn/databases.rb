@@ -77,8 +77,13 @@ module Ayadn
       @blacklist.clear
       dummy.each {|v,k| @blacklist[v] = k}
     end
-    def self.save_max_id(stream)
-      @pagination[stream['meta']['marker']['name']] = stream['meta']['max_id']
+    def self.save_max_id(stream, name = 'unknown')
+      if stream['meta']['marker'].nil?
+        key = name
+      else
+        key = stream['meta']['marker']['name']
+      end
+      @pagination[key] = stream['meta']['max_id']
     end
 
     def self.create_alias(channel_id, channel_alias)

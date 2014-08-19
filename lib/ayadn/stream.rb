@@ -20,6 +20,7 @@ module Ayadn
     end
 
     def checkins options
+      Settings.options[:force] = true if options[:force]
       @view.downloading(options)
       stream = @api.get_checkins(options)
       Check.no_new_posts(stream, options, 'explore:checkins')
@@ -36,18 +37,13 @@ module Ayadn
       stream = @api.get_global(options)
       Settings.options[:force] == true ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream)
       Check.no_new_posts(stream, options, 'global')
-      Databases.save_max_id(stream) unless stream['meta']['marker'].nil?
+      Databases.save_max_id(stream, 'explore:global')
       @view.render(stream, options, niceranks)
-      if options[:scroll]
-        if Settings.options[:force]
-          abort(Status.no_scroll_force('Global'))
-        else
-          Scroll.new(@api, @view).global(options)
-        end
-      end
+      Scroll.new(@api, @view).global(options) if options[:scroll]
     end
 
     def trending options
+      Settings.options[:force] = true if options[:force]
       @view.downloading(options)
       stream = @api.get_trending(options)
       Check.no_new_posts(stream, options, 'explore:trending')
@@ -57,6 +53,7 @@ module Ayadn
     end
 
     def photos options
+      Settings.options[:force] = true if options[:force]
       @view.downloading(options)
       stream = @api.get_photos(options)
       Check.no_new_posts(stream, options, 'explore:photos')
@@ -66,6 +63,7 @@ module Ayadn
     end
 
     def conversations options
+      Settings.options[:force] = true if options[:force]
       @view.downloading(options)
       stream = @api.get_conversations(options)
       Check.no_new_posts(stream, options, 'explore:replies')
@@ -75,6 +73,7 @@ module Ayadn
     end
 
     def mentions username, options
+      Settings.options[:force] = true if options[:force]
       Check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options)
@@ -97,14 +96,11 @@ module Ayadn
       Check.no_user(stream, username)
       Databases.save_max_id(stream) unless stream['meta']['marker'].nil?
       Check.no_data(stream, 'mentions')
-      @view.render(stream, options)
-      if options[:scroll]
-        if Settings.options[:force]
-          abort(Status.no_scroll_force('Posts'))
-        else
-          Scroll.new(@api, @view).posts(username, options)
-        end
+      if Databases.blacklist["-#{username.downcase}"] || stream['data'][0]['user']['you_muted'] || stream['data'][0]['user']['you_blocked']
+        abort(Status.no_force("#{username.downcase}")) unless options[:raw] || Settings.options[:force]
       end
+      @view.render(stream, options)
+      Scroll.new(@api, @view).posts(username, options) if options[:scroll]
     end
 
     def whatstarred(username, options)
@@ -193,6 +189,7 @@ module Ayadn
     end
 
     def convo(post_id, options)
+      Settings.options[:force] = true if options[:force]
       Check.bad_post_id(post_id)
       @view.downloading(options)
       details = @api.get_details(post_id, options)

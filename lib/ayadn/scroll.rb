@@ -31,7 +31,7 @@ module Ayadn
           target = "explore:#{target}" if explore?(target)
           show_if_new(stream, options, target, niceranks)
           target = orig_target if target =~ /explore/
-          options = save_then_return(stream, options)
+          options = save_then_return(stream, options, target)
           countdown
         rescue Interrupt
           canceled
@@ -47,7 +47,7 @@ module Ayadn
           stream = @api.get_mentions(username, options)
           Debug.stream stream, options, username
           show_if_new(stream, options, "mentions:#{id}")
-          options = save_then_return(stream, options)
+          options = save_then_return(stream, options, "mentions:#{id}")
           countdown
         rescue Interrupt
           canceled
@@ -63,7 +63,7 @@ module Ayadn
           stream = @api.get_posts(username, options)
           Debug.stream stream, options, username
           show_if_new(stream, options, "posts:#{id}")
-          options = save_then_return(stream, options)
+          options = save_then_return(stream, options, "posts:#{id}")
           countdown
         rescue Interrupt
           canceled
@@ -78,7 +78,7 @@ module Ayadn
           stream = @api.get_convo(post_id, options)
           Debug.stream stream, options, post_id
           show_if_new(stream, options, "replies:#{post_id}")
-          options = save_then_return(stream, options)
+          options = save_then_return(stream, options, "replies:#{post_id}")
           countdown
         rescue Interrupt
           canceled
@@ -93,7 +93,7 @@ module Ayadn
           stream = @api.get_messages(channel_id, options)
           Debug.stream stream, options, channel_id
           show_if_new(stream, options, "channel:#{channel_id}")
-          options = save_then_return(stream, options)
+          options = save_then_return(stream, options, "channel:#{channel_id}")
           countdown
         rescue Interrupt
           canceled
@@ -158,12 +158,9 @@ module Ayadn
       show(stream, options, niceranks) if Databases.has_new?(stream, target)
     end
 
-    def save_then_return(stream, options)
-      unless stream['meta']['max_id'].nil?
-        Databases.save_max_id(stream)
-        return options_hash(stream, options)
-      end
-      options
+    def save_then_return(stream, options, name = 'unknown')
+      Databases.save_max_id(stream, name)
+      return options_hash(stream, options)
     end
 
     def check_raw(options)

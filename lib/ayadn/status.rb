@@ -309,8 +309,8 @@ module Ayadn
     def self.no_show_infos
       "\nSorry, can't find informations about this show.\n".color(:blue)
     end
-    def self.no_scroll_force target
-      "\nSorry, can't scroll #{target} if option 'force' is activated.\n".color(:blue)
+    def self.no_force target
+      "\n'#{target}' can't be displayed (could be muted, blocked, in the Blacklist, etc). Use option '--force' ('-f') to try and display this content anyway.\n\n".color(:blue)
     end
   end
 end
