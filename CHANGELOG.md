@@ -1,6 +1,6 @@
 # 1.6.1 - 'Private Investigations'
 
-- `userposts` displays posts even if the user is blacklisted
+- Force view posts from blacklisted/muted/blocked users with `-f`
 - The cursor is hidden when the scroll spinning wheel is displayed
 
 # 1.6.0 - 'Beetlejuice'

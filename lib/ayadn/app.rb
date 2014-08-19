@@ -99,6 +99,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def userposts(*username)
       Action.new.posts(username, options)
     end

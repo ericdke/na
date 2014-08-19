@@ -16,6 +16,9 @@ module Ayadn
     def self.options_extract
       "Extract links from each object"
     end
+    def self.options_force
+      "Force retrieve posts if the user is muted/blocked"
+    end
     def self.unified
       <<-USAGE
       Show your App.net timeline, aka the Unified Stream.

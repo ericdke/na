@@ -118,39 +118,49 @@ module Ayadn
       table
     end
 
+    # builds a hash of hashes, each hash is a normalized post with post id as a key
     def build_posts(data, niceranks = {})
-      # builds a hash of hashes, each hash is a normalized post with post id as a key
+      # skip objects in blacklist unless force
       posts = {}
       data.each.with_index(1) do |post, index|
-        if Databases.blacklist[post['source']['name'].downcase] && Settings.options[:skip_blacklist].nil?
-          Debug.skipped({source: post['source']['name']})
-          next
+        unless Settings.options[:force]
+          if Databases.blacklist[post['source']['name'].downcase]
+            Debug.skipped({source: post['source']['name']})
+            next
+          end
         end
-        if Databases.blacklist["-@#{post['user']['username'].downcase}"] && Settings.options[:skip_blacklist].nil?
-          Debug.skipped({user: post['user']['username']})
-          next
+        unless Settings.options[:force]
+          if Databases.blacklist["-@#{post['user']['username'].downcase}"]
+            Debug.skipped({user: post['user']['username']})
+            next
+          end
         end
         hashtags = extract_hashtags(post)
         @skip = false
-        hashtags.each do |h|
-          if Databases.blacklist[h.downcase] && Settings.options[:skip_blacklist].nil?
-            @skip = true
-            Debug.skipped({hashtag: h})
-            break
+        unless Settings.options[:force]
+          hashtags.each do |h|
+            if Databases.blacklist[h.downcase]
+              @skip = true
+              Debug.skipped({hashtag: h})
+              break
+            end
           end
         end
         next if @skip
         mentions= []
         post['entities']['mentions'].each { |m| mentions << m['name'] }
-        mentions.each do |m|
-          if Databases.blacklist["@#{m.downcase}"] && Settings.options[:skip_blacklist].nil?
-            @skip = true
-            Debug.skipped({mention: m})
-            break
+        unless Settings.options[:force]
+          mentions.each do |m|
+            if Databases.blacklist["@#{m.downcase}"]
+              @skip = true
+              Debug.skipped({mention: m})
+              break
+            end
           end
         end
         next if @skip
 
+        # create custom objects from ADN response
         if niceranks[post['user']['id'].to_i]
           rank = niceranks[post['user']['id'].to_i][:rank]
           is_human = niceranks[post['user']['id'].to_i][:is_human]
