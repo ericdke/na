@@ -195,6 +195,7 @@ module Ayadn
     long_desc Descriptions.hashtag
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def hashtag(hashtag)
       Action.new.hashtag(hashtag, options)
     end
@@ -206,6 +207,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     option :messages, type: :boolean, desc: 'Search for WORD(S) in messages, including PMs.'
     option :users, type: :boolean, desc: 'Search for App.net users by searching WORD(S) in their bio/description.'
     option :channels, type: :boolean, desc: 'Search for App.net channels by searching WORD(S) in their description.'
