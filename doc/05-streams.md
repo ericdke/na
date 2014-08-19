@@ -109,7 +109,7 @@ Differences will occur due to ADN policy:
 
 - User's posts and Post infos: temporarily disables you user token and the Blacklist databases
 
-- Other streams: temporarily disables the Blacklist databases
+- Other streams, search, tags: temporarily disables the Blacklist databases
 
 
 # GLOBAL
