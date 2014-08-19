@@ -95,6 +95,23 @@ Extracts all links from posts.
 
 `ayadn -was -e ericd`
 
+### FORCE
+
+Force view blacklisted/muted/blocked user's posts with `-f` option. 
+
+`ayadn -gl -f`
+
+`ayadn -gl -s -f`
+
+Differences will occur due to ADN policy:
+
+- Global stream: temporarily disables you user token (so your muted/blocked preferences don't apply), the NiceRank filter, and the Blacklist databases
+
+- User's posts and Post infos: temporarily disables you user token and the Blacklist databases
+
+- Other streams: temporarily disables the Blacklist databases
+
+
 # GLOBAL
 
 Display the 'Global stream'.
