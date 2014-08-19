@@ -77,6 +77,7 @@ module Ayadn
       @blacklist.clear
       dummy.each {|v,k| @blacklist[v] = k}
     end
+
     def self.save_max_id(stream, name = 'unknown')
       if stream['meta']['marker'].nil?
         key = name

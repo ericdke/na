@@ -37,7 +37,7 @@ module Ayadn
       stream = @api.get_global(options)
       Settings.options[:force] == true ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream)
       Check.no_new_posts(stream, options, 'global')
-      Databases.save_max_id(stream, 'explore:global')
+      Databases.save_max_id(stream, 'global') unless stream['meta']['max_id'].nil?
       @view.render(stream, options, niceranks)
       Scroll.new(@api, @view).global(options) if options[:scroll]
     end

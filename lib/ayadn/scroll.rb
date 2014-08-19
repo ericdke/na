@@ -28,7 +28,7 @@ module Ayadn
           stream = get(target, options)
           stream['data'].empty? ? niceranks = {} : niceranks = @nr.get_ranks(stream)
           Debug.stream stream, options, target
-          target = "explore:#{target}" if explore?(target)
+          target = "explore:#{target}" if explore?(target) # explore but not global
           show_if_new(stream, options, target, niceranks)
           target = orig_target if target =~ /explore/
           options = save_then_return(stream, options, target)
@@ -159,8 +159,11 @@ module Ayadn
     end
 
     def save_then_return(stream, options, name = 'unknown')
-      Databases.save_max_id(stream, name)
-      return options_hash(stream, options)
+      unless stream['meta']['max_id'].nil?
+        Databases.save_max_id(stream, name)
+        return options_hash(stream, options)
+      end
+      options
     end
 
     def check_raw(options)
