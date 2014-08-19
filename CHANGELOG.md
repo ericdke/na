@@ -1,4 +1,4 @@
-# 1.6.1 - 
+# 1.6.1 - 'Private Investigations'
 
 - `userposts` displays posts even if the user is blacklisted
 - The cursor is hidden when the scroll spinning wheel is displayed
