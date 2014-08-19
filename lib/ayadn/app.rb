@@ -234,6 +234,7 @@ module Ayadn
     map "-pi" => :postinfo
     long_desc Descriptions.postinfo
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def postinfo(post_id)
       Action.new.postinfo(post_id, options)
     end

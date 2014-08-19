@@ -381,6 +381,7 @@ module Ayadn
 
     def postinfo(post_id, options)
       begin
+        Settings.options[:force] = true if options[:force]
         Check.bad_post_id(post_id)
         @view.downloading(options)
         if options[:raw]
