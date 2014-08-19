@@ -10,6 +10,7 @@ module Ayadn
     end
 
     def unified options
+      Settings.options[:force] = true if options[:force]
       @view.downloading(options)
       stream = @api.get_unified(options)
       Check.no_new_posts(stream, options, 'unified')
@@ -28,15 +29,22 @@ module Ayadn
     end
 
     def global settings
+      Settings.options[:force] = true if settings[:force]
       options = settings.dup
       options[:filter] = nicerank_true()
       @view.downloading(options)
       stream = @api.get_global(options)
-      niceranks = NiceRank.new.get_ranks(stream)
+      Settings.options[:force] == true ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream)
       Check.no_new_posts(stream, options, 'global')
-      Databases.save_max_id(stream)
+      Databases.save_max_id(stream) unless stream['meta']['marker'].nil?
       @view.render(stream, options, niceranks)
-      Scroll.new(@api, @view).global(options) if options[:scroll]
+      if options[:scroll]
+        if Settings.options[:force]
+          abort(Status.no_scroll_force('Global'))
+        else
+          Scroll.new(@api, @view).global(options)
+        end
+      end
     end
 
     def trending options
@@ -81,16 +89,22 @@ module Ayadn
     end
 
     def posts username, options
+      Settings.options[:force] = true if options[:force]
       Check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options)
       stream = @api.get_posts(username, options)
       Check.no_user(stream, username)
-      Databases.save_max_id(stream)
+      Databases.save_max_id(stream) unless stream['meta']['marker'].nil?
       Check.no_data(stream, 'mentions')
-      Settings.options[:force] = true if options[:force]
       @view.render(stream, options)
-      Scroll.new(@api, @view).posts(username, options) if options[:scroll]
+      if options[:scroll]
+        if Settings.options[:force]
+          abort(Status.no_scroll_force('Posts'))
+        else
+          Scroll.new(@api, @view).posts(username, options)
+        end
+      end
     end
 
     def whatstarred(username, options)

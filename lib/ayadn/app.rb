@@ -17,6 +17,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def timeline
       Action.new.unified(options)
     end
@@ -41,6 +42,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def global
       Action.new.global(options)
     end

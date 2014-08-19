@@ -1,6 +1,6 @@
 # 1.6.1 - 'Private Investigations'
 
-- Force view posts from blacklisted/muted/blocked users with `-f`
+- Force view blacklisted/muted/blocked user's posts with `-f` option. Differences may occur between userposts, global, unified, etc, due to ADN policy.
 - The cursor is hidden when the scroll spinning wheel is displayed
 
 # 1.6.0 - 'Beetlejuice'

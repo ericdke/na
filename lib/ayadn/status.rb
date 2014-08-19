@@ -309,5 +309,8 @@ module Ayadn
     def self.no_show_infos
       "\nSorry, can't find informations about this show.\n".color(:blue)
     end
+    def self.no_scroll_force target
+      "\nSorry, can't scroll #{target} if option 'force' is activated.\n".color(:blue)
+    end
   end
 end

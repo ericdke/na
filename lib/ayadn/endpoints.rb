@@ -56,7 +56,11 @@ module Ayadn
       else
         API.build_query({count: Settings.options[:counts][:global]})
       end
-      "#{@posts_url}stream/global?access_token=#{Settings.user_token}#{@options_list}"
+      if Settings.options[:force]
+        "#{@posts_url}stream/global"
+      else
+        "#{@posts_url}stream/global?access_token=#{Settings.user_token}#{@options_list}"
+      end
     end
 
     def trending(options)
@@ -101,7 +105,11 @@ module Ayadn
       else
         API.build_query({count: Settings.options[:counts][:posts]})
       end
-      "#{@users_url}#{username}/posts/?access_token=#{Settings.user_token}#{@options_list}"
+      if Settings.options[:force]
+        "#{@users_url}#{username}/posts/"
+      else
+        "#{@users_url}#{username}/posts/?access_token=#{Settings.user_token}#{@options_list}"
+      end
     end
 
     def whatstarred(username, options)

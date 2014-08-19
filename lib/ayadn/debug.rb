@@ -22,12 +22,12 @@ module Ayadn
 
     def self.db dbs
       if Settings.options[:timeline][:show_debug] == true
-        puts "/////\nSETTINGS\n"
-        jj JSON.parse((Settings.config).to_json)
-        jj JSON.parse((Settings.options).to_json)
-        Logs.rec.debug "SETTINGS/CONFIG: #{Settings.config}"
-        Logs.rec.debug "SETTINGS/OPTIONS: #{Settings.options}"
-        puts "/////\n\n"
+        # puts "/////\nSETTINGS\n"
+        # jj JSON.parse((Settings.config).to_json)
+        # jj JSON.parse((Settings.options).to_json)
+        # Logs.rec.debug "SETTINGS/CONFIG: #{Settings.config}"
+        # Logs.rec.debug "SETTINGS/OPTIONS: #{Settings.options}"
+        # puts "/////\n\n"
 
         #puts ">>>>>\nDATABASES\n"
         dbs.each do |db|
