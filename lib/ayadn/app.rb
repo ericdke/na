@@ -373,6 +373,7 @@ module Ayadn
     map "-W" => :write
     long_desc Descriptions.write
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
+    option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     def write
       Action.new.write(options)
     end
@@ -380,6 +381,7 @@ module Ayadn
     desc "pm @USERNAME", "Send a private message to @username"
     long_desc Descriptions.pmess
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
+    option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     def pm(*username)
       Action.new.pmess(username, options)
     end

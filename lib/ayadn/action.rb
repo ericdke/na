@@ -532,10 +532,12 @@ module Ayadn
         lines_array = writer.compose
         writer.check_post_length(lines_array)
         text = lines_array.join("\n")
-        if options['embed']
+        if options[:embed]
           @view.clear_screen
-          puts Status.uploading(options['embed'])
+          puts Status.uploading(options[:embed])
           resp = writer.send_embedded(text, files)
+        elsif options[:youtube]
+          resp = writer.send_youtube({'link' => options[:youtube][0], 'text' => text})
         else
           resp = writer.send_post(text)
         end
@@ -562,9 +564,12 @@ module Ayadn
     		messenger.check_message_length(lines_array)
         text = lines_array.join("\n")
     		@view.clear_screen
-        if options['embed']
-          puts Status.uploading(options['embed'])
+        if options[:embed]
+          puts Status.uploading(options[:embed])
           resp = messenger.send_pm_embedded(username, text, files)
+        elsif options[:youtube]
+          puts Status.posting
+          resp = messenger.send_youtube({'username' => username,'link' => options[:youtube][0], 'text' => text})
         else
           puts Status.posting
           resp = messenger.send_pm(username, text)
@@ -575,26 +580,6 @@ module Ayadn
     		@view.show_posted(resp)
     	rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-    	end
-    end
-
-    def send_to_channel(channel_id)
-    	begin
-        channel_id = @workers.get_channel_id_from_alias(channel_id)
-  			messenger = Post.new
-        puts Status.writing
-  			puts Status.post
-  			lines_array = messenger.compose
-  			messenger.check_message_length(lines_array)
-  			@view.clear_screen
-  			puts Status.posting
-  			resp = messenger.send_message(channel_id, lines_array.join("\n"))
-        FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
-  			@view.clear_screen
-  			puts Status.yourpost
-  			@view.show_posted(resp)
-    	rescue => e
-        Errors.global_error({error: e, caller: caller, data: [channel_id]})
     	end
     end
 
@@ -639,6 +624,26 @@ module Ayadn
         @view.render(@api.get_convo(post_id), options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
+      end
+    end
+
+    def send_to_channel(channel_id)
+      begin
+        channel_id = @workers.get_channel_id_from_alias(channel_id)
+        messenger = Post.new
+        puts Status.writing
+        puts Status.post
+        lines_array = messenger.compose
+        messenger.check_message_length(lines_array)
+        @view.clear_screen
+        puts Status.posting
+        resp = messenger.send_message(channel_id, lines_array.join("\n"))
+        FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
+        @view.clear_screen
+        puts Status.yourpost
+        @view.show_posted(resp)
+      rescue => e
+        Errors.global_error({error: e, caller: caller, data: [channel_id]})
       end
     end
 

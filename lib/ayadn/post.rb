@@ -51,10 +51,10 @@ module Ayadn
     end
 
     def send_youtube oem
-      oem['text'] += "\n \n[Link](#{oem['link']})"
+      # oem['text'] += "\n \n[Link](#{oem['link']})"
       req_url = "http://www.youtube.com/oembed?url=#{oem['link']}&format=json"
       res = JSON.parse(CNX.download(req_url))
-      send_content(Endpoints.new.posts_url, payload_youtube(res.merge!(oem)))
+      send_content(Endpoints.new.pm_url, payload_youtube(res.merge!(oem)))
     end
 
     def payload_youtube dic
@@ -85,11 +85,16 @@ module Ayadn
             "link" => dic['link']
           }
       }
-      return {
-        "text" => dic['text'],
-        "entities" => entities,
-        "annotations" => ann
-      }
+      yt = {
+          "text" => dic['text'],
+          "entities" => entities,
+          "annotations" => ann
+        }
+      if dic['username']
+        return yt.merge!({'destinations' => dic['username']})
+      else
+        return yt
+      end
     end
 
     def payload_movie dic
