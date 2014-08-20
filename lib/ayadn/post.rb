@@ -50,6 +50,48 @@ module Ayadn
       send_content(Endpoints.new.posts_url, payload_tvshow(dic))
     end
 
+    def send_youtube oem
+      oem['text'] += "\n \n[Link](#{oem['link']})"
+      req_url = "http://www.youtube.com/oembed?url=#{oem['link']}&format=json"
+      res = JSON.parse(CNX.download(req_url))
+      send_content(Endpoints.new.posts_url, payload_youtube(res.merge!(oem)))
+    end
+
+    def payload_youtube dic
+      ann = annotations()
+      ann << {
+          "type" => "net.app.core.oembed",
+          "value" => {
+            "version" => "1.0",
+            "type" => "video",
+            "provider_name" => "YouTube",
+            "provider_url" => "http://youtube.com/",
+            "width" => dic['width'],
+            "height" => dic['height'],
+            "title" => dic['title'],
+            "author_name" => dic['author_name'],
+            "author_url" => dic['author_url'],
+            "embeddable_url" => dic['link'],
+            "html" => dic['html'],
+            "thumbnail_url" => dic['thumbnail_url'],
+            "thumbnail_height" => dic['thumbnail_height'],
+            "thumbnail_width" => dic['thumbnail_width']
+          }
+        }
+      ann << {
+        "type" => "com.ayadn.youtube",
+          "value" => {
+            "title" => dic['title'],
+            "link" => dic['link']
+          }
+      }
+      return {
+        "text" => dic['text'],
+        "entities" => entities,
+        "annotations" => ann
+      }
+    end
+
     def payload_movie dic
       ann = annotations_embedded(dic)
       ann << {

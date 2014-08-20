@@ -735,6 +735,10 @@ module Ayadn
 
       ayadn -P Watching a movie with friends
 
+      Embed a picture:
+
+      ayadn -P "lol cat" -E ~/Pics/lolcat.jpg
+
       You don't have to put quotes around your text, but it's better to do it.
 
       The 'write' method is recommended over this one: it's more secure and offers multi-line support.
@@ -751,6 +755,10 @@ module Ayadn
 
       ayadn -W
 
+      Embed a picture:
+
+      ayadn -W -E ~/Pics/lolcat.jpg
+
       It enters the writing mode where you will type your post.
       \n\n
       USAGE
@@ -762,6 +770,10 @@ module Ayadn
       Usage:
 
       ayadn pm @ericd
+
+      Embed a picture:
+
+      ayadn pm -E ~/Pics/lolcat.jpg
 
       It enters the writing mode where you will type your message.
       \n\n
@@ -799,9 +811,11 @@ module Ayadn
 
       If you reply to a repost, Ayadn will automatically replace it by the original post.
 
-      If you just viewed a stream with the -i (--index) option, you can also reply to a post by its index.
+      If you just viewed a stream with the -i (--index) option, you can also reply to a post by its index (ex: ayadn -R 3).
 
-      Example: ayadn -R 3
+      Embed a picture in a reply:
+
+      ayadn -R 23365251 -E ~/Pics/lolcat.jpg
       \n\n
       USAGE
     end
