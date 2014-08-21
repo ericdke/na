@@ -377,6 +377,7 @@ module Ayadn
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
+    option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
     def write
       Action.new.write(options)
     end
@@ -386,6 +387,7 @@ module Ayadn
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
+    option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
     def pm(*username)
       Action.new.pmess(username, options)
     end
@@ -403,6 +405,7 @@ module Ayadn
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
+    option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
     def reply(id)
       ayadn = Action.new
       ayadn.reply(id, options)

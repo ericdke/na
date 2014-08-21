@@ -503,7 +503,7 @@ module Ayadn
         writer = Post.new
         @view.clear_screen
         puts Status.posting
-        if options[:poster]
+        if options[:poster] # Returns the same options hash + poster embed
           settings = options.dup
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
@@ -524,6 +524,10 @@ module Ayadn
         text = lines_array.join("\n")
         @view.clear_screen
         puts Status.posting
+        if options[:poster]
+          settings = options.dup
+          options = NowWatching.new.get_poster(settings[:poster], settings)
+        end
         resp = writer.post({options: options, text: text})
         save_and_view(resp)
       rescue => e
@@ -543,6 +547,10 @@ module Ayadn
         text = lines_array.join("\n")
     		@view.clear_screen
         puts Status.posting
+        if options[:poster]
+          settings = options.dup
+          options = NowWatching.new.get_poster(settings[:poster], settings)
+        end
         resp = writer.pm({options: options, text: text, username: username})
         FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
     		@view.clear_screen
@@ -575,6 +583,10 @@ module Ayadn
         @view.clear_screen
         text = lines_array.join("\n")
         replied_to = @workers.build_posts([replied_to['data']])
+        if options[:poster]
+          settings = options.dup
+          options = NowWatching.new.get_poster(settings[:poster], settings)
+        end
         resp = writer.reply({options: options, text: text, id: post_id, reply_to: replied_to})
         # ----
         options = options.dup

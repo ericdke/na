@@ -748,6 +748,12 @@ module Ayadn
       ayadn -P wave function -Y https://www.youtube.com/watch?v=Ei8CFin00PY
 
       ayadn -P wargarbl -V http://vimeo.com/123234345
+
+      Embed a movie poster:
+
+      ayadn -P "I'll be back" -M terminator
+
+      (This is different from the 'movie' command, check the docs.)
       \n\n
       USAGE
     end
@@ -772,6 +778,12 @@ module Ayadn
       ayadn -P wave function -Y https://www.youtube.com/watch?v=Ei8CFin00PY
 
       ayadn -P wargarbl -V http://vimeo.com/123234345
+
+      Embed a movie poster:
+
+      ayadn -P "I'll be back" -M terminator
+
+      (This is different from the 'movie' command, check the docs.)
       \n\n
       USAGE
     end
@@ -834,6 +846,12 @@ module Ayadn
       ayadn -P wave function -Y https://www.youtube.com/watch?v=Ei8CFin00PY
 
       ayadn -P wargarbl -V http://vimeo.com/123234345
+
+      Embed a movie poster:
+
+      ayadn -P "I'll be back" -M terminator
+
+      (This is different from the 'movie' command, check the docs.)
       \n\n
       USAGE
     end
