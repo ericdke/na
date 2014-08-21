@@ -504,10 +504,7 @@ module Ayadn
         @view.clear_screen
         puts Status.posting
         resp = writer.post({options: options, text: args.join(" ")})
-        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
-        @view.clear_screen
-        puts Status.yourpost
-        @view.show_posted(resp)
+        save_and_view(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args, options]})
       end
@@ -524,10 +521,7 @@ module Ayadn
         @view.clear_screen
         puts Status.posting
         resp = writer.post({options: options, text: text})
-        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
-        @view.clear_screen
-        puts Status.yourpost
-        @view.show_posted(resp)
+        save_and_view(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [text, options]})
       end
@@ -535,26 +529,17 @@ module Ayadn
 
     def pmess(username, options = {})
     	begin
-        files = FileOps.make_paths(options['embed']) if options['embed']
         Check.no_username(username)
         username = [@workers.add_arobase(username)]
-    		messenger = Post.new
+    		writer = Post.new
         puts Status.message_from(username)
     		puts Status.message
-    		lines_array = messenger.compose
-    		messenger.check_message_length(lines_array)
+    		lines_array = writer.compose
+    		writer.check_message_length(lines_array)
         text = lines_array.join("\n")
     		@view.clear_screen
-        if options[:embed]
-          puts Status.uploading(options[:embed])
-          resp = messenger.send_pm_embedded(username, text, files)
-        elsif options[:youtube]
-          puts Status.posting
-          resp = messenger.send_youtube({'username' => username,'link' => options[:youtube][0], 'text' => text})
-        else
-          puts Status.posting
-          resp = messenger.send_pm(username, text)
-        end
+        puts Status.posting
+        resp = writer.pm({options: options, text: text, username: username})
         FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
     		@view.clear_screen
     		puts Status.yourmessage(username[0])
@@ -566,7 +551,6 @@ module Ayadn
 
     def reply(post_id, options = {})
       begin
-        files = FileOps.make_paths(options['embed']) if options['embed']
         post_id = @workers.get_real_post_id(post_id)
       	puts Status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
@@ -578,30 +562,22 @@ module Ayadn
             Check.no_post(replied_to, post_id)
           end
         end
-        poster = Post.new
+        # ----
+        writer = Post.new
         puts Status.writing
         puts Status.reply
-        lines_array = poster.compose
-        poster.check_post_length(lines_array)
+        lines_array = writer.compose
+        writer.check_post_length(lines_array)
         @view.clear_screen
-        reply = poster.reply(lines_array.join("\n"), @workers.build_posts([replied_to['data']]))
-        if options['embed']
-          puts Status.uploading(options['embed'])
-          resp = poster.send_reply_embedded(reply, post_id, files)
-        else
-          puts Status.posting
-          resp = poster.send_reply(reply, post_id)
-        end
-        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
-        @view.clear_screen
-        puts Status.done
-
+        text = lines_array.join("\n")
+        replied_to = @workers.build_posts([replied_to['data']])
+        resp = writer.reply({options: options, text: text, id: post_id, reply_to: replied_to})
+        # ----
         options = options.dup
         unless resp['data']['reply_to'].nil?
           options[:reply_to] = resp['data']['reply_to'].to_i
         end
         options[:post_id] = resp['data']['id'].to_i
-
         @view.render(@api.get_convo(post_id), options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
@@ -618,7 +594,7 @@ module Ayadn
         messenger.check_message_length(lines_array)
         @view.clear_screen
         puts Status.posting
-        resp = messenger.send_message(channel_id, lines_array.join("\n"))
+        resp = messenger.message({id: channel_id, text: lines_array.join("\n")})
         FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
         @view.clear_screen
         puts Status.yourpost
@@ -681,6 +657,15 @@ module Ayadn
       rescue => e
         Errors.global_error({error: e, caller: caller, data: []})
       end
+    end
+
+    private
+
+    def save_and_view(resp)
+      FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
+      @view.clear_screen
+      puts Status.yourpost
+      @view.show_posted(resp)
     end
 
   end

@@ -7,18 +7,10 @@ module Ayadn
     attr_accessor :content
 
     def initialize(dic)
-      if dic[:options][:embed]
-        @content = base() + files(dic)
-      elsif dic[:options][:youtube]
-        @content = base() + youtube(dic)
-      else
-        @content = base()
-      end
+      @content = base()
+      @content += files(dic) if dic[:options][:embed]
+      @content += youtube(dic) if dic[:options][:youtube]
     end
-
-    # Each annotations method is an array of annotations
-
-    # At the end, all annotations should be regrouped in the same array, merged and returned
 
     def base
       [
