@@ -17,22 +17,5 @@ module Ayadn
       end
     end
 
-    # unused (experiment)
-    # def self.send_log(from, args, content)
-    #   begin
-    #     log = {
-    #       "platform" => "#{Settings.config[:platform]}",
-    #       "date" => Time.now,
-    #       "version" => "#{Settings.config[:version]}",
-    #       "source" => from,
-    #       "args" => args,
-    #       "content" => content
-    #     }
-    #     Post.new.send_log(log)
-    #   rescue
-    #     @rec.warn("Unable to send log.")
-    #   end
-    # end
-
   end
 end

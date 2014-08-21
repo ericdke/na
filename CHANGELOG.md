@@ -2,7 +2,9 @@
 
 - Force view blacklisted/muted/blocked user's posts with `-f` option. Differences may occur between userposts, global, unified, etc, due to ADN policy (cf docs).
 - The cursor is hidden when the scroll spinning wheel is displayed
+- Refactor: Post methods
 - Fixed: the add bookmark convo fix...
+- Fixed: value displayed when setting NiceRank
 
 # 1.6.0 - 'Beetlejuice'
 

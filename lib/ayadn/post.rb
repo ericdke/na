@@ -66,14 +66,6 @@ module Ayadn
 
 
 
-    def send_nowplaying dic
-      send_content(Endpoints.new.posts_url, payload_nowplaying(dic))
-    end
-
-    def send_movie dic
-      send_content(Endpoints.new.posts_url, payload_movie(dic))
-    end
-
     def send_tvshow dic
       send_content(Endpoints.new.posts_url, payload_tvshow(dic))
     end
@@ -89,7 +81,7 @@ module Ayadn
         begin
           #while buffer = Readline.readline("#{Settings.config[:identity][:handle]} >> ".color(:red))
           while buffer = Readline.readline(">> ".color(:red))
-            send_post(buffer)
+            post({text: buffer})
             puts Status.done
           end
         rescue Interrupt
@@ -184,22 +176,6 @@ module Ayadn
     #   ]
     # end
 
-    # def payload_movie dic
-    #   ann = annotations_embedded(dic)
-    #   ann << {
-    #     "type" => "com.ayadn.movie",
-    #       "value" => {
-    #         "title" => dic['title'],
-    #         "source" => dic['source']
-    #       }
-    #   }
-    #   {
-    #     "text" => dic['text'],
-    #     "entities" => entities,
-    #     "annotations" => ann
-    #   }
-    # end
-
     # def payload_tvshow dic
     #   ann = annotations_embedded(dic)
     #   ann << {
@@ -213,93 +189,6 @@ module Ayadn
     #     "text" => dic['text'],
     #     "entities" => entities,
     #     "annotations" => ann
-    #   }
-    # end
-
-    # def payload_nowplaying dic
-    #   ann = annotations()
-    #   if dic['visible'] == true
-    #     ann << {
-    #       "type" => "com.ayadn.nowplaying",
-    #         "value" => {
-    #           "title" => dic['title'],
-    #           "artist" => dic['artist'],
-    #           "artwork" => dic['artwork'],
-    #           "link" => dic['link'],
-    #           "source" => dic['source']
-    #         }
-    #     }
-    #   else
-    #     ann << {
-    #       "type" => "com.ayadn.nowplaying",
-    #         "value" => {
-    #           "status" => "no-url",
-    #           "source" => dic['source']
-    #         }
-    #     }
-    #   end
-    #   if dic['visible'] == true
-    #     ann << {
-    #       "type" => "net.app.core.oembed",
-    #       "value" => {
-    #         "version" => "1.0",
-    #         "type" => "photo",
-    #         "width" => dic['width'],
-    #         "height" => dic['height'],
-    #         "title" => dic['title'],
-    #         "url" => dic['artwork'],
-    #         "embeddable_url" => dic['artwork'],
-    #         "provider_url" => "https://itunes.apple.com",
-    #         "provider_name" => "iTunes",
-    #         "thumbnail_url" => dic['artwork_thumb'],
-    #         "thumbnail_width" => dic['width_thumb'],
-    #         "thumbnail_height" => dic['height_thumb']
-    #       }
-    #     }
-    #   end
-    #   {
-    #     "text" => dic['text'],
-    #     "entities" => entities,
-    #     "annotations" => ann
-    #   }
-    # end
-
-    # def payload_basic(text)
-    #   {
-    #     "text" => text,
-    #     "entities" => entities,
-    #     "annotations" => annotations
-    #   }
-    # end
-
-    # def payload_pm(username, text)
-    #   {
-    #     "text" => text,
-    #     "entities" => entities,
-    #     "destinations" => username,
-    #     "annotations" => annotations
-    #   }
-    # end
-
-    # def payload_reply(text, reply_to)
-    #   {
-    #     "text" => text,
-    #     "reply_to" => reply_to,
-    #     "entities" => entities,
-    #     "annotations" => annotations
-    #   }
-    # end
-
-    # def payload_log(data)
-    #   extended = annotations
-    #   extended << {
-    #       "type" => "com.ayadn.log",
-    #       "value" => data
-    #     }
-    #   return {
-    #     "text" => "#ayadnlog",
-    #     "entities" => entities,
-    #     "annotations" => extended
     #   }
     # end
 

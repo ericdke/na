@@ -7,9 +7,12 @@ module Ayadn
     attr_accessor :content
 
     def initialize(dic)
+      dic[:options] = {} if dic[:options].nil?
       @content = base()
       @content += files(dic) if dic[:options][:embed]
       @content += youtube(dic) if dic[:options][:youtube]
+      @content += nowplaying(dic) if dic[:options][:nowplaying]
+      @content += movie(dic) if dic[:options][:movie]
     end
 
     def base
@@ -92,8 +95,8 @@ module Ayadn
       [{
         "type" => "com.ayadn.movie",
           "value" => {
-            "title" => dic['title'],
-            "source" => dic['source']
+            "title" => dic[:title],
+            "source" => dic[:source]
           }
       }]
     end
@@ -113,20 +116,21 @@ module Ayadn
         "type" => "com.ayadn.nowplaying",
           "value" => {
             "status" => "no-url",
-            "source" => dic['source']
+            "source" => dic[:source]
           }
       }]
     end
 
     def nowplaying(dic)
+      return nowplaying_silent(dic) if dic[:options][:no_url]
       [{
         "type" => "com.ayadn.nowplaying",
           "value" => {
-            "title" => dic['title'],
-            "artist" => dic['artist'],
-            "artwork" => dic['artwork'],
-            "link" => dic['link'],
-            "source" => dic['source']
+            "title" => dic[:title],
+            "artist" => dic[:artist],
+            "artwork" => dic[:artwork],
+            "link" => dic[:link],
+            "source" => dic[:source]
           }
       },
       {
@@ -134,16 +138,16 @@ module Ayadn
         "value" => {
           "version" => "1.0",
           "type" => "photo",
-          "width" => dic['width'],
-          "height" => dic['height'],
-          "title" => dic['title'],
-          "url" => dic['artwork'],
-          "embeddable_url" => dic['artwork'],
+          "width" => dic[:width],
+          "height" => dic[:height],
+          "title" => dic[:title],
+          "url" => dic[:artwork],
+          "embeddable_url" => dic[:artwork],
           "provider_url" => "https://itunes.apple.com",
           "provider_name" => "iTunes",
-          "thumbnail_url" => dic['artwork_thumb'],
-          "thumbnail_width" => dic['width_thumb'],
-          "thumbnail_height" => dic['height_thumb']
+          "thumbnail_url" => dic[:artwork_thumb],
+          "thumbnail_width" => dic[:width_thumb],
+          "thumbnail_height" => dic[:height_thumb]
         }
       }]
     end

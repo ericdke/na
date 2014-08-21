@@ -222,7 +222,7 @@ module Ayadn
       Logs.create_logger
     end
     def log(args)
-      x = "New value for '#{args[0]}' in 'NiceRank' => #{"%1.1f" % args[1].to_f}"
+      x = "New value for '#{args[0]}' in 'NiceRank' => #{args[1]}"
       puts "\n#{x}\n".color(:cyan)
       Logs.rec.info x
     end

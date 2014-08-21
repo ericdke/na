@@ -11,6 +11,7 @@ module Ayadn
     end
 
     def post args, options
+      options = options.dup
       puts "\nContacting IMDb.com...".color(:cyan)
       response = find_by_title(args, options)
       text = format_post(response)
@@ -20,14 +21,15 @@ module Ayadn
       FileOps.download_url(filename, response.poster_url)
       @view.clear_screen
       puts "\nPosting and uploading the movie poster...\n".color(:green)
-      file = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
+      options[:embed] = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
+      options[:movie] = true
       dic = {
-        'text' => text,
-        'data' => FileOps.upload_files(file),
-        'title' => response.title,
-        'source' => 'IMDb'
+        options: options,
+        text: text,
+        title: response.title,
+        source: 'IMDb'
       }
-      resp = Post.new.send_movie(dic)
+      resp = Post.new.post(dic)
       FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
       @view.clear_screen
       puts Status.yourpost

@@ -587,18 +587,15 @@ module Ayadn
     def send_to_channel(channel_id)
       begin
         channel_id = @workers.get_channel_id_from_alias(channel_id)
-        messenger = Post.new
+        writer = Post.new
         puts Status.writing
         puts Status.post
-        lines_array = messenger.compose
-        messenger.check_message_length(lines_array)
+        lines_array = writer.compose
+        writer.check_message_length(lines_array)
         @view.clear_screen
         puts Status.posting
-        resp = messenger.message({id: channel_id, text: lines_array.join("\n")})
-        FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
-        @view.clear_screen
-        puts Status.yourpost
-        @view.show_posted(resp)
+        resp = writer.message({id: channel_id, text: lines_array.join("\n")})
+        save_and_view(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id]})
       end
