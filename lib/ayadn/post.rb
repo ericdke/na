@@ -57,17 +57,18 @@ module Ayadn
       }
     end
 
+    def entities
+      {
+        "parse_markdown_links" => true,
+        "parse_links" => true
+      }
+    end
+
     # -----
 
     def send_content(url, payload)
       url << "?include_annotations=1&access_token=#{Ayadn::Settings.user_token}"
       JSON.parse(CNX.post(url, payload))
-    end
-
-
-
-    def send_tvshow dic
-      send_content(Endpoints.new.posts_url, payload_tvshow(dic))
     end
 
     # -----
@@ -141,56 +142,6 @@ module Ayadn
       puts Status.no_text
       Errors.warn "-Post without text-"
     end
-
-    def entities
-      {
-        "parse_markdown_links" => true,
-        "parse_links" => true
-      }
-    end
-
-    # def annotations
-    #   [
-    #     {
-    #     "type" => "com.ayadn.user",
-    #     "value" => {
-    #       "+net.app.core.user" => {
-    #           "user_id" => "#{Settings.config[:identity][:handle]}",
-    #           "format" => "basic"
-    #         }
-    #       }
-    #     },
-    #     {
-    #     "type" => "com.ayadn.client",
-    #     "value" => {
-    #       "url" => "http://ayadn-app.net",
-    #       "author" => {
-    #           "name" => "Eric Dejonckheere",
-    #           "username" => "ericd",
-    #           "id" => "69904",
-    #           "email" => "eric@aya.io"
-    #         },
-    #       "version" => "#{Settings.config[:version]}"
-    #       }
-    #     }
-    #   ]
-    # end
-
-    # def payload_tvshow dic
-    #   ann = annotations_embedded(dic)
-    #   ann << {
-    #     "type" => "com.ayadn.tvshow",
-    #       "value" => {
-    #         "title" => dic['title'],
-    #         "source" => dic['source']
-    #       }
-    #   }
-    #   {
-    #     "text" => dic['text'],
-    #     "entities" => entities,
-    #     "annotations" => ann
-    #   }
-    # end
 
   end
 end
