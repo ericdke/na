@@ -742,6 +742,12 @@ module Ayadn
       You don't have to put quotes around your text, but it's better to do it.
 
       The 'write' method is recommended over this one: it's more secure and offers multi-line support.
+
+      Embed an online video:
+
+      ayadn -P wave function -Y https://www.youtube.com/watch?v=Ei8CFin00PY
+
+      ayadn -P wargarbl -V http://vimeo.com/123234345
       \n\n
       USAGE
     end
@@ -760,6 +766,12 @@ module Ayadn
       ayadn -W -E ~/Pics/lolcat.jpg
 
       It enters the writing mode where you will type your post.
+
+      Embed an online video:
+
+      ayadn -P wave function -Y https://www.youtube.com/watch?v=Ei8CFin00PY
+
+      ayadn -P wargarbl -V http://vimeo.com/123234345
       \n\n
       USAGE
     end
@@ -816,6 +828,12 @@ module Ayadn
       Embed a picture in a reply:
 
       ayadn -R 23365251 -E ~/Pics/lolcat.jpg
+
+      Embed an online video:
+
+      ayadn -P wave function -Y https://www.youtube.com/watch?v=Ei8CFin00PY
+
+      ayadn -P wargarbl -V http://vimeo.com/123234345
       \n\n
       USAGE
     end

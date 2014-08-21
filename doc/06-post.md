@@ -118,7 +118,10 @@ Examples:
 
 ```
 ayadn -P wave function -Y https://www.youtube.com/watch?v=Ei8CFin00PY
+ayadn -P Elixir -V http://vimeo.com/103927232
 ayadn -W -Y https://www.youtube.com/watch?v=Ei8CFin00PY
 ayadn -R 23362460 -Y https://www.youtube.com/watch?v=Ei8CFin00PY
 ayadn pm @ericd -Y https://www.youtube.com/watch?v=Ei8CFin00PY
 ```
+
+Unfortunately, very few App.net clients treat video embedding properly. So I would advise to include the video URL in the text body anyway, for better compatibility.

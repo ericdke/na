@@ -1,8 +1,9 @@
 # 1.7.0 - 'Private Investigations'
 
 - Change: option to embed an image is now `-E` (previously -e)
-- New: force view blacklisted/muted/blocked user's posts with option `-f`
 - New: embed Youtube video with option `-Y`
+- New: embed Vimeo video with option `-V`
+- New: force view blacklisted/muted/blocked user's posts with option `-f`
 - New: the cursor is hidden when the scroll spinning wheel is displayed
 - Refactor: Post methods
 - Fixed: the add bookmark convo fix...
