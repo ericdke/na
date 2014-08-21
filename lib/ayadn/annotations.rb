@@ -11,6 +11,7 @@ module Ayadn
       @content = base()
       @content += files(dic) if dic[:options][:embed]
       @content += youtube(dic) if dic[:options][:youtube]
+      @content += vimeo(dic) if dic[:options][:vimeo]
       @content += nowplaying(dic) if dic[:options][:nowplaying]
       @content += movie(dic) if dic[:options][:movie]
       @content += tvshow(dic) if dic[:options][:tvshow]
@@ -88,6 +89,38 @@ module Ayadn
           "value" => {
             "title" => dic['title'],
             "link" => dic['link']
+          }
+      }]
+    end
+
+    def vimeo(dic)
+      dic[:link] = dic[:options][:vimeo][0]
+      req_url = "http://vimeo.com/api/oembed.json?url=#{dic[:link]}"
+      dic.merge!(JSON.parse(CNX.download(req_url)))
+      [{
+        "type" => "net.app.core.oembed",
+        "value" => {
+          "version" => "1.0",
+          "type" => "video",
+          "provider_name" => "Vimeo",
+          "provider_url" => "http://vimeo.com/",
+          "width" => dic['width'],
+          "height" => dic['height'],
+          "title" => dic['title'],
+          "author_name" => dic['author_name'],
+          "author_url" => dic['author_url'],
+          "embeddable_url" => dic[:link],
+          "html" => dic['html'],
+          "thumbnail_url" => dic['thumbnail_url'],
+          "thumbnail_height" => dic['thumbnail_height'],
+          "thumbnail_width" => dic['thumbnail_width']
+        }
+      },
+      {
+        "type" => "com.ayadn.vimeo",
+          "value" => {
+            "title" => dic['title'],
+            "link" => dic[:link]
           }
       }]
     end

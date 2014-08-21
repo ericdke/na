@@ -364,6 +364,7 @@ module Ayadn
     long_desc Descriptions.post
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
+    option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
     def post(*args)
       Action.new.post(args, options)
     end
@@ -374,6 +375,7 @@ module Ayadn
     long_desc Descriptions.write
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
+    option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
     def write
       Action.new.write(options)
     end
@@ -382,6 +384,7 @@ module Ayadn
     long_desc Descriptions.pmess
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
+    option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
     def pm(*username)
       Action.new.pmess(username, options)
     end
@@ -398,6 +401,7 @@ module Ayadn
     long_desc Descriptions.reply
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
+    option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
     def reply(id)
       ayadn = Action.new
       ayadn.reply(id, options)

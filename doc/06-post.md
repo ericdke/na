@@ -107,3 +107,18 @@ ayadn -W -E ~/lolcat.png
 ayadn -R 23362460 -E "Desktop/dancing lolcat.gif"
 ayadn pm @ericd -E /users/dad/lol\'cat.JPG /users/mom/my\ doge.PNG
 ```  
+
+# EMBED VIDEOS
+
+You can embed a video hosted online in a post. Currently works with Youtube and Vimeo only.
+
+Add the `-Y` option for Youtube or `-V` for Vimeo **at the end** of the command line, followed by the video URL.
+
+Examples:
+
+```
+ayadn -P wave function -Y https://www.youtube.com/watch?v=Ei8CFin00PY
+ayadn -W -Y https://www.youtube.com/watch?v=Ei8CFin00PY
+ayadn -R 23362460 -Y https://www.youtube.com/watch?v=Ei8CFin00PY
+ayadn pm @ericd -Y https://www.youtube.com/watch?v=Ei8CFin00PY
+```
