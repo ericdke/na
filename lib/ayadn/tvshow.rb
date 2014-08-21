@@ -72,6 +72,7 @@ module Ayadn
     end
 
     def post options = {}
+      options = options.dup
       reg = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
       filename = "#{@name.downcase.strip.gsub(reg, '_').split(' ').join('_')}.jpg"
       if options['banner']
@@ -81,14 +82,15 @@ module Ayadn
       end
       @view.clear_screen
       puts "\nPosting and uploading the show poster...\n".color(:green)
-      file = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
+      options[:embed] = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
+      options[:tvshow] = true
       dic = {
-        'text' => @text,
-        'data' => FileOps.upload_files(file),
-        'title' => @name,
-        'source' => 'TVDb'
+        options: options,
+        text: @text,
+        title: @name,
+        source: 'TVDb'
       }
-      resp = Post.new.send_tvshow(dic)
+      resp = Post.new.post(dic)
       FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
       @view.clear_screen
       puts Status.yourpost

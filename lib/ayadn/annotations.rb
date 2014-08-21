@@ -13,6 +13,7 @@ module Ayadn
       @content += youtube(dic) if dic[:options][:youtube]
       @content += nowplaying(dic) if dic[:options][:nowplaying]
       @content += movie(dic) if dic[:options][:movie]
+      @content += tvshow(dic) if dic[:options][:tvshow]
     end
 
     def base
@@ -105,8 +106,8 @@ module Ayadn
       [{
         "type" => "com.ayadn.tvshow",
           "value" => {
-            "title" => dic['title'],
-            "source" => dic['source']
+            "title" => dic[:title],
+            "source" => dic[:source]
           }
       }]
     end
