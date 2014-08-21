@@ -515,24 +515,15 @@ module Ayadn
 
     def write(options)
       begin
-        files = FileOps.make_paths(options['embed']) if options['embed']
         writer = Post.new
         puts Status.writing
         puts Status.post
         lines_array = writer.compose
         writer.check_post_length(lines_array)
         text = lines_array.join("\n")
-        if options[:embed]
-          @view.clear_screen
-          puts Status.uploading(options[:embed])
-          resp = writer.send_embedded(text, files)
-        elsif options[:youtube]
-          resp = writer.send_youtube({'link' => options[:youtube][0], 'text' => text})
-        else
-          resp = writer.send_post(text)
-        end
         @view.clear_screen
         puts Status.posting
+        resp = writer.post({options: options, text: text})
         FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.yourpost
