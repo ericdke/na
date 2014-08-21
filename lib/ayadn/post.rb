@@ -2,13 +2,53 @@
 module Ayadn
   class Post
 
-    def post(args)
-      unless text_is_empty?(args)
-        send_post(args.join(" "))
-      else
-        error_text_empty
-      end
+    def post(dic)
+      send_content(Endpoints.new.posts_url, payload_basic(dic))
     end
+
+
+
+
+    def payload_basic(dic)
+      {
+        "text" => dic[:text],
+        "entities" => entities(),
+        "annotations" => Annotations.new(dic).content
+      }
+    end
+
+    def payload_pm(dic)
+      {
+        "text" => dic[:text],
+        "entities" => entities(),
+        "destinations" => dic[:username],
+        "annotations" => Annotations.new(dic).content
+      }
+    end
+
+    def payload_reply(dic)
+      {
+        "text" => dic[:text],
+        "reply_to" => dic[:reply_to],
+        "entities" => entities(),
+        "annotations" => Annotations.new(dic).content
+      }
+    end
+
+
+
+
+
+
+
+
+    # def post(args)
+    #   unless text_is_empty?(args)
+    #     send_post(args.join(" "))
+    #   else
+    #     error_text_empty
+    #   end
+    # end
 
     def compose
         readline()
@@ -50,175 +90,175 @@ module Ayadn
       send_content(Endpoints.new.posts_url, payload_tvshow(dic))
     end
 
-    def send_youtube oem
-      # oem['text'] += "\n \n[Link](#{oem['link']})"
-      req_url = "http://www.youtube.com/oembed?url=#{oem['link']}&format=json"
-      res = JSON.parse(CNX.download(req_url))
-      send_content(Endpoints.new.pm_url, payload_youtube(res.merge!(oem)))
-    end
+    # def send_youtube oem
+    #   # oem['text'] += "\n \n[Link](#{oem['link']})"
+    #   req_url = "http://www.youtube.com/oembed?url=#{oem['link']}&format=json"
+    #   res = JSON.parse(CNX.download(req_url))
+    #   send_content(Endpoints.new.pm_url, payload_youtube(res.merge!(oem)))
+    # end
 
-    def payload_youtube dic
-      ann = annotations()
-      ann << {
-          "type" => "net.app.core.oembed",
-          "value" => {
-            "version" => "1.0",
-            "type" => "video",
-            "provider_name" => "YouTube",
-            "provider_url" => "http://youtube.com/",
-            "width" => dic['width'],
-            "height" => dic['height'],
-            "title" => dic['title'],
-            "author_name" => dic['author_name'],
-            "author_url" => dic['author_url'],
-            "embeddable_url" => dic['link'],
-            "html" => dic['html'],
-            "thumbnail_url" => dic['thumbnail_url'],
-            "thumbnail_height" => dic['thumbnail_height'],
-            "thumbnail_width" => dic['thumbnail_width']
-          }
-        }
-      ann << {
-        "type" => "com.ayadn.youtube",
-          "value" => {
-            "title" => dic['title'],
-            "link" => dic['link']
-          }
-      }
-      yt = {
-          "text" => dic['text'],
-          "entities" => entities,
-          "annotations" => ann
-        }
-      if dic['username']
-        return yt.merge!({'destinations' => dic['username']})
-      else
-        return yt
-      end
-    end
+    # def payload_youtube dic
+    #   ann = annotations()
+    #   ann << {
+    #       "type" => "net.app.core.oembed",
+    #       "value" => {
+    #         "version" => "1.0",
+    #         "type" => "video",
+    #         "provider_name" => "YouTube",
+    #         "provider_url" => "http://youtube.com/",
+    #         "width" => dic['width'],
+    #         "height" => dic['height'],
+    #         "title" => dic['title'],
+    #         "author_name" => dic['author_name'],
+    #         "author_url" => dic['author_url'],
+    #         "embeddable_url" => dic['link'],
+    #         "html" => dic['html'],
+    #         "thumbnail_url" => dic['thumbnail_url'],
+    #         "thumbnail_height" => dic['thumbnail_height'],
+    #         "thumbnail_width" => dic['thumbnail_width']
+    #       }
+    #     }
+    #   ann << {
+    #     "type" => "com.ayadn.youtube",
+    #       "value" => {
+    #         "title" => dic['title'],
+    #         "link" => dic['link']
+    #       }
+    #   }
+    #   yt = {
+    #       "text" => dic['text'],
+    #       "entities" => entities,
+    #       "annotations" => ann
+    #     }
+    #   if dic['username']
+    #     return yt.merge!({'destinations' => dic['username']})
+    #   else
+    #     return yt
+    #   end
+    # end
 
-    def payload_movie dic
-      ann = annotations_embedded(dic)
-      ann << {
-        "type" => "com.ayadn.movie",
-          "value" => {
-            "title" => dic['title'],
-            "source" => dic['source']
-          }
-      }
-      {
-        "text" => dic['text'],
-        "entities" => entities,
-        "annotations" => ann
-      }
-    end
+    # def payload_movie dic
+    #   ann = annotations_embedded(dic)
+    #   ann << {
+    #     "type" => "com.ayadn.movie",
+    #       "value" => {
+    #         "title" => dic['title'],
+    #         "source" => dic['source']
+    #       }
+    #   }
+    #   {
+    #     "text" => dic['text'],
+    #     "entities" => entities,
+    #     "annotations" => ann
+    #   }
+    # end
 
-    def payload_tvshow dic
-      ann = annotations_embedded(dic)
-      ann << {
-        "type" => "com.ayadn.tvshow",
-          "value" => {
-            "title" => dic['title'],
-            "source" => dic['source']
-          }
-      }
-      {
-        "text" => dic['text'],
-        "entities" => entities,
-        "annotations" => ann
-      }
-    end
+    # def payload_tvshow dic
+    #   ann = annotations_embedded(dic)
+    #   ann << {
+    #     "type" => "com.ayadn.tvshow",
+    #       "value" => {
+    #         "title" => dic['title'],
+    #         "source" => dic['source']
+    #       }
+    #   }
+    #   {
+    #     "text" => dic['text'],
+    #     "entities" => entities,
+    #     "annotations" => ann
+    #   }
+    # end
 
-    def payload_nowplaying dic
-      ann = annotations()
-      if dic['visible'] == true
-        ann << {
-          "type" => "com.ayadn.nowplaying",
-            "value" => {
-              "title" => dic['title'],
-              "artist" => dic['artist'],
-              "artwork" => dic['artwork'],
-              "link" => dic['link'],
-              "source" => dic['source']
-            }
-        }
-      else
-        ann << {
-          "type" => "com.ayadn.nowplaying",
-            "value" => {
-              "status" => "no-url",
-              "source" => dic['source']
-            }
-        }
-      end
-      if dic['visible'] == true
-        ann << {
-          "type" => "net.app.core.oembed",
-          "value" => {
-            "version" => "1.0",
-            "type" => "photo",
-            "width" => dic['width'],
-            "height" => dic['height'],
-            "title" => dic['title'],
-            "url" => dic['artwork'],
-            "embeddable_url" => dic['artwork'],
-            "provider_url" => "https://itunes.apple.com",
-            "provider_name" => "iTunes",
-            "thumbnail_url" => dic['artwork_thumb'],
-            "thumbnail_width" => dic['width_thumb'],
-            "thumbnail_height" => dic['height_thumb']
-          }
-        }
-      end
-      {
-        "text" => dic['text'],
-        "entities" => entities,
-        "annotations" => ann
-      }
-    end
+    # def payload_nowplaying dic
+    #   ann = annotations()
+    #   if dic['visible'] == true
+    #     ann << {
+    #       "type" => "com.ayadn.nowplaying",
+    #         "value" => {
+    #           "title" => dic['title'],
+    #           "artist" => dic['artist'],
+    #           "artwork" => dic['artwork'],
+    #           "link" => dic['link'],
+    #           "source" => dic['source']
+    #         }
+    #     }
+    #   else
+    #     ann << {
+    #       "type" => "com.ayadn.nowplaying",
+    #         "value" => {
+    #           "status" => "no-url",
+    #           "source" => dic['source']
+    #         }
+    #     }
+    #   end
+    #   if dic['visible'] == true
+    #     ann << {
+    #       "type" => "net.app.core.oembed",
+    #       "value" => {
+    #         "version" => "1.0",
+    #         "type" => "photo",
+    #         "width" => dic['width'],
+    #         "height" => dic['height'],
+    #         "title" => dic['title'],
+    #         "url" => dic['artwork'],
+    #         "embeddable_url" => dic['artwork'],
+    #         "provider_url" => "https://itunes.apple.com",
+    #         "provider_name" => "iTunes",
+    #         "thumbnail_url" => dic['artwork_thumb'],
+    #         "thumbnail_width" => dic['width_thumb'],
+    #         "thumbnail_height" => dic['height_thumb']
+    #       }
+    #     }
+    #   end
+    #   {
+    #     "text" => dic['text'],
+    #     "entities" => entities,
+    #     "annotations" => ann
+    #   }
+    # end
 
-    def payload_embedded dic
-      {
-        "text" => dic['text'],
-        "entities" => entities,
-        "annotations" => annotations_embedded(dic)
-      }
-    end
+    # def payload_embedded dic
+    #   {
+    #     "text" => dic['text'],
+    #     "entities" => entities,
+    #     "annotations" => annotations_embedded(dic)
+    #   }
+    # end
 
-    def payload_reply_embedded dic
-      {
-        "text" => dic['text'],
-        "reply_to" => dic['reply_to'],
-        "entities" => entities,
-        "annotations" => annotations_embedded(dic)
-      }
-    end
+    # def payload_reply_embedded dic
+    #   {
+    #     "text" => dic['text'],
+    #     "reply_to" => dic['reply_to'],
+    #     "entities" => entities,
+    #     "annotations" => annotations_embedded(dic)
+    #   }
+    # end
 
-    def payload_pm_embedded dic
-      {
-        "text" => dic['text'],
-        "entities" => entities,
-        "destinations" => dic['username'],
-        "annotations" => annotations_embedded(dic)
-      }
-    end
+    # def payload_pm_embedded dic
+    #   {
+    #     "text" => dic['text'],
+    #     "entities" => entities,
+    #     "destinations" => dic['username'],
+    #     "annotations" => annotations_embedded(dic)
+    #   }
+    # end
 
-    def annotations_embedded dic
-      base = annotations()
-      dic['data'].each do |obj|
-        base << {
-          "type" => "net.app.core.oembed",
-          "value" => {
-             "+net.app.core.file" => {
-                "file_id" => obj['data']['id'],
-                "file_token" => obj['data']['file_token'],
-                "format" => "oembed"
-             }
-          }
-        }
-      end
-      return base
-    end
+    # def annotations_embedded dic
+    #   base = annotations()
+    #   dic['data'].each do |obj|
+    #     base << {
+    #       "type" => "net.app.core.oembed",
+    #       "value" => {
+    #          "+net.app.core.file" => {
+    #             "file_id" => obj['data']['id'],
+    #             "file_token" => obj['data']['file_token'],
+    #             "format" => "oembed"
+    #          }
+    #       }
+    #     }
+    #   end
+    #   return base
+    # end
 
     def auto_readline
       loop do
@@ -325,32 +365,32 @@ module Ayadn
       Errors.warn "-Post without text-"
     end
 
-    def annotations
-      [
-        {
-        "type" => "com.ayadn.user",
-        "value" => {
-          "+net.app.core.user" => {
-              "user_id" => "#{Settings.config[:identity][:handle]}",
-              "format" => "basic"
-            }
-          }
-        },
-        {
-        "type" => "com.ayadn.client",
-        "value" => {
-          "url" => "http://ayadn-app.net",
-          "author" => {
-              "name" => "Eric Dejonckheere",
-              "username" => "ericd",
-              "id" => "69904",
-              "email" => "eric@aya.io"
-            },
-          "version" => "#{Settings.config[:version]}"
-          }
-        }
-      ]
-    end
+    # def annotations
+    #   [
+    #     {
+    #     "type" => "com.ayadn.user",
+    #     "value" => {
+    #       "+net.app.core.user" => {
+    #           "user_id" => "#{Settings.config[:identity][:handle]}",
+    #           "format" => "basic"
+    #         }
+    #       }
+    #     },
+    #     {
+    #     "type" => "com.ayadn.client",
+    #     "value" => {
+    #       "url" => "http://ayadn-app.net",
+    #       "author" => {
+    #           "name" => "Eric Dejonckheere",
+    #           "username" => "ericd",
+    #           "id" => "69904",
+    #           "email" => "eric@aya.io"
+    #         },
+    #       "version" => "#{Settings.config[:version]}"
+    #       }
+    #     }
+    #   ]
+    # end
 
     def entities
       {
@@ -361,31 +401,31 @@ module Ayadn
 
 
 
-    def payload_basic(text)
-      {
-        "text" => text,
-        "entities" => entities,
-        "annotations" => annotations
-      }
-    end
+    # def payload_basic(text)
+    #   {
+    #     "text" => text,
+    #     "entities" => entities,
+    #     "annotations" => annotations
+    #   }
+    # end
 
-    def payload_pm(username, text)
-      {
-        "text" => text,
-        "entities" => entities,
-        "destinations" => username,
-        "annotations" => annotations
-      }
-    end
+    # def payload_pm(username, text)
+    #   {
+    #     "text" => text,
+    #     "entities" => entities,
+    #     "destinations" => username,
+    #     "annotations" => annotations
+    #   }
+    # end
 
-    def payload_reply(text, reply_to)
-      {
-        "text" => text,
-        "reply_to" => reply_to,
-        "entities" => entities,
-        "annotations" => annotations
-      }
-    end
+    # def payload_reply(text, reply_to)
+    #   {
+    #     "text" => text,
+    #     "reply_to" => reply_to,
+    #     "entities" => entities,
+    #     "annotations" => annotations
+    #   }
+    # end
 
     # def payload_log(data)
     #   extended = annotations

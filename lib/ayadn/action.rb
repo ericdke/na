@@ -502,18 +502,8 @@ module Ayadn
       begin
         writer = Post.new
         @view.clear_screen
-        text = args.join(" ")
-        if options[:embed]
-          embed = options[:embed]
-          puts Status.uploading(embed)
-          resp = writer.send_embedded(text, FileOps.make_paths(embed))
-        elsif options[:youtube]
-          puts Status.posting
-          resp = writer.send_youtube({'link' => options[:youtube][0], 'text' => text})
-        else
-          puts Status.posting
-          resp = writer.post(args)
-        end
+        puts Status.posting
+        resp = writer.post({options: options, text: args.join(" ")})
         FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         @view.clear_screen
         puts Status.yourpost
