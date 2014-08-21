@@ -5,10 +5,34 @@ module Ayadn
 
     require 'spotlite'
 
-    def initialize view
+    def initialize view = nil
       @view = view
       @spotlite = Spotlite::Movie
     end
+
+    # -----
+
+    def get_response args, options
+      find_by_title(args, options)
+    end
+
+    def create_filename response
+      reg = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
+      "#{response.title.downcase.strip.gsub(reg, '_').split(' ').join('_')}.jpg"
+    end
+
+    # This is only for the `-M` option in the CLI
+    def get_poster args, options
+      options = options.dup
+      response = get_response(args, options)
+      filename = create_filename(response)
+      FileOps.download_url(filename, response.poster_url)
+      options[:embed] ||= []
+      options[:embed] << "#{Settings.config[:paths][:downloads]}/#{filename}"
+      return options
+    end
+
+    # -----
 
     def post args, options
       options = options.dup
@@ -16,8 +40,7 @@ module Ayadn
       response = find_by_title(args, options)
       text = format_post(response)
       show_post(text)
-      reg = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
-      filename = "#{response.title.downcase.strip.gsub(reg, '_').split(' ').join('_')}.jpg"
+      filename = create_filename(response)
       FileOps.download_url(filename, response.poster_url)
       @view.clear_screen
       puts "\nPosting and uploading the movie poster...\n".color(:green)

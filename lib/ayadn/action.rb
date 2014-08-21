@@ -503,6 +503,10 @@ module Ayadn
         writer = Post.new
         @view.clear_screen
         puts Status.posting
+        if options[:poster]
+          settings = options.dup
+          options = NowWatching.new.get_poster(settings[:poster], settings)
+        end
         resp = writer.post({options: options, text: args.join(" ")})
         save_and_view(resp)
       rescue => e
