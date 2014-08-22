@@ -9,26 +9,6 @@ module Ayadn
       @workers = workers
     end
 
-    def unified options
-      Settings.options[:force] = true if options[:force]
-      @view.downloading(options)
-      stream = @api.get_unified(options)
-      Check.no_new_posts(stream, options, 'unified')
-      Databases.save_max_id(stream)
-      @view.render(stream, options)
-      Scroll.new(@api, @view).unified(options) if options[:scroll]
-    end
-
-    def checkins options
-      Settings.options[:force] = true if options[:force]
-      @view.downloading(options)
-      stream = @api.get_checkins(options)
-      Check.no_new_posts(stream, options, 'explore:checkins')
-      Databases.save_max_id(stream)
-      @view.render(stream, options)
-      Scroll.new(@api, @view).checkins(options) if options[:scroll]
-    end
-
     def global settings
       Settings.options[:force] = true if settings[:force]
       options = settings.dup
@@ -42,35 +22,30 @@ module Ayadn
       Scroll.new(@api, @view).global(options) if options[:scroll]
     end
 
-    def trending options
-      Settings.options[:force] = true if options[:force]
-      @view.downloading(options)
-      stream = @api.get_trending(options)
-      Check.no_new_posts(stream, options, 'explore:trending')
-      Databases.save_max_id(stream)
-      @view.render(stream, options)
-      Scroll.new(@api, @view).trending(options) if options[:scroll]
+
+    def method_missing(meth, options)
+      case meth
+      when :checkins, :trending, :photos
+        stream(meth, options, "explore:#{meth}")
+      when :conversations
+        stream(meth, options, "explore:replies")
+      when :unified
+        stream(meth, options, meth.to_s)
+      else
+        super
+      end
     end
 
-    def photos options
+    def stream meth, options, target
       Settings.options[:force] = true if options[:force]
       @view.downloading(options)
-      stream = @api.get_photos(options)
-      Check.no_new_posts(stream, options, 'explore:photos')
+      stream = @api.send("get_#{meth}".to_sym, options)
+      Check.no_new_posts(stream, options, target)
       Databases.save_max_id(stream)
       @view.render(stream, options)
-      Scroll.new(@api, @view).photos(options) if options[:scroll]
+      Scroll.new(@api, @view).send(meth, options) if options[:scroll]
     end
 
-    def conversations options
-      Settings.options[:force] = true if options[:force]
-      @view.downloading(options)
-      stream = @api.get_conversations(options)
-      Check.no_new_posts(stream, options, 'explore:replies')
-      Databases.save_max_id(stream)
-      @view.render(stream, options)
-      Scroll.new(@api, @view).replies(options) if options[:scroll]
-    end
 
     def mentions username, options
       Settings.options[:force] = true if options[:force]
