@@ -62,7 +62,7 @@ module Ayadn
         begin
           param = timeline_config.validate(args[1])
           timeline_config.send(args[0], param)
-        rescue NoMethodError
+        rescue NoMethodError, ArgumentError
           puts Status.error_missing_parameters
           exit
         rescue => e
@@ -108,7 +108,7 @@ module Ayadn
         begin
           color_config.validate(args[1])
           color_config.send(args[0], args[1])
-        rescue NoMethodError
+        rescue NoMethodError, ArgumentError
           puts Status.error_missing_parameters
           exit
         rescue => e
@@ -129,7 +129,7 @@ module Ayadn
         begin
           param = backup_config.validate(args[1])
           backup_config.send(args[0], param)
-        rescue NoMethodError
+        rescue NoMethodError, ArgumentError
           puts Status.error_missing_parameters
           exit
         rescue => e
@@ -148,7 +148,53 @@ module Ayadn
       Settings.restore_defaults
       puts Status.done
     end
+  end
 
+  class Validators
+    def self.boolean(value)
+      case value.downcase
+      when "true", "1", "yes"
+        true
+      when "false", "0", "no"
+        false
+      else
+        abort(Status.error_missing_parameters)
+      end
+    end
+    def self.index_range(min, max, value)
+      x = value.to_i
+      if x >= min && x <= max
+        x
+      else
+        abort(Status.must_be_integer)
+      end
+    end
+    def self.cache_range value
+      if value >= 1 && value <= 168
+        value.round
+      else
+        abort(Status.cache_range)
+      end
+    end
+    def self.threshold value
+      value = value.to_f
+      if value > 0 and value < 5
+        value
+      else
+        abort(Status.threshold)
+      end
+    end
+    def self.timer(t)
+      t = t.to_i
+      t >= 1 ? t : 3
+    end
+    def self.color(color)
+      colors_list = %w{red green magenta cyan yellow blue white black}
+      unless colors_list.include?(color)
+        puts Status.error_missing_parameters
+        abort(Status.valid_colors(colors_list))
+      end
+    end
   end
 
   class SetScroll
@@ -261,60 +307,12 @@ module Ayadn
     def validate(value)
       Validators.boolean(value)
     end
-    def auto_save_sent_posts(value)
-      Settings.options[:backup][:auto_save_sent_posts] = value
-    end
-    def auto_save_sent_messages(value)
-      Settings.options[:backup][:auto_save_sent_messages] = value
-    end
-    def auto_save_lists(value)
-      Settings.options[:backup][:auto_save_lists] = value
-    end
-  end
-
-  class Validators
-    def self.boolean(value)
-      case value.downcase
-      when "true", "1", "yes"
-        true
-      when "false", "0", "no"
-        false
+    def method_missing(meth, options)
+      case meth.to_s
+      when 'auto_save_sent_posts', 'auto_save_sent_messages', 'auto_save_lists'
+        Settings.options[:backup][meth.to_sym] = options
       else
-        abort(Status.error_missing_parameters)
-      end
-    end
-    def self.index_range(min, max, value)
-      x = value.to_i
-      if x >= min && x <= max
-        x
-      else
-        abort(Status.must_be_integer)
-      end
-    end
-    def self.cache_range value
-      if value >= 1 && value <= 168
-        value.round
-      else
-        abort(Status.cache_range)
-      end
-    end
-    def self.threshold value
-      value = value.to_f
-      if value > 0 and value < 5
-        value
-      else
-        abort(Status.threshold)
-      end
-    end
-    def self.timer(t)
-      t = t.to_i
-      t >= 1 ? t : 3
-    end
-    def self.color(color)
-      colors_list = %w{red green magenta cyan yellow blue white black}
-      unless colors_list.include?(color)
-        puts Status.error_missing_parameters
-        abort(Status.valid_colors(colors_list))
+        super
       end
     end
   end
@@ -365,37 +363,15 @@ module Ayadn
     def save
       Settings.save_config
     end
-    def directed(value)
-      Settings.options[:timeline][:directed] = value
-    end
-    def deleted(value)
-      #Settings.options[:timeline][:deleted] = value
-      abort(Status.not_mutable)
-    end
-    def html(value)
-      Settings.options[:timeline][:html] = value
-    end
-    def annotations(value)
-      #Settings.options[:timeline][:annotations] = value
-      abort(Status.not_mutable)
-    end
-    def show_source(value)
-      Settings.options[:timeline][:show_source] = value
-    end
-    def show_symbols(value)
-      Settings.options[:timeline][:show_symbols] = value
-    end
-    def show_real_name(value)
-      Settings.options[:timeline][:show_real_name] = value
-    end
-    def show_date(value)
-      Settings.options[:timeline][:show_date] = value
-    end
-    def show_spinner value
-      Settings.options[:timeline][:show_spinner] = value
-    end
-    def show_debug value
-      Settings.options[:timeline][:show_debug] = value
+    def method_missing(meth, options)
+      case meth.to_s
+      when 'directed', 'html', 'show_source', 'show_symbols', 'show_real_name', 'show_date', 'show_spinner', 'show_debug'
+        Settings.options[:timeline][meth.to_sym] = options
+      when 'deleted', 'annotations'
+        abort(Status.not_mutable)
+      else
+        super
+      end
     end
   end
 
@@ -421,68 +397,17 @@ module Ayadn
       Settings.save_config
     end
 
-    def id(color)
-      Settings.options[:colors][:id] = color.to_sym
-    end
-
-    def index(color)
-      Settings.options[:colors][:index] = color.to_sym
-    end
-
-    def username(color)
-      Settings.options[:colors][:username] = color.to_sym
-    end
-
-    def name(color)
-      Settings.options[:colors][:name] = color.to_sym
-    end
-
-    def date(color)
-      Settings.options[:colors][:date] = color.to_sym
-    end
-
-    def link(color)
-      Settings.options[:colors][:link] = color.to_sym
-    end
-
-    def dots(color)
-      Settings.options[:colors][:dots] = color.to_sym
-    end
-
-    def hashtags(color)
-      Settings.options[:colors][:hashtags] = color.to_sym
-    end
-
-    def hashtag color
-      hashtags color
-    end
-
-    def mentions(color)
-      Settings.options[:colors][:mentions] = color.to_sym
-    end
-
-    def mention color
-      mentions color
-    end
-
-    def source(color)
-      Settings.options[:colors][:source] = color.to_sym
-    end
-
-    def client color
-      source color
-    end
-
-    def symbols(color)
-      Settings.options[:colors][:symbols] = color.to_sym
-    end
-
-    def symbol(color)
-      symbols color
-    end
-
-    def debug(color)
-      Settings.options[:colors][:debug] = color.to_sym
+    def method_missing(meth, options)
+      case meth.to_s
+      when 'id', 'index', 'username', 'name', 'date', 'link', 'dots', 'hashtags', 'mentions', 'source', 'symbols', 'debug'
+        Settings.options[:colors][meth.to_sym] = options.to_sym
+      when 'hashtag', 'mention', 'symbol'
+        Settings.options[:colors]["#{meth}s".to_sym] = options.to_sym
+      when 'client'
+        Settings.options[:colors][:source] = options.to_sym
+      else
+        super
+      end
     end
   end
 end
