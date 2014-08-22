@@ -84,7 +84,7 @@ module Ayadn
         begin
           param = counts_config.validate(args[1])
           counts_config.send(args[0], param)
-        rescue NoMethodError
+        rescue NoMethodError, ArgumentError
           puts Status.error_missing_parameters
           exit
         rescue => e
@@ -337,53 +337,13 @@ module Ayadn
     def validate(value)
       Validators.index_range(1, 200, value)
     end
-    def default(value)
-      Settings.options[:counts][:default] = value
-    end
-    def unified(value)
-      Settings.options[:counts][:unified] = value
-    end
-    def global(value)
-      Settings.options[:counts][:global] = value
-    end
-    def checkins(value)
-      Settings.options[:counts][:checkins] = value
-    end
-    def conversations(value)
-      Settings.options[:counts][:conversations] = value
-    end
-    def photos(value)
-      Settings.options[:counts][:photos] = value
-    end
-    def trending(value)
-      Settings.options[:counts][:trending] = value
-    end
-    def mentions(value)
-      Settings.options[:counts][:mentions] = value
-    end
-    def convo(value)
-      Settings.options[:counts][:convo] = value
-    end
-    def posts(value)
-      Settings.options[:counts][:posts] = value
-    end
-    def messages(value)
-      Settings.options[:counts][:messages] = value
-    end
-    def search(value)
-      Settings.options[:counts][:search] = value
-    end
-    def whoreposted(value)
-      Settings.options[:counts][:whoreposted] = value
-    end
-    def whostarred(value)
-      Settings.options[:counts][:whostarred] = value
-    end
-    def whatstarred(value)
-      Settings.options[:counts][:whatstarred] = value
-    end
-    def files(value)
-      Settings.options[:counts][:files] = value
+    def method_missing(meth, options)
+      case meth.to_s
+      when 'default', 'unified', 'checkins', 'conversations', 'global', 'photos', 'trending', 'mentions', 'convo', 'posts', 'messages', 'search', 'whoreposted', 'whostarred', 'whatstarred', 'files'
+        Settings.options[:counts][meth.to_sym] = options.to_i
+      else
+        super
+      end
     end
   end
 
