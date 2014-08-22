@@ -19,51 +19,16 @@ module Ayadn
       at_exit { Databases.close_all }
     end
 
-    def unified(options)
-      begin
-        @stream.unified(options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [options]})
-      end
-    end
-
-    def checkins(options)
-      begin
-        @stream.checkins(options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [options]})
-      end
-    end
-
-    def global(settings)
-      begin
-        @stream.global(settings)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [settings]})
-      end
-    end
-
-    def trending(options)
-      begin
-        @stream.trending(options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [options]})
-      end
-    end
-
-    def photos(options)
-      begin
-        @stream.photos(options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [options]})
-      end
-    end
-
-    def conversations(options)
-      begin
-        @stream.conversations(options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [options]})
+    def method_missing(meth, options)
+      case meth.to_s
+      when 'unified', 'checkins', 'global', 'trending', 'photos', 'conversations', 'interactions'
+        begin
+          @stream.send(meth.to_sym, options)
+        rescue => e
+          Errors.global_error({error: e, caller: caller, data: [meth, options]})
+        end
+      else
+        super
       end
     end
 
@@ -80,14 +45,6 @@ module Ayadn
         @stream.posts(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-      end
-    end
-
-    def interactions(options)
-      begin
-        @stream.interactions(options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [options]})
       end
     end
 
