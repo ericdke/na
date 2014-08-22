@@ -1,14 +1,14 @@
 # 1.7.0 - 'Private Investigations'
 
-- Change: option to embed an image in a post is now `-E` (previously -e)
 - New: embed a Youtube video in a normal post with option `-Y`
 - New: embed a Vimeo video in a normal post with option `-V`
 - New: embed a movie poster in a normal post with option `-M`
 - New: force view blacklisted/muted/blocked user's posts with option `-f`
 - New: the cursor is hidden when the scroll spinning wheel is displayed
-- Refactor: Post methods
-- Fixed: the add bookmark convo fix...
+- Change: option to embed an image in a post is now `-E` (previously -e)
+- Fixed: bookmark title; also fixed the previous fix...
 - Fixed: value displayed when setting NiceRank
+- Refactor: Post methods
 
 # 1.6.0 - 'Beetlejuice'
 

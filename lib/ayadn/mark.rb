@@ -9,7 +9,8 @@ module Ayadn
       begin
         init
         unless args.empty?
-          post_id, convo_title = args[0], args[1]
+          double = args.dup
+          post_id, convo_title = double.shift, double.join(' ')
         else
           abort Status.wrong_arguments
         end
