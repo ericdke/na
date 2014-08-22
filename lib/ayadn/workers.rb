@@ -252,8 +252,7 @@ module Ayadn
     end
 
     def extract_links(post)
-      links = []
-      post['entities']['links'].each { |l| links << l['url'] }
+      links = post['entities']['links'].map { |l| l['url'] }
       unless post['annotations'].nil? || post['annotations'].empty?
         post['annotations'].each do |ann|
           if ann['type'] == "net.app.core.oembed"
@@ -261,14 +260,11 @@ module Ayadn
           end
         end
       end
-      links.uniq!
-      links
+      links.uniq
     end
 
     def extract_hashtags(post)
-      tags = []
-      post['entities']['hashtags'].each { |h| tags << h['name'] }
-      tags
+      post['entities']['hashtags'].map { |h| h['name'] }
     end
 
     def build_channels(data, options = {})
@@ -379,7 +375,16 @@ module Ayadn
       username.join
     end
 
-    def add_arobases_to_usernames args #TODO: replace
+    def remove_arobase_if_present args
+      args.map! do |username|
+        temp = username.chars
+        temp.shift if temp.first == "@"
+        temp.join
+      end
+      args
+    end
+
+    def add_arobases_to_usernames args #TODO: replace all these arobase legacy methods by a unique one
       args.map do |username|
         if username == 'me'
           who_am_i
@@ -395,15 +400,6 @@ module Ayadn
       db = Databases.init(Dir.home + "/ayadn/accounts.db")
       active = db['ACTIVE']
       db[active][:handle]
-    end
-
-    def remove_arobase_if_present args
-      args.map! do |username|
-        temp = username.chars
-        temp.shift if temp.first == "@"
-        temp.join
-      end
-      args
     end
 
     def extract_users(resp)
@@ -483,8 +479,7 @@ module Ayadn
       stream['data'].each do |post|
         extract_links(post).each {|l| links << l}
       end
-      links.uniq!
-      links
+      links.uniq
     end
 
     def all_but_me usernames
