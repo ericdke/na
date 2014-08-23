@@ -8,7 +8,7 @@
 - Change: option to embed an image in a post is now `-E` (previously -e)
 - Fixed: bookmark title; also fixed the previous fix...
 - Fixed: value displayed when setting NiceRank
-- Refactor: Post methods
+- Refactored a few classes and methods
 
 # 1.6.0 - 'Beetlejuice'
 

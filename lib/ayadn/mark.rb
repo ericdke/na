@@ -15,7 +15,7 @@ module Ayadn
           abort Status.wrong_arguments
         end
         abort Status.error_missing_post_id unless post_id.is_integer?
-        convo_title = post_id if convo_title.nil?
+        convo_title = post_id if convo_title == ''
         api, workers, view = API.new, Workers.new, View.new
         users, bucket = [], []
         view.clear_screen
