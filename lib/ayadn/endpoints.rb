@@ -256,6 +256,10 @@ module Ayadn
       "#{@channels_url}?access_token=#{Settings.user_token}#{API.build_query(options)}"
     end
 
+    def channel(channel_id, options = {})
+      "#{@channels_url}#{channel_id.join(',')}?access_token=#{Settings.user_token}#{API.build_query(options)}"
+    end
+
     def messages(channel_id, options = {})
       "#{@channels_url}#{channel_id}/messages?access_token=#{Settings.user_token}#{API.build_query(options)}&include_machine=1"
     end

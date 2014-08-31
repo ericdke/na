@@ -399,16 +399,22 @@ module Ayadn
 
     def channels options
       begin
+        channels = if options[:id]
+          lambda { @api.get_channel(options[:id], options) }
+        else
+          lambda { @api.get_channels }
+        end
         if options[:raw]
-          @view.show_raw(@api.get_channels)
+          @view.show_raw(channels.call)
+          exit
         else
           @view.downloading
-          resp = @api.get_channels
+          resp = channels.call
           @view.clear_screen
           @view.show_channels(resp)
         end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [resp['meta']]})
+        Errors.global_error({error: e, caller: caller, data: [resp['meta'], options]})
       end
     end
 

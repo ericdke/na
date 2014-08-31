@@ -338,6 +338,7 @@ module Ayadn
     desc "channels", "List your active channels (-ch)"
     map "-ch" => :channels
     long_desc Descriptions.channels
+    option :id, aliases: "-i", type: :array, desc: "Retrieve only the specified channel(s)"
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def channels
       Action.new.channels(options)

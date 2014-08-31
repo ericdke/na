@@ -30,6 +30,18 @@ List your active App.net channels.
 
 `ayadn -ch`
 
+Retrieve only specified channel(s) with option `--id`:
+
+`ayadn -ch --id 55123`
+
+`ayadn -ch --id 55123 34678 988776`
+
+Display raw response with option `-x`:
+
+`ayadn -ch -x`
+
+`ayadn -ch -x --id 55123`  
+
 # INTERACTIONS
 
 Shows a short reminder of your recent App.net activity.

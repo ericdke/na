@@ -225,6 +225,11 @@ module Ayadn
       # big
     end
 
+    def get_channel channel_id, options
+      options = {:recent_message => 1, :annotations => 1, :before_id => nil}
+      get_parsed_response(Endpoints.new.channel(channel_id, options))
+    end
+
     def get_messages(channel_id, options)
       options = paginate options, "channel:#{channel_id}"
       get_parsed_response(Endpoints.new.messages(channel_id, options))

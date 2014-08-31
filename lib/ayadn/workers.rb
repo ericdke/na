@@ -269,6 +269,7 @@ module Ayadn
 
     def build_channels(data, options = {})
       bucket = []
+      data = [data] unless data.is_a?(Array)
       if options[:channels]
         puts "Downloading list of channels and their users credentials.\n\nPlease wait, it could take a while if there are many results and users...".color(:cyan)
       else

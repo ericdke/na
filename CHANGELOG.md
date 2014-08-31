@@ -1,4 +1,9 @@
-# 1.7.0 - 'Private Investigations'
+# 1.7.1 (2014-08-31) - ''
+
+- New: option to retrieve only specified channels in Channels
+- New: option to display raw response in Channels
+
+# 1.7.0 (2014-08-21) - 'Private Investigations'
 
 - New: embed a Youtube video in a normal post with option `-Y`
 - New: embed a Vimeo video in a normal post with option `-V`
@@ -10,7 +15,7 @@
 - Fixed: value displayed when setting NiceRank
 - Refactored a few classes and methods
 
-# 1.6.0 - 'Beetlejuice'
+# 1.6.0 (2014-08-04) - 'Beetlejuice'
 
 - New command: 'movie'. Create a post from a movie title (with link + movie poster). Customisable hashtag (default: '#nowwatching').
 - New command: 'tvshow'. Create a post from a TV show title (with link + show poster). Customisable hashtag (default: '#nowwatching'). Option to display a banner instead of a poster.
@@ -21,11 +26,11 @@
 - Fixed: bookmark convos.
 - General code cleaning and refactoring.
 
-# 1.5.1 - 'Holograms'
+# 1.5.1 (2014-07-27) - 'Holograms'
 
 - Improved accuracy of iTunes Store requests for NowPlaying
 
-# 1.5.0 - 'Nozomi'
+# 1.5.0 (2014-07-25) - 'Nozomi'
 
 - In 'convo', both the post id you've requested and the post it replies to are marked with arrows
 - Same feature in the view after a reply
@@ -42,7 +47,7 @@
 
 - Temporary fix for filepaths instability when uploading pictures
 
-# 1.4.5 - 'Sébastien'
+# 1.4.5 (2014-07-19) - 'Sébastien'
 
 - Fixed a crash when iTunes Store URL contained exotic characters
 
@@ -50,7 +55,7 @@
 
 - Fixed a database problem in PM and SEND
 
-# 1.4.3 - 'Sergent Stretch'
+# 1.4.3 (2014-07-17) - 'Sergent Stretch'
 
 - NowPlaying is compatible with iTunes and Last.fm. Default: iTunes. Add `--last-fm` or `-l` to get Last.fm last played track instead
 - NowPlaying audio link has been replaced with an iTunes Store link
@@ -60,7 +65,7 @@
 - Automatically fixes the arguments order for 'post' if needed when uploading a picture
 - General code cleaning
 
-# 1.4.2 - 'Caligula'
+# 1.4.2 (2014-07-15) - 'Caligula'
 
 - Ayadn is more resilient to connectivity errors
 - Better handling of filenames when uploading
@@ -69,7 +74,7 @@
 
 - A few fixes in the NowPlaying section
 
-# 1.4.0 - 'Florian'
+# 1.4.0 (2014-07-14) - 'Florian'
 
 - New feature: embed one or several pictures within a post (in write, post, reply, and pm)
 - Nowplaying inserts preview URL and album art from iTunes Store (you can prevent this with: `--no-url`)
@@ -78,11 +83,11 @@
 
 - Fixed: Global stream crashed if NiceRank was enabled but unreachable
 
-# 1.3.1 - 'Nico'
+# 1.3.1 (2014-06-16) - 'Nico'
 
 - NiceRank threshold is a float again. Default value is 2.1
 
-# 1.3.0 - 'K'
+# 1.3.0 (2014-06-09) - 'K'
 
 - Updated the NiceRank API url
 - NiceRank filter is more efficient (checks is_human + real_person)
@@ -99,14 +104,14 @@ Features:
 
 - Fixed the non-installing unicode_utils Gem
 
-# 1.2.9 - 'Kirschen'
+# 1.2.9 (2014-05-29) - 'Kirschen'
 
 - NiceRank database auto-limits to 10000 users
 - Better handling of connection errors
 - Better display of emojis
 - General code cleaning
 
-# 1.2.8 - 'Hans'
+# 1.2.8 (2014-05-27) - 'Hans'
 
 - No more Ruby 1.9.3
 - Search for users: returns a detailed view of users containing word(s) in their bio/description
@@ -132,7 +137,7 @@ Features:
 
 - Fix the NiceRank filter staying on true
 
-# 1.2.4 - 'Stoopid me'
+# 1.2.4 (2014-05-25) - 'Stoopid me'
 
 - Fix the copy/paste error in Settings
 
@@ -146,23 +151,23 @@ Features:
 - Option for showing debug messages
 - Show spinner = true
 
-# 1.2.2 - 'Chris'
+# 1.2.2 (2014-05-21) - 'Chris'
 
 - No more empty lines in the scroll
 - Spinner while waiting for posts (false by default)
 - Hashtags support accented characters
 
-# 1.2.1 - 'Vinz'
+# 1.2.1 (2014-05-20) - 'Vinz'
 
 - Fixed the exclusion bug in NiceRank filters
 - Improved the truncation in Mark list
 - Changes to match changes in NiceRank API
 
-# 1.2.0 - 'Jason'
+# 1.2.0 (2014-05-19) - 'Jason'
 
 - @matigo's NiceRank filter for the Global stream
 
-# 1.1.3 - 'Kevin'
+# 1.1.3 (2014-05-17) - 'Kevin'
 
 - Bookmark a conversation
 - List, delete, rename bookmarks
@@ -171,12 +176,12 @@ Features:
 
 - URL for the docs
 
-# 1.1.1 - 'State Of The Onion'
+# 1.1.1 (2014-05-07) - 'State Of The Onion'
 
 - Star and unstar a reposted post
 - Nowplaying shows an error message if iTunes is closed or not currently playing any track
 
-# 1.1.0 - 'Leviathan'
+# 1.1.0 (2014-04-28) - 'Leviathan'
 
 - Show who's writing, and who's the recipient
 - Less help text when writing, more concise
@@ -188,7 +193,7 @@ Features:
 - New command: photos stream
 - New command: delete message (private or in a channel)
 
-# 1.0.13 - 'Charlotte'
+# 1.0.13 (2014-04-25) - 'Charlotte'
 
 - New layout for '#nowplaying'
 - Compact index.db and pagination.db if necessary
@@ -212,14 +217,14 @@ Features:
 
 - Fixes the stubborn 'nowplaying' database bug
 
-# 1.0.8 - 'Laurent'
+# 1.0.8 (2014-04-16) - 'Laurent'
 
 - Better error messages/logs (specifically when HTTP errors)
 - Token is anonymized if in error logs
 - No more database error when canceling a 'nowplaying' post
 - Better mentions colorization
 
-# 1.0.7 - 'Hugo'
+# 1.0.7 (2014-04-13) - 'Hugo'
 
 - Machine-only messages in channels are now viewable
 - Don't output "Downloading" if options = raw in messages view
@@ -227,7 +232,7 @@ Features:
 - Removed username in front of ">>" in Auto (in case the authd user changed)
 - Compatibility with Windows is broken
 
-# 1.0.6 - 'Matthew'
+# 1.0.6 (2014-04-12) - 'Matthew'
 
 - Fixed a bug where post_max_chars was displayed instead of message_max_chars
 - Show raw JSON in messages even if no data
@@ -237,7 +242,7 @@ Features:
 - Fixed the colorization for mentions
 - Added tests for colorization
 
-# 1.0.4 - 'Jeremy'
+# 1.0.4 (2014-04-06) - 'Jeremy'
 
 - Fixed 'reply to an indexed stream' for Ruby < 2.1
 - More tests for Databases
@@ -256,7 +261,7 @@ Features:
 - Better layout for checkins
 - Better alert message if error 429
 
-# 1.0.1 - 'Phoenix'
+# 1.0.1 (2014-04-04) - 'Phoenix'
 
 Release!
 
