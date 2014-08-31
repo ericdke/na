@@ -1,4 +1,4 @@
-# 1.7.1 (2014-08-31) - ''
+# 1.7.1 (2014-08-31) - 'Poltergeist'
 
 - New: option to retrieve only specified channels in Channels
 - New: option to display raw response in Channels

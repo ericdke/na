@@ -321,13 +321,12 @@ module Ayadn
       begin
         Check.no_username(username)
         username = @workers.add_arobase(username)
-        @view.downloading(options)
+        get_user = lambda { @api.get_user(username) }
         if options[:raw]
-          resp = @api.get_user(username)
-          @view.show_raw(resp, options)
+          @view.show_raw(get_user.call, options)
           exit
         end
-        stream = @api.get_user(username)
+        stream = get_user.call
         Check.no_user(stream, username)
         Check.same_username(stream) ? token = @api.get_token_info['data'] : token = nil
         @view.infos(stream['data'], token)
@@ -340,14 +339,13 @@ module Ayadn
       begin
         Settings.options[:force] = true if options[:force]
         Check.bad_post_id(post_id)
-        @view.downloading(options)
+        details = lambda { @api.get_details(post_id, options) }
         if options[:raw]
-          details = @api.get_details(post_id, options)
-          @view.show_raw(details, options)
+          @view.show_raw(details.call, options)
           exit
         end
         @view.clear_screen
-        response = @api.get_details(post_id, options)
+        response = details.call
         Check.no_post(response, post_id)
         resp = response['data']
         response = @api.get_user("@#{resp['user']['username']}")
@@ -373,11 +371,12 @@ module Ayadn
 
     def files(options)
       begin
+        get_files = lambda { @api.get_files_list(options) }
         if options[:raw]
-          @view.show_raw(@api.get_files_list(options))
+          @view.show_raw(get_files.call)
         else
           @view.downloading
-          list = @api.get_files_list(options)
+          list = get_files.call
           Errors.no_data('files') if list.empty?
           @view.clear_screen
           @view.show_files_list(list)
@@ -587,7 +586,7 @@ module Ayadn
 
     def nowplaying(options = {})
       np = NowPlaying.new(@api, @view, @workers)
-      options['lastfm'] ? np.lastfm(options) : np.itunes(options)
+      options[:lastfm] ? np.lastfm(options) : np.itunes(options)
     end
 
     def nowwatching(args, options = {})
@@ -607,10 +606,10 @@ module Ayadn
       begin
         abort(Status.error_missing_title) if args.empty?
         client = TvShow.new
-        if options['alt']
-          show_obj = client.find_alt(args.join(' '))
+        show_obj = if options[:alt]
+          client.find_alt(args.join(' '))
         else
-          show_obj = client.find(args.join(' '))
+          client.find(args.join(' '))
         end
         candidate = client.create_details(show_obj)
         candidate.ok ? candidate.post(options) : candidate.cancel
