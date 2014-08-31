@@ -338,8 +338,9 @@ module Ayadn
     desc "channels", "List your active channels (-ch)"
     map "-ch" => :channels
     long_desc Descriptions.channels
+    option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def channels
-      Action.new.channels
+      Action.new.channels(options)
     end
 
     desc "messages CHANNEL", "Show messages in a CHANNEL (-ms)"

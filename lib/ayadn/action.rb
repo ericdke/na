@@ -374,13 +374,14 @@ module Ayadn
     def files(options)
       begin
         @view.downloading(options)
-        if options[:raw]
-          @view.show_raw(@api.get_files_list(options), options)
-          exit
-        end
         list = @api.get_files_list(options)
-        @view.clear_screen
-        list.empty? ? Errors.no_data('files') : @view.show_files_list(list)
+        Errors.no_data('files') if list.empty?
+        if options[:raw]
+          @view.show_raw(list, options)
+        else
+          @view.clear_screen
+          @view.show_files_list(list)
+        end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -396,7 +397,7 @@ module Ayadn
       end
     end
 
-    def channels
+    def channels options
       begin
         @view.downloading
         resp = @api.get_channels
