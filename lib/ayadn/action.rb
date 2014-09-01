@@ -319,15 +319,48 @@ module Ayadn
 
     def userupdate options
       begin
-        writer = Post.new
-        input = writer.compose()
-        writer.check_post_length(input)
-        text = input.join("\n")
+        unless options[:delete]
+          writer = Post.new
+          input = writer.compose()
+          writer.check_post_length(input)
+          text = input.join("\n")
+        end
         @view.clear_screen
         if options[:bio]
-          payload = {'description' => {'text' => text}}
+          unless options[:delete]
+            payload = {'description' => {'text' => text}}
+          else
+            payload = {'description' => {'text' => ''}}
+          end
         elsif options[:name]
+          abort("'Delete' isn't available for 'name'.\n".color(:red)) if options[:delete]
           payload = {'name' => text}
+        elsif options[:twitter]
+          unless options[:delete]
+            payload = {'annotations' => [{
+                'type' => 'net.app.core.directory.twitter',
+                'value' => {'username' => text}}]}
+          else
+            payload = {'annotations' => [{'type' => 'net.app.core.directory.twitter'}]}
+          end
+        elsif options[:blog]
+          unless options[:delete]
+            payload = {'annotations' => [{
+                'type' => 'net.app.core.directory.blog',
+                'value' => {'url' => text}}]}
+          else
+            payload = {'annotations' => [{
+                'type' => 'net.app.core.directory.blog'}]}
+          end
+        elsif options[:web]
+          unless options[:delete]
+            payload = {'annotations' => [{
+                'type' => 'net.app.core.directory.homepage',
+                'value' => {'url' => text}}]}
+          else
+            payload = {'annotations' => [{
+                'type' => 'net.app.core.directory.homepage'}]}
+          end
         end
         CNX.patch(Endpoints.new.user('me'), payload)
         puts Status.done

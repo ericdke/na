@@ -235,8 +235,12 @@ module Ayadn
     desc "userupdate", "Update your user profile informations (-U)"
     map "-U" => :userupdate
     long_desc Descriptions.userupdate
+    option :delete, aliases: "-D", type: :boolean, desc: "Delete this content from your profile"
     option :bio, type: :boolean, desc: "Update your user bio"
     option :name, type: :boolean, desc: "Update your user full name"
+    option :twitter, type: :boolean, desc: "Update your Twitter username"
+    option :blog, type: :boolean, desc: "Update your blog url"
+    option :web, type: :boolean, desc: "Update your web url"
     def userupdate
       Action.new.userupdate(options)
     end
