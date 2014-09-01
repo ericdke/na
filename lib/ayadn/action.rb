@@ -413,7 +413,7 @@ module Ayadn
           @view.show_channels(resp)
         end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [resp['meta'], options]})
+        Errors.global_error({error: e, caller: caller, data: [options]})
       end
     end
 

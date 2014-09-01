@@ -264,9 +264,5 @@ module Ayadn
       "#{@channels_url}#{channel_id}/messages?access_token=#{Settings.user_token}#{API.build_query(options)}&include_machine=1"
     end
 
-    def ayadnlog
-      "#{@channels_url}47348/messages?access_token=#{Settings.user_token}"
-    end
-
   end
 end
