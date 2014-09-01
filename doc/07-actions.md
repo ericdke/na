@@ -113,3 +113,29 @@ Export a post's link and text, with tags, to your Pinboard account.
 `ayadn pin 22790201 Ayadn gem update`
 
 `ayadn pin 26874913 duel swords france`
+
+# UPDATE
+
+Update your user profile.
+
+`ayadn --update --bio`
+
+`ayadn -U --bio`
+
+`ayadn --update --bio --delete`
+
+`ayadn -U --bio -D`
+
+`ayadn -U --name`
+
+`ayadn -U --twitter`
+
+`ayadn -U --twitter -D`
+
+`ayadn -U --blog`
+
+`ayadn -U --blog -D`
+
+`ayadn -U --web`
+
+`ayadn -U --web -D`
