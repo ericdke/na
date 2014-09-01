@@ -157,5 +157,19 @@ module Ayadn
       end
     end
 
+    def self.patch(url, payload)
+      begin
+        RestClient.patch(url, payload.to_json, :content_type => :json, :accept => :json) do |response, request, result|
+          Debug.http response, url
+          check response
+        end
+      rescue SocketError, SystemCallError => e
+        puts "\nConnection error.".color(:red)
+        Errors.global_error({error: e, caller: caller, data: [url, payload]})
+      rescue => e
+        Errors.global_error({error: e, caller: caller, data: [url, payload]})
+      end
+    end
+
   end
 end

@@ -495,6 +495,30 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.userupdate
+      <<-USAGE
+      Update your user profile.
+
+      Usage:
+
+      ayadn userupdate --bio
+
+      ayadn -U --bio
+
+      ayadn -U --name
+
+      ayadn -U --birthday
+
+      ayadn -U --twitter
+
+      ayadn -U --blog
+
+      ayadn -U --avatar ~/Pics/myface.jpg
+
+      ayadn -U --cover ~/Pics/mycats.jpg
+      \n\n
+      USAGE
+    end
     def self.postinfo
       <<-USAGE
       Show detailed informations about post n°POST.

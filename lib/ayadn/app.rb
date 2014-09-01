@@ -232,6 +232,15 @@ module Ayadn
       Action.new.userinfo(username, options)
     end
 
+    desc "userupdate", "Update your user profile informations (-U)"
+    map "-U" => :userupdate
+    long_desc Descriptions.userupdate
+    option :bio, type: :boolean, desc: "Update your user bio"
+    option :name, type: :boolean, desc: "Update your user full name"
+    def userupdate
+      Action.new.userupdate(options)
+    end
+
     desc "postinfo POST", "Show detailed informations about a post (-pi)"
     map "-pi" => :postinfo
     long_desc Descriptions.postinfo

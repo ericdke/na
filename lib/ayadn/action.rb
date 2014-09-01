@@ -317,19 +317,40 @@ module Ayadn
       end
     end
 
+    def userupdate options
+      begin
+        writer = Post.new
+        input = writer.compose()
+        writer.check_post_length(input)
+        text = input.join("\n")
+        @view.clear_screen
+        if options[:bio]
+          payload = {'description' => {'text' => text}}
+        elsif options[:name]
+          payload = {'name' => text}
+        end
+        CNX.patch(Endpoints.new.user('me'), payload)
+        puts Status.done
+        userinfo(['me'], {})
+      rescue => e
+        Errors.global_error({error: e, caller: caller, data: [options]})
+      end
+    end
+
     def userinfo(username, options)
       begin
         Check.no_username(username)
         username = @workers.add_arobase(username)
-        get_user = lambda { @api.get_user(username) }
         if options[:raw]
-          @view.show_raw(get_user.call, options)
-          exit
+          @view.show_raw(@api.get_user(username), options)
+        else
+          @view.downloading
+          stream = @api.get_user(username)
+          Check.no_user(stream, username)
+          Check.same_username(stream) ? token = @api.get_token_info['data'] : token = nil
+          @view.clear_screen
+          @view.infos(stream['data'], token)
         end
-        stream = get_user.call
-        Check.no_user(stream, username)
-        Check.same_username(stream) ? token = @api.get_token_info['data'] : token = nil
-        @view.infos(stream['data'], token)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
