@@ -16,6 +16,7 @@ module Ayadn
         next if m == Settings.config[:identity][:username]
         reply << " @#{m}"
       end
+      post_size(reply)
       dic[:text] = reply
       dic[:reply_to] = dic[:id]
       send_content(Endpoints.new.posts_url, payload_reply(dic))
@@ -104,11 +105,22 @@ module Ayadn
       post
     end
 
-    def check_post_length(lines_array)
+    def post_size(post) # works on a string
+      size, max_size = post.length, Settings.config[:post_max_length]
+      if size < 1
+        abort(error_text_empty)
+      elsif size > max_size
+        Errors.warn "Canceled: too long (#{size - max_size}chars)"
+        puts "\nYour text was: \n\n#{post}\n\n".color(:yellow)
+        abort(Status.too_long(size, max_size))
+      end
+    end
+
+    def check_post_length(lines_array) # works on an array
       check_length(lines_array, Settings.config[:post_max_length])
     end
 
-    def check_message_length(lines_array)
+    def check_message_length(lines_array) # works on an array
       check_length(lines_array, Settings.config[:message_max_length])
     end
 
