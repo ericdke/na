@@ -264,5 +264,13 @@ module Ayadn
       "#{@channels_url}#{channel_id}/messages?access_token=#{Settings.user_token}#{API.build_query(options)}&include_machine=1"
     end
 
+    def avatar
+      "#{@users_url}me/avatar"
+    end
+
+    def cover
+      "#{@users_url}me/cover"
+    end
+
   end
 end

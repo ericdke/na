@@ -139,3 +139,11 @@ Update your user profile.
 `ayadn -U --web`
 
 `ayadn -U --web -D`
+
+`ayadn -U --avatar ~/Pics/myface.jpg`
+
+Avatar: the uploaded image will be cropped to square and must be smaller than 1 MB. The optimal size is 200×200 pixels.
+
+`ayadn -U --cover ~/Pics/mycats.jpg`
+
+Cover: the uploaded image must be at least 960 pixels wide and less than 4 MB in size.

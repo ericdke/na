@@ -1,6 +1,7 @@
-# 1.7.1 (2014-09-01) - 'Poltergeist'
+# 1.7.1 (2014-09-02) - 'Poltergeist'
 
-- New: update your user profile (name, bio, Twitter name, blog url, web url). Option to delete the field instead of updating.
+- New: update your user profile (full name, bio (user description), avatar, cover, Twitter username, blog url, web url)
+- Update profile: option to delete the field instead of updating
 - New: option to retrieve only specified channels in Channels
 - New: option to display raw response in Channels
 

@@ -63,6 +63,22 @@ module Ayadn
       end
     end
 
+    def self.upload_avatar file
+      begin
+        `curl -X POST -H "Authorization: Bearer #{Settings.user_token}" -F "avatar=@#{file}" #{Endpoints.new.avatar}`
+      rescue Errno::ENOENT
+        abort(Status.no_curl)
+      end
+    end
+
+    def self.upload_cover file
+      begin
+        `curl -X POST -H "Authorization: Bearer #{Settings.user_token}" -F "cover=@#{file}" #{Endpoints.new.cover}`
+      rescue Errno::ENOENT
+        abort(Status.no_curl)
+      end
+    end
+
     private
 
     def get_users(list)

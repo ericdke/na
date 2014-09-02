@@ -241,8 +241,10 @@ module Ayadn
     option :twitter, type: :boolean, desc: "Update your Twitter username"
     option :blog, type: :boolean, desc: "Update your blog url"
     option :web, type: :boolean, desc: "Update your web url"
-    def userupdate
-      Action.new.userupdate(options)
+    option :avatar, type: :boolean, desc: "Update your avatar picture"
+    option :cover, type: :boolean, desc: "Update your cover picture"
+    def userupdate(*args)
+      Action.new.userupdate(args, options)
     end
 
     desc "postinfo POST", "Show detailed informations about a post (-pi)"

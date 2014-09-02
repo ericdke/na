@@ -322,13 +322,13 @@ module Ayadn
       end
     end
 
-    def userupdate options
+    def userupdate args, options
       begin
-        profile = Profile.new(options)
+        profile = Profile.new(args, options)
         profile.get_text_from_user
         profile.prepare_payload
         puts "\n\nUpdating profile...\n".color(:green)
-        CNX.patch(Endpoints.new.user('me'), profile.payload)
+        profile.update
         puts Status.done
         userinfo('me')
       rescue => e

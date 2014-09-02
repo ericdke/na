@@ -4,13 +4,26 @@ module Ayadn
 
     attr_reader :options, :text, :payload
 
-    def initialize options
+    def initialize args, options
       abort(Status.profile_options) if options.empty?
       @options = options
+      @args = args
+    end
+
+    def update
+      if @options[:avatar]
+        file = FileOps.make_paths(@args).join
+        FileOps.upload_avatar(file)
+      elsif @options[:cover]
+        file = FileOps.make_paths(@args).join
+        FileOps.upload_cover(file)
+      else
+        CNX.patch(Endpoints.new.user('me'), @payload)
+      end
     end
 
     def get_text_from_user
-      unless @options[:delete]
+      unless @options[:delete] || @options[:avatar] || @options[:cover]
         writer = Post.new
         input = writer.compose()
         writer.check_post_length(input)
