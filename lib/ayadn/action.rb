@@ -322,9 +322,9 @@ module Ayadn
       end
     end
 
-    def userupdate args, options
+    def userupdate options
       begin
-        profile = Profile.new(args, options)
+        profile = Profile.new(options)
         profile.get_text_from_user
         profile.prepare_payload
         puts "\n\nUpdating profile...\n".color(:green)

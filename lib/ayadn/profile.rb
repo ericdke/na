@@ -4,21 +4,16 @@ module Ayadn
 
     attr_reader :options, :text, :payload
 
-    def initialize args, options
+    def initialize options
       abort(Status.profile_options) if options.empty?
       @options = options
-      @args = args
     end
 
     def update
       if @options[:avatar]
-        abort(Status.bad_path) if @args.empty?
-        file = FileOps.make_paths(@args).join
-        FileOps.upload_avatar(file)
+        FileOps.upload_avatar(@options[:avatar].join)
       elsif @options[:cover]
-        abort(Status.bad_path) if @args.empty?
-        file = FileOps.make_paths(@args).join
-        FileOps.upload_cover(file)
+        FileOps.upload_cover(@options[:cover].join)
       else
         CNX.patch(Endpoints.new.user('me'), @payload)
       end
