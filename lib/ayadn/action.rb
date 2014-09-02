@@ -312,6 +312,7 @@ module Ayadn
     def view_settings(options)
       begin
         if options[:raw]
+          jj JSON.parse(Settings.config.to_json)
           jj JSON.parse(Settings.options.to_json)
         else
           @view.show_settings
