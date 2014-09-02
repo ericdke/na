@@ -311,7 +311,11 @@ module Ayadn
 
     def view_settings(options)
       begin
-        options[:raw] ? (puts Settings.options.to_json) : @view.show_settings
+        if options[:raw]
+          jj JSON.parse(Settings.options.to_json)
+        else
+          @view.show_settings
+        end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
