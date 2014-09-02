@@ -118,6 +118,8 @@ Export a post's link and text, with tags, to your Pinboard account.
 
 Update your user profile.
 
+Use option `--delete` or `-D` to delete the field.
+
 `ayadn --update --bio`
 
 `ayadn -U --bio`

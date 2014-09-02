@@ -12,9 +12,11 @@ module Ayadn
 
     def update
       if @options[:avatar]
+        abort(Status.bad_path) if @args.empty?
         file = FileOps.make_paths(@args).join
         FileOps.upload_avatar(file)
       elsif @options[:cover]
+        abort(Status.bad_path) if @args.empty?
         file = FileOps.make_paths(@args).join
         FileOps.upload_cover(file)
       else
