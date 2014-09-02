@@ -325,14 +325,15 @@ module Ayadn
         puts "\n\nUpdating profile...\n".color(:green)
         CNX.patch(Endpoints.new.user('me'), profile.payload)
         puts Status.done
-        userinfo(['me'], {})
+        userinfo('me')
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
     end
 
-    def userinfo(username, options)
+    def userinfo(username, options = {})
       begin
+        username = [username] unless username.is_a?(Array)
         Check.no_username(username)
         username = @workers.add_arobase(username)
         if options[:raw]
