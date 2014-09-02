@@ -319,55 +319,11 @@ module Ayadn
 
     def userupdate options
       begin
-        if options.empty?
-          abort("\n\nYou have to specify what to update or delete: --bio, --name, --blog, --twitter or --web.\n\n".color(:cyan))
-        end
-        unless options[:delete]
-          writer = Post.new
-          input = writer.compose()
-          writer.check_post_length(input)
-          text = input.join("\n")
-        end
-        # @view.clear_screen
-        if options[:bio]
-          if options[:delete]
-            payload = {'description' => {'text' => ''}}
-          else
-            payload = {'description' => {'text' => text}}
-          end
-        elsif options[:name]
-          if options[:delete]
-            abort("'Delete' isn't available for 'name'.\n".color(:red))
-          else
-            payload = {'name' => text}
-          end
-        elsif options[:twitter]
-          if options[:delete]
-            payload = {'annotations' => [{'type' => 'net.app.core.directory.twitter'}]}
-          else
-            payload = {'annotations' => [{
-                'type' => 'net.app.core.directory.twitter',
-                'value' => {'username' => text}}]}
-          end
-        elsif options[:blog]
-          if options[:delete]
-            payload = {'annotations' => [{'type' => 'net.app.core.directory.blog'}]}
-          else
-            payload = {'annotations' => [{
-                'type' => 'net.app.core.directory.blog',
-                'value' => {'url' => text}}]}
-          end
-        elsif options[:web]
-          if options[:delete]
-            payload = {'annotations' => [{'type' => 'net.app.core.directory.homepage'}]}
-          else
-            payload = {'annotations' => [{
-                'type' => 'net.app.core.directory.homepage',
-                'value' => {'url' => text}}]}
-          end
-        end
+        profile = Profile.new(options)
+        profile.get_text_from_user
+        profile.prepare_payload
         puts "\n\nUpdating profile...\n".color(:green)
-        CNX.patch(Endpoints.new.user('me'), payload)
+        CNX.patch(Endpoints.new.user('me'), profile.payload)
         puts Status.done
         userinfo(['me'], {})
       rescue => e

@@ -312,5 +312,8 @@ module Ayadn
     def self.no_force target
       "\n'#{target}' can't be displayed (could be muted, blocked, in the Blacklist, etc). Use option '--force' ('-f') to try and display this content anyway.\n\n".color(:blue)
     end
+    def self.profile_options
+      "\n\nYou have to specify what to update or delete: --bio, --name, --blog, --twitter or --web.\n\n".color(:red)
+    end
   end
 end
