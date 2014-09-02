@@ -319,49 +319,54 @@ module Ayadn
 
     def userupdate options
       begin
+        if options.empty?
+          abort("\n\nYou have to specify what to update or delete: --bio, --name, --blog, --twitter or --web.\n\n".color(:cyan))
+        end
         unless options[:delete]
           writer = Post.new
           input = writer.compose()
           writer.check_post_length(input)
           text = input.join("\n")
         end
-        @view.clear_screen
+        # @view.clear_screen
         if options[:bio]
-          unless options[:delete]
-            payload = {'description' => {'text' => text}}
-          else
+          if options[:delete]
             payload = {'description' => {'text' => ''}}
+          else
+            payload = {'description' => {'text' => text}}
           end
         elsif options[:name]
-          abort("'Delete' isn't available for 'name'.\n".color(:red)) if options[:delete]
-          payload = {'name' => text}
+          if options[:delete]
+            abort("'Delete' isn't available for 'name'.\n".color(:red))
+          else
+            payload = {'name' => text}
+          end
         elsif options[:twitter]
-          unless options[:delete]
+          if options[:delete]
+            payload = {'annotations' => [{'type' => 'net.app.core.directory.twitter'}]}
+          else
             payload = {'annotations' => [{
                 'type' => 'net.app.core.directory.twitter',
                 'value' => {'username' => text}}]}
-          else
-            payload = {'annotations' => [{'type' => 'net.app.core.directory.twitter'}]}
           end
         elsif options[:blog]
-          unless options[:delete]
+          if options[:delete]
+            payload = {'annotations' => [{'type' => 'net.app.core.directory.blog'}]}
+          else
             payload = {'annotations' => [{
                 'type' => 'net.app.core.directory.blog',
                 'value' => {'url' => text}}]}
-          else
-            payload = {'annotations' => [{
-                'type' => 'net.app.core.directory.blog'}]}
           end
         elsif options[:web]
-          unless options[:delete]
+          if options[:delete]
+            payload = {'annotations' => [{'type' => 'net.app.core.directory.homepage'}]}
+          else
             payload = {'annotations' => [{
                 'type' => 'net.app.core.directory.homepage',
                 'value' => {'url' => text}}]}
-          else
-            payload = {'annotations' => [{
-                'type' => 'net.app.core.directory.homepage'}]}
           end
         end
+        puts "\n\nUpdating profile...\n".color(:green)
         CNX.patch(Endpoints.new.user('me'), payload)
         puts Status.done
         userinfo(['me'], {})
