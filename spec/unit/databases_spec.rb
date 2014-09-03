@@ -43,6 +43,13 @@ describe Ayadn::Databases do
       Ayadn::Databases.save_max_id(stream)
       expect(Ayadn::Databases.pagination.keys).to eq ['test_stream']
       expect(Ayadn::Databases.pagination['test_stream']).to eq '33666'
+
+      Ayadn::Databases.pagination.delete('test_stream')
+
+      stream = {'meta'=>{'max_id'=>'12'}}
+      Ayadn::Databases.save_max_id(stream, 'yolo')
+      expect(Ayadn::Databases.pagination.keys).to eq ['yolo']
+      expect(Ayadn::Databases.pagination['yolo']).to eq '12'
     end
   end
   describe ".has_new?" do
