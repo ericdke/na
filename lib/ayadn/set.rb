@@ -6,8 +6,7 @@ module Ayadn
     def scroll(*args)
       scroll_config = SetScroll.new
       if args[0]
-        param = scroll_config.validate(args[1])
-        scroll_config.send(args[0], param)
+        scroll_config.send(args[0], args[1])
       else
         abort(Status.error_missing_parameters)
       end
@@ -60,8 +59,7 @@ module Ayadn
       timeline_config = SetTimeline.new
       if args[0]
         begin
-          param = timeline_config.validate(args[1])
-          timeline_config.send(args[0], param)
+          timeline_config.send(args[0], args[1])
         rescue NoMethodError, ArgumentError
           puts Status.error_missing_parameters
           exit
@@ -82,8 +80,7 @@ module Ayadn
       counts_config = SetCounts.new
       if args[0]
         begin
-          param = counts_config.validate(args[1])
-          counts_config.send(args[0], param)
+          counts_config.send(args[0], args[1])
         rescue NoMethodError, ArgumentError
           puts Status.error_missing_parameters
           exit
@@ -106,7 +103,6 @@ module Ayadn
       color_config = SetColor.new
       if args[0]
         begin
-          color_config.validate(args[1])
           color_config.send(args[0], args[1])
         rescue NoMethodError, ArgumentError
           puts Status.error_missing_parameters
@@ -127,8 +123,7 @@ module Ayadn
       backup_config = SetBackup.new
       if args[0]
         begin
-          param = backup_config.validate(args[1])
-          backup_config.send(args[0], param)
+          backup_config.send(args[0], args[1])
         rescue NoMethodError, ArgumentError
           puts Status.error_missing_parameters
           exit
@@ -190,9 +185,11 @@ module Ayadn
     end
     def self.color(color)
       colors_list = %w{red green magenta cyan yellow blue white black}
-      unless colors_list.include?(color)
+      unless colors_list.include?(color.to_s)
         puts Status.error_missing_parameters
         abort(Status.valid_colors(colors_list))
+      else
+        return color
       end
     end
   end
@@ -216,7 +213,7 @@ module Ayadn
       Validators.timer(t)
     end
     def timer(t)
-      Settings.options[:scroll][:timer] = t
+      Settings.options[:scroll][:timer] = validate(t)
     end
   end
 
@@ -310,7 +307,7 @@ module Ayadn
     def method_missing(meth, options)
       case meth.to_s
       when 'auto_save_sent_posts', 'auto_save_sent_messages', 'auto_save_lists'
-        Settings.options[:backup][meth.to_sym] = options
+        Settings.options[:backup][meth.to_sym] = validate(options)
       else
         super
       end
@@ -338,7 +335,7 @@ module Ayadn
     def method_missing(meth, options)
       case meth.to_s
       when 'default', 'unified', 'checkins', 'conversations', 'global', 'photos', 'trending', 'mentions', 'convo', 'posts', 'messages', 'search', 'whoreposted', 'whostarred', 'whatstarred', 'files'
-        Settings.options[:counts][meth.to_sym] = options.to_i
+        Settings.options[:counts][meth.to_sym] = validate(options.to_i)
       else
         super
       end
@@ -366,7 +363,7 @@ module Ayadn
     def method_missing(meth, options)
       case meth.to_s
       when 'directed', 'html', 'show_source', 'show_symbols', 'show_real_name', 'show_date', 'show_spinner', 'show_debug'
-        Settings.options[:timeline][meth.to_sym] = options
+        Settings.options[:timeline][meth.to_sym] = validate(options)
       when 'deleted', 'annotations'
         abort(Status.not_mutable)
       else
@@ -400,11 +397,11 @@ module Ayadn
     def method_missing(meth, options)
       case meth.to_s
       when 'id', 'index', 'username', 'name', 'date', 'link', 'dots', 'hashtags', 'mentions', 'source', 'symbols', 'debug'
-        Settings.options[:colors][meth.to_sym] = options.to_sym
+        Settings.options[:colors][meth.to_sym] = validate(options.to_sym)
       when 'hashtag', 'mention', 'symbol'
-        Settings.options[:colors]["#{meth}s".to_sym] = options.to_sym
+        Settings.options[:colors]["#{meth}s".to_sym] = validate(options.to_sym)
       when 'client'
-        Settings.options[:colors][:source] = options.to_sym
+        Settings.options[:colors][:source] = validate(options.to_sym)
       else
         super
       end

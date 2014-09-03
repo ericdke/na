@@ -16,17 +16,55 @@ def init_stubs
         link: :magenta
       },
       timeline: {
+        directed: 1,
+        deleted: 0,
+        html: 0,
+        annotations: 1,
+        show_source: true,
+        show_symbols: true,
         show_real_name: true,
         show_date: true,
-        show_symbols: true,
-        show_source: true
+        show_spinner: true,
+        show_debug: false
       },
       formats: {table: {width: 75}},
       counts: {
-        default: 33
+        default: 50,
+        unified: 100,
+        global: 100,
+        checkins: 100,
+        conversations: 50,
+        photos: 50,
+        trending: 100,
+        mentions: 100,
+        convo: 100,
+        posts: 100,
+        messages: 50,
+        search: 200,
+        whoreposted: 50,
+        whostarred: 50,
+        whatstarred: 100,
+        files: 100
       },
       scroll: {
-        timer: 5
+        timer: 3
+      },
+      movie: {
+        hashtag: 'nowwatching'
+      },
+      tvshow: {
+        hashtag: 'nowwatching'
+      },
+      nicerank: {
+        threshold: 2.1,
+        cache: 48,
+        filter: true,
+        filter_unranked: false
+      },
+      backup: {
+        auto_save_sent_posts: false,
+        auto_save_sent_messages: false,
+        auto_save_lists: false
       }
     })
   Ayadn::Settings.stub(:config).and_return({
@@ -54,44 +92,78 @@ describe Ayadn::SetScroll do
   before do
     init_stubs
   end
-  describe "#validate" do
-    it "validates a correct timer value" do
-      timer = Ayadn::SetScroll.new.validate(3)
-      expect(timer).to eq 3
-    end
-    it "validates a correct timer value" do
-      timer = Ayadn::SetScroll.new.validate(1)
-      expect(timer).to eq 1
-    end
-    it "validates a correct timer value" do
-      timer = Ayadn::SetScroll.new.validate(2)
-      expect(timer).to eq 2
-    end
-    it "validates a correct timer value" do
-      timer = Ayadn::SetScroll.new.validate(10.2)
-      expect(timer).to eq 10
-    end
-    it "validates a correct timer value" do
-      timer = Ayadn::SetScroll.new.validate(1.1)
-      expect(timer).to eq 1
-    end
-    it "sets a default if incorrect timer value" do
-      timer = Ayadn::SetScroll.new.validate(0)
-      expect(timer).to eq 3
-    end
-    it "sets a default if incorrect timer value" do
-      timer = Ayadn::SetScroll.new.validate('johnson')
-      expect(timer).to eq 3
-    end
-    it "sets a default if incorrect timer value" do
-      timer = Ayadn::SetScroll.new.validate(-666)
-      expect(timer).to eq 3
-    end
-    it "sets a default if incorrect timer value" do
-      timer = Ayadn::SetScroll.new.validate(0.5)
-      expect(timer).to eq 3
+
+  describe "#timer" do
+    it "creates a default value" do
+      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
+      Ayadn::SetScroll.new.timer('2')
+      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 2
+      Ayadn::SetScroll.new.timer('4.2')
+      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 4
+      Ayadn::SetScroll.new.timer('0')
+      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
+      Ayadn::SetScroll.new.timer('johnson')
+      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
+      Ayadn::SetScroll.new.timer('-666')
+      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
+      Ayadn::SetScroll.new.timer('0')
+      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
     end
   end
+
+  after do
+    File.delete('spec/mock/ayadn.log')
+  end
+end
+
+describe Ayadn::SetColor do
+  before do
+    init_stubs
+  end
+
+  describe "#" do
+    it "creates a default value" do
+      colors_list = %w{red green magenta cyan yellow blue white black}
+      %w{id index username name date link dots hashtags mentions source symbols debug}.each do |meth|
+        command = meth.to_sym
+        color = colors_list.sample
+        Ayadn::SetColor.new.send(command, color)
+        expect(Ayadn::Settings.options[:colors][command]).to eq color.to_sym
+      end
+    end
+  end
+
+  after do
+    File.delete('spec/mock/ayadn.log')
+  end
+end
+
+describe Ayadn::SetTimeline do
+  before do
+    init_stubs
+  end
+
+  describe "#" do
+    it "creates a default value" do
+      %w{directed html show_source show_symbols show_real_name show_date show_spinner show_debug}.each do |meth|
+        command = meth.to_sym
+        Ayadn::SetTimeline.new.send(command, 'true')
+        expect(Ayadn::Settings.options[:timeline][command]).to eq true
+        printed = capture_stderr do
+          expect(lambda {Ayadn::SetTimeline.new.send(command, 'yolo')}).to raise_error(SystemExit)
+        end
+        expect(printed).to include 'You have to submit valid items'
+      end
+      ['deleted', 'annotations'].each do |meth|
+        command = meth.to_sym
+        printed = capture_stderr do
+          expect(lambda {Ayadn::SetTimeline.new.send(command, 'false')}).to raise_error(SystemExit)
+        end
+        expect(printed).to include 'This parameter is not modifiable'
+      end
+    end
+  end
+
   after do
     File.delete('spec/mock/ayadn.log')
   end
@@ -101,21 +173,22 @@ describe Ayadn::SetCounts do
   before do
     init_stubs
   end
-  describe "#validate" do
-    it "validates a correct count value" do
-      count = Ayadn::SetCounts.new.validate('1')
-      expect(count).to eq 1
-    end
-    it "validates a correct count value" do
-      count = Ayadn::SetCounts.new.validate('200')
-      expect(count).to eq 200
-    end
-    it "raises error if incorrect count value" do
-      printed = capture_stderr do
-        expect(lambda {Ayadn::SetCounts.new.validate('201')}).to raise_error(SystemExit)
+
+  describe "#" do
+    it "creates a default value" do
+      %w{default unified global checkins conversations photos trending mentions convo posts messages search whoreposted whostarred whatstarred files}.each do |meth|
+        command = meth.to_sym
+        Ayadn::SetCounts.new.send(command, '199')
+        expect(Ayadn::Settings.options[:counts][command]).to eq 199
+        printed = capture_stderr do
+          expect(lambda {Ayadn::SetCounts.new.send(command, '333')}).to raise_error(SystemExit)
+        end
+        expect(printed).to include 'This paramater must be an integer between 1 and 200'
       end
-      expect(printed).to include 'This paramater must be an integer between 1 and 200'
     end
+  end
+
+  describe "#validate" do
     it "raises error if incorrect count value" do
       printed = capture_stderr do
         expect(lambda {Ayadn::SetCounts.new.validate('0')}).to raise_error(SystemExit)
@@ -138,27 +211,30 @@ describe Ayadn::SetBackup do
   before do
     init_stubs
   end
+
+  describe "#auto_save_sent_posts" do
+    it "creates a default value" do
+      expect(Ayadn::Settings.options[:backup][:auto_save_sent_posts]).to eq false
+      Ayadn::SetBackup.new.auto_save_sent_posts('1')
+      expect(Ayadn::Settings.options[:backup][:auto_save_sent_posts]).to eq true
+    end
+  end
+  describe "#auto_save_sent_messages" do
+    it "creates a default value" do
+      expect(Ayadn::Settings.options[:backup][:auto_save_sent_messages]).to eq false
+      Ayadn::SetBackup.new.auto_save_sent_messages('True')
+      expect(Ayadn::Settings.options[:backup][:auto_save_sent_messages]).to eq true
+    end
+  end
+  describe "#auto_save_lists" do
+    it "creates a default value" do
+      expect(Ayadn::Settings.options[:backup][:auto_save_lists]).to eq false
+      Ayadn::SetBackup.new.auto_save_lists('YES')
+      expect(Ayadn::Settings.options[:backup][:auto_save_lists]).to eq true
+    end
+  end
+
   describe "#validate" do
-    it "validates a correct boolean" do
-      value = Ayadn::SetBackup.new.validate('1')
-      expect(value).to eq true
-    end
-    it "validates a correct boolean" do
-      value = Ayadn::SetBackup.new.validate('true')
-      expect(value).to eq true
-    end
-    it "validates a correct boolean" do
-      value = Ayadn::SetBackup.new.validate('TrUe')
-      expect(value).to eq true
-    end
-    it "validates a correct boolean" do
-      value = Ayadn::SetBackup.new.validate('false')
-      expect(value).to eq false
-    end
-    it "validates a correct boolean" do
-      value = Ayadn::SetBackup.new.validate('fAlsE')
-      expect(value).to eq false
-    end
     it "validates a correct boolean" do
       value = Ayadn::SetBackup.new.validate('0')
       expect(value).to eq false
@@ -168,6 +244,101 @@ describe Ayadn::SetBackup do
         expect(lambda {Ayadn::SetBackup.new.validate('yolo')}).to raise_error(SystemExit)
       end
       expect(printed).to include "You have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values"
+    end
+  end
+  after do
+    File.delete('spec/mock/ayadn.log')
+  end
+end
+
+describe Ayadn::SetMovie do
+  before do
+    init_stubs
+  end
+  describe "#hashtag" do
+    it "creates a new hashtag default" do
+      expect(Ayadn::Settings.options[:movie][:hashtag]).to eq 'nowwatching'
+      Ayadn::SetMovie.new.hashtag('yolo')
+      expect(Ayadn::Settings.options[:movie][:hashtag]).to eq 'yolo'
+    end
+  end
+  after do
+    File.delete('spec/mock/ayadn.log')
+  end
+end
+
+describe Ayadn::SetTVShow do
+  before do
+    init_stubs
+  end
+  describe "#hashtag" do
+    it "creates a new hashtag default" do
+      expect(Ayadn::Settings.options[:tvshow][:hashtag]).to eq 'nowwatching'
+      Ayadn::SetTVShow.new.hashtag('yolo')
+      expect(Ayadn::Settings.options[:tvshow][:hashtag]).to eq 'yolo'
+    end
+  end
+  after do
+    File.delete('spec/mock/ayadn.log')
+  end
+end
+
+describe Ayadn::SetNiceRank do
+  before do
+    init_stubs
+  end
+  describe "#threshold" do
+    it "creates a new threshold default" do
+      expect(Ayadn::Settings.options[:nicerank][:threshold]).to eq 2.1
+      Ayadn::SetNiceRank.new.threshold('3')
+      expect(Ayadn::Settings.options[:nicerank][:threshold]).to eq 3
+      Ayadn::SetNiceRank.new.threshold('3.2')
+      expect(Ayadn::Settings.options[:nicerank][:threshold]).to eq 3.2
+      printed = capture_stderr do
+        expect(lambda {Ayadn::SetNiceRank.new.threshold('6')}).to raise_error(SystemExit)
+      end
+      expect(printed).to include 'Please enter a value between 0.1 and 3.5, example: 2.1'
+      printed = capture_stderr do
+        expect(lambda {Ayadn::SetNiceRank.new.threshold('yolo')}).to raise_error(SystemExit)
+      end
+      expect(printed).to include 'Please enter a value between 0.1 and 3.5, example: 2.1'
+    end
+  end
+  describe "#filter" do
+    it "creates a new filter default" do
+      expect(Ayadn::Settings.options[:nicerank][:filter]).to eq true
+      Ayadn::SetNiceRank.new.filter('false')
+      expect(Ayadn::Settings.options[:nicerank][:filter]).to eq false
+      Ayadn::SetNiceRank.new.filter('1')
+      expect(Ayadn::Settings.options[:nicerank][:filter]).to eq true
+      printed = capture_stderr do
+        expect(lambda {Ayadn::SetNiceRank.new.filter('6')}).to raise_error(SystemExit)
+      end
+      expect(printed).to include "You have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values."
+    end
+  end
+  describe "#filter_unranked" do
+    it "creates a new filter_unranked default" do
+      expect(Ayadn::Settings.options[:nicerank][:filter_unranked]).to eq false
+      Ayadn::SetNiceRank.new.filter_unranked('true')
+      expect(Ayadn::Settings.options[:nicerank][:filter_unranked]).to eq true
+      Ayadn::SetNiceRank.new.filter_unranked('0')
+      expect(Ayadn::Settings.options[:nicerank][:filter_unranked]).to eq false
+      printed = capture_stderr do
+        expect(lambda {Ayadn::SetNiceRank.new.filter_unranked('yolo')}).to raise_error(SystemExit)
+      end
+      expect(printed).to include "You have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values."
+    end
+  end
+  describe "#cache" do
+    it "creates a new cache default" do
+      expect(Ayadn::Settings.options[:nicerank][:cache]).to eq 48
+      Ayadn::SetNiceRank.new.cache('72.4')
+      expect(Ayadn::Settings.options[:nicerank][:cache]).to eq 72
+      printed = capture_stderr do
+        expect(lambda {Ayadn::SetNiceRank.new.cache('200')}).to raise_error(SystemExit)
+      end
+      expect(printed).to include "Please enter a number of hours between 1 and 168"
     end
   end
   after do
