@@ -17,12 +17,16 @@ describe Ayadn::Workers do
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
     Ayadn::Databases.stub(:users).and_return("users")
+    Ayadn::Databases.stub(:get_post_from_index).and_return({id: 3312})
+    Ayadn::Databases.stub(:get_index_length).and_return(50)
     @workers = Ayadn::Workers.new
   end
 
   let(:data) { JSON.parse(File.read("spec/mock/stream.json")) }
   let(:checkins) { JSON.parse(File.read("spec/mock/checkins.json")) }
   let(:regex_post) { JSON.parse(File.read("spec/mock/regex.json")) }
+  let(:users_list) { JSON.parse(File.read("spec/mock/fwr_@ayadn.json")) }
+  let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
 
   describe "#build_posts" do
     it "builds posts hash from stream" do
@@ -52,6 +56,27 @@ describe Ayadn::Workers do
     end
   end
 
+  describe "#all_but_me" do
+    it "gets rid of 'me' and adds arobase if needed to other usernames" do
+      names = @workers.all_but_me(['yolo', '@james', 'me'])
+      expect(names).to eq ['@yolo', '@james']
+    end
+  end
+
+  describe "#get_real_post_id" do
+    it "gets real post id" do
+      id = @workers.get_real_post_id(8)
+      expect(id).to eq 3312
+    end
+  end
+
+  describe "#links_from_posts" do
+    it "extract links" do
+      links = @workers.links_from_posts(data)
+      expect(links).to eq ["http://feed.500px.com/~r/500px-best/~3/c2tMPEJVf6I/61517259", "https://app.net/b/m6bk3", "http://bit.ly/1cr16vM", "http://feed.500px.com/~r/500px-best/~3/i4uhLN-4rd4/61484745", "http://www.newscientist.com/article/dn25068-wikipediasize-maths-proof-too-big-for-humans-to-check.html#.UwTuA3gRq8M", "http://news.ycombinator.com/item?id=7264886", "http://ift.tt/1d0TA7I", "http://feed.500px.com/~r/500px-best/~3/hFi3AUnh_u8/61493427", "http://Experiment.com", "http://priceonomics.com/how-microryza-acquired-the-domain-experimentcom/", "http://news.ycombinator.com/item?id=7265540", "http://feeds.popsci.com/c/34567/f/632419/s/374c6496/sc/38/l/0L0Spopsci0N0Carticle0Cscience0Ccat0Ebites0Eare0Elinked0Edepression/story01.htm?utm_medium=App.net&utm_source=PourOver", "http://ift.tt/1mtTrU9"]
+    end
+  end
+
   describe "#extract_hashtags" do
     it "extracts hashtags" do
       tags = @workers.extract_hashtags(data['data'][0])
@@ -63,6 +88,15 @@ describe Ayadn::Workers do
     it "extracts links" do
       links = @workers.extract_links(data['data'][0])
       expect(links).to eq ['http://feed.500px.com/~r/500px-best/~3/c2tMPEJVf6I/61517259']
+    end
+  end
+
+  describe "#extract_users" do
+    it "extracts users" do
+      usr = @workers.extract_users(users_list[0])
+      expect(usr["52985"]).to eq ["schmidt_fu", "Florian Schmidt", false, false]
+      expect(usr["185581"]).to eq ["aya_tests", "@ericd's tests account", nil, nil]
+      expect(usr["69904"]).to eq ["ericd", "Eric Dejonckheere", true, true]
     end
   end
 
@@ -82,52 +116,64 @@ describe Ayadn::Workers do
     end
   end
 
-  # let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
+  let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
-  # describe "#build_followers_list" do
-  #   it 'builds the followers table list' do
-  #     printed = capture_stdout do
-  #       puts @workers.build_followers_list(list, "@test")
-  #     end
-  #     expect(printed).to include "@test"
-  #     expect(printed).to include "@bond"
-  #     expect(printed).to include "Mr Test"
-  #   end
-  # end
+  describe "#build_followers_list" do
+    before do
+      rest.stub(:get)
+    end
+    it 'builds the followers table list' do
+      printed = capture_stdout do
+        puts @workers.build_followers_list(list, "@test")
+      end
+      expect(printed).to include "@test"
+      expect(printed).to include "@bond"
+      expect(printed).to include "Mr Test"
+    end
+  end
 
-  # describe "#build_followings_list" do
-  #   it 'builds the followings table list' do
-  #     printed = capture_stdout do
-  #       puts @workers.build_followings_list(list, "@test")
-  #     end
-  #     #expect(printed).to include "+~~~~"
-  #     expect(printed).to include "@test"
-  #     expect(printed).to include "@bond"
-  #     expect(printed).to include "Mr Test"
-  #   end
-  # end
+  describe "#build_followings_list" do
+    before do
+      rest.stub(:get)
+    end
+    it 'builds the followings table list' do
+      printed = capture_stdout do
+        puts @workers.build_followings_list(list, "@test")
+      end
+      #expect(printed).to include "+~~~~"
+      expect(printed).to include "@test"
+      expect(printed).to include "@bond"
+      expect(printed).to include "Mr Test"
+    end
+  end
 
-  # describe "#build_muted_list" do
-  #   it 'builds the muted table list' do
-  #     printed = capture_stdout do
-  #       puts @workers.build_muted_list(list)
-  #     end
-  #     #expect(printed).to include "+----"
-  #     expect(printed).to include "@bond"
-  #     expect(printed).to include "Mr Test"
-  #   end
-  # end
+  describe "#build_muted_list" do
+    before do
+      rest.stub(:get)
+    end
+    it 'builds the muted table list' do
+      printed = capture_stdout do
+        puts @workers.build_muted_list(list)
+      end
+      #expect(printed).to include "+----"
+      expect(printed).to include "@bond"
+      expect(printed).to include "Mr Test"
+    end
+  end
 
-  # describe "#build_blocked_list" do
-  #   it 'builds the blocked table list' do
-  #     printed = capture_stdout do
-  #       puts @workers.build_blocked_list(list)
-  #     end
-  #     #expect(printed).to include "+----"
-  #     expect(printed).to include "@bond"
-  #     expect(printed).to include "Mr Test"
-  #   end
-  # end
+  describe "#build_blocked_list" do
+    before do
+      rest.stub(:get)
+    end
+    it 'builds the blocked table list' do
+      printed = capture_stdout do
+        puts @workers.build_blocked_list(list)
+      end
+      #expect(printed).to include "+----"
+      expect(printed).to include "@bond"
+      expect(printed).to include "Mr Test"
+    end
+  end
 
   describe "#add_arobase_if_missing" do
     it 'adds @ to username' do
