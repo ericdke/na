@@ -51,12 +51,6 @@ describe Ayadn::Post do
     before do
       rest.stub(:post).and_return(File.read("spec/mock/posted.json"))
     end
-    # it "should raise an error if args are empty" do
-    #   printed = capture_stdout do
-    #     post.post([])
-    #   end
-    #   expect(printed).to include "You should provide some text."
-    # end
     it "posts a post" do
       expect(rest).to receive(:post).with("https://api.app.net/posts/?include_annotations=1&access_token=XYZ", {"text"=>"YOLO", "entities"=>{"parse_markdown_links"=>true, "parse_links"=>true}, "annotations"=>[{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]})
       x = post.post({text: 'YOLO'})
@@ -66,18 +60,6 @@ describe Ayadn::Post do
       expect(x['data']['text']).to eq 'TEST'
     end
   end
-
-  # describe "#reply" do
-  #   it "formats a reply" do
-  #     new_post = "Hey guys!"
-  #     replied_to = {1=>{:handle => "@test",:username => "test", :mentions => ["user1", "user2"]}}
-  #     expect(post.reply(new_post, replied_to)).to eq "@test Hey guys! @user1 @user2"
-  #     replied_to = {1=>{:handle => "@test",:username => "test", :mentions => ["user1", "test"]}}
-  #     expect(post.reply(new_post, replied_to)).to eq "@test Hey guys! @user1"
-  #     replied_to = {1=>{:handle => "@yo",:username => "test", :mentions => ["test", "lol"]}}
-  #     expect(post.reply(new_post, replied_to)).to eq "@yo Hey guys! @lol"
-  #   end
-  # end
 
   describe "#text_is_empty?" do
     it "checks if empty" do
@@ -96,6 +78,15 @@ describe Ayadn::Post do
   describe "#get_markdown_text" do
     it "extracts markdown text" do
       expect(post.get_markdown_text("[ayadn](http://ayadn-app.net)")).to eq "ayadn"
+    end
+  end
+
+  describe "#post_size" do
+    it "tests if size of post string is ok" do
+      printed = capture_stderr do
+        expect(lambda {post.post_size("Black malt berliner weisse, filter. Ibu degrees plato alcohol. ipa hard cider ester infusion conditioning tank. Dry stout bottom fermenting yeast wort chiller wort chiller lager hand pump ! All-malt dunkle bright beer grainy, original gravity wheat beer glass.")}).to raise_error(SystemExit)
+      end
+      expect(printed).to include 'Canceled: too long. 256 max, 4 characters to remove.'
     end
   end
 
