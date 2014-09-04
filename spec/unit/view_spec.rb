@@ -38,7 +38,6 @@ describe Ayadn::View do
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
     Ayadn::Databases.stub(:save_indexed_posts).and_return("indexed")
-    Ayadn::NiceRank.stub(:from_ids).and_return([{}])
   end
 
   describe "#settings" do
@@ -59,6 +58,9 @@ describe Ayadn::View do
   let(:users) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
   describe "#show_list_reposted" do
+    before  do
+      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+    end
     it "outputs the reposters list" do
       printed = capture_stdout do
         Ayadn::View.new.show_list_reposted(list[0]['data'], 123456)
@@ -68,6 +70,9 @@ describe Ayadn::View do
   end
 
   describe "#show_list_starred" do
+    before  do
+      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+    end
     it "outputs the starred list" do
       printed = capture_stdout do
         Ayadn::View.new.show_list_starred(list[0]['data'], 123456)
@@ -77,6 +82,9 @@ describe Ayadn::View do
   end
 
   describe "#show_list_followings" do
+    before  do
+      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+    end
     it "outputs the followings list" do
       printed = capture_stdout do
         Ayadn::View.new.show_list_followings(users, '@bond')
@@ -86,6 +94,9 @@ describe Ayadn::View do
   end
 
   describe "#show_list_followers" do
+    before  do
+      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+    end
     it "outputs the followers list" do
       printed = capture_stdout do
         Ayadn::View.new.show_list_followers(users, '@bond')
@@ -95,6 +106,9 @@ describe Ayadn::View do
   end
 
   describe "#show_list_muted" do
+    before  do
+      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+    end
     it "outputs the muted list" do
       printed = capture_stdout do
         Ayadn::View.new.show_list_muted(users)
@@ -104,6 +118,9 @@ describe Ayadn::View do
   end
 
   describe "#show_list_blocked" do
+    before  do
+      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+    end
     it "outputs the blocked list" do
       printed = capture_stdout do
         Ayadn::View.new.show_list_blocked(users)
