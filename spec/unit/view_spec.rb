@@ -38,6 +38,7 @@ describe Ayadn::View do
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
     Ayadn::Databases.stub(:save_indexed_posts).and_return("indexed")
+    Ayadn::NiceRank.stub(:from_ids).and_return([{}])
   end
 
   describe "#settings" do
