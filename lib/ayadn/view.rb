@@ -14,13 +14,13 @@ module Ayadn
       puts "\e[?25l"
     end
 
-    def show_posts_with_index(data, options, niceranks = {})
+    def show_posts_with_index(data, options = {}, niceranks = {})
       posts, view = build_stream_with_index(data, options, niceranks)
       puts view unless view == ""
       Databases.save_indexed_posts(posts)
     end
 
-    def show_posts(data, options, niceranks = {})
+    def show_posts(data, options = {}, niceranks = {})
       resp = build_stream_without_index(data, options, niceranks)
       puts resp unless resp == ""
     end
@@ -37,16 +37,12 @@ module Ayadn
       jj stream
     end
 
-    def show_simple_post(post, options)
+    def show_simple_post(post, options = {})
       puts build_stream_without_index(post, options, {})
     end
 
     def show_posted(resp)
       show_simple_post([resp['data']], {})
-    end
-
-    def show_simple_stream(stream)
-      puts stream
     end
 
     def show_list_reposted(list, target)
@@ -306,11 +302,6 @@ module Ayadn
       else
         show_posts(stream, options, niceranks)
       end
-    end
-
-    def get_simple_view(stream)
-      clear_screen()
-      show_simple_stream(stream)
     end
 
     def clear_screen
