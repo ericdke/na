@@ -69,7 +69,7 @@ describe Ayadn::Endpoints do
   end
   describe '#channel' do
     it "returns the channel url" do
-      expect(Ayadn::Endpoints.new.channel([56789, 12345])).to eq 'https://api.app.net/channels/56789,12345?access_token=XXX&count=100&include_html=0&include_directed=1&include_deleted=0&include_annotations=1'
+      expect(Ayadn::Endpoints.new.channel([56789, 12345])).to eq 'https://api.app.net/channels/?ids=56789,12345&access_token=XXX&count=100&include_html=0&include_directed=1&include_deleted=0&include_annotations=1'
     end
   end
   describe '#messages' do

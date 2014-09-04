@@ -54,6 +54,7 @@ describe Ayadn::View do
   let(:list) { JSON.parse(File.read("spec/mock/fwr_@ayadn.json")) }
   let(:int) { JSON.parse(File.read("spec/mock/int.json")) }
   let(:files) { JSON.parse(File.read("spec/mock/files.json")) }
+  let(:user_e) { JSON.parse(File.read("spec/mock/@ericd.json")) }
   let(:users) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
   describe "#show_list_reposted" do
@@ -166,8 +167,6 @@ describe Ayadn::View do
       expect(printed).to include "Backer of the Day"
     end
   end
-
-  let(:user_e) { JSON.parse(File.read("spec/mock/@ericd.json")) }
 
   describe "#show_userinfos" do
     it "outputs user info" do
