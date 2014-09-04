@@ -57,77 +57,77 @@ describe Ayadn::View do
   let(:user_e) { JSON.parse(File.read("spec/mock/@ericd.json")) }
   let(:users) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
-  describe "#show_list_reposted" do
-    before  do
-      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
-    end
-    it "outputs the reposters list" do
-      printed = capture_stdout do
-        Ayadn::View.new.show_list_reposted(list[0]['data'], 123456)
-      end
-      expect(printed).to include *['Joel Timmins', 'Donny Davis', 'Nicolas Maumont', '95.41', 'reposted post']
-    end
-  end
+  # describe "#show_list_reposted" do
+  #   before  do
+  #     Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+  #   end
+  #   it "outputs the reposters list" do
+  #     printed = capture_stdout do
+  #       Ayadn::View.new.show_list_reposted(list[0]['data'], 123456)
+  #     end
+  #     expect(printed).to include *['Joel Timmins', 'Donny Davis', 'Nicolas Maumont', '95.41', 'reposted post']
+  #   end
+  # end
 
-  describe "#show_list_starred" do
-    before  do
-      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
-    end
-    it "outputs the starred list" do
-      printed = capture_stdout do
-        Ayadn::View.new.show_list_starred(list[0]['data'], 123456)
-      end
-      expect(printed).to include *['Joel Timmins', 'Donny Davis', 'Nicolas Maumont', '95.41', 'starred post']
-    end
-  end
+  # describe "#show_list_starred" do
+  #   before  do
+  #     Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+  #   end
+  #   it "outputs the starred list" do
+  #     printed = capture_stdout do
+  #       Ayadn::View.new.show_list_starred(list[0]['data'], 123456)
+  #     end
+  #     expect(printed).to include *['Joel Timmins', 'Donny Davis', 'Nicolas Maumont', '95.41', 'starred post']
+  #   end
+  # end
 
-  describe "#show_list_followings" do
-    before  do
-      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
-    end
-    it "outputs the followings list" do
-      printed = capture_stdout do
-        Ayadn::View.new.show_list_followings(users, '@bond')
-      end
-      expect(printed).to include *['List of users', 'is following', '0.83']
-    end
-  end
+  # describe "#show_list_followings" do
+  #   before  do
+  #     Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+  #   end
+  #   it "outputs the followings list" do
+  #     printed = capture_stdout do
+  #       Ayadn::View.new.show_list_followings(users, '@bond')
+  #     end
+  #     expect(printed).to include *['List of users', 'is following', '0.83']
+  #   end
+  # end
 
-  describe "#show_list_followers" do
-    before  do
-      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
-    end
-    it "outputs the followers list" do
-      printed = capture_stdout do
-        Ayadn::View.new.show_list_followers(users, '@bond')
-      end
-      expect(printed).to include *['List of users following', '0.83']
-    end
-  end
+  # describe "#show_list_followers" do
+  #   before  do
+  #     Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+  #   end
+  #   it "outputs the followers list" do
+  #     printed = capture_stdout do
+  #       Ayadn::View.new.show_list_followers(users, '@bond')
+  #     end
+  #     expect(printed).to include *['List of users following', '0.83']
+  #   end
+  # end
 
-  describe "#show_list_muted" do
-    before  do
-      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
-    end
-    it "outputs the muted list" do
-      printed = capture_stdout do
-        Ayadn::View.new.show_list_muted(users)
-      end
-      expect(printed).to include *['List of users you muted', '0.83']
-    end
-  end
+  # describe "#show_list_muted" do
+  #   before  do
+  #     Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+  #   end
+  #   it "outputs the muted list" do
+  #     printed = capture_stdout do
+  #       Ayadn::View.new.show_list_muted(users)
+  #     end
+  #     expect(printed).to include *['List of users you muted', '0.83']
+  #   end
+  # end
 
-  describe "#show_list_blocked" do
-    before  do
-      Ayadn::NiceRank.stub(:from_ids).and_return([{}])
-    end
-    it "outputs the blocked list" do
-      printed = capture_stdout do
-        Ayadn::View.new.show_list_blocked(users)
-      end
-      expect(printed).to include *['List of users you blocked', '0.83']
-    end
-  end
+  # describe "#show_list_blocked" do
+  #   before  do
+  #     Ayadn::NiceRank.stub(:from_ids).and_return([{}])
+  #   end
+  #   it "outputs the blocked list" do
+  #     printed = capture_stdout do
+  #       Ayadn::View.new.show_list_blocked(users)
+  #     end
+  #     expect(printed).to include *['List of users you blocked', '0.83']
+  #   end
+  # end
 
   describe "#show_interactions" do
     it "outputs the interactions list" do
