@@ -1,3 +1,9 @@
+# 1.7.2 (2014-09-04) - 'Fortress'
+
+- Fixed: option to retrieve only specified channels in Channels
+- Fixed: validators for Set
+- New: better tests suite
+
 # 1.7.1 (2014-09-02) - 'Poltergeist'
 
 - New: update your user profile (full name, bio (user description), avatar, cover, Twitter username, blog url, web url)
