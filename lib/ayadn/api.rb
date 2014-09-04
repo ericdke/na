@@ -227,8 +227,6 @@ module Ayadn
 
     def get_channel channel_id, options
       options = {:recent_message => 1, :annotations => 1, :before_id => nil}
-    puts get_parsed_response(Endpoints.new.channel(channel_id, options)).inspect
-    exit
       get_parsed_response(Endpoints.new.channel(channel_id, options))
     end
 
