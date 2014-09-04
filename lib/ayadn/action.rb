@@ -432,7 +432,7 @@ module Ayadn
           @view.downloading
           resp = channels.call
           @view.clear_screen
-          @view.show_channels(resp)
+          @view.show_channels(resp, options)
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})

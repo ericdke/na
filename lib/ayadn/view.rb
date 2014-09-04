@@ -283,7 +283,7 @@ module Ayadn
         end
         view << "\n\n"
       end
-      view << "\nYour account is currently linked to #{bucket.length} channels.\n\n".color(:green) unless options[:channels]
+      view << "\nYour account is currently linked to #{bucket.length} channels.\n\n".color(:green) unless options[:channels] || options[:id]
       puts view
     end
 
