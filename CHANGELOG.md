@@ -1,3 +1,7 @@
+# 1.7.3 () - 'Scanners'
+
+- New: option to reply to the original post instead of the reposted one
+
 # 1.7.2 (2014-09-04) - 'Fortress'
 
 - Fixed: option to retrieve only specified channels in Channels

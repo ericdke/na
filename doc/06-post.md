@@ -66,6 +66,15 @@ If you reply to a post containing multiple mentions, your text will be inserted 
 
 `ayadn -R 3`  
 
+If you reply to a reposted post, Ayadn will reply to the original post, complying with the ADN guidelines.
+
+However, you can reply to the reposted post with the `--noredirect` option:
+
+`ayadn -R --noredirect 23344556`
+
+`ayadn -R -n 23344556`  
+
+
 # PM (PRIVATE MESSAGE)
 
 Send a private message to a specific user.

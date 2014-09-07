@@ -556,7 +556,9 @@ module Ayadn
       	puts Status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
         Check.no_post(replied_to, post_id)
-        post_id = @workers.get_original_id(post_id, replied_to)
+        unless options[:noredirect]
+          post_id = @workers.get_original_id(post_id, replied_to)
+        end
         if replied_to['data']['repost_of']
           if post_id == replied_to['data']['repost_of']['id']
             replied_to = @api.get_details(post_id)

@@ -423,6 +423,7 @@ module Ayadn
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
     option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
+    option :noredirect, aliases: "-n", type: :boolean, desc: "Do not respond to the original post but to the reposted one if possible"
     def reply(id)
       ayadn = Action.new
       ayadn.reply(id, options)
