@@ -102,7 +102,7 @@ List them all:
 
 You can reverse the default lists order with a `set` command:
 
-`ayadn set list reverse false`
+`ayadn set formats list reverse false`
 
 (defaults to true since Ayadn version 1.7.3)
 
@@ -110,6 +110,6 @@ You can reverse the default lists order with a `set` command:
 
 You can change the width of the lists table if the default size doesn't fit well in your terminal:
 
-`ayadn set table width 80`
+`ayadn set formats table width 80`
 
 (min: 60, max: 90, default: 75)

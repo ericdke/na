@@ -30,9 +30,9 @@ These are just a few examples.
 
 `ayadn set scroll timer 5`
 
-`ayadn set table width 80`
+`ayadn set formats table width 80`
 
-`ayadn set list reverse false`
+`ayadn set formats list reverse false`
 
 ## RESET
 
