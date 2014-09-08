@@ -28,6 +28,10 @@ You can get a list of configurable parameters with
 
 `ayadn set scroll timer 5`
 
+`ayadn set table width 80`
+
+`ayadn set list reverse false`
+
 `ayadn set nicerank filter true`
 
 `ayadn set timeline show_spinner true`

@@ -95,3 +95,11 @@ List them all:
 `ayadn files -a`
 
 `ayadn -fl -a`
+
+## OPTIONS
+
+You can reverse the default lists order with a `set` command:
+
+`ayadn set list reverse false`
+
+(since version 1.7.3: defaults to true)

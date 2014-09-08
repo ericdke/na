@@ -1,6 +1,6 @@
 # 1.7.3 () - 'Scanners'
 
-- New: option to reply to the original post if replying to a reposted post. Example: `ayadn -R --noredirect 123456`. (default: reply to reposted)
+- New: option to reply to a reposted post. Example: `ayadn -R --noredirect 123456`. (without option: replies to the original post)
 - New: you can change the users lists order. Example: `ayadn set formats list reverse false` (default: true)
 - New: you can change the table width. Example: `ayadn set formats table width 80` (min: 60, max: 90, default: 75)
 
