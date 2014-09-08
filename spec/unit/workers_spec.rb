@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'helpers'
 require 'json'
-#require 'io/console'
 
 describe Ayadn::Workers do
 
@@ -139,7 +138,6 @@ describe Ayadn::Workers do
       printed = capture_stdout do
         puts @workers.build_followings_list(list, "@test")
       end
-      #expect(printed).to include "+~~~~"
       expect(printed).to include "@test"
       expect(printed).to include "@bond"
       expect(printed).to include "Mr Test"
@@ -154,7 +152,6 @@ describe Ayadn::Workers do
       printed = capture_stdout do
         puts @workers.build_muted_list(list)
       end
-      #expect(printed).to include "+----"
       expect(printed).to include "@bond"
       expect(printed).to include "Mr Test"
     end
@@ -168,7 +165,6 @@ describe Ayadn::Workers do
       printed = capture_stdout do
         puts @workers.build_blocked_list(list)
       end
-      #expect(printed).to include "+----"
       expect(printed).to include "@bond"
       expect(printed).to include "Mr Test"
     end
