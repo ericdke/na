@@ -20,11 +20,15 @@ Oh, and you can import blacklist databases from other accounts, too.
 
 Adds an item to your blacklist.
 
-Available items: client, hashtag, mention.
+Available items: client, hashtag, user, mention.
 
 `ayadn blacklist add mention @shmuck`
 
-Add a mention:
+Add a user:
+
+`ayadn -K add user @shmuck`
+
+Add a mention of a user:
 
 `ayadn -K add mention @shmuck`
 
@@ -40,9 +44,13 @@ Add a hashtag:
 
 Removes an item from your blacklist.
 
-Available items: client, hashtag, mention.
+Available items: client, hashtag, user, mention.
 
 `ayadn blacklist remove mention @shmuck`
+
+Remove a user:
+
+`ayadn -K remove user @shmuck`
 
 Remove a mention:
 
@@ -77,6 +85,8 @@ Import a blacklist database in the current account.
 You can add/remove several elements to/from the blacklist at once.
 
 (For usernames, '@' prefix will automatically be added if missing.)  
+
+`ayadn -K add user shmuck jerk mrspammer`
 
 `ayadn -K add mention shmuck jerk mrspammer`
 

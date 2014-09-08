@@ -19,17 +19,21 @@ Scroll your timeline with:
 
 `ayadn -tl -s`
 
-Note: Ayadn pulls the stream every 3 seconds by default. 
+#### SCROLL
 
-It means you can launch up to 3 scroll streams at a time _per account_. 
+A note about `--scroll`. 
 
-You can bring that value down to 1 second if you're using only _one_ scroll stream per account at a time, 2 seconds if you're using _two_ scroll streams, and so on and so forth.
+**Ayadn pulls the stream every 3 seconds by default.**
 
-If Ayadn ends up making too many requests to ADN, it will display an alert message with instructions then stop running.
+It means you can launch up to 3 scroll streams at a time _per account_ if you want. 
 
-So if you plan on launching many Ayadn scrolling instances at once, you should *set* the timer parameter accordingly (App.net accepts 5000 requests per hour per account maximum).
+To launch even more streams at the same time, increment the timer by one second for each stream. 
 
-Note: you can show an animated spinner while waiting for new posts, see the "SET" chapter.  
+Example: to launch 10 streams, set the timer to 12 seconds *before launching the streams* with `ayadn set scroll timer 12`.
+
+On the contrary, you can bring that value down to 1 second if you're using only _one_ scroll stream per account at a time.
+
+App.net accepts 5000 requests per hour per account maximum. If Ayadn ends up making too many requests to ADN, it will display an alert message with instructions, then it will exit.
 
 ### COUNT
 
@@ -73,7 +77,7 @@ Displays only the new posts in the stream since your last visit.
 
 ### RAW
 
-Displays the raw response from the App.net API instead of the formatted Ayadn output. For debugging and learning purposes.  
+Displays the raw response from the App.net API instead of the formatted Ayadn output.  
 
 `ayadn timeline --raw`
 
@@ -276,13 +280,11 @@ Search for App.net channels by searching WORD(S) in their description.
 
 If the channel (let's say 24573) is public, you can read its messages with `ayadn -ms 24573` or `ayadn -ms my_alias`.
 
-# RANDOM
+## Search ADN annotations
 
-Show series of random posts from App.net. Just for fun :)
+For the developers -or the adventurous-, there's a command to search for annotations types.
 
-`ayadn random`
-
-`ayadn -rnd`  
+`ayadn search --annotations net.app.ohai.location`
 
 # USER INFO
 
@@ -303,3 +305,11 @@ Show informations about a post.
 `ayadn postinfo 23362788`
 
 `ayadn -pi 23362788` 
+
+# RANDOM
+
+Show series of random posts from ADN. Just for fun :)
+
+`ayadn random`
+
+`ayadn -rnd`  

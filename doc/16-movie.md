@@ -1,6 +1,8 @@
 # MOVIE (nowwatching)
 
-Create a post from (part of) a movie title. Includes movie poster, IMDb url and hashtag.
+Create a post from (part of) a movie title. 
+
+Includes movie poster, IMDb url and hashtag.
 
 Usage:
 
@@ -26,21 +28,12 @@ This is useful for remakes:
 
 (gives the 1972 version)
 
-## ALIASES
-
-`ayadn nowwatching godfather II`
-
-`ayadn imdb -a conan`
-
 ## HASHTAG
 
-You can modify the hashtag with 'set':
+You can modify the default hashtag with 'set':
 
 `ayadn set movie hashtag movietime`
 
 `ayadn set movie hashtag adnmovieclub`
 
 (default is 'nowwatching')
-
-
-

@@ -6,7 +6,7 @@ Usage:
 
 `ayadn mark add 30594331`
 
-`ayadn mark add 30594331 'convo title'`
+`ayadn mark add 30594331 convo title`
 
 `ayadn mark list`
 
@@ -22,7 +22,9 @@ Usage:
 
 `ayadn mark add 30594331`
 
-`ayadn mark add 30594331 'convo title'`
+`ayadn mark add 30594331 talking about stuff`
+
+`ayadn mark add 30594331 'This convo about x, y and z is cool!'`
 
 You don't have to specify the root post of the conversation, any post within the thread will work.
 

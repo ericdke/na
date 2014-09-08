@@ -6,9 +6,9 @@ Delete a post.
 
 `ayadn -D 23365251`
 
-# DELETE MESSAGE
+# DELETE_M
 
-Delete a message. 
+Delete a private message. 
 
 You have to specify channel id (or alias) then message number.
 
@@ -108,44 +108,44 @@ Download a file from your App.net storage (any file posted with other ADN client
 
 # PIN
 
-Export a post's link and text, with tags, to your Pinboard account.
+Export a post's url, text and link(s) to your Pinboard account and add optional tags.
 
-`ayadn pin 22790201 Ayadn gem update`
+`ayadn pin 22790201 Ayadn Ruby dev`
 
-`ayadn pin 26874913 duel swords france`
+`ayadn pin 26874913 duel swords france history`
 
 # UPDATE
 
-Update your user profile.
-
-Use option `--delete` or `-D` to delete the field.
+- Update your user profile
 
 `ayadn --update --bio`
 
 `ayadn -U --bio`
 
-`ayadn --update --bio --delete`
-
-`ayadn -U --bio -D`
-
 `ayadn -U --name`
 
 `ayadn -U --twitter`
 
-`ayadn -U --twitter -D`
-
 `ayadn -U --blog`
-
-`ayadn -U --blog -D`
 
 `ayadn -U --web`
 
-`ayadn -U --web -D`
-
 `ayadn -U --avatar ~/Pics/myface.jpg`
 
-Avatar: the uploaded image will be cropped to square and must be smaller than 1 MB. The optimal size is 200×200 pixels.
+*Avatar: the uploaded image will be cropped to square and must be smaller than 1 MB. The optimal size is 200×200 pixels.*
 
 `ayadn -U --cover ~/Pics/mycats.jpg`
 
-Cover: the uploaded image must be at least 960 pixels wide and less than 4 MB in size.
+*Cover: the uploaded image must be at least 960 pixels wide and less than 4 MB in size.*
+
+- Use option `--delete` or `-D` to delete the field
+
+`ayadn --update --bio --delete`
+
+`ayadn -U --bio -D`
+
+`ayadn -U --twitter -D`
+
+`ayadn -U --blog -D`
+
+`ayadn -U --web -D`

@@ -10,6 +10,10 @@
 
 ## THANK YOU
 
+This is a list of the first people who helped me when I started developing Ayadn.
+
+I can't keep up and update the list, of course, there's too many of you awesome geeks. ;)
+
 [@matigo](http://app.net/matigo)
 [@ksniod](http://app.net/ksniod)
 [@donnywdavis](http://app.net/donnywdavis)
@@ -27,3 +31,5 @@
 [@jextxadore](http://app.net/jextxadore)
 [@jvimedia](http://app.net/jvimedia)
 [@fredvd](http://app.net/fredvd)
+
+See also the Ayadn CHANGELOG file...

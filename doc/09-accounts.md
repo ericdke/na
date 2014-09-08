@@ -18,13 +18,13 @@ Switch between your authorized accounts.
 
 `ayadn switch @ericd`
 
-`ayadn switch @otheraccount`
+`ayadn switch @mysecretaccount`
 
 Alternative syntax:
 
 `ayadn -@ ericd`
 
-`ayadn -@ otheraccount`
+`ayadn -@ mysecretaccount`
 
 List your authorized accounts:
 

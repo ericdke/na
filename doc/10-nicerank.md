@@ -22,7 +22,7 @@ An idea of the scale:
 
 - A user posting a lot of automated links without being active otherwise will be < 2
 
-- A new ADN user will typically start with 2
+- A new ADN user will typically start with 2.1
 
 - A regular user will always be > 2
 
@@ -32,27 +32,24 @@ An idea of the scale:
 
 *Again, this is not a popularity ratio: far from it. It only serves as a filter for bots and spam.*
 
-
-## Activate NiceRank
-
-NiceRank is disabled by default.
-
-Enable it with:
-
-`ayadn set nicerank filter true`
-
-My advice is to also filter out the few users that NiceRank haven't analyzed yet, as most of them are bots:
-
-`ayadn set nicerank filter_unranked true`
-
 ## Threshold
 
 Set the NiceRank threshold.
 
+You can use an integer or a float (only one decimal).
+
 Any user with a NiceRank smaller than this value will be ignored.
 
-`ayadn set nicerank threshold 2`  
+`ayadn set nicerank threshold 2.5`
 
-## Deactivate NiceRank
+`ayadn set nicerank threshold 3`
 
-It's the same as above, with *false* instead of *true*.  
+(default: 2.1)
+
+## Desactivate NiceRank
+
+NiceRank is enabled by default on new Ayadn installations, but can be disabled if needed:
+
+`ayadn set nicerank filter false`
+
+`ayadn set nicerank filter_unranked false`

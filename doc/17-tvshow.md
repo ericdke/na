@@ -1,6 +1,8 @@
 # TVSHOW (nowwatching)
 
-Create a post from (part of) a TV show title. Includes show poster, IMDb url and hashtag.
+Create a post from (part of) a TV show title. 
+
+Includes show poster, IMDb url and hashtag.
 
 Usage:
 

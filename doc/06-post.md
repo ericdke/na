@@ -6,13 +6,13 @@ Simple and fast way to post a short sentence/word to App.net.
 
 `ayadn -P Hello from Ayadn`
 
-`ayadn -P @ericd hello Eric`
+`ayadn -P @ericd Hello Eric`
 
 You have to put your text between single quotes if you're using punctuation:
 
 `ayadn -P 'Hello from Ayadn, guys!'`
 
-But remember you can't then use any `'` character!
+*But remember you can't use any quote character inside the quotes...*
 
 **So you should rather use either the _write_ or the _auto_ method for posting.**
 
@@ -20,7 +20,7 @@ But remember you can't then use any `'` character!
 
 Multi-line post to App.net.
 
-This is the recommended way to post elaborate text to ADN:
+*This is the recommended way to post elaborate text to ADN:*
 
 `ayadn write`
 
@@ -28,7 +28,9 @@ This is the recommended way to post elaborate text to ADN:
 
 It will show you a prompt where you can type anything, including special characters and Markdown links.
 
-Hit ENTER to create line breaks and paragraphs.
+Hit ENTER to create line breaks. 
+
+Hit ENTER, SPACE, ENTER to create paragraphs compatible with all clients.
 
 Cancel your post with CTRC-C or send it with CTRL-D.
 
@@ -111,7 +113,7 @@ Examples:
 
 ```
 ayadn -P Meet my cat -E lolcat.jpg
-ayadn -P "@ericd Hey, meet my pets" -E ~/lolcat.jpg ./doge.jpeg
+ayadn -P "@ericd Hey, meet my pets" -E ~/lolcat.jpg ~/doge.jpeg
 ayadn -W -E ~/lolcat.png
 ayadn -R 23362460 -E "Desktop/dancing lolcat.gif"
 ayadn pm @ericd -E /users/dad/lol\'cat.JPG /users/mom/my\ doge.PNG
@@ -141,7 +143,7 @@ You can embed a movie poster in a normal post with option `-M`.
 
 This is compatible with other options, eg embedding other images.
 
-Warning: contrary to the `movie` command, this option doesn't check with the user if the movie is valid. The poster is retrieved from IMDb and is automatically embedded in the post.
+*Warning: contrary to the `movie` command, this option doesn't check with the user if the movie is valid. The poster is retrieved from IMDb and is automatically embedded in the post.*
 
 Examples:
 
@@ -150,4 +152,3 @@ ayadn -P "I'll be back" -M terminator
 ayadn -W -M truman show -E ~/Pics/my_face.jpg
 ayadn -R 23362460 -M the dark knight
 ```  
-

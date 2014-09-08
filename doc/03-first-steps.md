@@ -105,7 +105,7 @@ And for the subcommands:
 
 ## SHORTCUTS
 
-Most examples will include the 'complete' command followed by the 'shortcut' command. 
+Most examples in the documentation include the 'complete' command followed by the 'shortcut' command. 
 
 Of course, using Ayadn is much faster with the shortcut commands.
 
@@ -156,6 +156,6 @@ Shortcuts:
 
 `ayadn -co 23362788`
 
-`ayadn -se movies hollywood`
+`ayadn -s movies hollywood`
 
 `ayadn -FO @ericd` 

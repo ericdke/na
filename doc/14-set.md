@@ -10,6 +10,8 @@ You can get a list of configurable parameters with
 
 ## EXAMPLES
 
+These are just a few examples.  
+
 `ayadn set color username green`
 
 `ayadn set color mentions yellow`
@@ -32,9 +34,7 @@ You can get a list of configurable parameters with
 
 `ayadn set list reverse false`
 
-`ayadn set nicerank filter true`
-
-`ayadn set timeline show_spinner true`
+## RESET
 
 To reset the configuration to default values:
 
@@ -42,7 +42,7 @@ To reset the configuration to default values:
 
 ## LIST
 
-Example list of configured items in Ayadn.
+*Example* list of configured items in Ayadn.
 
 `ayadn -sg` will show your own list.
 

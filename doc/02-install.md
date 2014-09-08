@@ -14,9 +14,9 @@ Uninstall:
 
 ## OS X, LINUX, BSD
 
-Please use something like RVM or RBENV to install Ruby if necessary.
+If you need to install Ruby it's better to use something like RVM or RBENV.
 
-You can also use the Ruby shipped with your system but it will require root privileges.
+You can of course use the Ruby shipped with your system but it will require root privileges and is not recommended.
 
 ## WINDOWS
 

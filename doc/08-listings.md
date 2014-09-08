@@ -24,13 +24,13 @@ You can see your own list by using *me* instead of *@username*:
 
 # CHANNELS
 
-List your active App.net channels.
+List all your active App.net channels.
 
 `ayadn channels`
 
 `ayadn -ch`
 
-Retrieve only specified channel(s) with option `--id`:
+Retrieve a unique channel, or specific channel(s), with option `--id`:
 
 `ayadn -ch --id 55123`
 
@@ -98,8 +98,18 @@ List them all:
 
 ## OPTIONS
 
+### LIST
+
 You can reverse the default lists order with a `set` command:
 
 `ayadn set list reverse false`
 
-(since version 1.7.3: defaults to true)
+(defaults to true since Ayadn version 1.7.3)
+
+### TABLE
+
+You can change the width of the lists table if the default size doesn't fit well in your terminal:
+
+`ayadn set table width 80`
+
+(min: 60, max: 90, default: 75)

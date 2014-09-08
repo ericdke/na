@@ -20,4 +20,6 @@ It will also grab a 30 seconds preview and the album art from the iTunes Store. 
 
 `ayadn -np -l`
 
-Same behaviour and options as above.
+Ayadn will grab information from your Last.fm account, format it, insert the *#nowplaying* hashtag then ask for your confirmation before posting it.
+
+It will also grab a 30 seconds preview and the album art from the iTunes Store. You can prevent this behavior by adding the `--no-url` option (short: `-n`).
