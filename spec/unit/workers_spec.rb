@@ -12,7 +12,7 @@ describe Ayadn::Workers do
           mentions: :red,
           username: :green
         },
-        formats: {table: {width: 75}}
+        formats: {table: {width: 75}, list: {reverse: true}}
       })
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
@@ -27,6 +27,7 @@ describe Ayadn::Workers do
   let(:regex_post) { JSON.parse(File.read("spec/mock/regex.json")) }
   let(:users_list) { JSON.parse(File.read("spec/mock/fwr_@ayadn.json")) }
   let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
+  let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
   describe "#build_posts" do
     it "builds posts hash from stream" do
@@ -115,8 +116,6 @@ describe Ayadn::Workers do
       expect(posts[26947690][:mentions]).to eq ["tuaw"]
     end
   end
-
-  let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
   describe "#build_followers_list" do
     before do
