@@ -38,6 +38,6 @@ Shortcuts:
 
 `ayadn -co 23362788`
 
-`ayadn -se movies hollywood`
+`ayadn -s movies hollywood`
 
 `ayadn -FO @ericd` 
