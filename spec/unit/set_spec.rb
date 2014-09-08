@@ -27,7 +27,10 @@ def init_stubs
         show_spinner: true,
         show_debug: false
       },
-      formats: {table: {width: 75}},
+      formats: {
+        table: {width: 75},
+        list: {reverse: true}
+      },
       counts: {
         default: 50,
         unified: 100,
@@ -104,10 +107,6 @@ describe Ayadn::SetScroll do
       expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
       Ayadn::SetScroll.new.timer('johnson')
       expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
-      Ayadn::SetScroll.new.timer('-666')
-      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
-      Ayadn::SetScroll.new.timer('0')
-      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
     end
   end
 
@@ -130,6 +129,44 @@ describe Ayadn::SetColor do
         Ayadn::SetColor.new.send(command, color)
         expect(Ayadn::Settings.options[:colors][command]).to eq color.to_sym
       end
+    end
+  end
+
+  after do
+    File.delete('spec/mock/ayadn.log')
+  end
+end
+
+describe Ayadn::SetFormats do
+  before do
+    init_stubs
+  end
+
+  describe "#table" do
+    it "creates a default table width" do
+      Ayadn::SetFormats.new.send(:table, ['width', '80'])
+      expect(Ayadn::Settings.options[:formats][:table][:width]).to eq 80
+    end
+    it "creates a default table width" do
+      Ayadn::SetFormats.new.send(:table, ['width', '33'])
+      expect(Ayadn::Settings.options[:formats][:table][:width]).to eq 75
+    end
+    it "creates a default table width" do
+      Ayadn::SetFormats.new.send(:table, ['width', 'yolo'])
+      expect(Ayadn::Settings.options[:formats][:table][:width]).to eq 75
+    end
+  end
+
+  describe "#list" do
+    it "creates a default list order" do
+      Ayadn::SetFormats.new.send(:list, ['reverse', 'false'])
+      expect(Ayadn::Settings.options[:formats][:list][:reverse]).to eq false
+    end
+    it "raises an error" do
+      printed = capture_stderr do
+        expect(lambda {Ayadn::SetFormats.new.send(:list, ['reverse', 'yolo'])}).to raise_error(SystemExit)
+      end
+      expect(printed).to include 'You have to submit valid items'
     end
   end
 

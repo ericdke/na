@@ -10,7 +10,6 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
-      scroll_config.log(args)
       scroll_config.save
     end
 
@@ -23,7 +22,6 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
-      movie_config.log(args)
       movie_config.save
     end
 
@@ -36,7 +34,6 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
-      tvshow_config.log(args)
       tvshow_config.save
     end
 
@@ -49,7 +46,6 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
-      nicerank_config.log(args)
       nicerank_config.save
     end
 
@@ -69,7 +65,6 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
-      timeline_config.log(args)
       timeline_config.save
     end
 
@@ -90,7 +85,6 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
-      counts_config.log(args)
       counts_config.save
     end
 
@@ -113,7 +107,6 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
-      color_config.log(args)
       color_config.save
     end
 
@@ -133,7 +126,6 @@ module Ayadn
       else
         abort(Status.error_missing_parameters)
       end
-      backup_config.log(args)
       backup_config.save
     end
 
@@ -143,9 +135,30 @@ module Ayadn
       Settings.restore_defaults
       puts Status.done
     end
+
+    desc "formats ITEM VALUE", "Set values for formatting fields"
+    def formats(*args)
+      formats_config = SetFormats.new
+      if args[0]
+        begin
+          command = args.shift
+          formats_config.send(command, args)
+        rescue NoMethodError, ArgumentError
+          puts Status.error_missing_parameters
+          exit
+        rescue => e
+          raise e
+        end
+      else
+        abort(Status.error_missing_parameters)
+      end
+      formats_config.save
+    end
+
   end
 
   class Validators
+
     def self.boolean(value)
       case value.downcase
       when "true", "1", "yes"
@@ -156,6 +169,7 @@ module Ayadn
         abort(Status.error_missing_parameters)
       end
     end
+
     def self.index_range(min, max, value)
       x = value.to_i
       if x >= min && x <= max
@@ -164,6 +178,7 @@ module Ayadn
         abort(Status.must_be_integer)
       end
     end
+
     def self.cache_range value
       if value >= 1 && value <= 168
         value.round
@@ -171,6 +186,15 @@ module Ayadn
         abort(Status.cache_range)
       end
     end
+
+    def self.width_range value
+      if value >= 60 && value <= 90
+        value.round
+      else
+        75
+      end
+    end
+
     def self.threshold value
       value = value.to_f
       if value > 0 and value < 5
@@ -179,232 +203,270 @@ module Ayadn
         abort(Status.threshold)
       end
     end
+
     def self.timer(t)
-      t = t.to_i
+      t = t.to_f.round
       t >= 1 ? t : 3
     end
+
     def self.color(color)
       colors_list = %w{red green magenta cyan yellow blue white black}
       unless colors_list.include?(color.to_s)
         puts Status.error_missing_parameters
         abort(Status.valid_colors(colors_list))
       else
-        return color
+        return color.to_sym
       end
     end
+
   end
 
-  class SetScroll
+  class SetBase
+
+    attr_accessor :input, :output, :category
+
     def initialize
-      Settings.load_config
-      Settings.get_token
-      Settings.init_config
-      Logs.create_logger
+      Settings.load_config()
+      Settings.get_token()
+      Settings.init_config()
+      Logs.create_logger()
     end
-    def log(args)
-      x = "New value for '#{args[0]}' in 'Scroll' => #{args[1]}"
+
+    def save
+      Settings.save_config()
+      log()
+    end
+
+    def log
+      x = "New value for '#{@input}' in '#{@category}' => #{@output}"
       puts "\n#{x}\n".color(:cyan)
       Logs.rec.info x
     end
-    def save
-      Settings.save_config
+
+  end
+
+  class SetFormats < SetBase
+
+    def initialize
+      super
+      @category = 'formats'
     end
+
+    def table(args)
+      type = args.shift.downcase
+      value = args[0].to_i
+      if type == 'width'
+        @input = 'table width'
+        @output = Validators.width_range(value)
+        Settings.options[:formats][:table][:width] = @output
+      else
+        abort(Status.error_missing_parameters)
+      end
+    end
+
+    def tables(args)
+      table(args)
+    end
+
+    def list(args)
+      type = args.shift.downcase
+      value = args[0]
+      if type == 'reverse' || type == 'reversed'
+        @input = 'list reverse'
+        @output = Validators.boolean(value)
+        Settings.options[:formats][:list][:reverse] = @output
+      else
+        abort(Status.error_missing_parameters)
+      end
+    end
+
+    def lists(args)
+      list(args)
+    end
+
+  end
+
+  class SetScroll < SetBase
+
+    def initialize
+      super
+      @category = 'scroll'
+    end
+
     def validate(t)
       Validators.timer(t)
     end
+
     def timer(t)
-      Settings.options[:scroll][:timer] = validate(t)
+      @input = 'timer'
+      @output = validate(t)
+      Settings.options[:scroll][:timer] = @output
     end
+
   end
 
-  class SetMovie
+  class SetMovie < SetBase
+
     def initialize
-      Settings.load_config
-      Settings.get_token
-      Settings.init_config
-      Logs.create_logger
+      super
+      @category = 'movie'
     end
-    def log(args)
-      x = "New value for '#{args[0]}' in 'Movie' => #{args[1]}"
-      puts "\n#{x}\n".color(:cyan)
-      Logs.rec.info x
-    end
-    def save
-      Settings.save_config
-    end
+
     def hashtag(tag)
-      Settings.options[:movie][:hashtag] = tag
+      @input = 'hashtag'
+      @output = tag
+      Settings.options[:movie][:hashtag] = @output
     end
+
   end
 
-  class SetTVShow
+  class SetTVShow < SetBase
+
     def initialize
-      Settings.load_config
-      Settings.get_token
-      Settings.init_config
-      Logs.create_logger
+      super
+      @category = 'tvshow'
     end
-    def log(args)
-      x = "New value for '#{args[0]}' in 'TV Show' => #{args[1]}"
-      puts "\n#{x}\n".color(:cyan)
-      Logs.rec.info x
-    end
-    def save
-      Settings.save_config
-    end
+
     def hashtag(tag)
-      Settings.options[:tvshow][:hashtag] = tag
+      @input = 'hashtag'
+      @output = tag
+      Settings.options[:tvshow][:hashtag] = @output
     end
+
   end
 
-  class SetNiceRank
+  class SetNiceRank < SetBase
+
     def initialize
-      Settings.load_config
-      Settings.get_token
-      Settings.init_config
-      Logs.create_logger
+      super
+      @category = 'nicerank'
     end
-    def log(args)
-      x = "New value for '#{args[0]}' in 'NiceRank' => #{args[1]}"
-      puts "\n#{x}\n".color(:cyan)
-      Logs.rec.info x
-    end
-    def save
-      Settings.save_config
-    end
+
     def filter value
-      Settings.options[:nicerank][:filter] = Validators.boolean(value)
+      @input = 'filter'
+      @output = Validators.boolean(value)
+      Settings.options[:nicerank][:filter] = @output
     end
+
     def filter_unranked value
-      Settings.options[:nicerank][:filter_unranked] = Validators.boolean(value)
+      @input = 'filter_unranked'
+      @output = Validators.boolean(value)
+      Settings.options[:nicerank][:filter_unranked] = @output
     end
+
     def threshold value
-      Settings.options[:nicerank][:threshold] = Validators.threshold value
+      @input = 'threshold'
+      @output = Validators.threshold(value)
+      Settings.options[:nicerank][:threshold] = @output
     end
+
     def cache value
-      Settings.options[:nicerank][:cache] = Validators.cache_range value.to_i
+      @input = 'cache'
+      @output = Validators.cache_range(value.to_i)
+      Settings.options[:nicerank][:cache] = @output
     end
+
   end
 
-  class SetBackup
+  class SetBackup < SetBase
+
     def initialize
-      Settings.load_config
-      Settings.get_token
-      Settings.init_config
-      Logs.create_logger
+      super
+      @category = 'backup'
     end
-    def log(args)
-      x = "New value for '#{args[0]}' in 'Backup' => #{args[1]}"
-      puts "\n#{x}\n".color(:cyan)
-      Logs.rec.info x
-    end
-    def save
-      Settings.save_config
-    end
+
     def validate(value)
       Validators.boolean(value)
     end
+
     def method_missing(meth, options)
-      case meth.to_s
+      @input = meth.to_s
+      @output = validate(options)
+      case @input
       when 'auto_save_sent_posts', 'auto_save_sent_messages', 'auto_save_lists'
-        Settings.options[:backup][meth.to_sym] = validate(options)
+        Settings.options[:backup][meth.to_sym] = @output
       else
         super
       end
     end
+
   end
 
-  class SetCounts
+  class SetCounts < SetBase
+
     def initialize
-      Settings.load_config
-      Settings.get_token
-      Settings.init_config
-      Logs.create_logger
+      super
+      @category = 'counts'
     end
-    def log(args)
-      x = "New value for '#{args[0]}' in 'Counts' => #{args[1]}"
-      puts "\n#{x}\n".color(:cyan)
-      Logs.rec.info x
-    end
-    def save
-      Settings.save_config
-    end
+
     def validate(value)
       Validators.index_range(1, 200, value)
     end
+
     def method_missing(meth, options)
+      @input = meth.to_s.capitalize
+      @output = validate(options.to_i)
       case meth.to_s
       when 'default', 'unified', 'checkins', 'conversations', 'global', 'photos', 'trending', 'mentions', 'convo', 'posts', 'messages', 'search', 'whoreposted', 'whostarred', 'whatstarred', 'files'
-        Settings.options[:counts][meth.to_sym] = validate(options.to_i)
+        Settings.options[:counts][meth.to_sym] = @output
       else
         super
       end
     end
+
   end
 
-  class SetTimeline
+  class SetTimeline < SetBase
+
     def initialize
-      Settings.load_config
-      Settings.get_token
-      Settings.init_config
-      Logs.create_logger
+      super
+      @category = 'timeline'
     end
+
     def validate(value)
       Validators.boolean(value)
     end
-    def log(args)
-      x = "New value for '#{args[0]}' in 'Timeline' => #{args[1]}"
-      puts "\n#{x}\n".color(:cyan)
-      Logs.rec.info x
-    end
-    def save
-      Settings.save_config
-    end
+
     def method_missing(meth, options)
-      case meth.to_s
+      @input = meth.to_s
+      @output = validate(options)
+      case @input
       when 'directed', 'html', 'show_source', 'show_symbols', 'show_real_name', 'show_date', 'show_spinner', 'show_debug'
-        Settings.options[:timeline][meth.to_sym] = validate(options)
+        Settings.options[:timeline][meth.to_sym] = @output
       when 'deleted', 'annotations'
         abort(Status.not_mutable)
       else
         super
       end
     end
+
   end
 
-  class SetColor
+  class SetColor < SetBase
+
     def initialize
-      Settings.load_config
-      Settings.get_token
-      Settings.init_config
-      Logs.create_logger
+      super
+      @category = 'colors'
     end
 
     def validate(color)
       Validators.color(color)
     end
 
-    def log(args)
-      x = "New value for '#{args[0]}' in 'Colors' => #{args[1]}"
-      puts "\n#{x}\n".color(:cyan)
-      Logs.rec.info x
-    end
-
-    def save
-      Settings.save_config
-    end
-
     def method_missing(meth, options)
+      @input = meth.to_s.capitalize
+      @output = validate(options)
       case meth.to_s
       when 'id', 'index', 'username', 'name', 'date', 'link', 'dots', 'hashtags', 'mentions', 'source', 'symbols', 'debug'
-        Settings.options[:colors][meth.to_sym] = validate(options.to_sym)
+        Settings.options[:colors][meth.to_sym] = @output
       when 'hashtag', 'mention', 'symbol'
-        Settings.options[:colors]["#{meth}s".to_sym] = validate(options.to_sym)
+        Settings.options[:colors]["#{meth}s".to_sym] = @output
       when 'client'
-        Settings.options[:colors][:source] = validate(options.to_sym)
+        Settings.options[:colors][:source] = @output
       else
         super
       end
     end
+
   end
 end

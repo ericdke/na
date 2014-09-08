@@ -508,8 +508,13 @@ module Ayadn
     end
 
     def build_users_array(list)
-      list.map do |key, value|
+      users = list.map do |key, value|
         {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3], :id => key}
+      end
+      if Settings.options[:formats][:list][:reverse]
+        return users.reverse
+      else
+        return users
       end
     end
 

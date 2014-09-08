@@ -98,6 +98,7 @@ module Ayadn
           conf[:nowplaying] = {} if conf[:nowplaying].nil?
           conf[:movie] = {hashtag: 'nowwatching'} if conf[:movie].nil?
           conf[:tvshow] = {hashtag: 'nowwatching'} if conf[:tvshow].nil?
+          conf[:formats][:list] = {reverse: true} if conf[:formats][:list].nil?
 
           @options = conf
           self.write_config_file(config_file, @options)
@@ -196,6 +197,9 @@ module Ayadn
         formats: {
           table: {
             width: 75
+          },
+          list: {
+            reverse: true
           }
         },
         colors: {
