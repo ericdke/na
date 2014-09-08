@@ -3,6 +3,7 @@ module Ayadn
   class Errors
 
     def self.global_error(args)
+      abort(Status.wtf) if Logs.nil?
       Logs.rec.error "--BEGIN--"
       Logs.rec.error "CAUSE: #{args[:error]}"
       Logs.rec.debug "DATA: #{args[:data]}"

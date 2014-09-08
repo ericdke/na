@@ -66,6 +66,9 @@ module Ayadn
         end
         puts "\nConnection error.".color(:red)
         Errors.global_error({error: e, caller: caller, data: [url]})
+      rescue URI::InvalidURIError => e
+        puts "\nConnection or authorization error.".color(:red)
+        Errors.global_error({error: e, caller: caller, data: [url]})
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url]})
       end
