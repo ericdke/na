@@ -45,7 +45,8 @@ describe Ayadn::Post do
   end
 
   let(:post) { Ayadn::Post.new }
-  let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
+  #let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
+  let(:rest) {Ayadn::CNX} 
 
   describe "#post" do
     before do

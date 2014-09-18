@@ -25,7 +25,8 @@ describe Ayadn::Workers do
   let(:checkins) { JSON.parse(File.read("spec/mock/checkins.json")) }
   let(:regex_post) { JSON.parse(File.read("spec/mock/regex.json")) }
   let(:users_list) { JSON.parse(File.read("spec/mock/fwr_@ayadn.json")) }
-  let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
+  #let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
+  let(:rest) {Ayadn::CNX}
   let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
 
   describe "#build_posts" do

@@ -94,7 +94,8 @@ describe Ayadn::NiceRank do
     Ayadn::Logs.stub(:rec).and_return("logged")
   end
 
-  let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
+  #let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
+  let(:rest) {Ayadn::CNX} 
   # let(:nicerank) { JSON.parse(File.read("spec/mock/nicerank.json")) }
 
   describe "#get_posts_day" do
