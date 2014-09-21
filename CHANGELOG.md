@@ -2,6 +2,7 @@
 
 - Fix: nowplaying (show artwork)
 - Fix: nowwatching (show posting account)
+- Fix: tvshow (show posting account)
 
 # 1.7.3 (2014-09-08) - 'Scanners'
 

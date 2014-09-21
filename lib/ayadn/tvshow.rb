@@ -65,6 +65,7 @@ module Ayadn
 
     def ok
       @view.clear_screen
+      puts Status.writing
       puts "\nYour post:\n\n".color(:cyan)
       puts @text
       puts "\n\nIs it ok? (y/N)".color(:yellow)
