@@ -1,3 +1,8 @@
+# 1.7.4 (2014-09-21) - 'Elton'
+
+- Fix: nowplaying (show artwork)
+- Fix: nowwatching (show posting account)
+
 # 1.7.3 (2014-09-08) - 'Scanners'
 
 - New: option to reply to a reposted post

@@ -70,6 +70,8 @@ module Ayadn
         else
           visible, track, artwork, artwork_thumb, link, artist = false
         end
+        options = options.dup
+        options[:nowplaying] = true
         if options[:lastfm]
           source = 'Last.fm'
         else

@@ -91,6 +91,7 @@ module Ayadn
 
     def show_post text
       @view.clear_screen
+      puts Status.writing
       puts "\nYour post:\n\n".color(:cyan)
       puts text
       puts "\nIs it ok? (y/N)".color(:yellow)

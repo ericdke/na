@@ -5,7 +5,7 @@ module Ayadn
 
     require 'tvdb_party'
 
-    AYADN_TVDB_API_KEY = '3F21527FE4C9C274'
+    AYADN_TVDB_API_KEY = 'E874ACBC542CAA53'
 
     attr_accessor :language, :name, :poster_url, :banner_url, :plot, :text, :imdb_link, :tag, :link, :date
 
