@@ -1,6 +1,7 @@
-# 1.7.5 () - 'Cirrus'
+# 1.7.5 (2014-10-20) - 'Cirrus'
 
 - New: option to display a compact view for the timeline
+- Fix: character count in reply with Markdown links
 
 # 1.7.4 (2014-09-21) - 'Elton'
 
