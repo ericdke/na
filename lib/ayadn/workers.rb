@@ -472,7 +472,12 @@ module Ayadn
         sentences << words.join(' ')
         words = Array.new
       end
-      sentences.join("\n")
+      if Settings.options[:timeline][:compact] == true
+        wo = sentences.keep_if { |s| s != "" }
+        wo.join("\n")
+      else
+        sentences.join("\n")
+      end
     end
 
     def links_from_posts(stream)

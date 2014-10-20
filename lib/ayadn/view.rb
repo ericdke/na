@@ -551,12 +551,12 @@ module Ayadn
     def build_content(content)
       view = ""
       view << build_header(content)
-      view << "\n"
+      view << "\n" unless Settings.options[:timeline][:compact] == true
       view << content[:text]
-      view << "\n"
+      view << "\n" unless Settings.options[:timeline][:compact] == true
       if content[:has_checkins]
         view << build_checkins(content)
-        view << "\n"
+        view << "\n" unless Settings.options[:timeline][:compact] == true
       end
       unless content[:links].empty?
         view << "\n"
@@ -565,7 +565,15 @@ module Ayadn
           view << "\n"
         end
       end
-      view << "\n\n"
+      if Settings.options[:timeline][:compact] == true
+        if content[:links].empty?
+          view << "\n"
+        else
+          view
+        end
+      else
+        view << "\n\n"
+      end
     end
 
     def build_header(content)
@@ -598,8 +606,12 @@ module Ayadn
       else
         num_dots = 10
       end
-      hd = (".".color(Settings.options[:colors][:dots])) * num_dots
-      hd << "\n"
+      if Settings.options[:timeline][:compact] == true
+        hd = "\n"
+      else
+        hd = (".".color(Settings.options[:colors][:dots])) * num_dots
+        hd << "\n"
+      end
       formatted = { header: hd }
       content[:checkins].each do |key, val|
           formatted[key] = val
