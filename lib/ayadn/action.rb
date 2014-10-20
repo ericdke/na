@@ -379,7 +379,11 @@ module Ayadn
           Errors.repost(post_id, resp['repost_of']['id'])
           @view.show_simple_post([resp['repost_of']], options)
         end
-        puts "AUTHOR:\n".inverse
+        if Settings.options[:timeline][:compact] == true
+          puts "\nAUTHOR:\n".inverse
+        else
+          puts "AUTHOR:\n".inverse
+        end
         if response['data']['username'] == Settings.config[:identity][:username]
           @view.show_userinfos(stream, @api.get_token_info['data'], true)
         else
