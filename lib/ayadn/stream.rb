@@ -14,14 +14,14 @@ module Ayadn
       options = settings.dup
       options[:filter] = nicerank_true()
       @view.downloading(options)
-      if Settings.options[:timeline][:compact] == false
+      unless options[:scroll]
         stream = @api.get_global(options)
         Settings.options[:force] == true ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream)
         Check.no_new_posts(stream, options, 'global')
         Databases.save_max_id(stream, 'global') unless stream['meta']['max_id'].nil?
         @view.render(stream, options, niceranks)
       end
-      if Settings.options[:timeline][:compact] == true
+      if Settings.options[:timeline][:compact] == true && options[:scroll] == true
         @view.clear_screen()
       end
       Scroll.new(@api, @view).global(options) if options[:scroll]
@@ -44,10 +44,15 @@ module Ayadn
     def stream meth, options, target
       Settings.options[:force] = true if options[:force]
       @view.downloading(options)
-      stream = @api.send("get_#{meth}".to_sym, options)
-      Check.no_new_posts(stream, options, target)
-      Databases.save_max_id(stream)
-      @view.render(stream, options)
+      unless options[:scroll]
+        stream = @api.send("get_#{meth}".to_sym, options)
+        Check.no_new_posts(stream, options, target)
+        Databases.save_max_id(stream)
+        @view.render(stream, options)
+      end
+      if Settings.options[:timeline][:compact] == true && options[:scroll] == true
+        @view.clear_screen()
+      end
       Scroll.new(@api, @view).send(meth, options) if options[:scroll]
     end
 
@@ -57,13 +62,18 @@ module Ayadn
       Check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options)
-      stream = @api.get_mentions(username, options)
-      Check.no_user(stream, username)
-      Databases.save_max_id(stream)
-      Check.no_data(stream, 'mentions')
-      options = options.dup
-      options[:in_mentions] = true
-      @view.render(stream, options)
+      unless options[:scroll]
+        stream = @api.get_mentions(username, options)
+        Check.no_user(stream, username)
+        Databases.save_max_id(stream)
+        Check.no_data(stream, 'mentions')
+        options = options.dup
+        options[:in_mentions] = true
+        @view.render(stream, options)
+      end
+      if Settings.options[:timeline][:compact] == true && options[:scroll] == true
+        @view.clear_screen()
+      end
       Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
     end
 

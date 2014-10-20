@@ -113,7 +113,9 @@ module Ayadn
         else
           table << [ "@#{username} ".color(Settings.options[:colors][:username]), "", posts_day ]
         end
-        table << :separator unless index + 1 == list.length
+        if index + 1 != list.length && Settings.options[:timeline][:compact] == false
+          table << :separator
+        end
       end
       table
     end
