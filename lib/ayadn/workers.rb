@@ -473,8 +473,8 @@ module Ayadn
         words = Array.new
       end
       if Settings.options[:timeline][:compact] == true
-        wo = sentences.keep_if { |s| s != "" }
-        wo.join("\n")
+        without_linebreaks = sentences.keep_if { |s| s != "" }
+        without_linebreaks.join("\n")
       else
         sentences.join("\n")
       end

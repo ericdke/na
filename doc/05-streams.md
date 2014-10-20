@@ -115,6 +115,16 @@ Differences will occur due to ADN policy:
 
 - Other streams, search, tags: temporarily disables the Blacklist databases
 
+### COMPACT
+
+Removes the line-breaks when possible, and forces the view to be "compact".
+
+Set it with:
+
+`ayadn set timeline compact true`
+
+You may want to change colors to create visual marks between posts if you choose the compact view, i.e. putting the all header in the same color (post id, username, name, etc).
+
 
 # GLOBAL
 

@@ -11,6 +11,7 @@ describe Ayadn::Workers do
           mentions: :red,
           username: :green
         },
+        timeline: {compact: false},
         formats: {table: {width: 75}, list: {reverse: true}}
       })
     Ayadn::Logs.stub(:rec).and_return("logged")

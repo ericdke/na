@@ -1,3 +1,7 @@
+# 1.7.5 () - 'Cirrus'
+
+- New: option to display a compact view for the timeline
+
 # 1.7.4 (2014-09-21) - 'Elton'
 
 - Fix: nowplaying (show artwork)
