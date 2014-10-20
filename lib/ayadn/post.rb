@@ -106,6 +106,10 @@ module Ayadn
     end
 
     def post_size(post) # works on a string
+      words = post.split(" ")
+      result = []
+      words.each { |word| result << get_markdown_text(word) }
+      post = result.join(" ")
       size, max_size = post.length, Settings.config[:post_max_length]
       if size < 1
         abort(error_text_empty)
