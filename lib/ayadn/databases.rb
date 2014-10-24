@@ -8,6 +8,9 @@ module Ayadn
     end
 
     def self.open_databases
+      if Settings.options[:timeline][:show_debug] == true
+        puts "\n-Opening databases-\n"
+      end
       @users = self.init "#{Settings.config[:paths][:db]}/users.db"
       @index = self.init "#{Settings.config[:paths][:pagination]}/index.db"
       @pagination = self.init "#{Settings.config[:paths][:pagination]}/pagination.db"
@@ -15,6 +18,9 @@ module Ayadn
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
       @bookmarks = self.init "#{Settings.config[:paths][:db]}/bookmarks.db"
       @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
+      if Settings.options[:timeline][:show_debug] == true
+        puts "\n-Done-\n"
+      end
     end
 
     def self.all_dbs
@@ -23,7 +29,10 @@ module Ayadn
 
     def self.close_all
 
-      if @nicerank.size > 10000
+      if @nicerank.size > 5000
+        if Settings.options[:timeline][:show_debug] == true
+          puts "\n-Purging NiceRank database-\n"
+        end
         limit = Time.now - (3600 * 48)
         @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
       end
@@ -31,6 +40,9 @@ module Ayadn
       Debug.db all_dbs
 
       all_dbs.each do |db|
+        if Settings.options[:timeline][:show_debug] == true
+          puts "\n-Closing #{File.basename(db.file)}-"
+        end
         db.flush
         db.compact
         db.close
