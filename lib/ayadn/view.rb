@@ -96,7 +96,7 @@ module Ayadn
         opts.each do |k,v|
           v.delete_if {|ke,_| ke == :deleted || ke == :annotations} # don't show immutable values
           v.each do |x,y|
-            t << :separator if @iter >= 1
+            t << :separator if @iter >= 1 && Settings.options[:timeline][:compact] == false
             unless y.is_a?(Hash)
               t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), y.to_s.color(:green) ]
             else
