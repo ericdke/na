@@ -43,6 +43,7 @@ module Ayadn
     end
 
     def self.err error, stack
+      Logs.rec.debug "+DEBUG STACK: #{stack}"
       if Settings.options[:timeline][:show_debug] == true
         puts "\n--*--\nERROR:\n"
         raise error

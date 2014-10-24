@@ -1,6 +1,6 @@
 # 1.7.6 (2014-10-25) - 'Barrie'
 
-- Fix: channels parser broke if a channel user was 404
+- Fix: channels parser if a channel user is 404
 
 # 1.7.5 (2014-10-20) - 'Cirrus'
 
