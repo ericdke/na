@@ -1,3 +1,7 @@
+# 1.7.6 (2014-10-25) - 'Barrie'
+
+- Fix: channels parser broke if a channel user was 404
+
 # 1.7.5 (2014-10-20) - 'Cirrus'
 
 - New: option to display a compact view for the timeline
