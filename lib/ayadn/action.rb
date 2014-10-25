@@ -600,7 +600,7 @@ module Ayadn
         channel_id = @workers.get_channel_id_from_alias(channel_id)
         writer = Post.new
         puts Status.writing
-        puts Status.post
+        puts Status.message
         lines_array = writer.compose
         writer.check_message_length(lines_array)
         @view.clear_screen

@@ -1,3 +1,7 @@
+# 1.7.7 -  - ''
+
+- Fix: information when sending to a channel
+
 # 1.7.6 - 2014-10-25 - 'Barrie'
 
 - Fix: channels parser (response != 200, working status)
