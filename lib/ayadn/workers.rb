@@ -279,7 +279,7 @@ module Ayadn
       if options[:channels]
         puts "Downloading list of channels and their users credentials.\n\nPlease wait, it could take a while if there are many results and users...".color(:cyan)
       else
-        puts "Downloading the channels and recording their users attributes (owners, writers, editors and readers).\n\nThe users are recorded in a database for later filtering and analyzing.\n\nPlease wait, it could take a while if you have many channels.\n\n".color(:cyan)
+        puts "Downloading the channels and recording their users attributes (owners, writers, editors and readers).\n\nThe users are recorded in a database for later filtering and analyzing.\n\nPlease wait, it could take a while the first time if you have many channels.\n\n".color(:cyan)
       end
       chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
       no_user = {}
