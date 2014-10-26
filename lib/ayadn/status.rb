@@ -159,7 +159,7 @@ module Ayadn
       "\nPosting as ".color(:cyan) + "#{Settings.config[:identity][:handle]}".color(:green) + ".".color(:cyan)
     end
     def self.yourpost
-      "Your post:\n\n".color(:cyan)
+      "Your post:\n".color(:cyan)
     end
     def self.yourmessage username = nil
       if username.nil?

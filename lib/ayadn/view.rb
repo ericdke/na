@@ -43,6 +43,7 @@ module Ayadn
 
     def show_posted(resp)
       show_simple_post([resp['data']], {})
+      puts "\n" if Settings.options[:timeline][:compact]
     end
 
     def show_list_reposted(list, target)
