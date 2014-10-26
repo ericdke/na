@@ -273,12 +273,13 @@ module Ayadn
       links.uniq
     end
 
-    def save_links(links, origin)
+    def save_links(links, origin, args = "")
       links.sort!
       obj = {
         'meta' => {
           'type' => 'links',
           'origin' => origin,
+          'args' => args,
           'created_at' => Time.now,
           'username' => Settings.config[:identity][:handle]
         },

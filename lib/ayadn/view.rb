@@ -328,7 +328,7 @@ module Ayadn
       links = @workers.links_from_posts(stream)
       links.uniq!
       show_links(links)
-      @workers.save_links(links, "hashtag")
+      @workers.save_links(links, "hashtag", hashtag)
     end
 
     def all_search_links(stream, words)
@@ -337,7 +337,7 @@ module Ayadn
       links = @workers.links_from_posts(stream)
       links.uniq!
       show_links(links)
-      @workers.save_links(links, "search(#{words.gsub!(",","-")})")
+      @workers.save_links(links, "search", words)
     end
 
     def all_stars_links(stream)

@@ -7,7 +7,7 @@
 - New: embed a Youtube video in a message
 - New: embed a Vimeo video in a message
 - New: embed a movie poster in a message
-- New: option to show OEmbed image links from channels/messages
+- New: option to show OEmbed links from channels/messages
 - New: extracted links are exported to a json file
 
 # 1.7.6 - 2014-10-25 - 'Barrie'
