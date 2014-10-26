@@ -4,6 +4,9 @@
 - Fix: line break at the end of stream if compact view
 - Fix: save posts/messages if backup enabled
 - New: embed an image in a message to a channel
+- New: embed a Youtube video in a message
+- New: embed a Vimeo video in a message
+- New: embed a movie poster in a message
 - New: option to show OEmbed image links from channels/messages
 - New: extracted links are exported to a json file
 

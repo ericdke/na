@@ -413,6 +413,9 @@ module Ayadn
     map "-C" => :send_to_channel
     long_desc Descriptions.send_to_channel
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new message"
+    option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new message"
+    option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new message"
+    option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new message"
     def send_to_channel(channel_id)
       Action.new.send_to_channel(channel_id, options)
     end

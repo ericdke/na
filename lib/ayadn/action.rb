@@ -606,6 +606,10 @@ module Ayadn
         writer.check_message_length(lines_array)
         @view.clear_screen
         puts Status.posting
+        if options[:poster]
+          settings = options.dup
+          options = NowWatching.new.get_poster(settings[:poster], settings)
+        end
         resp = writer.message({options: options, id: channel_id, text: lines_array.join("\n")})
         FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
         @view.clear_screen
