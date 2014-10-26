@@ -5,6 +5,7 @@
 - Fix: save posts/messages if backup enabled
 - New: embed an image in a message to a channel
 - New: option to show OEmbed image links from channels/messages
+- New: extracted links are exported to a json file
 
 # 1.7.6 - 2014-10-25 - 'Barrie'
 

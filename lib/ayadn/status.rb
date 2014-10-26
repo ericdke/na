@@ -7,6 +7,9 @@ module Ayadn
     def self.downloaded(name)
       "\nFile downloaded in #{Settings.config[:paths][:downloads]}/#{name}\n".color(:green)
     end
+    def self.links_saved(name)
+      "\nLinks exported to file #{Settings.config[:paths][:lists]}/#{name}\n".color(:green)
+    end
     def self.downloading
       "Downloading from ADN...\n\n".inverse
     end

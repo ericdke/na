@@ -2,6 +2,10 @@
 module Ayadn
   class FileOps
 
+    def self.save_links(obj, name)
+      File.write(Settings.config[:paths][:lists] + "/#{name}", obj.to_json)
+    end
+
     def self.save_post(resp)
       File.write(Settings.config[:paths][:posts] + "/#{resp['data']['id']}.json", resp['data'].to_json)
     end

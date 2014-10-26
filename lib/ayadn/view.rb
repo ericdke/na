@@ -325,19 +325,28 @@ module Ayadn
     def all_hashtag_links(stream, hashtag)
       clear_screen()
       puts "Links from posts containing hashtag '##{hashtag}': \n".color(:cyan)
-      show_links(@workers.links_from_posts(stream))
+      links = @workers.links_from_posts(stream)
+      links.uniq!
+      show_links(links)
+      @workers.save_links(links, "hashtag")
     end
 
     def all_search_links(stream, words)
       clear_screen()
       puts "Links from posts containing word(s) '#{words}': \n".color(:cyan)
-      show_links(@workers.links_from_posts(stream))
+      links = @workers.links_from_posts(stream)
+      links.uniq!
+      show_links(links)
+      @workers.save_links(links, "search(#{words.gsub!(",","-")})")
     end
 
     def all_stars_links(stream)
       clear_screen()
       puts "Links from your starred posts: \n".color(:cyan)
-      show_links(@workers.links_from_posts(stream))
+      links = @workers.links_from_posts(stream)
+      links.uniq!
+      show_links(links)
+      @workers.save_links(links, 'starred')
     end
 
     def infos(stream, token)

@@ -273,6 +273,22 @@ module Ayadn
       links.uniq
     end
 
+    def save_links(links, origin)
+      links.sort!
+      obj = {
+        'meta' => {
+          'type' => 'links',
+          'origin' => origin,
+          'created_at' => Time.now,
+          'username' => Settings.config[:identity][:handle]
+        },
+        'data' => links
+      }
+      filename = "#{Settings.config[:identity][:handle]}_#{origin}_links.json"
+      FileOps.save_links(obj, filename)
+      puts Status.links_saved(filename)
+    end
+
     def extract_hashtags(post)
       post['entities']['hashtags'].map { |h| h['name'] }
     end
