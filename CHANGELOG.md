@@ -1,4 +1,4 @@
-# 1.7.7 - 2014-10-26 - ''
+# 1.7.7 - 2014-10-26 - 'The Twins'
 
 - Fix: max characters information when sending to a channel
 - Fix: line break at the end of stream if compact view
