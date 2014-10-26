@@ -401,10 +401,10 @@ module Ayadn
 
     desc "pm @USERNAME", "Send a private message to @username"
     long_desc Descriptions.pmess
-    option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
-    option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
-    option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
-    option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
+    option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new message"
+    option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new message"
+    option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new message"
+    option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new message"
     def pm(*username)
       Action.new.pmess(username, options)
     end
@@ -412,8 +412,9 @@ module Ayadn
     desc "send CHANNEL", "Send a message to a CHANNEL (-C)"
     map "-C" => :send_to_channel
     long_desc Descriptions.send_to_channel
+    option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new message"
     def send_to_channel(channel_id)
-      Action.new.send_to_channel(channel_id)
+      Action.new.send_to_channel(channel_id, options)
     end
 
     desc "reply POST", "Reply to post n°POST (-R)"

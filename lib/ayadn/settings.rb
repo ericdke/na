@@ -100,6 +100,7 @@ module Ayadn
           conf[:tvshow] = {hashtag: 'nowwatching'} if conf[:tvshow].nil?
           conf[:formats][:list] = {reverse: true} if conf[:formats][:list].nil?
           conf[:timeline][:compact] = false if conf[:timeline][:compact].nil?
+          conf[:timeline][:show_channel_oembed] = true if conf[:timeline][:show_channel_oembed].nil?
 
           @options = conf
           self.write_config_file(config_file, @options)
@@ -176,6 +177,7 @@ module Ayadn
           show_date: true,
           show_spinner: true,
           show_debug: false,
+          show_channel_oembed: true,
           compact: false
         },
         counts: {

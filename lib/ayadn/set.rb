@@ -431,7 +431,7 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'directed', 'html', 'show_source', 'show_symbols', 'show_real_name', 'show_date', 'show_spinner', 'show_debug', 'compact'
+      when 'directed', 'html', 'show_source', 'show_symbols', 'show_real_name', 'show_date', 'show_spinner', 'show_debug', 'compact', 'show_channel_oembed'
         Settings.options[:timeline][meth.to_sym] = @output
       when 'deleted', 'annotations'
         abort(Status.not_mutable)

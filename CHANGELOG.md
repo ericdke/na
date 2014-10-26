@@ -2,6 +2,7 @@
 
 - Fix: max characters information when sending to a channel
 - Fix: line break at the end of stream if compact view
+- New: option to show OEmbed image links from channels/messages
 
 # 1.7.6 - 2014-10-25 - 'Barrie'
 

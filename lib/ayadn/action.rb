@@ -595,7 +595,7 @@ module Ayadn
       end
     end
 
-    def send_to_channel(channel_id)
+    def send_to_channel(channel_id, options = {})
       begin
         channel_id = @workers.get_channel_id_from_alias(channel_id)
         writer = Post.new
@@ -605,7 +605,7 @@ module Ayadn
         writer.check_message_length(lines_array)
         @view.clear_screen
         puts Status.posting
-        resp = writer.message({id: channel_id, text: lines_array.join("\n")})
+        resp = writer.message({options: options, id: channel_id, text: lines_array.join("\n")})
         save_and_view(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id]})

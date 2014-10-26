@@ -262,7 +262,11 @@ module Ayadn
       unless post['annotations'].nil? || post['annotations'].empty?
         post['annotations'].each do |ann|
           if ann['type'] == "net.app.core.oembed"
-            links << ann['value']['embeddable_url'] if ann['value']['embeddable_url']
+            if ann['value']['embeddable_url']
+              links << ann['value']['embeddable_url']
+            elsif ann['value']['url'] && Settings.options[:timeline][:show_channel_oembed] == true
+              links << ann['value']['url']
+            end
           end
         end
       end
