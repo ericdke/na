@@ -92,7 +92,9 @@ module Ayadn
           source: source,
           visible: visible
         }
-        @view.show_posted(Post.new.post(dic))
+        resp = Post.new.post(dic)
+        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
+        @view.show_posted(resp)
       rescue => e
         puts Status.wtf
         Errors.global_error({error: e, caller: caller, data: [dic, store, options]})

@@ -1,7 +1,9 @@
-# 1.7.7 -  - ''
+# 1.7.7 - 2014-10-26 - ''
 
 - Fix: max characters information when sending to a channel
 - Fix: line break at the end of stream if compact view
+- Fix: save posts/messages if backup enabled
+- New: embed an image in a message to a channel
 - New: option to show OEmbed image links from channels/messages
 
 # 1.7.6 - 2014-10-25 - 'Barrie'

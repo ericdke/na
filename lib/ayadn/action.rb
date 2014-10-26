@@ -583,6 +583,7 @@ module Ayadn
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
         resp = writer.reply({options: options, text: text, id: post_id, reply_to: replied_to})
+        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
         # ----
         options = options.dup
         unless resp['data']['reply_to'].nil?
@@ -606,7 +607,10 @@ module Ayadn
         @view.clear_screen
         puts Status.posting
         resp = writer.message({options: options, id: channel_id, text: lines_array.join("\n")})
-        save_and_view(resp)
+        FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
+        @view.clear_screen
+        puts Status.yourpost
+        @view.show_posted(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id]})
       end

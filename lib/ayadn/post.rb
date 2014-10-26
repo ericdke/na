@@ -83,7 +83,8 @@ module Ayadn
         begin
           #while buffer = Readline.readline("#{Settings.config[:identity][:handle]} >> ".color(:red))
           while buffer = Readline.readline(">> ".color(:red))
-            post({text: buffer})
+            resp = post({text: buffer})
+            FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
             puts Status.done
           end
         rescue Interrupt
