@@ -19,13 +19,11 @@ Scroll your timeline with:
 
 `ayadn -tl -s`
 
-#### SCROLL
+#### SCROLL REFRESH
 
-A note about `--scroll`. 
+*Read this if you want to launch several scroll streams at once*
 
-**Ayadn pulls the stream every 3 seconds by default.**
-
-It means you can launch up to 3 scroll streams at a time _per account_ if you want. 
+Ayadn pulls the stream every 3 seconds by default. It means you can launch up to 3 scroll streams at a time _per account_ if you want. 
 
 To launch even more streams at the same time, increment the timer by one second for each stream. 
 
@@ -220,6 +218,8 @@ Show messages in a *channel*.
 You can replace the channel id with its alias if you previously defined one:
 
 `ayadn -ms mychannelalias`  
+
+Since version 1.7.7, Ayadn shows the full oembed links in messages if any. As these links can be quite long and complex, you can remove them from the view if you want with `ayadn set timeline show_channel_oembed false`.  
 
 # WHATSTARRED
 
