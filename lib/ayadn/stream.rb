@@ -25,6 +25,7 @@ module Ayadn
         @view.clear_screen()
       end
       Scroll.new(@api, @view).global(options) if options[:scroll]
+      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
 
 
@@ -54,6 +55,7 @@ module Ayadn
         @view.clear_screen()
       end
       Scroll.new(@api, @view).send(meth, options) if options[:scroll]
+      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
 
 
@@ -75,6 +77,7 @@ module Ayadn
         @view.clear_screen()
       end
       Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
+      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
 
     def posts username, options
@@ -91,6 +94,7 @@ module Ayadn
       end
       @view.render(stream, options)
       Scroll.new(@api, @view).posts(username, options) if options[:scroll]
+      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
 
     def whatstarred(username, options)
@@ -193,6 +197,7 @@ module Ayadn
       options[:post_id] = post_id.to_i
       @view.render(stream, options)
       Scroll.new(@api, @view).convo(id, options) if options[:scroll]
+      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
 
     def messages(channel_id, options)
@@ -205,6 +210,7 @@ module Ayadn
       Check.no_data(resp, 'messages')
       @view.render(resp, options)
       Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
+      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
 
     def random_posts(options)

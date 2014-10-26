@@ -1,6 +1,7 @@
 # 1.7.7 -  - ''
 
-- Fix: information when sending to a channel
+- Fix: max characters information when sending to a channel
+- Fix: line break at the end of stream if compact view
 
 # 1.7.6 - 2014-10-25 - 'Barrie'
 
