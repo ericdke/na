@@ -273,7 +273,7 @@ module Ayadn
     end
 
     def update_marker
-      "https://api.app.net/posts/marker?access_token=#{Settings.user_token}"
+      "#{@posts_url}marker?access_token=#{Settings.user_token}"
     end
 
   end
