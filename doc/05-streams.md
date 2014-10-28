@@ -219,7 +219,31 @@ You can replace the channel id with its alias if you previously defined one:
 
 `ayadn -ms mychannelalias`  
 
+By default, Ayadn will mark the channel as read after running the `messages` command.
+
+You can invert this behaviour with `set`:
+
+`ayadn set marker update_messages false`
+
 Since version 1.7.7, Ayadn shows the full oembed links in messages if any. As these links can be quite long and complex, you can remove them from the view if you want with `ayadn set timeline show_channel_oembed false`.  
+
+# UNREAD MESSAGES
+
+Show *all* unread messages.
+
+`ayadn messages_unread`
+
+`ayadn -pmu`
+
+Ayadn will mark all your PM channels as read after running this command.
+
+You can pass an option to avoid this for the time of the command:
+
+`ayadn -pmu --no_update`
+
+Or you can set it off permanently:
+
+`ayadn set marker update_messages false`  
 
 # WHATSTARRED
 

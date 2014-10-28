@@ -1,3 +1,8 @@
+# 1.8.0 - 2014-10-28 - 'Cascadeur'
+
+- New: command to view all unread PMs
+- New: channel commands can update unread status (default: true)
+
 # 1.7.7 - 2014-10-26 - 'The Twins'
 
 - Fix: max characters information when sending to a channel

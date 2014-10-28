@@ -83,7 +83,13 @@ Send a private message to a specific user.
 
 `ayadn pm @ericd`
 
-Ayadn will then show you the *write* prompt.  
+Ayadn will then show you the *write* prompt.
+
+By default, Ayadn will mark this private messages channel as read once the message has been sent.
+
+You can invert this behaviour with `set`:
+
+`ayadn set marker update_messages false`  
 
 # SEND
 
@@ -94,6 +100,12 @@ Send a message to an App.net CHANNEL.
 `ayadn -C 46217`
 
 Ayadn will then show you the *write* prompt.
+
+By default, Ayadn will mark this channel as read once the message has been sent.
+
+You can invert this behaviour with `set`:
+
+`ayadn set marker update_messages false`  
 
 If you've already created an [alias](#alias) for the channel, you can post to it with:
 
