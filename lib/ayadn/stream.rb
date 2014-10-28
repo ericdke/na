@@ -21,10 +21,10 @@ module Ayadn
         Databases.save_max_id(stream, 'global') unless stream['meta']['max_id'].nil?
         @view.render(stream, options, niceranks)
       end
-      if Settings.options[:timeline][:compact] == true || options[:scroll] == true
+      if options[:scroll]
         @view.clear_screen()
+        Scroll.new(@api, @view).global(options)
       end
-      Scroll.new(@api, @view).global(options) if options[:scroll]
       puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
 
@@ -51,10 +51,10 @@ module Ayadn
         Databases.save_max_id(stream)
         @view.render(stream, options)
       end
-      if Settings.options[:timeline][:compact] == true || options[:scroll] == true
+      if options[:scroll]
         @view.clear_screen()
+        Scroll.new(@api, @view).send(meth, options)
       end
-      Scroll.new(@api, @view).send(meth, options) if options[:scroll]
       puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
 
@@ -73,10 +73,10 @@ module Ayadn
         options[:in_mentions] = true
         @view.render(stream, options)
       end
-      if Settings.options[:timeline][:compact] == true || options[:scroll] == true
+      if options[:scroll]
         @view.clear_screen()
+        Scroll.new(@api, @view).mentions(username, options)
       end
-      Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
       puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
 
@@ -207,15 +207,17 @@ module Ayadn
       name = "channel:#{channel_id}"
       Check.no_new_posts(resp, options, name)
       if Settings.options[:marker][:update_messages] == true
-        marked = @api.update_marker(name, resp['meta']['max_id'])
-        updated = JSON.parse(marked)
-        if updated['meta']['code'] != 200
-          raise "couldn't update channel #{channel_id} as read"
+        unless resp['meta']['max_id'].nil?
+          marked = @api.update_marker(name, resp['meta']['max_id'])
+          updated = JSON.parse(marked)
+          if updated['meta']['code'] != 200
+            raise "couldn't update channel #{channel_id} as read"
+          end
         end
       end
       Databases.save_max_id(resp)
       @view.if_raw(resp, options)
-      Check.no_data(resp, 'messages')
+      Check.no_data(resp, 'messages') unless options[:scroll]
       @view.render(resp, options)
       Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
       puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?

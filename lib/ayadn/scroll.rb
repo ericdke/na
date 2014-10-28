@@ -93,6 +93,13 @@ module Ayadn
           stream = @api.get_messages(channel_id, options)
           Debug.stream stream, options, channel_id
           show_if_new(stream, options, "channel:#{channel_id}")
+          # if Settings.options[:marker][:update_messages] == true
+          #   marked = @api.update_marker("channel:#{channel_id}", stream['meta']['max_id'])
+          #   updated = JSON.parse(marked)
+          #   if updated['meta']['code'] != 200
+          #     Errors.warn "couldn't update channel #{channel_id} as read"
+          #   end
+          # end
           options = save_then_return(stream, options, "channel:#{channel_id}")
           countdown
         rescue Interrupt
