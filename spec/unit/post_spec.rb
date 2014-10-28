@@ -46,14 +46,14 @@ describe Ayadn::Post do
 
   let(:post) { Ayadn::Post.new }
   #let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
-  let(:rest) {Ayadn::CNX} 
+  let(:rest) {Ayadn::CNX}
 
   describe "#post" do
     before do
       rest.stub(:post).and_return(File.read("spec/mock/posted.json"))
     end
     it "posts a post" do
-      expect(rest).to receive(:post).with("https://api.app.net/posts/?include_annotations=1&access_token=XYZ", {"text"=>"YOLO", "entities"=>{"parse_markdown_links"=>true, "parse_links"=>true}, "annotations"=>[{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]})
+      expect(rest).to receive(:post).with("https://api.app.net/posts/?include_annotations=1&access_token=XYZ", {"text"=>"YOLO", "entities"=>{"parse_markdown_links"=>true, "parse_links"=>true}, "annotations"=>[{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>nil, "ruby"=>"2.1.2", "locale"=>"fr_FR.UTF-8"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]})
       x = post.post({text: 'YOLO'})
     end
     it "returns the posted post" do
