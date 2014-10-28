@@ -97,42 +97,42 @@ describe Ayadn::Annotations do
   describe "#base" do
     it "creates basic annotations" do
       ann = Ayadn::Annotations.new({})
-      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]
+      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>nil, "ruby"=>"2.1.2", "locale"=>"fr_FR.UTF-8"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]
     end
   end
 
   describe "#movie" do
     it "creates movie annotations" do
       ann = Ayadn::Annotations.new({title: 'WUT', source: 'tEsT', options: {movie: true}})
-      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.movie", "value"=>{"title"=>"WUT", "source"=>"tEsT"}}]
+      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>nil, "ruby"=>"2.1.2", "locale"=>"fr_FR.UTF-8"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.movie", "value"=>{"title"=>"WUT", "source"=>"tEsT"}}]
     end
   end
 
   describe "#tvshow" do
     it "creates tvshow annotations" do
       ann = Ayadn::Annotations.new({title: 'WUT', source: 'tEsT', options: {tvshow: true}})
-      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.tvshow", "value"=>{"title"=>"WUT", "source"=>"tEsT"}}]
+      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>nil, "ruby"=>"2.1.2", "locale"=>"fr_FR.UTF-8"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.tvshow", "value"=>{"title"=>"WUT", "source"=>"tEsT"}}]
     end
   end
 
   describe "#nowplaying --silent" do
     it "creates nowplaying --silent annotations" do
       ann = Ayadn::Annotations.new({source: 'wadawadawada', options: {nowplaying: true, no_url: true}})
-      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.nowplaying", "value"=>{"status"=>"no-url", "source"=>"wadawadawada"}}]
+      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>nil, "ruby"=>"2.1.2", "locale"=>"fr_FR.UTF-8"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.nowplaying", "value"=>{"status"=>"no-url", "source"=>"wadawadawada"}}]
     end
   end
 
   describe "#nowplaying" do
     it "creates nowplaying annotations" do
       ann = Ayadn::Annotations.new({source: 'rspec', title: 'ibelieveicanfly', artist: 'big jim', artwork: 'http://ahah', link: 'http://ohoh', source: 'fake', width: 9000, height: 30000, artwork_thumb: 'http://hihi', width_thumb: 9, height_thumb: 3, options: {nowplaying: true}})
-      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.nowplaying", "value"=>{"title"=>"ibelieveicanfly", "artist"=>'big jim', "artwork"=>"http://ahah", "link"=>"http://ohoh", "source"=>"fake"}}, {"type"=>"net.app.core.oembed", "value"=>{"version"=>"1.0", "type"=>"photo", "width"=>9000, "height"=>30000, "title"=>"ibelieveicanfly", "url"=>"http://ahah", "embeddable_url"=>"http://ahah", "provider_url"=>"https://itunes.apple.com", "provider_name"=>"iTunes", "thumbnail_url"=>"http://hihi", "thumbnail_width"=>9, "thumbnail_height"=>3}}]
+      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>nil, "ruby"=>"2.1.2", "locale"=>"fr_FR.UTF-8"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.nowplaying", "value"=>{"title"=>"ibelieveicanfly", "artist"=>"big jim", "artwork"=>"http://ahah", "link"=>"http://ohoh", "source"=>"fake"}}, {"type"=>"net.app.core.oembed", "value"=>{"version"=>"1.0", "type"=>"photo", "width"=>9000, "height"=>30000, "title"=>"ibelieveicanfly", "url"=>"http://ahah", "embeddable_url"=>"http://ahah", "provider_url"=>"https://itunes.apple.com", "provider_name"=>"iTunes", "thumbnail_url"=>"http://hihi", "thumbnail_width"=>9, "thumbnail_height"=>3}}]
     end
   end
 
   describe "#files" do
     it "creates files annotations" do
       ann = Ayadn::Annotations.new({options: {embed: ['whatever.jpg', 'another.png']}}) # fake array, cf STUB1
-      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"net.app.core.oembed", "value"=>{"+net.app.core.file"=>{"file_id"=>3312, "file_token"=>"0x3312-YOLO", "format"=>"oembed"}}}, {"type"=>"net.app.core.oembed", "value"=>{"+net.app.core.file"=>{"file_id"=>5550, "file_token"=>"0x5550-WOOT", "format"=>"oembed"}}}]
+      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>nil, "ruby"=>"2.1.2", "locale"=>"fr_FR.UTF-8"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"net.app.core.oembed", "value"=>{"+net.app.core.file"=>{"file_id"=>3312, "file_token"=>"0x3312-YOLO", "format"=>"oembed"}}}, {"type"=>"net.app.core.oembed", "value"=>{"+net.app.core.file"=>{"file_id"=>5550, "file_token"=>"0x5550-WOOT", "format"=>"oembed"}}}]
     end
   end
 

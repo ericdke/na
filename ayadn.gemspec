@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.0.0'
 
-  spec.add_dependency "thor", "~> 0.18"
+  spec.add_dependency "thor", "~> 0.19"
   spec.add_dependency "rest-client", "~> 1.6"
   spec.add_dependency "rainbow", "~> 2.0"
   spec.add_dependency "terminal-table", "~> 1.4"

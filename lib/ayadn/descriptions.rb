@@ -1219,13 +1219,19 @@ module Ayadn
       <<-USAGE
       Post the track you're listening to.
 
-      Usage:
+      Ayadn will insert the album cover, a link and a description.
+
+      Usage with iTunes (Mac Os X only):
 
       ayadn nowplaying
 
       ayadn -np
 
-      (works only with iTunes and Mac Os X)
+      Usage with Last.fm:
+
+      ayadn nowplaying -l
+
+      ayadn -np -l
       \n\n
       USAGE
     end
