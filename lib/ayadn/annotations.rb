@@ -25,6 +25,11 @@ module Ayadn
           "+net.app.core.user" => {
               "user_id" => "#{Settings.config[:identity][:handle]}",
               "format" => "basic"
+            },
+            "env" => {
+              "platform" => Settings.config[:platform],
+              "ruby" => "#{RUBY_VERSION}",
+              "locale" => ENV["LANG"]
             }
           }
         },
