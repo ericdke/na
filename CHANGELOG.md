@@ -3,7 +3,7 @@
 - New: command to view all unread PMs
 - New: channel commands can update unread status (default: true)
 - Update: debug info included in posts annotations
-- Update: Thor dependency
+- Update: Thor gem dependency
 
 # 1.7.7 - 2014-10-26 - 'The Twins'
 

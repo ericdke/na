@@ -236,14 +236,18 @@ module Ayadn
           values[:num_stars] = 0
         end
 
+        if post['num_replies']
+          values[:num_replies] = post['num_replies']
+        else
+          values[:num_replies] = 0
+        end
+
         if post['reply_to']
           values[:is_reply] = true
           values[:reply_to] = post['reply_to']
-          values[:num_replies] = post['num_replies']
         else
           values[:is_reply] = false
           values[:reply_to] = nil
-          values[:num_replies] = 0
         end
         if post['num_reposts']
           values[:num_reposts] = post['num_reposts']
