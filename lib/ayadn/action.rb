@@ -11,6 +11,7 @@ module Ayadn
       @workers = Workers.new
       @stream = Stream.new(@api, @view, @workers)
       @search = Search.new(@api, @view, @workers)
+      @shell = Thor::Shell::Color.new
       Settings.load_config
       Settings.get_token
       Settings.init_config
@@ -448,6 +449,62 @@ module Ayadn
         @stream.messages(channel_id, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id, options]})
+      end
+    end
+
+    def messages_unread(options)
+      begin
+        if options[:no_update]
+          Settings.options[:marker][:update_messages] = false
+        end
+        puts "\n"
+        @shell.say_status :searching, "channels with unread PMs"
+        response = @api.get_channels
+        unread_channels = []
+        response['data'].map do |ch|
+          if ch['type'] == "net.app.core.pm" && ch['has_unread'] == true
+            unread_channels << ch['id']
+          end
+        end
+        abort(Status.no_new_messages) if unread_channels.empty?
+        unread_messages = {}
+        unread_channels.each do |id|
+          @shell.say_status :downloading, "messages from channel #{id}"
+          since = Databases.pagination["channel:#{id}"]
+          unless since.nil?
+            api_options = {count: 20, since_id: since}
+          else
+            api_options = {count: 20}
+          end
+          ch = @api.get_messages(id, api_options)
+          last_read_id = ch['meta']['marker']['last_read_id'].to_i
+          last_message_id = ch['meta']['max_id']
+          messages = []
+          ch['data'].each do |msg|
+            messages << msg if msg['id'].to_i > last_read_id
+          end
+          unread_messages[id] = [messages, last_message_id]
+        end
+        if Settings.options[:marker][:update_messages] == true
+          unread_messages.each do |k,v|
+            name = "channel:#{k}"
+            Databases.pagination[name] = v[1]
+            resp = @api.update_marker(name, v[1])
+            res = JSON.parse(resp)
+            if res['meta']['code'] != 200
+              @shell.say_status :error, "couldn't update channel #{k} as read", :red
+            else
+              @shell.say_status :updated, "channel #{k} as read", :green
+            end
+          end
+        end
+        @view.clear_screen
+        unread_messages.each do |k,v|
+          puts "\nUnread messages from channel #{k}:\n".color(:green).inverse
+          @view.show_posts(v[0])
+        end
+      rescue => e
+        Errors.global_error({error: e, caller: caller, data: [options]})
       end
     end
 

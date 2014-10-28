@@ -257,11 +257,11 @@ module Ayadn
     end
 
     def channel(channel_id, options = {})
-      "#{@channels_url}?ids=#{channel_id.join(',')}&access_token=#{Settings.user_token}#{API.build_query(options)}"
+      "#{@channels_url}?ids=#{channel_id.join(',')}&access_token=#{Settings.user_token}#{API.build_query(options)}&include_marker=1"
     end
 
     def messages(channel_id, options = {})
-      "#{@channels_url}#{channel_id}/messages?access_token=#{Settings.user_token}#{API.build_query(options)}&include_machine=1"
+      "#{@channels_url}#{channel_id}/messages?access_token=#{Settings.user_token}#{API.build_query(options)}&include_machine=1&include_marker=1"
     end
 
     def avatar
@@ -270,6 +270,10 @@ module Ayadn
 
     def cover
       "#{@users_url}me/cover"
+    end
+
+    def update_marker
+      "https://api.app.net/posts/marker?access_token=#{Settings.user_token}"
     end
 
   end

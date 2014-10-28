@@ -737,6 +737,30 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.messages_unread
+      <<-USAGE
+      Shows your unread private messages.
+
+      Usage:
+
+      ayadn messages_unread
+
+      ayadn -pmu
+
+      Ayadn will mark all your PM channels as read after running this command.
+
+      You can pass an option to avoid this for the time of the command:
+
+      ayadn -pmu --no_update
+
+      ayadn -pmu -n
+
+      Or you can set it off permanently:
+
+      ayadn set marker update_messages false
+      \n\n
+      USAGE
+    end
     def self.pin
       <<-USAGE
       Export a POST's link and text with tags to Pinboard.

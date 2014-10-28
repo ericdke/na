@@ -343,6 +343,8 @@ module Ayadn
         else
           unread = "No unread messages"
         end
+        @shell.say_status :recording, "channel #{ch['id']}", :green
+        Databases.add_channel_object(ch)
         bucket << chan.new(ch['id'], ch['counts']['messages'], ch['counts']['subscribers'], ch['type'], ch['owner'], ch['annotations'], ch['readers'], ch['editors'], writers, ch['you_subscribed'], unread, ch['recent_message_id'], ch['recent_message'])
       end
       puts "\e[H\e[2J"

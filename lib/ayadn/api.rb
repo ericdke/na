@@ -225,7 +225,7 @@ module Ayadn
       # big
     end
 
-    def get_channel channel_id, options
+    def get_channel channel_id, options = {}
       options = {:recent_message => 1, :annotations => 1, :before_id => nil}
       get_parsed_response(Endpoints.new.channel(channel_id, options))
     end
@@ -245,6 +245,15 @@ module Ayadn
       else
         Errors.global_error({error: nil, caller: caller, data: [res['meta']]})
       end
+    end
+
+    def update_marker(name, last_read_id)
+      obj = {
+        'name' => name,
+        'id' => last_read_id
+      }
+      url = Endpoints.new.update_marker
+      CNX.post(url, obj)
     end
 
     def self.build_query(arg)

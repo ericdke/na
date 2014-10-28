@@ -101,6 +101,7 @@ module Ayadn
           conf[:formats][:list] = {reverse: true} if conf[:formats][:list].nil?
           conf[:timeline][:compact] = false if conf[:timeline][:compact].nil?
           conf[:timeline][:show_channel_oembed] = true if conf[:timeline][:show_channel_oembed].nil?
+          conf[:marker] = {update_messages: true} if conf[:marker].nil?
 
           @options = conf
           self.write_config_file(config_file, @options)
@@ -179,6 +180,9 @@ module Ayadn
           show_debug: false,
           show_channel_oembed: true,
           compact: false
+        },
+        marker: {
+          update_messages: true
         },
         counts: {
           default: 50,

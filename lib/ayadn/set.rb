@@ -37,6 +37,18 @@ module Ayadn
       tvshow_config.save
     end
 
+    desc "marker ITEM TRUE/FALSE", "Set values for stream markers"
+    map "markers" => :marker
+    def marker(*args)
+      marker_config = SetMarker.new
+      unless args.length != 2
+        marker_config.send(args[0], args[1])
+      else
+        abort(Status.error_missing_parameters)
+      end
+      marker_config.save
+    end
+
     desc "nicerank ITEM VALUE", "Set NiceRank filter values"
     long_desc Descriptions.set_nicerank
     def nicerank *args
@@ -385,6 +397,30 @@ module Ayadn
       case @input
       when 'auto_save_sent_posts', 'auto_save_sent_messages', 'auto_save_lists'
         Settings.options[:backup][meth.to_sym] = @output
+      else
+        super
+      end
+    end
+
+  end
+
+  class SetMarker < SetBase
+
+    def initialize
+      super
+      @category = 'marker'
+    end
+
+    def validate(value)
+      Validators.boolean(value)
+    end
+
+    def method_missing(meth, options)
+      @input = meth.to_s
+      @output = validate(options)
+      case @input
+      when 'update_messages'
+        Settings.options[:marker][meth.to_sym] = @output
       else
         super
       end

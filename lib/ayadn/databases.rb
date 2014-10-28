@@ -4,7 +4,7 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :index, :pagination, :aliases, :blacklist, :bookmarks, :nicerank
+      attr_accessor :users, :index, :pagination, :aliases, :blacklist, :bookmarks, :nicerank, :channels
     end
 
     def self.open_databases
@@ -18,13 +18,14 @@ module Ayadn
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
       @bookmarks = self.init "#{Settings.config[:paths][:db]}/bookmarks.db"
       @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
+      @channels = self.init "#{Settings.config[:paths][:db]}/channels.db"
       if Settings.options[:timeline][:show_debug] == true
         puts "\n-Done-\n"
       end
     end
 
     def self.all_dbs
-      [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank]
+      [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank, @channels]
     end
 
     def self.close_all
@@ -174,6 +175,14 @@ module Ayadn
 
     def self.rename_bookmark post_id, new_title
       @bookmarks[post_id][:title] = new_title
+    end
+
+    def self.add_channel_object channel
+      @channels[channel['id']] = channel
+    end
+
+    def self.remove_channel channel_id
+      @channels.delete channel_id
     end
 
   end

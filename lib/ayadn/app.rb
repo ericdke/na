@@ -370,6 +370,14 @@ module Ayadn
       Action.new.messages(channel_id, options)
     end
 
+    desc "messages_unread", "Show your unread private messages (-pmu)"
+    map "-pmu" => :messages_unread
+    option :no_update, aliases: "-n", type: :boolean, desc: "Do not mark the channels as read"
+    long_desc Descriptions.messages_unread
+    def messages_unread
+        Action.new.messages_unread(options)
+    end
+
     desc "pin POST TAG(S)", "Export a post's link and text with tags to Pinboard"
     long_desc Descriptions.pin
     def pin(post_id, *tags)
