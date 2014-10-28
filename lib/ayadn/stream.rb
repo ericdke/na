@@ -204,7 +204,15 @@ module Ayadn
       channel_id = @workers.get_channel_id_from_alias(channel_id)
       @view.downloading(options)
       resp = @api.get_messages(channel_id, options)
-      Check.no_new_posts(resp, options, "channel:#{channel_id}")
+      name = "channel:#{channel_id}"
+      Check.no_new_posts(resp, options, name)
+      if Settings.options[:marker][:update_messages] == true
+        marked = @api.update_marker(name, resp['meta']['max_id'])
+        updated = JSON.parse(marked)
+        if updated['meta']['code'] != 200
+          raise "couldn't update channel #{channel_id} as read"
+        end
+      end
       Databases.save_max_id(resp)
       @view.if_raw(resp, options)
       Check.no_data(resp, 'messages')
