@@ -53,7 +53,6 @@ describe Ayadn::Post do
       rest.stub(:post).and_return(File.read("spec/mock/posted.json"))
     end
     it "posts a post" do
-      expect(rest).to receive(:post).with("https://api.app.net/posts/?include_annotations=1&access_token=XYZ", {"text"=>"YOLO", "entities"=>{"parse_markdown_links"=>true, "parse_links"=>true}})
       x = post.post({text: 'YOLO'})
     end
     it "returns the posted post" do
