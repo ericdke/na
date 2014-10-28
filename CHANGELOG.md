@@ -5,7 +5,7 @@
 - Fix: root post of conversation shows "has replies" symbol
 - Fix: clear screen before showing spinner in scroll
 - Update: debug info included in posts annotations
-- Update: Thor gem dependency
+- Update: gem dependencies
 
 # 1.7.7 - 2014-10-26 - 'The Twins'
 
