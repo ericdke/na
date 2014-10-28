@@ -205,7 +205,7 @@ module Ayadn
       "\nNo new posts since your last visit.\n\n".color(:cyan)
     end
     def self.no_new_messages
-      "\n   No new messages since your last visit.\n".color(:green)
+      "\n   No new messages since your last visit.\n".color(:cyan)
     end
     def self.type_and_target_missing
       "\nYou have to submit a TYPE (mention, hashtag, client name) and a TARGET (a @username, a hashtag, a client name)\n\n".color(:red)

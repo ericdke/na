@@ -500,9 +500,14 @@ module Ayadn
         end
         @view.clear_screen
         unread_messages.each do |k,v|
-          puts "\nUnread messages from channel #{k}:\n".color(:green).inverse
+          if v[0].length == 1
+            puts "\nUnread message from channel #{k}:\n".color(:green).inverse
+          else
+            puts "\nUnread messages from channel #{k}:\n".color(:green).inverse
+          end
           @view.show_posts(v[0])
         end
+        puts "\n" if Settings.options[:timeline][:compact]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -602,6 +607,16 @@ module Ayadn
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
         resp = writer.pm({options: options, text: text, username: username})
+        if Settings.options[:marker][:update_messages] == true
+          data = resp['data']
+          name = "channel:#{data['channel_id']}"
+          Databases.pagination[name] = data['id']
+          marked = @api.update_marker(name, data['id'])
+          updated = JSON.parse(marked)
+          if updated['meta']['code'] != 200
+            raise "couldn't update channel #{data['channel_id']} as read"
+          end
+        end
         FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
     		@view.clear_screen
     		puts Status.yourmessage(username[0])
