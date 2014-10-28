@@ -2,6 +2,8 @@
 
 - New: command to view all unread PMs
 - New: channel commands can update unread status (default: true)
+- Fix: root post of conversation shows "has replies" symbol
+- Fix: clear screen before showing spinner in scroll
 - Update: debug info included in posts annotations
 - Update: Thor gem dependency
 

@@ -21,7 +21,7 @@ module Ayadn
         Databases.save_max_id(stream, 'global') unless stream['meta']['max_id'].nil?
         @view.render(stream, options, niceranks)
       end
-      if Settings.options[:timeline][:compact] == true && options[:scroll] == true
+      if Settings.options[:timeline][:compact] == true || options[:scroll] == true
         @view.clear_screen()
       end
       Scroll.new(@api, @view).global(options) if options[:scroll]
@@ -51,7 +51,7 @@ module Ayadn
         Databases.save_max_id(stream)
         @view.render(stream, options)
       end
-      if Settings.options[:timeline][:compact] == true && options[:scroll] == true
+      if Settings.options[:timeline][:compact] == true || options[:scroll] == true
         @view.clear_screen()
       end
       Scroll.new(@api, @view).send(meth, options) if options[:scroll]
@@ -73,7 +73,7 @@ module Ayadn
         options[:in_mentions] = true
         @view.render(stream, options)
       end
-      if Settings.options[:timeline][:compact] == true && options[:scroll] == true
+      if Settings.options[:timeline][:compact] == true || options[:scroll] == true
         @view.clear_screen()
       end
       Scroll.new(@api, @view).mentions(username, options) if options[:scroll]
