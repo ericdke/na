@@ -493,9 +493,9 @@ module Ayadn
         @view.clear_screen
         unread_messages.each do |k,v|
           if v[0].length == 1
-            puts "\nUnread message from channel #{k}:\n".color(:green).inverse
+            puts "\nUnread message from channel #{k}:\n".color(Settings.options[:colors][:unread]).inverse
           else
-            puts "\nUnread messages from channel #{k}:\n".color(:green).inverse
+            puts "\nUnread messages from channel #{k}:\n".color(Settings.options[:colors][:unread]).inverse
           end
           @view.show_posts(v[0])
         end

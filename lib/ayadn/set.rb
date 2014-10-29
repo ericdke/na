@@ -493,7 +493,7 @@ module Ayadn
       @input = meth.to_s.capitalize
       @output = validate(options)
       case meth.to_s
-      when 'id', 'index', 'username', 'name', 'date', 'link', 'dots', 'hashtags', 'mentions', 'source', 'symbols', 'debug'
+      when 'id', 'index', 'username', 'name', 'date', 'link', 'dots', 'hashtags', 'mentions', 'source', 'symbols', 'unread', 'debug'
         Settings.options[:colors][meth.to_sym] = @output
       when 'hashtag', 'mention', 'symbol'
         Settings.options[:colors]["#{meth}s".to_sym] = @output
