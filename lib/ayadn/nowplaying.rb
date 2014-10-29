@@ -65,10 +65,10 @@ module Ayadn
         end
         abort(Status.canceled) unless STDIN.getch == ("y" || "Y")
         puts "\n#{Status.yourpost}"
-        unless store.nil? || options[:no_url]
-          visible, track, artwork, artwork_thumb, link, artist = true, store['track'], store['artwork'], store['artwork_thumb'], store['link'], store['artist']
-        else
+        if store.nil? || options[:no_url]
           visible, track, artwork, artwork_thumb, link, artist = false
+        else
+          visible, track, artwork, artwork_thumb, link, artist = true, store['track'], store['artwork'], store['artwork_thumb'], store['link'], store['artist']
         end
         options = options.dup
         options[:nowplaying] = true
@@ -132,7 +132,12 @@ module Ayadn
       results = JSON.load(CNX.download(URI.escape(url)))['results']
       unless results.empty? || results.nil?
 
-        resp = results.select {|obj| obj['artistName'] == artist && obj['trackName'] == track}
+        results.keep_if do |obj|
+          unless obj['artistName'].nil?
+            obj['artistName'].downcase == artist.downcase
+          end
+        end
+        resp = results.select {|obj| obj['trackName'] == track}
         candidate = resp[0] || results[0]
 
         return {
