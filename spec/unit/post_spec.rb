@@ -36,7 +36,10 @@ describe Ayadn::Post do
         },
         post_max_length: 256,
         message_max_length: 2048,
-        version: 'wee'
+        version: 'wee',
+        ruby: '0',
+        locale: 'gibberish',
+        platform: 'shoes'
       })
     Ayadn::Settings.stub(:user_token).and_return('XYZ')
     Ayadn::Settings.stub(:check_for_accounts)
@@ -51,6 +54,10 @@ describe Ayadn::Post do
   describe "#post" do
     before do
       rest.stub(:post).and_return(File.read("spec/mock/posted.json"))
+    end
+    it "posts a post" do
+      expect(rest).to receive(:post).with("https://api.app.net/posts/?include_annotations=1&access_token=XYZ", {"text"=>"YOLO", "entities"=>{"parse_markdown_links"=>true, "parse_links"=>true}, "annotations"=>[{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>"shoes", "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]})
+      x = post.post({text: 'YOLO'})
     end
     it "posts a post" do
       x = post.post({text: 'YOLO'})
