@@ -89,7 +89,6 @@ module Ayadn
           print Status.deleting_post(post_id)
           resp = @api.delete_post(post_id)
           Check.has_been_deleted(post_id, resp)
-          sleep 1 unless ids.length == 1
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
@@ -108,7 +107,6 @@ module Ayadn
           print Status.deleting_message(message_id)
           resp = @api.delete_message(channel_id, message_id)
           Check.message_has_been_deleted(message_id, resp)
-          sleep 1 unless ids.length == 1
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [message_id]})
@@ -123,7 +121,6 @@ module Ayadn
         users.each do |user|
           resp = @api.unfollow(user)
           Check.has_been_unfollowed(user, resp)
-          sleep 1 unless users.length == 1
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [usernames]})
@@ -138,7 +135,6 @@ module Ayadn
         users.each do |user|
           resp = @api.follow(user)
           Check.has_been_followed(user, resp)
-          sleep 1 unless users.length == 1
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [usernames]})
@@ -153,7 +149,6 @@ module Ayadn
         users.each do |user|
           resp = @api.unmute(user)
           Check.has_been_unmuted(user, resp)
-          sleep 1 unless users.length == 1
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [usernames]})
@@ -168,7 +163,6 @@ module Ayadn
         users.each do |user|
           resp = @api.mute(user)
           Check.has_been_muted(user, resp)
-          sleep 1 unless users.length == 1
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [usernames]})
@@ -183,7 +177,6 @@ module Ayadn
         users.each do |user|
           resp = @api.unblock(user)
           Check.has_been_unblocked(user, resp)
-          sleep 1 unless users.length == 1
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [usernames]})
@@ -198,7 +191,6 @@ module Ayadn
         users.each do |user|
           resp = @api.block(user)
           Check.has_been_blocked(user, resp)
-          sleep 1 unless users.length == 1
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [usernames]})

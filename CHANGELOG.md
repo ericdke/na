@@ -4,6 +4,7 @@
 - New: channel commands can update unread status (default: true)
 - Fix: root post of conversation shows "has replies" symbol
 - Fix: clear screen before showing spinner in scroll
+- Fix: faster follow/mute/block/delete actions
 - Update: debug info included in posts annotations
 - Update: gem dependencies
 
