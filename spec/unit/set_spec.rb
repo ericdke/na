@@ -68,6 +68,9 @@ def init_stubs
         auto_save_sent_posts: false,
         auto_save_sent_messages: false,
         auto_save_lists: false
+      },
+      marker: {
+        update_messages: true
       }
     })
   Ayadn::Settings.stub(:config).and_return({
@@ -182,7 +185,7 @@ describe Ayadn::SetTimeline do
 
   describe "#" do
     it "creates a default value" do
-      %w{directed html show_source show_symbols show_real_name show_date show_spinner show_debug}.each do |meth|
+      %w{directed html show_source show_symbols show_real_name show_date show_spinner show_debug compact}.each do |meth|
         command = meth.to_sym
         Ayadn::SetTimeline.new.send(command, 'true')
         expect(Ayadn::Settings.options[:timeline][command]).to eq true
@@ -239,6 +242,24 @@ describe Ayadn::SetCounts do
       expect(printed).to include 'This paramater must be an integer between 1 and 200'
     end
   end
+  after do
+    File.delete('spec/mock/ayadn.log')
+  end
+end
+
+describe Ayadn::SetMarker do
+  before do
+    init_stubs
+  end
+
+  describe "#update_messages" do
+    it "creates a default value" do
+      expect(Ayadn::Settings.options[:marker][:update_messages]).to eq true
+      Ayadn::SetMarker.new.update_messages('0')
+      expect(Ayadn::Settings.options[:marker][:update_messages]).to eq false
+    end
+  end
+
   after do
     File.delete('spec/mock/ayadn.log')
   end
