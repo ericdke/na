@@ -64,6 +64,8 @@ module Ayadn
     def self.init_config
       @config[:version] = VERSION
       @config[:platform] = RbConfig::CONFIG['host_os']
+      @config[:ruby] = RUBY_VERSION
+      @config[:locale] = ENV["LANG"]
       self.config_file
       self.create_api_file
       self.create_version_file

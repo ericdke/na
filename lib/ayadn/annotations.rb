@@ -23,13 +23,13 @@ module Ayadn
         "type" => "com.ayadn.user",
         "value" => {
           "+net.app.core.user" => {
-              "user_id" => "#{Settings.config[:identity][:handle]}",
+              "user_id" => Settings.config[:identity][:handle],
               "format" => "basic"
             },
             "env" => {
               "platform" => Settings.config[:platform],
-              "ruby" => "#{RUBY_VERSION}",
-              "locale" => ENV["LANG"]
+              "ruby" => Settings.config[:ruby],
+              "locale" => Settings.config[:locale]
             }
           }
         },
@@ -43,7 +43,7 @@ module Ayadn
               "id" => "69904",
               "email" => "eric@aya.io"
             },
-          "version" => "#{Settings.config[:version]}"
+          "version" => Settings.config[:version]
           }
         }
       ]
