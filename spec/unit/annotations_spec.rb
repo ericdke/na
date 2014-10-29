@@ -97,10 +97,32 @@ describe Ayadn::Annotations do
     Ayadn::FileOps.stub(:upload_files).and_return([{'data' => {'id' => 3312,'file_token' => '0x3312-YOLO'}},{'data' => {'id' => 5550,'file_token' => '0x5550-WOOT'}}])
   end
 
+  let(:rest) {Ayadn::CNX}
+
   describe "#base" do
     it "creates basic annotations" do
       ann = Ayadn::Annotations.new({})
       expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>'shoes', "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]
+    end
+  end
+
+  describe "#youtube" do
+    before do
+      rest.stub(:download).and_return({'width' => 33, 'height' => 12}.to_json)
+    end
+    it "creates youtube annotations" do
+      ann = Ayadn::Annotations.new({title: 'WUT', source: 'tEsT', options: {youtube: ['http://yolo']}})
+      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>"shoes", "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"net.app.core.oembed", "value"=>{"version"=>"1.0", "type"=>"video", "provider_name"=>"YouTube", "provider_url"=>"http://youtube.com/", "width"=>33, "height"=>12, "title"=>nil, "author_name"=>nil, "author_url"=>nil, "embeddable_url"=>"http://yolo", "html"=>nil, "thumbnail_url"=>nil, "thumbnail_height"=>nil, "thumbnail_width"=>nil}}, {"type"=>"com.ayadn.youtube", "value"=>{"title"=>nil, "link"=>"http://yolo"}}]
+    end
+  end
+
+  describe "#vimeo" do
+    before do
+      rest.stub(:download).and_return({'title' => 'yolo'}.to_json)
+    end
+    it "creates vimeo annotations" do
+      ann = Ayadn::Annotations.new({title: 'WUT', source: 'tEsT', options: {vimeo: ['http://yolo'],}})
+      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>"shoes", "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"net.app.core.oembed", "value"=>{"version"=>"1.0", "type"=>"video", "provider_name"=>"Vimeo", "provider_url"=>"http://vimeo.com/", "width"=>nil, "height"=>nil, "title"=>"yolo", "author_name"=>nil, "author_url"=>nil, "embeddable_url"=>"http://yolo", "html"=>nil, "thumbnail_url"=>nil, "thumbnail_height"=>nil, "thumbnail_width"=>nil}}, {"type"=>"com.ayadn.vimeo", "value"=>{"title"=>"yolo", "link"=>"http://yolo"}}]
     end
   end
 
