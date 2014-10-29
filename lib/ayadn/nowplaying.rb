@@ -130,6 +130,7 @@ module Ayadn
 
     def get_itunes_store url, artist, track
       results = JSON.load(CNX.download(URI.escape(url)))['results']
+
       unless results.empty? || results.nil?
 
         results.keep_if do |obj|
@@ -137,7 +138,23 @@ module Ayadn
             obj['artistName'].downcase == artist.downcase
           end
         end
+
+        if results.empty?
+          return {
+            'code' => 404,
+            'request' => url
+          }
+        end
+
         resp = results.select {|obj| obj['trackName'] == track}
+
+        if resp.empty?
+          return {
+            'code' => 404,
+            'request' => url
+          }
+        end
+
         candidate = resp[0] || results[0]
 
         return {
