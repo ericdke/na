@@ -366,13 +366,14 @@ module Ayadn
     option :new, aliases: "-n", type: :boolean, desc: Descriptions.options_new
     option :count, aliases: "-c", type: :numeric, desc: "Specify the number of messages to retrieve"
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channels as read"
     def messages(channel_id)
       Action.new.messages(channel_id, options)
     end
 
     desc "messages_unread", "Show your unread private messages (-pmu)"
     map "-pmu" => :messages_unread
-    option :no_update, aliases: "-n", type: :boolean, desc: "Do not mark the channels as read"
+    option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channels as read"
     long_desc Descriptions.messages_unread
     def messages_unread
         Action.new.messages_unread(options)
@@ -413,6 +414,7 @@ module Ayadn
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new message"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new message"
     option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new message"
+    option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channels as read"
     def pm(*username)
       Action.new.pmess(username, options)
     end
@@ -424,6 +426,7 @@ module Ayadn
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new message"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new message"
     option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new message"
+    option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channels as read"
     def send_to_channel(channel_id)
       Action.new.send_to_channel(channel_id, options)
     end

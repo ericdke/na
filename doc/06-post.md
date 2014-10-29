@@ -87,7 +87,11 @@ Ayadn will then show you the *write* prompt.
 
 By default, Ayadn will mark this private messages channel as read once the message has been sent.
 
-You can invert this behaviour with `set`:
+You can pass an option to avoid this for the time of the command:
+
+`ayadn pm -z @ericd`
+
+Or even invert this behaviour permanently with `set`:
 
 `ayadn set marker update_messages false`  
 
@@ -103,7 +107,11 @@ Ayadn will then show you the *write* prompt.
 
 By default, Ayadn will mark this channel as read once the message has been sent.
 
-You can invert this behaviour with `set`:
+You can pass an option to avoid this for the time of the command:
+
+`ayadn -C -z 46217`
+
+Or even invert this behaviour permanently with `set`:
 
 `ayadn set marker update_messages false`  
 

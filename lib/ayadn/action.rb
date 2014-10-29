@@ -454,7 +454,7 @@ module Ayadn
 
     def messages_unread(options)
       begin
-        if options[:no_update]
+        if options[:silent]
           Settings.options[:marker][:update_messages] = false
         end
         puts "\n"
@@ -592,6 +592,9 @@ module Ayadn
 
     def pmess(username, options = {})
     	begin
+        if options[:silent]
+          Settings.options[:marker][:update_messages] = false
+        end
         Check.no_username(username)
         username = [@workers.add_arobase(username)]
     		writer = Post.new
@@ -672,6 +675,9 @@ module Ayadn
 
     def send_to_channel(channel_id, options = {})
       begin
+        if options[:silent]
+          Settings.options[:marker][:update_messages] = false
+        end
         channel_id = @workers.get_channel_id_from_alias(channel_id)
         writer = Post.new
         puts Status.writing

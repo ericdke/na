@@ -733,7 +733,19 @@ module Ayadn
 
       ayadn -ms -s 46217
 
-      If you've set an alias for the channel, you can display its messages with 'ayadn -ms my_alias'
+      Ayadn will mark this PM channel as read after running this command.
+
+      You can pass an option, `-z`, to avoid this for the time of the command:
+
+      ayadn -ms -z 46217
+
+      Or you can set it off permanently:
+
+      ayadn set marker update_messages false
+
+      If you've set an alias for the channel, you can use it instead of the channel id:
+
+      ayadn -ms my_alias
       \n\n
       USAGE
     end
@@ -749,11 +761,9 @@ module Ayadn
 
       Ayadn will mark all your PM channels as read after running this command.
 
-      You can pass an option to avoid this for the time of the command:
+      You can pass an option, `-z`, to avoid this for the time of the command:
 
-      ayadn -pmu --no_update
-
-      ayadn -pmu -n
+      ayadn -pmu -z
 
       Or you can set it off permanently:
 

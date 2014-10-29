@@ -221,7 +221,11 @@ You can replace the channel id with its alias if you previously defined one:
 
 By default, Ayadn will mark the channel as read after running the `messages` command.
 
-You can invert this behaviour with `set`:
+You can pass an option to avoid this for the time of the command:
+
+`ayadn -ms -z 46217`
+
+Or you can set it off permanently:
 
 `ayadn set marker update_messages false`
 
@@ -239,7 +243,7 @@ Ayadn will mark all your PM channels as read after running this command.
 
 You can pass an option to avoid this for the time of the command:
 
-`ayadn -pmu --no_update`
+`ayadn -pmu -z`
 
 Or you can set it off permanently:
 

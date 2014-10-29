@@ -201,6 +201,9 @@ module Ayadn
     end
 
     def messages(channel_id, options)
+      if options[:silent]
+        Settings.options[:marker][:update_messages] = false
+      end
       channel_id = @workers.get_channel_id_from_alias(channel_id)
       @view.downloading(options)
       resp = @api.get_messages(channel_id, options)
