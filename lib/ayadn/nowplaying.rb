@@ -146,7 +146,7 @@ module Ayadn
           }
         end
 
-        resp = results.select {|obj| obj['trackName'] == track}
+        resp = results.select {|obj| obj['trackName'].downcase == track.downcase}
 
         if resp.empty?
           return {
