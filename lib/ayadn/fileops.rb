@@ -83,9 +83,7 @@ module Ayadn
       end
     end
 
-    private
-
-    def get_users(list)
+    def self.get_users(list)
       h = {}
       list.each {|k,v| h[k] = { username: v[0], name: v[1] }}
       h

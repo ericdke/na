@@ -6,6 +6,7 @@
 - Fix: faster follow/mute/block/delete actions
 - Fix: root post of conversation shows "has replies" symbol
 - Fix: clear screen before showing spinner in scroll
+- Fix: save lists if backup enabled
 - Update: debug info included in posts annotations
 - Update: gem dependencies
 
