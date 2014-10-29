@@ -1,4 +1,4 @@
-# 1.8.0 - 2014-10-28 - 'Cascadeur'
+# 1.8.0 - 2014-10-29 - 'Cascadeur'
 
 - New: command to view all unread PMs
 - New: channel commands can update unread status (default: true)

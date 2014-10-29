@@ -168,10 +168,10 @@ module Ayadn
     def self.defaults
       {
         timeline: {
-          directed: 1,
-          deleted: 0,
-          html: 0,
-          annotations: 1,
+          directed: true,
+          deleted: false,
+          html: false,
+          annotations: true,
           show_source: true,
           show_symbols: true,
           show_real_name: true,
@@ -186,21 +186,21 @@ module Ayadn
         },
         counts: {
           default: 50,
-          unified: 100,
-          global: 100,
-          checkins: 100,
+          unified: 50,
+          global: 50,
+          checkins: 50,
           conversations: 50,
           photos: 50,
-          trending: 100,
-          mentions: 100,
-          convo: 100,
+          trending: 50,
+          mentions: 50,
+          convo: 50,
           posts: 100,
           messages: 50,
           search: 200,
-          whoreposted: 50,
-          whostarred: 50,
+          whoreposted: 20,
+          whostarred: 20,
           whatstarred: 100,
-          files: 100
+          files: 50
         },
         formats: {
           table: {
