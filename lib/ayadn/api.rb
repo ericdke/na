@@ -275,11 +275,11 @@ module Ayadn
         html = 0
       end
       if arg[:since_id]
-        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=0&include_annotations=1&since_id=#{arg[:since_id]}"
+        "&count=#{count}&include_html=#{html}&include_directed_posts=#{directed}&include_deleted=0&include_annotations=1&since_id=#{arg[:since_id]}"
       elsif arg[:recent_message]
-        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=0&include_annotations=1&include_recent_message=#{arg[:recent_message]}"
+        "&count=#{count}&include_html=#{html}&include_directed_posts=#{directed}&include_deleted=0&include_annotations=1&include_recent_message=#{arg[:recent_message]}"
       else
-        "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=0&include_annotations=1"
+        "&count=#{count}&include_html=#{html}&include_directed_posts=#{directed}&include_deleted=0&include_annotations=1"
       end
     end
 
