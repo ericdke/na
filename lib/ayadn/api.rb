@@ -263,7 +263,17 @@ module Ayadn
         count = Settings.options[:counts][:default]
       end
       directed = arg[:directed] || Settings.options[:timeline][:directed]
+      if directed == true || directed == 1
+        directed = 1
+      else
+        directed = 0
+      end
       html = arg[:html] || Settings.options[:timeline][:html]
+      if html == true || html == 1
+        html = 1
+      else
+        html = 0
+      end
       if arg[:since_id]
         "&count=#{count}&include_html=#{html}&include_directed=#{directed}&include_deleted=0&include_annotations=1&since_id=#{arg[:since_id]}"
       elsif arg[:recent_message]

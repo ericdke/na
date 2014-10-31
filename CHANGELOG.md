@@ -1,3 +1,7 @@
+# 1.8.1 - 2014-10-31 - 'Stockholm'
+
+- Fix: directed posts in timeline
+
 # 1.8.0 - 2014-10-29 - 'Cascadeur'
 
 - New: command to view all unread PMs

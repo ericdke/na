@@ -171,9 +171,9 @@ module Ayadn
     def self.defaults
       {
         timeline: {
-          directed: true,
-          deleted: false,
-          html: false,
+          directed: 1,
+          deleted: 0,
+          html: 0,
           annotations: true,
           show_source: true,
           show_symbols: true,
