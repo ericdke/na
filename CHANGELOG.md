@@ -1,3 +1,7 @@
+# 1.8.2 - 2014-10-31 - 'Asylum'
+
+- Fix: directed posts in timeline, bis
+
 # 1.8.1 - 2014-10-31 - 'Stockholm'
 
 - Fix: directed posts in timeline
