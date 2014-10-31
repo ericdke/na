@@ -19,7 +19,7 @@ describe Ayadn::API do
       expect(Ayadn::API.build_query({count: 12})).to match /count=12/
     end
     it 'returns a URL with directed=0' do
-      expect(Ayadn::API.build_query({directed: 0})).to match /directed=0/
+      expect(Ayadn::API.build_query({directed: 0})).to match /directed_posts=0/
     end
     it 'returns a URL with html=1' do
       expect(Ayadn::API.build_query({html: 1})).to match /html=1/
