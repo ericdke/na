@@ -3,19 +3,24 @@ module Ayadn
   class Migration
 
     def initialize
-      @bookmarks = Databases.bookmarks
+      @bookmarks = Daybreak::DB.new "#{Settings.config[:paths][:db]}/bookmarks.db" if File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
       @aliases = Databases.aliases
       @blacklist = Databases.blacklist
       @niceranks = Databases.nicerank
       @users = Databases.users
       @pagination = Databases.pagination
       @index = Databases.index
-      @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
-      @sql = Amalgalite::Database.new(@sqlfile)
       @shell = Thor::Shell::Color.new
+      @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
+      @shell.say_status :create, "#{Settings.config[:paths][:db]}/ayadn.sqlite", :blue
+      @sql = Amalgalite::Database.new(@sqlfile)
     end
 
     def all
+      if File.exist?("#{Settings.config[:paths][:db]}/channels.db")
+        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/channels.db", :green
+        FileUtils.rm("#{Settings.config[:paths][:db]}/channels.db")
+      end
       bookmarks
       aliases
       blacklist
@@ -26,29 +31,36 @@ module Ayadn
     end
 
     def bookmarks
-      @shell.say_status :importing, "Bookmarks database", :cyan
-      @sql.execute_batch <<-SQL
-        CREATE TABLE Bookmarks (
-          post_id INTEGER,
-          bookmark TEXT
-        );
-      SQL
-      @sql.reload_schema!
-      @sql.transaction do |db_in_transaction|
-        @bookmarks.each do |k,v|
-          insert_data = {}
-          insert_data[":k"] = k.to_i
-          insert_data[":v"] = v.to_s
-          db_in_transaction.prepare("INSERT INTO Bookmarks(post_id, bookmark) VALUES(:k, :v);") do |insert|
-            insert.execute(insert_data)
+      unless File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
+        @shell.say_status :skip, "old Bookmarks database doesn't exist", :red
+      else
+        @shell.say_status :import, "Bookmarks database", :cyan
+        @sql.execute_batch <<-SQL
+          CREATE TABLE Bookmarks (
+            post_id INTEGER,
+            bookmark TEXT
+          );
+        SQL
+        @sql.reload_schema!
+        @sql.transaction do |db_in_transaction|
+          @bookmarks.each do |k,v|
+            insert_data = {}
+            insert_data[":k"] = k.to_i
+            insert_data[":v"] = v.to_json.to_s
+            db_in_transaction.prepare("INSERT INTO Bookmarks(post_id, bookmark) VALUES(:k, :v);") do |insert|
+              insert.execute(insert_data)
+            end
           end
         end
+        @shell.say_status :done, "#{@bookmarks.size} objects", :green
+        @bookmarks.close
+        FileUtils.rm("#{Settings.config[:paths][:db]}/bookmarks.db")
+        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/bookmarks.db", :green
       end
-      @shell.say_status :imported, "#{@bookmarks.size} objects", :green
     end
 
     def aliases
-      @shell.say_status :importing, "Aliases database", :cyan
+      @shell.say_status :import, "Aliases database", :cyan
       @sql.execute_batch <<-SQL
         CREATE TABLE Aliases (
           channel_id INTEGER,
@@ -66,11 +78,11 @@ module Ayadn
           end
         end
       end
-      @shell.say_status :imported, "#{@aliases.size} objects", :green
+      @shell.say_status :done, "#{@aliases.size} objects", :green
     end
 
     def blacklist
-      @shell.say_status :importing, "Blacklist database", :cyan
+      @shell.say_status :import, "Blacklist database", :cyan
       @sql.execute_batch <<-SQL
         CREATE TABLE Blacklist (
           type VARCHAR(255),
@@ -91,11 +103,11 @@ module Ayadn
           end
         end
       end
-      @shell.say_status :imported, "#{@blacklist.size} objects", :green
+      @shell.say_status :done, "#{@blacklist.size} objects", :green
     end
 
     def niceranks
-      @shell.say_status :importing, "Niceranks database", :cyan
+      @shell.say_status :import, "Niceranks database", :cyan
       @sql.execute_batch <<-SQL
         CREATE TABLE Niceranks (
           user_id INTEGER,
@@ -123,11 +135,11 @@ module Ayadn
           end
         end
       end
-      @shell.say_status :imported, "#{@niceranks.size} objects", :green
+      @shell.say_status :done, "#{@niceranks.size} objects", :green
     end
 
     def users
-      @shell.say_status :importing, "Users database", :cyan
+      @shell.say_status :import, "Users database", :cyan
       @sql.execute_batch <<-SQL
         CREATE TABLE Users (
           user_id INTEGER,
@@ -147,11 +159,11 @@ module Ayadn
           end
         end
       end
-      @shell.say_status :imported, "#{@users.size} objects", :green
+      @shell.say_status :done, "#{@users.size} objects", :green
     end
 
     def pagination
-      @shell.say_status :importing, "Pagination database", :cyan
+      @shell.say_status :import, "Pagination database", :cyan
       @sql.execute_batch <<-SQL
         CREATE TABLE Pagination (
           name VARCHAR(256),
@@ -169,11 +181,11 @@ module Ayadn
           end
         end
       end
-      @shell.say_status :imported, "#{@pagination.size} objects", :green
+      @shell.say_status :done, "#{@pagination.size} objects", :green
     end
 
     def index
-      @shell.say_status :importing, "Index database", :cyan
+      @shell.say_status :import, "Index database", :cyan
       @sql.execute_batch <<-SQL
         CREATE TABLE TLIndex (
           count INTEGER,
@@ -193,7 +205,7 @@ module Ayadn
           end
         end
       end
-      @shell.say_status :imported, "#{@index.size} objects", :green
+      @shell.say_status :done, "#{@index.size} objects", :green
     end
 
   end

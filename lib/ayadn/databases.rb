@@ -4,28 +4,28 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :index, :pagination, :aliases, :blacklist, :bookmarks, :nicerank, :channels
+      attr_accessor :users, :index, :pagination, :aliases, :blacklist, :nicerank, :channels
     end
 
     def self.open_databases
       if Settings.options[:timeline][:show_debug] == true
         puts "\n-Opening databases-\n"
       end
+      @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
+      @sql = Amalgalite::Database.new(@sqlfile)
       @users = self.init "#{Settings.config[:paths][:db]}/users.db"
       @index = self.init "#{Settings.config[:paths][:pagination]}/index.db"
       @pagination = self.init "#{Settings.config[:paths][:pagination]}/pagination.db"
       @aliases = self.init "#{Settings.config[:paths][:db]}/aliases.db"
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
-      @bookmarks = self.init "#{Settings.config[:paths][:db]}/bookmarks.db"
       @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
-      @channels = self.init "#{Settings.config[:paths][:db]}/channels.db"
       if Settings.options[:timeline][:show_debug] == true
         puts "\n-Done-\n"
       end
     end
 
     def self.all_dbs
-      [@users, @index, @pagination, @aliases, @blacklist, @bookmarks, @nicerank, @channels]
+      [@users, @index, @pagination, @aliases, @blacklist, @nicerank]
     end
 
     def self.close_all
@@ -117,7 +117,7 @@ module Ayadn
     end
 
     def self.clear_bookmarks
-      @bookmarks.clear
+      @sql.execute("DELETE FROM Bookmarks")
     end
 
     def self.get_channel_id(channel_alias)
@@ -166,15 +166,29 @@ module Ayadn
     end
 
     def self.add_bookmark bookmark
-      @bookmarks[bookmark[:id]] = bookmark
+      delete_bookmark(bookmark['id'])
+      @sql.transaction do |db_in_transaction|
+        insert_data = {}
+        insert_data[":k"] = bookmark['id'].to_i
+        insert_data[":v"] = bookmark.to_json.to_s
+        db_in_transaction.prepare("INSERT INTO Bookmarks(post_id, bookmark) VALUES(:k, :v);") do |insert|
+          insert.execute(insert_data)
+        end
+      end
     end
 
     def self.delete_bookmark post_id
-      @bookmarks.delete post_id
+      @sql.execute("DELETE FROM Bookmarks WHERE post_id=#{post_id.to_i}")
+    end
+
+    def self.all_bookmarks
+      @sql.execute("SELECT * FROM Bookmarks")
     end
 
     def self.rename_bookmark post_id, new_title
-      @bookmarks[post_id][:title] = new_title
+      bm = JSON.parse(@sql.execute("SELECT bookmark FROM Bookmarks WHERE post_id=#{post_id.to_i}")[0][0])
+      bm['title'] = new_title
+      @sql.execute("UPDATE Bookmarks SET bookmark='#{bm.to_json}' WHERE post_id=#{post_id.to_i}")
     end
 
     def self.add_channel_object channel
