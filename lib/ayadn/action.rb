@@ -759,6 +759,11 @@ module Ayadn
       end
     end
 
+    def migrate
+      migr = Migration.new
+      migr.all
+    end
+
     private
 
     def save_and_view(resp)

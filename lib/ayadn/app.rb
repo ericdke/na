@@ -3,7 +3,7 @@ module Ayadn
   class App < Thor
     package_name "Ayadn"
 
-    %w{action stream api search descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowplaying nowwatching tvshow annotations profile}.each { |r| require_relative "#{r}" }
+    %w{action stream api search descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowplaying nowwatching tvshow annotations profile migration}.each { |r| require_relative "#{r}" }
 
     ##
     # These methods are intended to be called from the CLI.
@@ -536,6 +536,11 @@ module Ayadn
     map "-v" => :version
     def version
       Action.new.version
+    end
+
+    desc "migrate", "TEMP: migrate databases"
+    def migrate
+      Action.new.migrate
     end
 
   end
