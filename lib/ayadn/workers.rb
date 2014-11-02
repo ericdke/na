@@ -9,8 +9,8 @@ module Ayadn
     def build_aliases_list(list)
       table = init_table
       table.title = "List of your channel aliases".color(:cyan) + "".color(:white)
-      table.style = {border_x: '~', border_i: '+', border_y: ':'}
-      list.each {|k,v| table << ["#{k}".color(:green), "#{v}".color(:red)]}
+      table.style = {border_x: '-', border_i: '+', border_y: '|'}
+      list.each {|obj| table << [obj[0].to_s.color(:green), obj[1].color(:red)]}
       table
     end
 
@@ -347,8 +347,6 @@ module Ayadn
         else
           unread = "No unread messages"
         end
-        @shell.say_status :recording, "channel #{ch['id']}", :green
-        Databases.add_channel_object(ch)
         bucket << chan.new(ch['id'], ch['counts']['messages'], ch['counts']['subscribers'], ch['type'], ch['owner'], ch['annotations'], ch['readers'], ch['editors'], writers, ch['you_subscribed'], unread, ch['recent_message_id'], ch['recent_message'])
       end
       puts "\e[H\e[2J"

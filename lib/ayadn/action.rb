@@ -418,6 +418,8 @@ module Ayadn
       begin
         channels = if options[:id]
           channel_id = options[:id].map {|id| @workers.get_channel_id_from_alias(id)}
+        puts channel_id
+        exit
           lambda { @api.get_channel(channel_id, options) }
         else
           lambda { @api.get_channels }

@@ -4,7 +4,7 @@ module Ayadn
 
     def initialize
       @bookmarks = Daybreak::DB.new "#{Settings.config[:paths][:db]}/bookmarks.db" if File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
-      @aliases = Databases.aliases
+      @aliases = Daybreak::DB.new "#{Settings.config[:paths][:db]}/aliases.db" if File.exist?("#{Settings.config[:paths][:db]}/aliases.db")
       @blacklist = Databases.blacklist
       @niceranks = Databases.nicerank
       @users = Databases.users
@@ -32,7 +32,7 @@ module Ayadn
 
     def bookmarks
       unless File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
-        @shell.say_status :skip, "old Bookmarks database doesn't exist", :red
+        @shell.say_status :skip, "old bookmarks database doesn't exist", :red
       else
         @shell.say_status :import, "Bookmarks database", :cyan
         @sql.execute_batch <<-SQL
@@ -60,25 +60,32 @@ module Ayadn
     end
 
     def aliases
-      @shell.say_status :import, "Aliases database", :cyan
-      @sql.execute_batch <<-SQL
-        CREATE TABLE Aliases (
-          channel_id INTEGER,
-          alias VARCHAR(255)
-        );
-      SQL
-      @sql.reload_schema!
-      @sql.transaction do |db_in_transaction|
-        @aliases.each do |k,v|
-          insert_data = {}
-          insert_data[":k"] = v.to_i
-          insert_data[":v"] = k
-          db_in_transaction.prepare("INSERT INTO Aliases(channel_id, alias) VALUES(:k, :v);") do |insert|
-            insert.execute(insert_data)
+      unless File.exist?("#{Settings.config[:paths][:db]}/aliases.db")
+        @shell.say_status :skip, "old aliases database doesn't exist", :red
+      else
+        @shell.say_status :import, "Aliases database", :cyan
+        @sql.execute_batch <<-SQL
+          CREATE TABLE Aliases (
+            channel_id INTEGER,
+            alias VARCHAR(255)
+          );
+        SQL
+        @sql.reload_schema!
+        @sql.transaction do |db_in_transaction|
+          @aliases.each do |k,v|
+            insert_data = {}
+            insert_data[":k"] = v.to_i
+            insert_data[":v"] = k
+            db_in_transaction.prepare("INSERT INTO Aliases(channel_id, alias) VALUES(:k, :v);") do |insert|
+              insert.execute(insert_data)
+            end
           end
         end
+        @shell.say_status :done, "#{@aliases.size} objects", :green
+        @aliases.close
+        FileUtils.rm("#{Settings.config[:paths][:db]}/aliases.db")
+        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/aliases.db", :green
       end
-      @shell.say_status :done, "#{@aliases.size} objects", :green
     end
 
     def blacklist

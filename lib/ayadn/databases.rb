@@ -4,7 +4,7 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :index, :pagination, :aliases, :blacklist, :nicerank, :channels
+      attr_accessor :users, :index, :pagination, :blacklist, :nicerank, :channels
     end
 
     def self.open_databases
@@ -16,7 +16,6 @@ module Ayadn
       @users = self.init "#{Settings.config[:paths][:db]}/users.db"
       @index = self.init "#{Settings.config[:paths][:pagination]}/index.db"
       @pagination = self.init "#{Settings.config[:paths][:pagination]}/pagination.db"
-      @aliases = self.init "#{Settings.config[:paths][:db]}/aliases.db"
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
       @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
       if Settings.options[:timeline][:show_debug] == true
@@ -25,7 +24,7 @@ module Ayadn
     end
 
     def self.all_dbs
-      [@users, @index, @pagination, @aliases, @blacklist, @nicerank]
+      [@users, @index, @pagination, @blacklist, @nicerank]
     end
 
     def self.close_all
@@ -100,39 +99,87 @@ module Ayadn
       @pagination[key] = stream['meta']['max_id']
     end
 
+
     def self.create_alias(channel_id, channel_alias)
-      @aliases[channel_alias] = channel_id
+      delete_alias(channel_alias)
+      @sql.transaction do |db_in_transaction|
+        insert_data = {}
+        insert_data[":k"] = channel_id.to_i
+        insert_data[":v"] = channel_alias
+        db_in_transaction.prepare("INSERT INTO Aliases(channel_id, alias) VALUES(:k, :v);") do |insert|
+          insert.execute(insert_data)
+        end
+      end
     end
 
     def self.delete_alias(channel_alias)
-      @aliases.delete(channel_alias)
+      @sql.execute("DELETE FROM Aliases WHERE alias='#{channel_alias}'")
     end
 
     def self.clear_aliases
-      @aliases.clear
+      @sql.execute("DELETE FROM Aliases")
     end
 
-    def self.clear_blacklist
-      @blacklist.clear
+    def self.get_alias_from_id(channel_id)
+      res = @sql.execute("SELECT alias FROM Aliases WHERE channel_id=#{channel_id.to_i}")
+      if res.empty?
+        return nil
+      else
+        return res[0][0]
+      end
     end
+
+    def self.get_channel_id(channel_alias)
+      res = @sql.execute("SELECT channel_id FROM Aliases WHERE alias='#{channel_alias}'")
+      if res.empty?
+        return nil
+      else
+        return res[0][0]
+      end
+    end
+
+    def self.all_aliases
+      @sql.execute("SELECT * FROM Aliases")
+    end
+
 
     def self.clear_bookmarks
       @sql.execute("DELETE FROM Bookmarks")
     end
 
-    def self.get_channel_id(channel_alias)
-      @aliases[channel_alias]
+    def self.add_bookmark bookmark
+      delete_bookmark(bookmark['id'])
+      @sql.transaction do |db_in_transaction|
+        insert_data = {}
+        insert_data[":k"] = bookmark['id'].to_i
+        insert_data[":v"] = bookmark.to_json.to_s
+        db_in_transaction.prepare("INSERT INTO Bookmarks(post_id, bookmark) VALUES(:k, :v);") do |insert|
+          insert.execute(insert_data)
+        end
+      end
     end
 
-    def self.import_aliases(aliases)
-      new_aliases = self.init aliases
-      new_aliases.each {|al,id| @aliases[al] = id}
-      new_aliases.close
+    def self.delete_bookmark post_id
+      @sql.execute("DELETE FROM Bookmarks WHERE post_id=#{post_id.to_i}")
     end
 
-    def self.get_alias_from_id(channel_id)
-      @aliases.each {|al, id| return al if id == channel_id}
-      nil
+    def self.all_bookmarks
+      @sql.execute("SELECT * FROM Bookmarks")
+    end
+
+    def self.rename_bookmark post_id, new_title
+      req = @sql.execute("SELECT bookmark FROM Bookmarks WHERE post_id=#{post_id.to_i}")
+      if req.empty?
+        Errors.global_error({error: "Post doesn't exist", caller: caller, data: [post_id, new_title]})
+      else
+        bm = JSON.parse(req[0][0])
+        bm['title'] = new_title
+        @sql.execute("UPDATE Bookmarks SET bookmark='#{bm.to_json}' WHERE post_id=#{post_id.to_i}")
+      end
+    end
+
+    def self.clear_blacklist
+      @blacklist.clear
     end
 
     def self.save_indexed_posts(posts)
@@ -163,40 +210,6 @@ module Ayadn
 
     def self.has_new?(stream, title)
       stream['meta']['max_id'].to_i > @pagination[title].to_i
-    end
-
-    def self.add_bookmark bookmark
-      delete_bookmark(bookmark['id'])
-      @sql.transaction do |db_in_transaction|
-        insert_data = {}
-        insert_data[":k"] = bookmark['id'].to_i
-        insert_data[":v"] = bookmark.to_json.to_s
-        db_in_transaction.prepare("INSERT INTO Bookmarks(post_id, bookmark) VALUES(:k, :v);") do |insert|
-          insert.execute(insert_data)
-        end
-      end
-    end
-
-    def self.delete_bookmark post_id
-      @sql.execute("DELETE FROM Bookmarks WHERE post_id=#{post_id.to_i}")
-    end
-
-    def self.all_bookmarks
-      @sql.execute("SELECT * FROM Bookmarks")
-    end
-
-    def self.rename_bookmark post_id, new_title
-      bm = JSON.parse(@sql.execute("SELECT bookmark FROM Bookmarks WHERE post_id=#{post_id.to_i}")[0][0])
-      bm['title'] = new_title
-      @sql.execute("UPDATE Bookmarks SET bookmark='#{bm.to_json}' WHERE post_id=#{post_id.to_i}")
-    end
-
-    def self.add_channel_object channel
-      @channels[channel['id']] = channel
-    end
-
-    def self.remove_channel channel_id
-      @channels.delete channel_id
     end
 
   end

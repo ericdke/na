@@ -93,7 +93,6 @@ describe Ayadn::Databases do
     Ayadn::Databases.users.clear
     Ayadn::Databases.pagination.clear
     Ayadn::Databases.index.clear
-    Ayadn::Databases.aliases.clear
     Ayadn::Databases.close_all
   end
 end

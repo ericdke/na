@@ -47,42 +47,16 @@ module Ayadn
       end
     end
 
-    desc "import DATABASE", "Imports an aliases database from a backed up Ayadn account"
-    long_desc Descriptions.alias_import
-    def import(database)
-      begin
-        init
-        unless database.nil?
-          new_db = File.realpath(database)
-        else
-          abort(Status.wrong_arguments)
-        end
-        if File.exist?(new_db)
-          Databases.import_aliases(new_db)
-          Logs.rec.info "Imported '#{new_db}' values in aliases database."
-          puts Status.done
-        else
-          puts "\nFile '#{new_db}' doesn't exist.".color(:red)
-        end
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [database]})
-      ensure
-        Databases.close_all
-      end
-    end
-
     desc "list", "List previously created aliases"
     long_desc Descriptions.alias_list
     option :raw, aliases: "-x", type: :boolean, desc: "Outputs the raw list in JSON"
     def list
       begin
         init
-        list = Databases.aliases
+        list = Databases.all_aliases
         unless list.empty? || list.nil?
           if options[:raw]
-            h = {}
-            list.each {|k,v| h[k] = v}
-            puts h.to_json
+            puts list.to_json
           else
             View.new.page Workers.new.build_aliases_list(list)
           end

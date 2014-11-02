@@ -47,11 +47,3 @@ List all your channel aliases.
 `ayadn alias list`
 
 `ayadn -A list`
-
-## IMPORT
-
-Import a previously backed-up list of aliases.
-
-`ayadn alias import '/Users/blah/backups/aliases.db'`
-
-`ayadn -A import '/Users/blah/backups/aliases.db'`

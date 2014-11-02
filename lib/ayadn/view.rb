@@ -211,17 +211,11 @@ module Ayadn
       bucket = @workers.build_channels(resp['data'], options)
       bucket.reverse.each do |ch|
         view << "\n"
-        ch_alias = false
-        Databases.aliases.each do |k,v|
-          if v == "#{ch.id}"
-            ch_alias = k
-            break
-          end
-        end
         view << "ID: ".color(:cyan)
         view << "#{ch.id}".color(Settings.options[:colors][:id])
         view << "\n"
-        if ch_alias
+        ch_alias = Databases.get_alias_from_id(ch.id)
+        unless ch_alias.nil?
           view << "Alias: ".color(:cyan)
           view << "#{ch_alias}".color(Settings.options[:colors][:username])
           view << "\n"
