@@ -80,7 +80,7 @@ describe Ayadn::Databases do
   describe ".create_alias" do
     it "creates an alias for a channel id" do
       Ayadn::Databases.create_alias('42','everything')
-      expect(Ayadn::Databases.aliases['everything']).to eq '42'
+      expect(Ayadn::Databases.get_channel_id('everything')).to eq 42
     end
   end
   describe ".get_alias_from_id" do

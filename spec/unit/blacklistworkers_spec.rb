@@ -110,10 +110,6 @@ describe Ayadn::BlacklistWorkers do
     File.delete('spec/mock/ayadn.log')
     Ayadn::Databases.open_databases
     Ayadn::Databases.blacklist.clear
-    Ayadn::Databases.users.clear
-    Ayadn::Databases.pagination.clear
-    Ayadn::Databases.index.clear
-    Ayadn::Databases.aliases.clear
     Ayadn::Databases.close_all
   end
 end
