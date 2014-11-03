@@ -314,7 +314,7 @@ module Ayadn
           usernames = []
           ch['writers']['user_ids'].each do |id|
             next if no_user[id]
-            db = Databases.users[id]
+            db = Databases.find_user_by_id(id)
             if db.nil?
               @shell.say_status :downloading, "user #{id}"
               resp = API.new.get_user(id)
@@ -331,7 +331,7 @@ module Ayadn
               usernames << "@" + the_username
               Databases.add_to_users_db(id, the_username, resp['data']['name'])
             else
-              the_username = "@" + db.keys.first
+              the_username = "@#{db}"
               @shell.say_status :match, "#{the_username} is already in the database", :blue
 
               usernames << the_username

@@ -16,7 +16,6 @@ module Ayadn
       @accounts = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
 
       # get rid of these once daybreak > sql transition is done
-      @users = self.init "#{Settings.config[:paths][:db]}/users.db"
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
       @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
 
@@ -26,7 +25,7 @@ module Ayadn
     end
 
     def self.all_dbs
-      [@users, @blacklist, @nicerank]
+      [@blacklist, @nicerank]
     end
 
     def self.close_all
@@ -178,6 +177,18 @@ module Ayadn
       @sql.execute("DELETE FROM Bookmarks")
     end
 
+    def self.clear_pagination
+      @sql.execute("DELETE FROM Pagination")
+    end
+
+    def self.clear_index
+      @sql.execute("DELETE FROM TLIndex")
+    end
+
+    def self.clear_users
+      @sql.execute("DELETE FROM Users")
+    end
+
     def self.add_bookmark bookmark
       delete_bookmark(bookmark['id'])
       @sql.transaction do |db_in_transaction|
@@ -243,13 +254,48 @@ module Ayadn
     end
 
     def self.add_to_users_db_from_list(list)
-      list.each { |id, content_array| @users[id] = {content_array[0] => content_array[1]} }
+      @sql.transaction do |db_in_transaction|
+        list.each do |id, content_array|
+          insert_data = {}
+          insert_data[":id"] = id.to_i
+          insert_data[":username"] = content_array[0]
+          insert_data[":name"] = content_array[1]
+          db_in_transaction.prepare("INSERT OR REPLACE INTO Users(id, username, name) VALUES(:id, :username, :name);") do |insert|
+            insert.execute(insert_data)
+          end
+        end
+      end
     end
+
 
     def self.add_to_users_db(id, username, name)
-      @users[id] = {username => name}
+      @sql.execute("INSERT OR REPLACE INTO Users VALUES(#{id.to_i}, '#{username}', '#{name}')")
     end
 
+    def self.find_user_by_id(user_id)
+      res = @sql.execute("SELECT username FROM Users WHERE user_id=#{user_id}").flatten
+      if res.empty?
+        return nil
+      else
+        return res[0]
+      end
+    end
+
+    def self.find_user_object_by_id(user_id)
+      @sql.execute("SELECT * FROM Users WHERE user_id=#{user_id}").flatten[0]
+    end
+
+    def self.all_users
+      @sql.execute("SELECT * FROM Users")
+    end
+
+    def self.all_users_ids
+      @sql.execute("SELECT user_id FROM Users")
+    end
+
+    def self.all_pagination
+      @sql.execute("SELECT * FROM Pagination").flatten
+    end
 
     def self.has_new?(stream, title)
       res = @sql.execute("SELECT post_id FROM Pagination WHERE name='#{title}'").flatten[0]
@@ -264,6 +310,14 @@ module Ayadn
       end
       @sql.execute("DELETE FROM Pagination WHERE name='#{key}'")
       @sql.execute("INSERT INTO Pagination(name, post_id) VALUES('#{key}', #{stream['meta']['max_id'].to_i});")
+    end
+
+    def self.find_last_id_from(name)
+      @sql.execute("SELECT post_id FROM Pagination WHERE name='#{name}'").flatten[0]
+    end
+
+    def self.pagination_delete(name)
+      @sql.execute("DELETE FROM Pagination WHERE name='#{name}'")
     end
 
   end

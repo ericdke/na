@@ -21,8 +21,8 @@ describe Ayadn::Databases do
   describe ".add_to_users_db" do
     it "adds a user" do
       Ayadn::Databases.add_to_users_db(33, 'test', 'Mr Test')
-      expect(Ayadn::Databases.users.keys).to eq ['33']
-      u = Ayadn::Databases.users[33]
+      expect(Ayadn::Databases.all_users_ids).to eq [33]
+      u = Ayadn::Databases.find_user_object_by_id(33)
       expect(u['test']).to eq 'Mr Test'
     end
   end
@@ -30,10 +30,10 @@ describe Ayadn::Databases do
     it "imports users from a list" do
       list = {12=>['yolo', 'Miss YOLO'], 666=>['lucy', 'Lucy Fair']}
       Ayadn::Databases.add_to_users_db_from_list(list)
-      expect(Ayadn::Databases.users.keys).to eq ['12', '666']
-      u = Ayadn::Databases.users[12]
+      expect(Ayadn::Databases.all_users_ids).to eq [12, 666]
+      u = Ayadn::Databases.find_user_object_by_id(12)
       expect(u['yolo']).to eq 'Miss YOLO'
-      u = Ayadn::Databases.users[666]
+      u = Ayadn::Databases.find_user_object_by_id(666)
       expect(u['lucy']).to eq 'Lucy Fair'
     end
   end
@@ -41,15 +41,15 @@ describe Ayadn::Databases do
     it "saves pagination" do
       stream = {'meta'=>{'max_id'=>'33666','marker'=>{'name'=>'test_stream'}}}
       Ayadn::Databases.save_max_id(stream)
-      expect(Ayadn::Databases.pagination.keys).to eq ['test_stream']
-      expect(Ayadn::Databases.pagination['test_stream']).to eq '33666'
+      expect(Ayadn::Databases.all_pagination).to eq ['test_stream']
+      expect(Ayadn::Databases.find_last_id_from('test_stream')).to eq 33666
 
-      Ayadn::Databases.pagination.delete('test_stream')
+      Ayadn::Databases.pagination_delete('test_stream')
 
       stream = {'meta'=>{'max_id'=>'12'}}
       Ayadn::Databases.save_max_id(stream, 'yolo')
-      expect(Ayadn::Databases.pagination.keys).to eq ['yolo']
-      expect(Ayadn::Databases.pagination['yolo']).to eq '12'
+      expect(Ayadn::Databases.all_pagination).to eq ['yolo']
+      expect(Ayadn::Databases.find_last_id_from('yolo')).to eq 12
     end
   end
   describe ".has_new?" do
@@ -65,7 +65,7 @@ describe Ayadn::Databases do
     it "saves index" do
       posts = {'33666' =>{:count=>1},'424242' =>{:count=>2}}
       Ayadn::Databases.save_indexed_posts(posts)
-      expect(Ayadn::Databases.index['424242'][:count]).to eq 2
+      expect(Ayadn::Databases.get_post_from_index('424242')[:count]).to eq 2
     end
   end
   describe ".get_post_from_index" do
@@ -90,9 +90,9 @@ describe Ayadn::Databases do
     end
   end
   after do
-    Ayadn::Databases.users.clear
-    Ayadn::Databases.pagination.clear
-    Ayadn::Databases.index.clear
+    Ayadn::Databases.clear_users
+    Ayadn::Databases.clear_pagination
+    Ayadn::Databases.clear_index
     Ayadn::Databases.close_all
   end
 end
