@@ -17,7 +17,6 @@ module Ayadn
 
       # get rid of these once daybreak > sql transition is done
       @users = self.init "#{Settings.config[:paths][:db]}/users.db"
-      @index = self.init "#{Settings.config[:paths][:pagination]}/index.db"
       @pagination = self.init "#{Settings.config[:paths][:pagination]}/pagination.db"
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
       @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
@@ -28,7 +27,7 @@ module Ayadn
     end
 
     def self.all_dbs
-      [@users, @index, @pagination, @blacklist, @nicerank]
+      [@users, @pagination, @blacklist, @nicerank]
     end
 
     def self.close_all
