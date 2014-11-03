@@ -12,10 +12,11 @@ module Ayadn
       show_link
       token = get_token
       check_token(token)
-      puts "\n\nThanks! Contacting App.net...\n".color(:green)
+      puts "\n\nThanks you!\n".color(:green)
+      @shell.say_status :connexion, "downloading user info", :cyan
       user = create_user_data(token, Dir.home + "/ayadn")
       prepare(user)
-      puts "Creating configuration...\n".color(:green)
+      @shell.say_status :create, "configuration", :cyan
       Settings.load_config
       Logs.create_logger
       install
@@ -27,11 +28,11 @@ module Ayadn
     private
 
     def prepare(user)
-      puts "Ok! Creating Ayadn folders...\n".color(:green)
+      @shell.say_status :create, "Ayadn folders", :cyan
       create_config_folders(user)
-      puts "Saving user token...\n".color(:green)
+      @shell.say_status :save, "user token", :cyan
       create_token_file(user)
-      puts "Creating user account for #{user.handle}...\n".color(:green)
+      @shell.say_status :create, "#{user.handle} user account", :cyan
       if File.exist?(Dir.home + "/ayadn/accounts.sqlite")
         acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
         Databases.create_account(acc_db, user)
@@ -44,8 +45,8 @@ module Ayadn
     end
 
     def install
-      puts "Creating api and config files...\n".color(:green)
-      Errors.info "Creating api, version and config files..."
+      @shell.say_status :create, "api and config files", :cyan
+      Errors.info "Creating api and config files..."
       Errors.info "Creating version file..."
       Settings.init_config
     end
@@ -61,19 +62,19 @@ module Ayadn
           Dir.mkdir("#{user.user_path}/#{target}") unless Dir.exist?("#{user.user_path}/#{target}")
         end
       rescue => e
-        puts "\nError creating Ayadn #{user.handle} account folders.\n\n"
-        puts "Error: #{e}"
+        @shell.say_status :error, "can't create #{user.handle} account folders", :red
+        puts "\nError: #{e}"
         exit
       end
     end
 
     def show_link
-      puts "\nPlease click this URL, or open a browser then copy/paste it:\n".color(:cyan)
+      puts "\nClick this URL or copy/paste it in a browser:\n".color(:cyan)
       puts Endpoints.new.authorize_url
       puts "\n"
-      puts "On this page, log in with your App.net account to authorize Ayadn.\n".color(:cyan)
-      puts "You will then be redirected to a page showing a 'user token' (your secret code).\n".color(:cyan)
-      puts "Copy it then paste it here:\n".color(:yellow)
+      puts "In the browser, log in with your App.net account to authorize Ayadn.\n".color(:cyan)
+      puts "You will then be redirected to a page showing a 'user token' (your authorization code).\n".color(:cyan)
+      puts "Copy/paste it here:\n".color(:yellow)
       print "> "
     end
 
@@ -92,7 +93,7 @@ module Ayadn
 
     def check_token(token)
       if token.empty? || token.nil?
-        puts "\n\nOops, something went wrong, I couldn't get the token. Please try again.\n\n".color(:red)
+        @shell.say_status :error, "couldn't get the token", :red
         exit
       end
     end
@@ -104,12 +105,12 @@ module Ayadn
           puts Status.canceled
           exit
         end
-        puts "\nDeleting old version...\n".color(:green)
+        @shell.say_status :delete, "old version", :blue
         begin
           old_dir = Dir.home + "/ayadn"
           FileUtils.remove_dir(old_dir)
         rescue => e
-          puts "Unable to remove folder: #{old_dir}\n\n".color(:red)
+          @shell.say_status :error, "can't remove folder '#{old_dir}'", :red
           raise e
         end
       end
