@@ -3,27 +3,19 @@ module Ayadn
   class Switch
 
     def list
-      home_path = Dir.home + "/ayadn"
-      if File.exist?("#{home_path}/accounts.db")
-        accounts_db = Databases.init("#{home_path}/accounts.db")
-        active = accounts_db['ACTIVE']
-        begin
-          puts "\nCurrently authorized accounts:\n".color(:cyan)
-          accounts_db.each do |acc|
-            next if acc[0] == 'ACTIVE'
-            if acc[1][:username] == active
-              puts "#{acc[1][:handle]}".color(:red)
-            else
-              puts "#{acc[1][:handle]}".color(:green)
-            end
-          end
-          puts "\n"
-        ensure
-          close_db(accounts_db)
+      acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+      accounts = Databases.all_accounts(acc_db)
+      please if accounts.empty?
+      puts "\nAuthorized accounts:\n".color(:cyan)
+      accounts.sort_by! { |acc| acc[0] }
+      accounts.each do |acc|
+        if acc[4] == 1
+          puts "  #{acc[2]}".color(:red)
+        else
+          puts "  #{acc[2]}".color(:green)
         end
-      else
-        please
       end
+      puts "\n"
     end
 
     def switch(user)
@@ -31,41 +23,30 @@ module Ayadn
         puts "\n\nOops, something went wrong, I couldn't get your username. Please try again.\n\n".color(:red)
         exit
       end
-      #puts "\e[H\e[2J"
       username = Workers.new.remove_arobase_if_present([user.first])[0]
-      home_path = Dir.home + "/ayadn"
-      if File.exist?("#{home_path}/accounts.db")
-        accounts_db = Databases.init("#{home_path}/accounts.db")
-        active = accounts_db['ACTIVE']
-        if username == accounts_db[active][:username]
-          puts "\nYou're already authorized with username '#{accounts_db[active][:handle]}'.\n".color(:red)
-          cancel(accounts_db)
-        end
-        if accounts_db[username]
-          puts "\nSwitching to account @#{username}...".color(:green)
-          accounts_db['ACTIVE'] = username
-          close_db(accounts_db)
-          puts Status.done
-          exit
-        else
-          puts "\nThis account isn't in the database. Please run 'ayadn authorize'.\n".color(:red)
-          cancel(accounts_db)
-        end
+      acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+      accounts = Databases.all_accounts(acc_db)
+      please if accounts.empty?
+      active = accounts.select { |acc| acc[4] == 1 }[0]
+      active_user = active[0]
+      if username == active_user
+        puts "\nYou're already authorized with username '#{accounts_db[active][:handle]}'.\n".color(:red)
+        exit
+      end
+      flag = accounts.select { |acc| acc[0] == username }.flatten
+      if flag.empty?
+        puts "\nThis account isn't in the database. Please run 'ayadn authorize'.\n".color(:red)
+        exit
       else
-        please
+        puts "\nSwitching to account @#{username}...".color(:green)
+        Databases.set_active_account(acc_db, active_user, username)
+        puts Status.done
+        exit
       end
     end
 
     private
 
-    def cancel(accounts_db)
-      accounts_db.close
-      exit
-    end
-    def close_db(db)
-      db.flush
-      db.close
-    end
     def please
       puts "\nPlease run 'ayadn authorize' first.\n".color(:red)
       exit

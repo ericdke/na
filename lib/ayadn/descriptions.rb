@@ -991,8 +991,6 @@ module Ayadn
 
       ayadn -A delete my_alias
 
-      ayadn -A import '/Users/blah/backups/aliases.db'
-
       (Once an alias is set, you can display the messages in this channel with 'ayadn -ms my_alias', post to it with 'ayadn -C my_alias', etc)
       \n\n
       USAGE
@@ -1020,18 +1018,6 @@ module Ayadn
       ayadn alias delete my_alias
 
       ayadn -A delete my_alias
-      \n\n
-      USAGE
-    end
-    def self.alias_import
-      <<-USAGE
-      Imports an aliases database from a backed up Ayadn account.
-
-      Usage:
-
-      ayadn alias import '/Users/blah/ayadn/blah/db/aliases.db'
-
-      ayadn -A import '/Users/blah/backups/aliases.db'
       \n\n
       USAGE
     end

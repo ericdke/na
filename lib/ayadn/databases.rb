@@ -13,6 +13,7 @@ module Ayadn
       end
       @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
       @sql = Amalgalite::Database.new(@sqlfile)
+      @accounts = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
       @users = self.init "#{Settings.config[:paths][:db]}/users.db"
       @index = self.init "#{Settings.config[:paths][:pagination]}/index.db"
       @pagination = self.init "#{Settings.config[:paths][:pagination]}/pagination.db"
@@ -99,6 +100,18 @@ module Ayadn
       @pagination[key] = stream['meta']['max_id']
     end
 
+    def self.active_account(acc)
+      acc.execute("SELECT * FROM Accounts WHERE active=1")[0]
+    end
+
+    def self.all_accounts(acc)
+      acc.execute("SELECT * FROM Accounts")
+    end
+
+    def self.set_active_account(acc_db, old_user, new_user)
+      acc_db.execute("UPDATE Accounts SET active=0 WHERE username='#{old_user}'")
+      acc_db.execute("UPDATE Accounts SET active=1 WHERE username='#{new_user}'")
+    end
 
     def self.create_alias(channel_id, channel_alias)
       delete_alias(channel_alias)

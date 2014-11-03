@@ -446,9 +446,7 @@ module Ayadn
     end
 
     def who_am_i
-      db = Databases.init(Dir.home + "/ayadn/accounts.db")
-      active = db['ACTIVE']
-      db[active][:handle]
+      Databases.active_account(Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite"))[2]
     end
 
     def extract_users(resp)

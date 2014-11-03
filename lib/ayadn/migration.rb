@@ -10,6 +10,7 @@ module Ayadn
       @users = Databases.users
       @pagination = Databases.pagination
       @index = Databases.index
+      @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
       @shell = Thor::Shell::Color.new
       @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
       @shell.say_status :create, "#{Settings.config[:paths][:db]}/ayadn.sqlite", :blue
@@ -28,6 +29,7 @@ module Ayadn
       users
       pagination
       index
+      accounts
     end
 
     def bookmarks
@@ -93,7 +95,7 @@ module Ayadn
       @sql.execute_batch <<-SQL
         CREATE TABLE Blacklist (
           type VARCHAR(255),
-          content VARCHAR(256)
+          content TEXT
         );
       SQL
       @sql.reload_schema!
@@ -151,7 +153,7 @@ module Ayadn
         CREATE TABLE Users (
           user_id INTEGER,
           username VARCHAR(20),
-          name VARCHAR(256)
+          name TEXT
         );
       SQL
       @sql.reload_schema!
@@ -173,7 +175,7 @@ module Ayadn
       @shell.say_status :import, "Pagination database", :cyan
       @sql.execute_batch <<-SQL
         CREATE TABLE Pagination (
-          name VARCHAR(256),
+          name TEXT,
           post_id INTEGER
         );
       SQL
@@ -213,6 +215,45 @@ module Ayadn
         end
       end
       @shell.say_status :done, "#{@index.size} objects", :green
+    end
+
+    def accounts
+      @shell.say_status :create, Dir.home + "/ayadn/accounts.sqlite", :blue
+      sql = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+      @shell.say_status :import, "Accounts database", :cyan
+      sql.execute_batch <<-SQL
+        CREATE TABLE Accounts (
+          username VARCHAR(20),
+          user_id INTEGER,
+          handle VARCHAR(21),
+          account_path TEXT,
+          active INTEGER
+        );
+      SQL
+      sql.reload_schema!
+      active_account = ""
+      sql.transaction do |db_in_transaction|
+        @accounts.each do |k,v|
+          if k == "ACTIVE"
+            active_account = v
+            next
+          end
+          insert_data = {}
+          insert_data[":username"] = k
+          insert_data[":user_id"] = v[:id].to_i
+          insert_data[":handle"] = "@#{k}"
+          insert_data[":account_path"] = v[:path]
+          insert_data[":active"] = 0
+          db_in_transaction.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active) VALUES(:username, :user_id, :handle, :account_path, :active);") do |insert|
+            insert.execute(insert_data)
+          end
+        end
+      end
+      sql.execute("UPDATE Accounts SET active=1 WHERE username='#{active_account}'")
+      @shell.say_status :done, "#{@accounts.size - 1} objects", :green
+      @accounts.close
+      # FileUtils.rm(Dir.home + "/ayadn/accounts.db")
+      # @shell.say_status :delete, Dir.home + "/ayadn/accounts.db", :green
     end
 
   end

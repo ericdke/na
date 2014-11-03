@@ -40,7 +40,7 @@ On Mac OS X, it looks like this:
 
 ```
   /Users/ericdke/ayadn/
-  ├── accounts.db
+  ├── accounts.sqlite
   /Users/ericdke/ayadn/ericd
   ├── auth
   │   └── token
@@ -50,9 +50,7 @@ On Mac OS X, it looks like this:
   │   ├── config.yml
   │   └── version.yml
   ├── db
-  │   ├── aliases.db
-  │   ├── blacklist.db
-  │   └── users.db
+  │   └── ayadn.sqlite
   ├── downloads
   ├── lists
   ├── log

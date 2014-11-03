@@ -10,11 +10,14 @@ module Ayadn
     end
 
     def self.load_config
-      acc_db = Dir.home + "/ayadn/accounts.db"
-      self.check_for_accounts(acc_db)
-      db = Databases.init acc_db
-      active = db['ACTIVE']
-      home = db[active][:path]
+      # acc_db = Dir.home + "/ayadn/accounts.db"
+      acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+      # active = self.check_for_accounts(acc_db)
+      active = Databases.active_account(acc_db)
+      # db = Databases.init acc_db
+      # active = db['ACTIVE']
+      # home = db[active][:path]
+      home = active[3]
       @config = {
         paths: {
           home: home,
@@ -30,9 +33,9 @@ module Ayadn
           lists: "#{home}/lists"
         },
         identity: {
-          id: db[active][:id],
-          username: db[active][:username],
-          handle: db[active][:handle]
+          id: active[1],
+          username: active[0],
+          handle: active[2]
         }
       }
       @default_nr = {
@@ -41,15 +44,19 @@ module Ayadn
         filter: true,
         filter_unranked: false
       }
-      db.close
       @options = self.defaults
     end
 
     def self.check_for_accounts(acc_db)
-      unless File.exist?(acc_db)
+      if File.exist?(Dir.home + "/ayadn/accounts.db")
+        # TODO : migrate
+        #
+      end
+      unless File.exist?(Dir.home + "/ayadn/accounts.sqlite")
         puts Status.not_authorized
         exit
       end
+      Databases.active_account
     end
 
     def self.get_token
