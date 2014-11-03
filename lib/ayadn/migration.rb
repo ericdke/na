@@ -5,12 +5,12 @@ module Ayadn
     def initialize
       @bookmarks = Daybreak::DB.new "#{Settings.config[:paths][:db]}/bookmarks.db" if File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
       @aliases = Daybreak::DB.new "#{Settings.config[:paths][:db]}/aliases.db" if File.exist?("#{Settings.config[:paths][:db]}/aliases.db")
-      @blacklist = Databases.blacklist
-      @niceranks = Databases.nicerank
-      @users = Databases.users
-      @pagination = Databases.pagination
-      @index = Databases.index
-      @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
+      @blacklist = Daybreak::DB.new "#{Settings.config[:paths][:db]}/blacklist.db" if File.exist?("#{Settings.config[:paths][:db]}/blacklist.db")
+      @niceranks = Daybreak::DB.new "#{Settings.config[:paths][:db]}/nicerank.db" if File.exist?("#{Settings.config[:paths][:db]}/nicerank.db")
+      @users = Daybreak::DB.new "#{Settings.config[:paths][:db]}/users.db" if File.exist?("#{Settings.config[:paths][:db]}/users.db")
+      @pagination = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/pagination.db" if File.exist?("#{Settings.config[:paths][:pagination]}/pagination.db")
+      @index = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/index.db" if File.exist?("#{Settings.config[:paths][:pagination]}/index.db")
+      @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db") if File.exist?(Dir.home + "/ayadn/accounts.db")
       @shell = Thor::Shell::Color.new
       @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
       @shell.say_status :create, "#{Settings.config[:paths][:db]}/ayadn.sqlite", :blue
@@ -113,6 +113,9 @@ module Ayadn
         end
       end
       @shell.say_status :done, "#{@blacklist.size} objects", :green
+      @blacklist.close
+      # FileUtils.rm("#{Settings.config[:paths][:db]}/blacklist.db")
+      # @shell.say_status :delete, "#{Settings.config[:paths][:db]}/blacklist.db", :green
     end
 
     def niceranks
@@ -145,6 +148,9 @@ module Ayadn
         end
       end
       @shell.say_status :done, "#{@niceranks.size} objects", :green
+      @niceranks.close
+      # FileUtils.rm("#{Settings.config[:paths][:db]}/nicerank.db")
+      # @shell.say_status :delete, "#{Settings.config[:paths][:db]}/nicerank.db", :green
     end
 
     def users
@@ -169,6 +175,9 @@ module Ayadn
         end
       end
       @shell.say_status :done, "#{@users.size} objects", :green
+      @users.close
+      # FileUtils.rm("#{Settings.config[:paths][:db]}/users.db")
+      # @shell.say_status :delete, "#{Settings.config[:paths][:db]}/users.db", :green
     end
 
     def pagination
@@ -191,6 +200,9 @@ module Ayadn
         end
       end
       @shell.say_status :done, "#{@pagination.size} objects", :green
+      @pagination.close
+      # FileUtils.rm("#{Settings.config[:paths][:pagination]}/pagination.db")
+      # @shell.say_status :delete, "#{Settings.config[:paths][:pagination]}/pagination.db", :green
     end
 
     def index
@@ -208,13 +220,16 @@ module Ayadn
           insert_data = {}
           insert_data[":post_id"] = v[:id]
           insert_data[":count"] = v[:count]
-          insert_data[":content"] = v
+          insert_data[":content"] = v.to_json.to_s
           db_in_transaction.prepare("INSERT INTO TLIndex(count, post_id, content) VALUES(:count, :post_id, :content);") do |insert|
             insert.execute(insert_data)
           end
         end
       end
       @shell.say_status :done, "#{@index.size} objects", :green
+      @index.close
+      FileUtils.rm("#{Settings.config[:paths][:pagination]}/index.db")
+      @shell.say_status :delete, "#{Settings.config[:paths][:pagination]}/index.db", :green
     end
 
     def accounts
@@ -227,7 +242,8 @@ module Ayadn
           user_id INTEGER,
           handle VARCHAR(21),
           account_path TEXT,
-          active INTEGER
+          active INTEGER,
+          token TEXT
         );
       SQL
       sql.reload_schema!
@@ -244,7 +260,9 @@ module Ayadn
           insert_data[":handle"] = "@#{k}"
           insert_data[":account_path"] = v[:path]
           insert_data[":active"] = 0
-          db_in_transaction.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active) VALUES(:username, :user_id, :handle, :account_path, :active);") do |insert|
+          template = Dir.home + "/ayadn/#{k}/auth/token"
+          insert_data[":token"] = File.read(template)
+          db_in_transaction.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active, token) VALUES(:username, :user_id, :handle, :account_path, :active, :token);") do |insert|
             insert.execute(insert_data)
           end
         end

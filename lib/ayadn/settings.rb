@@ -10,13 +10,8 @@ module Ayadn
     end
 
     def self.load_config
-      # acc_db = Dir.home + "/ayadn/accounts.db"
       acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
       active = self.check_for_accounts(acc_db)
-      # active = Databases.active_account(acc_db)
-      # db = Databases.init acc_db
-      # active = db['ACTIVE']
-      # home = db[active][:path]
       home = active[3]
       @config = {
         paths: {
@@ -48,10 +43,19 @@ module Ayadn
     end
 
     def self.check_for_accounts(acc_db)
-      if File.exist?(Dir.home + "/ayadn/accounts.db")
-        # TODO : migrate
-        #
-      end
+      # TODO: set active once daybreak > sql transition is done
+
+      # if File.exist?(Dir.home + "/ayadn/accounts.db")
+      #   puts "\nAyadn 1.x is already installed. Migrate to 2.x now? (y/N)\n".color(:red)
+      #   answer = STDIN.getch
+      #   unless answer.downcase == "y"
+      #     puts Status.canceled
+      #     exit
+      #   end
+      #   Action.new.migrate
+      # end
+
+      # TODO : actual test to find if at least one user is authorized
       unless File.exist?(Dir.home + "/ayadn/accounts.sqlite")
         puts Status.not_authorized
         exit

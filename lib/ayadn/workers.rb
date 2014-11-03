@@ -403,9 +403,9 @@ module Ayadn
 
     def get_real_post_id post_id
       id = post_id.to_i
-      if id > 0 && id <= length_of_index
+      if id <= 200
         resp = get_post_from_index(id)
-        post_id = resp[:id]
+        post_id = resp['id']
       end
       post_id
     end

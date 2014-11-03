@@ -4,7 +4,7 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :index, :pagination, :blacklist, :nicerank, :channels
+      attr_accessor :users, :index, :pagination, :blacklist, :nicerank
     end
 
     def self.open_databases
@@ -14,11 +14,14 @@ module Ayadn
       @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
       @sql = Amalgalite::Database.new(@sqlfile)
       @accounts = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+
+      # get rid of these once daybreak > sql transition is done
       @users = self.init "#{Settings.config[:paths][:db]}/users.db"
       @index = self.init "#{Settings.config[:paths][:pagination]}/index.db"
       @pagination = self.init "#{Settings.config[:paths][:pagination]}/pagination.db"
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
       @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
+
       if Settings.options[:timeline][:show_debug] == true
         puts "\n-Done-\n"
       end
@@ -120,13 +123,15 @@ module Ayadn
           user_id INTEGER,
           handle VARCHAR(21),
           account_path TEXT,
-          active INTEGER
+          active INTEGER,
+          token TEXT
         );
       SQL
       sql.reload_schema!
     end
 
     def self.create_account(acc_db, user)
+      acc_db.execute("DELETE FROM Accounts WHERE username='#{user.username}'")
       acc_db.transaction do |db|
         insert_data = {}
           insert_data[":username"] = user.username
@@ -134,7 +139,8 @@ module Ayadn
           insert_data[":handle"] = user.handle
           insert_data[":account_path"] = user.path
           insert_data[":active"] = 0
-          db.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active) VALUES(:username, :user_id, :handle, :account_path, :active);") do |insert|
+          insert_data[":token"] = user.token
+          db.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active, token) VALUES(:username, :user_id, :handle, :account_path, :active, :token);") do |insert|
             insert.execute(insert_data)
           end
       end
@@ -224,17 +230,28 @@ module Ayadn
     end
 
     def self.save_indexed_posts(posts)
-      @index.clear
-      posts.each {|id, hash| @index[id] = hash}
+      @sql.execute("DELETE FROM TLIndex")
+      @sql.transaction do |db_in_transaction|
+        posts.each do |k, v|
+          insert_data = {}
+          insert_data[":post_id"] = v[:id]
+          insert_data[":count"] = v[:count]
+          insert_data[":content"] = v.to_json.to_s
+          db_in_transaction.prepare("INSERT INTO TLIndex(count, post_id, content) VALUES(:count, :post_id, :content);") do |insert|
+            insert.execute(insert_data)
+          end
+        end
+      end
     end
 
     def self.get_index_length
-      @index.length
+      @sql.execute("SELECT Count(*) FROM TLIndex").flatten[0]
     end
 
     def self.get_post_from_index(number)
-      unless number > @index.length || number <= 0
-        @index.each {|id, values| return values if values[:count] == number}
+      unless number > 200
+        res = @sql.execute("SELECT content FROM TLIndex WHERE count=#{number}").flatten[0]
+        JSON.parse(res)
       else
         puts Status.must_be_in_index
         Errors.global_error({error: "Out of range", caller: caller, data: [number]})
