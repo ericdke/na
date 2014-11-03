@@ -108,9 +108,37 @@ module Ayadn
       acc.execute("SELECT * FROM Accounts")
     end
 
-    def self.set_active_account(acc_db, old_user, new_user)
-      acc_db.execute("UPDATE Accounts SET active=0 WHERE username='#{old_user}'")
+    def self.set_active_account(acc_db, new_user)
+      acc_db.execute("UPDATE Accounts SET active=0")
       acc_db.execute("UPDATE Accounts SET active=1 WHERE username='#{new_user}'")
+    end
+
+    def self.create_account_table(acc_db)
+      acc_db.execute_batch <<-SQL
+        CREATE TABLE Accounts (
+          username VARCHAR(20),
+          user_id INTEGER,
+          handle VARCHAR(21),
+          account_path TEXT,
+          active INTEGER
+        );
+      SQL
+      sql.reload_schema!
+    end
+
+    def self.create_account(acc_db, user)
+      acc_db.transaction do |db|
+        insert_data = {}
+          insert_data[":username"] = user.username
+          insert_data[":user_id"] = user.id
+          insert_data[":handle"] = user.handle
+          insert_data[":account_path"] = user.path
+          insert_data[":active"] = 0
+          db.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active) VALUES(:username, :user_id, :handle, :account_path, :active);") do |insert|
+            insert.execute(insert_data)
+          end
+      end
+      set_active_account(acc_db, user.username)
     end
 
     def self.create_alias(channel_id, channel_alias)

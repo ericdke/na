@@ -39,7 +39,7 @@ module Ayadn
         exit
       else
         puts "\nSwitching to account @#{username}...".color(:green)
-        Databases.set_active_account(acc_db, active_user, username)
+        Databases.set_active_account(acc_db, username)
         puts Status.done
         exit
       end

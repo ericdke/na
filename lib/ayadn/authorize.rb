@@ -2,6 +2,10 @@
 module Ayadn
   class Authorize
 
+    def initialize
+      @shell = Thor::Shell::Color.new
+    end
+
     def authorize
       puts "\e[H\e[2J"
       try_remove_old_ayadn
@@ -28,8 +32,15 @@ module Ayadn
       puts "Saving user token...\n".color(:green)
       create_token_file(user)
       puts "Creating user account for #{user.handle}...\n".color(:green)
-      accounts_db = Databases.init("#{user.home_path}/accounts.db")
-      create_account(user, accounts_db)
+      if File.exist?(Dir.home + "/ayadn/accounts.sqlite")
+        acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+        Databases.create_account(acc_db, user)
+      else
+        acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+        Databases.create_account_table(acc_db)
+        Databases.create_account(acc_db, user)
+      end
+
     end
 
     def install
@@ -37,13 +48,6 @@ module Ayadn
       Errors.info "Creating api, version and config files..."
       Errors.info "Creating version file..."
       Settings.init_config
-    end
-
-    def create_account(user, accounts_db)
-      accounts_db[user.username] = {username: user.username, id: user.id, handle: user.handle, path: user.user_path}
-      accounts_db['ACTIVE'] = user.username
-      accounts_db.flush
-      accounts_db.close
     end
 
     def create_token_file(user)

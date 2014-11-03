@@ -12,8 +12,8 @@ module Ayadn
     def self.load_config
       # acc_db = Dir.home + "/ayadn/accounts.db"
       acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
-      # active = self.check_for_accounts(acc_db)
-      active = Databases.active_account(acc_db)
+      active = self.check_for_accounts(acc_db)
+      # active = Databases.active_account(acc_db)
       # db = Databases.init acc_db
       # active = db['ACTIVE']
       # home = db[active][:path]
@@ -56,7 +56,7 @@ module Ayadn
         puts Status.not_authorized
         exit
       end
-      Databases.active_account
+      Databases.active_account(acc_db)
     end
 
     def self.get_token
