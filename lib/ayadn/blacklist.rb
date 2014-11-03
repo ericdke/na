@@ -96,12 +96,14 @@ module Ayadn
         type = args.shift
         case type
         when 'user', 'username', 'account'
-          target = @workers.add_arobases_to_usernames args
+          target = @workers.remove_arobase_if_present(args)
           Databases.add_to_blacklist('user', target)
+          target = @workers.add_arobases_to_usernames args
           Logs.rec.info "Added '#{target}' to blacklist of users."
         when 'mention', 'mentions'
-          target = @workers.add_arobases_to_usernames args
+          target = @workers.remove_arobase_if_present(args)
           Databases.add_to_blacklist('mention', target)
+          target = @workers.add_arobases_to_usernames args
           Logs.rec.info "Added '#{target}' to blacklist of mentions."
         when 'client', 'source'
           Databases.add_to_blacklist('client', args)

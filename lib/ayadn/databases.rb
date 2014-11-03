@@ -48,12 +48,13 @@ module Ayadn
 
 
     def self.add_to_blacklist(type, target)
+      remove_from_blacklist(target)
       @sql.transaction do |db_in_transaction|
         target.each do |element|
           insert_data = {}
           insert_data[":type"] = type
           insert_data[":content"] = element.downcase
-          db_in_transaction.prepare("INSERT OR REPLACE INTO Blacklist(type, content) VALUES(:type, :content);") do |insert|
+          db_in_transaction.prepare("INSERT INTO Blacklist(type, content) VALUES(:type, :content);") do |insert|
             insert.execute(insert_data)
           end
         end
@@ -261,21 +262,27 @@ module Ayadn
     end
 
     def self.add_to_users_db_from_list(list)
+      delete_users_from_list(list)
       @sql.transaction do |db_in_transaction|
         list.each do |id, content_array|
           insert_data = {}
           insert_data[":id"] = id.to_i
           insert_data[":username"] = content_array[0]
           insert_data[":name"] = content_array[1]
-          db_in_transaction.prepare("INSERT OR REPLACE INTO Users(id, username, name) VALUES(:id, :username, :name);") do |insert|
+          db_in_transaction.prepare("INSERT INTO Users(id, username, name) VALUES(:id, :username, :name);") do |insert|
             insert.execute(insert_data)
           end
         end
       end
     end
 
+    def self.delete_users_from_list(list)
+      list.each {|id, _| @sql.execute("DELETE FROM Users WHERE id=#{id.to_i}")}
+    end
+
     def self.add_to_users_db(id, username, name)
-      @sql.execute("INSERT OR REPLACE INTO Users VALUES(#{id.to_i}, '#{username}', '#{name}')")
+      @sql.execute("DELETE FROM Users WHERE id=#{id.to_i}")
+      @sql.execute("INSERT INTO Users VALUES(#{id.to_i}, '#{username}', '#{name}')")
     end
 
     def self.find_user_by_id(user_id)
@@ -314,7 +321,8 @@ module Ayadn
       else
         key = stream['meta']['marker']['name']
       end
-      @sql.execute("INSERT OR REPLACE INTO Pagination(name, post_id) VALUES('#{key}', #{stream['meta']['max_id'].to_i});")
+      @sql.execute("DELETE FROM Pagination WHERE name=#{key}")
+      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES('#{key}', #{stream['meta']['max_id'].to_i});")
     end
 
     def self.find_last_id_from(name)
@@ -326,7 +334,8 @@ module Ayadn
     end
 
     def self.pagination_insert(name, val)
-      @sql.execute("INSERT OR REPLACE INTO Pagination(name, post_id) VALUES('#{name}', #{val.to_i});")
+      @sql.execute("DELETE FROM Pagination WHERE name='#{name}'")
+      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES('#{name}', #{val.to_i});")
     end
 
   end
