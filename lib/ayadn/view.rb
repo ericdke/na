@@ -382,7 +382,11 @@ module Ayadn
 
     def get_broadcast_alias_from_id(event_id)
       al = Databases.get_alias_from_id(event_id)
-      al.nil? ? event_id : al
+      if al.nil? || al.empty?
+        return event_id
+      else
+        return al
+      end
     end
 
     def filter_nicerank posts, options

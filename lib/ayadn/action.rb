@@ -462,7 +462,7 @@ module Ayadn
         unread_messages = {}
         unread_channels.each do |id|
           @shell.say_status :downloading, "messages from channel #{id}"
-          since = Databases.pagination["channel:#{id}"]
+          since = Databases.find_last_id_from("channel:#{id}")
           unless since.nil?
             api_options = {count: 20, since_id: since}
           else
@@ -480,7 +480,7 @@ module Ayadn
         if Settings.options[:marker][:update_messages] == true
           unread_messages.each do |k,v|
             name = "channel:#{k}"
-            Databases.pagination[name] = v[1]
+            Databases.pagination_insert(name, v[1])
             resp = @api.update_marker(name, v[1])
             res = JSON.parse(resp)
             if res['meta']['code'] != 200
@@ -606,7 +606,7 @@ module Ayadn
           if resp['meta']['code'] == 200
             data = resp['data']
             name = "channel:#{data['channel_id']}"
-            Databases.pagination[name] = data['id']
+            Databases.pagination_insert(name, data['id'])
             marked = @api.update_marker(name, data['id'])
             updated = JSON.parse(marked)
             if updated['meta']['code'] != 200
@@ -687,7 +687,7 @@ module Ayadn
           if resp['meta']['code'] == 200
             data = resp['data']
             name = "channel:#{data['channel_id']}"
-            Databases.pagination[name] = data['id']
+            Databases.pagination_insert(name, data['id'])
             marked = @api.update_marker(name, data['id'])
             updated = JSON.parse(marked)
             if updated['meta']['code'] != 200

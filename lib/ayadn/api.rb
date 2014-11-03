@@ -287,7 +287,7 @@ module Ayadn
 
     def paginate options, target
       if options[:new] || options[:scroll]
-        return {since_id: Databases.pagination[target]}
+        return {since_id: Databases.find_last_id_from(target)}
       end
       return options
     end

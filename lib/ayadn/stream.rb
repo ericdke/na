@@ -89,7 +89,7 @@ module Ayadn
       Check.no_user(stream, username)
       Databases.save_max_id(stream) unless stream['meta']['marker'].nil?
       Check.no_data(stream, 'mentions')
-      if Databases.blacklist["-#{username.downcase}"] || stream['data'][0]['user']['you_muted'] || stream['data'][0]['user']['you_blocked']
+      if Databases.is_in_blacklist?('mention', username) || stream['data'][0]['user']['you_muted'] || stream['data'][0]['user']['you_blocked']
         abort(Status.no_force("#{username.downcase}")) unless options[:raw] || Settings.options[:force]
       end
       @view.render(stream, options)
@@ -191,7 +191,7 @@ module Ayadn
       id = @workers.get_original_id(post_id, details)
       stream = @api.get_convo(id, options)
       Check.no_post(stream, id)
-      Databases.pagination["replies:#{id}"] = stream['meta']['max_id']
+      Databases.pagination_insert("replies:#{id}", stream['meta']['max_id'])
       options = options.dup
       options[:reply_to] = details['data']['reply_to'].to_i unless details['data']['reply_to'].nil?
       options[:post_id] = post_id.to_i

@@ -61,7 +61,12 @@ module Ayadn
     end
 
     def self.is_in_blacklist?(type, target)
-
+      res = @sql.execute("SELECT * FROM Blacklist WHERE type='#{type}' AND content='#{target.downcase}'").flatten
+      if res.empty?
+        return false
+      else
+        return true
+      end
     end
 
     def self.remove_from_blacklist(target)
@@ -309,8 +314,7 @@ module Ayadn
       else
         key = stream['meta']['marker']['name']
       end
-      @sql.execute("DELETE FROM Pagination WHERE name='#{key}'")
-      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES('#{key}', #{stream['meta']['max_id'].to_i});")
+      @sql.execute("INSERT OR REPLACE INTO Pagination(name, post_id) VALUES('#{key}', #{stream['meta']['max_id'].to_i});")
     end
 
     def self.find_last_id_from(name)
@@ -319,6 +323,10 @@ module Ayadn
 
     def self.pagination_delete(name)
       @sql.execute("DELETE FROM Pagination WHERE name='#{name}'")
+    end
+
+    def self.pagination_insert(name, val)
+      @sql.execute("INSERT OR REPLACE INTO Pagination(name, post_id) VALUES('#{name}', #{val.to_i});")
     end
 
   end
