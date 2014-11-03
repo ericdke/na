@@ -4,32 +4,23 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :blacklist, :nicerank
+      attr_accessor :nicerank
     end
 
     def self.open_databases
-      if Settings.options[:timeline][:show_debug] == true
-        puts "\n-Opening databases-\n"
-      end
       @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
       @sql = Amalgalite::Database.new(@sqlfile)
       @accounts = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
 
       # get rid of these once daybreak > sql transition is done
-      @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
-      @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
-
-      if Settings.options[:timeline][:show_debug] == true
-        puts "\n-Done-\n"
-      end
+      @nicerank = Daybreak::DB.new "#{Settings.config[:paths][:db]}/nicerank.db"
     end
 
     def self.all_dbs
-      [@blacklist, @nicerank]
+      [@nicerank]
     end
 
     def self.close_all
-
       if @nicerank.size > 5000
         if Settings.options[:timeline][:show_debug] == true
           puts "\n-Purging NiceRank database-\n"
@@ -37,7 +28,6 @@ module Ayadn
         limit = Time.now - (3600 * 48)
         @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
       end
-
       all_dbs.each do |db|
         db.flush
         db.compact
@@ -45,9 +35,6 @@ module Ayadn
       end
     end
 
-    def self.init(path)
-        Daybreak::DB.new "#{path}"
-    end
 
     def self.add_niceranks niceranks
       niceranks.each {|id,infos| @nicerank[id] = infos}
@@ -59,32 +46,47 @@ module Ayadn
       ids
     end
 
-    def self.add_user_to_blacklist(target)
-      target.each {|username| @blacklist["-#{username.downcase}"] = :user}
+
+    def self.add_to_blacklist(type, target)
+      @sql.transaction do |db_in_transaction|
+        target.each do |element|
+          insert_data = {}
+          insert_data[":type"] = type
+          insert_data[":content"] = element.downcase
+          db_in_transaction.prepare("INSERT OR REPLACE INTO Blacklist(type, content) VALUES(:type, :content);") do |insert|
+            insert.execute(insert_data)
+          end
+        end
+      end
     end
-    def self.add_mention_to_blacklist(target)
-      target.each {|username| @blacklist[username.downcase] = :mention}
+
+    def self.is_in_blacklist?(type, target)
+
     end
-    def self.add_client_to_blacklist(target)
-      target.each {|source| @blacklist[source.downcase] = :client}
-    end
-    def self.add_hashtag_to_blacklist(target)
-      target.each {|tag| @blacklist[tag.downcase] = :hashtag}
-    end
+
     def self.remove_from_blacklist(target)
-      target.each {|el| @blacklist.delete(el.downcase)}
+      target.each do |el|
+        @sql.execute("DELETE FROM Blacklist WHERE content='#{el.downcase}'")
+      end
     end
-    def self.import_blacklist(blacklist)
-      new_list = self.init blacklist
-      new_list.each {|name,type| @blacklist[name] = type}
-      new_list.close
+
+    def self.all_blacklist
+      @sql.execute("SELECT * FROM Blacklist")
     end
-    def self.convert_blacklist
-      dummy = {}
-      @blacklist.each {|v,k| dummy[v.downcase] = k}
-      @blacklist.clear
-      dummy.each {|v,k| @blacklist[v] = k}
-    end
+
+    # def self.import_blacklist(blacklist)
+    #   new_list = self.init blacklist
+    #   new_list.each {|name,type| @blacklist[name] = type}
+    #   new_list.close
+    # end
+    # def self.convert_blacklist
+    #   dummy = {}
+    #   @blacklist.each {|v,k| dummy[v.downcase] = k}
+    #   @blacklist.clear
+    #   dummy.each {|v,k| @blacklist[v] = k}
+    # end
+
+
 
     def self.active_account(acc)
       acc.execute("SELECT * FROM Accounts WHERE active=1")[0]
@@ -189,6 +191,10 @@ module Ayadn
       @sql.execute("DELETE FROM Users")
     end
 
+    def self.clear_blacklist
+      @sql.execute("DELETE FROM Blacklist")
+    end
+
     def self.add_bookmark bookmark
       delete_bookmark(bookmark['id'])
       @sql.transaction do |db_in_transaction|
@@ -218,10 +224,6 @@ module Ayadn
         bm['title'] = new_title
         @sql.execute("UPDATE Bookmarks SET bookmark='#{bm.to_json}' WHERE post_id=#{post_id.to_i}")
       end
-    end
-
-    def self.clear_blacklist
-      @blacklist.clear
     end
 
     def self.save_indexed_posts(posts)
@@ -266,7 +268,6 @@ module Ayadn
         end
       end
     end
-
 
     def self.add_to_users_db(id, username, name)
       @sql.execute("INSERT OR REPLACE INTO Users VALUES(#{id.to_i}, '#{username}', '#{name}')")

@@ -17,9 +17,10 @@ module Ayadn
     def build_blacklist_list(list)
       table = init_table
       table.title = "Your blacklist".color(:cyan) + "".color(:white)
-      table.style = {border_x: '~', border_i: '+', border_y: ':'}
-      list = list.sort_by {|k,v| v} # no sort_by! for Daybreak dbs
-      list.each {|k,v| table << ["#{v.capitalize}".color(:green), "#{k}".color(:red)]}
+      table.style = {border_x: '-', border_i: '+', border_y: '|'}
+      table.headings = [ 'Name', 'Type' ]
+      list.sort!
+      list.each {|obj| table << ["#{obj[1].capitalize}".color(:green), "#{obj[0]}".color(:red)]}
       table
     end
 
@@ -130,13 +131,13 @@ module Ayadn
       posts = {}
       data.each.with_index(1) do |post, index|
         unless Settings.options[:force]
-          if Databases.blacklist[post['source']['name'].downcase]
+          if Databases.is_in_blacklist?('client', post['source']['name'].downcase)
             Debug.skipped({source: post['source']['name']})
             next
           end
         end
         unless Settings.options[:force]
-          if Databases.blacklist["-@#{post['user']['username'].downcase}"]
+          if Databases.is_in_blacklist?('user', post['user']['username'].downcase)
             Debug.skipped({user: post['user']['username']})
             next
           end
@@ -145,7 +146,7 @@ module Ayadn
         @skip = false
         unless Settings.options[:force]
           hashtags.each do |h|
-            if Databases.blacklist[h.downcase]
+            if Databases.is_in_blacklist?('hashtag', h.downcase)
               @skip = true
               Debug.skipped({hashtag: h})
               break
@@ -157,7 +158,7 @@ module Ayadn
         post['entities']['mentions'].each { |m| mentions << m['name'] }
         unless Settings.options[:force]
           mentions.each do |m|
-            if Databases.blacklist["@#{m.downcase}"]
+            if Databases.is_in_blacklist?('mention', m.downcase)
               @skip = true
               Debug.skipped({mention: m})
               break

@@ -56,27 +56,27 @@ module Ayadn
       Databases.open_databases
       @workers = Workers.new
     end
-    def import(database)
-      begin
-        new_db = File.realpath(database)
-        if File.exist?(new_db)
-          Databases.import_blacklist(new_db)
-          Logs.rec.info "Imported '#{new_db}' values in blacklist database."
-        else
-          puts "\nFile '#{new_db}' doesn't exist.\n\n".color(:red)
-          Logs.rec.warn "File '#{new_db}' doesn't exist."
-        end
-      ensure
-        Databases.close_all
-      end
-    end
-    def convert
-      begin
-        Databases.convert_blacklist
-      ensure
-        Databases.close_all
-      end
-    end
+    # def import(database)
+    #   begin
+    #     new_db = File.realpath(database)
+    #     if File.exist?(new_db)
+    #       Databases.import_blacklist(new_db)
+    #       Logs.rec.info "Imported '#{new_db}' values in blacklist database."
+    #     else
+    #       puts "\nFile '#{new_db}' doesn't exist.\n\n".color(:red)
+    #       Logs.rec.warn "File '#{new_db}' doesn't exist."
+    #     end
+    #   ensure
+    #     Databases.close_all
+    #   end
+    # end
+    # def convert
+    #   begin
+    #     Databases.convert_blacklist
+    #   ensure
+    #     Databases.close_all
+    #   end
+    # end
     def clear
       begin
         puts "\n\nAre you sure you want to erase all the content of your blacklist database?\n\n[y/N]\n".color(:red)
@@ -97,17 +97,17 @@ module Ayadn
         case type
         when 'user', 'username', 'account'
           target = @workers.add_arobases_to_usernames args
-          Databases.add_user_to_blacklist(target)
+          Databases.add_to_blacklist('user', target)
           Logs.rec.info "Added '#{target}' to blacklist of users."
         when 'mention', 'mentions'
           target = @workers.add_arobases_to_usernames args
-          Databases.add_mention_to_blacklist(target)
+          Databases.add_to_blacklist('mention', target)
           Logs.rec.info "Added '#{target}' to blacklist of mentions."
         when 'client', 'source'
-          Databases.add_client_to_blacklist(args)
+          Databases.add_to_blacklist('client', args)
           Logs.rec.info "Added '#{args}' to blacklist of clients."
         when 'hashtag', 'tag'
-          Databases.add_hashtag_to_blacklist(args)
+          Databases.add_to_blacklist('hashtag', args)
           Logs.rec.info "Added '#{args}' to blacklist of hashtags."
         else
           puts Status.wrong_arguments
@@ -121,13 +121,12 @@ module Ayadn
         type = args.shift
         case type
         when 'user', 'username', 'account'
-          temp = @workers.add_arobases_to_usernames args
-          target = temp.map {|u| "-#{u}"}
-          Databases.remove_from_blacklist(target)
+          Databases.remove_from_blacklist(args)
+          target = @workers.add_arobases_to_usernames(args)
           Logs.rec.info "Removed '#{target}' from blacklist of users."
         when 'mention', 'mentions'
-          target = @workers.add_arobases_to_usernames args
-          Databases.remove_from_blacklist(target)
+          Databases.remove_from_blacklist(args)
+          target = @workers.add_arobases_to_usernames(args)
           Logs.rec.info "Removed '#{target}' from blacklist of mentions."
         when 'client', 'source', 'hashtag', 'tag'
           Databases.remove_from_blacklist(args)
@@ -150,10 +149,11 @@ module Ayadn
     private
 
     def show_list(options)
-      list = Databases.blacklist
+      list = Databases.all_blacklist
       unless list.empty?
         if options[:raw]
-          list.each {|v,k| puts "#{v},#{k}"}
+          xx = list.map {|obj| [obj[0], obj[1].to_s.force_encoding("UTF-8")] }
+          puts xx.to_json
         else
           puts Workers.new.build_blacklist_list(list)
         end
