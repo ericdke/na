@@ -4,7 +4,7 @@ module Ayadn
   class Databases
 
     class << self
-      attr_accessor :users, :index, :pagination, :blacklist, :nicerank
+      attr_accessor :users, :blacklist, :nicerank
     end
 
     def self.open_databases
@@ -17,7 +17,6 @@ module Ayadn
 
       # get rid of these once daybreak > sql transition is done
       @users = self.init "#{Settings.config[:paths][:db]}/users.db"
-      @pagination = self.init "#{Settings.config[:paths][:pagination]}/pagination.db"
       @blacklist = self.init "#{Settings.config[:paths][:db]}/blacklist.db"
       @nicerank = self.init "#{Settings.config[:paths][:db]}/nicerank.db"
 
@@ -27,7 +26,7 @@ module Ayadn
     end
 
     def self.all_dbs
-      [@users, @pagination, @blacklist, @nicerank]
+      [@users, @blacklist, @nicerank]
     end
 
     def self.close_all
@@ -40,12 +39,7 @@ module Ayadn
         @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
       end
 
-      Debug.db all_dbs
-
       all_dbs.each do |db|
-        if Settings.options[:timeline][:show_debug] == true
-          puts "\n-Closing #{File.basename(db.file)}-"
-        end
         db.flush
         db.compact
         db.close
@@ -91,15 +85,6 @@ module Ayadn
       @blacklist.each {|v,k| dummy[v.downcase] = k}
       @blacklist.clear
       dummy.each {|v,k| @blacklist[v] = k}
-    end
-
-    def self.save_max_id(stream, name = 'unknown')
-      if stream['meta']['marker'].nil?
-        key = name
-      else
-        key = stream['meta']['marker']['name']
-      end
-      @pagination[key] = stream['meta']['max_id']
     end
 
     def self.active_account(acc)
@@ -265,8 +250,20 @@ module Ayadn
       @users[id] = {username => name}
     end
 
+
     def self.has_new?(stream, title)
-      stream['meta']['max_id'].to_i > @pagination[title].to_i
+      res = @sql.execute("SELECT post_id FROM Pagination WHERE name='#{title}'").flatten[0]
+      stream['meta']['max_id'].to_i > res.to_i
+    end
+
+    def self.save_max_id(stream, name = 'unknown')
+      if stream['meta']['marker'].nil?
+        key = name
+      else
+        key = stream['meta']['marker']['name']
+      end
+      @sql.execute("DELETE FROM Pagination WHERE name='#{key}'")
+      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES('#{key}', #{stream['meta']['max_id'].to_i});")
     end
 
   end

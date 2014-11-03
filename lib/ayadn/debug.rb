@@ -20,28 +20,6 @@ module Ayadn
       end
     end
 
-    def self.db dbs
-      if Settings.options[:timeline][:show_debug] == true
-        # puts "/////\nSETTINGS\n"
-        # jj JSON.parse((Settings.config).to_json)
-        # jj JSON.parse((Settings.options).to_json)
-        # Logs.rec.debug "SETTINGS/CONFIG: #{Settings.config}"
-        # Logs.rec.debug "SETTINGS/OPTIONS: #{Settings.options}"
-        # puts "/////\n\n"
-
-        #puts ">>>>>\nDATABASES\n"
-        dbs.each do |db|
-          #puts "Path:\t#{db.file}\nLength:\t#{db.size}\nSize:\t#{db.bytesize / 1024}KB"
-          Logs.rec.debug "DB: #{File.basename(db.file)} - Length: #{db.size}, Size: #{db.bytesize / 1024}KB"
-        end
-        #puts ">>>>>\n\n"
-
-        # puts "^^^^^\nTOKEN\n"
-        # puts Settings.user_token
-        # puts "^^^^^\n\n"
-      end
-    end
-
     def self.err error, stack
       Logs.rec.debug "+DEBUG STACK: #{stack}"
       if Settings.options[:timeline][:show_debug] == true

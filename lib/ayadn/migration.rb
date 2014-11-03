@@ -201,8 +201,8 @@ module Ayadn
       end
       @shell.say_status :done, "#{@pagination.size} objects", :green
       @pagination.close
-      # FileUtils.rm("#{Settings.config[:paths][:pagination]}/pagination.db")
-      # @shell.say_status :delete, "#{Settings.config[:paths][:pagination]}/pagination.db", :green
+      FileUtils.rm("#{Settings.config[:paths][:pagination]}/pagination.db")
+      @shell.say_status :delete, "#{Settings.config[:paths][:pagination]}/pagination.db", :green
     end
 
     def index
