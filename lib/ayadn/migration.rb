@@ -7,7 +7,7 @@ module Ayadn
     def initialize
       @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
       active_old = @accounts['ACTIVE']
-      @home = active_old[active][:path]
+      @home = @accounts[active_old][:path]
       bookmarks_old = "#{@home}/db/bookmarks.db"
       aliases_old = "#{@home}/db/aliases.db"
       blacklist_old = "#{@home}/db/blacklist.db"
