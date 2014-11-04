@@ -79,7 +79,7 @@ module Ayadn
     end
 
     def self.is_in_blacklist?(type, target)
-      res = @sql.execute("SELECT * FROM Blacklist WHERE type='#{type}' AND content='#{target.downcase}'").flatten
+      res = @sql.execute("SELECT * FROM Blacklist WHERE type=\"#{type}\" AND content=\"#{target.downcase}\"").flatten
       if res.empty?
         return false
       else
@@ -89,7 +89,7 @@ module Ayadn
 
     def self.remove_from_blacklist(target)
       target.each do |el|
-        @sql.execute("DELETE FROM Blacklist WHERE content='#{el.downcase}'")
+        @sql.execute("DELETE FROM Blacklist WHERE content=\"#{el.downcase}\"")
       end
     end
 
@@ -121,7 +121,7 @@ module Ayadn
 
     def self.set_active_account(acc_db, new_user)
       acc_db.execute("UPDATE Accounts SET active=0")
-      acc_db.execute("UPDATE Accounts SET active=1 WHERE username='#{new_user}'")
+      acc_db.execute("UPDATE Accounts SET active=1 WHERE username=\"#{new_user}\"")
     end
 
     def self.create_account_table(acc_db)
@@ -139,7 +139,7 @@ module Ayadn
     end
 
     def self.create_account(acc_db, user)
-      acc_db.execute("DELETE FROM Accounts WHERE username='#{user.username}'")
+      acc_db.execute("DELETE FROM Accounts WHERE username=\"#{user.username}\"")
       acc_db.transaction do |db|
         insert_data = {}
           insert_data[":username"] = user.username
@@ -168,7 +168,7 @@ module Ayadn
     end
 
     def self.delete_alias(channel_alias)
-      @sql.execute("DELETE FROM Aliases WHERE alias='#{channel_alias}'")
+      @sql.execute("DELETE FROM Aliases WHERE alias=\"#{channel_alias}\"")
     end
 
     def self.clear_aliases
@@ -185,7 +185,7 @@ module Ayadn
     end
 
     def self.get_channel_id(channel_alias)
-      res = @sql.execute("SELECT channel_id FROM Aliases WHERE alias='#{channel_alias}'")
+      res = @sql.execute("SELECT channel_id FROM Aliases WHERE alias=\"#{channel_alias}\"")
       if res.empty?
         return nil
       else
@@ -245,7 +245,7 @@ module Ayadn
       else
         bm = JSON.parse(req[0][0])
         bm['title'] = new_title
-        @sql.execute("UPDATE Bookmarks SET bookmark='#{bm.to_json}' WHERE post_id=#{post_id.to_i}")
+        @sql.execute("UPDATE Bookmarks SET bookmark=\"#{bm.to_json}\" WHERE post_id=#{post_id.to_i}")
       end
     end
 
@@ -300,7 +300,7 @@ module Ayadn
 
     def self.add_to_users_db(id, username, name)
       @sql.execute("DELETE FROM Users WHERE user_id=#{id.to_i}")
-      @sql.execute("INSERT INTO Users VALUES(#{id.to_i}, '#{username}', '#{name}')")
+      @sql.execute("INSERT INTO Users VALUES(#{id.to_i}, \"#{username}\", \"#{name}\")")
     end
 
     def self.find_user_by_id(user_id)
@@ -329,7 +329,7 @@ module Ayadn
     end
 
     def self.has_new?(stream, title)
-      res = @sql.execute("SELECT post_id FROM Pagination WHERE name='#{title}'").flatten[0]
+      res = @sql.execute("SELECT post_id FROM Pagination WHERE name=\"#{title}\"").flatten[0]
       stream['meta']['max_id'].to_i > res.to_i
     end
 
@@ -339,21 +339,21 @@ module Ayadn
       else
         key = stream['meta']['marker']['name']
       end
-      @sql.execute("DELETE FROM Pagination WHERE name='#{key}'")
-      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES('#{key}', #{stream['meta']['max_id'].to_i});")
+      @sql.execute("DELETE FROM Pagination WHERE name=\"#{key}\"")
+      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(\"#{key}\", #{stream['meta']['max_id'].to_i});")
     end
 
     def self.find_last_id_from(name)
-      @sql.execute("SELECT post_id FROM Pagination WHERE name='#{name}'").flatten[0]
+      @sql.execute("SELECT post_id FROM Pagination WHERE name=\"#{name}\"").flatten[0]
     end
 
     def self.pagination_delete(name)
-      @sql.execute("DELETE FROM Pagination WHERE name='#{name}'")
+      @sql.execute("DELETE FROM Pagination WHERE name=\"#{name}\"")
     end
 
     def self.pagination_insert(name, val)
-      @sql.execute("DELETE FROM Pagination WHERE name='#{name}'")
-      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES('#{name}', #{val.to_i});")
+      @sql.execute("DELETE FROM Pagination WHERE name=\"#{name}\"")
+      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(\"#{name}\", #{val.to_i});")
     end
 
   end

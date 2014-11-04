@@ -21,7 +21,6 @@ module Ayadn
           config: "#{home}/config",
           auth: "#{home}/auth",
           downloads: "#{home}/downloads",
-          backup: "#{home}/backup",
           posts: "#{home}/posts",
           messages: "#{home}/messages",
           lists: "#{home}/lists"

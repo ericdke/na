@@ -8,7 +8,6 @@ module Ayadn
 
     def authorize
       puts "\e[H\e[2J"
-      try_remove_old_ayadn
       show_link
       token = get_token
       check_token(token)
@@ -58,7 +57,7 @@ module Ayadn
     def create_config_folders(user)
       begin
         FileUtils.mkdir_p(user.user_path)
-        %w{log db pagination config auth downloads backup posts messages lists}.each do |target|
+        %w{log db config auth downloads posts messages lists}.each do |target|
           Dir.mkdir("#{user.user_path}/#{target}") unless Dir.exist?("#{user.user_path}/#{target}")
         end
       rescue => e
@@ -74,7 +73,7 @@ module Ayadn
       puts "\n"
       puts "In the browser, log in with your App.net account to authorize Ayadn.\n".color(:cyan)
       puts "You will then be redirected to a page showing a 'user token' (your authorization code).\n".color(:cyan)
-      puts "Copy/paste it here:\n".color(:yellow)
+      puts "Copy/paste the token here:\n".color(:yellow)
       print "> "
     end
 
@@ -96,30 +95,6 @@ module Ayadn
         @shell.say_status :error, "couldn't get the token", :red
         exit
       end
-    end
-
-    def try_remove_old_ayadn
-      if FileOps.old_ayadn?
-        answer = ask_del_old_ayadn
-        unless answer.downcase == "y"
-          puts Status.canceled
-          exit
-        end
-        @shell.say_status :delete, "old version", :blue
-        begin
-          old_dir = Dir.home + "/ayadn"
-          FileUtils.remove_dir(old_dir)
-        rescue => e
-          @shell.say_status :error, "can't remove folder '#{old_dir}'", :red
-          raise e
-        end
-      end
-    end
-
-    def ask_del_old_ayadn
-      puts "\nAn obsolete version of Ayadn has been detected and will be deleted. Install and authorize the new version? [y/N]\n".color(:red)
-      print "> "
-      STDIN.getch
     end
 
     def create_user_data(token, home_path)

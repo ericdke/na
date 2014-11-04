@@ -11,7 +11,7 @@ module Ayadn
       @users = Daybreak::DB.new "#{Settings.config[:paths][:db]}/users.db" if File.exist?("#{Settings.config[:paths][:db]}/users.db")
       @pagination = Daybreak::DB.new "#{Settings.config[:paths][:home]}/pagination/pagination.db" if File.exist?("#{Settings.config[:paths][:home]}/pagination/pagination.db")
       @index = Daybreak::DB.new "#{Settings.config[:paths][:home]}/pagination/index.db" if File.exist?("#{Settings.config[:paths][:home]}/pagination/index.db")
-      @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db") if File.exist?(Dir.home + "/ayadn/accounts.db")
+      @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
       @shell = Thor::Shell::Color.new
       @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
       @shell.say_status :create, "#{Settings.config[:paths][:db]}/ayadn.sqlite", :blue
@@ -19,9 +19,20 @@ module Ayadn
     end
 
     def all
-      if File.exist?("#{Settings.config[:paths][:db]}/channels.db")
-        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/channels.db", :green
-        FileUtils.rm("#{Settings.config[:paths][:db]}/channels.db")
+      # DON'T MODIFY THE ORDER!
+      old_backup = "#{Settings.config[:paths][:home]}/backup"
+      if Dir.exist?(old_backup)
+        if Dir.entries(old_backup).size > 2
+          FileUtils.mv(Dir.glob("#{old_backup}/*"), Settings.config[:paths][:downloads])
+          @shell.say_status :move, "files from 'backup' to 'downloads'", :green
+        end
+        Dir.rmdir(old_backup)
+        @shell.say_status :delete, old_backup, :green
+      end
+      old_channels = "#{Settings.config[:paths][:db]}/channels.db"
+      if File.exist?(old_channels)
+        @shell.say_status :delete, old_channels, :green
+        File.delete(old_channels)
       end
       bookmarks
       aliases
@@ -57,7 +68,7 @@ module Ayadn
         end
         @shell.say_status :done, "#{@bookmarks.size} objects", :green
         @bookmarks.close
-        FileUtils.rm("#{Settings.config[:paths][:db]}/bookmarks.db")
+        File.delete("#{Settings.config[:paths][:db]}/bookmarks.db")
         @shell.say_status :delete, "#{Settings.config[:paths][:db]}/bookmarks.db", :green
       end
     end
@@ -86,7 +97,7 @@ module Ayadn
         end
         @shell.say_status :done, "#{@aliases.size} objects", :green
         @aliases.close
-        FileUtils.rm("#{Settings.config[:paths][:db]}/aliases.db")
+        File.delete("#{Settings.config[:paths][:db]}/aliases.db")
         @shell.say_status :delete, "#{Settings.config[:paths][:db]}/aliases.db", :green
       end
     end
@@ -115,12 +126,12 @@ module Ayadn
       end
       @shell.say_status :done, "#{@blacklist.size} objects", :green
       @blacklist.close
-      # FileUtils.rm("#{Settings.config[:paths][:db]}/blacklist.db")
+      # File.delete("#{Settings.config[:paths][:db]}/blacklist.db")
       # @shell.say_status :delete, "#{Settings.config[:paths][:db]}/blacklist.db", :green
     end
 
     def niceranks
-      FileUtils.rm("#{Settings.config[:paths][:db]}/nicerank.db")
+      File.delete("#{Settings.config[:paths][:db]}/nicerank.db")
       @shell.say_status :delete, "#{Settings.config[:paths][:db]}/nicerank.db", :green
     end
 
@@ -147,7 +158,7 @@ module Ayadn
       end
       @shell.say_status :done, "#{@users.size} objects", :green
       @users.close
-      # FileUtils.rm("#{Settings.config[:paths][:db]}/users.db")
+      # File.delete("#{Settings.config[:paths][:db]}/users.db")
       # @shell.say_status :delete, "#{Settings.config[:paths][:db]}/users.db", :green
     end
 
@@ -172,7 +183,7 @@ module Ayadn
       end
       @shell.say_status :done, "#{@pagination.size} objects", :green
       @pagination.close
-      FileUtils.rm("#{Settings.config[:paths][:home]}/pagination/pagination.db")
+      File.delete("#{Settings.config[:paths][:home]}/pagination/pagination.db")
       @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/pagination.db", :green
     end
 
@@ -199,9 +210,9 @@ module Ayadn
       end
       @shell.say_status :done, "#{@index.size} objects", :green
       @index.close
-      FileUtils.rm("#{Settings.config[:paths][:home]}/pagination/index.db")
+      File.delete("#{Settings.config[:paths][:home]}/pagination/index.db")
       @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/index.db", :green
-      FileUtils.rmdir("#{Settings.config[:paths][:home]}/pagination")
+      Dir.rmdir("#{Settings.config[:paths][:home]}/pagination")
       @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination", :green
     end
 
@@ -243,7 +254,7 @@ module Ayadn
       sql.execute("UPDATE Accounts SET active=1 WHERE username='#{active_account}'")
       @shell.say_status :done, "#{@accounts.size - 1} objects", :green
       @accounts.close
-      # FileUtils.rm(Dir.home + "/ayadn/accounts.db")
+      # File.delete(Dir.home + "/ayadn/accounts.db")
       # @shell.say_status :delete, Dir.home + "/ayadn/accounts.db", :green
     end
 
