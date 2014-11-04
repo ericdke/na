@@ -175,7 +175,7 @@ module Ayadn
         else
           rank = false
           is_human = 'unknown'
-          real_person = nil
+          real_person = 'unknown'
         end
 
         if post['user'].has_key?('name')
@@ -259,6 +259,7 @@ module Ayadn
         posts[post['id'].to_i] = values
 
       end
+
       posts
     end
 
@@ -538,6 +539,10 @@ module Ayadn
     def all_but_me usernames
       arr = usernames.select {|user| user != 'me'}
       at(arr)
+    end
+
+    def self.epoch_to_date(epoch)
+      Time.at(epoch).to_time
     end
 
     private

@@ -67,11 +67,11 @@ module Ayadn
       if Settings.options[:timeline][:show_debug] == true
         # deb = "=====\n"
         # deb << "NiceRanks:\t#{niceranks}\n\n"
-        # deb << "DB size:\t#{Databases.nicerank.size}\n"
+        # deb << "DB size:\t#{Databases.nicerank_size}\n"
         # deb << "=====\n"
         # puts deb.color(Settings.options[:colors][:debug])
         Logs.rec.debug "NR/RANKS: #{niceranks}"
-        Logs.rec.debug "NR/DB SIZE: #{Databases.nicerank.size}"
+        Logs.rec.debug "NR/DB SIZE: #{Databases.niceranks_size}"
       end
     end
 

@@ -3,47 +3,64 @@ module Ayadn
 
   class Databases
 
-    class << self
-      attr_accessor :nicerank
-    end
-
     def self.open_databases
       @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
       @sql = Amalgalite::Database.new(@sqlfile)
       @accounts = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
-
-      # get rid of these once daybreak > sql transition is done
-      @nicerank = Daybreak::DB.new "#{Settings.config[:paths][:db]}/nicerank.db"
-    end
-
-    def self.all_dbs
-      [@nicerank]
     end
 
     def self.close_all
-      if @nicerank.size > 5000
-        if Settings.options[:timeline][:show_debug] == true
-          puts "\n-Purging NiceRank database-\n"
-        end
-        limit = Time.now - (3600 * 48)
-        @nicerank.each {|k,v| @nicerank.delete(k) if v[:cached] < limit}
-      end
-      all_dbs.each do |db|
-        db.flush
-        db.compact
-        db.close
-      end
+      # puts "\n-Purging NiceRank database-\n" if Settings.options[:timeline][:show_debug] == true
+      # limit = Time.now.to_i - (3600 * Settings.options[:nicerank][:cache].to_i)
+      # if Settings.options[:timeline][:show_debug] == true
+      #   before = niceranks_size
+      # end
+      # @sql.execute("DELETE FROM Niceranks WHERE cached < #{limit}")
+      # if Settings.options[:timeline][:show_debug] == true
+      #   puts "\n-Before: #{before} items. After: #{niceranks_size} items.-\n"
+      # end
     end
 
 
     def self.add_niceranks niceranks
-      niceranks.each {|id,infos| @nicerank[id] = infos}
+      niceranks.each {|k,v| @sql.execute("DELETE FROM Niceranks WHERE user_id=#{k.to_i}")}
+      @sql.transaction do |db_in_transaction|
+        niceranks.each do |k,v|
+          insert_data = {}
+          insert_data[":k"] = k.to_i
+          insert_data[":username"] = v[:username]
+          insert_data[":rank"] = v[:rank]
+          human = v[:is_human]
+          human == true ? insert_data[":is_human"] = 1 : insert_data[":is_human"] = 0
+          real_person = v[:real_person]
+          real_person == true ? insert_data[":real_person"] = 1 : insert_data[":real_person"] = 0
+          insert_data[":cached"] = v[:cached]
+          db_in_transaction.prepare("INSERT INTO Niceranks(user_id, username, rank, is_human, real_person, cached) VALUES(:k, :username, :rank, :is_human, :real_person, :cached);") do |insert|
+            insert.execute(insert_data)
+          end
+        end
+      end
     end
 
     def self.get_niceranks user_ids
       ids = {}
-      user_ids.each {|id| ids[id] = @nicerank[id]}
+      user_ids.each do |id|
+        u = @sql.execute("SELECT * FROM Niceranks WHERE user_id=#{id.to_i}").flatten
+        next if u.empty?
+        obj = {
+            username: u[1],
+            rank: u[2],
+            is_human: u[3],
+            real_person: u[4],
+            cached: Time.now.to_i
+          }
+        ids[id.to_s] = obj
+      end
       ids
+    end
+
+    def self.niceranks_size
+      @sql.execute("SELECT Count(*) FROM Niceranks").flatten[0]
     end
 
 
@@ -321,7 +338,7 @@ module Ayadn
       else
         key = stream['meta']['marker']['name']
       end
-      @sql.execute("DELETE FROM Pagination WHERE name=#{key}")
+      @sql.execute("DELETE FROM Pagination WHERE name='#{key}'")
       @sql.execute("INSERT INTO Pagination(name, post_id) VALUES('#{key}', #{stream['meta']['max_id'].to_i});")
     end
 

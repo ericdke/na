@@ -2,8 +2,11 @@
 module Ayadn
   class NiceRank
 
+    attr_reader :store
+
     def initialize
       @url = 'http://api.nice.social/user/nicerank?ids='
+      @store = {}
     end
 
     def get_posts_day ids
@@ -40,74 +43,32 @@ module Ayadn
     end
 
     def get_ranks stream
-      user_ids, get_these, table, niceranks = [], [], {}, {}
+      user_ids, niceranks = [], {}
 
       stream['data'].each do |post|
-        user_ids << post['user']['id'].to_i
-        table[post['user']['id'].to_i] = post['user']['username']
+        user_ids << post['user']['id']
       end
       user_ids.uniq!
 
-      db_ranks = Databases.get_niceranks user_ids
-      expire = Settings.options[:nicerank][:cache] * 3600 # Time.now needs seconds
-
-      db_ranks.each do |id, ranks|
-        if ranks.nil? || (Time.now - ranks[:cached]) > expire
-          get_these << id
-        else
-          niceranks[id] = {
-            username: ranks[:username],
-            rank: ranks[:rank],
-            is_human: ranks[:is_human],
-            real_person: ranks[:real_person],
-            cached: ranks[:cached]
-          }
-        end
+      got = CNX.get "#{@url}#{user_ids.join(',')}&show_details=Y"
+      if got.nil? || got == ""
+        parsed = {'meta' => {'code' => 404}, 'data' => []}
+      else
+        parsed = JSON.parse(got)
       end
 
-      Debug.how_many_ranks niceranks, get_these
-
-      unless get_these.empty?
-        got = CNX.get "#{@url}#{get_these.join(',')}&show_details=Y"
-        blank = JSON.parse({'meta' => {'code' => 404}, 'data' => []}.to_json)
-        if got.nil? || got == ""
-          parsed = blank
-        else
-          parsed = JSON.parse(got)
-        end
-        if parsed['meta']['code'] != 200
-          resp = blank
-        else
-          resp = parsed
-        end
-
-        if resp['meta']['code'] != 200
-          Debug.niceranks_error resp
-          Errors.nr "REQUESTED: #{get_these.join(' ')}"
-          Errors.nr "RESPONSE: #{resp}"
-          if niceranks
-            Debug.ranks_pool niceranks
-            return niceranks
-          else
-            return {}
-          end
-        end
-
-        resp['data'].each do |obj|
-          niceranks[obj['user_id']] = {
-            username: table[obj['user_id']],
-            rank: obj['rank'],
-            is_human: obj['is_human'],
-            real_person: obj['account']['real_person'],
-            cached: Time.now
-          }
-        end
-
-        Debug.total_ranks niceranks
+      parsed['data'].each do |obj|
+        obj['account']['is_human'] == true ? is_human = 1 : is_human = 0
+        obj['account']['real_person'] == true ? real_person = 1 : real_person = 0
+        niceranks[obj['user_id']] = {
+          username: obj['user']['username'],
+          rank: obj['rank'],
+          is_human: is_human,
+          real_person: real_person,
+          cached: Time.now.to_i
+        }
       end
-
-      Databases.add_niceranks niceranks
-
+puts niceranks.inspect
       niceranks
     end
 

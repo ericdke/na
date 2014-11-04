@@ -6,7 +6,6 @@ module Ayadn
       @bookmarks = Daybreak::DB.new "#{Settings.config[:paths][:db]}/bookmarks.db" if File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
       @aliases = Daybreak::DB.new "#{Settings.config[:paths][:db]}/aliases.db" if File.exist?("#{Settings.config[:paths][:db]}/aliases.db")
       @blacklist = Daybreak::DB.new "#{Settings.config[:paths][:db]}/blacklist.db" if File.exist?("#{Settings.config[:paths][:db]}/blacklist.db")
-      @niceranks = Daybreak::DB.new "#{Settings.config[:paths][:db]}/nicerank.db" if File.exist?("#{Settings.config[:paths][:db]}/nicerank.db")
       @users = Daybreak::DB.new "#{Settings.config[:paths][:db]}/users.db" if File.exist?("#{Settings.config[:paths][:db]}/users.db")
       @pagination = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/pagination.db" if File.exist?("#{Settings.config[:paths][:pagination]}/pagination.db")
       @index = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/index.db" if File.exist?("#{Settings.config[:paths][:pagination]}/index.db")
@@ -119,38 +118,8 @@ module Ayadn
     end
 
     def niceranks
-      @shell.say_status :import, "Niceranks database", :cyan
-      @sql.execute_batch <<-SQL
-        CREATE TABLE Niceranks (
-          user_id INTEGER,
-          username VARCHAR(20),
-          rank REAL,
-          is_human INTEGER,
-          real_person INTEGER,
-          cached VARCHAR(255)
-        );
-      SQL
-      @sql.reload_schema!
-      @sql.transaction do |db_in_transaction|
-        @niceranks.each do |k,v|
-          insert_data = {}
-          insert_data[":k"] = k.to_i
-          insert_data[":username"] = v[:username]
-          insert_data[":rank"] = v[:rank]
-          human = v[:is_human]
-          human == true ? insert_data[":is_human"] = 1 : insert_data[":is_human"] = 0
-          real_person = v[:real_person]
-          real_person == true ? insert_data[":real_person"] = 1 : insert_data[":real_person"] = 0
-          insert_data[":cached"] = v[:cached]
-          db_in_transaction.prepare("INSERT INTO Niceranks(user_id, username, rank, is_human, real_person, cached) VALUES(:k, :username, :rank, :is_human, :real_person, :cached);") do |insert|
-            insert.execute(insert_data)
-          end
-        end
-      end
-      @shell.say_status :done, "#{@niceranks.size} objects", :green
-      @niceranks.close
-      # FileUtils.rm("#{Settings.config[:paths][:db]}/nicerank.db")
-      # @shell.say_status :delete, "#{Settings.config[:paths][:db]}/nicerank.db", :green
+      FileUtils.rm("#{Settings.config[:paths][:db]}/nicerank.db")
+      @shell.say_status :delete, "#{Settings.config[:paths][:db]}/nicerank.db", :green
     end
 
     def users

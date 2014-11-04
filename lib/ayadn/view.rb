@@ -399,8 +399,8 @@ module Ayadn
             end
             unless content[:nicerank] == false
               next if content[:nicerank] < Settings.options[:nicerank][:threshold]
-              next if content[:is_human] == false
-              next if content[:real_person] == false
+              next if content[:is_human] == 0
+              next if content[:real_person] == 0
             end
             filtered[id] = content
           end
