@@ -42,7 +42,7 @@ module Ayadn
 
     def self.check_for_accounts(acc_db)
 
-      if File.exist?(Dir.home + "/ayadn/accounts.db")
+      unless File.exist?(Dir.home + "/ayadn/accounts.sqlite")
         puts "\nAyadn 1.x is already installed. Migrate to 2.x now? (y/N)\n".color(:red)
         answer = STDIN.getch
         unless answer.downcase == "y"
@@ -53,10 +53,10 @@ module Ayadn
       end
 
       # TODO : actual test to find if at least one user is authorized
-      unless File.exist?(Dir.home + "/ayadn/accounts.sqlite")
-        puts Status.not_authorized
-        exit
-      end
+      # unless File.exist?(Dir.home + "/ayadn/accounts.sqlite")
+      #   puts Status.not_authorized
+      #   exit
+      # end
       Databases.active_account(acc_db)
     end
 
