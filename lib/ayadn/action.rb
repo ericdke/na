@@ -758,7 +758,7 @@ module Ayadn
       end
     end
 
-    def migrate
+    def self.migrate
       migr = Migration.new
       migr.all
       exit

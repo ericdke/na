@@ -49,7 +49,7 @@ module Ayadn
         sh = Thor::Shell::Color.new
         input = sh.ask("> ")
         if input == "y" || input == "Y"
-          Action.new.migrate
+          Action.migrate
         else
           puts Status.canceled
           exit
