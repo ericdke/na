@@ -45,7 +45,7 @@ module Ayadn
       unless File.exist?(sqlaccounts)
         puts "\nAyadn 1.x is already installed. Migrate to 2.x now? (y/N)\n".color(:red)
         answer = STDIN.getch
-        unless answer.downcase == "y"
+        unless answer == "y" || answer == "Y"
           puts Status.canceled
           exit
         end
