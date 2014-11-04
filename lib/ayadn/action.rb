@@ -761,6 +761,7 @@ module Ayadn
     def migrate
       migr = Migration.new
       migr.all
+      exit
     end
 
     private

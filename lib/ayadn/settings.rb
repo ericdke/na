@@ -41,17 +41,16 @@ module Ayadn
     end
 
     def self.check_for_accounts(acc_db)
-      # TODO: set active once daybreak > sql transition is done
 
-      # if File.exist?(Dir.home + "/ayadn/accounts.db")
-      #   puts "\nAyadn 1.x is already installed. Migrate to 2.x now? (y/N)\n".color(:red)
-      #   answer = STDIN.getch
-      #   unless answer.downcase == "y"
-      #     puts Status.canceled
-      #     exit
-      #   end
-      #   Action.new.migrate
-      # end
+      if File.exist?(Dir.home + "/ayadn/accounts.db")
+        puts "\nAyadn 1.x is already installed. Migrate to 2.x now? (y/N)\n".color(:red)
+        answer = STDIN.getch
+        unless answer.downcase == "y"
+          puts Status.canceled
+          exit
+        end
+        Action.new.migrate
+      end
 
       # TODO : actual test to find if at least one user is authorized
       unless File.exist?(Dir.home + "/ayadn/accounts.sqlite")

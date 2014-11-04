@@ -45,9 +45,7 @@ module Ayadn
     end
 
     def bookmarks
-      unless File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
-        @shell.say_status :skip, "old bookmarks database doesn't exist", :red
-      else
+      if File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
         @shell.say_status :import, "Bookmarks database", :cyan
         @sql.execute_batch <<-SQL
           CREATE TABLE Bookmarks (
@@ -74,9 +72,7 @@ module Ayadn
     end
 
     def aliases
-      unless File.exist?("#{Settings.config[:paths][:db]}/aliases.db")
-        @shell.say_status :skip, "old aliases database doesn't exist", :red
-      else
+      if File.exist?("#{Settings.config[:paths][:db]}/aliases.db")
         @shell.say_status :import, "Aliases database", :cyan
         @sql.execute_batch <<-SQL
           CREATE TABLE Aliases (
@@ -103,31 +99,33 @@ module Ayadn
     end
 
     def blacklist
-      @shell.say_status :import, "Blacklist database", :cyan
-      @sql.execute_batch <<-SQL
-        CREATE TABLE Blacklist (
-          type VARCHAR(255),
-          content TEXT
-        );
-      SQL
-      @sql.reload_schema!
-      @sql.transaction do |db_in_transaction|
-        @blacklist.each do |k,v|
-          insert_data = {}
-          ks = k.dup.to_s
-          ks[0] = "" if ks[0] == "-"
-          ks[0] = "" if ks[0] == "@"
-          insert_data[":k"] = v.to_s
-          insert_data[":v"] = ks
-          db_in_transaction.prepare("INSERT INTO Blacklist(type, content) VALUES(:k, :v);") do |insert|
-            insert.execute(insert_data)
+      if File.exist?("#{Settings.config[:paths][:db]}/blacklist.db")
+        @shell.say_status :import, "Blacklist database", :cyan
+        @sql.execute_batch <<-SQL
+          CREATE TABLE Blacklist (
+            type VARCHAR(255),
+            content TEXT
+          );
+        SQL
+        @sql.reload_schema!
+        @sql.transaction do |db_in_transaction|
+          @blacklist.each do |k,v|
+            insert_data = {}
+            ks = k.dup.to_s
+            ks[0] = "" if ks[0] == "-"
+            ks[0] = "" if ks[0] == "@"
+            insert_data[":k"] = v.to_s
+            insert_data[":v"] = ks
+            db_in_transaction.prepare("INSERT INTO Blacklist(type, content) VALUES(:k, :v);") do |insert|
+              insert.execute(insert_data)
+            end
           end
         end
+        @shell.say_status :done, "#{@blacklist.size} objects", :green
+        @blacklist.close
+        File.delete("#{Settings.config[:paths][:db]}/blacklist.db")
+        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/blacklist.db", :green
       end
-      @shell.say_status :done, "#{@blacklist.size} objects", :green
-      @blacklist.close
-      # File.delete("#{Settings.config[:paths][:db]}/blacklist.db")
-      # @shell.say_status :delete, "#{Settings.config[:paths][:db]}/blacklist.db", :green
     end
 
     def niceranks

@@ -1,3 +1,10 @@
+# 2.0.0 - WIP - 'The Piper At The Gates Of Dawn'
+
+- New: SQLite database. Means FAST!
+- Also means db updates are immediately effective.
+- Code has been optimized. Bugs have been squashed.
+- The migration from 1.x to 2.0 is automatic.
+
 # 1.8.2 - 2014-10-31 - 'Asylum'
 
 - Fix: directed posts in timeline, bis
