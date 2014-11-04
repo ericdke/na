@@ -10,7 +10,6 @@ module Ayadn
     end
 
     def self.load_config
-
       active = self.check_for_accounts
       home = active[3]
       @config = {
@@ -42,15 +41,22 @@ module Ayadn
 
     def self.check_for_accounts
       sqlaccounts = Dir.home + "/ayadn/accounts.sqlite"
-      unless File.exist?(sqlaccounts)
-        puts "\nAyadn 1.x is already installed. Migrate to 2.x now? (y/N)\n".color(:red)
+      if File.exist?(sqlaccounts)
+        return self.init_sqlite(sqlaccounts)
+      else
+        puts "\nAyadn 1.x is installed. Migrate to #{VERSION} now? (y/N)\n".color(:red)
+        puts "\n"
         answer = STDIN.getch
-        unless answer == "y" || answer == "Y"
+        if answer == "y" || answer == "Y"
+          Action.new.migrate
+        else
           puts Status.canceled
           exit
         end
-        Action.new.migrate
       end
+    end
+
+    def self.init_sqlite(sqlaccounts)
       Databases.active_account(Amalgalite::Database.new(sqlaccounts))
     end
 

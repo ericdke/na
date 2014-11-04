@@ -14,7 +14,6 @@ module Ayadn
       @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
       @shell = Thor::Shell::Color.new
       @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
-      @shell.say_status :create, "#{Settings.config[:paths][:db]}/ayadn.sqlite", :blue
       @sql = Amalgalite::Database.new(@sqlfile)
     end
 
