@@ -2,13 +2,15 @@
 module Ayadn
   class Migration
 
+    require 'daybreak'
+
     def initialize
       @bookmarks = Daybreak::DB.new "#{Settings.config[:paths][:db]}/bookmarks.db" if File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
       @aliases = Daybreak::DB.new "#{Settings.config[:paths][:db]}/aliases.db" if File.exist?("#{Settings.config[:paths][:db]}/aliases.db")
       @blacklist = Daybreak::DB.new "#{Settings.config[:paths][:db]}/blacklist.db" if File.exist?("#{Settings.config[:paths][:db]}/blacklist.db")
       @users = Daybreak::DB.new "#{Settings.config[:paths][:db]}/users.db" if File.exist?("#{Settings.config[:paths][:db]}/users.db")
-      @pagination = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/pagination.db" if File.exist?("#{Settings.config[:paths][:pagination]}/pagination.db")
-      @index = Daybreak::DB.new "#{Settings.config[:paths][:pagination]}/index.db" if File.exist?("#{Settings.config[:paths][:pagination]}/index.db")
+      @pagination = Daybreak::DB.new "#{Settings.config[:paths][:home]}/pagination/pagination.db" if File.exist?("#{Settings.config[:paths][:home]}/pagination/pagination.db")
+      @index = Daybreak::DB.new "#{Settings.config[:paths][:home]}/pagination/index.db" if File.exist?("#{Settings.config[:paths][:home]}/pagination/index.db")
       @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db") if File.exist?(Dir.home + "/ayadn/accounts.db")
       @shell = Thor::Shell::Color.new
       @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
@@ -170,8 +172,8 @@ module Ayadn
       end
       @shell.say_status :done, "#{@pagination.size} objects", :green
       @pagination.close
-      FileUtils.rm("#{Settings.config[:paths][:pagination]}/pagination.db")
-      @shell.say_status :delete, "#{Settings.config[:paths][:pagination]}/pagination.db", :green
+      FileUtils.rm("#{Settings.config[:paths][:home]}/pagination/pagination.db")
+      @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/pagination.db", :green
     end
 
     def index
@@ -197,8 +199,10 @@ module Ayadn
       end
       @shell.say_status :done, "#{@index.size} objects", :green
       @index.close
-      FileUtils.rm("#{Settings.config[:paths][:pagination]}/index.db")
-      @shell.say_status :delete, "#{Settings.config[:paths][:pagination]}/index.db", :green
+      FileUtils.rm("#{Settings.config[:paths][:home]}/pagination/index.db")
+      @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/index.db", :green
+      FileUtils.rmdir("#{Settings.config[:paths][:home]}/pagination")
+      @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination", :green
     end
 
     def accounts

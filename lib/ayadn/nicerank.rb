@@ -68,7 +68,7 @@ module Ayadn
           cached: Time.now.to_i
         }
       end
-puts niceranks.inspect
+# puts niceranks.inspect
       niceranks
     end
 

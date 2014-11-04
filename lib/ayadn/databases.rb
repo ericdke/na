@@ -268,7 +268,8 @@ module Ayadn
       @sql.execute("SELECT Count(*) FROM TLIndex").flatten[0]
     end
 
-    def self.get_post_from_index(number)
+    def self.get_post_from_index(arg)
+      number = arg.to_i
       unless number > 200
         res = @sql.execute("SELECT content FROM TLIndex WHERE count=#{number}").flatten[0]
         JSON.parse(res)
@@ -286,7 +287,7 @@ module Ayadn
           insert_data[":id"] = id.to_i
           insert_data[":username"] = content_array[0]
           insert_data[":name"] = content_array[1]
-          db_in_transaction.prepare("INSERT INTO Users(id, username, name) VALUES(:id, :username, :name);") do |insert|
+          db_in_transaction.prepare("INSERT INTO Users(user_id, username, name) VALUES(:id, :username, :name);") do |insert|
             insert.execute(insert_data)
           end
         end
@@ -294,11 +295,11 @@ module Ayadn
     end
 
     def self.delete_users_from_list(list)
-      list.each {|id, _| @sql.execute("DELETE FROM Users WHERE id=#{id.to_i}")}
+      list.each {|id, _| @sql.execute("DELETE FROM Users WHERE user_id=#{id.to_i}")}
     end
 
     def self.add_to_users_db(id, username, name)
-      @sql.execute("DELETE FROM Users WHERE id=#{id.to_i}")
+      @sql.execute("DELETE FROM Users WHERE user_id=#{id.to_i}")
       @sql.execute("INSERT INTO Users VALUES(#{id.to_i}, '#{username}', '#{name}')")
     end
 
@@ -312,15 +313,15 @@ module Ayadn
     end
 
     def self.find_user_object_by_id(user_id)
-      @sql.execute("SELECT * FROM Users WHERE user_id=#{user_id}").flatten[0]
+      @sql.execute("SELECT * FROM Users WHERE user_id=#{user_id}").flatten
     end
 
     def self.all_users
-      @sql.execute("SELECT * FROM Users")
+      @sql.execute("SELECT * FROM Users").flatten
     end
 
     def self.all_users_ids
-      @sql.execute("SELECT user_id FROM Users")
+      @sql.execute("SELECT user_id FROM Users").flatten
     end
 
     def self.all_pagination

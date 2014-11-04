@@ -18,7 +18,6 @@ module Ayadn
           home: home,
           log: "#{home}/log",
           db: "#{home}/db",
-          pagination: "#{home}/pagination",
           config: "#{home}/config",
           auth: "#{home}/auth",
           downloads: "#{home}/downloads",

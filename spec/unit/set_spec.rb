@@ -83,7 +83,6 @@ def init_stubs
       version: 'wee',
       paths: {
         db: 'spec/mock/',
-        pagination: 'spec/mock/',
         log: 'spec/mock'
       }
     })

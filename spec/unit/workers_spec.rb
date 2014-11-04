@@ -14,12 +14,27 @@ describe Ayadn::Workers do
         timeline: {compact: false},
         formats: {table: {width: 75}, list: {reverse: true}}
       })
+    Ayadn::Settings.stub(:config).and_return({
+      identity: {
+        username: 'test',
+        handle: '@test'
+      },
+      post_max_length: 256,
+      message_max_length: 2048,
+      version: 'wee',
+      paths: {
+        db: 'spec/mock/',
+        log: 'spec/mock'
+      }
+    })
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
     Ayadn::Databases.stub(:users).and_return("users")
-    Ayadn::Databases.stub(:get_post_from_index).and_return({id: 3312})
     Ayadn::Databases.stub(:get_index_length).and_return(50)
+    Ayadn::Databases.stub(:is_in_blacklist?).and_return(false)
+    Dir.stub(:home).and_return("spec/mock")
     @workers = Ayadn::Workers.new
+    Ayadn::Databases.open_databases
   end
 
   let(:data) { JSON.parse(File.read("spec/mock/stream.json")) }
@@ -62,13 +77,6 @@ describe Ayadn::Workers do
     it "gets rid of 'me' and adds arobase if needed to other usernames" do
       names = @workers.all_but_me(['yolo', '@james', 'me'])
       expect(names).to eq ['@yolo', '@james']
-    end
-  end
-
-  describe "#get_real_post_id" do
-    it "gets real post id" do
-      id = @workers.get_real_post_id(8)
-      expect(id).to eq 3312
     end
   end
 

@@ -5,8 +5,7 @@ describe Ayadn::Databases do
   before do
     Ayadn::Settings.stub(:config).and_return({
         paths: {
-          db: 'spec/mock/',
-          pagination: 'spec/mock/'
+          db: 'spec/mock/'
         }
       })
     Ayadn::Settings.stub(:options).and_return(
@@ -23,7 +22,7 @@ describe Ayadn::Databases do
       Ayadn::Databases.add_to_users_db(33, 'test', 'Mr Test')
       expect(Ayadn::Databases.all_users_ids).to eq [33]
       u = Ayadn::Databases.find_user_object_by_id(33)
-      expect(u['test']).to eq 'Mr Test'
+      expect(u[2]).to eq 'Mr Test'
     end
   end
   describe ".add_to_users_db_from_list" do
@@ -32,23 +31,25 @@ describe Ayadn::Databases do
       Ayadn::Databases.add_to_users_db_from_list(list)
       expect(Ayadn::Databases.all_users_ids).to eq [12, 666]
       u = Ayadn::Databases.find_user_object_by_id(12)
-      expect(u['yolo']).to eq 'Miss YOLO'
+      expect(u[2]).to eq 'Miss YOLO'
       u = Ayadn::Databases.find_user_object_by_id(666)
-      expect(u['lucy']).to eq 'Lucy Fair'
+      expect(u[0]).to eq 666
+      expect(u[1]).to eq 'lucy'
+      expect(u[2]).to eq 'Lucy Fair'
     end
   end
   describe ".save_max_id" do
     it "saves pagination" do
       stream = {'meta'=>{'max_id'=>'33666','marker'=>{'name'=>'test_stream'}}}
       Ayadn::Databases.save_max_id(stream)
-      expect(Ayadn::Databases.all_pagination).to eq ['test_stream']
+      expect(Ayadn::Databases.all_pagination).to eq ['test_stream', 33666]
       expect(Ayadn::Databases.find_last_id_from('test_stream')).to eq 33666
 
       Ayadn::Databases.pagination_delete('test_stream')
 
       stream = {'meta'=>{'max_id'=>'12'}}
       Ayadn::Databases.save_max_id(stream, 'yolo')
-      expect(Ayadn::Databases.all_pagination).to eq ['yolo']
+      expect(Ayadn::Databases.all_pagination).to eq ['yolo', 12]
       expect(Ayadn::Databases.find_last_id_from('yolo')).to eq 12
     end
   end
@@ -63,18 +64,16 @@ describe Ayadn::Databases do
   end
   describe ".save_indexed_posts" do
     it "saves index" do
-      posts = {'33666' =>{:count=>1},'424242' =>{:count=>2}}
+      posts = {'33666' =>{:count=>1, :id=>33666},'424242' =>{:count=>2, :id=>424242}}
       Ayadn::Databases.save_indexed_posts(posts)
-      expect(Ayadn::Databases.get_post_from_index('424242')[:count]).to eq 2
+      expect(Ayadn::Databases.get_post_from_index('2')['id']).to eq 424242
     end
   end
   describe ".get_post_from_index" do
     it "gets post id from index" do
       posts = {'33666' =>{:count=>1, :id=>33666},'424242' =>{:count=>2, :id=>424242}}
       Ayadn::Databases.save_indexed_posts(posts)
-      r = Ayadn::Databases.get_post_from_index(1)
-      expect(r[:count]).to eq 1
-      expect(r[:id]).to eq 33666
+      expect(Ayadn::Databases.get_post_from_index(1)['id']).to eq 33666
     end
   end
   describe ".create_alias" do
@@ -93,6 +92,5 @@ describe Ayadn::Databases do
     Ayadn::Databases.clear_users
     Ayadn::Databases.clear_pagination
     Ayadn::Databases.clear_index
-    Ayadn::Databases.close_all
   end
 end

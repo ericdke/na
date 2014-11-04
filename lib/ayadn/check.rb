@@ -31,7 +31,7 @@ module Ayadn
     end
 
     def self.no_new_posts stream, options, title
-      if options[:new]
+      if options[:new] == true
         unless Databases.has_new?(stream, title)
           abort(Status.no_new_posts)
         end

@@ -37,7 +37,6 @@ describe Ayadn::BlacklistWorkers do
         version: 'wee',
         paths: {
           db: 'spec/mock/',
-          pagination: 'spec/mock/',
           log: 'spec/mock'
         }
       })
@@ -110,6 +109,5 @@ describe Ayadn::BlacklistWorkers do
     File.delete('spec/mock/ayadn.log')
     Ayadn::Databases.open_databases
     Ayadn::Databases.clear_blacklist
-    Ayadn::Databases.close_all
   end
 end
