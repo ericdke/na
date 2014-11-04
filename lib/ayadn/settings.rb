@@ -45,8 +45,9 @@ module Ayadn
         return self.init_sqlite(sqlaccounts)
       else
         puts "\nAyadn 1.x is installed. Migrate to #{VERSION} now? (y/N)\n".color(:red)
-        puts "\n> "
-        input = STDIN.getch
+        puts "\n"
+        sh = Thor::Shell::Color.new
+        input = sh.ask("> ")
         if input == "y" || input == "Y"
           Action.new.migrate
         else
