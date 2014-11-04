@@ -5,30 +5,41 @@ module Ayadn
     require 'daybreak'
 
     def initialize
-      @bookmarks = Daybreak::DB.new "#{Settings.config[:paths][:db]}/bookmarks.db" if File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
-      @aliases = Daybreak::DB.new "#{Settings.config[:paths][:db]}/aliases.db" if File.exist?("#{Settings.config[:paths][:db]}/aliases.db")
-      @blacklist = Daybreak::DB.new "#{Settings.config[:paths][:db]}/blacklist.db" if File.exist?("#{Settings.config[:paths][:db]}/blacklist.db")
-      @users = Daybreak::DB.new "#{Settings.config[:paths][:db]}/users.db" if File.exist?("#{Settings.config[:paths][:db]}/users.db")
-      @pagination = Daybreak::DB.new "#{Settings.config[:paths][:home]}/pagination/pagination.db" if File.exist?("#{Settings.config[:paths][:home]}/pagination/pagination.db")
-      @index = Daybreak::DB.new "#{Settings.config[:paths][:home]}/pagination/index.db" if File.exist?("#{Settings.config[:paths][:home]}/pagination/index.db")
       @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
+      active_old = @accounts['ACTIVE']
+      @home = active_old[active][:path]
+      bookmarks_old = "#{@home}/db/bookmarks.db"
+      aliases_old = "#{@home}/db/aliases.db"
+      blacklist_old = "#{@home}/db/blacklist.db"
+      users_old = "#{@home}/db/users.db"
+      @pagination_old = "#{@home}/pagination/pagination.db"
+      @index_old = "#{@home}/pagination/index.db"
+
       @shell = Thor::Shell::Color.new
-      @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
+
+      @bookmarks = Daybreak::DB.new(bookmarks_old) if File.exist?(bookmarks_old)
+      @aliases = Daybreak::DB.new(aliases_old) if File.exist?(aliases_old)
+      @blacklist = Daybreak::DB.new(blacklist_old) if File.exist?(blacklist_old)
+      @users = Daybreak::DB.new(users_old) if File.exist?(users_old)
+      @pagination = Daybreak::DB.new(@pagination_old) if File.exist?(@pagination_old)
+      @index = Daybreak::DB.new(@index_old) if File.exist?(@index_old)
+
+      @sqlfile = "#{@home}/ayadn.sqlite"
       @sql = Amalgalite::Database.new(@sqlfile)
     end
 
     def all
       # DON'T MODIFY THE ORDER!
-      old_backup = "#{Settings.config[:paths][:home]}/backup"
+      old_backup = "#{@home}/backup"
       if Dir.exist?(old_backup)
         if Dir.entries(old_backup).size > 2
-          FileUtils.mv(Dir.glob("#{old_backup}/*"), Settings.config[:paths][:downloads])
+          FileUtils.mv(Dir.glob("#{old_backup}/*"), "#{@home}/downloads")
           @shell.say_status :move, "files from 'backup' to 'downloads'", :green
         end
         Dir.rmdir(old_backup)
         @shell.say_status :delete, old_backup, :green
       end
-      old_channels = "#{Settings.config[:paths][:db]}/channels.db"
+      old_channels = "#{@home}/db/channels.db"
       if File.exist?(old_channels)
         @shell.say_status :delete, old_channels, :green
         File.delete(old_channels)
@@ -46,7 +57,7 @@ module Ayadn
     end
 
     def bookmarks
-      if File.exist?("#{Settings.config[:paths][:db]}/bookmarks.db")
+      if File.exist?("#{@home}/db/bookmarks.db")
         @shell.say_status :import, "Bookmarks database", :cyan
         @sql.execute_batch <<-SQL
           CREATE TABLE Bookmarks (
@@ -67,13 +78,13 @@ module Ayadn
         end
         @shell.say_status :done, "#{@bookmarks.size} objects", :green
         @bookmarks.close
-        File.delete("#{Settings.config[:paths][:db]}/bookmarks.db")
+        File.delete("#{@home}/db/bookmarks.db")
         @shell.say_status :delete, "#{Settings.config[:paths][:db]}/bookmarks.db", :green
       end
     end
 
     def aliases
-      if File.exist?("#{Settings.config[:paths][:db]}/aliases.db")
+      if File.exist?("#{@home}/db/aliases.db")
         @shell.say_status :import, "Aliases database", :cyan
         @sql.execute_batch <<-SQL
           CREATE TABLE Aliases (
@@ -94,13 +105,13 @@ module Ayadn
         end
         @shell.say_status :done, "#{@aliases.size} objects", :green
         @aliases.close
-        File.delete("#{Settings.config[:paths][:db]}/aliases.db")
-        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/aliases.db", :green
+        File.delete("#{@home}/db/aliases.db")
+        @shell.say_status :delete, "#{@home}/db/aliases.db", :green
       end
     end
 
     def blacklist
-      if File.exist?("#{Settings.config[:paths][:db]}/blacklist.db")
+      if File.exist?("#{@home}/db/blacklist.db")
         @shell.say_status :import, "Blacklist database", :cyan
         @sql.execute_batch <<-SQL
           CREATE TABLE Blacklist (
@@ -124,20 +135,20 @@ module Ayadn
         end
         @shell.say_status :done, "#{@blacklist.size} objects", :green
         @blacklist.close
-        File.delete("#{Settings.config[:paths][:db]}/blacklist.db")
-        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/blacklist.db", :green
+        File.delete("#{@home}/db/blacklist.db")
+        @shell.say_status :delete, "#{@home}/db/blacklist.db", :green
       end
     end
 
     def niceranks
-      if File.exist?("#{Settings.config[:paths][:db]}/nicerank.db")
-        File.delete("#{Settings.config[:paths][:db]}/nicerank.db")
-        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/nicerank.db", :green
+      if File.exist?("#{@home}/db/nicerank.db")
+        File.delete("#{@home}/db/nicerank.db")
+        @shell.say_status :delete, "#{@home}/db/nicerank.db", :green
       end
     end
 
     def users
-      if File.exist?("#{Settings.config[:paths][:db]}/users.db")
+      if File.exist?("#{@home}/db/users.db")
         @shell.say_status :import, "Users database", :cyan
         @sql.execute_batch <<-SQL
           CREATE TABLE Users (
@@ -160,13 +171,13 @@ module Ayadn
         end
         @shell.say_status :done, "#{@users.size} objects", :green
         @users.close
-        File.delete("#{Settings.config[:paths][:db]}/users.db")
-        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/users.db", :green
+        File.delete("#{@home}/db/users.db")
+        @shell.say_status :delete, "#{@home}/db/users.db", :green
       end
     end
 
     def pagination
-      if File.exist?("#{Settings.config[:paths][:home]}/pagination/pagination.db")
+      if File.exist?(@pagination_old)
         @shell.say_status :import, "Pagination database", :cyan
         @sql.execute_batch <<-SQL
           CREATE TABLE Pagination (
@@ -187,13 +198,13 @@ module Ayadn
         end
         @shell.say_status :done, "#{@pagination.size} objects", :green
         @pagination.close
-        File.delete("#{Settings.config[:paths][:home]}/pagination/pagination.db")
-        @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/pagination.db", :green
+        File.delete(@pagination_old)
+        @shell.say_status :delete, @pagination_old, :green
       end
     end
 
     def index
-      if File.exist?("#{Settings.config[:paths][:home]}/pagination/index.db")
+      if File.exist?(@index_old)
         @shell.say_status :import, "Index database", :cyan
         @sql.execute_batch <<-SQL
           CREATE TABLE TLIndex (
@@ -216,10 +227,10 @@ module Ayadn
         end
         @shell.say_status :done, "#{@index.size} objects", :green
         @index.close
-        File.delete("#{Settings.config[:paths][:home]}/pagination/index.db")
-        @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/index.db", :green
-        Dir.rmdir("#{Settings.config[:paths][:home]}/pagination")
-        @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination", :green
+        File.delete(@index_old)
+        @shell.say_status :delete, @index_old, :green
+        Dir.rmdir("#{@home}/pagination")
+        @shell.say_status :delete, "#{@home}/pagination", :green
       end
     end
 
