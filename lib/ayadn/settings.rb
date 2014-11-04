@@ -10,8 +10,8 @@ module Ayadn
     end
 
     def self.load_config
-      acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
-      active = self.check_for_accounts(acc_db)
+
+      active = self.check_for_accounts
       home = active[3]
       @config = {
         paths: {
@@ -40,8 +40,9 @@ module Ayadn
       @options = self.defaults
     end
 
-    def self.check_for_accounts(acc_db)
-      unless File.exist?(Dir.home + "/ayadn/accounts.sqlite")
+    def self.check_for_accounts
+      sqlaccounts = Dir.home + "/ayadn/accounts.sqlite"
+      unless File.exist?(sqlaccounts)
         puts "\nAyadn 1.x is already installed. Migrate to 2.x now? (y/N)\n".color(:red)
         answer = STDIN.getch
         unless answer.downcase == "y"
@@ -50,7 +51,7 @@ module Ayadn
         end
         Action.new.migrate
       end
-      Databases.active_account(acc_db)
+      Databases.active_account(Amalgalite::Database.new(sqlaccounts))
     end
 
     def self.get_token
