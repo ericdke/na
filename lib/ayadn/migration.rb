@@ -42,6 +42,8 @@ module Ayadn
       pagination
       index
       accounts
+      @shell.say_status :done, "Ready to go!", :green
+      @shell.say_status :thanks, "Please launch Ayadn again.", :cyan
     end
 
     def bookmarks
@@ -129,89 +131,97 @@ module Ayadn
     end
 
     def niceranks
-      File.delete("#{Settings.config[:paths][:db]}/nicerank.db")
-      @shell.say_status :delete, "#{Settings.config[:paths][:db]}/nicerank.db", :green
+      if File.exist?("#{Settings.config[:paths][:db]}/nicerank.db")
+        File.delete("#{Settings.config[:paths][:db]}/nicerank.db")
+        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/nicerank.db", :green
+      end
     end
 
     def users
-      @shell.say_status :import, "Users database", :cyan
-      @sql.execute_batch <<-SQL
-        CREATE TABLE Users (
-          user_id INTEGER,
-          username VARCHAR(20),
-          name TEXT
-        );
-      SQL
-      @sql.reload_schema!
-      @sql.transaction do |db_in_transaction|
-        @users.each do |k,v|
-          insert_data = {}
-          insert_data[":id"] = k.to_i
-          insert_data[":username"] = v.keys[0]
-          insert_data[":name"] = v.values[0]
-          db_in_transaction.prepare("INSERT INTO Users(user_id, username, name) VALUES(:id, :username, :name);") do |insert|
-            insert.execute(insert_data)
+      if File.exist?("#{Settings.config[:paths][:db]}/users.db")
+        @shell.say_status :import, "Users database", :cyan
+        @sql.execute_batch <<-SQL
+          CREATE TABLE Users (
+            user_id INTEGER,
+            username VARCHAR(20),
+            name TEXT
+          );
+        SQL
+        @sql.reload_schema!
+        @sql.transaction do |db_in_transaction|
+          @users.each do |k,v|
+            insert_data = {}
+            insert_data[":id"] = k.to_i
+            insert_data[":username"] = v.keys[0]
+            insert_data[":name"] = v.values[0]
+            db_in_transaction.prepare("INSERT INTO Users(user_id, username, name) VALUES(:id, :username, :name);") do |insert|
+              insert.execute(insert_data)
+            end
           end
         end
+        @shell.say_status :done, "#{@users.size} objects", :green
+        @users.close
+        File.delete("#{Settings.config[:paths][:db]}/users.db")
+        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/users.db", :green
       end
-      @shell.say_status :done, "#{@users.size} objects", :green
-      @users.close
-      # File.delete("#{Settings.config[:paths][:db]}/users.db")
-      # @shell.say_status :delete, "#{Settings.config[:paths][:db]}/users.db", :green
     end
 
     def pagination
-      @shell.say_status :import, "Pagination database", :cyan
-      @sql.execute_batch <<-SQL
-        CREATE TABLE Pagination (
-          name TEXT,
-          post_id INTEGER
-        );
-      SQL
-      @sql.reload_schema!
-      @sql.transaction do |db_in_transaction|
-        @pagination.each do |k,v|
-          insert_data = {}
-          insert_data[":post_id"] = v.to_i
-          insert_data[":name"] = k.to_s
-          db_in_transaction.prepare("INSERT INTO Pagination(name, post_id) VALUES(:name, :post_id);") do |insert|
-            insert.execute(insert_data)
+      if File.exist?("#{Settings.config[:paths][:home]}/pagination/pagination.db")
+        @shell.say_status :import, "Pagination database", :cyan
+        @sql.execute_batch <<-SQL
+          CREATE TABLE Pagination (
+            name TEXT,
+            post_id INTEGER
+          );
+        SQL
+        @sql.reload_schema!
+        @sql.transaction do |db_in_transaction|
+          @pagination.each do |k,v|
+            insert_data = {}
+            insert_data[":post_id"] = v.to_i
+            insert_data[":name"] = k.to_s
+            db_in_transaction.prepare("INSERT INTO Pagination(name, post_id) VALUES(:name, :post_id);") do |insert|
+              insert.execute(insert_data)
+            end
           end
         end
+        @shell.say_status :done, "#{@pagination.size} objects", :green
+        @pagination.close
+        File.delete("#{Settings.config[:paths][:home]}/pagination/pagination.db")
+        @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/pagination.db", :green
       end
-      @shell.say_status :done, "#{@pagination.size} objects", :green
-      @pagination.close
-      File.delete("#{Settings.config[:paths][:home]}/pagination/pagination.db")
-      @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/pagination.db", :green
     end
 
     def index
-      @shell.say_status :import, "Index database", :cyan
-      @sql.execute_batch <<-SQL
-        CREATE TABLE TLIndex (
-          count INTEGER,
-          post_id INTEGER,
-          content TEXT
-        );
-      SQL
-      @sql.reload_schema!
-      @sql.transaction do |db_in_transaction|
-        @index.each do |k,v|
-          insert_data = {}
-          insert_data[":post_id"] = v[:id]
-          insert_data[":count"] = v[:count]
-          insert_data[":content"] = v.to_json.to_s
-          db_in_transaction.prepare("INSERT INTO TLIndex(count, post_id, content) VALUES(:count, :post_id, :content);") do |insert|
-            insert.execute(insert_data)
+      if File.exist?("#{Settings.config[:paths][:home]}/pagination/index.db")
+        @shell.say_status :import, "Index database", :cyan
+        @sql.execute_batch <<-SQL
+          CREATE TABLE TLIndex (
+            count INTEGER,
+            post_id INTEGER,
+            content TEXT
+          );
+        SQL
+        @sql.reload_schema!
+        @sql.transaction do |db_in_transaction|
+          @index.each do |k,v|
+            insert_data = {}
+            insert_data[":post_id"] = v[:id]
+            insert_data[":count"] = v[:count]
+            insert_data[":content"] = v.to_json.to_s
+            db_in_transaction.prepare("INSERT INTO TLIndex(count, post_id, content) VALUES(:count, :post_id, :content);") do |insert|
+              insert.execute(insert_data)
+            end
           end
         end
+        @shell.say_status :done, "#{@index.size} objects", :green
+        @index.close
+        File.delete("#{Settings.config[:paths][:home]}/pagination/index.db")
+        @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/index.db", :green
+        Dir.rmdir("#{Settings.config[:paths][:home]}/pagination")
+        @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination", :green
       end
-      @shell.say_status :done, "#{@index.size} objects", :green
-      @index.close
-      File.delete("#{Settings.config[:paths][:home]}/pagination/index.db")
-      @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination/index.db", :green
-      Dir.rmdir("#{Settings.config[:paths][:home]}/pagination")
-      @shell.say_status :delete, "#{Settings.config[:paths][:home]}/pagination", :green
     end
 
     def accounts
@@ -252,8 +262,8 @@ module Ayadn
       sql.execute("UPDATE Accounts SET active=1 WHERE username='#{active_account}'")
       @shell.say_status :done, "#{@accounts.size - 1} objects", :green
       @accounts.close
-      # File.delete(Dir.home + "/ayadn/accounts.db")
-      # @shell.say_status :delete, Dir.home + "/ayadn/accounts.db", :green
+      File.delete(Dir.home + "/ayadn/accounts.db")
+      @shell.say_status :delete, Dir.home + "/ayadn/accounts.db", :green
     end
 
   end
