@@ -79,7 +79,7 @@ module Ayadn
         @shell.say_status :done, "#{@bookmarks.size} objects", :green
         @bookmarks.close
         File.delete("#{@home}/db/bookmarks.db")
-        @shell.say_status :delete, "#{Settings.config[:paths][:db]}/bookmarks.db", :green
+        @shell.say_status :delete, "#{@home}/db/bookmarks.db", :green
       end
     end
 
