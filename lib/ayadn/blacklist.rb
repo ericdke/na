@@ -66,16 +66,10 @@ module Ayadn
     #       puts "\nFile '#{new_db}' doesn't exist.\n\n".color(:red)
     #       Logs.rec.warn "File '#{new_db}' doesn't exist."
     #     end
-    #   ensure
-    #     Databases.close_all
     #   end
     # end
     # def convert
-    #   begin
     #     Databases.convert_blacklist
-    #   ensure
-    #     Databases.close_all
-    #   end
     # end
     def clear
       begin
@@ -87,8 +81,6 @@ module Ayadn
         else
           abort Status.canceled
         end
-      ensure
-        Databases.close_all
       end
     end
     def add(args)
@@ -114,8 +106,6 @@ module Ayadn
         else
           puts Status.wrong_arguments
         end
-      ensure
-        Databases.close_all
       end
     end
     def remove(args)
@@ -136,15 +126,11 @@ module Ayadn
         else
           puts Status.wrong_arguments
         end
-      ensure
-        Databases.close_all
       end
     end
     def list(options)
       begin
         show_list(options)
-      ensure
-        Databases.close_all
       end
     end
 

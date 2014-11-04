@@ -9,19 +9,6 @@ module Ayadn
       @accounts = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
     end
 
-    def self.close_all
-      # puts "\n-Purging NiceRank database-\n" if Settings.options[:timeline][:show_debug] == true
-      # limit = Time.now.to_i - (3600 * Settings.options[:nicerank][:cache].to_i)
-      # if Settings.options[:timeline][:show_debug] == true
-      #   before = niceranks_size
-      # end
-      # @sql.execute("DELETE FROM Niceranks WHERE cached < #{limit}")
-      # if Settings.options[:timeline][:show_debug] == true
-      #   puts "\n-Before: #{before} items. After: #{niceranks_size} items.-\n"
-      # end
-    end
-
-
     def self.add_niceranks niceranks
       niceranks.each {|k,v| @sql.execute("DELETE FROM Niceranks WHERE user_id=#{k.to_i}")}
       @sql.transaction do |db_in_transaction|

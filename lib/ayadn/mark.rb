@@ -53,8 +53,6 @@ module Ayadn
         puts Status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -73,8 +71,6 @@ module Ayadn
         list.each {|marked| puts make_entry(JSON.parse(marked[1])); puts "\n"}
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args, options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -93,8 +89,6 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: []})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -110,8 +104,6 @@ module Ayadn
         puts Status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -131,8 +123,6 @@ module Ayadn
         puts Status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
-      ensure
-        Databases.close_all
       end
     end
 

@@ -17,7 +17,6 @@ module Ayadn
       Settings.init_config
       Logs.create_logger
       Databases.open_databases
-      at_exit { Databases.close_all }
     end
 
     def method_missing(meth, options)

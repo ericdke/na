@@ -22,8 +22,6 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -42,8 +40,6 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -65,8 +61,6 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
-      ensure
-        Databases.close_all
       end
     end
 
@@ -85,8 +79,6 @@ module Ayadn
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: []})
-      ensure
-        Databases.close_all
       end
     end
 
