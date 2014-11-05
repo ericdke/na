@@ -10,12 +10,14 @@ module Ayadn
 
     def self.http response, url
       if Settings.options[:timeline][:show_debug] == true
-        # deb = ":::::\n"
-        # deb << "Url:\t\t#{url}\n\n"
-        # deb << "Headers:\t#{response.headers}\n"
-        # deb << ":::::\n"
-        # puts deb.color(Settings.options[:colors][:debug])
-        Logs.rec.debug "HTTP/URL: #{url}"
+        deb = "\n"
+        deb << "+ HTTP\n"
+        deb << "* t#{Time.now.to_i}\n"
+        # deb << "Url:\t\t#{url}\n"
+        deb << "#{response.headers}\n"
+        deb << "\n"
+        puts deb.color(Settings.options[:colors][:debug])
+        # Logs.rec.debug "HTTP/URL: #{url}"
         Logs.rec.debug "HTTP/HEADERS: #{response.headers}"
       end
     end
@@ -31,37 +33,16 @@ module Ayadn
       end
     end
 
-    def self.niceranks
+    def self.stream(stream, options, target)
       if Settings.options[:timeline][:show_debug] == true
-        deb = "\n\n"
-        deb << "+ NICERANK"
-        deb << "* t#{Time.now.to_i}"
-        deb << "Posts:\t\t#{stream['data'].size}"
-        deb << "Requested NR:\t#{user_ids.size}"
-        deb << "* TOTALS"
-        deb << "Posts:\t\t#{@posts}"
-        deb << "Requested NR:\t#{@ids}"
-        deb << "Hits DB:\t#{@hits}"
-        deb << "Uniques:\t#{@store.count}"
-        deb << "\n\n"
-        puts deb.color(Settings.options[:colors][:debug])
-        Logs.rec.debug "NICERANK/STREAM LEN: #{@posts}"
-        Logs.rec.debug "NICERANK/REQUESTS: #{@ids}"
-        Logs.rec.debug "NICERANK/CACHE HITS: #{@hits}"
-        Logs.rec.debug "NICERANK/CACHED IDS: #{@store.count}"
-      end
-    end
-
-    def self.stream stream, options, target
-      if Settings.options[:timeline][:show_debug] == true
-        deb = "\n\n"
-        deb << "+ STREAM"
-        deb << "* t#{Time.now.to_i}"
-        deb << "Meta:\t\t#{stream['meta']}"
-        deb << "Options:\t#{options.inspect}"
-        deb << "Target:\t\t#{target.inspect}"
-        deb << "Posts:\t\t#{stream['data'].length}"
-        deb << "\n\n"
+        deb = "\n"
+        deb << "+ STREAM\n"
+        deb << "* t#{Time.now.to_i}\n"
+        deb << "Options:\t#{options.inspect}\n"
+        deb << "Target:\t\t#{target.inspect}\n"
+        deb << "Posts:\t\t#{stream['data'].length}\n"
+        deb << "Meta:\t\t#{stream['meta']}\n"
+        deb << "\n"
         puts deb.color(Settings.options[:colors][:debug])
         Logs.rec.debug "STREAM/META: #{stream['meta']}"
         Logs.rec.debug "STREAM/OPTIONS: #{options.inspect}"

@@ -56,7 +56,24 @@ module Ayadn
       @posts += stream['data'].size
       @ids += user_ids.size
 
-      Debug.niceranks
+      if Settings.options[:timeline][:show_debug] == true
+        deb = "\n"
+        deb << "+ NICERANK\n"
+        deb << "* t#{Time.now.to_i}\n"
+        deb << "Posts:\t\t#{stream['data'].size}\n"
+        deb << "Requested NR:\t#{user_ids.size}\n"
+        deb << "* TOTALS\n"
+        deb << "Posts:\t\t#{@posts}\n"
+        deb << "Fetched ranks:\t#{@ids}\n"
+        deb << "DB hits:\t#{@hits}\n"
+        deb << "Uniques:\t#{@store.count}\n"
+        deb << "\n"
+        puts deb.color(Settings.options[:colors][:debug])
+        Logs.rec.debug "NICERANK/POSTS: #{@posts}"
+        Logs.rec.debug "NICERANK/NR CALLS: #{@ids}"
+        Logs.rec.debug "NICERANK/CACHE HITS: #{@hits}"
+        Logs.rec.debug "NICERANK/CACHED IDS: #{@store.count}"
+      end
 
       return niceranks
     end
