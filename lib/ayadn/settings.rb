@@ -42,15 +42,18 @@ module Ayadn
     def self.check_for_accounts
       sqlaccounts = Dir.home + "/ayadn/accounts.sqlite"
       if File.exist?(sqlaccounts)
+        # Ayadn 2.x with already authorized account(s)
         return self.init_sqlite(sqlaccounts)
       else
         sh = Thor::Shell::Color.new
         if File.exist?(Dir.home + "/ayadn/accounts.db")
-          sh.say_status :upgrade, "Ayadn 1.x is installed. Please run `ayadn migrate` to upgrade to 2.0!"
+          # Ayadn 1.x with already authorized account(s)
+          sh.say_status :upgrade, "Ayadn 1.x user data already exists. Please run `ayadn migrate` to upgrade to 2.0!", :red
           puts
           exit
         else
-          sh.say_status :auth, "No user authorized. Please run `ayadn -auth`!"
+          # Ayadn 1.x without authorized accounts
+          sh.say_status :auth, "No user authorized. Please run `ayadn -auth`!", :red
           puts
           exit
         end

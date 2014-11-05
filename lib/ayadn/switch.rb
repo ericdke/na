@@ -35,7 +35,7 @@ module Ayadn
       end
       flag = accounts.select { |acc| acc[0] == username }.flatten
       if flag.empty?
-        puts "\nThis account isn't in the database. Please run 'ayadn authorize'.\n".color(:red)
+        puts "\nThis account isn't in the database. Please run `ayadn -auth`.\n".color(:red)
         exit
       else
         puts "\nSwitching to account @#{username}...".color(:green)
@@ -48,7 +48,7 @@ module Ayadn
     private
 
     def please
-      puts "\nPlease run 'ayadn authorize' first.\n".color(:red)
+      puts "\nPlease run `ayadn -auth` first.\n".color(:red)
       exit
     end
   end

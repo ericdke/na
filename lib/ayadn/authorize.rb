@@ -11,7 +11,6 @@ module Ayadn
       show_link
       token = get_token
       check_token(token)
-      puts "\n\nThanks you!\n".color(:green)
       @shell.say_status :connexion, "downloading user info", :cyan
       user = create_user_data(token, Dir.home + "/ayadn")
       prepare(user)
@@ -19,9 +18,9 @@ module Ayadn
       Settings.load_config
       Logs.create_logger
       install
-      puts Status.done
-      Errors.info "Done!"
-      puts "\nThank you for using Ayadn. Enjoy!\n\n".color(:yellow)
+      @shell.say_status :done, "configuration", :green
+      Errors.info "Authorized."
+      @shell.say_status :end, "Thank you for using Ayadn. Enjoy!", :yellow
     end
 
     private
@@ -38,7 +37,7 @@ module Ayadn
         Databases.create_tables(user)
       else
         sh = Thor::Shell::Color.new
-        sh.say_status :upgrade, "Ayadn 1.x is installed. Please run `ayadn migrate` to upgrade to 2.0!"
+        sh.say_status :upgrade, "Ayadn 1.x user data already exists. Please run `ayadn migrate` to upgrade to 2.0!", :red
         puts
         exit
         # acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
