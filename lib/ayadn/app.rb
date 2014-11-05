@@ -540,7 +540,7 @@ module Ayadn
 
     desc "migrate", "TEMP: migrate databases"
     def migrate
-      Action.new.migrate
+      Migration.new.all
     end
 
   end
