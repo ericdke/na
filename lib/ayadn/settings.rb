@@ -44,15 +44,17 @@ module Ayadn
       if File.exist?(sqlaccounts)
         return self.init_sqlite(sqlaccounts)
       else
-        puts "\nAyadn 1.x is installed. Migrate to #{VERSION} now? (y/N)\n".color(:red)
-        puts "\n"
-        sh = Thor::Shell::Color.new
-        input = sh.ask("> ")
-        if input == "y" || input == "Y"
-          Action.migrate
-        else
-          puts Status.canceled
-          exit
+        if File.exist?(Dir.home + "/ayadn/accounts.db")
+          puts "\nAyadn 1.x is installed. Migrate to #{VERSION} now? (y/N)\n".color(:red)
+          puts "\n"
+          sh = Thor::Shell::Color.new
+          input = sh.ask("> ")
+          if input == "y" || input == "Y"
+            Action.migrate
+          else
+            puts Status.canceled
+            exit
+          end
         end
       end
     end

@@ -326,6 +326,9 @@ module Ayadn
       else
         key = stream['meta']['marker']['name']
       end
+
+      # crashes in Linux when -tl after just migrated ("no Pagination table")
+
       @sql.execute("DELETE FROM Pagination WHERE name=\"#{key}\"")
       @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(\"#{key}\", #{stream['meta']['max_id'].to_i});")
     end
