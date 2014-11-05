@@ -47,6 +47,8 @@ module Ayadn
         if File.exist?(Dir.home + "/ayadn/accounts.db")
           sh = Thor::Shell::Color.new
           sh.say_status :upgrade, "Ayadn 1.x is installed. Please run `ayadn migrate` to upgrade to 2.0!"
+          puts
+          exit
           # puts "\nAyadn 1.x is installed. Migrate to #{VERSION} now? (y/N)\n".color(:red)
           # puts "\n"
           #
