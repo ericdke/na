@@ -191,14 +191,6 @@ module Ayadn
       end
     end
 
-    def self.cache_range value
-      if value >= 1 && value <= 168
-        value.round
-      else
-        abort(Status.cache_range)
-      end
-    end
-
     def self.width_range value
       if value >= 60 && value <= 90
         value.round
@@ -370,12 +362,6 @@ module Ayadn
       @input = 'threshold'
       @output = Validators.threshold(value)
       Settings.options[:nicerank][:threshold] = @output
-    end
-
-    def cache value
-      @input = 'cache'
-      @output = Validators.cache_range(value.to_i)
-      Settings.options[:nicerank][:cache] = @output
     end
 
   end

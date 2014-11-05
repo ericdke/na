@@ -2,41 +2,66 @@
 module Ayadn
   class NiceRank
 
+    require 'fast_cache'
+
     attr_reader :store
 
     def initialize
       @url = 'http://api.nice.social/user/nicerank?ids='
-      @store = {}
+      @store = FastCache::Cache.new(5_000, 120*60) # 5000 items with 2 hours TTL each
+      @hits = 0
+      @ids = 0
+      @posts = 0
     end
 
-    # XP
+    # Get posts
+    # Get unique posters
+    # Get NR response
+    # Fetch IDs from store
+    # if absent, decode + save to dic + cache in store
+    # if present, save to dic from store (and count hits for debug)
     def get_ranks stream
       user_ids, niceranks = [], {}
       stream['data'].each do |post|
-        user_ids << post['user']['id']
+        id = post['user']['id']
+        user_ids << id if @store[id].nil?
       end
       user_ids.uniq!
-      got = CNX.get "#{@url}#{user_ids.join(',')}&show_details=Y"
+      got = CNX.get "#{@url}#{user_ids.join(',')}&show_details=Y" unless user_ids.empty?
       if got.nil? || got == ""
         parsed = {'meta' => {'code' => 404}, 'data' => []}
       else
         parsed = JSON.parse(got)
       end
       parsed['data'].each do |obj|
-        obj['account']['is_human'] == true ? is_human = 1 : is_human = 0
-        obj['account']['real_person'] == true ? real_person = 1 : real_person = 0
-        niceranks[obj['user_id']] = {
-          username: obj['user']['username'],
-          rank: obj['rank'],
-          is_human: is_human,
-          real_person: real_person,
-          cached: Time.now.to_i
-        }
+        res = @store[obj['user_id']]
+        if res.nil?
+          obj['account']['is_human'] == true ? is_human = 1 : is_human = 0
+          obj['account']['real_person'] == true ? real_person = 1 : real_person = 0
+          content = {
+            username: obj['user']['username'],
+            rank: obj['rank'],
+            is_human: is_human,
+            real_person: real_person
+          }
+          @store[obj['user_id']] = content
+          niceranks[obj['user_id']] = content
+        else
+          @hits += 1
+          niceranks[obj['user_id']] = res
+        end
+
       end
-# puts niceranks.inspect
-      niceranks
+
+      @posts += stream['data'].size
+      @ids += user_ids.size
+
+      Debug.niceranks
+
+      return niceranks
     end
 
+    # This is for user info, no scrolling: no need to cache
     def get_posts_day ids
       resp = JSON.parse(CNX.get("#{@url}#{ids.join(',')}&show_details=Y"))
       if resp.nil? || resp['meta']['code'] != 200
@@ -52,6 +77,9 @@ module Ayadn
       end
     end
 
+    # This is for user lists, no scrolling: no need to cache
+    # Even with a lot of requests, it's within the NR limits
+    # because of the slicing (upto 200 objects / call)
     def from_ids ids
       blocs, ranks = [], []
       blank = JSON.parse({'meta' => {'code' => 404}, 'data' => []}.to_json)
@@ -69,36 +97,6 @@ module Ayadn
       end
       return ranks.flatten!
     end
-
-    # WORKING
-    # "normal" version
-#     def get_ranks stream
-#       user_ids, niceranks = [], {}
-#       stream['data'].each do |post|
-#         user_ids << post['user']['id']
-#       end
-#       user_ids.uniq!
-#       got = CNX.get "#{@url}#{user_ids.join(',')}&show_details=Y"
-#       if got.nil? || got == ""
-#         parsed = {'meta' => {'code' => 404}, 'data' => []}
-#       else
-#         parsed = JSON.parse(got)
-#       end
-#       parsed['data'].each do |obj|
-#         obj['account']['is_human'] == true ? is_human = 1 : is_human = 0
-#         obj['account']['real_person'] == true ? real_person = 1 : real_person = 0
-#         niceranks[obj['user_id']] = {
-#           username: obj['user']['username'],
-#           rank: obj['rank'],
-#           is_human: is_human,
-#           real_person: real_person,
-#           cached: Time.now.to_i
-#         }
-#       end
-# # puts niceranks.inspect
-#       niceranks
-#     end
-
 
   end
 end

@@ -31,57 +31,38 @@ module Ayadn
       end
     end
 
-    def self.how_many_ranks niceranks, get_these
+    def self.niceranks
       if Settings.options[:timeline][:show_debug] == true
-        # deb = "=====\n"
-        # deb << "NR from DB:\t#{niceranks}\n\n"
-        # deb << "NR to get:\t#{get_these}\n"
-        # deb << "=====\n"
-        # puts deb.color(Settings.options[:colors][:debug])
-        Logs.rec.debug "NR/FROM DB: #{niceranks}"
-        Logs.rec.debug "NR/TO GET: #{get_these}"
-      end
-    end
-
-    def self.ranks_pool niceranks
-      if Settings.options[:timeline][:show_debug] == true
-        # deb = "=====\n"
-        # deb << "NR in pool:\t#{niceranks}\n"
-        # deb << "=====\n"
-        # puts deb.color(Settings.options[:colors][:debug])
-        Logs.rec.debug "NR/IN POOL: #{niceranks}"
-      end
-    end
-
-    def self.niceranks_error resp
-      if Settings.options[:timeline][:show_debug] == true
-        # deb = "=====\n"
-        # deb << "NR Error:\t#{resp}\n"
-        # deb << "=====\n"
-        # puts deb.color(Settings.options[:colors][:debug])
-        Logs.rec.error "NR/ERROR: #{resp}"
-      end
-    end
-
-    def self.total_ranks niceranks
-      if Settings.options[:timeline][:show_debug] == true
-        # deb = "=====\n"
-        # deb << "NiceRanks:\t#{niceranks}\n\n"
-        # deb << "DB size:\t#{Databases.nicerank_size}\n"
-        # deb << "=====\n"
-        # puts deb.color(Settings.options[:colors][:debug])
-        Logs.rec.debug "NR/RANKS: #{niceranks}"
-        Logs.rec.debug "NR/DB SIZE: #{Databases.niceranks_size}"
+        deb = "\n\n"
+        deb << "+ NICERANK"
+        deb << "* t#{Time.now.to_i}"
+        deb << "Posts:\t\t#{stream['data'].size}"
+        deb << "Requested NR:\t#{user_ids.size}"
+        deb << "* TOTALS"
+        deb << "Posts:\t\t#{@posts}"
+        deb << "Requested NR:\t#{@ids}"
+        deb << "Hits DB:\t#{@hits}"
+        deb << "Uniques:\t#{@store.count}"
+        deb << "\n\n"
+        puts deb.color(Settings.options[:colors][:debug])
+        Logs.rec.debug "NICERANK/STREAM LEN: #{@posts}"
+        Logs.rec.debug "NICERANK/REQUESTS: #{@ids}"
+        Logs.rec.debug "NICERANK/CACHE HITS: #{@hits}"
+        Logs.rec.debug "NICERANK/CACHED IDS: #{@store.count}"
       end
     end
 
     def self.stream stream, options, target
       if Settings.options[:timeline][:show_debug] == true
-        # deb = "+++++\nStream meta:\t#{stream['meta']}\n\n"
-        # deb << "Options:\t#{options.inspect}\n\n"
-        # deb << "Target:\t\t#{target.inspect}\n\n"
-        # deb << "Posts:\t\t#{stream['data'].length}\n+++++\n"
-        # puts deb.color(Settings.options[:colors][:debug])
+        deb = "\n\n"
+        deb << "+ STREAM"
+        deb << "* t#{Time.now.to_i}"
+        deb << "Meta:\t\t#{stream['meta']}"
+        deb << "Options:\t#{options.inspect}"
+        deb << "Target:\t\t#{target.inspect}"
+        deb << "Posts:\t\t#{stream['data'].length}"
+        deb << "\n\n"
+        puts deb.color(Settings.options[:colors][:debug])
         Logs.rec.debug "STREAM/META: #{stream['meta']}"
         Logs.rec.debug "STREAM/OPTIONS: #{options.inspect}"
         Logs.rec.debug "STREAM/TARGET: #{target.inspect}"

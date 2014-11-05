@@ -32,7 +32,6 @@ module Ayadn
       }
       @default_nr = {
         threshold: 2.1,
-        cache: 48,
         filter: true,
         filter_unranked: false
       }
@@ -105,7 +104,7 @@ module Ayadn
           conf[:timeline].delete_if {|k,_| k == :show_nicerank}
           conf[:colors].delete_if {|k,_| k == :nicerank}
           # force create mandatory keys (idem)
-          conf[:nicerank] = @default_nr if conf[:nicerank].nil? || conf[:nicerank].size != 4
+          conf[:nicerank] = @default_nr if conf[:nicerank].nil?
           conf[:timeline][:show_debug] = false if conf[:timeline][:show_debug].nil?
           conf[:timeline][:show_spinner] = true if conf[:timeline][:show_spinner].nil?
           conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
