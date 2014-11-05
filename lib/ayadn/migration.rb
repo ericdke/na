@@ -44,6 +44,10 @@ module Ayadn
         @shell.say_status :delete, old_channels, :green
         File.delete(old_channels)
       end
+      if File.exist?("#{@home}/db/ayadn_pinboard.db")
+        @shell.say_status :move, "pinboard credentials", :green
+        FileUtils.mv("#{@home}/db/ayadn_pinboard.db", "#{@home}/auth/pinboard.data")
+      end
       bookmarks
       aliases
       blacklist

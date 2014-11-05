@@ -51,7 +51,7 @@ module Ayadn
           puts
           exit
         else
-          # Ayadn 1.x without authorized accounts
+          # Ayadn 1.x without any authorized account (gem installed but no ~/ayadn folder)
           sh.say_status :auth, "No user authorized. Please run `ayadn -auth`!", :red
           puts
           exit
