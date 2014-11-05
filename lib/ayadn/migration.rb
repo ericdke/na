@@ -57,15 +57,15 @@ module Ayadn
     end
 
     def bookmarks
+      @sql.execute_batch <<-SQL
+        CREATE TABLE Bookmarks (
+          post_id INTEGER,
+          bookmark TEXT
+        );
+      SQL
+      @sql.reload_schema!
       if File.exist?("#{@home}/db/bookmarks.db")
         @shell.say_status :import, "Bookmarks database", :cyan
-        @sql.execute_batch <<-SQL
-          CREATE TABLE Bookmarks (
-            post_id INTEGER,
-            bookmark TEXT
-          );
-        SQL
-        @sql.reload_schema!
         @sql.transaction do |db_in_transaction|
           @bookmarks.each do |k,v|
             insert_data = {}
@@ -84,15 +84,15 @@ module Ayadn
     end
 
     def aliases
+      @sql.execute_batch <<-SQL
+        CREATE TABLE Aliases (
+          channel_id INTEGER,
+          alias VARCHAR(255)
+        );
+      SQL
+      @sql.reload_schema!
       if File.exist?("#{@home}/db/aliases.db")
         @shell.say_status :import, "Aliases database", :cyan
-        @sql.execute_batch <<-SQL
-          CREATE TABLE Aliases (
-            channel_id INTEGER,
-            alias VARCHAR(255)
-          );
-        SQL
-        @sql.reload_schema!
         @sql.transaction do |db_in_transaction|
           @aliases.each do |k,v|
             insert_data = {}
@@ -111,15 +111,15 @@ module Ayadn
     end
 
     def blacklist
+      @sql.execute_batch <<-SQL
+        CREATE TABLE Blacklist (
+          type VARCHAR(255),
+          content TEXT
+        );
+      SQL
+      @sql.reload_schema!
       if File.exist?("#{@home}/db/blacklist.db")
         @shell.say_status :import, "Blacklist database", :cyan
-        @sql.execute_batch <<-SQL
-          CREATE TABLE Blacklist (
-            type VARCHAR(255),
-            content TEXT
-          );
-        SQL
-        @sql.reload_schema!
         @sql.transaction do |db_in_transaction|
           @blacklist.each do |k,v|
             insert_data = {}
@@ -148,16 +148,16 @@ module Ayadn
     end
 
     def users
+      @sql.execute_batch <<-SQL
+        CREATE TABLE Users (
+          user_id INTEGER,
+          username VARCHAR(20),
+          name TEXT
+        );
+      SQL
+      @sql.reload_schema!
       if File.exist?("#{@home}/db/users.db")
         @shell.say_status :import, "Users database", :cyan
-        @sql.execute_batch <<-SQL
-          CREATE TABLE Users (
-            user_id INTEGER,
-            username VARCHAR(20),
-            name TEXT
-          );
-        SQL
-        @sql.reload_schema!
         @sql.transaction do |db_in_transaction|
           @users.each do |k,v|
             insert_data = {}
@@ -177,15 +177,15 @@ module Ayadn
     end
 
     def pagination
+      @sql.execute_batch <<-SQL
+        CREATE TABLE Pagination (
+          name TEXT,
+          post_id INTEGER
+        );
+      SQL
+      @sql.reload_schema!
       if File.exist?(@pagination_old)
         @shell.say_status :import, "Pagination database", :cyan
-        @sql.execute_batch <<-SQL
-          CREATE TABLE Pagination (
-            name TEXT,
-            post_id INTEGER
-          );
-        SQL
-        @sql.reload_schema!
         @sql.transaction do |db_in_transaction|
           @pagination.each do |k,v|
             insert_data = {}
@@ -204,16 +204,16 @@ module Ayadn
     end
 
     def index
+      @sql.execute_batch <<-SQL
+        CREATE TABLE TLIndex (
+          count INTEGER,
+          post_id INTEGER,
+          content TEXT
+        );
+      SQL
+      @sql.reload_schema!
       if File.exist?(@index_old)
         @shell.say_status :import, "Index database", :cyan
-        @sql.execute_batch <<-SQL
-          CREATE TABLE TLIndex (
-            count INTEGER,
-            post_id INTEGER,
-            content TEXT
-          );
-        SQL
-        @sql.reload_schema!
         @sql.transaction do |db_in_transaction|
           @index.each do |k,v|
             insert_data = {}
