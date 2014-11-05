@@ -44,21 +44,15 @@ module Ayadn
       if File.exist?(sqlaccounts)
         return self.init_sqlite(sqlaccounts)
       else
+        sh = Thor::Shell::Color.new
         if File.exist?(Dir.home + "/ayadn/accounts.db")
-          sh = Thor::Shell::Color.new
           sh.say_status :upgrade, "Ayadn 1.x is installed. Please run `ayadn migrate` to upgrade to 2.0!"
           puts
           exit
-          # puts "\nAyadn 1.x is installed. Migrate to #{VERSION} now? (y/N)\n".color(:red)
-          # puts "\n"
-          #
-          # input = sh.ask("> ")
-          # if input == "y" || input == "Y"
-          #   Action.migrate
-          # else
-          #   puts Status.canceled
-          #   exit
-          # end
+        else
+          sh.say_status :auth, "No user authorized. Please run `ayadn -auth`!"
+          puts
+          exit
         end
       end
     end

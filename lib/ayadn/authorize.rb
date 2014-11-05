@@ -35,12 +35,17 @@ module Ayadn
       if File.exist?(Dir.home + "/ayadn/accounts.sqlite")
         acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
         Databases.create_account(acc_db, user)
+        Databases.create_tables(user)
       else
-        acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
-        Databases.create_account_table(acc_db)
-        Databases.create_account(acc_db, user)
+        sh = Thor::Shell::Color.new
+        sh.say_status :upgrade, "Ayadn 1.x is installed. Please run `ayadn migrate` to upgrade to 2.0!"
+        puts
+        exit
+        # acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+        # Databases.create_account_table(acc_db)
+        # Databases.create_account(acc_db, user)
+        # Databases.create_tables(user)
       end
-
     end
 
     def install

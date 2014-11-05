@@ -24,7 +24,7 @@ module Ayadn
       @pagination = Daybreak::DB.new(@pagination_old) if File.exist?(@pagination_old)
       @index = Daybreak::DB.new(@index_old) if File.exist?(@index_old)
 
-      @sqlfile = "#{@home}/ayadn.sqlite"
+      @sqlfile = "#{@home}/db/ayadn.sqlite"
       @sql = Amalgalite::Database.new(@sqlfile)
     end
 

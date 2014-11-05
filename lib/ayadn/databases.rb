@@ -9,6 +9,55 @@ module Ayadn
       @accounts = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
     end
 
+    def self.create_tables(user)
+      # config is not loaded here, have to specify absolute path
+      sql = Amalgalite::Database.new("#{user.user_path}/db/ayadn.sqlite")
+      sql.execute_batch <<-SQL
+        CREATE TABLE Bookmarks (
+          post_id INTEGER,
+          bookmark TEXT
+        );
+      SQL
+      sql.reload_schema!
+      sql.execute_batch <<-SQL
+        CREATE TABLE Aliases (
+          channel_id INTEGER,
+          alias VARCHAR(255)
+        );
+      SQL
+      sql.reload_schema!
+      sql.execute_batch <<-SQL
+        CREATE TABLE Blacklist (
+          type VARCHAR(255),
+          content TEXT
+        );
+      SQL
+      sql.reload_schema!
+      sql.execute_batch <<-SQL
+        CREATE TABLE Users (
+          user_id INTEGER,
+          username VARCHAR(20),
+          name TEXT
+        );
+      SQL
+      sql.reload_schema!
+      sql.execute_batch <<-SQL
+        CREATE TABLE Pagination (
+          name TEXT,
+          post_id INTEGER
+        );
+      SQL
+      sql.reload_schema!
+      sql.execute_batch <<-SQL
+        CREATE TABLE TLIndex (
+          count INTEGER,
+          post_id INTEGER,
+          content TEXT
+        );
+      SQL
+      sql.reload_schema!
+    end
+
     # def self.add_niceranks niceranks
     #   niceranks.each {|k,v| @sql.execute("DELETE FROM Niceranks WHERE user_id=#{k.to_i}")}
     #   @sql.transaction do |db_in_transaction|
@@ -122,7 +171,7 @@ module Ayadn
           token TEXT
         );
       SQL
-      sql.reload_schema!
+      acc_db.reload_schema!
     end
 
     def self.create_account(acc_db, user)
@@ -132,7 +181,7 @@ module Ayadn
           insert_data[":username"] = user.username
           insert_data[":user_id"] = user.id
           insert_data[":handle"] = user.handle
-          insert_data[":account_path"] = user.path
+          insert_data[":account_path"] = user.user_path
           insert_data[":active"] = 0
           insert_data[":token"] = user.token
           db.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active, token) VALUES(:username, :user_id, :handle, :account_path, :active, :token);") do |insert|

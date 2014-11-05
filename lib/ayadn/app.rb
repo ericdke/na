@@ -538,7 +538,8 @@ module Ayadn
       Action.new.version
     end
 
-    desc "migrate", "TEMP: migrate databases"
+    desc "migrate", "TEMP: migrate databases", :hide => true
+    map "upgrade" => :migrate
     def migrate
       Migration.new.all
     end
