@@ -3,7 +3,7 @@ module Ayadn
   class Authorize
 
     def initialize
-      @shell = Thor::Shell::Color.new
+      @thor = Thor::Shell::Color.new
     end
 
     def authorize
@@ -11,26 +11,51 @@ module Ayadn
       show_link
       token = get_token
       check_token(token)
-      @shell.say_status :connexion, "downloading user info", :cyan
+      @thor.say_status :connexion, "downloading user info", :cyan
       user = create_user_data(token, Dir.home + "/ayadn")
       prepare(user)
-      @shell.say_status :create, "configuration", :cyan
+      @thor.say_status :create, "configuration", :cyan
       Settings.load_config
       Logs.create_logger
       install
-      @shell.say_status :done, "configuration", :green
+      @thor.say_status :done, "configuration", :green
       Errors.info "Authorized."
-      @shell.say_status :end, "Thank you for using Ayadn. Enjoy!", :yellow
+      @thor.say_status :end, "Thank you for using Ayadn. Enjoy!", :yellow
+    end
+
+    def unauthorize(user, options)
+      begin
+        @workers = Workers.new
+        abort(Status.one_username) if user.size > 1
+        user = @workers.remove_arobase_if_present(user)[0]
+        puts "\e[H\e[2J"
+        if options[:delete]
+          sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} and delete its folders?\n\n> ", :red)
+        else
+          sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} ?\n\n> ", :red)
+        end
+        abort(Status.canceled) unless sure == true
+        @thor.say_status :delete, "database entry for @#{user}", :yellow
+        db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+        Databases.remove_from_accounts(db, user)
+        if options[:delete]
+          @thor.say_status :delete, "@#{user} user folders", :yellow
+          FileUtils.rm_rf(Dir.home + "/ayadn/#{user}")
+        end
+        @thor.say_status :done, "user @#{user} has been unauthorized", :green
+      rescue Interrupt
+        abort(Status.canceled)
+      end
     end
 
     private
 
     def prepare(user)
-      @shell.say_status :create, "Ayadn folders", :cyan
+      @thor.say_status :create, "Ayadn folders", :cyan
       create_config_folders(user)
-      @shell.say_status :save, "user token", :cyan
+      @thor.say_status :save, "user token", :cyan
       create_token_file(user)
-      @shell.say_status :create, "#{user.handle} user account", :cyan
+      @thor.say_status :create, "#{user.handle} user account", :cyan
       if File.exist?(Dir.home + "/ayadn/accounts.sqlite")
         acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
         Databases.create_account(acc_db, user)
@@ -48,7 +73,7 @@ module Ayadn
     end
 
     def install
-      @shell.say_status :create, "api and config files", :cyan
+      @thor.say_status :create, "api and config files", :cyan
       Errors.info "Creating api and config files..."
       Errors.info "Creating version file..."
       Settings.init_config
@@ -65,7 +90,7 @@ module Ayadn
           Dir.mkdir("#{user.user_path}/#{target}") unless Dir.exist?("#{user.user_path}/#{target}")
         end
       rescue => e
-        @shell.say_status :error, "can't create #{user.handle} account folders", :red
+        @thor.say_status :error, "can't create #{user.handle} account folders", :red
         puts "\nError: #{e}"
         exit
       end
@@ -96,7 +121,7 @@ module Ayadn
 
     def check_token(token)
       if token.empty? || token.nil?
-        @shell.say_status :error, "couldn't get the token", :red
+        @thor.say_status :error, "couldn't get the token", :red
         exit
       end
     end

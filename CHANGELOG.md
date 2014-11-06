@@ -3,7 +3,8 @@
 - New: SQLite database. Means FAST!
 - Ayadn instances share access to the database.
 - NiceRank filter for Global is cached in-memory.
-- Blacklist has a setting: active in the view or not.
+- New: Timeline setting: word wrap (experimental).
+- New: Blacklist setting: active in the view or not.
 - Code has been optimized. Bugs have been squashed.
 
 # 1.8.2 - 2014-10-31 - 'Asylum'

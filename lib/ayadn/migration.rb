@@ -15,7 +15,7 @@ module Ayadn
       @pagination_old = "#{@home}/pagination/pagination.db"
       @index_old = "#{@home}/pagination/index.db"
 
-      @shell = Thor::Shell::Color.new
+      @thor = Thor::Shell::Color.new
 
       @bookmarks = Daybreak::DB.new(bookmarks_old) if File.exist?(bookmarks_old)
       @aliases = Daybreak::DB.new(aliases_old) if File.exist?(aliases_old)
@@ -34,18 +34,18 @@ module Ayadn
       if Dir.exist?(old_backup)
         if Dir.entries(old_backup).size > 2
           FileUtils.mv(Dir.glob("#{old_backup}/*"), "#{@home}/downloads")
-          @shell.say_status :move, "files from 'backup' to 'downloads'", :green
+          @thor.say_status :move, "files from 'backup' to 'downloads'", :green
         end
         Dir.rmdir(old_backup)
-        @shell.say_status :delete, old_backup, :green
+        @thor.say_status :delete, old_backup, :green
       end
       old_channels = "#{@home}/db/channels.db"
       if File.exist?(old_channels)
-        @shell.say_status :delete, old_channels, :green
+        @thor.say_status :delete, old_channels, :green
         File.delete(old_channels)
       end
       if File.exist?("#{@home}/db/ayadn_pinboard.db")
-        @shell.say_status :move, "pinboard credentials", :green
+        @thor.say_status :move, "pinboard credentials", :green
         FileUtils.mv("#{@home}/db/ayadn_pinboard.db", "#{@home}/auth/pinboard.data")
       end
       bookmarks
@@ -56,8 +56,8 @@ module Ayadn
       pagination
       index
       accounts
-      @shell.say_status :done, "Ready to go!", :green
-      @shell.say_status :thanks, "Please launch Ayadn again.", :cyan
+      @thor.say_status :done, "Ready to go!", :green
+      @thor.say_status :thanks, "Please launch Ayadn again.", :cyan
     end
 
     def bookmarks
@@ -69,7 +69,7 @@ module Ayadn
       SQL
       @sql.reload_schema!
       if File.exist?("#{@home}/db/bookmarks.db")
-        @shell.say_status :import, "Bookmarks database", :cyan
+        @thor.say_status :import, "Bookmarks database", :cyan
         @sql.transaction do |db_in_transaction|
           @bookmarks.each do |k,v|
             insert_data = {}
@@ -80,10 +80,10 @@ module Ayadn
             end
           end
         end
-        @shell.say_status :done, "#{@bookmarks.size} objects", :green
+        @thor.say_status :done, "#{@bookmarks.size} objects", :green
         @bookmarks.close
         File.delete("#{@home}/db/bookmarks.db")
-        @shell.say_status :delete, "#{@home}/db/bookmarks.db", :green
+        @thor.say_status :delete, "#{@home}/db/bookmarks.db", :green
       end
     end
 
@@ -96,7 +96,7 @@ module Ayadn
       SQL
       @sql.reload_schema!
       if File.exist?("#{@home}/db/aliases.db")
-        @shell.say_status :import, "Aliases database", :cyan
+        @thor.say_status :import, "Aliases database", :cyan
         @sql.transaction do |db_in_transaction|
           @aliases.each do |k,v|
             insert_data = {}
@@ -107,10 +107,10 @@ module Ayadn
             end
           end
         end
-        @shell.say_status :done, "#{@aliases.size} objects", :green
+        @thor.say_status :done, "#{@aliases.size} objects", :green
         @aliases.close
         File.delete("#{@home}/db/aliases.db")
-        @shell.say_status :delete, "#{@home}/db/aliases.db", :green
+        @thor.say_status :delete, "#{@home}/db/aliases.db", :green
       end
     end
 
@@ -123,7 +123,7 @@ module Ayadn
       SQL
       @sql.reload_schema!
       if File.exist?("#{@home}/db/blacklist.db")
-        @shell.say_status :import, "Blacklist database", :cyan
+        @thor.say_status :import, "Blacklist database", :cyan
         @sql.transaction do |db_in_transaction|
           @blacklist.each do |k,v|
             insert_data = {}
@@ -137,17 +137,17 @@ module Ayadn
             end
           end
         end
-        @shell.say_status :done, "#{@blacklist.size} objects", :green
+        @thor.say_status :done, "#{@blacklist.size} objects", :green
         @blacklist.close
         File.delete("#{@home}/db/blacklist.db")
-        @shell.say_status :delete, "#{@home}/db/blacklist.db", :green
+        @thor.say_status :delete, "#{@home}/db/blacklist.db", :green
       end
     end
 
     def niceranks
       if File.exist?("#{@home}/db/nicerank.db")
         File.delete("#{@home}/db/nicerank.db")
-        @shell.say_status :delete, "#{@home}/db/nicerank.db", :green
+        @thor.say_status :delete, "#{@home}/db/nicerank.db", :green
       end
     end
 
@@ -161,7 +161,7 @@ module Ayadn
       SQL
       @sql.reload_schema!
       if File.exist?("#{@home}/db/users.db")
-        @shell.say_status :import, "Users database", :cyan
+        @thor.say_status :import, "Users database", :cyan
         @sql.transaction do |db_in_transaction|
           @users.each do |k,v|
             insert_data = {}
@@ -173,10 +173,10 @@ module Ayadn
             end
           end
         end
-        @shell.say_status :done, "#{@users.size} objects", :green
+        @thor.say_status :done, "#{@users.size} objects", :green
         @users.close
         File.delete("#{@home}/db/users.db")
-        @shell.say_status :delete, "#{@home}/db/users.db", :green
+        @thor.say_status :delete, "#{@home}/db/users.db", :green
       end
     end
 
@@ -189,7 +189,7 @@ module Ayadn
       SQL
       @sql.reload_schema!
       if File.exist?(@pagination_old)
-        @shell.say_status :import, "Pagination database", :cyan
+        @thor.say_status :import, "Pagination database", :cyan
         @sql.transaction do |db_in_transaction|
           @pagination.each do |k,v|
             insert_data = {}
@@ -200,10 +200,10 @@ module Ayadn
             end
           end
         end
-        @shell.say_status :done, "#{@pagination.size} objects", :green
+        @thor.say_status :done, "#{@pagination.size} objects", :green
         @pagination.close
         File.delete(@pagination_old)
-        @shell.say_status :delete, @pagination_old, :green
+        @thor.say_status :delete, @pagination_old, :green
       end
     end
 
@@ -217,7 +217,7 @@ module Ayadn
       SQL
       @sql.reload_schema!
       if File.exist?(@index_old)
-        @shell.say_status :import, "Index database", :cyan
+        @thor.say_status :import, "Index database", :cyan
         @sql.transaction do |db_in_transaction|
           @index.each do |k,v|
             insert_data = {}
@@ -229,19 +229,19 @@ module Ayadn
             end
           end
         end
-        @shell.say_status :done, "#{@index.size} objects", :green
+        @thor.say_status :done, "#{@index.size} objects", :green
         @index.close
         File.delete(@index_old)
-        @shell.say_status :delete, @index_old, :green
+        @thor.say_status :delete, @index_old, :green
         Dir.rmdir("#{@home}/pagination")
-        @shell.say_status :delete, "#{@home}/pagination", :green
+        @thor.say_status :delete, "#{@home}/pagination", :green
       end
     end
 
     def accounts
-      @shell.say_status :create, Dir.home + "/ayadn/accounts.sqlite", :blue
+      @thor.say_status :create, Dir.home + "/ayadn/accounts.sqlite", :blue
       sql = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
-      @shell.say_status :import, "Accounts database", :cyan
+      @thor.say_status :import, "Accounts database", :cyan
       sql.execute_batch <<-SQL
         CREATE TABLE Accounts (
           username VARCHAR(20),
@@ -274,10 +274,10 @@ module Ayadn
         end
       end
       sql.execute("UPDATE Accounts SET active=1 WHERE username='#{active_account}'")
-      @shell.say_status :done, "#{@accounts.size - 1} objects", :green
+      @thor.say_status :done, "#{@accounts.size - 1} objects", :green
       @accounts.close
       File.delete(Dir.home + "/ayadn/accounts.db")
-      @shell.say_status :delete, Dir.home + "/ayadn/accounts.db", :green
+      @thor.say_status :delete, Dir.home + "/ayadn/accounts.db", :green
     end
 
   end

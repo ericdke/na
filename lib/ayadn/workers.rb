@@ -3,7 +3,7 @@ module Ayadn
   class Workers
 
     def initialize
-      @shell = Thor::Shell::Color.new
+      @thor = Thor::Shell::Color.new
     end
 
     def build_aliases_list(list)
@@ -320,29 +320,29 @@ module Ayadn
       no_user = {}
       data.each do |ch|
         unless ch['writers']['user_ids'].empty?
-          @shell.say_status :parsing, "channel #{ch['id']}", :cyan
+          @thor.say_status :parsing, "channel #{ch['id']}", :cyan
           usernames = []
           ch['writers']['user_ids'].each do |id|
             next if no_user[id]
             db = Databases.find_user_by_id(id)
             if db.nil?
-              @shell.say_status :downloading, "user #{id}"
+              @thor.say_status :downloading, "user #{id}"
               resp = API.new.get_user(id)
 
               if resp['meta']['code'] != 200
-                @shell.say_status :error, "can't get user #{id}'s data, skipping", :red
+                @thor.say_status :error, "can't get user #{id}'s data, skipping", :red
                 no_user[id] = true
                 next
               end
 
               the_username = resp['data']['username']
-              @shell.say_status :recording, "@#{the_username}", :green
+              @thor.say_status :recording, "@#{the_username}", :green
 
               usernames << "@" + the_username
               Databases.add_to_users_db(id, the_username, resp['data']['name'])
             else
               the_username = "@#{db}"
-              @shell.say_status :match, "#{the_username} is already in the database", :blue
+              @thor.say_status :match, "#{the_username} is already in the database", :blue
 
               usernames << the_username
             end

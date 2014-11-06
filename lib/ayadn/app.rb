@@ -513,15 +513,25 @@ module Ayadn
       Action.new.random_posts(options)
     end
 
-    desc "authorize", "Authorize Ayadn (-auth)"
+    desc "authorize", "Authorize Ayadn (-AU)"
     map "-auth" => :authorize
+    map "-AU" => :authorize
     long_desc Descriptions.authorize
     def authorize
       Authorize.new.authorize
     end
 
+    desc "unauthorize @USERNAME", "Unauthorize an Ayadn user account (-UA)"
+    map "-unauth" => :unauthorize
+    map "-UA" => :unauthorize
+    option :delete, aliases: "-D", type: :boolean, desc: "Deletes user folders (default: false)"
+    def unauthorize(*user)
+      Authorize.new.unauthorize(user)
+    end
+
     desc "switch @USERNAME", "Switch between authorized App.net accounts (-@)"
     map "-@" => :switch
+    map "login" => :switch
     option :list, aliases: "-l", type: :boolean, desc: "List authorized accounts"
     long_desc Descriptions.switch
     def switch(*username)
@@ -538,7 +548,7 @@ module Ayadn
       Action.new.version
     end
 
-    desc "migrate", "TEMP: migrate databases", :hide => true
+    desc "migrate", "Migrate databases (upgrade accounts)", :hide => true
     map "upgrade" => :migrate
     def migrate
       Migration.new.all

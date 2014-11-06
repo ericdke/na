@@ -11,7 +11,7 @@ module Ayadn
       @workers = Workers.new
       @stream = Stream.new(@api, @view, @workers)
       @search = Search.new(@api, @view, @workers)
-      @shell = Thor::Shell::Color.new
+      @thor = Thor::Shell::Color.new
       Settings.load_config
       Settings.get_token
       Settings.init_config
@@ -449,7 +449,7 @@ module Ayadn
           Settings.options[:marker][:update_messages] = false
         end
         puts "\n"
-        @shell.say_status :searching, "channels with unread PMs"
+        @thor.say_status :searching, "channels with unread PMs"
         response = @api.get_channels
         unread_channels = []
         response['data'].map do |ch|
@@ -460,7 +460,7 @@ module Ayadn
         abort(Status.no_new_messages) if unread_channels.empty?
         unread_messages = {}
         unread_channels.each do |id|
-          @shell.say_status :downloading, "messages from channel #{id}"
+          @thor.say_status :downloading, "messages from channel #{id}"
           since = Databases.find_last_id_from("channel:#{id}")
           unless since.nil?
             api_options = {count: 20, since_id: since}
@@ -483,9 +483,9 @@ module Ayadn
             resp = @api.update_marker(name, v[1])
             res = JSON.parse(resp)
             if res['meta']['code'] != 200
-              @shell.say_status :error, "couldn't update channel #{k} as read", :red
+              @thor.say_status :error, "couldn't update channel #{k} as read", :red
             else
-              @shell.say_status :updated, "channel #{k} as read", :green
+              @thor.say_status :updated, "channel #{k} as read", :green
             end
           end
         end

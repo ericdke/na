@@ -133,6 +133,10 @@ module Ayadn
       @sql.execute("SELECT * FROM Blacklist")
     end
 
+    def self.remove_from_accounts(db, username)
+      db.execute("DELETE FROM Accounts WHERE username=\"#{username.downcase}\"")
+    end
+
     # def self.import_blacklist(blacklist)
     #   new_list = self.init blacklist
     #   new_list.each {|name,type| @blacklist[name] = type}

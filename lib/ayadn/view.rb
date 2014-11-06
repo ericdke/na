@@ -4,6 +4,7 @@ module Ayadn
 
     def initialize
       @workers = Workers.new
+      @thor = Thor::Shell::Basic.new
     end
 
     def show_cursor
@@ -16,13 +17,21 @@ module Ayadn
 
     def show_posts_with_index(data, options = {}, niceranks = {})
       posts, view = build_stream_with_index(data, options, niceranks)
-      puts view unless view == ""
+      if Settings.options[:timeline][:word_wrap] == true
+        @thor.print_wrapped(view) unless view == ""
+      else
+        puts view unless view == ""
+      end
       Databases.save_indexed_posts(posts)
     end
 
     def show_posts(data, options = {}, niceranks = {})
       resp = build_stream_without_index(data, options, niceranks)
-      puts resp unless resp == ""
+      if Settings.options[:timeline][:word_wrap] == true
+        @thor.print_wrapped(resp) unless resp == ""
+      else
+        puts resp unless resp == ""
+      end
     end
 
     def if_raw what, options
@@ -38,7 +47,11 @@ module Ayadn
     end
 
     def show_simple_post(post, options = {})
-      puts build_stream_without_index(post, options, {})
+      if Settings.options[:timeline][:word_wrap] == true
+        @thor.print_wrapped(build_stream_without_index(post, options, {}))
+      else
+        puts build_stream_without_index(post, options, {})
+      end
     end
 
     def show_posted(resp)
@@ -114,17 +127,19 @@ module Ayadn
     end
 
     def show_userinfos(content, token, show_ranks = false)
+      Settings.options[:timeline][:compact] == true ? padding = "\n" : padding = "\n\n"
+
       if content['name']
         view = "Name\t\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
       else
         view = "Name\t\t\t".color(:cyan) + "(no name)".color(:red)
       end
 
-      view << "\n\nUsername\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:id])
+      view << "#{padding}Username\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:id])
 
-      view << "\n\nID\t\t\t".color(:cyan) + content['id'].color(Settings.options[:colors][:username])
+      view << "#{padding}ID\t\t\t".color(:cyan) + content['id'].color(Settings.options[:colors][:username])
 
-      view << "\n\nURL\t\t\t".color(:cyan) + content['canonical_url'].color(Settings.options[:colors][:link])
+      view << "#{padding}URL\t\t\t".color(:cyan) + content['canonical_url'].color(Settings.options[:colors][:link])
 
       unless content['verified_domain'].nil?
         if content['verified_domain'] =~ (/http/ || /https/)
@@ -136,11 +151,11 @@ module Ayadn
       end
 
 
-      view << "\n\nAccount creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(:green)
-      view << "\n\nTimeZone\t\t".color(:cyan) + content['timezone'].color(:green)
+      view << "#{padding}Account creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(:green)
+      view << "#{padding}TimeZone\t\t".color(:cyan) + content['timezone'].color(:green)
       view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(:green)
 
-      view << "\n\nPosts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(:green)
+      view << "#{padding}Posts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(:green)
 
 
       unless show_ranks == false
@@ -148,15 +163,15 @@ module Ayadn
         # do call them all at once instead if many
         ranks = NiceRank.new.get_posts_day([content['id'].to_i])
         unless ranks.empty?
-          view << "\n\nPosts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(:green)
+          view << "#{padding}Posts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(:green)
         end
       end
 
-      view << "\n\nFollowing\t\t".color(:cyan) + content['counts']['following'].to_s.color(:green)
+      view << "#{padding}Following\t\t".color(:cyan) + content['counts']['following'].to_s.color(:green)
       view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:green)
 
       if content['username'] == Settings.config[:identity][:username] && !token.nil?
-        view << "\n\nStorage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(:red)
+        view << "#{padding}Storage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(:red)
         view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(:green)
       end
 
@@ -164,9 +179,9 @@ module Ayadn
 
       unless content['username'] == Settings.config[:identity][:username]
         if content['you_follow']
-          view << "\n\nYou follow ".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
+          view << "#{padding}You follow ".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
         else
-          view << "\n\nYou don't follow ".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
+          view << "#{padding}You don't follow ".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
         end
         if content['follows_you']
           view << "\n" + "@#{content['username']}".color(Settings.options[:colors][:username]) + " follows you".color(:cyan)
@@ -196,10 +211,10 @@ module Ayadn
       end
 
 
-      #view << "\n\nAvatar URL\t\t".color(:cyan) + content['avatar_image']['url']
+      #view << "#{padding}Avatar URL\t\t".color(:cyan) + content['avatar_image']['url']
 
       if content['description']
-        view << "\n\n#{content['description']['text']}\n".color(:magenta) + "\n\n"
+        view << "#{padding}#{content['description']['text']}\n".color(:magenta) + "\n\n"
       end
 
       puts view
@@ -303,6 +318,7 @@ module Ayadn
       puts "\e[H\e[2J"
     end
 
+    # ???
     def page msg
       clear_screen
       puts msg

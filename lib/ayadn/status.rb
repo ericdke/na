@@ -321,5 +321,8 @@ module Ayadn
     def self.profile_options
       "\n\nYou have to specify what to update or delete: --bio, --name, --blog, --twitter or --web.\n\n".color(:red)
     end
+    def self.one_username
+      "\n\nYou can specify only one username.\n".color(:red)
+    end
   end
 end
