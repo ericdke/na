@@ -12,12 +12,12 @@ describe Ayadn::Annotations do
           deleted: 0,
           html: 0,
           annotations: 1,
-          show_source: true,
-          show_symbols: true,
-          show_real_name: true,
-          show_date: true,
-          show_spinner: true,
-          show_debug: false
+          source: true,
+          symbols: true,
+          real_name: true,
+          date: true,
+          spinner: true,
+          debug: false
         },
         counts: {
           default: 50,

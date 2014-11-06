@@ -20,12 +20,12 @@ def init_stubs
         deleted: 0,
         html: 0,
         annotations: 1,
-        show_source: true,
-        show_symbols: true,
-        show_real_name: true,
-        show_date: true,
-        show_spinner: true,
-        show_debug: false
+        source: true,
+        symbols: true,
+        real_name: true,
+        date: true,
+        spinner: true,
+        debug: false
       },
       formats: {
         table: {width: 75},
@@ -184,7 +184,7 @@ describe Ayadn::SetTimeline do
 
   describe "#" do
     it "creates a default value" do
-      %w{directed html show_source show_symbols show_real_name show_date show_spinner show_debug compact}.each do |meth|
+      %w{directed html source symbols real_name date spinner debug compact}.each do |meth|
         command = meth.to_sym
         Ayadn::SetTimeline.new.send(command, 'true')
         expect(Ayadn::Settings.options[:timeline][command]).to eq true

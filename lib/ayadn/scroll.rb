@@ -113,7 +113,7 @@ module Ayadn
     private
 
     def countdown
-      Settings.options[:timeline][:show_spinner] == true ? waiting : pause
+      Settings.options[:timeline][:spinner] == true ? waiting : pause
     end
 
     def clear

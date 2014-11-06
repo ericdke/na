@@ -107,8 +107,8 @@ module Ayadn
           conf[:colors].delete_if {|k,_| k == :nicerank}
           # force create mandatory keys (idem)
           conf[:nicerank] = @default_nr if conf[:nicerank].nil?
-          conf[:timeline][:show_debug] = false if conf[:timeline][:show_debug].nil?
-          conf[:timeline][:show_spinner] = true if conf[:timeline][:show_spinner].nil?
+          conf[:timeline][:debug] = false if conf[:timeline][:debug].nil?
+          conf[:timeline][:spinner] = true if conf[:timeline][:spinner].nil?
           conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
           conf[:colors][:unread] = :cyan if conf[:colors][:unread].nil?
           conf[:nowplaying] = {} if conf[:nowplaying].nil?
@@ -117,7 +117,7 @@ module Ayadn
           conf[:formats][:list] = {reverse: true} if conf[:formats][:list].nil?
           conf[:timeline][:compact] = false if conf[:timeline][:compact].nil?
           conf[:timeline][:word_wrap] = false if conf[:timeline][:word_wrap].nil?
-          conf[:timeline][:show_channel_oembed] = true if conf[:timeline][:show_channel_oembed].nil?
+          conf[:timeline][:channel_oembed] = true if conf[:timeline][:channel_oembed].nil?
           conf[:marker] = {update_messages: true} if conf[:marker].nil?
           conf[:blacklist] = {active: true} if conf[:blacklist].nil?
 
@@ -190,13 +190,13 @@ module Ayadn
           deleted: 0,
           html: 0,
           annotations: true,
-          show_source: true,
-          show_symbols: true,
-          show_real_name: true,
-          show_date: true,
-          show_spinner: true,
-          show_debug: false,
-          show_channel_oembed: true,
+          source: true,
+          symbols: true,
+          real_name: true,
+          date: true,
+          spinner: true,
+          debug: false,
+          channel_oembed: true,
           compact: false,
           word_wrap: false
         },
@@ -206,15 +206,15 @@ module Ayadn
         counts: {
           default: 50,
           unified: 50,
-          global: 50,
+          global: 100,
           checkins: 50,
           conversations: 50,
           photos: 50,
           trending: 50,
           mentions: 50,
           convo: 50,
-          posts: 100,
-          messages: 50,
+          posts: 50,
+          messages: 20,
           search: 200,
           whoreposted: 20,
           whostarred: 20,

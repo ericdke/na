@@ -56,7 +56,7 @@ module Ayadn
       @posts += stream['data'].size
       @ids += user_ids.size
 
-      if Settings.options[:timeline][:show_debug] == true
+      if Settings.options[:timeline][:debug] == true
         deb = "\n"
         deb << "+ NICERANK\n"
         deb << "* t#{Time.now.to_i}\n"

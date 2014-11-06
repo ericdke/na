@@ -603,19 +603,19 @@ module Ayadn
     def build_header(content)
       header = ""
       header << content[:handle].color(Settings.options[:colors][:username])
-      if Settings.options[:timeline][:show_real_name]
+      if Settings.options[:timeline][:real_name]
         header << " "
         header << content[:name].color(Settings.options[:colors][:name])
       end
-      if Settings.options[:timeline][:show_date]
+      if Settings.options[:timeline][:date]
         header << " "
         header << content[:date].color(Settings.options[:colors][:date])
       end
-      if Settings.options[:timeline][:show_source]
+      if Settings.options[:timeline][:source]
         header << " "
         header << "[#{content[:source_name]}]".color(Settings.options[:colors][:source])
       end
-      if Settings.options[:timeline][:show_symbols]
+      if Settings.options[:timeline][:symbols]
         header << " <".color(Settings.options[:colors][:symbols]) if content[:is_reply]
         header << " #{content[:num_stars]}*".color(Settings.options[:colors][:symbols]) if content[:is_starred]
         header << " #{content[:num_reposts]}x".color(Settings.options[:colors][:symbols]) if content[:num_reposts] > 0

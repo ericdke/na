@@ -19,10 +19,10 @@ describe Ayadn::Post do
           link: :magenta
         },
         timeline: {
-          show_real_name: true,
-          show_date: true,
-          show_symbols: true,
-          show_source: true
+          real_name: true,
+          date: true,
+          symbols: true,
+          source: true
         },
         formats: {table: {width: 75}},
         counts: {

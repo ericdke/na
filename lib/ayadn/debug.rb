@@ -3,13 +3,13 @@ module Ayadn
   class Debug
 
     def self.skipped dic
-      if Settings.options[:timeline][:show_debug] == true
+      if Settings.options[:timeline][:debug] == true
         Logs.rec.debug "SKIPPED: #{dic.keys.first.to_s.capitalize} => #{dic.values.first}"
       end
     end
 
     def self.http response, url
-      if Settings.options[:timeline][:show_debug] == true
+      if Settings.options[:timeline][:debug] == true
         deb = "\n"
         deb << "+ HTTP\n"
         deb << "* t#{Time.now.to_i}\n"
@@ -24,7 +24,7 @@ module Ayadn
 
     def self.err error, stack
       Logs.rec.debug "+DEBUG STACK: #{stack}"
-      if Settings.options[:timeline][:show_debug] == true
+      if Settings.options[:timeline][:debug] == true
         puts "\n--*--\nERROR:\n"
         raise error
         puts "\n--*--\nSTACK:\n"
@@ -34,7 +34,7 @@ module Ayadn
     end
 
     def self.stream(stream, options, target)
-      if Settings.options[:timeline][:show_debug] == true
+      if Settings.options[:timeline][:debug] == true
         deb = "\n"
         deb << "+ STREAM\n"
         deb << "* t#{Time.now.to_i}\n"

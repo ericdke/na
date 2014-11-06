@@ -11,7 +11,7 @@ describe Ayadn::Databases do
     Ayadn::Settings.stub(:options).and_return(
         {
           timeline: {
-            show_debug: false
+            debug: false
           }
         }
       )
