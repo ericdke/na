@@ -131,25 +131,31 @@ module Ayadn
       posts = {}
       data.each.with_index(1) do |post, index|
         unless Settings.options[:force]
-          if Databases.is_in_blacklist?('client', post['source']['name'].downcase)
-            Debug.skipped({source: post['source']['name']})
-            next
+          if Settings.options[:blacklist][:active] == true
+            if Databases.is_in_blacklist?('client', post['source']['name'].downcase)
+              Debug.skipped({source: post['source']['name']})
+              next
+            end
           end
         end
         unless Settings.options[:force]
-          if Databases.is_in_blacklist?('user', post['user']['username'].downcase)
-            Debug.skipped({user: post['user']['username']})
-            next
+          if Settings.options[:blacklist][:active] == true
+            if Databases.is_in_blacklist?('user', post['user']['username'].downcase)
+              Debug.skipped({user: post['user']['username']})
+              next
+            end
           end
         end
         hashtags = extract_hashtags(post)
         @skip = false
         unless Settings.options[:force]
-          hashtags.each do |h|
-            if Databases.is_in_blacklist?('hashtag', h.downcase)
-              @skip = true
-              Debug.skipped({hashtag: h})
-              break
+          if Settings.options[:blacklist][:active] == true
+            hashtags.each do |h|
+              if Databases.is_in_blacklist?('hashtag', h.downcase)
+                @skip = true
+                Debug.skipped({hashtag: h})
+                break
+              end
             end
           end
         end
@@ -157,11 +163,13 @@ module Ayadn
         mentions= []
         post['entities']['mentions'].each { |m| mentions << m['name'] }
         unless Settings.options[:force]
-          mentions.each do |m|
-            if Databases.is_in_blacklist?('mention', m.downcase)
-              @skip = true
-              Debug.skipped({mention: m})
-              break
+          if Settings.options[:blacklist][:active] == true
+            mentions.each do |m|
+              if Databases.is_in_blacklist?('mention', m.downcase)
+                @skip = true
+                Debug.skipped({mention: m})
+                break
+              end
             end
           end
         end

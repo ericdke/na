@@ -47,12 +47,14 @@ module Ayadn
         sh = Thor::Shell::Color.new
         if File.exist?(Dir.home + "/ayadn/accounts.db")
           # Ayadn 1.x with already authorized account(s)
-          sh.say_status :upgrade, "Ayadn 1.x user data already exists. Please run `ayadn migrate` to upgrade to 2.0!", :red
+          sh.say_status :upgrade, "Ayadn 1.x user data detected.", :yellow
+          sh.say_status :migrate,  "Please run `ayadn migrate` to upgrade your account(s).", :red
           puts
           exit
         else
           # Ayadn 1.x without any authorized account (gem installed but no ~/ayadn folder)
-          sh.say_status :auth, "No user authorized. Please run `ayadn -auth`!", :red
+          sh.say_status :error, "No user authorized.", :yellow
+          sh.say_status :auth, "Please run `ayadn -auth` to authorize an account.", :red
           puts
           exit
         end
@@ -116,6 +118,7 @@ module Ayadn
           conf[:timeline][:compact] = false if conf[:timeline][:compact].nil?
           conf[:timeline][:show_channel_oembed] = true if conf[:timeline][:show_channel_oembed].nil?
           conf[:marker] = {update_messages: true} if conf[:marker].nil?
+          conf[:blacklist] = {active: true} if conf[:blacklist].nil?
 
           @options = conf
           self.write_config_file(config_file, @options)
@@ -254,6 +257,9 @@ module Ayadn
         },
         tvshow: {
           hashtag: 'nowwatching'
+        },
+        blacklist: {
+          active: true
         }
       }
     end

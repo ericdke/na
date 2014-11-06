@@ -208,7 +208,7 @@ module Ayadn
       "\n   No new messages since your last visit.\n".color(:cyan)
     end
     def self.type_and_target_missing
-      "\nYou have to submit a TYPE (mention, hashtag, client name) and a TARGET (a @username, a hashtag, a client name)\n\n".color(:red)
+      "\nYou have to submit a TYPE ('mention', 'hashtag', 'client') and a TARGET (a @username, a hashtag, a client name)\n\n".color(:red)
     end
     def self.wrong_arguments
       "\nYou have to submit valid arguments.\n\n".color(:red)

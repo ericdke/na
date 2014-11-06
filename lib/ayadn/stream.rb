@@ -89,7 +89,14 @@ module Ayadn
       Check.no_user(stream, username)
       Databases.save_max_id(stream) unless stream['meta']['marker'].nil?
       Check.no_data(stream, 'mentions')
-      if Databases.is_in_blacklist?('mention', username) || stream['data'][0]['user']['you_muted'] || stream['data'][0]['user']['you_blocked']
+      unless options[:raw] || Settings.options[:force]
+        if Settings.options[:blacklist][:active] == true
+          if Databases.is_in_blacklist?('mention', username)
+            abort(Status.no_force("#{username.downcase}"))
+          end
+        end
+      end
+      if stream['data'][0]['user']['you_muted'] || stream['data'][0]['user']['you_blocked']
         abort(Status.no_force("#{username.downcase}")) unless options[:raw] || Settings.options[:force]
       end
       @view.render(stream, options)

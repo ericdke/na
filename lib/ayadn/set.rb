@@ -49,6 +49,17 @@ module Ayadn
       marker_config.save
     end
 
+    desc "blacklist ITEM TRUE/FALSE", "Set values for the blacklist"
+    def blacklist(*args)
+      blacklist_config = SetBlacklist.new
+      unless args.length != 2
+        blacklist_config.send(args[0], args[1])
+      else
+        abort(Status.error_missing_parameters)
+      end
+      blacklist_config.save
+    end
+
     desc "nicerank ITEM VALUE", "Set NiceRank filter values"
     long_desc Descriptions.set_nicerank
     def nicerank *args
@@ -352,6 +363,10 @@ module Ayadn
       Settings.options[:nicerank][:filter] = @output
     end
 
+    def active value
+      filter(value)
+    end
+
     def filter_unranked value
       @input = 'filter_unranked'
       @output = Validators.boolean(value)
@@ -407,6 +422,30 @@ module Ayadn
       case @input
       when 'update_messages'
         Settings.options[:marker][meth.to_sym] = @output
+      else
+        super
+      end
+    end
+
+  end
+
+  class SetBlacklist < SetBase
+
+    def initialize
+      super
+      @category = 'blacklist'
+    end
+
+    def validate(value)
+      Validators.boolean(value)
+    end
+
+    def method_missing(meth, options)
+      @input = meth.to_s
+      @output = validate(options)
+      case @input
+      when 'active', 'activated'
+        Settings.options[:blacklist][meth.to_sym] = @output
       else
         super
       end
