@@ -41,3 +41,5 @@ Shortcuts:
 `ayadn -s movies hollywood`
 
 `ayadn -FO @ericd` 
+
+*Most of the times a passive action (reading, searching, etc) shortcut will be downcase and an active action shortcut (posting, deleting, etc) will be upcase.*

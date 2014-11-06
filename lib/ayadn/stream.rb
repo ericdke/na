@@ -90,6 +90,7 @@ module Ayadn
       Databases.save_max_id(stream) unless stream['meta']['marker'].nil?
       Check.no_data(stream, 'mentions')
       unless options[:raw] || Settings.options[:force]
+        # this is just to show a message rather than an empty screen
         if Settings.options[:blacklist][:active] == true
           if Databases.is_in_blacklist?('mention', username)
             abort(Status.no_force("#{username.downcase}"))

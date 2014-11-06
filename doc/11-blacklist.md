@@ -2,7 +2,7 @@
 
 The blacklist is a list of users, clients and hashtags that you don't want to ever be displayed.
 
-Available subcommands: add, remove, import, list.
+Available subcommands: add, remove, list.
 
 This is different from the 'mute a user' feature of the App.net API: blacklist works locally and is specific to each account.
 
@@ -14,7 +14,7 @@ Blacklist a hashtag and you will free yourself from this annoying trend you can'
 
 Blacklist a user and you won't even see posts by other users mentioning the user you blacklisted!
 
-Oh, and you can import blacklist databases from other accounts, too.
+*Since Ayadn 2.0, adding and removing to/from the blacklist takes immediately effect and is shared with other Ayadn instances.*
 
 ## ADD
 
@@ -70,15 +70,7 @@ List all items in your blacklist.
 
 `ayadn blacklist list`
 
-`ayadn -K list`
-
-## IMPORT
-
-Import a blacklist database in the current account.
-
-`ayadn blacklist import '/Users/blah/backups/blacklist.db'`
-
-`ayadn -K import '/Users/blah/backups/blacklist.db'`
+`ayadn -K list`  
 
 ## MULTIPLE TARGETS
 

@@ -123,6 +123,12 @@ Set it with:
 
 You may want to change colors to create visual marks between posts if you choose the compact view, i.e. putting the all header in the same color (post id, username, name, etc).
 
+### BLACKLIST
+
+You can activate or deactivate the blacklist filter in the stream view with:
+
+`ayadn set blacklist active false`
+
 
 # GLOBAL
 

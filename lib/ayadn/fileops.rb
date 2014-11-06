@@ -34,10 +34,6 @@ module Ayadn
       File.write(Settings.config[:paths][:downloads] + "/#{name}", file)
     end
 
-    def self.old_ayadn?
-      Dir.exist?(Dir.home + "/ayadn/data")
-    end
-
     def self.upload_files files
       files.map do |file|
         puts "\n#{file}\n\n"

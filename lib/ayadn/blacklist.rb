@@ -26,18 +26,11 @@ module Ayadn
       BlacklistWorkers.new.list(options)
     end
 
-    desc "import DATABASE", "Imports a blacklist database from another Ayadn account"
-    long_desc Descriptions.blacklist_import
-    def import(database)
-      BlacklistWorkers.new.import(database)
-    end
-
-    desc "convert", "Convert your current blacklist database to the new format"
-    long_desc Descriptions.blacklist_convert
-    def convert
-      BlacklistWorkers.new.convert
-      puts Status.done
-    end
+    # desc "import DATABASE", "Imports a blacklist database from another Ayadn account"
+    # long_desc Descriptions.blacklist_import
+    # def import(database)
+    #   BlacklistWorkers.new.import(database)
+    # end
 
     desc "clear", "Clear your blacklist database"
     def clear
@@ -67,9 +60,6 @@ module Ayadn
     #       Logs.rec.warn "File '#{new_db}' doesn't exist."
     #     end
     #   end
-    # end
-    # def convert
-    #     Databases.convert_blacklist
     # end
     def clear
       begin

@@ -26,11 +26,11 @@ An idea of the scale:
 
 - A regular user will always be > 2
 
-- Active regular users will be > 3
-
-- Very 'social' users can be > 4
+- Very active and 'social' users will be > 3
 
 *Again, this is not a popularity ratio: far from it. It only serves as a filter for bots and spam.*
+
+In addition to this manual rank filter, NiceRank and Ayadn have other automatic filtering based upon the information available about the user.
 
 ## Threshold
 
@@ -38,7 +38,7 @@ Set the NiceRank threshold.
 
 You can use an integer or a float (only one decimal).
 
-Any user with a NiceRank smaller than this value will be ignored.
+Any user with a NiceRank smaller than this value will be ignored in the Global stream.
 
 `ayadn set nicerank threshold 2.5`
 
@@ -52,4 +52,4 @@ NiceRank is enabled by default on new Ayadn installations, but can be disabled i
 
 `ayadn set nicerank filter false`
 
-`ayadn set nicerank filter_unranked false`
+*Note: the other field, `filter_unranked`, can be activated to ignore the users who haven't been analysed by NiceRank yet. It's more an experimental feature, and it's actually recommended to always let it to false.*

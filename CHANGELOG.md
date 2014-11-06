@@ -1,8 +1,9 @@
 # 2.0.0 - WIP - 'The Piper At The Gates Of Dawn'
 
 - New: SQLite database. Means FAST!
-- Settings updates from other instances are immediately effective.
+- Ayadn instances share access to the database.
 - NiceRank filter for Global is cached in-memory.
+- Blacklist has a setting: active in the view or not.
 - Code has been optimized. Bugs have been squashed.
 
 # 1.8.2 - 2014-10-31 - 'Asylum'

@@ -31,7 +31,8 @@ describe Ayadn::View do
         },
         counts: {
           default: 33
-        }
+        },
+        blacklist: {active: true}
       })
     Ayadn::Settings.stub(:config).and_return({
         identity: {

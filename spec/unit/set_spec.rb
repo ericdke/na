@@ -387,17 +387,6 @@ describe Ayadn::SetNiceRank do
       expect(printed).to include "You have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values."
     end
   end
-  describe "#cache" do
-    it "creates a new cache default" do
-      expect(Ayadn::Settings.options[:nicerank][:cache]).to eq 48
-      Ayadn::SetNiceRank.new.cache('72.4')
-      expect(Ayadn::Settings.options[:nicerank][:cache]).to eq 72
-      printed = capture_stderr do
-        expect(lambda {Ayadn::SetNiceRank.new.cache('200')}).to raise_error(SystemExit)
-      end
-      expect(printed).to include "Please enter a number of hours between 1 and 168"
-    end
-  end
   after do
     File.delete('spec/mock/ayadn.log')
   end

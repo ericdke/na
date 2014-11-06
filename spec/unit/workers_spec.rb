@@ -12,7 +12,8 @@ describe Ayadn::Workers do
           username: :green
         },
         timeline: {compact: false},
-        formats: {table: {width: 75}, list: {reverse: true}}
+        formats: {table: {width: 75}, list: {reverse: true}},
+        blacklist: {active: true}
       })
     Ayadn::Settings.stub(:config).and_return({
       identity: {
