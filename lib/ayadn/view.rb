@@ -108,7 +108,6 @@ module Ayadn
         @iter = 0
         opts = Settings.options.dup
         opts.each do |k,v|
-          v.delete_if {|ke,_| ke == :deleted || ke == :annotations} # don't show immutable values
           v.each do |x,y|
             t << :separator if @iter >= 1 && Settings.options[:timeline][:compact] == false
             unless y.is_a?(Hash)

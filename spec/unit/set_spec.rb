@@ -17,7 +17,6 @@ def init_stubs
       },
       timeline: {
         directed: 1,
-        deleted: 0,
         html: 0,
         annotations: 1,
         source: true,
@@ -65,9 +64,9 @@ def init_stubs
         filter_unranked: false
       },
       backup: {
-        auto_save_sent_posts: false,
-        auto_save_sent_messages: false,
-        auto_save_lists: false
+        sent_posts: false,
+        sent_messages: false,
+        lists: false
       },
       marker: {
         update_messages: true
@@ -193,13 +192,6 @@ describe Ayadn::SetTimeline do
         end
         expect(printed).to include 'You have to submit valid items'
       end
-      ['deleted', 'annotations'].each do |meth|
-        command = meth.to_sym
-        printed = capture_stderr do
-          expect(lambda {Ayadn::SetTimeline.new.send(command, 'false')}).to raise_error(SystemExit)
-        end
-        expect(printed).to include 'This parameter is not modifiable'
-      end
     end
   end
 
@@ -269,25 +261,25 @@ describe Ayadn::SetBackup do
     init_stubs
   end
 
-  describe "#auto_save_sent_posts" do
+  describe "#sent_posts" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:backup][:auto_save_sent_posts]).to eq false
-      Ayadn::SetBackup.new.auto_save_sent_posts('1')
-      expect(Ayadn::Settings.options[:backup][:auto_save_sent_posts]).to eq true
+      expect(Ayadn::Settings.options[:backup][:sent_posts]).to eq false
+      Ayadn::SetBackup.new.sent_posts('1')
+      expect(Ayadn::Settings.options[:backup][:sent_posts]).to eq true
     end
   end
-  describe "#auto_save_sent_messages" do
+  describe "#sent_messages" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:backup][:auto_save_sent_messages]).to eq false
-      Ayadn::SetBackup.new.auto_save_sent_messages('True')
-      expect(Ayadn::Settings.options[:backup][:auto_save_sent_messages]).to eq true
+      expect(Ayadn::Settings.options[:backup][:sent_messages]).to eq false
+      Ayadn::SetBackup.new.sent_messages('True')
+      expect(Ayadn::Settings.options[:backup][:sent_messages]).to eq true
     end
   end
-  describe "#auto_save_lists" do
+  describe "#lists" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:backup][:auto_save_lists]).to eq false
-      Ayadn::SetBackup.new.auto_save_lists('YES')
-      expect(Ayadn::Settings.options[:backup][:auto_save_lists]).to eq true
+      expect(Ayadn::Settings.options[:backup][:lists]).to eq false
+      Ayadn::SetBackup.new.lists('YES')
+      expect(Ayadn::Settings.options[:backup][:lists]).to eq true
     end
   end
 

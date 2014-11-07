@@ -268,12 +268,7 @@ module Ayadn
       else
         directed = 0
       end
-      html = arg[:html] || Settings.options[:timeline][:html]
-      if html == true || html == 1
-        html = 1
-      else
-        html = 0
-      end
+      html = 0
       if arg[:since_id]
         "&count=#{count}&include_html=#{html}&include_directed_posts=#{directed}&include_deleted=0&include_annotations=1&since_id=#{arg[:since_id]}"
       elsif arg[:recent_message]

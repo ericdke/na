@@ -92,7 +92,7 @@ module Ayadn
         source: 'TVDb'
       }
       resp = Post.new.post(dic)
-      FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
+      FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
       @view.clear_screen
       puts Status.yourpost
       @view.show_posted(resp)

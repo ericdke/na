@@ -8,15 +8,15 @@ module Ayadn
     end
 
     def self.auto_save_muted(list)
-      FileOps.save_muted_list(list) if Settings.options[:backup][:auto_save_lists]
+      FileOps.save_muted_list(list) if Settings.options[:backup][:lists]
     end
 
     def self.auto_save_followers(list)
-      FileOps.save_followers_list(list) if Settings.options[:backup][:auto_save_lists]
+      FileOps.save_followers_list(list) if Settings.options[:backup][:lists]
     end
 
     def self.auto_save_followings(list)
-      FileOps.save_followings_list(list) if Settings.options[:backup][:auto_save_lists]
+      FileOps.save_followings_list(list) if Settings.options[:backup][:lists]
     end
 
     def self.no_username username

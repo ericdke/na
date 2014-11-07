@@ -613,7 +613,7 @@ module Ayadn
             end
           end
         end
-        FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
+        FileOps.save_message(resp) if Settings.options[:backup][:sent_messages]
     		@view.clear_screen
     		puts Status.yourmessage(username[0])
     		@view.show_posted(resp)
@@ -651,7 +651,7 @@ module Ayadn
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
         resp = writer.reply({options: options, text: text, id: post_id, reply_to: replied_to})
-        FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
+        FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
         # ----
         options = options.dup
         unless resp['data']['reply_to'].nil?
@@ -694,7 +694,7 @@ module Ayadn
             end
           end
         end
-        FileOps.save_message(resp) if Settings.options[:backup][:auto_save_sent_messages]
+        FileOps.save_message(resp) if Settings.options[:backup][:sent_messages]
         @view.clear_screen
         puts Status.yourpost
         @view.show_posted(resp)
@@ -761,7 +761,7 @@ module Ayadn
     private
 
     def save_and_view(resp)
-      FileOps.save_post(resp) if Settings.options[:backup][:auto_save_sent_posts]
+      FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
       @view.clear_screen
       puts Status.yourpost
       @view.show_posted(resp)

@@ -396,7 +396,7 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'auto_save_sent_posts', 'auto_save_sent_messages', 'auto_save_lists'
+      when 'sent_posts', 'sent_messages', 'lists'
         Settings.options[:backup][meth.to_sym] = @output
       else
         super
@@ -492,10 +492,8 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'directed', 'html', 'source', 'symbols', 'real_name', 'date', 'spinner', 'debug', 'compact', 'channel_oembed'
+      when 'directed', 'source', 'symbols', 'real_name', 'date', 'spinner', 'debug', 'compact', 'channel_oembed'
         Settings.options[:timeline][meth.to_sym] = @output
-      when 'deleted', 'annotations'
-        abort(Status.not_mutable)
       else
         super
       end

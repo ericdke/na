@@ -103,10 +103,54 @@ module Ayadn
           conf = YAML.load(File.read(config_file))
 
           # force delete obsolete keys (because legacy versions of the config file)
-          conf[:timeline].delete_if {|k,_| k == :show_nicerank}
-          conf[:colors].delete_if {|k,_| k == :nicerank}
+          [:show_nicerank, :deleted, :annotations, :html].each { |k| conf[:timeline].delete(k) }
+          conf[:colors].delete(:nicerank)
+          conf[:nicerank].delete(:cache)
           # force create mandatory keys (idem)
           conf[:nicerank] = @default_nr if conf[:nicerank].nil?
+          # force convert mandatory keys (idem)
+          unless conf[:timeline][:show_source].nil?
+            v = conf[:timeline][:show_source]
+            conf[:timeline][:source] = v
+          end
+          unless conf[:timeline][:show_symbols].nil?
+            v = conf[:timeline][:show_symbols]
+            conf[:timeline][:symbols] = v
+          end
+          unless conf[:timeline][:show_real_name].nil?
+            v = conf[:timeline][:show_real_name]
+            conf[:timeline][:real_name] = v
+          end
+          unless conf[:timeline][:show_date].nil?
+            v = conf[:timeline][:show_date]
+            conf[:timeline][:date] = v
+          end
+          unless conf[:timeline][:show_spinner].nil?
+            v = conf[:timeline][:show_spinner]
+            conf[:timeline][:spinner] = v
+          end
+          unless conf[:timeline][:show_debug].nil?
+            v = conf[:timeline][:show_debug]
+            conf[:timeline][:debug] = v
+          end
+          unless conf[:timeline][:show_channel_oembed].nil?
+            v = conf[:timeline][:show_channel_oembed]
+            conf[:timeline][:channel_oembed] = v
+          end
+          unless conf[:backup][:auto_save_sent_posts].nil?
+            v = conf[:backup][:auto_save_sent_posts]
+            conf[:backup][:sent_posts] = v
+          end
+          unless conf[:backup][:auto_save_sent_messages].nil?
+            v = conf[:backup][:auto_save_sent_messages]
+            conf[:backup][:sent_messages] = v
+          end
+          unless conf[:backup][:auto_save_lists].nil?
+            v = conf[:backup][:auto_save_lists]
+            conf[:backup][:lists] = v
+          end
+          [:show_source, :show_symbols, :show_real_name, :show_date, :show_spinner, :show_debug, :show_channel_oembed].each { |k| conf[:timeline].delete(k) }
+          [:auto_save_sent_posts, :auto_save_sent_messages, :auto_save_lists].each { |k| conf[:backup].delete(k) }
           conf[:timeline][:debug] = false if conf[:timeline][:debug].nil?
           conf[:timeline][:spinner] = true if conf[:timeline][:spinner].nil?
           conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
@@ -187,9 +231,6 @@ module Ayadn
       {
         timeline: {
           directed: 1,
-          deleted: 0,
-          html: 0,
-          annotations: true,
           source: true,
           symbols: true,
           real_name: true,
@@ -245,9 +286,9 @@ module Ayadn
           debug: :red
         },
         backup: {
-          auto_save_sent_posts: false,
-          auto_save_sent_messages: false,
-          auto_save_lists: false
+          sent_posts: false,
+          sent_messages: false,
+          lists: false
         },
         scroll: {
           timer: 3

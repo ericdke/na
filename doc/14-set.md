@@ -26,7 +26,7 @@ These are just a few examples.
 
 `ayadn set timeline date false`
 
-`ayadn set backup auto_save_sent_posts true`
+`ayadn set backup sent_posts true`
 
 `ayadn set scroll timer 5`
 

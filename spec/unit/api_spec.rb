@@ -8,7 +8,6 @@ describe Ayadn::API do
         },
         timeline: {
           directed: 1,
-          deleted: 0,
           html: 0,
           annotations: 1
         }

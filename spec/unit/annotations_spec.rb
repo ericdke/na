@@ -9,9 +9,7 @@ describe Ayadn::Annotations do
       {
         timeline: {
           directed: 1,
-          deleted: 0,
           html: 0,
-          annotations: 1,
           source: true,
           symbols: true,
           real_name: true,
@@ -57,9 +55,9 @@ describe Ayadn::Annotations do
           debug: :red
         },
         backup: {
-          auto_save_sent_posts: false,
-          auto_save_sent_messages: false,
-          auto_save_lists: false
+          sent_posts: false,
+          sent_messages: false,
+          lists: false
         },
         scroll: {
           timer: 3

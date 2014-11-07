@@ -40,7 +40,7 @@ module Ayadn
         Databases.remove_from_accounts(db, user)
         if options[:delete]
           @thor.say_status :delete, "@#{user} user folders", :yellow
-          FileUtils.rm_rf(Dir.home + "/ayadn/#{user}")
+          FileUtils.remove_dir(Dir.home + "/ayadn/#{user}")
         end
         @thor.say_status :done, "user @#{user} has been unauthorized", :green
       rescue Interrupt

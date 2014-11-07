@@ -943,7 +943,7 @@ module Ayadn
       <<-USAGE
       Set ITEM to be activated or not.
 
-      Example: ayadn set auto_save_lists true
+      Example: ayadn set lists true
       \n\n
       USAGE
     end

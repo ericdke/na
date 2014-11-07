@@ -1,12 +1,13 @@
 # 2.0.0 - WIP - 'The Piper At The Gates Of Dawn'
 
 - New: SQLite database. Means FAST!
-- Ayadn instances share access to the database.
-- New: Timeline setting: word wrap (experimental).
-- New: Blacklist setting: active in the view or not.
-- New: unauthorize an Ayadn user account.
-- NiceRank filter for Global is cached in-memory.
-- Code has been optimized. Bugs have been squashed.
+- Ayadn instances share access to the database
+- New Timeline setting: word wrap (default: false)
+- New Blacklist setting: active (default: true)
+- New: unauthorize an Ayadn user account
+- Simplified, shorter settings options
+- NiceRank filter for Global is cached in-memory
+- Code has been optimized. Bugs have been squashed
 
 # 1.8.2 - 2014-10-31 - 'Asylum'
 
