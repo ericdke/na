@@ -37,6 +37,7 @@ module Ayadn
           sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} ?\n\n> ", :red)
         end
         abort(Status.canceled) unless sure == true
+        puts "\e[H\e[2J"
         @thor.say_status :delete, "database entry for @#{user}", :yellow
         db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
         Databases.remove_from_accounts(db, user)
@@ -45,6 +46,7 @@ module Ayadn
           FileUtils.remove_dir(Dir.home + "/ayadn/#{user}")
         end
         @thor.say_status :done, "user @#{user} has been unauthorized", :green
+        puts "\n"
       rescue Interrupt
         abort(Status.canceled)
       end
