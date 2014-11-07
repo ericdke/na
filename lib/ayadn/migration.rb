@@ -6,8 +6,8 @@ module Ayadn
 
     def initialize
       @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
-      active_old = @accounts['ACTIVE']
-      @home = @accounts[active_old][:path]
+      @active_old = @accounts['ACTIVE']
+      @home = @accounts[@active_old][:path]
       bookmarks_old = "#{@home}/db/bookmarks.db"
       aliases_old = "#{@home}/db/aliases.db"
       blacklist_old = "#{@home}/db/blacklist.db"
@@ -30,6 +30,7 @@ module Ayadn
 
     def all
       # DON'T MODIFY THE ORDER!
+      @thor.say_status :start, "migration", :yellow
       old_backup = "#{@home}/backup"
       if Dir.exist?(old_backup)
         if Dir.entries(old_backup).size > 2
