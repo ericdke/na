@@ -14,7 +14,7 @@ module Ayadn
         else
           abort Status.wrong_arguments
         end
-        abort Status.error_missing_post_id unless post_id.is_integer?
+        abort Status.new.error_missing_post_id unless post_id.is_integer?
         convo_title = post_id if convo_title == ''
         api, workers, view = API.new, Workers.new, View.new
         users, bucket = [], []
@@ -99,7 +99,7 @@ module Ayadn
       begin
         init
         args.empty? ? abort(Status.wrong_arguments) : post_id = args[0]
-        abort Status.error_missing_post_id unless post_id.is_integer?
+        abort Status.new.error_missing_post_id unless post_id.is_integer?
         Databases.delete_bookmark post_id
         puts Status.done
       rescue => e
@@ -118,7 +118,7 @@ module Ayadn
         else
           abort Status.wrong_arguments
         end
-        abort Status.error_missing_post_id unless post_id.is_integer?
+        abort Status.new.error_missing_post_id unless post_id.is_integer?
         Databases.rename_bookmark post_id, arguments.join(" ")
         puts Status.done
       rescue => e

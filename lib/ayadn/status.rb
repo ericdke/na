@@ -1,6 +1,11 @@
 # encoding: utf-8
 module Ayadn
   class Status
+
+    def initialize
+      @thor = Thor::Shell::Color.new
+    end
+
     def self.done
       "\nDone.\n".color(:green)
     end
@@ -17,9 +22,15 @@ module Ayadn
       files.length > 1 ? pl = "s" : pl = ""
       "\nUploading file#{pl} to ADN...".color(:cyan)
     end
+
     def self.posting
       "Posting to ADN...\n\n".inverse
     end
+    def posting
+      # @thor.say_status :status, 'posting', :yellow
+      "Posting to ADN...\n\n".inverse
+    end
+
     def self.deleting_post(post_id)
       "\nDeleting post #{post_id}\n".inverse
     end
@@ -131,9 +142,11 @@ module Ayadn
     def self.error_missing_username
       "\nYou have to specify a username.\n".color(:red)
     end
-    def self.error_missing_post_id
-      "\nYou have to specify a post id.\n".color(:red)
+
+    def error_missing_post_id
+      print("error", "please specify a post id", "red")
     end
+
     def self.error_missing_message_id
       "\nYou have to specify a message id.\n".color(:red)
     end
@@ -324,5 +337,19 @@ module Ayadn
     def self.one_username
       "\n\nYou can specify only one username.\n".color(:red)
     end
+
+    private
+
+    def print(status, message, color = nil)
+      if color.nil?
+        lamb = lambda { @thor.say_status(status.to_sym, message) }
+      else
+        lamb = lambda { @thor.say_status(status.to_sym, message, color.to_sym) }
+      end
+      puts "\n"
+      lamb.call
+      puts "\n"
+    end
+
   end
 end
