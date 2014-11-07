@@ -6,15 +6,20 @@ module Ayadn
       acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
       accounts = Databases.all_accounts(acc_db)
       please if accounts.empty?
-      puts "\nAuthorized accounts:\n".color(:cyan)
       accounts.sort_by! { |acc| acc[0] }
+      @thor = Thor::Shell::Color.new
+      cols = [['Username', 'Status', 'ID', 'Path'], ['', '', '', '']]
       accounts.each do |acc|
+        username = acc[2]
+        id = acc[1]
+        active = 'AUTHORIZED'
         if acc[4] == 1
-          puts "  #{acc[2]}".color(:red)
-        else
-          puts "  #{acc[2]}".color(:green)
+          active = 'ACTIVE'
         end
+        cols << [username, active, id, acc[3]]
       end
+       puts "\n"
+      @thor.print_table(cols)
       puts "\n"
     end
 
@@ -30,7 +35,7 @@ module Ayadn
       active = accounts.select { |acc| acc[4] == 1 }[0]
       active_user = active[0]
       if username == active_user
-        puts "\nYou're already authorized with username '#{accounts_db[active][:handle]}'.\n".color(:red)
+        puts "\nYou're already authorized with username '@#{username}'.\n".color(:red)
         exit
       end
       flag = accounts.select { |acc| acc[0] == username }.flatten

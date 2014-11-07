@@ -1,7 +1,7 @@
 # 2.0.0 - WIP - 'The Piper At The Gates Of Dawn'
 
 - New: SQLite database. Means FAST!
-- Ayadn instances share access to the database
+- Ayadn instances share access to the blacklist
 - New Blacklist setting: active (default: true)
 - New: unauthorize an Ayadn user account
 - Simplified, shorter settings options
