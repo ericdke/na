@@ -20,8 +20,8 @@ describe Ayadn::API do
     it 'returns a URL with directed=0' do
       expect(Ayadn::API.build_query({directed: 0})).to match /directed_posts=0/
     end
-    it 'returns a URL with html=1' do
-      expect(Ayadn::API.build_query({html: 1})).to match /html=1/
+    it 'returns a URL with html=0 anyway' do
+      expect(Ayadn::API.build_query({html: 1})).to match /html=0/
     end
   end
   describe "#check_response_meta_code" do

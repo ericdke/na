@@ -2,7 +2,6 @@
 
 - New: SQLite database. Means FAST!
 - Ayadn instances share access to the database
-- New Timeline setting: word wrap (default: false)
 - New Blacklist setting: active (default: true)
 - New: unauthorize an Ayadn user account
 - Simplified, shorter settings options

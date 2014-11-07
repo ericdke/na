@@ -33,7 +33,7 @@ describe Ayadn::Endpoints do
   end
   describe "#checkins" do
     it "returns the Checkins url" do
-      expect(Ayadn::Endpoints.new.checkins({count: 66, html: 1})).to eq 'https://api.app.net/posts/stream/explore/checkins?access_token=XXX&count=66&include_html=1&include_directed_posts=1&include_deleted=0&include_annotations=1'
+      expect(Ayadn::Endpoints.new.checkins({count: 66, html: 1})).to eq 'https://api.app.net/posts/stream/explore/checkins?access_token=XXX&count=66&include_html=0&include_directed_posts=1&include_deleted=0&include_annotations=1'
     end
   end
   describe '#trending' do

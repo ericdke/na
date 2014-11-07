@@ -183,7 +183,7 @@ describe Ayadn::SetTimeline do
 
   describe "#" do
     it "creates a default value" do
-      %w{directed html source symbols real_name date spinner debug compact}.each do |meth|
+      %w{directed source symbols real_name date spinner debug compact}.each do |meth|
         command = meth.to_sym
         Ayadn::SetTimeline.new.send(command, 'true')
         expect(Ayadn::Settings.options[:timeline][command]).to eq true

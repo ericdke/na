@@ -160,7 +160,6 @@ module Ayadn
           conf[:tvshow] = {hashtag: 'nowwatching'} if conf[:tvshow].nil?
           conf[:formats][:list] = {reverse: true} if conf[:formats][:list].nil?
           conf[:timeline][:compact] = false if conf[:timeline][:compact].nil?
-          conf[:timeline][:word_wrap] = false if conf[:timeline][:word_wrap].nil?
           conf[:timeline][:channel_oembed] = true if conf[:timeline][:channel_oembed].nil?
           conf[:marker] = {update_messages: true} if conf[:marker].nil?
           conf[:blacklist] = {active: true} if conf[:blacklist].nil?
@@ -238,8 +237,7 @@ module Ayadn
           spinner: true,
           debug: false,
           channel_oembed: true,
-          compact: false,
-          word_wrap: false
+          compact: false
         },
         marker: {
           update_messages: true
