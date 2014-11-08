@@ -77,11 +77,15 @@ module Ayadn
           @status.canceled
           exit
         end
-        puts "\n"
+        @view.clear_screen
         @status.yourpost
+        puts "\n\n"
         if store.nil? || options[:no_url]
           visible, track, artwork, artwork_thumb, link, artist = false
         else
+          if store['link'].nil?
+            visible, track, artwork, artwork_thumb, link, artist = false
+          end
           visible, track, artwork, artwork_thumb, link, artist = true, store['track'], store['artwork'], store['artwork_thumb'], store['link'], store['artist']
         end
         options = options.dup
@@ -116,7 +120,8 @@ module Ayadn
     end
 
     def ask_lastfm_user
-      @status.info("please enter your Last.fm username", "yellow")
+      @status.info("please", "enter your Last.fm username", "yellow")
+      print "> "
       begin
         STDIN.gets.chomp!
       rescue Interrupt
@@ -222,10 +227,10 @@ module Ayadn
         thor.say_status(nil, line)
       end
       puts "\n"
-      thor.say_status(nil, "[iTunes Store link]")
-      thor.say_status(nil, "[album art]")
-      puts "\n"
       unless options['no_url'] || store['code'] != 200
+        thor.say_status(nil, "[iTunes Store link]")
+        thor.say_status(nil, "[album art]")
+        puts "\n"
         @status.itunes_store_track(store)
       end
       @status.ok?

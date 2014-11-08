@@ -258,6 +258,7 @@ module Ayadn
       Settings.get_token()
       Settings.init_config()
       Logs.create_logger()
+      @thor = Thor::Shell::Color.new
       @status = Status.new
     end
 
@@ -267,8 +268,10 @@ module Ayadn
     end
 
     def log
-      @status.info("new", "value for '#{@input}' in '#{@category}'", "cyan")
-      @status.info("value", "'#{@output}'", "green")
+      @status.say do
+        @thor.say_status(:updated, "'#{@input}' in '#{@category}'", :cyan)
+        @thor.say_status(:content, "'#{@output}'", :green)
+      end
       Logs.rec.info "new value for '#{@input}' in '#{@category}' => '#{@output}'"
     end
 

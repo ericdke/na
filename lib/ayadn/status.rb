@@ -466,11 +466,11 @@ module Ayadn
     end
 
     def your_post
-      info("info", "your post:", "cyan")
+      info("", "your post:", "cyan")
     end
 
     def post_info
-      info("info", "post info", "cyan")
+      info("info", "post", "cyan")
     end
 
     def repost_info
