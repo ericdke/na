@@ -166,7 +166,7 @@ module Ayadn
     long_desc Descriptions.set_defaults
     def defaults
       Settings.restore_defaults
-      puts Status.done
+      Status.new.done
     end
 
     desc "formats ITEM VALUE", "Set values for formatting fields"

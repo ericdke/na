@@ -39,7 +39,10 @@ module Ayadn
         else
           sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} ?\n\n> ", :red)
         end
-        abort(Status.canceled) unless sure == true
+        unless sure == true
+          Status.new.canceled
+          exit
+        end
         puts "\e[H\e[2J"
         @thor.say_status :delete, "database entry for @#{user}", :yellow
         db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
@@ -51,7 +54,8 @@ module Ayadn
         @thor.say_status :done, "user @#{user} has been unauthorized", :green
         puts "\n"
       rescue Interrupt
-        abort(Status.canceled)
+        Status.new.canceled
+        exit
       end
     end
 
@@ -117,7 +121,7 @@ module Ayadn
       begin
         STDIN.gets.chomp()
       rescue Interrupt
-        puts Status.canceled
+        Status.new.canceled
         exit
       end
     end

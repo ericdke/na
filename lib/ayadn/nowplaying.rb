@@ -60,7 +60,8 @@ module Ayadn
         lfm = feed.items[0].title.split(' – ')
         return lfm[0], lfm[1]
       rescue Interrupt
-        abort(Status.canceled)
+        @status.canceled
+        exit
       end
     end
 
@@ -72,7 +73,10 @@ module Ayadn
         unless options[:no_url] || store.nil?
           text_to_post += "\n \n[iTunes Store](#{store['link']})"
         end
-        abort(Status.canceled) unless STDIN.getch == ("y" || "Y")
+        unless STDIN.getch == ("y" || "Y")
+          @status.canceled
+          exit
+        end
         puts "\n"
         @status.yourpost
         if store.nil? || options[:no_url]
@@ -116,7 +120,8 @@ module Ayadn
       begin
         STDIN.gets.chomp!
       rescue Interrupt
-        abort(Status.canceled)
+        @status.canceled
+        exit
       end
     end
 

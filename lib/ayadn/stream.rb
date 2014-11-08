@@ -272,7 +272,8 @@ module Ayadn
             counter = 1
           end
         rescue Interrupt
-          abort(Status.canceled)
+          @status.canceled
+          exit
         end
       end
     end

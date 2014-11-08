@@ -17,7 +17,8 @@ module Ayadn
         @status.pin_password
         pin_password = STDIN.noecho(&:gets).chomp()
       rescue Interrupt
-        abort(Status.canceled)
+        @status.canceled
+        exit
       rescue => e
         @status.wtf
         Errors.global_error({error: e, caller: caller, data: [pin_username]})

@@ -89,10 +89,11 @@ module Ayadn
           while buffer = Readline.readline(">> ".color(:red))
             resp = post({text: buffer})
             FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
-            puts Status.done
+            @status.done
           end
         rescue Interrupt
-          abort(Status.canceled)
+          @status.canceled
+          exit
         end
       end
     end
@@ -105,7 +106,8 @@ module Ayadn
           post << buffer
         end
       rescue Interrupt
-        abort(Status.canceled)
+        @status.canceled
+        exit
       end
       post
     end

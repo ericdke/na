@@ -208,7 +208,7 @@ module Ayadn
     end
 
     def canceled
-      puts Status.canceled
+      Status.new.canceled
       exit
     end
   end

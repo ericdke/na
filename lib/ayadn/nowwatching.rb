@@ -102,7 +102,10 @@ module Ayadn
       puts "\nYour post:\n\n".color(:cyan)
       puts text
       puts "\nIs it ok? (y/N)".color(:yellow)
-      abort(Status.canceled) unless STDIN.getch == ("y" || "Y")
+      unless STDIN.getch == ("y" || "Y")
+        @status.canceled
+        exit
+      end
     end
 
   end

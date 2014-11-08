@@ -13,7 +13,7 @@ module Ayadn
           double = args.dup
           post_id, convo_title = double.shift, double.join(' ')
         else
-          Status.new.wrong_arguments
+          status.wrong_arguments
           exit
         end
         unless post_id.is_integer?
@@ -55,7 +55,7 @@ module Ayadn
         puts make_entry bookmark
         Databases.add_bookmark bookmark
         Logs.rec.info "Added conversation bookmark for post #{bookmark['id']}."
-        puts Status.done
+        status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
       end
@@ -88,9 +88,10 @@ module Ayadn
         if input == 'y' || input == 'Y'
           Databases.clear_bookmarks
           Logs.rec.info "Cleared the bookmarks database."
-          puts Status.done
+          Status.new.done
         else
-          abort Status.canceled
+          Status.new.canceled
+          exit
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: []})
@@ -115,7 +116,7 @@ module Ayadn
           exit
         end
         Databases.delete_bookmark post_id
-        puts Status.done
+        status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
       end
@@ -138,7 +139,7 @@ module Ayadn
           exit
         end
         Databases.rename_bookmark post_id, arguments.join(" ")
-        puts Status.done
+        status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
       end

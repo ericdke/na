@@ -6,20 +6,12 @@ module Ayadn
       @thor = Thor::Shell::Color.new
     end
 
-    def self.done
-      "\nDone.\n".color(:green)
+    def done
+      info("done", "", "green")
     end
 
-    def self.canceled
-      "\n\nCanceled.\n\n".color(:cyan)
-    end
-
-    def self.not_found
-      "\n\n404 NOT FOUND - Object does not exist or has been deleted\n\n"
-    end
-
-    def self.stopped
-      "\n\nStopped.".color(:red)
+    def canceled
+      info("canceled", "", "red")
     end
 
     def downloaded(name)
@@ -31,11 +23,11 @@ module Ayadn
     end
 
     def downloading
-      info("connexion", "downloading from ADN", "yellow")
+      info("connected", "downloading from ADN", "yellow")
     end
 
     def posting
-      info("connexion", "posting to ADN", "yellow")
+      info("connected", "posting to ADN", "yellow")
     end
 
     def deleting_post(post_id)

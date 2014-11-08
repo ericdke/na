@@ -332,7 +332,7 @@ module Ayadn
         profile.prepare_payload
         puts "\n\nUpdating profile...\n".color(:green)
         profile.update
-        puts Status.done
+        @status.done
         userinfo('me')
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
@@ -548,7 +548,7 @@ module Ayadn
         bookmark = maker.new(credentials[0], credentials[1], resp['canonical_url'], usertags.join(","), post_text, links[0])
         @status.saving_pin
         pinner.pin(bookmark)
-        puts Status.done
+        @status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, usertags]})
       end

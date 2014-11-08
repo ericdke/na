@@ -18,7 +18,7 @@ module Ayadn
         if channel.is_integer?
           Databases.create_alias(channel, channel_alias)
           Logs.rec.info "Added alias '#{channel_alias}' for channel #{channel}."
-          puts Status.done
+          status.done
         else
           status.error_missing_channel_id
         end
@@ -36,7 +36,7 @@ module Ayadn
         unless args.empty?
           Databases.delete_alias(args[0])
           Logs.rec.info "Deleted alias '#{args[0]}'."
-          puts Status.done
+          Status.new.done
         else
           Status.new.wrong_arguments
           exit
@@ -76,9 +76,9 @@ module Ayadn
         if input == 'y' || input == 'Y'
           Databases.clear_aliases
           Logs.rec.info "Cleared the aliases database."
-          puts Status.done
+          Status.new.done
         else
-          abort Status.canceled
+          Status.new.canceled
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: []})

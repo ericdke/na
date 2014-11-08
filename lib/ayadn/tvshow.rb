@@ -114,7 +114,8 @@ module Ayadn
     end
 
     def cancel
-      abort(Status.canceled)
+      @status.canceled
+      exit
     end
 
     private

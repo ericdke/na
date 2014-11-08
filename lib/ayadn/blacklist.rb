@@ -10,7 +10,7 @@ module Ayadn
         exit
       end
       BlacklistWorkers.new.add(args)
-      puts Status.done
+      Status.new.done
     end
 
     desc "remove TYPE TARGET", "Removes a mention, hashtag, client or username from your blacklist"
@@ -22,7 +22,7 @@ module Ayadn
         exit
       end
       BlacklistWorkers.new.remove(args)
-      puts Status.done
+      Status.new.done
     end
 
     desc "list", "List the content of your blacklist"
@@ -41,7 +41,7 @@ module Ayadn
     desc "clear", "Clear your blacklist database"
     def clear
       BlacklistWorkers.new.clear
-      puts Status.done
+      Status.new.done
     end
 
   end
@@ -75,7 +75,8 @@ module Ayadn
           Databases.clear_blacklist
           Logs.rec.info "Cleared the blacklist database."
         else
-          abort Status.canceled
+          Status.new.canceled
+          exit
         end
       end
     end
