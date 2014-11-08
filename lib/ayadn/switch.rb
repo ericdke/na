@@ -3,7 +3,8 @@ module Ayadn
   class Switch
 
     def initialize
-      @thor = Thor::Shell::Color.new
+      @thor = Thor::Shell::Color.new # local statuses
+      @status = Status.new # global statuses + utils
       @acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
     end
 
@@ -21,17 +22,14 @@ module Ayadn
         end
         cols << [username, active, id, acc[3]]
       end
-      puts "\n"
-      @thor.print_table(cols)
-      puts "\n"
+      @status.say do
+        @thor.print_table(cols)
+      end
     end
 
     def switch(user)
       if user.empty? || user.nil?
-        puts "\n"
-        @thor.say_status :error, "Ayadn couldn't get your username", :red
-        @thor.say_status :next, "please try again", :yellow
-        puts "\n"
+        @status.no_username
         exit
       end
       username = Workers.new.remove_arobase_if_present([user.first])[0]
@@ -40,24 +38,24 @@ module Ayadn
       active = accounts.select { |acc| acc[4] == 1 }[0]
       active_user = active[0]
       if username == active_user
-        puts "\n"
-        @thor.say_status :done, "already authorized with username @#{username}", :green
-        puts "\n"
+        @status.say do
+          @thor.say_status :done, "already authorized with username @#{username}", :green
+        end
         exit
       end
       flag = accounts.select { |acc| acc[0] == username }.flatten
       if flag.empty?
-        puts "\n"
-        @thor.say_status :error, "@#{username} isn't in the database", :red
-        @thor.say_status :next, "please run `ayadn -auth` to authorize this account", :yellow
-        puts "\n"
+        @status.say do
+          @thor.say_status :error, "@#{username} isn't in the database", :red
+          @thor.say_status :next, "please run `ayadn -auth` to authorize this account", :yellow
+        end
         exit
       else
-        puts "\n"
-        @thor.say_status :switching, "from @#{active_user} to @#{username}", :cyan
-        Databases.set_active_account(@acc_db, username)
-        @thor.say_status :done, "@#{username} is the active account", :green
-        puts "\n"
+        @status.say do
+          @thor.say_status :switching, "from @#{active_user} to @#{username}", :cyan
+          Databases.set_active_account(@acc_db, username)
+          @thor.say_status :done, "@#{username} is now the active account", :green
+        end
         exit
       end
     end
@@ -65,9 +63,9 @@ module Ayadn
     private
 
     def please
-      puts "\n"
-      @thor.say_status :next, "please run `ayadn -auth`", :yellow
-      puts "\n"
+      @status.say do
+        @thor.say_status :error, "please run `ayadn -auth` to authorize an account", :red
+      end
       exit
     end
   end

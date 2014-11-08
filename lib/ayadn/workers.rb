@@ -4,6 +4,7 @@ module Ayadn
 
     def initialize
       @thor = Thor::Shell::Color.new
+      @status = Status.new
     end
 
     def build_aliases_list(list)
@@ -301,7 +302,7 @@ module Ayadn
       }
       filename = "#{Settings.config[:identity][:handle]}_#{origin}_links.json"
       FileOps.save_links(obj, filename)
-      puts Status.links_saved(filename)
+      @status.links_saved(filename)
     end
 
     def extract_hashtags(post)
@@ -381,7 +382,7 @@ module Ayadn
 
     def get_original_id(post_id, resp)
       if resp['data']['repost_of']
-        puts Status.redirecting
+        @status.redirecting
         id = resp['data']['repost_of']['id']
         Errors.repost(post_id, id)
         return id
@@ -396,7 +397,7 @@ module Ayadn
         channel_id = Databases.get_channel_id(orig)
         if channel_id.nil?
           Errors.warn("Alias '#{orig}' doesn't exist.")
-          puts Status.no_alias
+          @status.no_alias
           exit
         end
       end

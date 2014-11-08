@@ -5,7 +5,10 @@ module Ayadn
     map "create" => :add
     long_desc Descriptions.blacklist_add
     def add(*args)
-      abort(Status.type_and_target_missing) if args.length < 2
+      if args.length < 2
+        Status.new.type_and_target_missing
+        exit
+      end
       BlacklistWorkers.new.add(args)
       puts Status.done
     end
@@ -14,7 +17,10 @@ module Ayadn
     map "delete" => :remove
     long_desc Descriptions.blacklist_remove
     def remove(*args)
-      abort(Status.type_and_target_missing) if args.length < 2
+      if args.length < 2
+        Status.new.type_and_target_missing
+        exit
+      end
       BlacklistWorkers.new.remove(args)
       puts Status.done
     end
@@ -94,7 +100,7 @@ module Ayadn
           Databases.add_to_blacklist('hashtag', args)
           Logs.rec.info "Added '#{args}' to blacklist of hashtags."
         else
-          puts Status.wrong_arguments
+          Status.new.wrong_arguments
         end
       end
     end
@@ -114,7 +120,7 @@ module Ayadn
           Databases.remove_from_blacklist(args)
           Logs.rec.info "Removed '#{type}:#{args}' from blacklist."
         else
-          puts Status.wrong_arguments
+          Status.new.wrong_arguments
         end
       end
     end

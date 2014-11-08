@@ -8,6 +8,7 @@ module Ayadn
       @view = view
       @workers = workers
       @check = Check.new
+      @status = Status.new
     end
 
     def global settings
@@ -94,12 +95,16 @@ module Ayadn
         # this is just to show a message rather than an empty screen
         if Settings.options[:blacklist][:active] == true
           if Databases.is_in_blacklist?('mention', username)
-            abort(Status.no_force("#{username.downcase}"))
+            @status.no_force("#{username.downcase}")
+            exit
           end
         end
       end
       if stream['data'][0]['user']['you_muted'] || stream['data'][0]['user']['you_blocked']
-        abort(Status.no_force("#{username.downcase}")) unless options[:raw] || Settings.options[:force]
+        unless options[:raw] || Settings.options[:force]
+          @status.no_force("#{username.downcase}")
+          exit
+        end
       end
       @view.render(stream, options)
       Scroll.new(@api, @view).posts(username, options) if options[:scroll]
@@ -175,7 +180,10 @@ module Ayadn
       id = @workers.get_original_id(post_id, details)
       list = @api.get_whoreposted(id)
       @view.if_raw(list, options)
-      abort(Status.nobody_reposted) if list['data'].empty?
+      if list['data'].empty?
+        @status.nobody_reposted
+        exit
+      end
       @view.list(:whoreposted, list['data'], post_id)
     end
 
@@ -187,7 +195,10 @@ module Ayadn
       id = @workers.get_original_id(post_id, details)
       list = @api.get_whostarred(id)
       @view.if_raw(list, options)
-      abort(Status.nobody_starred) if list['data'].empty?
+      if list['data'].empty?
+        @status.nobody_starred
+        exit
+      end
       @view.list(:whostarred, list['data'], id)
     end
 

@@ -15,9 +15,9 @@ module Ayadn
     def lastfm options
       begin
         user = Settings.options[:nowplaying][:lastfm] || create_lastfm_user()
-        puts Status.fetching_from('Last.fm')
+        @status.fetching_from('Last.fm')
         artist, track = get_lastfm_track_infos(user)
-        puts Status.itunes_store
+        @status.itunes_store
         store = lastfm_istore_request(artist, track) unless options['no_url']
         text_to_post = "#nowplaying\n \nTitle: ‘#{track}’\nArtist: #{artist}"
         post_nowplaying(text_to_post, store, options)
@@ -29,11 +29,19 @@ module Ayadn
 
     def itunes options
       begin
-        abort(Status.error_only_osx) unless Settings.config[:platform] =~ /darwin/
-        puts Status.fetching_from('iTunes')
+        unless Settings.config[:platform] =~ /darwin/
+          @status.error_only_osx
+          exit
+        end
+        @status.fetching_from('iTunes')
         itunes = get_itunes_track_infos()
-        itunes.each {|el| abort(Status.empty_fields) if el.length == 0}
-        puts Status.itunes_store
+        itunes.each do |el|
+          if el.length == 0
+            @status.empty_fields
+            exit
+          end
+        end
+        @status.itunes_store
         store = itunes_istore_request(itunes) unless options['no_url']
         text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         post_nowplaying(text_to_post, store, options)
@@ -192,7 +200,7 @@ module Ayadn
     def get_itunes_track_infos
       track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
       if track.empty?
-        puts Status.no_itunes
+        @status.no_itunes
         Errors.warn "Nowplaying canceled: unable to get info from iTunes."
         exit
       end

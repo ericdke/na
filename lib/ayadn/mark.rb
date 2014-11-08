@@ -13,7 +13,8 @@ module Ayadn
           double = args.dup
           post_id, convo_title = double.shift, double.join(' ')
         else
-          abort Status.wrong_arguments
+          Status.new.wrong_arguments
+          exit
         end
         unless post_id.is_integer?
           status.error_missing_post_id
@@ -103,7 +104,12 @@ module Ayadn
       begin
         init
         status = Status.new
-        args.empty? ? abort(Status.wrong_arguments) : post_id = args[0]
+        if args.empty?
+          status.wrong_arguments
+          exit
+        else
+          post_id = args[0]
+        end
         unless post_id.is_integer?
           status.error_missing_post_id
           exit

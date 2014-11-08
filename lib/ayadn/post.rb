@@ -2,6 +2,10 @@
 module Ayadn
   class Post
 
+    def initialize
+      @status = Status.new
+    end
+
     def post(dic)
       send_content(Endpoints.new.posts_url, payload_basic(dic))
     end
@@ -94,7 +98,7 @@ module Ayadn
     end
 
     def readline
-      puts Status.readline
+      @status.readline
       post = []
       begin
         while buffer = Readline.readline("> ")
@@ -117,7 +121,8 @@ module Ayadn
       elsif size > max_size
         Errors.warn "Canceled: too long (#{size - max_size}chars)"
         puts "\nYour text was: \n\n#{post}\n\n".color(:yellow)
-        abort(Status.too_long(size, max_size))
+        @status.too_long(size, max_size)
+        exit
       end
     end
 
@@ -138,7 +143,8 @@ module Ayadn
         exit
       elsif size > max_size
         Errors.warn "Canceled: too long (#{size - max_size}chars)"
-        abort(Status.too_long(size, max_size))
+        @status.too_long(size, max_size)
+        exit
       end
     end
 
@@ -156,7 +162,7 @@ module Ayadn
     end
 
     def error_text_empty
-      puts Status.no_text
+      @status.no_text
       Errors.warn "-Post without text-"
     end
 

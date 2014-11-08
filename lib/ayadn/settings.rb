@@ -40,22 +40,18 @@ module Ayadn
 
     def self.check_for_accounts
       sqlaccounts = Dir.home + "/ayadn/accounts.sqlite"
+      status = Status.new
       if File.exist?(sqlaccounts)
         # Ayadn 2.x with already authorized account(s)
         return self.init_sqlite(sqlaccounts)
       else
-        sh = Thor::Shell::Color.new
         if File.exist?(Dir.home + "/ayadn/accounts.db")
           # Ayadn 1.x with already authorized account(s)
-          sh.say_status :upgrade, "Ayadn 1.x user data detected.", :yellow
-          sh.say_status :migrate,  "Please run `ayadn migrate` to upgrade your account(s).", :red
-          puts
+          status.has_to_migrate
           exit
         else
           # Ayadn 1.x without any authorized account (gem installed but no ~/ayadn folder)
-          sh.say_status :error, "No user authorized.", :yellow
-          sh.say_status :auth, "Please run `ayadn -auth` to authorize an account.", :red
-          puts
+          status.not_authorized
           exit
         end
       end
@@ -69,7 +65,7 @@ module Ayadn
       if self.has_token_file?
         @user_token = self.read_token_file
       else
-        puts Status.not_authorized
+        Status.new.not_authorized
         exit
       end
     end

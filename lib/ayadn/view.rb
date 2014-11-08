@@ -5,6 +5,7 @@ module Ayadn
     def initialize
       @workers = Workers.new
       @thor = Thor::Shell::Basic.new
+      @status = Status.new
     end
 
     def show_cursor
@@ -355,7 +356,7 @@ module Ayadn
     def downloading(options = {})
       unless options[:raw]
         clear_screen()
-        print Status.downloading
+        @status.downloading
       end
     end
 

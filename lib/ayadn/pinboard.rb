@@ -2,20 +2,24 @@
 module Ayadn
   class PinBoard
 
+    def initialize
+      @status = Status.new
+    end
+
     def has_credentials_file?
       File.exist?(Ayadn::Settings.config[:paths][:auth] + '/pinboard.data')
     end
 
     def ask_credentials
       begin
-        puts Status.pin_username
+        @status.pin_username
         pin_username = STDIN.gets.chomp()
-        puts Status.pin_password
+        @status.pin_password
         pin_password = STDIN.noecho(&:gets).chomp()
       rescue Interrupt
         abort(Status.canceled)
       rescue => e
-        Status.new.wtf
+        @status.wtf
         Errors.global_error({error: e, caller: caller, data: [pin_username]})
       end
       save_credentials(encode(pin_username, pin_password))

@@ -3,7 +3,13 @@ module Ayadn
 
   class NowWatching
 
-    require 'spotlite'
+    begin
+      require 'spotlite'
+    rescue LoadError => e
+      puts "\nAYADN: Error while loading Gems\n\n"
+      puts "RUBY: #{e}\n\n"
+      exit
+    end
 
     def initialize view = nil
       @view = view

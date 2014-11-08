@@ -8,17 +8,19 @@ module Ayadn
     def create(*args)
       begin
         init
+        status = Status.new
         unless args.empty?
           channel, channel_alias = args[0], args[1]
         else
-          abort(Status.wrong_arguments)
+          status.wrong_arguments
+          exit
         end
         if channel.is_integer?
           Databases.create_alias(channel, channel_alias)
           Logs.rec.info "Added alias '#{channel_alias}' for channel #{channel}."
           puts Status.done
         else
-          puts Status.error_missing_channel_id
+          status.error_missing_channel_id
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})
@@ -36,7 +38,8 @@ module Ayadn
           Logs.rec.info "Deleted alias '#{args[0]}'."
           puts Status.done
         else
-          abort(Status.wrong_arguments)
+          Status.new.wrong_arguments
+          exit
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args]})

@@ -314,7 +314,7 @@ module Ayadn
         res = @sql.execute("SELECT content FROM TLIndex WHERE count=#{number}").flatten[0]
         JSON.parse(res)
       else
-        puts Status.must_be_in_index
+        Status.new.must_be_in_index
         Errors.global_error({error: "Out of range", caller: caller, data: [number]})
       end
     end

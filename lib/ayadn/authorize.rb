@@ -3,7 +3,8 @@ module Ayadn
   class Authorize
 
     def initialize
-      @thor = Thor::Shell::Color.new
+      @thor = Thor::Shell::Color.new # local statuses
+      @status = Status.new # global statuses + utils
     end
 
     def authorize
@@ -21,14 +22,16 @@ module Ayadn
       install
       @thor.say_status :done, "user #{user.handle} is authorized", :green
       Errors.info "#{user.handle} authorized."
-      @thor.say_status :end, "Thank you for using Ayadn. Enjoy!", :yellow
-      puts "\n"
+      @status.say { @thor.say_status :end, "Thank you for using Ayadn. Enjoy!", :yellow }
     end
 
     def unauthorize(user, options)
       begin
         @workers = Workers.new
-        abort(Status.one_username) if user.size > 1
+        if user.size > 1
+          @status.one_username
+          exit
+        end
         user = @workers.remove_arobase_if_present(user)[0]
         puts "\e[H\e[2J"
         if options[:delete]
@@ -65,9 +68,7 @@ module Ayadn
         Databases.create_account(acc_db, user)
         Databases.create_tables(user)
       else
-        sh = Thor::Shell::Color.new
-        sh.say_status :upgrade, "Ayadn 1.x user data already exists. Please run `ayadn migrate` to upgrade to 2.0!", :red
-        puts
+        @status.has_to_migrate
         exit
       end
     end
@@ -90,8 +91,10 @@ module Ayadn
           Dir.mkdir("#{user.user_path}/#{target}") unless Dir.exist?("#{user.user_path}/#{target}")
         end
       rescue => e
-        @thor.say_status :error, "can't create #{user.handle} account folders", :red
-        puts "\nError: #{e}"
+        @status.say do
+          @thor.say_status :error, "can't create #{user.handle} account folders", :red
+        end
+        @status.say { puts "\nError: #{e}" }
         exit
       end
     end
@@ -121,7 +124,9 @@ module Ayadn
 
     def check_token(token)
       if token.empty? || token.nil?
-        @thor.say_status :error, "couldn't get the token", :red
+        @status.say do
+          @thor.say_status :error, "couldn't get the token", :red
+        end
         exit
       end
     end

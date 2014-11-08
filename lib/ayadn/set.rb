@@ -8,7 +8,8 @@ module Ayadn
       if args[0]
         scroll_config.send(args[0], args[1])
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       scroll_config.save
     end
@@ -20,7 +21,8 @@ module Ayadn
       unless args.length != 2
         movie_config.send(args[0], args[1])
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       movie_config.save
     end
@@ -32,7 +34,8 @@ module Ayadn
       unless args.length != 2
         tvshow_config.send(args[0], args[1])
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       tvshow_config.save
     end
@@ -44,7 +47,8 @@ module Ayadn
       unless args.length != 2
         marker_config.send(args[0], args[1])
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       marker_config.save
     end
@@ -55,7 +59,8 @@ module Ayadn
       unless args.length != 2
         blacklist_config.send(args[0], args[1])
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       blacklist_config.save
     end
@@ -67,7 +72,8 @@ module Ayadn
       if args[0]
         nicerank_config.send(args[0], args[1])
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       nicerank_config.save
     end
@@ -80,13 +86,14 @@ module Ayadn
         begin
           timeline_config.send(args[0], args[1])
         rescue NoMethodError, ArgumentError
-          puts Status.error_missing_parameters
+          Status.new.error_missing_parameters
           exit
         rescue => e
           raise e
         end
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       timeline_config.save
     end
@@ -100,13 +107,14 @@ module Ayadn
         begin
           counts_config.send(args[0], args[1])
         rescue NoMethodError, ArgumentError
-          puts Status.error_missing_parameters
+          Status.new.error_missing_parameters
           exit
         rescue => e
           raise e
         end
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       counts_config.save
     end
@@ -122,13 +130,14 @@ module Ayadn
         begin
           color_config.send(args[0], args[1])
         rescue NoMethodError, ArgumentError
-          puts Status.error_missing_parameters
+          Status.new.error_missing_parameters
           exit
         rescue => e
           raise e
         end
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       color_config.save
     end
@@ -141,13 +150,14 @@ module Ayadn
         begin
           backup_config.send(args[0], args[1])
         rescue NoMethodError, ArgumentError
-          puts Status.error_missing_parameters
+          Status.new.error_missing_parameters
           exit
         rescue => e
           raise e
         end
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       backup_config.save
     end
@@ -167,13 +177,14 @@ module Ayadn
           command = args.shift
           formats_config.send(command, args)
         rescue NoMethodError, ArgumentError
-          puts Status.error_missing_parameters
+          Status.new.error_missing_parameters
           exit
         rescue => e
           raise e
         end
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
       formats_config.save
     end
@@ -189,7 +200,8 @@ module Ayadn
       when "false", "0", "no"
         false
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
     end
 
@@ -198,7 +210,7 @@ module Ayadn
       if x >= min && x <= max
         x
       else
-        abort(Status.must_be_integer)
+        Status.new.must_be_integer
       end
     end
 
@@ -215,7 +227,7 @@ module Ayadn
       if value > 0 and value < 5
         value
       else
-        abort(Status.threshold)
+        Status.new.threshold
       end
     end
 
@@ -227,8 +239,9 @@ module Ayadn
     def self.color(color)
       colors_list = %w{red green magenta cyan yellow blue white black}
       unless colors_list.include?(color.to_s)
-        puts Status.error_missing_parameters
-        abort(Status.valid_colors(colors_list))
+        Status.new.error_missing_parameters
+        Status.new.valid_colors(colors_list)
+        exit
       else
         return color.to_sym
       end
@@ -275,7 +288,8 @@ module Ayadn
         @output = Validators.width_range(value)
         Settings.options[:formats][:table][:width] = @output
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
     end
 
@@ -291,7 +305,8 @@ module Ayadn
         @output = Validators.boolean(value)
         Settings.options[:formats][:list][:reverse] = @output
       else
-        abort(Status.error_missing_parameters)
+        Status.new.error_missing_parameters
+        exit
       end
     end
 

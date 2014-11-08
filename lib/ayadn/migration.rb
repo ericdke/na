@@ -2,7 +2,13 @@
 module Ayadn
   class Migration
 
-    require 'daybreak'
+    begin
+      require 'daybreak'
+    rescue LoadError => e
+      puts "\nAYADN: Error while loading Gems\n\n"
+      puts "RUBY: #{e}\n\n"
+      exit
+    end
 
     def initialize
       @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")

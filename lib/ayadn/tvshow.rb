@@ -3,7 +3,13 @@ module Ayadn
 
   class TvShow
 
-    require 'tvdb_party'
+    begin
+      require 'tvdb_party'
+    rescue LoadError => e
+      puts "\nAYADN: Error while loading Gems\n\n"
+      puts "RUBY: #{e}\n\n"
+      exit
+    end
 
     AYADN_TVDB_API_KEY = 'E874ACBC542CAA53'
 
@@ -18,24 +24,32 @@ module Ayadn
 
     def find title
       res = find_all(title)
-      abort(Status.no_show) if res[0].nil?
+      if res[0].nil?
+        @status.no_show
+        exit
+      end
       if res[0].has_key?('FirstAired')
         return @tvdb.get_series_by_id(res[0]['seriesid'])
       else
         return @tvdb.get_series_by_id(res[1]['seriesid']) unless res[1].nil?
       end
-      abort(Status.no_show)
+      @status.no_show
+      exit
     end
 
     def find_alt title
       res = find_all(title)
-      abort(Status.no_show) if res[0].nil?
+      if res[0].nil?
+        @status.no_show
+        exit
+      end
       if res[0].has_key?('FirstAired')
         return @tvdb.get_series_by_id(res[1]['seriesid']) unless res[1].nil?
       else
         return @tvdb.get_series_by_id(res[2]['seriesid']) unless res[2].nil?
       end
-      abort(Status.no_show)
+      @status.no_show
+      exit
     end
 
     def create_details show_obj
@@ -111,12 +125,22 @@ module Ayadn
 
     def find_poster_url show_obj
       poster = show_obj.posters(@language).first
-      poster.nil? ? abort(Status.no_show_infos) : poster.url
+      if poster.nil?
+        @status.no_show_infos
+        exit
+      else
+        poster.url
+      end
     end
 
     def find_banner_url show_obj
       banner = show_obj.series_banners(@language).first
-      banner.nil? ? abort(Status.no_show_infos) : banner.url
+      if banner.nil?
+        @status.no_show_infos
+        exit
+      else
+        banner.url
+      end
     end
 
     def find_plot show_obj

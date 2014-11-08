@@ -519,8 +519,14 @@ module Ayadn
     end
 
     def pin(post_id, usertags)
-      require 'pinboard'
-      require 'base64'
+      begin
+        require 'pinboard'
+        require 'base64'
+      rescue LoadError => e
+        puts "\nAYADN: Error while loading Gems\n\n"
+        puts "RUBY: #{e}\n\n"
+        exit
+      end
       begin
         @check.bad_post_id(post_id)
         @view.downloading

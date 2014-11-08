@@ -5,7 +5,10 @@ module Ayadn
     attr_reader :options, :text, :payload
 
     def initialize options
-      abort(Status.profile_options) if options.empty?
+      if options.empty?
+        @status.profile_options
+        exit
+      end
       @options = options
     end
 

@@ -52,13 +52,17 @@ module Ayadn
           `curl -k -H 'Authorization: BEARER #{token}' https://api.app.net/files -F 'type=com.ayadn.files' -F "content=@#{file}" -F 'public=true' -X POST`
         end
       rescue Errno::ENOENT
-        abort(Status.no_curl)
+        Status.new.no_curl
+        exit
       end
     end
 
     def self.make_paths(files_array)
       files_array.map do |file|
-        abort(Status.bad_path) unless File.exist?(file)
+        unless File.exist?(file)
+          Status.new.bad_path
+          exit
+        end
         File.absolute_path(file)
       end
     end
@@ -67,7 +71,8 @@ module Ayadn
       begin
         `curl -X POST -H "Authorization: Bearer #{Settings.user_token}" -F "avatar=@#{file}" #{Endpoints.new.avatar}`
       rescue Errno::ENOENT
-        abort(Status.no_curl)
+        Status.new.no_curl
+        exit
       end
     end
 
@@ -75,7 +80,8 @@ module Ayadn
       begin
         `curl -X POST -H "Authorization: Bearer #{Settings.user_token}" -F "cover=@#{file}" #{Endpoints.new.cover}`
       rescue Errno::ENOENT
-        abort(Status.no_curl)
+        Status.new.no_curl
+        exit
       end
     end
 

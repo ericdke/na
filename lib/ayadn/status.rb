@@ -10,19 +10,28 @@ module Ayadn
       "\nDone.\n".color(:green)
     end
 
+    def self.canceled
+      "\n\nCanceled.\n\n".color(:cyan)
+    end
+
+    def self.not_found
+      "\n\n404 NOT FOUND - Object does not exist or has been deleted\n\n"
+    end
+
+    def self.stopped
+      "\n\nStopped.".color(:red)
+    end
+
     def downloaded(name)
       info("downloaded", "#{Settings.config[:paths][:downloads]}/#{name}", "green")
     end
 
-    def self.links_saved(name)
-      "\nLinks exported to file #{Settings.config[:paths][:lists]}/#{name}\n".color(:green)
+    def links_saved(name)
+      info("done", "links exported to file #{Settings.config[:paths][:lists]}/#{name}", "green")
     end
-    def self.downloading
-      "Downloading from ADN...\n\n".inverse
-    end
-    def self.uploading files
-      files.length > 1 ? pl = "s" : pl = ""
-      "\nUploading file#{pl} to ADN...".color(:cyan)
+
+    def downloading
+      info("connexion", "downloading from ADN", "yellow")
     end
 
     def posting
@@ -197,75 +206,72 @@ module Ayadn
       info("error", "please specify a message id", "red")
     end
 
-    def self.error_missing_channel_id
-      "\nYou have to specify a channel id.\n".color(:red)
+    def error_missing_channel_id
+      info("error", "please specify a channel id", "red")
     end
-    def self.error_missing_hashtag
-      "\nYou have to specify one or more hashtag(s).\n".color(:red)
-    end
-    def self.error_missing_parameters
-      "\nYou have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values.\n".color(:red)
+
+    def error_missing_parameters
+      say do
+        @thor.say_status "error", "please submit valid items", "red"
+        @thor.say_status "info", "see `ayadn -sg` for a list of valid parameters and values", "cyan"
+      end
     end
 
     def empty_list
       info("info", "the list is empty", "yellow")
     end
 
-    def self.not_found
-      "\n\n404 NOT FOUND - Object does not exist or has been deleted\n\n"
-    end
-    def self.stopped
-      "\n\nStopped.".color(:red)
-    end
-
     def writing
-      puts "\nPosting as ".color(:cyan) + "#{Settings.config[:identity][:handle]}".color(:green) + ".".color(:cyan)
+      @thor.say_status "info", "posting as #{Settings.config[:identity][:handle]}", "cyan"
     end
 
     def yourpost
-      puts "Your post:\n".color(:cyan)
+      @thor.say_status "info", "your post:", "cyan"
     end
 
     def yourmessage username = nil
       if username.nil?
-        puts "Your message:\n\n".color(:cyan)
+        @thor.say_status "info", "your message:", "cyan"
       else
-        puts "Your message to ".color(:cyan) + username.color(:green) + ":\n\n".color(:cyan)
+        @thor.say_status "info", "your message to #{username}:", "cyan"
       end
     end
 
     def message_from(username)
-      puts "\nMessage from ".color(:cyan) + "#{Settings.config[:identity][:handle]} ".color(:green) + "to ".color(:cyan) + "#{username[0]}".color(:yellow) + ".".color(:cyan)
+      @thor.say_status "info", "message from #{Settings.config[:identity][:handle]} to #{username[0]}", "cyan"
     end
 
     def replying_to(post_id)
-      puts "\nReplying to post #{post_id}...\n".color(:green)
+      @thor.say_status "info", "replying to post #{post_id}...", "cyan"
     end
 
-    def self.readline
-      "\nType your text. ".color(:cyan) + "[CTRL+D] ".color(:green) + "to validate, ".color(:cyan) + "[CTRL+C] ".color(:red) + "to cancel.\n".color(:cyan)
+    def readline
+      say do
+        @thor.say_status "next", "type your text", "cyan"
+        @thor.say_status "info", "[CTRL+D] to validate", "cyan"
+        @thor.say_status "info", "[CTRL+C] to cancel", "cyan"
+      end
     end
 
     def reply
-      puts "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum.\n"
+      @thor.say_status "info", "#{Settings.config[:post_max_length]} characters maximum", "cyan"
     end
 
     def post
-      puts "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum.\n"
+      @thor.say_status "info", "#{Settings.config[:post_max_length]} characters maximum", "cyan"
     end
 
     def message
-      puts "\n#{Settings.config[:message_max_length]} ".color(:yellow) + "characters maximum.\n"
+      @thor.say_status "info", "#{Settings.config[:message_max_length]} characters maximum", "cyan"
     end
 
-    def self.valid_colors(colors_list)
-      "\nThe valid colors are: #{colors_list}\n".color(:cyan)
+    def valid_colors(colors_list)
+      @thor.say_status "info", "valid colors:", "cyan"
+      say { puts colors_list }
     end
-    def self.not_mutable
-      "\nThis parameter is not modifiable for the time being, sorry.\n".color(:red)
-    end
-    def self.must_be_integer
-      "\nThis paramater must be an integer between 1 and 200.\n".color(:red)
+
+    def must_be_integer
+      info("error", "this paramater must be an integer between 1 and 200", "red")
     end
 
     def no_new_posts
@@ -276,12 +282,12 @@ module Ayadn
       info("info", "no new messages", "cyan")
     end
 
-    def self.type_and_target_missing
-      "\nYou have to submit a TYPE ('mention', 'hashtag', 'client') and a TARGET (a @username, a hashtag, a client name)\n\n".color(:red)
+    def type_and_target_missing
+      info("error", "please submit a TYPE ('mention', 'hashtag', 'client') and a TARGET (a @username, a hashtag, a client name)", "red")
     end
 
-    def self.wrong_arguments
-      "\nYou have to submit valid arguments.\n\n".color(:red)
+    def wrong_arguments
+      info("error", "invalid arguments", "red")
     end
 
     def no_pin_creds
@@ -296,31 +302,41 @@ module Ayadn
       info("saving", "post text and links to Pinboard", "yellow")
     end
 
-    def self.error_only_osx
-      "\nThis feature only works with iTunes by default. If you've got a Last.fm account, add the option:\n\n`ayadn -np --lastfm` (short: `-l`).\n\n".color(:red)
+    def error_only_osx
+      say do
+        @thor.say_status :error, "this feature only works with iTunes by default", :red
+        @thor.say_status :info, "if you've got a Last.fm account, use `ayadn -NP --lastfm` (short: `-l`)", :cyan
+      end
     end
-    def self.empty_fields
-      "\nCanceled: couldn't get enough information (empty field).\n\n".color(:red)
+
+    def empty_fields
+      info("canceled", "couldn't get enough information (empty field)", "red")
     end
-    def self.canceled
-      "\n\nCanceled.\n\n".color(:cyan)
-    end
-    def self.not_authorized
-      "\nYou need to authorize Ayadn before using it.\n\nPlease run 'ayadn -auth' :)\n\n".color(:red)
+
+    def not_authorized
+      say do
+        @thor.say_status :error, "no user authorized", :red
+        @thor.say_status :auth, "please run `ayadn -auth` to authorize an account", :yellow
+      end
     end
 
     def wtf
       info("error", "an unkown error happened", "red")
     end
 
-    def self.redirecting
-      "\nPost is a repost. Redirecting...\n".color(:cyan)
+    def redirecting
+      say do
+        @thor.say_status "info", "post is a repost", "cyan"
+        @thor.say_status "action", "redirecting", "yellow"
+      end
     end
-    def self.nobody_reposted
-      "\nNobody reposted this post.\n\n".color(:red)
+
+    def nobody_reposted
+      info("error", "nobody reposted this post", "red")
     end
-    def self.nobody_starred
-      "\nNobody starred this post.\n\n".color(:red)
+
+    def nobody_starred
+      info("error", "nobody starred this post", "red")
     end
 
     def not_your_repost
@@ -332,22 +348,23 @@ module Ayadn
     end
 
     def auto
-      view = "\nEntering the auto posting mode.\n\n".color(:cyan)
-      view << "In this mode, each line you type (each time you hit ENTER!) is automatically posted to ADN.\n\n".color(:cyan)
-      view << "At any moment, starting now, hit CTRL+C to exit.\n\n".color(:yellow)
-      view << "\n\t--AUTO POSTING MODE ACTIVATED--\n\n".color(:red)
+      say do
+        @thor.say_status "info", "entering the auto posting mode", "cyan"
+        @thor.say_status "info", "each line you type (each time you hit ENTER) is automatically posted to ADN", "cyan"
+        @thor.say_status "info", "at any moment, starting now, hit CTRL+C to exit", "cyan"
+        @thor.say_status "info", "AUTO POSTING MODE ACTIVATED", "yellow"
+      end
     end
-    def self.reducing db
-      "\nPlease wait while Ayadn is pruning and compacting the #{db} database...\n".color(:cyan)
+
+    def threshold
+      say do
+        @thor.say_status "error", "please enter a value between 0.1 and 3.5", "red"
+        @thor.say_status "info", "example: 2.1", "green"
+      end
     end
-    def self.cache_range
-      "\nPlease enter a number of hours between 1 and 168.\n\n".color(:red)
-    end
-    def self.threshold
-      "\nPlease enter a value between 0.1 and 3.5, example: 2.1\n\n".color(:red)
-    end
-    def self.must_be_in_index
-      "\nNumber must be in the range of the indexed posts.\n".color(:red)
+
+    def must_be_in_index
+      info("error", "number must be in the range of the indexed posts", "red")
     end
 
     def user_404(username)
@@ -358,58 +375,94 @@ module Ayadn
       info("error", "impossible to find #{post_id} (it may have been deleted)", "red")
     end
 
-    def self.no_alias
-      "\nThis alias doesn't exist.\n\n".color(:red)
+    def no_alias
+      info("error", "this alias doesn't exist", "red")
     end
-    def self.no_itunes
-      "\nCanceled: unable to get info from iTunes.\n".color(:red)
+
+    def no_itunes
+      info("canceled", "unable to get info from iTunes", "red")
     end
-    def self.pin_username
-      "Please enter your Pinboard username (CTRL+C to cancel): ".color(:green)
+
+    def pin_username
+      info("please", "enter your Pinboard username (CTRL+C to cancel)", "green")
     end
-    def self.pin_password
-      "\nPlease enter your Pinboard password (invisible, CTRL+C to cancel): ".color(:green)
+
+    def pin_password
+      info("please", "enter your Pinboard password (invisible, CTRL+C to cancel)", "green")
     end
-    def self.too_long size, max_size
-      "\n\nCanceled: too long. #{max_size} max, #{size - max_size} characters to remove.\n\n\n".color(:red)
+
+    def too_long(size, max_size)
+      say do
+        @thor.say_status "error", "text too long", "red"
+        @thor.say_status "info", "#{max_size} max: #{size - max_size} characters to remove", "green"
+      end
     end
-    def self.no_text
-      "\n\nYou should provide some text.\n\n".color(:red)
+
+    def no_text
+      info("error", "no text", "red")
     end
-    def self.bad_path
-      "\n\nCouldn't upload this file (path seems wrong).\n\n".color(:red)
+
+    def bad_path
+      info("error", "couldn't upload this file (path seems wrong)", "red")
     end
-    def self.no_curl
-      "\n\nAyadn needs 'curl' to upload files. Please install 'curl' (or check that it's properly declared in your $PATH).\n\n".color(:red)
+
+    def no_curl
+      say do
+        @thor.say_status :error, "Ayadn needs 'curl' to upload files", :red
+        @thor.say_status :next, "please install 'curl' (or check that it's properly declared in your $PATH)", :yellow
+      end
     end
-    def self.itunes_store
-      "Fetching informations from the Itunes Store...\n".color(:green)
+
+    def itunes_store
+      info("connexion", "fetching informations from the iTunes Store", "green")
     end
-    def self.fetching_from source
-      "\nFetching informations from #{source}...\n".color(:green)
+
+    def fetching_from(source)
+      info("connexion", "fetching informations from #{source}", "green")
     end
 
     def no_movie
       info("error", "sorry, can't find this movie", "red")
     end
 
-    def self.no_show
-      "\nSorry, can't find this show.\n".color(:blue)
-    end
-    def self.no_show_infos
-      "\nSorry, can't find informations about this show.\n".color(:blue)
-    end
-    def self.no_force target
-      "\n'#{target}' can't be displayed (could be muted, blocked, in the Blacklist, etc). Use option '--force' ('-f') to try and display this content anyway.\n\n".color(:blue)
-    end
-    def self.profile_options
-      "\n\nYou have to specify what to update or delete: --bio, --name, --blog, --twitter or --web.\n\n".color(:red)
-    end
-    def self.one_username
-      "\n\nYou can specify only one username.\n".color(:red)
+    def no_show
+      info("error", "sorry, can't find this show", "red")
     end
 
-    private
+    def no_show_infos
+      info("error", "sorry, can't find informations about this show", "red")
+    end
+
+    def no_force(target)
+      say do
+        @thor.say_status :error, "'#{target}' can't be displayed (could be muted, blocked, in the Blacklist, etc)", :red
+        @thor.say_status :info, "please use option '--force' ('-f') to try and display this content anyway", :cyan
+      end
+    end
+
+    def profile_options
+      info("error", "please specify what to update or delete: --bio, --name, --blog, --twitter or --web", "red")
+    end
+
+    def one_username
+      info("error", "please specify only one username", "red")
+    end
+
+    def no_username
+      say do
+        @thor.say_status :error, "Ayadn couldn't get your username", :red
+        @thor.say_status :next, "please try again", :yellow
+      end
+    end
+
+    def has_to_migrate
+      say do
+        @thor.say_status :upgrade, "Ayadn 1.x user data detected", :red
+        @thor.say_status :migrate,  "please run `ayadn migrate` to upgrade your account", :yellow
+      end
+    end
+
+    ##---
 
     def info(status, message, color = nil)
       if color.nil?
@@ -419,6 +472,12 @@ module Ayadn
       end
       puts "\n"
       lamb.call
+      puts "\n"
+    end
+
+    def say() # expects a block
+      puts "\n"
+      yield
       puts "\n"
     end
 
