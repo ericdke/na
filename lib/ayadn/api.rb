@@ -4,6 +4,7 @@ module Ayadn
 
     def initialize
       @workers = Workers.new
+      @status = Status.new
     end
 
     def get_unified(options)
@@ -304,7 +305,10 @@ module Ayadn
       big_hash = {}
       loop do
         resp = get_parsed_response(get_list_url(username, target, options))
-        abort(Status.user_404(username)) if resp['meta']['code'] == 404
+        if resp['meta']['code'] == 404
+          @status.user_404(username)
+          exit
+        end
         users = @workers.extract_users(resp)
         big_hash.merge!(users)
         break if resp['meta']['min_id'] == nil

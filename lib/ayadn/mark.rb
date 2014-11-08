@@ -8,13 +8,17 @@ module Ayadn
     def add(*args)
       begin
         init
+        status = Status.new
         unless args.empty?
           double = args.dup
           post_id, convo_title = double.shift, double.join(' ')
         else
           abort Status.wrong_arguments
         end
-        abort Status.new.error_missing_post_id unless post_id.is_integer?
+        unless post_id.is_integer?
+          status.error_missing_post_id
+          exit
+        end
         convo_title = post_id if convo_title == ''
         api, workers, view = API.new, Workers.new, View.new
         users, bucket = [], []
@@ -98,8 +102,12 @@ module Ayadn
     def delete *args
       begin
         init
+        status = Status.new
         args.empty? ? abort(Status.wrong_arguments) : post_id = args[0]
-        abort Status.new.error_missing_post_id unless post_id.is_integer?
+        unless post_id.is_integer?
+          status.error_missing_post_id
+          exit
+        end
         Databases.delete_bookmark post_id
         puts Status.done
       rescue => e
@@ -112,13 +120,17 @@ module Ayadn
     def rename *args
       begin
         init
+        status = Status.new
         unless args.empty? || args[1].nil?
           arguments = args.dup
           post_id = arguments.shift
         else
           abort Status.wrong_arguments
         end
-        abort Status.new.error_missing_post_id unless post_id.is_integer?
+        unless post_id.is_integer?
+          status.error_missing_post_id
+          exit
+        end
         Databases.rename_bookmark post_id, arguments.join(" ")
         puts Status.done
       rescue => e

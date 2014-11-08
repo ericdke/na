@@ -100,47 +100,69 @@ module Ayadn
     def self.not_blocked(post_id)
       "\nCould not block user #{username} (doesn't exist, or is already blocked)\n".color(:red)
     end
-    def self.deleted(post_id)
-      "\nPost #{post_id} has been deleted.\n".color(:green)
+
+    def deleted(post_id)
+      print("deleted", "post #{post_id}", "green")
     end
-    def self.deleted_m(message_id)
-      "\nMessage #{message_id} has been deleted.\n".color(:green)
+
+    def deleted_m(message_id)
+      print("deleted", "message #{message_id}", "green")
     end
-    def self.starred(post_id)
-      "\nPost #{post_id} has been starred.\n".color(:green)
+
+    def starred(post_id)
+      print("starred", "post #{post_id}", "green")
     end
-    def self.unreposted(post_id)
-      "\nPost #{post_id} has been unreposted.\n".color(:green)
+
+    def unreposted(post_id)
+      print("unreposted", "post #{post_id}", "green")
     end
-    def self.reposted(post_id)
-      "\nPost #{post_id} has been reposted.\n".color(:green)
+
+    def reposted(post_id)
+      print("reposted", "post #{post_id}", "green")
     end
-    def self.unstarred(post_id)
-      "\nPost #{post_id} has been unstarred.\n".color(:green)
+
+    def unstarred(post_id)
+      print("unstarred", "post #{post_id}", "green")
     end
-    def self.unfollowed(username)
-      "\nUser #{username} has been unfollowed.\n".color(:green)
+
+    def already_starred
+      print("ok", "already starred", "green")
     end
-    def self.followed(username)
-      "\nUser #{username} has been followed.\n".color(:green)
+
+    def already_reposted
+      print("ok", "already reposted", "green")
     end
-    def self.unmuted(username)
-      "\nUser #{username} has been unmuted.\n".color(:green)
+
+    def unfollowed(username)
+      print("unfollowed", username, "green")
     end
-    def self.muted(username)
-      "\nUser #{username} has been muted.\n".color(:green)
+
+    def followed(username)
+      print("followed", username, "green")
     end
-    def self.unblocked(username)
-      "\nUser #{username} has been unblocked.\n".color(:green)
+
+    def unmuted(username)
+      print("unmuted", username, "green")
     end
-    def self.blocked(username)
-      "\nUser #{username} has been blocked.\n".color(:green)
+
+    def muted(username)
+      print("muted", username, "green")
     end
+
+    def unblocked(username)
+      print("unblocked", username, "green")
+    end
+
+    def blocked(username)
+      print("blocked", username, "green")
+    end
+
     def self.error_missing_title
       "\nYou have to specify (part of) a movie title.\n".color(:red)
     end
-    def self.error_missing_username
-      "\nYou have to specify a username.\n".color(:red)
+
+    def error_missing_username
+      print("error", "please specify a username", "red")
     end
 
     def error_missing_post_id
@@ -159,9 +181,11 @@ module Ayadn
     def self.error_missing_parameters
       "\nYou have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values.\n".color(:red)
     end
-    def self.empty_list
-      "\n\nThe list is empty.\n\n".color(:red)
+
+    def empty_list
+      print("info", "the list is empty", "yellow")
     end
+
     def self.not_found
       "\n\n404 NOT FOUND - Object does not exist or has been deleted\n\n"
     end
@@ -214,9 +238,11 @@ module Ayadn
     def self.must_be_integer
       "\nThis paramater must be an integer between 1 and 200.\n".color(:red)
     end
-    def self.no_new_posts
-      "\nNo new posts since your last visit.\n\n".color(:cyan)
+
+    def no_new_posts
+      print("info", "no new posts since your last visit with Ayadn", "cyan")
     end
+
     def self.no_new_messages
       "\n   No new messages since your last visit.\n".color(:cyan)
     end
@@ -283,12 +309,15 @@ module Ayadn
     def self.must_be_in_index
       "\nNumber must be in the range of the indexed posts.\n".color(:red)
     end
-    def self.user_404 username
-      "\nUser #{username} doesn't exist. It could be a deleted account.\n".color(:red)
+
+    def user_404(username)
+      print("error", "user #{username} doesn't exist (it could be a deleted account)", "red")
     end
-    def self.post_404(post_id)
-      "\nImpossible to find #{post_id}. This post may have been deleted.\n".color(:red)
+
+    def post_404(post_id)
+      print("error", "impossible to find #{post_id} (it may have been deleted)", "red")
     end
+
     def self.no_alias
       "\nThis alias doesn't exist.\n\n".color(:red)
     end
@@ -342,9 +371,9 @@ module Ayadn
 
     def print(status, message, color = nil)
       if color.nil?
-        lamb = lambda { @thor.say_status(status.to_sym, message) }
+        lamb = lambda { @thor.say_status(status.to_sym, message.to_s) }
       else
-        lamb = lambda { @thor.say_status(status.to_sym, message, color.to_sym) }
+        lamb = lambda { @thor.say_status(status.to_sym, message.to_s, color.to_sym) }
       end
       puts "\n"
       lamb.call

@@ -136,7 +136,8 @@ module Ayadn
           puts Workers.new.build_blacklist_list(list)
         end
       else
-        abort(Status.empty_list)
+        Status.new.empty_list
+        exit
       end
     end
   end

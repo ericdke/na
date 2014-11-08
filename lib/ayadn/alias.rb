@@ -57,7 +57,7 @@ module Ayadn
             View.new.page Workers.new.build_aliases_list(list)
           end
         else
-          puts Status.empty_list
+          Status.new.empty_list
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})

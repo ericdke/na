@@ -48,7 +48,8 @@ module Ayadn
 
     def self.no_data(where)
       self.warn "In action/#{where}: no data"
-      abort(Status.empty_list)
+      Status.new.empty_list
+      exit
     end
 
   end
