@@ -15,7 +15,7 @@ module Ayadn
       rescue Interrupt
         abort(Status.canceled)
       rescue => e
-        puts Status.wtf
+        Status.new.wtf
         Errors.global_error({error: e, caller: caller, data: [pin_username]})
       end
       save_credentials(encode(pin_username, pin_password))

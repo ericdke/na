@@ -9,6 +9,7 @@ module Ayadn
       @api = api
       @view = view
       @workers = workers
+      @status = Status.new
     end
 
     def lastfm options
@@ -21,7 +22,7 @@ module Ayadn
         text_to_post = "#nowplaying\n \nTitle: ‘#{track}’\nArtist: #{artist}"
         post_nowplaying(text_to_post, store, options)
       rescue => e
-        puts Status.wtf
+        @status.wtf
         Errors.global_error({error: e, caller: caller, data: [store, options]})
       end
     end
@@ -37,7 +38,7 @@ module Ayadn
         text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         post_nowplaying(text_to_post, store, options)
       rescue => e
-        puts Status.wtf
+        @status.wtf
         Errors.global_error({error: e, caller: caller, data: [itunes, store, options]})
       end
     end
@@ -58,13 +59,14 @@ module Ayadn
     def post_nowplaying text_to_post, store, options
       begin
         @view.clear_screen
-        puts Status.writing
+        @status.writing
         show_nowplaying("\n#{text_to_post}", options, store)
         unless options[:no_url] || store.nil?
           text_to_post += "\n \n[iTunes Store](#{store['link']})"
         end
         abort(Status.canceled) unless STDIN.getch == ("y" || "Y")
-        puts "\n#{Status.yourpost}"
+        puts "\n"
+        @status.yourpost
         if store.nil? || options[:no_url]
           visible, track, artwork, artwork_thumb, link, artist = false
         else
@@ -96,7 +98,7 @@ module Ayadn
         FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
         @view.show_posted(resp)
       rescue => e
-        puts Status.wtf
+        @status.wtf
         Errors.global_error({error: e, caller: caller, data: [dic, store, options]})
       end
     end

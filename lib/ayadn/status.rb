@@ -9,9 +9,11 @@ module Ayadn
     def self.done
       "\nDone.\n".color(:green)
     end
-    def self.downloaded(name)
-      "\nFile downloaded in #{Settings.config[:paths][:downloads]}/#{name}\n".color(:green)
+
+    def downloaded(name)
+      info("downloaded", "#{Settings.config[:paths][:downloads]}/#{name}", "green")
     end
+
     def self.links_saved(name)
       "\nLinks exported to file #{Settings.config[:paths][:lists]}/#{name}\n".color(:green)
     end
@@ -23,155 +25,178 @@ module Ayadn
       "\nUploading file#{pl} to ADN...".color(:cyan)
     end
 
-    def self.posting
-      "Posting to ADN...\n\n".inverse
-    end
     def posting
-      # @thor.say_status :status, 'posting', :yellow
-      "Posting to ADN...\n\n".inverse
+      info("connexion", "posting to ADN", "yellow")
     end
 
-    def self.deleting_post(post_id)
-      "\nDeleting post #{post_id}\n".inverse
+    def deleting_post(post_id)
+      info("deleting", "post #{post_id}", "yellow")
     end
-    def self.deleting_message(message_id)
-      "\nDeleting message #{message_id}\n".inverse
+
+    def deleting_message(message_id)
+      info("deleting", "message #{message_id}", "yellow")
     end
-    def self.unfollowing(username)
-      "\nUnfollowing #{username}".inverse
+
+    def unfollowing(username)
+      info("unfollowing", username, "yellow")
     end
-    def self.following(username)
-      "\nFollowing #{username}".inverse
+
+    def following(username)
+      info("following", username, "yellow")
     end
-    def self.unmuting(username)
-      "\nUnmuting #{username}".inverse
+
+    def unmuting(username)
+      info("unmuting", username, "yellow")
     end
-    def self.muting(username)
-      "\nMuting #{username}".inverse
+
+    def muting(username)
+      info("muting", username, "yellow")
     end
-    def self.unblocking(username)
-      "\nUnblocking #{username}".inverse
+
+    def unblocking(username)
+      info("unblocking", username, "yellow")
     end
-    def self.blocking(username)
-      "\nBlocking #{username}".inverse
+
+    def blocking(username)
+      info("blocking", username, "yellow")
     end
-    def self.unreposting(post_id)
-      "\nUnreposting #{post_id}".inverse
+
+    def unreposting(post_id)
+      info("unreposting", "post #{post_id}", "yellow")
     end
-    def self.reposting(post_id)
-      "\nReposting #{post_id}".inverse
+
+    def reposting(post_id)
+      info("reposting", "post #{post_id}", "yellow")
     end
-    def self.unstarring(post_id)
-      "\nUnstarring #{post_id}".inverse
+
+    def unstarring(post_id)
+      info("unstarring", "post #{post_id}", "yellow")
     end
-    def self.starring(post_id)
-      "\nStarring #{post_id}".inverse
+
+    def starring(post_id)
+      info("starring", "post #{post_id}", "yellow")
     end
-    def self.not_deleted(post_id)
-      "\nCould not delete post #{post_id} (post isn't yours, or is already deleted)\n".color(:red)
+
+    def not_deleted(post_id)
+      info("error", "could not delete post #{post_id} (post isn't yours, or is already deleted)", "red")
     end
-    def self.not_starred(post_id)
-      "\nCould not star post #{post_id} (post doesn't exist, or is already starred)\n".color(:red)
+
+    def not_deleted_m(post_id)
+      info("error", "could not delete post #{post_id} (post isn't yours, or is already deleted)", "red")
     end
-    def self.not_unreposted(post_id)
-      "\nCould not unrepost post #{post_id} (post isn't yours, isn't a repost, or has been deleted)\n".color(:red)
+
+    def not_starred(post_id)
+      info("error", "could not star post #{post_id} (post doesn't exist, or is already starred)", "red")
     end
-    def self.not_reposted(post_id)
-      "\nCould not repost post #{post_id} (post has been deleted?)\n".color(:red)
+
+    def not_unreposted(post_id)
+      info("error", "could not unrepost post #{post_id} (post isn't yours, isn't a repost, or has been deleted)", "red")
     end
-    def self.not_unstarred(post_id)
-      "\nCould not unstar post #{post_id} (post isn't yours, isn't starred, or has been deleted)\n".color(:red)
+
+    def not_reposted(post_id)
+      info("error", "could not repost post #{post_id} (post has been deleted?)", "red")
     end
-    def self.not_unfollowed(post_id)
-      "\nCould not unfollow user #{username} (doesn't exist, or wasn't already followed)\n".color(:red)
+
+    def not_unstarred(post_id)
+      info("error", "could not unstar post #{post_id} (post isn't yours, isn't starred, or has been deleted)", "red")
     end
-    def self.not_followed(post_id)
-      "\nCould not follow user #{username} (doesn't exist, or you already follow)\n".color(:red)
+
+    def not_unfollowed(username)
+      info("error", "could not unfollow user #{username} (doesn't exist, or wasn't already followed)", "red")
     end
-    def self.not_unmuted(post_id)
-      "\nCould not unmute user #{username} (doesn't exist, or wasn't already muted)\n".color(:red)
+
+    def not_followed(username)
+      info("error", "could not follow user #{username} (doesn't exist, or you already follow)", "red")
     end
-    def self.not_muted(post_id)
-      "\nCould not mute user #{username} (doesn't exist, or is already muted)\n".color(:red)
+
+    def not_unmuted(username)
+      info("error", "could not unmute user #{username} (doesn't exist, or wasn't already muted)", "red")
     end
-    def self.not_unblocked(post_id)
-      "\nCould not unblock user #{username} (doesn't exist, or wasn't already blocked)\n".color(:red)
+
+    def not_muted(username)
+      info("error", "could not mute user #{username} (doesn't exist, or is already muted)", "red")
     end
-    def self.not_blocked(post_id)
-      "\nCould not block user #{username} (doesn't exist, or is already blocked)\n".color(:red)
+
+    def not_unblocked(username)
+      info("error", "could not unblock user #{username} (doesn't exist, or wasn't already blocked)", "red")
+    end
+
+    def not_blocked(username)
+      info("error", "could not block user #{username} (doesn't exist, or is already blocked)", "red")
     end
 
     def deleted(post_id)
-      print("deleted", "post #{post_id}", "green")
+      info("deleted", "post #{post_id}", "green")
     end
 
     def deleted_m(message_id)
-      print("deleted", "message #{message_id}", "green")
+      info("deleted", "message #{message_id}", "green")
     end
 
     def starred(post_id)
-      print("starred", "post #{post_id}", "green")
+      info("starred", "post #{post_id}", "green")
     end
 
     def unreposted(post_id)
-      print("unreposted", "post #{post_id}", "green")
+      info("unreposted", "post #{post_id}", "green")
     end
 
     def reposted(post_id)
-      print("reposted", "post #{post_id}", "green")
+      info("reposted", "post #{post_id}", "green")
     end
 
     def unstarred(post_id)
-      print("unstarred", "post #{post_id}", "green")
+      info("unstarred", "post #{post_id}", "green")
     end
 
     def already_starred
-      print("ok", "already starred", "green")
+      info("ok", "already starred", "green")
     end
 
     def already_reposted
-      print("ok", "already reposted", "green")
+      info("ok", "already reposted", "green")
     end
 
     def unfollowed(username)
-      print("unfollowed", username, "green")
+      info("unfollowed", username, "green")
     end
 
     def followed(username)
-      print("followed", username, "green")
+      info("followed", username, "green")
     end
 
     def unmuted(username)
-      print("unmuted", username, "green")
+      info("unmuted", username, "green")
     end
 
     def muted(username)
-      print("muted", username, "green")
+      info("muted", username, "green")
     end
 
     def unblocked(username)
-      print("unblocked", username, "green")
+      info("unblocked", username, "green")
     end
 
     def blocked(username)
-      print("blocked", username, "green")
+      info("blocked", username, "green")
     end
 
-    def self.error_missing_title
-      "\nYou have to specify (part of) a movie title.\n".color(:red)
+    def error_missing_title
+      info("error", "please specify (part of) a movie title", "red")
     end
 
     def error_missing_username
-      print("error", "please specify a username", "red")
+      info("error", "please specify a username", "red")
     end
 
     def error_missing_post_id
-      print("error", "please specify a post id", "red")
+      info("error", "please specify a post id", "red")
     end
 
-    def self.error_missing_message_id
-      "\nYou have to specify a message id.\n".color(:red)
+    def error_missing_message_id
+      info("error", "please specify a message id", "red")
     end
+
     def self.error_missing_channel_id
       "\nYou have to specify a channel id.\n".color(:red)
     end
@@ -183,7 +208,7 @@ module Ayadn
     end
 
     def empty_list
-      print("info", "the list is empty", "yellow")
+      info("info", "the list is empty", "yellow")
     end
 
     def self.not_found
@@ -192,43 +217,47 @@ module Ayadn
     def self.stopped
       "\n\nStopped.".color(:red)
     end
-    def self.writing
-      "\nPosting as ".color(:cyan) + "#{Settings.config[:identity][:handle]}".color(:green) + ".".color(:cyan)
+
+    def writing
+      puts "\nPosting as ".color(:cyan) + "#{Settings.config[:identity][:handle]}".color(:green) + ".".color(:cyan)
     end
-    def self.yourpost
-      "Your post:\n".color(:cyan)
+
+    def yourpost
+      puts "Your post:\n".color(:cyan)
     end
-    def self.yourmessage username = nil
+
+    def yourmessage username = nil
       if username.nil?
-        "Your message:\n\n".color(:cyan)
+        puts "Your message:\n\n".color(:cyan)
       else
-        "Your message to ".color(:cyan) + username.color(:green) + ":\n\n".color(:cyan)
+        puts "Your message to ".color(:cyan) + username.color(:green) + ":\n\n".color(:cyan)
       end
     end
-    def self.message_from(username)
-      "\nMessage from ".color(:cyan) + "#{Settings.config[:identity][:handle]} ".color(:green) + "to ".color(:cyan) + "#{username[0]}".color(:yellow) + ".".color(:cyan)
+
+    def message_from(username)
+      puts "\nMessage from ".color(:cyan) + "#{Settings.config[:identity][:handle]} ".color(:green) + "to ".color(:cyan) + "#{username[0]}".color(:yellow) + ".".color(:cyan)
     end
-    def self.replying_to(post_id)
-      "\nReplying to post #{post_id}...\n".color(:green)
+
+    def replying_to(post_id)
+      puts "\nReplying to post #{post_id}...\n".color(:green)
     end
+
     def self.readline
       "\nType your text. ".color(:cyan) + "[CTRL+D] ".color(:green) + "to validate, ".color(:cyan) + "[CTRL+C] ".color(:red) + "to cancel.\n".color(:cyan)
     end
-    # def self.classic
-    #   "\nType your text. ".color(:cyan) + "[ENTER] ".color(:green) + "to validate, ".color(:cyan) + "[CTRL+C] ".color(:red) + "to cancel.\n\n".color(:cyan)
-    # end
-    def self.reply
-      "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum.\n"
+
+    def reply
+      puts "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum.\n"
     end
-    def self.post
-      "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum.\n"
+
+    def post
+      puts "\n#{Settings.config[:post_max_length]} ".color(:yellow) + "characters maximum.\n"
     end
-    def self.message
-      "\n#{Settings.config[:message_max_length]} ".color(:yellow) + "characters maximum.\n"
+
+    def message
+      puts "\n#{Settings.config[:message_max_length]} ".color(:yellow) + "characters maximum.\n"
     end
-    # def self.method_missing(meth, args)
-    #   "\nThe command '#{meth} #{args}' doesn't exist.\n".color(:red)
-    # end
+
     def self.valid_colors(colors_list)
       "\nThe valid colors are: #{colors_list}\n".color(:cyan)
     end
@@ -240,27 +269,33 @@ module Ayadn
     end
 
     def no_new_posts
-      print("info", "no new posts since your last visit with Ayadn", "cyan")
+      info("info", "no new posts since your last visit with Ayadn", "cyan")
     end
 
-    def self.no_new_messages
-      "\n   No new messages since your last visit.\n".color(:cyan)
+    def no_new_messages
+      info("info", "no new messages", "cyan")
     end
+
     def self.type_and_target_missing
       "\nYou have to submit a TYPE ('mention', 'hashtag', 'client') and a TARGET (a @username, a hashtag, a client name)\n\n".color(:red)
     end
+
     def self.wrong_arguments
       "\nYou have to submit valid arguments.\n\n".color(:red)
     end
-    def self.no_pin_creds
-      "\nAyadn couldn't find your Pinboard credentials.\n".color(:red)
+
+    def no_pin_creds
+      info("error", "Ayadn couldn't find your Pinboard credentials", "red")
     end
-    def self.pin_creds_saved
-      "\n\nCredentials successfully encoded and saved in database.\n\n".color(:green)
+
+    def pin_creds_saved
+      info("done", "credentials successfully encoded and saved", "green")
     end
-    def self.saving_pin
-      "\nSaving post text and links to Pinboard...\n\n".color(:yellow)
+
+    def saving_pin
+      info("saving", "post text and links to Pinboard", "yellow")
     end
+
     def self.error_only_osx
       "\nThis feature only works with iTunes by default. If you've got a Last.fm account, add the option:\n\n`ayadn -np --lastfm` (short: `-l`).\n\n".color(:red)
     end
@@ -273,9 +308,11 @@ module Ayadn
     def self.not_authorized
       "\nYou need to authorize Ayadn before using it.\n\nPlease run 'ayadn -auth' :)\n\n".color(:red)
     end
-    def self.wtf
-      "\nSomething wrong happened. :(\n\n".color(:red)
+
+    def wtf
+      info("error", "an unkown error happened", "red")
     end
+
     def self.redirecting
       "\nPost is a repost. Redirecting...\n".color(:cyan)
     end
@@ -285,13 +322,16 @@ module Ayadn
     def self.nobody_starred
       "\nNobody starred this post.\n\n".color(:red)
     end
-    def self.not_your_repost
-      "\nThis post isn't one of your reposts.\n\n".color(:red)
+
+    def not_your_repost
+      info("error", "this post isn't one of your reposts", "red")
     end
-    def self.not_your_starred
-      "\nThis isn't one of your starred posts.\n\n".color(:red)
+
+    def not_your_starred
+      info("error", "this isn't one of your starred posts", "red")
     end
-    def self.auto
+
+    def auto
       view = "\nEntering the auto posting mode.\n\n".color(:cyan)
       view << "In this mode, each line you type (each time you hit ENTER!) is automatically posted to ADN.\n\n".color(:cyan)
       view << "At any moment, starting now, hit CTRL+C to exit.\n\n".color(:yellow)
@@ -311,11 +351,11 @@ module Ayadn
     end
 
     def user_404(username)
-      print("error", "user #{username} doesn't exist (it could be a deleted account)", "red")
+      info("error", "user #{username} doesn't exist (it could be a deleted account)", "red")
     end
 
     def post_404(post_id)
-      print("error", "impossible to find #{post_id} (it may have been deleted)", "red")
+      info("error", "impossible to find #{post_id} (it may have been deleted)", "red")
     end
 
     def self.no_alias
@@ -348,9 +388,11 @@ module Ayadn
     def self.fetching_from source
       "\nFetching informations from #{source}...\n".color(:green)
     end
-    def self.no_movie
-      "\nSorry, can't find this movie.\n".color(:blue)
+
+    def no_movie
+      info("error", "sorry, can't find this movie", "red")
     end
+
     def self.no_show
       "\nSorry, can't find this show.\n".color(:blue)
     end
@@ -369,7 +411,7 @@ module Ayadn
 
     private
 
-    def print(status, message, color = nil)
+    def info(status, message, color = nil)
       if color.nil?
         lamb = lambda { @thor.say_status(status.to_sym, message.to_s) }
       else

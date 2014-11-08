@@ -90,7 +90,7 @@ module Ayadn
           exit
         end
         ids.each do |post_id|
-          print Status.deleting_post(post_id)
+          @status.deleting_post(post_id)
           resp = @api.delete_post(post_id)
           @check.has_been_deleted(post_id, resp)
         end
@@ -101,14 +101,20 @@ module Ayadn
 
     def delete_m(args)
       begin
-        abort(Status.error_missing_message_id) unless args.length >= 2
+        unless args.length >= 2
+          @status.error_missing_message_id
+          exit
+        end
         channel = args[0]
         args.shift
         ids = args.select {|message_id| message_id.is_integer?}
-        abort(Status.error_missing_message_id) if ids.empty?
+        if ids.empty?
+          @status.error_missing_message_id
+          exit
+        end
         channel_id = @workers.get_channel_id_from_alias(channel)
         ids.each do |message_id|
-          print Status.deleting_message(message_id)
+          @status.deleting_message(message_id)
           resp = @api.delete_message(channel_id, message_id)
           @check.message_has_been_deleted(message_id, resp)
         end
@@ -121,7 +127,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
-        puts Status.unfollowing(users.join(','))
+        @status.unfollowing(users.join(','))
         users.each do |user|
           resp = @api.unfollow(user)
           @check.has_been_unfollowed(user, resp)
@@ -135,7 +141,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
-        puts Status.following(users.join(','))
+        @status.following(users.join(','))
         users.each do |user|
           resp = @api.follow(user)
           @check.has_been_followed(user, resp)
@@ -149,7 +155,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
-        puts Status.unmuting(users.join(','))
+        @status.unmuting(users.join(','))
         users.each do |user|
           resp = @api.unmute(user)
           @check.has_been_unmuted(user, resp)
@@ -163,7 +169,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
-        puts Status.muting(users.join(','))
+        @status.muting(users.join(','))
         users.each do |user|
           resp = @api.mute(user)
           @check.has_been_muted(user, resp)
@@ -177,7 +183,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
-        puts Status.unblocking(users.join(','))
+        @status.unblocking(users.join(','))
         users.each do |user|
           resp = @api.unblock(user)
           @check.has_been_unblocked(user, resp)
@@ -191,7 +197,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
-        puts Status.blocking(users.join(','))
+        @status.blocking(users.join(','))
         users.each do |user|
           resp = @api.block(user)
           @check.has_been_blocked(user, resp)
@@ -204,7 +210,7 @@ module Ayadn
     def repost(post_id)
       begin
         @check.bad_post_id(post_id)
-        puts Status.reposting(post_id)
+        @status.reposting(post_id)
         resp = @api.get_details(post_id)
         @check.already_reposted(resp)
         id = @workers.get_original_id(post_id, resp)
@@ -217,11 +223,11 @@ module Ayadn
     def unrepost(post_id)
       begin
         @check.bad_post_id(post_id)
-        puts Status.unreposting(post_id)
+        @status.unreposting(post_id)
         if @api.get_details(post_id)['data']['you_reposted']
           @check.has_been_unreposted(post_id, @api.unrepost(post_id))
         else
-          puts Status.not_your_repost
+          @status.not_your_repost
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
@@ -231,14 +237,14 @@ module Ayadn
     def unstar(post_id)
       begin
         @check.bad_post_id(post_id)
-        puts Status.unstarring(post_id)
+        @status.unstarring(post_id)
         resp = @api.get_details(post_id)
         id = @workers.get_original_id(post_id, resp)
         resp = @api.get_details(id)
         if resp['data']['you_starred']
           @check.has_been_unstarred(id, @api.unstar(id))
         else
-          puts Status.not_your_starred
+          @status.not_your_starred
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
@@ -248,7 +254,7 @@ module Ayadn
     def star(post_id)
       begin
         @check.bad_post_id(post_id)
-        puts Status.starring(post_id)
+        @status.starring(post_id)
         resp = @api.get_details(post_id)
         @check.already_starred(resp)
         id = @workers.get_original_id(post_id, resp)
@@ -412,7 +418,7 @@ module Ayadn
       begin
         file = @api.get_file(file_id)['data']
         FileOps.download_url(file['name'], file['url'])
-        puts Status.downloaded(file['name'])
+        @status.downloaded(file['name'])
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [file_id, file['url']]})
       end
@@ -462,7 +468,10 @@ module Ayadn
             unread_channels << ch['id']
           end
         end
-        abort(Status.no_new_messages) if unread_channels.empty?
+        if unread_channels.empty?
+          @status.no_new_messages
+          exit
+        end
         unread_messages = {}
         unread_channels.each do |id|
           @thor.say_status :downloading, "messages from channel #{id}"
@@ -524,14 +533,14 @@ module Ayadn
         post_text = "From: #{handle} -- Text: #{text} -- Links: #{links.join(" ")}"
         pinner = Ayadn::PinBoard.new
         unless pinner.has_credentials_file?
-          puts Status.no_pin_creds
+          @status.no_pin_creds
           pinner.ask_credentials
-          puts Status.pin_creds_saved
+          @status.pin_creds_saved
         end
         credentials = pinner.load_credentials
         maker = Struct.new(:username, :password, :url, :tags, :text, :description)
         bookmark = maker.new(credentials[0], credentials[1], resp['canonical_url'], usertags.join(","), post_text, links[0])
-        puts Status.saving_pin
+        @status.saving_pin
         pinner.pin(bookmark)
         puts Status.done
       rescue => e
@@ -542,7 +551,7 @@ module Ayadn
     def auto(options)
       begin
         @view.clear_screen
-        puts Status.auto
+        @status.auto
         Post.new.auto_readline
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
@@ -553,7 +562,7 @@ module Ayadn
       begin
         writer = Post.new
         @view.clear_screen
-        puts Status.posting
+        @status.posting
         if options[:poster] # Returns the same options hash + poster embed
           settings = options.dup
           options = NowWatching.new.get_poster(settings[:poster], settings)
@@ -568,13 +577,13 @@ module Ayadn
     def write(options)
       begin
         writer = Post.new
-        puts Status.writing
-        puts Status.post
+        @status.writing
+        @status.post
         lines_array = writer.compose
         writer.check_post_length(lines_array)
         text = lines_array.join("\n")
         @view.clear_screen
-        puts Status.posting
+        @status.posting
         if options[:poster]
           settings = options.dup
           options = NowWatching.new.get_poster(settings[:poster], settings)
@@ -594,13 +603,13 @@ module Ayadn
         @check.no_username(username)
         username = [@workers.add_arobase(username)]
     		writer = Post.new
-        puts Status.message_from(username)
-    		puts Status.message
+        @status.message_from(username)
+    		@status.message
     		lines_array = writer.compose
     		writer.check_message_length(lines_array)
         text = lines_array.join("\n")
     		@view.clear_screen
-        puts Status.posting
+        @status.posting
         if options[:poster]
           settings = options.dup
           options = NowWatching.new.get_poster(settings[:poster], settings)
@@ -620,7 +629,7 @@ module Ayadn
         end
         FileOps.save_message(resp) if Settings.options[:backup][:sent_messages]
     		@view.clear_screen
-    		puts Status.yourmessage(username[0])
+    		@status.yourmessage(username[0])
     		@view.show_posted(resp)
     	rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
@@ -630,7 +639,7 @@ module Ayadn
     def reply(post_id, options = {})
       begin
         post_id = @workers.get_real_post_id(post_id)
-      	puts Status.replying_to(post_id)
+      	@status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
         @check.no_post(replied_to, post_id)
         unless options[:noredirect]
@@ -644,8 +653,8 @@ module Ayadn
         end
         # ----
         writer = Post.new
-        puts Status.writing
-        puts Status.reply
+        @status.writing
+        @status.reply
         lines_array = writer.compose
         writer.check_post_length(lines_array)
         @view.clear_screen
@@ -676,12 +685,12 @@ module Ayadn
         end
         channel_id = @workers.get_channel_id_from_alias(channel_id)
         writer = Post.new
-        puts Status.writing
-        puts Status.message
+        @status.writing
+        @status.message
         lines_array = writer.compose
         writer.check_message_length(lines_array)
         @view.clear_screen
-        puts Status.posting
+        @status.posting
         if options[:poster]
           settings = options.dup
           options = NowWatching.new.get_poster(settings[:poster], settings)
@@ -701,7 +710,7 @@ module Ayadn
         end
         FileOps.save_message(resp) if Settings.options[:backup][:sent_messages]
         @view.clear_screen
-        puts Status.yourpost
+        @status.yourpost
         @view.show_posted(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id, options]})
@@ -715,20 +724,26 @@ module Ayadn
 
     def nowwatching(args, options = {})
       begin
-        abort(Status.error_missing_title) if args.empty?
+        if args.empty?
+          @status.error_missing_title
+          exit
+        end
         nw = NowWatching.new(@view)
         nw.post(args, options)
       rescue ArgumentError => e
-        puts Status.no_movie
+        @status.no_movie
       rescue => e
-        puts Status.wtf
+        @status.wtf
         Errors.global_error({error: e, caller: caller, data: [args, options]})
       end
     end
 
     def tvshow(args, options = {})
       begin
-        abort(Status.error_missing_title) if args.empty?
+        if args.empty?
+          @status.error_missing_title
+          exit
+        end
         client = TvShow.new
         show_obj = if options[:alt]
           client.find_alt(args.join(' '))
@@ -738,7 +753,7 @@ module Ayadn
         candidate = client.create_details(show_obj)
         candidate.ok ? candidate.post(options) : candidate.cancel
       rescue => e
-        puts Status.wtf
+        @status.wtf
         Errors.global_error({error: e, caller: caller, data: [args, options]})
       end
     end
@@ -768,7 +783,7 @@ module Ayadn
     def save_and_view(resp)
       FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
       @view.clear_screen
-      puts Status.yourpost
+      @status.yourpost
       @view.show_posted(resp)
     end
 

@@ -13,6 +13,7 @@ module Ayadn
       @language = 'en'
       @view = View.new
       @tvdb = TvdbParty::Search.new(AYADN_TVDB_API_KEY)
+      @status = Status.new
     end
 
     def find title
@@ -65,7 +66,7 @@ module Ayadn
 
     def ok
       @view.clear_screen
-      puts Status.writing
+      @status.writing
       puts "\nYour post:\n\n".color(:cyan)
       puts @text
       puts "\n\nIs it ok? (y/N)".color(:yellow)
@@ -94,7 +95,7 @@ module Ayadn
       resp = Post.new.post(dic)
       FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
       @view.clear_screen
-      puts Status.yourpost
+      @status.yourpost
       @view.show_posted(resp)
     end
 

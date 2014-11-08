@@ -3,7 +3,10 @@ module Ayadn
   class Errors
 
     def self.global_error(args)
-      abort(Status.wtf) if Logs.nil? || Logs.rec.nil?
+      if Logs.nil? || Logs.rec.nil?
+        Status.new.wtf
+        exit
+      end
       Logs.rec.error "--BEGIN--"
       Logs.rec.error "CAUSE: #{args[:error]}"
       Logs.rec.debug "DATA: #{args[:data]}"
@@ -39,11 +42,6 @@ module Ayadn
 
     def self.nr msg
       Logs.nr.warn msg
-    end
-
-    def self.whine(status, resp)
-      puts status
-      self.error("#{status} => #{resp['meta']}")
     end
 
     def self.no_data(where)

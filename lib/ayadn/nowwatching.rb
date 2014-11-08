@@ -8,6 +8,7 @@ module Ayadn
     def initialize view = nil
       @view = view
       @spotlite = Spotlite::Movie
+      @status = Status.new
     end
 
     # -----
@@ -55,7 +56,7 @@ module Ayadn
       resp = Post.new.post(dic)
       FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
       @view.clear_screen
-      puts Status.yourpost
+      @status.yourpost
       @view.show_posted(resp)
     end
 
@@ -91,7 +92,7 @@ module Ayadn
 
     def show_post text
       @view.clear_screen
-      puts Status.writing
+      @status.writing
       puts "\nYour post:\n\n".color(:cyan)
       puts text
       puts "\nIs it ok? (y/N)".color(:yellow)

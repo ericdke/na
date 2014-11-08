@@ -73,18 +73,16 @@ module Ayadn
     def has_been_unfollowed(username, resp)
       if resp['meta']['code'] == 200
         @status.unfollowed(username)
-        Logs.rec.info "Unfollowed #{username}."
       else
-        Errors.whine(Status.not_unfollowed(username), resp)
+        @status.not_unfollowed(username)
       end
     end
 
     def has_been_unmuted(username, resp)
       if resp['meta']['code'] == 200
         @status.unmuted(username)
-        Logs.rec.info "Unmuted #{username}."
       else
-        Errors.whine(Status.not_unmuted(username), resp)
+        @status.not_unmuted(username)
       end
     end
 
@@ -105,94 +103,82 @@ module Ayadn
     def has_been_starred(post_id, resp)
       if resp['meta']['code'] == 200
         @status.starred(post_id)
-        Logs.rec.info "Starred #{post_id}."
       else
-        Errors.whine(Status.not_starred(post_id), resp)
+        @status.not_starred(post_id)
       end
     end
 
     def has_been_reposted(post_id, resp)
       if resp['meta']['code'] == 200
         @status.reposted(post_id)
-        Logs.rec.info "Reposted #{post_id}."
       else
-        Errors.whine(Status.not_reposted(post_id), resp)
+        @status.not_reposted(post_id)
       end
     end
 
     def has_been_blocked(username, resp)
       if resp['meta']['code'] == 200
         @status.blocked(username)
-        Logs.rec.info "Blocked #{username}."
       else
-        Errors.whine(Status.not_blocked(username), resp)
+        @status.not_blocked(username)
       end
     end
 
     def has_been_muted(username, resp)
       if resp['meta']['code'] == 200
         @status.muted(username)
-        Logs.rec.info "Muted #{username}."
       else
-        Errors.whine(Status.not_muted(username), resp)
+        @status.not_muted(username)
       end
     end
 
     def has_been_followed(username, resp)
       if resp['meta']['code'] == 200
         @status.followed(username)
-        Logs.rec.info "Followed #{username}."
       else
-        Errors.whine(Status.not_followed(username), resp)
+        @status.not_followed(username)
       end
     end
 
     def has_been_deleted(post_id, resp)
       if resp['meta']['code'] == 200
         @status.deleted(post_id)
-        Logs.rec.info "Deleted post #{post_id}."
       else
-        Errors.whine(Status.not_deleted(post_id), resp)
+        @status.not_deleted(post_id)
       end
     end
 
     def message_has_been_deleted(message_id, resp)
       if resp['meta']['code'] == 200
         @status.deleted_m(message_id)
-        Logs.rec.info "Deleted message #{message_id}."
       else
-        Errors.whine(Status.not_deleted(message_id), resp)
+        @status.not_deleted_m(message_id)
       end
     end
 
     def has_been_unblocked(username, resp)
       if resp['meta']['code'] == 200
         @status.unblocked(username)
-        Logs.rec.info "Unblocked #{username}."
       else
-        Errors.whine(Status.not_unblocked(username), resp)
+        @status.not_unblocked(username)
       end
     end
 
     def has_been_unstarred(post_id, resp)
       if resp['meta']['code'] == 200
         @status.unstarred(post_id)
-        Logs.rec.info "Unstarred #{post_id}."
       else
-        Errors.whine(Status.not_unstarred(post_id), resp)
+        @status.not_unstarred(post_id)
       end
     end
 
     def has_been_unreposted(post_id, resp)
       if resp['meta']['code'] == 200
         @status.unreposted(post_id)
-        Logs.rec.info "Unreposted #{post_id}."
       else
-        Errors.whine(Status.not_unreposted(post_id), resp)
+        @status.not_unreposted(post_id)
       end
     end
-
-
 
   end
 

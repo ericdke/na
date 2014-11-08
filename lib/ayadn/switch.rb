@@ -29,7 +29,7 @@ module Ayadn
     def switch(user)
       if user.empty? || user.nil?
         puts "\n"
-        @thor.say_status :error, "I couldn't get your username", :red
+        @thor.say_status :error, "Ayadn couldn't get your username", :red
         @thor.say_status :next, "please try again", :yellow
         puts "\n"
         exit
@@ -41,7 +41,7 @@ module Ayadn
       active_user = active[0]
       if username == active_user
         puts "\n"
-        @thor.say_status :ok, "you're already authorized with username @#{username}", :green
+        @thor.say_status :done, "already authorized with username @#{username}", :green
         puts "\n"
         exit
       end
