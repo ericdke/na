@@ -7,13 +7,15 @@ module Ayadn
       begin
         RestClient.get(url) {|response, request, result| response}
       rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError, RestClient::RequestTimeout => e
+        thor = Thor::Shell::Color.new
         if working == true
           working = false
-          puts "\nOoops, '#{url}' didn't respond. Trying again in 5 secs.\n".color(:red)
+          thor.say_status :error, "'#{url}' didn't respond", :red
+          thor.say_status :info, "trying again in 5 secs", :yellow
           sleep 5
           retry
         end
-        puts "\nConnexion error.\n\n".color(:red)
+        thor.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url]})
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url]})
@@ -64,10 +66,10 @@ module Ayadn
           try_cnx = retry_adn 10, try_cnx
           retry
         end
-        puts "\nConnection error.".color(:red)
+        Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url]})
       rescue URI::InvalidURIError => e
-        puts "\nConnection or authorization error.".color(:red)
+        Thor::Shell::Color.new.say_status :error, "connection or authorization problem", :red
         Errors.global_error({error: e, caller: caller, data: [url]})
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url]})
@@ -75,8 +77,10 @@ module Ayadn
     end
 
     def self.retry_adn seconds, try_cnx
+      thor = Thor::Shell::Color.new
+      thor.say_status :error, "unable to connect to App.net", :red
+      thor.say_status :info, "trying again in #{seconds} seconds (#{try_cnx}/3)", :yellow
       Errors.warn "Unable to connect to App.net"
-      puts "\n\nUnable to connect to App.net\nRetrying in #{seconds} seconds... (#{try_cnx}/3)\n".color(:red)
       try_cnx += 1
       sleep seconds
       puts "\e[H\e[2J"
@@ -125,7 +129,7 @@ module Ayadn
           check response
         end
       rescue SocketError, SystemCallError => e
-        puts "\nConnection error.".color(:red)
+        Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url]})
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url]})
@@ -139,7 +143,7 @@ module Ayadn
           check response
         end
       rescue SocketError, SystemCallError => e
-        puts "\nConnection error.".color(:red)
+        Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
@@ -153,7 +157,7 @@ module Ayadn
           check response
         end
       rescue SocketError, SystemCallError => e
-        puts "\nConnection error.".color(:red)
+        Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
@@ -167,7 +171,7 @@ module Ayadn
           check response
         end
       rescue SocketError, SystemCallError => e
-        puts "\nConnection error.".color(:red)
+        Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url, payload]})

@@ -71,14 +71,15 @@ module Ayadn
     def clear
       begin
         init
-        puts "\n\nAre you sure you want to erase all the content of your aliases database?\n\n[y/N]\n".color(:red)
+        status = Status.new
+        status.ask_clear_databases
         input = STDIN.getch
         if input == 'y' || input == 'Y'
           Databases.clear_aliases
           Logs.rec.info "Cleared the aliases database."
-          Status.new.done
+          status.done
         else
-          Status.new.canceled
+          status.canceled
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: []})

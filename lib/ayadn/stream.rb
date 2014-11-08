@@ -251,7 +251,7 @@ module Ayadn
       #max_posts = cols / 16
       max_posts = 6
       @view.clear_screen
-      puts "Fetching random posts, please wait...".color(:cyan)
+      @status.info("connected", "fetching random posts", "cyan")
       @max_id = @api.get_global({count: 1})['meta']['max_id'].to_i
       @view.clear_screen
       counter = 1

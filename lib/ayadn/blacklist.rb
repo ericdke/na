@@ -69,7 +69,7 @@ module Ayadn
     # end
     def clear
       begin
-        puts "\n\nAre you sure you want to erase all the content of your blacklist database?\n\n[y/N]\n".color(:red)
+        Status.new.ask_clear_blacklist
         input = STDIN.getch
         if input == 'y' || input == 'Y'
           Databases.clear_blacklist

@@ -281,8 +281,11 @@ module Ayadn
         end
         view << "\n\n"
       end
-      view << "\nYour account is currently linked to #{bucket.length} channels.\n\n".color(:green) unless options[:channels] || options[:id]
       puts view
+      unless options[:channels] || options[:id]
+        @status.info("info", "your account is currently linked to #{bucket.length} channels", "cyan")
+        puts "\n"
+      end
     end
 
     def render(stream, options = {}, niceranks = {})
@@ -306,7 +309,6 @@ module Ayadn
       puts "\e[H\e[2J"
     end
 
-    # ???
     def page msg
       clear_screen
       puts msg
@@ -318,12 +320,12 @@ module Ayadn
     end
 
     def show_links(links)
-      links.each {|l| puts "#{l}\n".color(Settings.options[:colors][:link])}
+      links.each {|l| puts "#{l}".color(Settings.options[:colors][:link])}
     end
 
     def all_hashtag_links(stream, hashtag)
       clear_screen()
-      puts "Links from posts containing hashtag '##{hashtag}': \n".color(:cyan)
+      @status.info("info", "links from posts containing hashtag '##{hashtag}':", "cyan")
       links = @workers.links_from_posts(stream)
       links.uniq!
       show_links(links)
@@ -332,7 +334,7 @@ module Ayadn
 
     def all_search_links(stream, words)
       clear_screen()
-      puts "Links from posts containing word(s) '#{words}': \n".color(:cyan)
+      @status.info("info", "links from posts containing word(s) '#{words}':", "cyan")
       links = @workers.links_from_posts(stream)
       links.uniq!
       show_links(links)
@@ -341,7 +343,7 @@ module Ayadn
 
     def all_stars_links(stream)
       clear_screen()
-      puts "Links from your starred posts: \n".color(:cyan)
+      @status.info("info", "links from your starred posts:", "cyan")
       links = @workers.links_from_posts(stream)
       links.uniq!
       show_links(links)

@@ -122,7 +122,8 @@ module Ayadn
         abort(error_text_empty)
       elsif size > max_size
         Errors.warn "Canceled: too long (#{size - max_size}chars)"
-        puts "\nYour text was: \n\n#{post}\n\n".color(:yellow)
+        @status.info("info", "your text:", "cyan")
+        puts post
         @status.too_long(size, max_size)
         exit
       end

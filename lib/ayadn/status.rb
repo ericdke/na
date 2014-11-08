@@ -11,7 +11,10 @@ module Ayadn
     end
 
     def canceled
-      info("canceled", "", "red")
+      say do
+        puts "\n"
+        @thor.say_status :canceled, "", :red
+      end
     end
 
     def downloaded(name)
@@ -204,8 +207,8 @@ module Ayadn
 
     def error_missing_parameters
       say do
-        @thor.say_status "error", "please submit valid items", "red"
-        @thor.say_status "info", "see `ayadn -sg` for a list of valid parameters and values", "cyan"
+        @thor.say_status :error, "please submit valid items", :red
+        @thor.say_status :info, "see `ayadn -sg` for a list of valid parameters and values", :cyan
       end
     end
 
@@ -214,7 +217,8 @@ module Ayadn
     end
 
     def writing
-      @thor.say_status "info", "posting as #{Settings.config[:identity][:handle]}", "cyan"
+      puts "\n"
+      @thor.say_status "author", "#{Settings.config[:identity][:handle]}", "cyan"
     end
 
     def yourpost
@@ -230,31 +234,34 @@ module Ayadn
     end
 
     def message_from(username)
-      @thor.say_status "info", "message from #{Settings.config[:identity][:handle]} to #{username[0]}", "cyan"
+      puts "\n"
+      @thor.say_status "from", "#{Settings.config[:identity][:handle]}", "yellow"
+      @thor.say_status "to", "#{username[0]}", "yellow"
     end
 
     def replying_to(post_id)
-      @thor.say_status "info", "replying to post #{post_id}...", "cyan"
+      puts "\n"
+      @thor.say_status "replying", "to post #{post_id}", "yellow"
     end
 
     def readline
       say do
-        @thor.say_status "next", "type your text", "cyan"
-        @thor.say_status "info", "[CTRL+D] to validate", "cyan"
-        @thor.say_status "info", "[CTRL+C] to cancel", "cyan"
+        @thor.say_status :next, "type your text", :cyan
+        @thor.say_status :ok, "[CTRL+D] to validate", :cyan
+        @thor.say_status :cancel, "[CTRL+C] to cancel", :cyan
       end
     end
 
     def reply
-      @thor.say_status "info", "#{Settings.config[:post_max_length]} characters maximum", "cyan"
+      @thor.say_status "max", "#{Settings.config[:post_max_length]} characters", "cyan"
     end
 
     def post
-      @thor.say_status "info", "#{Settings.config[:post_max_length]} characters maximum", "cyan"
+      @thor.say_status "max", "#{Settings.config[:post_max_length]} characters", "cyan"
     end
 
     def message
-      @thor.say_status "info", "#{Settings.config[:message_max_length]} characters maximum", "cyan"
+      @thor.say_status "max", "#{Settings.config[:message_max_length]} characters", "cyan"
     end
 
     def valid_colors(colors_list)
@@ -318,8 +325,8 @@ module Ayadn
 
     def redirecting
       say do
-        @thor.say_status "info", "post is a repost", "cyan"
-        @thor.say_status "action", "redirecting", "yellow"
+        @thor.say_status :info, "post is a repost", :cyan
+        @thor.say_status :action, "redirecting", :yellow
       end
     end
 
@@ -341,17 +348,17 @@ module Ayadn
 
     def auto
       say do
-        @thor.say_status "info", "entering the auto posting mode", "cyan"
-        @thor.say_status "info", "each line you type (each time you hit ENTER) is automatically posted to ADN", "cyan"
-        @thor.say_status "info", "at any moment, starting now, hit CTRL+C to exit", "cyan"
-        @thor.say_status "info", "AUTO POSTING MODE ACTIVATED", "yellow"
+        @thor.say_status :info, "entering the auto posting mode", :cyan
+        @thor.say_status :info, "each line you type (each time you hit ENTER) is automatically posted to ADN", :cyan
+        @thor.say_status :info, "at any moment, starting now, hit CTRL+C to exit", :cyan
+        @thor.say_status :info, "AUTO POSTING MODE ACTIVATED", :yellow
       end
     end
 
     def threshold
       say do
-        @thor.say_status "error", "please enter a value between 0.1 and 3.5", "red"
-        @thor.say_status "info", "example: 2.1", "green"
+        @thor.say_status :error, "please enter a value between 0.1 and 3.5", :red
+        @thor.say_status :info, "example: 2.1", :green
       end
     end
 
@@ -385,8 +392,8 @@ module Ayadn
 
     def too_long(size, max_size)
       say do
-        @thor.say_status "error", "text too long", "red"
-        @thor.say_status "info", "#{max_size} max: #{size - max_size} characters to remove", "green"
+        @thor.say_status :error, "text too long", :red
+        @thor.say_status :info, "#{max_size} max: #{size - max_size} characters to remove", :green
       end
     end
 
@@ -452,6 +459,56 @@ module Ayadn
         @thor.say_status :upgrade, "Ayadn 1.x user data detected", :red
         @thor.say_status :migrate,  "please run `ayadn migrate` to upgrade your account", :yellow
       end
+    end
+
+    def updating_profile
+      info("updating", "profile", "yellow")
+    end
+
+    def your_post
+      info("info", "your post:", "cyan")
+    end
+
+    def post_info
+      info("info", "post info", "cyan")
+    end
+
+    def repost_info
+      info("info", "repost of", "cyan")
+    end
+
+    def unread_from_channel(channel_id)
+      info("info", "unread message(s) from channel #{channel_id}", "cyan")
+    end
+
+    def version
+      say do
+        @thor.say_status :AYADN, "", :red
+        @thor.say_status :version, "#{VERSION}", :green
+        @thor.say_status :changelog, "https://github.com/ericdke/na/blob/master/CHANGELOG.md", :yellow
+        @thor.say_status :docs, "https://github.com/ericdke/na/tree/master/doc", :yellow
+      end
+    end
+
+    def ask_clear_databases
+      info("question", "are you sure you want to erase all the content of your aliases database? [y/N]", "red")
+    end
+
+    def ask_clear_blacklist
+      info("question", "are you sure you want to erase all the content of your blacklist database? [y/N]", "red")
+    end
+
+    def ask_clear_bookmarks
+      info("question", "are you sure you want to erase all the content of your bookmarks database? [y/N]", "red")
+    end
+
+    def ok?
+      info("confirm", "is it ok? [y/N]", "yellow")
+    end
+
+    def itunes_store_track(store)
+      puts "\n"
+      @thor.say_status "next", "Ayadn will use these elements to insert album artwork and a link", :cyan
     end
 
     ##---

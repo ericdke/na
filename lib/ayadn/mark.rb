@@ -24,7 +24,7 @@ module Ayadn
         api, workers, view = API.new, Workers.new, View.new
         users, bucket = [], []
         view.clear_screen
-        puts "\nAnalyzing conversation...\n".inverse
+        status.info(:connected, "analyzing conversation", :yellow)
         resp = api.get_convo(post_id, options)
         posts = workers.build_posts(resp['data'].reverse)
         posts.each do |id, post|
@@ -51,7 +51,7 @@ module Ayadn
           'root_colorized_text' => bucket[0][:text]
         }
         view.clear_screen
-        puts "Bookmarked conversation:\n".color(:green)
+        status.info(:done, "bookmarked conversation:", :green)
         puts make_entry bookmark
         Databases.add_bookmark bookmark
         Logs.rec.info "Added conversation bookmark for post #{bookmark['id']}."
@@ -83,14 +83,15 @@ module Ayadn
     def clear
       begin
         init
-        puts "\n\nAre you sure you want to erase all the content of your bookmarks database?\n\n[y/N]\n".color(:red)
+        status = Status.new
+        status.ask_clear_bookmarks
         input = STDIN.getch
         if input == 'y' || input == 'Y'
           Databases.clear_bookmarks
           Logs.rec.info "Cleared the bookmarks database."
-          Status.new.done
+          status.done
         else
-          Status.new.canceled
+          status.canceled
           exit
         end
       rescue => e

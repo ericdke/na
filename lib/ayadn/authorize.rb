@@ -13,16 +13,16 @@ module Ayadn
       token = get_token
       check_token(token)
       puts "\e[H\e[2J"
-      @thor.say_status :connexion, "downloading user info", :cyan
+      @thor.say_status :connexion, "downloading user info", :yellow
       user = create_user_data(token, Dir.home + "/ayadn")
       prepare(user)
-      @thor.say_status :create, "configuration", :cyan
+      @thor.say_status :create, "configuration", :yellow
       Settings.load_config
       Logs.create_logger
       install
       @thor.say_status :done, "user #{user.handle} is authorized", :green
       Errors.info "#{user.handle} authorized."
-      @status.say { @thor.say_status :end, "Thank you for using Ayadn. Enjoy!", :yellow }
+      @status.say { @thor.say_status :end, "Thank you for using Ayadn. Enjoy!", :green }
     end
 
     def unauthorize(user, options)
@@ -62,11 +62,11 @@ module Ayadn
     private
 
     def prepare(user)
-      @thor.say_status :create, "user folders", :cyan
+      @thor.say_status :create, "user folders", :yellow
       create_config_folders(user)
-      @thor.say_status :save, "user token", :cyan
+      @thor.say_status :save, "user token", :yellow
       create_token_file(user)
-      @thor.say_status :create, "Ayadn account", :cyan
+      @thor.say_status :create, "Ayadn account", :yellow
       if File.exist?(Dir.home + "/ayadn/accounts.sqlite")
         acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
         Databases.create_account(acc_db, user)
@@ -78,7 +78,7 @@ module Ayadn
     end
 
     def install
-      @thor.say_status :create, "api and config files", :cyan
+      @thor.say_status :create, "api and config files", :yellow
       Errors.info "Creating api and config files..."
       Errors.info "Creating version file..."
       Settings.init_config
@@ -104,13 +104,16 @@ module Ayadn
     end
 
     def show_link
-      puts "\nClick this URL or copy/paste it in a browser:\n".color(:cyan)
-      puts Endpoints.new.authorize_url
-      puts "\n"
-      puts "In the browser, log in with your App.net account to authorize Ayadn.\n".color(:cyan)
-      puts "You will then be redirected to a page showing a 'user token' (your authorization code).\n".color(:cyan)
-      puts "Copy/paste the token here:\n".color(:yellow)
-      print "> "
+      @status.say do
+        @thor.say_status :please, "click this URL or copy/paste it in a browser", :yellow
+        puts "\n"
+        puts "\t#{Endpoints.new.authorize_url}"
+        puts "\n"
+        @thor.say_status :next, "in the App.net page, log in to authorize Ayadn", :cyan
+        @thor.say_status nil, "you will be redirected to your 'user token' (your authorization code)", :cyan
+        @thor.say_status :please, "copy/paste the token here:", :yellow
+      end
+      print "\t> "
     end
 
     def get_user(token)

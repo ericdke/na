@@ -81,9 +81,14 @@ module Ayadn
     def ok
       @view.clear_screen
       @status.writing
-      puts "\nYour post:\n\n".color(:cyan)
-      puts @text
-      puts "\n\nIs it ok? (y/N)".color(:yellow)
+      @status.your_post
+      thor = Thor::Shell::Basic.new
+      puts "\n"
+      @text.split("\n").each do |line|
+        thor.say_status(nil, line)
+      end
+      puts "\n"
+      @status.ok?
       STDIN.getch == ("y" || "Y") ? true : false
     end
 
@@ -97,7 +102,7 @@ module Ayadn
         FileOps.download_url(filename, @poster_url)
       end
       @view.clear_screen
-      puts "\nPosting and uploading the show poster...\n".color(:green)
+      @status.info("uploading", "show poster", "yellow")
       options[:embed] = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
       options[:tvshow] = true
       dic = {

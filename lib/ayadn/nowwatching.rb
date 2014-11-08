@@ -43,14 +43,14 @@ module Ayadn
 
     def post args, options
       options = options.dup
-      puts "\nContacting IMDb.com...".color(:cyan)
+      @status.info("connected", "IMDb", "yellow")
       response = find_by_title(args, options)
       text = format_post(response)
       show_post(text)
       filename = create_filename(response)
       FileOps.download_url(filename, response.poster_url)
       @view.clear_screen
-      puts "\nPosting and uploading the movie poster...\n".color(:green)
+      @status.info("uploading", "movie poster", "yellow")
       options[:embed] = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
       options[:movie] = true
       dic = {
@@ -99,9 +99,14 @@ module Ayadn
     def show_post text
       @view.clear_screen
       @status.writing
-      puts "\nYour post:\n\n".color(:cyan)
-      puts text
-      puts "\nIs it ok? (y/N)".color(:yellow)
+      @status.your_post
+      thor = Thor::Shell::Basic.new
+      puts "\n"
+      text.split("\n").each do |line|
+        thor.say_status(nil, line)
+      end
+      puts "\n"
+      @status.ok?
       unless STDIN.getch == ("y" || "Y")
         @status.canceled
         exit

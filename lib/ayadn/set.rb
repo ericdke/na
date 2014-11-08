@@ -258,6 +258,7 @@ module Ayadn
       Settings.get_token()
       Settings.init_config()
       Logs.create_logger()
+      @status = Status.new
     end
 
     def save
@@ -266,9 +267,9 @@ module Ayadn
     end
 
     def log
-      x = "New value for '#{@input}' in '#{@category}' => #{@output}"
-      puts "\n#{x}\n".color(:cyan)
-      Logs.rec.info x
+      @status.info("new", "value for '#{@input}' in '#{@category}'", "cyan")
+      @status.info("value", "'#{@output}'", "green")
+      Logs.rec.info "new value for '#{@input}' in '#{@category}' => '#{@output}'"
     end
 
   end
@@ -288,7 +289,7 @@ module Ayadn
         @output = Validators.width_range(value)
         Settings.options[:formats][:table][:width] = @output
       else
-        Status.new.error_missing_parameters
+        @status.error_missing_parameters
         exit
       end
     end
@@ -305,7 +306,7 @@ module Ayadn
         @output = Validators.boolean(value)
         Settings.options[:formats][:list][:reverse] = @output
       else
-        Status.new.error_missing_parameters
+        @status.error_missing_parameters
         exit
       end
     end

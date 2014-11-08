@@ -330,7 +330,7 @@ module Ayadn
         profile = Profile.new(options)
         profile.get_text_from_user
         profile.prepare_payload
-        puts "\n\nUpdating profile...\n".color(:green)
+        @status.updating_profile
         profile.update
         @status.done
         userinfo('me')
@@ -375,17 +375,17 @@ module Ayadn
         response = @api.get_user("@#{resp['user']['username']}")
         @check.no_user(response, response['data']['username'])
         stream = response['data']
-        puts "POST:\n".inverse
+        @status.post_info
         @view.show_simple_post([resp], options)
         if resp['repost_of']
-          puts "REPOST OF:\n".inverse
+          @status.repost_info
           Errors.repost(post_id, resp['repost_of']['id'])
           @view.show_simple_post([resp['repost_of']], options)
         end
         if Settings.options[:timeline][:compact] == true
-          puts "\nAUTHOR:\n".inverse
+          @status.say { @thor.say_status "info", "author", "cyan" }
         else
-          puts "AUTHOR:\n".inverse
+          @thor.say_status "info", "author", "cyan"
         end
         if response['data']['username'] == Settings.config[:identity][:username]
           @view.show_userinfos(stream, @api.get_token_info['data'], true)
@@ -505,11 +505,7 @@ module Ayadn
         end
         @view.clear_screen
         unread_messages.each do |k,v|
-          if v[0].length == 1
-            puts "\nUnread message from channel #{k}:\n".color(Settings.options[:colors][:unread]).inverse
-          else
-            puts "\nUnread messages from channel #{k}:\n".color(Settings.options[:colors][:unread]).inverse
-          end
+          @status.unread_from_channel(k)
           @view.show_posts(v[0])
         end
         puts "\n" if Settings.options[:timeline][:compact]
@@ -774,11 +770,7 @@ module Ayadn
 
     def version
       begin
-        puts "\nAYADN\n".color(:red)
-        puts "Version:\t".color(:cyan) + "#{VERSION}\n".color(:green)
-        puts "Changelog:\t".color(:cyan) + "https://github.com/ericdke/na/blob/master/CHANGELOG.md\n".color(Settings.options[:colors][:link])
-        puts "Docs:\t\t".color(:cyan) + "https://github.com/ericdke/na/tree/master/doc".color(Settings.options[:colors][:link])
-        puts "\n"
+        @status.version
       rescue => e
         Errors.global_error({error: e, caller: caller, data: []})
       end

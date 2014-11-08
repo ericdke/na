@@ -116,7 +116,7 @@ module Ayadn
     end
 
     def ask_lastfm_user
-      puts "\nPlease enter your Last.fm username:\n".color(:cyan)
+      @status.info("please enter your Last.fm username", "yellow")
       begin
         STDIN.gets.chomp!
       rescue Interrupt
@@ -216,13 +216,19 @@ module Ayadn
     end
 
     def show_nowplaying(text, options, store)
-      puts "\nYour post:\n".color(:cyan)
-      if options['no_url'] || store['code'] != 200
-        puts text + "\n\n\n"
-      else
-        puts text + "\n\n\nThe iTunes Store thinks this track is: ".color(:green) + "'#{store['track']}'".color(:magenta) + " by ".color(:green) + "'#{store['artist']}'".color(:magenta) + ".\n\nAyadn will use these elements to insert album artwork and a link to the track.\n\n".color(:green)
+      @status.your_post
+      thor = Thor::Shell::Basic.new
+      text.split("\n").each do |line|
+        thor.say_status(nil, line)
       end
-      puts "Is it ok? (y/N) ".color(:yellow)
+      puts "\n"
+      thor.say_status(nil, "[iTunes Store link]")
+      thor.say_status(nil, "[album art]")
+      puts "\n"
+      unless options['no_url'] || store['code'] != 200
+        @status.itunes_store_track(store)
+      end
+      @status.ok?
     end
 
   end

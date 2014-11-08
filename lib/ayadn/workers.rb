@@ -313,9 +313,12 @@ module Ayadn
       bucket = []
       data = [data] unless data.is_a?(Array)
       if options[:channels]
-        puts "Downloading list of channels and their users credentials.\n\nPlease wait, it could take a while if there are many results and users...".color(:cyan)
+        @thor.say_status :downloading, "list of channels and their users credentials", :yellow
+        @thor.say_status :info, "it could take a while if there are many results and users", :cyan
       else
-        puts "Downloading the channels and recording their users attributes (owners, writers, editors and readers).\n\nThe users are recorded in a database for later filtering and analyzing.\n\nPlease wait, it could take a while the first time if you have many channels.\n\n".color(:cyan)
+        @thor.say_status :downloading, "the channels and their users attributes (owners, writers, editors and readers)", :yellow
+        @thor.say_status :info, "users are recorded in a database for later filtering and analyzing", :cyan
+        @thor.say_status :info, "it could take a while if there are many results", :cyan
       end
       chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
       no_user = {}
@@ -327,7 +330,7 @@ module Ayadn
             next if no_user[id]
             db = Databases.find_user_by_id(id)
             if db.nil?
-              @thor.say_status :downloading, "user #{id}"
+              @thor.say_status :downloading, "user #{id}", :yellow
               resp = API.new.get_user(id)
 
               if resp['meta']['code'] != 200
@@ -337,7 +340,7 @@ module Ayadn
               end
 
               the_username = resp['data']['username']
-              @thor.say_status :recording, "@#{the_username}", :green
+              @thor.say_status :recording, "@#{the_username}", :yellow
 
               usernames << "@" + the_username
               Databases.add_to_users_db(id, the_username, resp['data']['name'])
