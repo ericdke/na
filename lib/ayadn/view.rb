@@ -185,7 +185,7 @@ module Ayadn
       end
 
       unless content['annotations'].empty?
-        view << "\n"
+        view << "\n" unless Settings.options[:timeline][:compact] == true
       end
       content['annotations'].each do |anno|
         case anno['type']
@@ -213,6 +213,24 @@ module Ayadn
       view = ""
       bucket = @workers.build_channels(resp['data'], options)
       bucket.reverse.each do |ch|
+        if options[:broadcasts]
+          next if ch.type != "net.app.core.broadcast"
+        end
+        if options[:"no-broadcasts"]
+          next if ch.type == "net.app.core.broadcast"
+        end
+        if options[:messages]
+          next if ch.type != "net.app.core.pm"
+        end
+        if options[:"no-messages"]
+          next if ch.type == "net.app.core.pm"
+        end
+        if options[:other]
+          next if ch.type == "net.app.core.pm" || ch.type == "net.app.core.broadcast"
+        end
+        if options[:"no-other"]
+          next if ch.type != "net.app.core.pm" || ch.type != "net.app.core.broadcast"
+        end
         view << "\n"
         view << "ID: ".color(:cyan)
         view << "#{ch.id}".color(Settings.options[:colors][:id])
@@ -238,7 +256,7 @@ module Ayadn
           view << "\n"
         end
         view << "Type: ".color(:cyan)
-        view << "#{ch.type}".color(Settings.options[:colors][:id])
+        view << "#{ch.type}".color(Settings.options[:colors][:index])
         view << "\n"
         if ch.type == "net.patter-app.room"
           ann = ch.annotations.select {|a| a['type'] == "net.patter-app.settings"}

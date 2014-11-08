@@ -89,6 +89,7 @@ module Ayadn
           @status.error_missing_post_id
           exit
         end
+        puts "\n"
         ids.each do |post_id|
           @status.deleting_post(post_id)
           resp = @api.delete_post(post_id)
@@ -113,6 +114,7 @@ module Ayadn
           exit
         end
         channel_id = @workers.get_channel_id_from_alias(channel)
+        puts "\n"
         ids.each do |message_id|
           @status.deleting_message(message_id)
           resp = @api.delete_message(channel_id, message_id)
@@ -382,7 +384,7 @@ module Ayadn
           Errors.repost(post_id, resp['repost_of']['id'])
           @view.show_simple_post([resp['repost_of']], options)
         end
-        if Settings.options[:timeline][:compact] == true
+        if Settings.options[:timeline][:compact] == false
           @status.say { @thor.say_status "info", "author", "cyan" }
         else
           @thor.say_status "info", "author", "cyan"
@@ -782,6 +784,7 @@ module Ayadn
       FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
       @view.clear_screen
       @status.yourpost
+      puts "\n\n"
       @view.show_posted(resp)
     end
 

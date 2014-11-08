@@ -1,10 +1,12 @@
 # 2.0.0 - WIP - 'The Piper At The Gates Of Dawn'
 
 - New: SQLite database. Means FAST!
+- Unified style for statuses and infos
 - Ayadn instances share access to the blacklist
+- Simplified, shorter settings options
 - New Blacklist setting: active (default: true)
 - New: unauthorize an Ayadn user account
-- Simplified, shorter settings options
+- In channels: option to show only broadcasts/PMs/other
 - NiceRank filter for Global is cached in-memory
 - Code has been optimized. Bugs have been squashed.
 

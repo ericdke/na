@@ -354,6 +354,9 @@ module Ayadn
     map "-ch" => :channels
     long_desc Descriptions.channels
     option :id, aliases: "-i", type: :array, desc: "Retrieve only the specified channel(s)"
+    option :broadcasts, aliases: "-b", type: :boolean, desc: "Only your broadcast channel(s)"
+    option :messages, aliases: "-m", type: :boolean, desc: "Only your private messaging channel(s)"
+    option :other, aliases: "-o", type: :boolean, desc: "Only other than private messaging and broadcasts channel(s)"
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def channels
       Action.new.channels(options)

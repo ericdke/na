@@ -221,7 +221,7 @@ module Ayadn
     end
 
     def show_nowplaying(text, options, store)
-      @status.your_post
+      @status.to_be_posted
       thor = Thor::Shell::Basic.new
       text.split("\n").each do |line|
         thor.say_status(nil, line)

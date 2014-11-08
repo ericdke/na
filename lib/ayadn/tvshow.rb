@@ -81,7 +81,7 @@ module Ayadn
     def ok
       @view.clear_screen
       @status.writing
-      @status.your_post
+      @status.to_be_posted
       thor = Thor::Shell::Basic.new
       puts "\n"
       @text.split("\n").each do |line|
@@ -115,6 +115,7 @@ module Ayadn
       FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
       @view.clear_screen
       @status.yourpost
+      puts "\n\n"
       @view.show_posted(resp)
     end
 

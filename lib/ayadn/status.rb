@@ -34,51 +34,51 @@ module Ayadn
     end
 
     def deleting_post(post_id)
-      info("deleting", "post #{post_id}", "yellow")
+      @thor.say_status :deleting, "post #{post_id}", :yellow
     end
 
     def deleting_message(message_id)
-      info("deleting", "message #{message_id}", "yellow")
+      @thor.say_status :deleting, "message #{message_id}", :yellow
     end
 
     def unfollowing(username)
-      info("unfollowing", username, "yellow")
+      @thor.say_status :unfollowing, username, :yellow
     end
 
     def following(username)
-      info("following", username, "yellow")
+      @thor.say_status :following, username, :yellow
     end
 
     def unmuting(username)
-      info("unmuting", username, "yellow")
+      @thor.say_status :unmuting, username, :yellow
     end
 
     def muting(username)
-      info("muting", username, "yellow")
+      @thor.say_status :muting, username, :yellow
     end
 
     def unblocking(username)
-      info("unblocking", username, "yellow")
+      @thor.say_status :unblocking, username, :yellow
     end
 
     def blocking(username)
-      info("blocking", username, "yellow")
+      @thor.say_status :blocking, username, :yellow
     end
 
     def unreposting(post_id)
-      info("unreposting", "post #{post_id}", "yellow")
+      @thor.say_status :unreposting, "post #{post_id}", :yellow
     end
 
     def reposting(post_id)
-      info("reposting", "post #{post_id}", "yellow")
+      @thor.say_status :reposting, "post #{post_id}", :yellow
     end
 
     def unstarring(post_id)
-      info("unstarring", "post #{post_id}", "yellow")
+      @thor.say_status :unstarring, "post #{post_id}", :yellow
     end
 
     def starring(post_id)
-      info("starring", "post #{post_id}", "yellow")
+      @thor.say_status :starring, "post #{post_id}", :yellow
     end
 
     def not_deleted(post_id)
@@ -219,17 +219,14 @@ module Ayadn
     def writing
       puts "\n"
       @thor.say_status "author", "#{Settings.config[:identity][:handle]}", "cyan"
-    end
-
-    def yourpost
-      @thor.say_status "info", "your post:", "cyan"
+      puts "\n"
     end
 
     def yourmessage username = nil
       if username.nil?
-        @thor.say_status "info", "your message:", "cyan"
+        @thor.say_status "", "Your message:"
       else
-        @thor.say_status "info", "your message to #{username}:", "cyan"
+        @thor.say_status "", "Your message to #{username}:"
       end
     end
 
@@ -465,8 +462,13 @@ module Ayadn
       info("updating", "profile", "yellow")
     end
 
-    def your_post
-      info("", "your post:", "cyan")
+    def to_be_posted
+      info("", "Your post:")
+    end
+
+    def yourpost
+      # info("", "Your post:")
+      @thor.say_status nil, "Your post:"
     end
 
     def post_info
