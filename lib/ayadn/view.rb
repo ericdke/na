@@ -129,9 +129,9 @@ module Ayadn
         view << "Name\t\t\t".color(:cyan) + "(no name)".color(:red)
       end
 
-      view << "#{padding}Username\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:id])
+      view << "#{padding}Username\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
 
-      view << "#{padding}ID\t\t\t".color(:cyan) + content['id'].color(Settings.options[:colors][:username])
+      view << "#{padding}ID\t\t\t".color(:cyan) + content['id'].color(Settings.options[:colors][:id])
 
       view << "#{padding}URL\t\t\t".color(:cyan) + content['canonical_url'].color(Settings.options[:colors][:link])
 
@@ -145,11 +145,11 @@ module Ayadn
       end
 
 
-      view << "#{padding}Account creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(:green)
-      view << "#{padding}TimeZone\t\t".color(:cyan) + content['timezone'].color(:green)
-      view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(:green)
+      view << "#{padding}Account creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(Settings.options[:colors][:excerpt])
+      view << "#{padding}TimeZone\t\t".color(:cyan) + content['timezone'].color(Settings.options[:colors][:excerpt])
+      view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(Settings.options[:colors][:excerpt])
 
-      view << "#{padding}Posts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(:green)
+      view << "#{padding}Posts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(Settings.options[:colors][:excerpt])
 
 
       unless show_ranks == false
@@ -157,16 +157,16 @@ module Ayadn
         # do call them all at once instead if many
         ranks = NiceRank.new.get_posts_day([content['id'].to_i])
         unless ranks.empty?
-          view << "#{padding}Posts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(:green)
+          view << "#{padding}Posts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(Settings.options[:colors][:excerpt])
         end
       end
 
-      view << "#{padding}Following\t\t".color(:cyan) + content['counts']['following'].to_s.color(:green)
-      view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:green)
+      view << "#{padding}Following\t\t".color(:cyan) + content['counts']['following'].to_s.color(Settings.options[:colors][:excerpt])
+      view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(Settings.options[:colors][:excerpt])
 
       if content['username'] == Settings.config[:identity][:username] && !token.nil?
-        view << "#{padding}Storage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(:green)
-        view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(:green)
+        view << "#{padding}Storage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(Settings.options[:colors][:excerpt])
+        view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(Settings.options[:colors][:excerpt])
       end
 
       #view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)

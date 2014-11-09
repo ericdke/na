@@ -85,7 +85,7 @@ module Ayadn
       thor = Thor::Shell::Basic.new
       puts "\n"
       @text.split("\n").each do |line|
-        thor.say_status(nil, line)
+        thor.say_status(nil, line.color(Settings.options[:colors][:excerpt]))
       end
       puts "\n"
       @status.ok?

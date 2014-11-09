@@ -151,6 +151,7 @@ module Ayadn
           conf[:timeline][:spinner] = true if conf[:timeline][:spinner].nil?
           conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
           conf[:colors][:unread] = :cyan if conf[:colors][:unread].nil?
+          conf[:colors][:excerpt] = :green if conf[:colors][:excerpt].nil?
           conf[:nowplaying] = {} if conf[:nowplaying].nil?
           conf[:movie] = {hashtag: 'nowwatching'} if conf[:movie].nil?
           conf[:tvshow] = {hashtag: 'nowwatching'} if conf[:tvshow].nil?
@@ -277,7 +278,8 @@ module Ayadn
           source: :cyan,
           symbols: :green,
           unread: :cyan,
-          debug: :red
+          debug: :red,
+          excerpt: :green
         },
         backup: {
           sent_posts: false,

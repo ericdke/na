@@ -224,7 +224,7 @@ module Ayadn
       @status.to_be_posted
       thor = Thor::Shell::Basic.new
       text.split("\n").each do |line|
-        thor.say_status(nil, line)
+        thor.say_status(nil, line.color(Settings.options[:colors][:excerpt]))
       end
       puts "\n"
       unless options['no_url'] || store['code'] != 200

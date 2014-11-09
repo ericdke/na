@@ -6,7 +6,7 @@
 - Simplified, shorter settings options
 - New Blacklist setting: active (default: true)
 - New: unauthorize an Ayadn user account
-- In channels: option to show only broadcasts/PMs/other
+- In channels: option to show only broadcasts/PMs/patter/other
 - NiceRank filter for Global is cached in-memory
 - Code has been optimized. Bugs have been squashed.
 
