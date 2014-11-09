@@ -251,7 +251,6 @@ module Ayadn
     map "-pi" => :postinfo
     long_desc Descriptions.postinfo
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
-    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def postinfo(post_id)
       Action.new.postinfo(post_id, options)
     end
@@ -356,6 +355,7 @@ module Ayadn
     option :id, aliases: "-i", type: :array, desc: "Retrieve only the specified channel(s)"
     option :broadcasts, aliases: "-b", type: :boolean, desc: "Only your broadcast channel(s)"
     option :messages, aliases: "-m", type: :boolean, desc: "Only your private messaging channel(s)"
+    option :patter, aliases: "-p", type: :boolean, desc: "Only your patter room channel(s)"
     option :other, aliases: "-o", type: :boolean, desc: "Only other than private messaging and broadcasts channel(s)"
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     def channels

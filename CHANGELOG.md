@@ -1,7 +1,7 @@
 # 2.0.0 - WIP - 'The Piper At The Gates Of Dawn'
 
 - New: SQLite database. Means FAST!
-- Unified style for statuses and infos
+- Unified style for statuses, questions and alerts
 - Ayadn instances share access to the blacklist
 - Simplified, shorter settings options
 - New Blacklist setting: active (default: true)

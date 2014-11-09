@@ -115,12 +115,18 @@ module Ayadn
     end
 
     def show_userinfos(content, token, show_ranks = false)
-      Settings.options[:timeline][:compact] == true ? padding = "\n" : padding = "\n\n"
+      if Settings.options[:timeline][:compact] == true
+        padding = "\n"
+        view = "\n"
+      else
+        padding = "\n\n"
+        view = ""
+      end
 
       if content['name']
-        view = "Name\t\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
+        view << "Name\t\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
       else
-        view = "Name\t\t\t".color(:cyan) + "(no name)".color(:red)
+        view << "Name\t\t\t".color(:cyan) + "(no name)".color(:red)
       end
 
       view << "#{padding}Username\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:id])
@@ -159,7 +165,7 @@ module Ayadn
       view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(:green)
 
       if content['username'] == Settings.config[:identity][:username] && !token.nil?
-        view << "#{padding}Storage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(:red)
+        view << "#{padding}Storage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(:green)
         view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(:green)
       end
 
@@ -202,7 +208,10 @@ module Ayadn
       #view << "#{padding}Avatar URL\t\t".color(:cyan) + content['avatar_image']['url']
 
       if content['description']
-        view << "#{padding}#{content['description']['text']}\n".color(:magenta) + "\n\n"
+        mentions = content['description']['entities']['mentions'].map {|m| "@#{m['name']}"}
+        hashtags = content['description']['entities']['hashtags'].map {|m| m['name']}
+        view << "#{padding}#{@workers.colorize_text(content['description']['text'], mentions, hashtags)}\n"
+        view << "\n" unless Settings.options[:timeline][:compact] == true
       end
 
       puts view
@@ -225,11 +234,20 @@ module Ayadn
         if options[:"no-messages"]
           next if ch.type == "net.app.core.pm"
         end
+        if options[:patter]
+          next if ch.type != "net.patter-app.room"
+        end
+        if options[:"no-patter"]
+          next if ch.type == "net.patter-app.room"
+        end
         if options[:other]
-          next if ch.type == "net.app.core.pm" || ch.type == "net.app.core.broadcast"
+          case ch.type
+          when "net.app.core.pm", "net.app.core.broadcast", "net.patter-app.room"
+            next
+          end
         end
         if options[:"no-other"]
-          next if ch.type != "net.app.core.pm" || ch.type != "net.app.core.broadcast"
+          next if ch.type != "net.app.core.pm" || ch.type != "net.app.core.broadcast" || ch.type != "net.patter-app.room"
         end
         view << "\n"
         view << "ID: ".color(:cyan)

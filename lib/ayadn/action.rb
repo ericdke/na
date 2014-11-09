@@ -4,14 +4,13 @@ module Ayadn
 
     ##
     # This class is the main initializer + dispatcher
+    # It responds to the CLI commands dispatcher, app.rb
 
     def initialize
       @api = API.new
       @view = View.new
       @workers = Workers.new
-      @stream = Stream.new(@api, @view, @workers)
-      @search = Search.new(@api, @view, @workers)
-      @thor = Thor::Shell::Color.new # will be replaced by @status eventually
+      @thor = Thor::Shell::Color.new
       @status = Status.new
       @check = Check.new
       Settings.load_config
@@ -25,7 +24,8 @@ module Ayadn
       case meth.to_s
       when 'unified', 'checkins', 'global', 'trending', 'photos', 'conversations', 'interactions'
         begin
-          @stream.send(meth.to_sym, options)
+          stream = Stream.new(@api, @view, @workers)
+          stream.send(meth.to_sym, options)
         rescue => e
           Errors.global_error({error: e, caller: caller, data: [meth, options]})
         end
@@ -36,7 +36,8 @@ module Ayadn
 
     def mentions(username, options)
       begin
-        @stream.mentions(username, options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.mentions(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -44,7 +45,8 @@ module Ayadn
 
     def posts(username, options)
       begin
-        @stream.posts(username, options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.posts(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -52,7 +54,8 @@ module Ayadn
 
     def whatstarred(username, options)
       begin
-        @stream.whatstarred(username, options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.whatstarred(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -60,7 +63,8 @@ module Ayadn
 
     def whoreposted(post_id, options)
       begin
-        @stream.whoreposted(post_id, options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.whoreposted(post_id, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       end
@@ -68,7 +72,8 @@ module Ayadn
 
     def whostarred(post_id, options)
       begin
-        @stream.whostarred(post_id, options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.whostarred(post_id, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       end
@@ -76,7 +81,8 @@ module Ayadn
 
     def convo(post_id, options)
       begin
-        @stream.convo(post_id, options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.convo(post_id, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       end
@@ -129,6 +135,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
+        puts "\n"
         @status.unfollowing(users.join(','))
         users.each do |user|
           resp = @api.unfollow(user)
@@ -143,6 +150,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
+        puts "\n"
         @status.following(users.join(','))
         users.each do |user|
           resp = @api.follow(user)
@@ -157,6 +165,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
+        puts "\n"
         @status.unmuting(users.join(','))
         users.each do |user|
           resp = @api.unmute(user)
@@ -171,6 +180,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
+        puts "\n"
         @status.muting(users.join(','))
         users.each do |user|
           resp = @api.mute(user)
@@ -185,6 +195,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
+        puts "\n"
         @status.unblocking(users.join(','))
         users.each do |user|
           resp = @api.unblock(user)
@@ -199,6 +210,7 @@ module Ayadn
       begin
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
+        puts "\n"
         @status.blocking(users.join(','))
         users.each do |user|
           resp = @api.block(user)
@@ -212,6 +224,7 @@ module Ayadn
     def repost(post_id)
       begin
         @check.bad_post_id(post_id)
+        puts "\n"
         @status.reposting(post_id)
         resp = @api.get_details(post_id)
         @check.already_reposted(resp)
@@ -225,6 +238,7 @@ module Ayadn
     def unrepost(post_id)
       begin
         @check.bad_post_id(post_id)
+        puts "\n"
         @status.unreposting(post_id)
         if @api.get_details(post_id)['data']['you_reposted']
           @check.has_been_unreposted(post_id, @api.unrepost(post_id))
@@ -239,6 +253,7 @@ module Ayadn
     def unstar(post_id)
       begin
         @check.bad_post_id(post_id)
+        puts "\n"
         @status.unstarring(post_id)
         resp = @api.get_details(post_id)
         id = @workers.get_original_id(post_id, resp)
@@ -256,6 +271,7 @@ module Ayadn
     def star(post_id)
       begin
         @check.bad_post_id(post_id)
+        puts "\n"
         @status.starring(post_id)
         resp = @api.get_details(post_id)
         @check.already_starred(resp)
@@ -268,7 +284,8 @@ module Ayadn
 
     def hashtag(hashtag, options)
       begin
-        @search.hashtag(hashtag, options)
+        search = Search.new(@api, @view, @workers)
+        search.hashtag(hashtag, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [hashtag, options]})
       end
@@ -276,7 +293,8 @@ module Ayadn
 
     def search(words, options)
       begin
-        @search.find(words, options)
+        search = Search.new(@api, @view, @workers)
+        search.find(words, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [words, options]})
       end
@@ -284,7 +302,8 @@ module Ayadn
 
     def followings(username, options)
       begin
-        @stream.followings(username, options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.followings(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -292,7 +311,8 @@ module Ayadn
 
     def followers(username, options)
       begin
-        @stream.followers(username, options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.followers(username, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
@@ -300,7 +320,8 @@ module Ayadn
 
     def muted(options)
       begin
-        @stream.muted(options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.muted(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -308,7 +329,8 @@ module Ayadn
 
     def blocked(options)
       begin
-        @stream.blocked(options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.blocked(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -363,7 +385,7 @@ module Ayadn
 
     def postinfo(post_id, options)
       begin
-        Settings.options[:force] = true if options[:force]
+        Settings.options[:force] = true
         @check.bad_post_id(post_id)
         details = lambda { @api.get_details(post_id, options) }
         if options[:raw]
@@ -379,20 +401,19 @@ module Ayadn
         stream = response['data']
         @status.post_info
         @view.show_simple_post([resp], options)
-        if resp['repost_of']
-          @status.repost_info
-          Errors.repost(post_id, resp['repost_of']['id'])
-          @view.show_simple_post([resp['repost_of']], options)
-        end
-        if Settings.options[:timeline][:compact] == false
-          @status.say { @thor.say_status "info", "author", "cyan" }
-        else
-          @thor.say_status "info", "author", "cyan"
-        end
+        puts "\n" if Settings.options[:timeline][:compact] == true
+        @thor.say_status "info", "author", "cyan"
+        puts "\n" unless Settings.options[:timeline][:compact] == true
         if response['data']['username'] == Settings.config[:identity][:username]
           @view.show_userinfos(stream, @api.get_token_info['data'], true)
         else
           @view.show_userinfos(stream, nil, true)
+        end
+        if resp['repost_of']
+          @status.repost_info
+          Errors.repost(post_id, resp['repost_of']['id'])
+          @view.show_simple_post([resp['repost_of']], options)
+          puts "\n" if Settings.options[:timeline][:compact] == true
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
@@ -450,7 +471,8 @@ module Ayadn
 
     def messages(channel_id, options)
       begin
-        @stream.messages(channel_id, options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.messages(channel_id, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id, options]})
       end
@@ -764,7 +786,8 @@ module Ayadn
 
     def random_posts(options)
       begin
-        @stream.random_posts(options)
+        stream = Stream.new(@api, @view, @workers)
+        stream.random_posts(options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [@max_id, @random_post_id, @resp, options]})
       end
