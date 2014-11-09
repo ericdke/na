@@ -149,28 +149,65 @@ module Ayadn
     end
 
     def itunes_istore_request itunes
-      infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
-      itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&term=#{infos[2]}&media=music&entity=musicTrack"
+      # infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
+      # itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&term=#{infos[2]}&media=music&entity=musicTrack"
+      itunes_url = "https://itunes.apple.com/search?term=#{itunes.artist}&term=#{itunes.track}&term=#{itunes.album}&media=music&entity=musicTrack"
       get_itunes_store(itunes_url, itunes.artist, itunes.track)
     end
 
     def lastfm_istore_request artist, track
-      infos = itunes_reg([artist, track])
-      itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&media=music&entity=musicTrack"
+      # infos = itunes_reg([artist, track])
+      # itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&media=music&entity=musicTrack"
+      itunes_url = "https://itunes.apple.com/search?term=#{artist}&term=#{track}&media=music&entity=musicTrack"
       get_itunes_store(itunes_url, artist, track)
     end
 
     def get_itunes_store url, artist, track
       results = JSON.load(CNX.download(URI.escape(url)))['results']
-
+# puts results.inspect
+# exit
       unless results.empty? || results.nil?
+# puts results
+# puts track
+# exit
+        # results.delete_if {|obj| obj['trackName'].nil?}
+        # results.delete_if {|obj| obj['collectionArtistName'].nil?}
 
-        results.keep_if do |obj|
-          unless obj['artistName'].nil?
-            obj['artistName'].downcase == artist.downcase
+# results.each {|obj| puts obj['trackName']}
+# puts "-"
+# puts track
+# exit
+
+        one = results.select do |obj|
+          next if obj['trackName'].nil?
+          obj['trackName'].downcase == track.downcase
+        end
+# puts one.inspect
+# exit
+        if one.empty?
+          results.select! do |obj|
+            next if obj['collectionArtistName'].nil?
+            obj['collectionArtistName'].downcase == artist.downcase
           end
+# puts results
+# exit
+          splitted = track.split(" ").first.downcase
+          results.select! do |obj|
+            next if obj['trackName'].nil?
+            obj['trackName'].split(" ").first.downcase == splitted
+          end
+# puts results.inspect
+# puts results.size
+# exit
+        else
+          results = one
         end
 
+#         if results.length > 1
+#           results.select! {|obj| obj['trackName'].downcase == track.downcase}
+#         end
+# puts results
+# exit
         if results.empty?
           return {
             'code' => 404,
@@ -178,20 +215,8 @@ module Ayadn
           }
         end
 
-        if results.length > 1
-          resp = results.select {|obj| obj['trackName'].downcase == track.downcase}
-        else
-          resp = results
-        end
-
-        if resp.empty?
-          return {
-            'code' => 404,
-            'request' => url
-          }
-        end
-
-        candidate = resp[0] || results[0]
+        # candidate = resp[0] || results[0]
+        candidate = results[0]
 
         return {
           'code' => 200,
@@ -213,7 +238,7 @@ module Ayadn
     end
 
     def itunes_reg arr_of_itunes
-      regex_exotics = /[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/
+      regex_exotics = /[~:-;,?!\'&`^=+<>()*%\/"“”’°£$€.…]/
       arr_of_itunes.map do |itune|
         itune.gsub(regex_exotics, ' ').split(' ').join('+')
       end
