@@ -606,8 +606,8 @@ module Ayadn
         @status.writing
         @status.post
         lines_array = writer.compose
-        writer.check_post_length(lines_array)
         text = lines_array.join("\n")
+        writer.bad_post_size(text) if writer.post_size_ok?(text) == false
         @view.clear_screen
         @status.posting
         if options[:poster]
@@ -632,8 +632,8 @@ module Ayadn
         @status.message_from(username)
     		@status.message
     		lines_array = writer.compose
-    		writer.check_message_length(lines_array)
         text = lines_array.join("\n")
+        writer.bad_message_size(text) if writer.message_size_ok?(text) == false
     		@view.clear_screen
         @status.posting
         if options[:poster]
@@ -682,9 +682,9 @@ module Ayadn
         @status.writing
         @status.reply
         lines_array = writer.compose
-        writer.check_post_length(lines_array)
-        @view.clear_screen
         text = lines_array.join("\n")
+        # text length is tested in Post class for the reply command
+        @view.clear_screen
         replied_to = @workers.build_posts([replied_to['data']])
         if options[:poster]
           settings = options.dup
@@ -714,14 +714,15 @@ module Ayadn
         @status.writing
         @status.message
         lines_array = writer.compose
-        writer.check_message_length(lines_array)
+        text = lines_array.join("\n")
+        writer.bad_message_size(text) if writer.message_size_ok?(text) == false
         @view.clear_screen
         @status.posting
         if options[:poster]
           settings = options.dup
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
-        resp = writer.message({options: options, id: channel_id, text: lines_array.join("\n")})
+        resp = writer.message({options: options, id: channel_id, text: text})
         if Settings.options[:marker][:update_messages] == true
           if resp['meta']['code'] == 200
             data = resp['data']

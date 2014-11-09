@@ -88,36 +88,27 @@ describe Ayadn::Post do
     end
   end
 
-  describe "#post_size" do
-    it "tests if size of post string is ok" do
-      printed = capture_stderr do
-        expect(lambda {post.post_size("Black malt berliner weisse, filter. Ibu degrees plato alcohol. ipa hard cider ester infusion conditioning tank. Dry stout bottom fermenting yeast wort chiller wort chiller lager hand pump ! All-malt dunkle bright beer grainy, original gravity wheat beer glass.")}).to raise_error(SystemExit)
-      end
-      expect(printed).to include 'Canceled: too long. 256 max, 4 characters to remove.'
-    end
-  end
-
-  describe "#check_post_length" do
-    it "checks normal post length" do
-      expect(post.check_post_length(["allo", "wtf"])).to be nil #no error
-    end
+  describe "#post_size_ok?" do
     it "checks excessive post length" do
-      printed = capture_stderr do
-        expect(lambda {post.check_post_length(["allo", "wtf dude", "ok whatever pfff", "Black malt berliner weisse, filter. Ibu degrees plato alcohol. ipa hard cider ester infusion conditioning tank. Dry stout bottom fermenting yeast wort chiller wort chiller lager hand pump ! All-malt dunkle bright beer grainy, original gravity wheat beer glass."])}).to raise_error(SystemExit)
-      end
-      expect(printed).to include 'Canceled: too long. 256 max, 32 characters to remove.'
+      expect(post.post_size_ok?(["1" * 257].join())).to eq false
+    end
+    it "checks empty post length" do
+      expect(post.post_size_ok?("")).to eq false
+    end
+    it "checks normal post length" do
+      expect(post.post_size_ok?(["1" * 256].join())).to eq true
     end
   end
 
-  describe "#check_message_length" do
+  describe "#message_size_ok?" do
     it "checks normal message length" do
-      expect(post.check_message_length(["allo", "wtf"])).to be nil #no error
+      expect(post.message_size_ok?(["1" * 2048].join())).to eq true
+    end
+    it "checks empty message length" do
+      expect(post.message_size_ok?("")).to eq false
     end
     it "checks excessive message length" do
-      printed = capture_stderr do
-        expect(lambda {post.check_message_length(["Black malt berliner weisse, filter. Ibu degrees plato alcohol. ipa hard cider ester infusion conditioning tank. Dry stout bottom fermenting yeast wort chiller wort chiller lager hand pump ! All-malt dunkle bright beer grainy, original gravity wheat beer glass!!" * 8])}).to raise_error(SystemExit)
-      end
-      expect(printed).to include 'Canceled: too long. 2048 max, 40 characters to remove.'
+      expect(post.message_size_ok?(["1" * 2049].join())).to eq false
     end
   end
 end

@@ -26,8 +26,8 @@ module Ayadn
       unless @options[:delete] || @options[:avatar] || @options[:cover]
         writer = Post.new
         input = writer.compose()
-        writer.check_post_length(input)
         @text = input.join("\n")
+        writer.bad_post_size(@text) if writer.post_size_ok?(@text) == false
       end
     end
 

@@ -20,7 +20,7 @@ module Ayadn
         next if m == Settings.config[:identity][:username]
         reply << " @#{m}"
       end
-      post_size(reply)
+      bad_post_size(reply) if post_size_ok?(reply) == false
       dic[:text] = reply
       dic[:reply_to] = dic[:id]
       send_content(Endpoints.new.posts_url, payload_reply(dic))
@@ -112,40 +112,35 @@ module Ayadn
       post
     end
 
-    def post_size(post) # works on a string
-      words = post.split(" ")
-      result = []
-      words.each { |word| result << get_markdown_text(word) }
-      post = result.join(" ")
+    def post_size_ok?(post) # works on a string, returns boolean
+      text = post.split(" ").map {|word| get_markdown_text(word)}.join(" ")
+      size, max_size = text.length, Settings.config[:post_max_length]
+      (size >= 1 && size <= max_size)
+    end
+
+    def message_size_ok?(message) # works on a string, returns boolean
+      text = message.split(" ").map {|word| get_markdown_text(word)}.join(" ")
+      size, max_size = text.length, Settings.config[:message_max_length]
+      (size >= 1 && size <= max_size)
+    end
+
+    def bad_post_size(post)
       size, max_size = post.length, Settings.config[:post_max_length]
+      bad_text_size(post, size, max_size)
+    end
+
+    def bad_message_size(message)
+      size, max_size = message.length, Settings.config[:message_max_length]
+      bad_text_size(message, size, max_size)
+    end
+
+    def bad_text_size(post, size, max_size)
       if size < 1
-        abort(error_text_empty)
+        error_text_empty()
       elsif size > max_size
         Errors.warn "Canceled: too long (#{size - max_size}chars)"
         @status.info("info", "your text:", "cyan")
         puts post
-        @status.too_long(size, max_size)
-        exit
-      end
-    end
-
-    def check_post_length(lines_array) # works on an array
-      check_length(lines_array, Settings.config[:post_max_length])
-    end
-
-    def check_message_length(lines_array) # works on an array
-      check_length(lines_array, Settings.config[:message_max_length])
-    end
-
-    def check_length(lines_array, max_size)
-      words_array = []
-      lines_array.each { |word| words_array << get_markdown_text(word) }
-      size = words_array.join.length
-      if size < 1
-        error_text_empty
-        exit
-      elsif size > max_size
-        Errors.warn "Canceled: too long (#{size - max_size}chars)"
         @status.too_long(size, max_size)
         exit
       end
@@ -166,7 +161,8 @@ module Ayadn
 
     def error_text_empty
       @status.no_text
-      Errors.warn "-Post without text-"
+      Errors.warn "-No text-"
+      exit
     end
 
   end
