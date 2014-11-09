@@ -164,18 +164,31 @@ module Ayadn
 
     def get_itunes_store url, artist, track
       results = JSON.load(CNX.download(URI.escape(url)))['results']
-
+# puts results.inspect
+# exit
       unless results.empty? || results.nil?
+
+        # results.delete_if {|obj| obj['trackName'].nil?}
+        # results.delete_if {|obj| obj['collectionArtistName'].nil?}
+
+# results.each {|obj| puts obj['trackName']}
+# puts "-"
+# puts track
+# exit
+
         one = results.select do |obj|
           next if obj['trackName'].nil?
           obj['trackName'].downcase == track.downcase
         end
-
+# puts one.inspect
+# exit
         if one.empty?
           results.select! do |obj|
             next if obj['collectionArtistName'].nil?
             obj['collectionArtistName'].downcase == artist.downcase
           end
+# puts results
+# exit
           splitted = track.split(" ").first.downcase
           results.select! do |obj|
             next if obj['trackName'].nil?

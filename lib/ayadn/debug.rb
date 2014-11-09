@@ -16,7 +16,7 @@ module Ayadn
         # deb << "Url:\t\t#{url}\n"
         deb << "#{response.headers}\n"
         deb << "\n"
-        puts deb.color(Settings.options[:colors][:debug])
+        puts deb.color(:green)
         # Logs.rec.debug "HTTP/URL: #{url}"
         Logs.rec.debug "HTTP/HEADERS: #{response.headers}"
       end

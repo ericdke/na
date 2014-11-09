@@ -23,6 +23,7 @@ module Ayadn
       @thor.say_status :done, "user #{user.handle} is authorized", :green
       Errors.info "#{user.handle} authorized."
       @status.say { @thor.say_status :end, "Thank you for using Ayadn. Enjoy!", :green }
+      Switch.new.list
     end
 
     def unauthorize(user, options)
