@@ -53,7 +53,8 @@ describe Ayadn::NiceRank do
           mentions: :red,
           source: :cyan,
           symbols: :green,
-          debug: :red
+          debug: :red,
+          excerpt: :green
         },
         backup: {
           sent_posts: false,

@@ -13,7 +13,8 @@ def init_stubs
         symbols: :green,
         index: :blue,
         date: :cyan,
-        link: :magenta
+        link: :magenta,
+        excerpt: :green
       },
       timeline: {
         directed: 1,
@@ -164,10 +165,9 @@ describe Ayadn::SetFormats do
       expect(Ayadn::Settings.options[:formats][:list][:reverse]).to eq false
     end
     it "raises an error" do
-      printed = capture_stderr do
+      printed = capture_stdout do
         expect(lambda {Ayadn::SetFormats.new.send(:list, ['reverse', 'yolo'])}).to raise_error(SystemExit)
       end
-      expect(printed).to include 'You have to submit valid items'
     end
   end
 
@@ -187,10 +187,9 @@ describe Ayadn::SetTimeline do
         command = meth.to_sym
         Ayadn::SetTimeline.new.send(command, 'true')
         expect(Ayadn::Settings.options[:timeline][command]).to eq true
-        printed = capture_stderr do
+        printed = capture_stdout do
           expect(lambda {Ayadn::SetTimeline.new.send(command, 'yolo')}).to raise_error(SystemExit)
         end
-        expect(printed).to include 'You have to submit valid items'
       end
     end
   end
@@ -211,30 +210,11 @@ describe Ayadn::SetCounts do
         command = meth.to_sym
         Ayadn::SetCounts.new.send(command, '199')
         expect(Ayadn::Settings.options[:counts][command]).to eq 199
-        printed = capture_stderr do
-          expect(lambda {Ayadn::SetCounts.new.send(command, '333')}).to raise_error(SystemExit)
+        printed = capture_stdout do
+          Ayadn::SetCounts.new.send(command, '333')
         end
-        expect(printed).to include 'This paramater must be an integer between 1 and 200'
       end
     end
-  end
-
-  describe "#validate" do
-    it "raises error if incorrect count value" do
-      printed = capture_stderr do
-        expect(lambda {Ayadn::SetCounts.new.validate('0')}).to raise_error(SystemExit)
-      end
-      expect(printed).to include 'This paramater must be an integer between 1 and 200'
-    end
-    it "raises error if incorrect count value" do
-      printed = capture_stderr do
-        expect(lambda {Ayadn::SetCounts.new.validate('yolo')}).to raise_error(SystemExit)
-      end
-      expect(printed).to include 'This paramater must be an integer between 1 and 200'
-    end
-  end
-  after do
-    File.delete('spec/mock/ayadn.log')
   end
 end
 
@@ -289,10 +269,9 @@ describe Ayadn::SetBackup do
       expect(value).to eq false
     end
     it "raises error if incorrect boolean" do
-      printed = capture_stderr do
+      printed = capture_stdout do
         expect(lambda {Ayadn::SetBackup.new.validate('yolo')}).to raise_error(SystemExit)
       end
-      expect(printed).to include "You have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values"
     end
   end
   after do
@@ -343,14 +322,6 @@ describe Ayadn::SetNiceRank do
       expect(Ayadn::Settings.options[:nicerank][:threshold]).to eq 3
       Ayadn::SetNiceRank.new.threshold('3.2')
       expect(Ayadn::Settings.options[:nicerank][:threshold]).to eq 3.2
-      printed = capture_stderr do
-        expect(lambda {Ayadn::SetNiceRank.new.threshold('6')}).to raise_error(SystemExit)
-      end
-      expect(printed).to include 'Please enter a value between 0.1 and 3.5, example: 2.1'
-      printed = capture_stderr do
-        expect(lambda {Ayadn::SetNiceRank.new.threshold('yolo')}).to raise_error(SystemExit)
-      end
-      expect(printed).to include 'Please enter a value between 0.1 and 3.5, example: 2.1'
     end
   end
   describe "#filter" do
@@ -360,10 +331,9 @@ describe Ayadn::SetNiceRank do
       expect(Ayadn::Settings.options[:nicerank][:filter]).to eq false
       Ayadn::SetNiceRank.new.filter('1')
       expect(Ayadn::Settings.options[:nicerank][:filter]).to eq true
-      printed = capture_stderr do
+      printed = capture_stdout do
         expect(lambda {Ayadn::SetNiceRank.new.filter('6')}).to raise_error(SystemExit)
       end
-      expect(printed).to include "You have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values."
     end
   end
   describe "#filter_unranked" do
@@ -373,10 +343,9 @@ describe Ayadn::SetNiceRank do
       expect(Ayadn::Settings.options[:nicerank][:filter_unranked]).to eq true
       Ayadn::SetNiceRank.new.filter_unranked('0')
       expect(Ayadn::Settings.options[:nicerank][:filter_unranked]).to eq false
-      printed = capture_stderr do
+      printed = capture_stdout do
         expect(lambda {Ayadn::SetNiceRank.new.filter_unranked('yolo')}).to raise_error(SystemExit)
       end
-      expect(printed).to include "You have to submit valid items. See 'ayadn -sg' for a list of valid parameters and values."
     end
   end
   after do

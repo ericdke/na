@@ -9,7 +9,8 @@ describe Ayadn::Workers do
         colors: {
           hashtags: :cyan,
           mentions: :red,
-          username: :green
+          username: :green,
+          excerpt: :green
         },
         timeline: {compact: false},
         formats: {table: {width: 75}, list: {reverse: true}},

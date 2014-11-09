@@ -14,7 +14,8 @@ describe Ayadn::BlacklistWorkers do
           symbols: :green,
           index: :blue,
           date: :cyan,
-          link: :magenta
+          link: :magenta,
+          excerpt: :green
         },
         timeline: {
           real_name: true,
