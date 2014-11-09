@@ -387,7 +387,6 @@ module Ayadn
     end
 
     def infos(stream, token)
-      clear_screen()
       show_userinfos(stream, token, true)
     end
 

@@ -365,18 +365,19 @@ module Ayadn
 
     def userinfo(username, options = {})
       begin
-        username = [username] unless username.is_a?(Array)
         @check.no_username(username)
-        username = @workers.add_arobase(username)
-        if options[:raw]
-          @view.show_raw(@api.get_user(username), options)
-        else
-          @view.downloading
-          stream = @api.get_user(username)
-          @check.no_user(stream, username)
-          @check.same_username(stream) ? token = @api.get_token_info['data'] : token = nil
-          @view.clear_screen
-          @view.infos(stream['data'], token)
+        usernames = @workers.add_arobases_to_usernames(username)
+        usernames.each.with_index do |username, index|
+          if options[:raw]
+            @view.show_raw(@api.get_user(username), options)
+          else
+            @view.downloading if index == 0
+            stream = @api.get_user(username)
+            @check.no_user(stream, username)
+            @check.same_username(stream) ? token = @api.get_token_info['data'] : token = nil
+            @view.clear_screen if index == 0
+            @view.infos(stream['data'], token)
+          end
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
