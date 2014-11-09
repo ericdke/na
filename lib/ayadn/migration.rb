@@ -11,7 +11,17 @@ module Ayadn
     end
 
     def initialize
-      @accounts = Daybreak::DB.new(Dir.home + "/ayadn/accounts.db")
+      @thor = Thor::Shell::Color.new
+      accounts_old = Dir.home + "/ayadn/accounts.db"
+      unless File.exist?(accounts_old)
+        puts "\n"
+        @thor.say_status :error, "can't find the Ayadn 1.x accounts database", :red
+        @thor.say_status :canceled, "migration canceled", :cyan
+        puts "\n"
+        exit
+      end
+      @thor.say_status :initialize, "migration", :yellow
+      @accounts = Daybreak::DB.new(accounts_old)
       @active_old = @accounts['ACTIVE']
       @home = @accounts[@active_old][:path]
       bookmarks_old = "#{@home}/db/bookmarks.db"
@@ -20,8 +30,6 @@ module Ayadn
       users_old = "#{@home}/db/users.db"
       @pagination_old = "#{@home}/pagination/pagination.db"
       @index_old = "#{@home}/pagination/index.db"
-
-      @thor = Thor::Shell::Color.new
 
       @bookmarks = Daybreak::DB.new(bookmarks_old) if File.exist?(bookmarks_old)
       @aliases = Daybreak::DB.new(aliases_old) if File.exist?(aliases_old)
