@@ -529,7 +529,7 @@ module Ayadn
     map "-UA" => :unauthorize
     option :delete, aliases: "-D", type: :boolean, desc: "Deletes user folders (default: false)"
     def unauthorize(*user)
-      Authorize.new.unauthorize(user)
+      Authorize.new.unauthorize(user, options)
     end
 
     desc "switch @USERNAME", "Switch between authorized App.net accounts (-@)"
