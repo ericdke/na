@@ -587,13 +587,15 @@ module Ayadn
     def post(args, options)
       begin
         writer = Post.new
-        @view.clear_screen
-        @status.posting
         if options[:poster] # Returns the same options hash + poster embed
           settings = options.dup
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
-        resp = writer.post({options: options, text: args.join(" ")})
+        text = args.join(" ")
+        writer.bad_post_size(text) if writer.post_size_ok?(text) == false
+        @view.clear_screen
+        @status.posting
+        resp = writer.post({options: options, text: text})
         save_and_view(resp)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args, options]})

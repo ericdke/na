@@ -388,9 +388,11 @@ module Ayadn
     end
 
     def too_long(size, max_size)
+      diff = size - max_size
+      diff > 1 ? pl = "s" : pl = ""
       say do
         @thor.say_status :error, "text too long", :red
-        @thor.say_status :info, "#{max_size} max: #{size - max_size} characters to remove", :green
+        @thor.say_status :info, "#{max_size} max: #{diff} character#{pl} to remove", :green
       end
     end
 
