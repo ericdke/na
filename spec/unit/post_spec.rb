@@ -68,14 +68,6 @@ describe Ayadn::Post do
     end
   end
 
-  describe "#text_is_empty?" do
-    it "checks if empty" do
-      expect(post.text_is_empty?(["allo"])).to be false
-      expect(post.text_is_empty?([""])).to be true
-      expect(post.text_is_empty?([])).to be true
-    end
-  end
-
   describe "#markdown_extract" do
     it "splits markdown" do
       expect(post.markdown_extract("[ayadn](http://ayadn-app.net)")).to eq ["ayadn", "http://ayadn-app.net"]

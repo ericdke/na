@@ -19,6 +19,12 @@ module Ayadn
         artist, track = get_lastfm_track_infos(user)
         @status.itunes_store
         store = lastfm_istore_request(artist, track) unless options['no_url']
+        if store['code'] == 404 && artist =~ /(and)/
+          unless options['no_url']
+            artist.gsub!('and', '&')
+            store = lastfm_istore_request(artist, track)
+          end
+        end
         text_to_post = "#nowplaying\n \nTitle: ‘#{track}’\nArtist: #{artist}"
         post_nowplaying(text_to_post, store, options)
       rescue => e
@@ -43,6 +49,12 @@ module Ayadn
         end
         @status.itunes_store
         store = itunes_istore_request(itunes) unless options['no_url']
+        if store['code'] == 404 && itunes.artist =~ /(and)/
+          unless options['no_url']
+            itunes.artist.gsub!('and', '&')
+            store = itunes_istore_request(itunes)
+          end
+        end
         text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
         post_nowplaying(text_to_post, store, options)
       rescue => e

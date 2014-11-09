@@ -371,18 +371,6 @@ module Ayadn
       "#{string[0...10]} #{string[11...19]}"
     end
 
-    def at usernames #TODO: consolidate
-      usernames.map do |user|
-        if user == 'me'
-          'me'
-        elsif user[0] == '@'
-          user
-        else
-          "@#{user}"
-        end
-      end
-    end
-
     def get_original_id(post_id, resp)
       if resp['data']['repost_of']
         @status.redirecting
@@ -447,7 +435,7 @@ module Ayadn
       args
     end
 
-    def add_arobases_to_usernames args #TODO: replace all these arobase legacy methods by a unique one
+    def add_arobases_to_usernames args
       args.map do |username|
         if username == 'me'
           who_am_i
@@ -455,6 +443,18 @@ module Ayadn
           temp = username.chars
           temp.unshift("@") unless temp.first == "@"
           temp.join
+        end
+      end
+    end
+
+    def at usernames
+      usernames.map do |user|
+        if user == 'me'
+          'me'
+        elsif user[0] == '@'
+          user
+        else
+          "@#{user}"
         end
       end
     end

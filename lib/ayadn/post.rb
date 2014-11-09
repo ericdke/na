@@ -155,10 +155,6 @@ module Ayadn
         result.split('|||') #=> [text, link]
     end
 
-    def text_is_empty?(args)
-      args.empty? || args[0] == ""
-    end
-
     def error_text_empty
       @status.no_text
       Errors.warn "-No text-"
