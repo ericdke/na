@@ -255,8 +255,11 @@ module Ayadn
       end
       puts "\n"
       unless options['no_url'] || store['code'] != 200
-        thor.say_status(nil, "[iTunes Store link]")
-        thor.say_status(nil, "[album art]")
+        thor.say_status(nil, "[iTunes link](#1)")
+        thor.say_status(nil, "[album art](#2)")
+        puts "\n"
+        thor.say_status(:'#1', store['link'], :magenta)
+        thor.say_status(:'#2', store['artwork'], :magenta)
         puts "\n"
         @status.itunes_store_track(store)
       end
