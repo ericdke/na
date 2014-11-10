@@ -10,7 +10,7 @@ module Ayadn
     def build_aliases_list(list)
       table = init_table
       table.title = "List of your channel aliases".color(:cyan) + "".color(:white)
-      table.style = {border_x: '-', border_i: '+', border_y: '|'}
+      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       list.each {|obj| table << [obj[0].to_s.color(:green), obj[1].color(:red)]}
       table
     end
@@ -18,7 +18,7 @@ module Ayadn
     def build_blacklist_list(list)
       table = init_table
       table.title = "Your blacklist".color(:cyan) + "".color(:white)
-      table.style = {border_x: '-', border_i: '+', border_y: '|'}
+      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       table.headings = [ 'Name', 'Type' ]
       list.sort!
       list.each {|obj| table << ["#{obj[1].capitalize}".color(:green), "#{obj[0]}".color(:red)]}
@@ -322,6 +322,7 @@ module Ayadn
       end
       chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
       no_user = {}
+      @api = API.new
       data.each do |ch|
         unless ch['writers']['user_ids'].empty?
           @thor.say_status :parsing, "channel #{ch['id']}", :cyan
@@ -331,7 +332,7 @@ module Ayadn
             db = Databases.find_user_by_id(id)
             if db.nil?
               @thor.say_status :downloading, "user #{id}", :yellow
-              resp = API.new.get_user(id)
+              resp = @api.get_user(id)
 
               if resp['meta']['code'] != 200
                 @thor.say_status :error, "can't get user #{id}'s data, skipping", :red

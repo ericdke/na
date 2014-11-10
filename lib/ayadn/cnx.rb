@@ -17,6 +17,12 @@ module Ayadn
         end
         thor.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url]})
+      rescue Interrupt
+        thor = Thor::Shell::Color.new
+        puts "\n"
+        thor.say_status :canceled, "connection canceled", :red
+        puts "\n"
+        exit
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url]})
       end
@@ -37,6 +43,12 @@ module Ayadn
         end
         Errors.nr "URL: #{url}"
         return {'meta' => {'code' => 666}, 'data' => "#{e}"}.to_json
+      rescue Interrupt
+        thor = Thor::Shell::Color.new
+        puts "\n"
+        thor.say_status :canceled, "connection canceled", :red
+        puts "\n"
+        exit
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url]})
       end
@@ -71,6 +83,12 @@ module Ayadn
       rescue URI::InvalidURIError => e
         Thor::Shell::Color.new.say_status :error, "connection or authorization problem", :red
         Errors.global_error({error: e, caller: caller, data: [url]})
+      rescue Interrupt
+        thor = Thor::Shell::Color.new
+        puts "\n"
+        thor.say_status :canceled, "connection canceled", :red
+        puts "\n"
+        exit
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url]})
       end
@@ -131,6 +149,12 @@ module Ayadn
       rescue SocketError, SystemCallError => e
         Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url]})
+      rescue Interrupt
+        thor = Thor::Shell::Color.new
+        puts "\n"
+        thor.say_status :canceled, "connection canceled", :red
+        puts "\n"
+        exit
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url]})
       end
@@ -145,6 +169,12 @@ module Ayadn
       rescue SocketError, SystemCallError => e
         Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
+      rescue Interrupt
+        thor = Thor::Shell::Color.new
+        puts "\n"
+        thor.say_status :canceled, "connection canceled", :red
+        puts "\n"
+        exit
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
       end
@@ -159,6 +189,12 @@ module Ayadn
       rescue SocketError, SystemCallError => e
         Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
+      rescue Interrupt
+        thor = Thor::Shell::Color.new
+        puts "\n"
+        thor.say_status :canceled, "connection canceled", :red
+        puts "\n"
+        exit
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
       end
@@ -173,6 +209,12 @@ module Ayadn
       rescue SocketError, SystemCallError => e
         Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
+      rescue Interrupt
+        thor = Thor::Shell::Color.new
+        puts "\n"
+        thor.say_status :canceled, "connection canceled", :red
+        puts "\n"
+        exit
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
       end

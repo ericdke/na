@@ -16,30 +16,38 @@ module Ayadn
       unless File.exist?(accounts_old)
         puts "\n"
         @thor.say_status :error, "can't find the Ayadn 1.x accounts database", :red
-        @thor.say_status :canceled, "migration canceled", :cyan
+        @thor.say_status :canceled, "migration canceled", :red
         puts "\n"
         exit
       end
       @thor.say_status :initialize, "migration", :yellow
-      @accounts = Daybreak::DB.new(accounts_old)
-      @active_old = @accounts['ACTIVE']
-      @home = @accounts[@active_old][:path]
-      bookmarks_old = "#{@home}/db/bookmarks.db"
-      aliases_old = "#{@home}/db/aliases.db"
-      blacklist_old = "#{@home}/db/blacklist.db"
-      users_old = "#{@home}/db/users.db"
-      @pagination_old = "#{@home}/pagination/pagination.db"
-      @index_old = "#{@home}/pagination/index.db"
+      begin
+        @accounts = Daybreak::DB.new(accounts_old)
+        @active_old = @accounts['ACTIVE']
+        @home = @accounts[@active_old][:path]
+        bookmarks_old = "#{@home}/db/bookmarks.db"
+        aliases_old = "#{@home}/db/aliases.db"
+        blacklist_old = "#{@home}/db/blacklist.db"
+        users_old = "#{@home}/db/users.db"
+        @pagination_old = "#{@home}/pagination/pagination.db"
+        @index_old = "#{@home}/pagination/index.db"
 
-      @bookmarks = Daybreak::DB.new(bookmarks_old) if File.exist?(bookmarks_old)
-      @aliases = Daybreak::DB.new(aliases_old) if File.exist?(aliases_old)
-      @blacklist = Daybreak::DB.new(blacklist_old) if File.exist?(blacklist_old)
-      @users = Daybreak::DB.new(users_old) if File.exist?(users_old)
-      @pagination = Daybreak::DB.new(@pagination_old) if File.exist?(@pagination_old)
-      @index = Daybreak::DB.new(@index_old) if File.exist?(@index_old)
+        @bookmarks = Daybreak::DB.new(bookmarks_old) if File.exist?(bookmarks_old)
+        @aliases = Daybreak::DB.new(aliases_old) if File.exist?(aliases_old)
+        @blacklist = Daybreak::DB.new(blacklist_old) if File.exist?(blacklist_old)
+        @users = Daybreak::DB.new(users_old) if File.exist?(users_old)
+        @pagination = Daybreak::DB.new(@pagination_old) if File.exist?(@pagination_old)
+        @index = Daybreak::DB.new(@index_old) if File.exist?(@index_old)
 
-      @sqlfile = "#{@home}/db/ayadn.sqlite"
-      @sql = Amalgalite::Database.new(@sqlfile)
+        @sqlfile = "#{@home}/db/ayadn.sqlite"
+        @sql = Amalgalite::Database.new(@sqlfile)
+      rescue Exception => e
+        puts "\n"
+        @thor.say_status :error, "#{e}", :red
+        @thor.say_status :canceled, "migration canceled", :red
+        puts "\n"
+        exit
+      end
     end
 
     def all

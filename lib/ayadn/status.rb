@@ -223,11 +223,12 @@ module Ayadn
     end
 
     def yourmessage username = nil
-      if username.nil?
-        @thor.say_status "", "Your message:"
-      else
-        @thor.say_status "", "Your message to #{username}:"
-      end
+        if username.nil?
+          @thor.say_status "", "Your message:"
+        else
+          @thor.say_status "", "Your message to #{username}:"
+        end
+        puts "\n\n"
     end
 
     def message_from(username)

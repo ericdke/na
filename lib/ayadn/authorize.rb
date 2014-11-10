@@ -106,26 +106,33 @@ module Ayadn
 
     def show_link
       @status.say do
-        @thor.say_status :please, "click this URL or copy/paste it in a browser", :yellow
+        @thor.say_status :please, "click or copy/paste this URL in a browser", :yellow
         puts "\n"
         puts "\t#{Endpoints.new.authorize_url}"
         puts "\n"
-        @thor.say_status :next, "in the App.net page, log in to authorize Ayadn", :cyan
-        @thor.say_status nil, "you will be redirected to your 'user token' (your authorization code)", :cyan
+        @thor.say_status :next, "log in to authorize Ayadn", :cyan
+        @thor.say_status nil, "you will be redirected to your 'user token'"
         @thor.say_status :please, "copy/paste the token here:", :yellow
       end
       print "\t> "
     end
 
     def get_user(token)
-      JSON.parse(RestClient.get("https://api.app.net/users/me?access_token=#{token}", :verify_ssl => OpenSSL::SSL::VERIFY_NONE) {|response, request, result| response })
+      begin
+        JSON.parse(RestClient.get("https://api.app.net/users/me?access_token=#{token}", :verify_ssl => OpenSSL::SSL::VERIFY_NONE) {|response, request, result| response })
+      rescue Exception => e
+        @status.say do
+          @thor.say_status :error, "connection problem", :red
+        end
+        puts "#{e}"
+      end
     end
 
     def get_token
       begin
         STDIN.gets.chomp()
       rescue Interrupt
-        Status.new.canceled
+        @status.canceled
         exit
       end
     end
