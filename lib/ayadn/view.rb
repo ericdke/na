@@ -214,6 +214,8 @@ module Ayadn
         view << "\n" unless Settings.options[:timeline][:compact] == true
       end
 
+      view << "\n" if Settings.options[:timeline][:compact] == true
+
       puts view
 
     end

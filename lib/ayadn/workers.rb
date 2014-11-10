@@ -31,7 +31,7 @@ module Ayadn
       users_list = []
       list.each do |obj|
         obj['name'].nil? ? name = "" : name = obj['name']
-        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id']}
+        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id'], :posts => obj['counts']['posts']}
       end
       table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       return users_list, table
@@ -43,7 +43,7 @@ module Ayadn
       users_list = []
       list.each do |obj|
         obj['name'].nil? ? name = "" : name = obj['name']
-        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id']}
+        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id'], :posts => obj['counts']['posts']}
       end
       table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       return users_list, table
@@ -107,10 +107,10 @@ module Ayadn
       elsif options[:name]
         list.sort_by! { |obj| obj[:name].downcase }
       elsif options[:posts]
-        list.sort_by! { |obj| obj[:posts] }
+        list.sort_by! { |obj| [obj[:posts], obj[:username]] }
       end
       list.each do |obj|
-        obj[:name] = "(no name)" if obj[:name].nil?
+        obj[:name] = "" if obj[:name].nil?
         unless indexed_ranks == false
           details = indexed_ranks[obj[:id].to_i]
           if details['user']['posts_day'] == -1
@@ -126,7 +126,7 @@ module Ayadn
         arr << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}", obj[:posts], posts_day ]
       end
       if options[:posts_day]
-        arr.sort_by! { |obj| obj[2].to_f }
+        arr.sort_by! { |obj| obj[3].to_f }
       end
       if options[:reverse]
         arr.reverse!

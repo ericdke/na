@@ -1,17 +1,17 @@
 # 2.0.0 - WIP - 'The Piper At The Gates Of Dawn'
 
-- New: SQLite database. Means FAST!
+- SQLite database. Means FAST!
 - Unified style for statuses, questions and alerts
-- Ayadn instances share access to the blacklist
-- Simplified, shorter settings options
-- New Blacklist setting: active (default: true)
-- New: unauthorize an Ayadn user account
 - Channels: option to show only broadcasts/PMs/patter/other
-- Users lists: sort by username, name, posts or posting frequency
+- Users lists: sort by username, name, total posts or posting frequency
 - Userinfos accepts several users in arguments
-- NiceRank filter for Global is cached in-memory
+- Blacklist setting: active (default: true)
+- Ayadn instances share access to the blacklist
+- Unauthorize an Ayadn user account
 - NowPlaying has been improved
 - Better display for the spinner when scrolling
+- Simplified, shorter settings options names
+- NiceRank filter for Global is cached in-memory
 - Code has been optimized. Bugs have been squashed.
 
 # 1.8.2 - 2014-10-31 - 'Asylum'
