@@ -60,23 +60,23 @@ module Ayadn
       puts "\n"
     end
 
-    def show_list_followings(list, target)
-      puts @workers.build_followings_list(list, target)
+    def show_list_followings(list, target, options = {})
+      puts @workers.build_followings_list(list, target, options)
       puts "\n"
     end
 
-    def show_list_followers(list, target)
-      puts @workers.build_followers_list(list, target)
+    def show_list_followers(list, target, options = {})
+      puts @workers.build_followers_list(list, target, options)
       puts "\n"
     end
 
-    def show_list_muted(list)
-      puts @workers.build_muted_list(list)
+    def show_list_muted(list, options = {})
+      puts @workers.build_muted_list(list, options)
       puts "\n"
     end
 
-    def show_list_blocked(list)
-      puts @workers.build_blocked_list(list)
+    def show_list_blocked(list, options = {})
+      puts @workers.build_blocked_list(list, options)
       puts "\n"
     end
 
@@ -397,7 +397,7 @@ module Ayadn
       end
     end
 
-    def list(what, list, target)
+    def list(what, list, target, options = {})
       clear_screen()
       case what
       when :whoreposted
@@ -405,13 +405,13 @@ module Ayadn
       when :whostarred
         show_list_starred(list, target)
       when :followings
-        show_list_followings(list, target)
+        show_list_followings(list, target, options)
       when :followers
-        show_list_followers(list, target)
+        show_list_followers(list, target, options)
       when :muted
-        show_list_muted(list)
+        show_list_muted(list, options)
       when :blocked
-        show_list_blocked(list)
+        show_list_blocked(list, options)
       end
     end
 

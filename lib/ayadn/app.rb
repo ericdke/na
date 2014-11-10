@@ -162,6 +162,10 @@ module Ayadn
     map "-fwg" => :followings
     long_desc Descriptions.followings
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :reverse, aliases: "-r", type: :boolean, desc: "Reverses the list original order"
+    option :username, aliases: "-u", type: :boolean, desc: "Sort the list by: username"
+    option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
+    option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
     def followings(*username)
       Action.new.followings(username, options)
     end
@@ -170,6 +174,10 @@ module Ayadn
     map "-fwr" => :followers
     long_desc Descriptions.followers
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :reverse, aliases: "-r", type: :boolean, desc: "Reverses the list original order"
+    option :username, aliases: "-u", type: :boolean, desc: "Sort the list by: username"
+    option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
+    option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
     def followers(*username)
       Action.new.followers(username, options)
     end
@@ -178,16 +186,24 @@ module Ayadn
     map "-mtd" => :muted
     long_desc Descriptions.muted
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :reverse, aliases: "-r", type: :boolean, desc: "Reverses the list original order"
+    option :username, aliases: "-u", type: :boolean, desc: "Sort the list by: username"
+    option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
+    option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
     def muted
-      Action.new.muted(options)
+      Action.new.muted(options, options)
     end
 
     desc "blocked", "List the users you blocked (-bkd)"
     map "-bkd" => :blocked
     long_desc Descriptions.blocked
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :reverse, aliases: "-r", type: :boolean, desc: "Reverses the list original order"
+    option :username, aliases: "-u", type: :boolean, desc: "Sort the list by: username"
+    option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
+    option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
     def blocked
-      Action.new.blocked(options)
+      Action.new.blocked(options, options)
     end
 
     desc "hashtag HASHTAG", "Show recent posts containing #HASHTAG (-t)"

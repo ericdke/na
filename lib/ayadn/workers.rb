@@ -49,7 +49,7 @@ module Ayadn
       return users_list, table
     end
 
-    def build_followings_list(list, target) #takes a hash of users with ayadn format
+    def build_followings_list(list, target, options = {}) #takes a hash of users with ayadn format
       table = init_table
       table.title = if target == "me"
         "List of users you're following".color(:cyan) + "".color(:white)
@@ -58,10 +58,10 @@ module Ayadn
       end
       table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
       users_list = build_users_array(list)
-      build_users_list(users_list, table)
+      build_users_list(users_list, table, options)
     end
 
-    def build_followers_list(list, target)
+    def build_followers_list(list, target, options = {})
       table = init_table
       table.title = if target == "me"
         "List of your followers".color(:cyan) + "".color(:white)
@@ -69,24 +69,24 @@ module Ayadn
         "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
       end
       table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
-      build_users_list(build_users_array(list), table)
+      build_users_list(build_users_array(list), table, options)
     end
 
-    def build_muted_list(list)
+    def build_muted_list(list, options = {})
       table = init_table
       table.title = "List of users you muted".color(:cyan) + "".color(:white)
       table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
-      build_users_list(build_users_array(list), table)
+      build_users_list(build_users_array(list), table, options)
     end
 
-    def build_blocked_list(list)
+    def build_blocked_list(list, options = {})
       table = init_table
       table.title = "List of users you blocked".color(:cyan) + "".color(:white)
       table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
-      build_users_list(build_users_array(list), table)
+      build_users_list(build_users_array(list), table, options)
     end
 
-    def build_users_list(list, table)
+    def build_users_list(list, table, options = {})
       users = at(list.map {|obj| obj[:username]})
       ids = list.map {|obj| obj[:id].to_i}
       ranks = NiceRank.new.from_ids(ids)
@@ -101,7 +101,17 @@ module Ayadn
       end
       table << ['USERNAME'.color(:red), 'NAME'.color(:red), 'POSTS/DAY'.color(:red)]
       table << :separator
-      list.each_with_index do |obj, index|
+      arr = []
+      if options[:username]
+        list.sort_by! { |obj| obj[:username] }
+      elsif options[:name]
+        list.sort_by! { |obj| obj[:name].downcase }
+      end
+      if options[:reverse]
+        list.reverse!
+      end
+      list.each do |obj|
+        obj[:name] = "(no name)" if obj[:name].nil?
         unless indexed_ranks == false
           details = indexed_ranks[obj[:id].to_i]
           if details['user']['posts_day'] == -1
@@ -113,13 +123,15 @@ module Ayadn
           posts_day = 'unknown'
         end
         obj[:username].length > 23 ? username = "#{obj[:username][0..20]}..." : username = obj[:username]
-        unless obj[:name].nil? || obj[:name].empty?
-          obj[:name].length > 23 ? name = "#{obj[:name][0..20]}..." : name = obj[:name]
-          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}", posts_day ]
-        else
-          table << [ "@#{username} ".color(Settings.options[:colors][:username]), "", posts_day ]
-        end
-        if index + 1 != list.length && Settings.options[:timeline][:compact] == false
+        obj[:name].length > 23 ? name = "#{obj[:name][0..20]}..." : name = obj[:name]
+        arr << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}", posts_day ]
+      end
+      if options[:posts_day]
+        arr.sort_by! { |obj| obj[2].to_f }
+      end
+      arr.each_with_index do |obj, index|
+        table << arr[index]
+        if index + 1 != arr.length && Settings.options[:timeline][:compact] == false
           table << :separator
         end
       end

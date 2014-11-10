@@ -6,7 +6,8 @@
 - Simplified, shorter settings options
 - New Blacklist setting: active (default: true)
 - New: unauthorize an Ayadn user account
-- In channels: option to show only broadcasts/PMs/patter/other
+- Channels: option to show only broadcasts/PMs/patter/other
+- Users lists: sort by username, name or posting frequency
 - Userinfos accepts several users in arguments
 - NiceRank filter for Global is cached in-memory
 - NowPlaying has been improved

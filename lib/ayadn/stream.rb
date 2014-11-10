@@ -129,7 +129,7 @@ module Ayadn
       list = @api.get_followings(username)
       @check.auto_save_followings(list)
       Errors.no_data('followings') if list.empty?
-      @view.list(:followings, list, username)
+      @view.list(:followings, list, username, options)
       Databases.add_to_users_db_from_list(list)
     end
 
@@ -141,7 +141,7 @@ module Ayadn
       list = @api.get_followers(username)
       @check.auto_save_followers(list)
       Errors.no_data('followers') if list.empty?
-      @view.list(:followers, list, username)
+      @view.list(:followers, list, username, options)
       Databases.add_to_users_db_from_list(list)
     end
 
@@ -151,7 +151,7 @@ module Ayadn
       list = @api.get_muted
       @check.auto_save_muted(list)
       Errors.no_data('muted') if list.empty?
-      @view.list(:muted, list, nil)
+      @view.list(:muted, list, nil, options)
       Databases.add_to_users_db_from_list(list)
     end
 
@@ -160,7 +160,7 @@ module Ayadn
       show_raw_list(nil, :blocked, options)
       list = @api.get_blocked
       Errors.no_data('blocked') if list.empty?
-      @view.list(:blocked, list, nil)
+      @view.list(:blocked, list, nil, options)
       Databases.add_to_users_db_from_list(list)
     end
 
