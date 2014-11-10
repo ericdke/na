@@ -247,6 +247,7 @@ module Ayadn
     end
 
     def random_posts(options)
+      Settings.options[:force] = true
       #_, cols = @view.winsize
       #max_posts = cols / 16
       max_posts = 6
@@ -255,7 +256,7 @@ module Ayadn
       @max_id = @api.get_global({count: 1})['meta']['max_id'].to_i
       @view.clear_screen
       counter = 1
-      wait = options[:wait] || 5
+      wait = options[:wait] || 10
       loop do
         begin
           @random_post_id = rand(@max_id)
@@ -265,7 +266,7 @@ module Ayadn
           counter += 1
           if counter == max_posts
             wait.downto(1) do |i|
-              print "\r#{sprintf("%02d", i)} sec... QUIT WITH [CTRL+C]".color(:cyan)
+              print "\r#{sprintf("%02d", i)} sec... ([CTRL+C] to quit)".color(:cyan)
               sleep 1
             end
             @view.clear_screen
