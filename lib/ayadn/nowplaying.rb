@@ -185,17 +185,28 @@ module Ayadn
 # puts one.inspect
 # exit
         if one.empty?
-          results.select! do |obj|
-            next if obj['collectionArtistName'].nil?
-            obj['collectionArtistName'].downcase == artist.downcase
+          by_artist = results.select do |obj|
+            next if obj['artistName'].nil?
+            obj['artistName'].downcase == artist.downcase
           end
-# puts results
+# puts by_artist
 # exit
-          splitted = track.split(" ").first.downcase
-          results.select! do |obj|
+          by_exact_track = by_artist.select do |obj|
             next if obj['trackName'].nil?
-            obj['trackName'].split(" ").first.downcase == splitted
+            obj['trackName'].downcase == track.downcase
           end
+# puts by_exact_track
+# exit
+          if by_exact_track.empty?
+            splitted = track.split(" ").first.downcase
+            by_artist.select! do |obj|
+              next if obj['trackName'].nil?
+              obj['trackName'].split(" ").first.downcase == splitted
+            end
+          end
+# puts by_artist
+# exit
+          results = by_artist
 
         else
           results = one
