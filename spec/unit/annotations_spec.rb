@@ -67,7 +67,7 @@ describe Ayadn::Annotations do
           threshold: 2.1,
           cache: 48,
           filter: true,
-          filter_unranked: false
+          unranked: false
         },
         nowplaying: {},
         movie: {

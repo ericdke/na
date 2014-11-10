@@ -222,14 +222,14 @@ module Ayadn
 
     def messages(channel_id, options)
       if options[:silent]
-        Settings.options[:marker][:update_messages] = false
+        Settings.options[:marker][:messages] = false
       end
       channel_id = @workers.get_channel_id_from_alias(channel_id)
       @view.downloading(options)
       resp = @api.get_messages(channel_id, options)
       name = "channel:#{channel_id}"
       @check.no_new_posts(resp, options, name)
-      if Settings.options[:marker][:update_messages] == true
+      if Settings.options[:marker][:messages] == true
         unless resp['meta']['max_id'].nil?
           marked = @api.update_marker(name, resp['meta']['max_id'])
           updated = JSON.parse(marked)

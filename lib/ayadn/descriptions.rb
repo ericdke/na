@@ -741,7 +741,7 @@ module Ayadn
 
       Or you can set it off permanently:
 
-      ayadn set marker update_messages false
+      ayadn set marker messages false
 
       If you've set an alias for the channel, you can use it instead of the channel id:
 
@@ -767,7 +767,7 @@ module Ayadn
 
       Or you can set it off permanently:
 
-      ayadn set marker update_messages false
+      ayadn set marker messages false
       \n\n
       USAGE
     end
@@ -962,8 +962,6 @@ module Ayadn
       Examples:
 
       ayadn set nicerank filter true
-
-      ayadn set nicerank filter_unranked true
 
       ayadn set nicerank threshold 2.1
       \n\n

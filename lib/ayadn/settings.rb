@@ -33,7 +33,7 @@ module Ayadn
       @default_nr = {
         threshold: 2.1,
         filter: true,
-        filter_unranked: false
+        unranked: false
       }
       @options = self.defaults
     end
@@ -102,8 +102,13 @@ module Ayadn
           [:show_nicerank, :deleted, :annotations, :html].each { |k| conf[:timeline].delete(k) }
           conf[:colors].delete(:nicerank)
           conf[:nicerank].delete(:cache)
+          conf[:marker].delete(:update_messages) unless conf[:marker].nil?
           # force create mandatory keys (idem)
           conf[:nicerank] = @default_nr if conf[:nicerank].nil?
+          if conf[:nicerank][:unranked].nil?
+            conf[:nicerank].delete(:filter_unranked)
+            conf[:nicerank][:unranked] = false
+          end
           # force convert mandatory keys (idem)
           unless conf[:timeline][:show_source].nil?
             v = conf[:timeline][:show_source]
@@ -159,7 +164,7 @@ module Ayadn
           conf[:formats][:table][:borders] = true if conf[:formats][:table][:borders].nil?
           conf[:timeline][:compact] = false if conf[:timeline][:compact].nil?
           conf[:timeline][:channel_oembed] = true if conf[:timeline][:channel_oembed].nil?
-          conf[:marker] = {update_messages: true} if conf[:marker].nil?
+          conf[:marker] = {messages: true} if conf[:marker].nil? || conf[:marker].empty?
           conf[:blacklist] = {active: true} if conf[:blacklist].nil?
 
           @options = conf
@@ -238,7 +243,7 @@ module Ayadn
           compact: false
         },
         marker: {
-          update_messages: true
+          messages: true
         },
         counts: {
           default: 50,

@@ -102,7 +102,7 @@ module Ayadn
           Debug.stream stream, options, channel_id
           clear() if Settings.options[:timeline][:spinner] == true
           show_if_new(stream, options, "channel:#{channel_id}")
-          if Settings.options[:marker][:update_messages] == true
+          if Settings.options[:marker][:messages] == true
             unless resp['meta']['max_id'].nil?
               marked = @api.update_marker("channel:#{channel_id}", stream['meta']['max_id'])
               updated = JSON.parse(marked)

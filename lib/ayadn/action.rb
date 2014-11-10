@@ -482,7 +482,7 @@ module Ayadn
     def messages_unread(options)
       begin
         if options[:silent]
-          Settings.options[:marker][:update_messages] = false
+          Settings.options[:marker][:messages] = false
         end
         puts "\n"
         @thor.say_status :searching, "channels with unread PMs"
@@ -515,7 +515,7 @@ module Ayadn
           end
           unread_messages[id] = [messages, last_message_id]
         end
-        if Settings.options[:marker][:update_messages] == true
+        if Settings.options[:marker][:messages] == true
           unread_messages.each do |k,v|
             name = "channel:#{k}"
             Databases.pagination_insert(name, v[1])
@@ -627,7 +627,7 @@ module Ayadn
     def pmess(username, options = {})
     	begin
         if options[:silent]
-          Settings.options[:marker][:update_messages] = false
+          Settings.options[:marker][:messages] = false
         end
         @check.no_username(username)
         username = [@workers.add_arobase(username)]
@@ -644,7 +644,7 @@ module Ayadn
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
         resp = writer.pm({options: options, text: text, username: username})
-        if Settings.options[:marker][:update_messages] == true
+        if Settings.options[:marker][:messages] == true
           if resp['meta']['code'] == 200
             data = resp['data']
             name = "channel:#{data['channel_id']}"
@@ -710,7 +710,7 @@ module Ayadn
     def send_to_channel(channel_id, options = {})
       begin
         if options[:silent]
-          Settings.options[:marker][:update_messages] = false
+          Settings.options[:marker][:messages] = false
         end
         channel_id = @workers.get_channel_id_from_alias(channel_id)
         writer = Post.new
@@ -726,7 +726,7 @@ module Ayadn
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
         resp = writer.message({options: options, id: channel_id, text: text})
-        if Settings.options[:marker][:update_messages] == true
+        if Settings.options[:marker][:messages] == true
           if resp['meta']['code'] == 200
             data = resp['data']
             name = "channel:#{data['channel_id']}"

@@ -62,7 +62,7 @@ def init_stubs
         threshold: 2.1,
         cache: 48,
         filter: true,
-        filter_unranked: false
+        unranked: false
       },
       backup: {
         sent_posts: false,
@@ -70,7 +70,7 @@ def init_stubs
         lists: false
       },
       marker: {
-        update_messages: true
+        messages: true
       }
     })
   Ayadn::Settings.stub(:config).and_return({
@@ -223,11 +223,11 @@ describe Ayadn::SetMarker do
     init_stubs
   end
 
-  describe "#update_messages" do
+  describe "#messages" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:marker][:update_messages]).to eq true
-      Ayadn::SetMarker.new.update_messages('0')
-      expect(Ayadn::Settings.options[:marker][:update_messages]).to eq false
+      expect(Ayadn::Settings.options[:marker][:messages]).to eq true
+      Ayadn::SetMarker.new.messages('0')
+      expect(Ayadn::Settings.options[:marker][:messages]).to eq false
     end
   end
 
@@ -336,15 +336,15 @@ describe Ayadn::SetNiceRank do
       end
     end
   end
-  describe "#filter_unranked" do
-    it "creates a new filter_unranked default" do
-      expect(Ayadn::Settings.options[:nicerank][:filter_unranked]).to eq false
-      Ayadn::SetNiceRank.new.filter_unranked('true')
-      expect(Ayadn::Settings.options[:nicerank][:filter_unranked]).to eq true
-      Ayadn::SetNiceRank.new.filter_unranked('0')
-      expect(Ayadn::Settings.options[:nicerank][:filter_unranked]).to eq false
+  describe "#unranked" do
+    it "creates a new unranked default" do
+      expect(Ayadn::Settings.options[:nicerank][:unranked]).to eq false
+      Ayadn::SetNiceRank.new.unranked('true')
+      expect(Ayadn::Settings.options[:nicerank][:unranked]).to eq true
+      Ayadn::SetNiceRank.new.unranked('0')
+      expect(Ayadn::Settings.options[:nicerank][:unranked]).to eq false
       printed = capture_stdout do
-        expect(lambda {Ayadn::SetNiceRank.new.filter_unranked('yolo')}).to raise_error(SystemExit)
+        expect(lambda {Ayadn::SetNiceRank.new.unranked('yolo')}).to raise_error(SystemExit)
       end
     end
   end

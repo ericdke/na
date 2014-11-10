@@ -391,10 +391,10 @@ module Ayadn
       filter(value)
     end
 
-    def filter_unranked value
-      @input = 'filter_unranked'
+    def unranked value
+      @input = 'unranked'
       @output = Validators.boolean(value)
-      Settings.options[:nicerank][:filter_unranked] = @output
+      Settings.options[:nicerank][:unranked] = @output
     end
 
     def threshold value
@@ -444,7 +444,7 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'update_messages'
+      when 'messages'
         Settings.options[:marker][meth.to_sym] = @output
       else
         super

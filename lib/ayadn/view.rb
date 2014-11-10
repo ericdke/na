@@ -116,6 +116,7 @@ module Ayadn
       end
       clear_screen()
       puts table
+      puts "\n"
     end
 
     def show_userinfos(content, token, show_ranks = false)
@@ -441,7 +442,7 @@ module Ayadn
         if Settings.options[:nicerank][:filter] == true
           filtered = {}
           posts.each do |id,content|
-            if Settings.options[:nicerank][:filter_unranked] == true
+            if Settings.options[:nicerank][:unranked] == true
               next if content[:nicerank] == false
             end
             unless content[:nicerank] == false

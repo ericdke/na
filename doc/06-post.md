@@ -93,7 +93,7 @@ You can pass an option to avoid this for the time of the command:
 
 Or even invert this behaviour permanently with `set`:
 
-`ayadn set marker update_messages false`  
+`ayadn set marker messages false`  
 
 # SEND
 
@@ -113,7 +113,7 @@ You can pass an option to avoid this for the time of the command:
 
 Or even invert this behaviour permanently with `set`:
 
-`ayadn set marker update_messages false`  
+`ayadn set marker messages false`  
 
 If you've already created an [alias](#alias) for the channel, you can post to it with:
 

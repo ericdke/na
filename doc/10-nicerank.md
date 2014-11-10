@@ -52,4 +52,4 @@ NiceRank is enabled by default on new Ayadn installations, but can be disabled i
 
 `ayadn set nicerank filter false`
 
-*Note: the other field, `filter_unranked`, can be activated to ignore the users who haven't been analysed by NiceRank yet. It's more an experimental feature, and it's actually recommended to always let it to false.*
+*Note: the other field, `unranked`, can be activated to ignore the users who haven't been analysed by NiceRank yet. It's more an experimental feature, and it's actually recommended to always let it to false.*

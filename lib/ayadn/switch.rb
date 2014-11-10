@@ -9,22 +9,28 @@ module Ayadn
     end
 
     def list
+      puts "\n"
       accounts = Databases.all_accounts(@acc_db)
       please if accounts.empty?
       accounts.sort_by! { |acc| acc[0] }
-      cols = [['Username', 'Status', 'ID', 'Path'], ['', '', '', '']]
+      table = Terminal::Table.new do |t|
+        t.style = { :width => 80 }
+        t.title = "Ayadn accounts"
+        t.headings = ['Username', 'ID', 'Path']
+      end
       accounts.each do |acc|
         username = acc[2]
-        id = acc[1]
-        active = 'AUTHORIZED'
+        id = acc[1].to_s
+        path = "~/ayadn/#{File.basename(acc[3])}"
         if acc[4] == 1
-          active = 'ACTIVE'
+          username = username.color(:green)
+          id = id.color(:green)
+          path = path.color(:green)
         end
-        cols << [username, active, id, acc[3]]
+        table << [username, id, path]
       end
-      @status.say do
-        @thor.print_table(cols)
-      end
+      puts table
+      puts "\n"
     end
 
     def switch(user)
