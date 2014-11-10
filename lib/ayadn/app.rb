@@ -191,7 +191,7 @@ module Ayadn
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
     option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
     def muted
-      Action.new.muted(options, options)
+      Action.new.muted(options)
     end
 
     desc "blocked", "List the users you blocked (-bkd)"
@@ -203,7 +203,7 @@ module Ayadn
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
     option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
     def blocked
-      Action.new.blocked(options, options)
+      Action.new.blocked(options)
     end
 
     desc "hashtag HASHTAG", "Show recent posts containing #HASHTAG (-t)"
