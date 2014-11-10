@@ -99,7 +99,7 @@ module Ayadn
           indexed_ranks[r['user_id']] = r
         end
       end
-      table << ['USERNAME'.color(:red), 'NAME'.color(:red), 'POSTS/DAY'.color(:red)]
+      table << ['USERNAME'.color(:red), 'NAME'.color(:red), 'POSTS'.color(:red), 'POSTS/DAY'.color(:red)]
       table << :separator
       arr = []
       if options[:username]
@@ -121,7 +121,7 @@ module Ayadn
         end
         obj[:username].length > 23 ? username = "#{obj[:username][0..20]}..." : username = obj[:username]
         obj[:name].length > 23 ? name = "#{obj[:name][0..20]}..." : name = obj[:name]
-        arr << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}", posts_day ]
+        arr << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}", obj[:posts], posts_day ]
       end
       if options[:posts_day]
         arr.sort_by! { |obj| obj[2].to_f }
@@ -479,7 +479,7 @@ module Ayadn
     def extract_users(resp)
       users_hash = {}
       resp['data'].each do |item|
-        users_hash[item['id']] = [item['username'], item['name'], item['you_follow'], item['follows_you']]
+        users_hash[item['id']] = [item['username'], item['name'], item['you_follow'], item['follows_you'], item['counts']['posts']]
       end
       users_hash
     end
@@ -591,13 +591,9 @@ module Ayadn
 
     def build_users_array(list)
       users = list.map do |key, value|
-        {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3], :id => key}
+        {:username => value[0], :name => value[1], :you_follow => value[2], :follows_you => value[3], :id => key, :posts => value[4]}
       end
-      if Settings.options[:formats][:list][:reverse]
-        return users.reverse
-      else
-        return users
-      end
+      return users
     end
 
     def extract_checkins(post)
