@@ -165,7 +165,8 @@ module Ayadn
     option :reverse, aliases: "-r", type: :boolean, desc: "Reverses the list original order"
     option :username, aliases: "-u", type: :boolean, desc: "Sort the list by: username"
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
-    option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
+    option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
+    option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
     def followings(*username)
       Action.new.followings(username, options)
     end
@@ -177,7 +178,8 @@ module Ayadn
     option :reverse, aliases: "-r", type: :boolean, desc: "Reverses the list original order"
     option :username, aliases: "-u", type: :boolean, desc: "Sort the list by: username"
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
-    option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
+    option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
+    option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
     def followers(*username)
       Action.new.followers(username, options)
     end
@@ -189,7 +191,8 @@ module Ayadn
     option :reverse, aliases: "-r", type: :boolean, desc: "Reverses the list original order"
     option :username, aliases: "-u", type: :boolean, desc: "Sort the list by: username"
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
-    option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
+    option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
+    option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
     def muted
       Action.new.muted(options)
     end
@@ -201,7 +204,8 @@ module Ayadn
     option :reverse, aliases: "-r", type: :boolean, desc: "Reverses the list original order"
     option :username, aliases: "-u", type: :boolean, desc: "Sort the list by: username"
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
-    option :posts_day, aliases: "-p", type: :boolean, desc: "Sort the list by: posts/day"
+    option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
+    option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
     def blocked
       Action.new.blocked(options)
     end

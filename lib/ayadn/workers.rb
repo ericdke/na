@@ -106,6 +106,8 @@ module Ayadn
         list.sort_by! { |obj| obj[:username] }
       elsif options[:name]
         list.sort_by! { |obj| obj[:name].downcase }
+      elsif options[:posts]
+        list.sort_by! { |obj| obj[:posts] }
       end
       list.each do |obj|
         obj[:name] = "(no name)" if obj[:name].nil?
