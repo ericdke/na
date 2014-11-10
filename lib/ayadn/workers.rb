@@ -107,9 +107,6 @@ module Ayadn
       elsif options[:name]
         list.sort_by! { |obj| obj[:name].downcase }
       end
-      if options[:reverse]
-        list.reverse!
-      end
       list.each do |obj|
         obj[:name] = "(no name)" if obj[:name].nil?
         unless indexed_ranks == false
@@ -128,6 +125,9 @@ module Ayadn
       end
       if options[:posts_day]
         arr.sort_by! { |obj| obj[2].to_f }
+      end
+      if options[:reverse]
+        arr.reverse!
       end
       arr.each_with_index do |obj, index|
         table << arr[index]
