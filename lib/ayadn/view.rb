@@ -91,7 +91,11 @@ module Ayadn
 
     def show_settings
       table = Terminal::Table.new do |t|
-        t.style = { :width => Settings.options[:formats][:table][:width], border_x: ' ', border_i: ' ', border_y: ' ' }
+        if Settings.options[:formats][:table][:borders] == true
+          t.style = { :width => Settings.options[:formats][:table][:width], border_x: '—', border_i: '+', border_y: '|' }
+        else
+          t.style = { :width => Settings.options[:formats][:table][:width], border_x: ' ', border_i: ' ', border_y: ' ' }
+        end
         t.title = "Current Ayadn settings".color(:cyan)
         t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
         @iter = 0

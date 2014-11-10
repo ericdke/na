@@ -5,11 +5,12 @@
 - Channels: option to show only broadcasts/PMs/patter/other
 - Users lists: sort by username, name, total posts or posting frequency
 - Userinfos accepts several users in arguments
-- Blacklist setting: active (default: true)
+- Setting: blacklist active (default: true)
 - Ayadn instances share access to the blacklist
 - Unauthorize an Ayadn user account
 - NowPlaying has been improved
 - Better display for the spinner when scrolling
+- Setting: show tables borders (default: true)
 - Simplified, shorter settings options names
 - NiceRank filter for Global is cached in-memory
 - Code has been optimized. Bugs have been squashed.

@@ -156,6 +156,7 @@ module Ayadn
           conf[:movie] = {hashtag: 'nowwatching'} if conf[:movie].nil?
           conf[:tvshow] = {hashtag: 'nowwatching'} if conf[:tvshow].nil?
           conf[:formats][:list] = {reverse: true} if conf[:formats][:list].nil?
+          conf[:formats][:table][:borders] = true if conf[:formats][:table][:borders].nil?
           conf[:timeline][:compact] = false if conf[:timeline][:compact].nil?
           conf[:timeline][:channel_oembed] = true if conf[:timeline][:channel_oembed].nil?
           conf[:marker] = {update_messages: true} if conf[:marker].nil?
@@ -259,7 +260,8 @@ module Ayadn
         },
         formats: {
           table: {
-            width: 75
+            width: 75,
+            borders: true
           },
           list: {
             reverse: true

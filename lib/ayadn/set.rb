@@ -286,11 +286,16 @@ module Ayadn
 
     def table(args)
       type = args.shift.downcase
-      value = args[0].to_i
       if type == 'width'
+        value = args[0].to_i
         @input = 'table width'
         @output = Validators.width_range(value)
         Settings.options[:formats][:table][:width] = @output
+      elsif type == 'borders' || type == 'border'
+        value = args[0]
+        @input = 'table borders'
+        @output = Validators.boolean(value)
+        Settings.options[:formats][:table][:borders] = @output
       else
         @status.error_missing_parameters
         exit

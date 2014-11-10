@@ -7,10 +7,18 @@ module Ayadn
       @status = Status.new
     end
 
+    def table_borders
+      if Settings.options[:formats][:table][:borders] == true
+        { :width => Settings.options[:formats][:table][:width], border_x: '—', border_i: '+', border_y: '|' }
+      else
+        { :width => Settings.options[:formats][:table][:width], border_x: ' ', border_i: ' ', border_y: ' ' }
+      end
+    end
+
     def build_aliases_list(list)
       table = init_table
       table.title = "List of your channel aliases".color(:cyan) + "".color(:white)
-      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
+      table.style = table_borders()
       list.each {|obj| table << [obj[0].to_s.color(:green), obj[1].color(:red)]}
       table
     end
@@ -18,7 +26,7 @@ module Ayadn
     def build_blacklist_list(list)
       table = init_table
       table.title = "Your blacklist".color(:cyan) + "".color(:white)
-      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
+      table.style = table_borders()
       table.headings = [ 'Name', 'Type' ]
       list.sort!
       list.each {|obj| table << ["#{obj[1].capitalize}".color(:green), "#{obj[0]}".color(:red)]}
@@ -33,7 +41,7 @@ module Ayadn
         obj['name'].nil? ? name = "" : name = obj['name']
         users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id'], :posts => obj['counts']['posts']}
       end
-      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
+      table.style = table_borders()
       return users_list, table
     end
 
@@ -45,7 +53,7 @@ module Ayadn
         obj['name'].nil? ? name = "" : name = obj['name']
         users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id'], :posts => obj['counts']['posts']}
       end
-      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
+      table.style = table_borders()
       return users_list, table
     end
 
@@ -56,7 +64,7 @@ module Ayadn
       else
         "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
       end
-      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
+      table.style = table_borders()
       users_list = build_users_array(list)
       build_users_list(users_list, table, options)
     end
@@ -68,21 +76,21 @@ module Ayadn
       else
         "List of users following ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
       end
-      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
+      table.style = table_borders()
       build_users_list(build_users_array(list), table, options)
     end
 
     def build_muted_list(list, options = {})
       table = init_table
       table.title = "List of users you muted".color(:cyan) + "".color(:white)
-      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
+      table.style = table_borders()
       build_users_list(build_users_array(list), table, options)
     end
 
     def build_blocked_list(list, options = {})
       table = init_table
       table.title = "List of users you blocked".color(:cyan) + "".color(:white)
-      table.style = {border_x: ' ', border_i: ' ', border_y: ' '}
+      table.style = table_borders()
       build_users_list(build_users_array(list), table, options)
     end
 
@@ -129,6 +137,9 @@ module Ayadn
         arr.sort_by! { |obj| obj[3].to_f }
       end
       if options[:reverse]
+        arr.reverse!
+      end
+      if Settings.options[:formats][:list][:reverse] == true
         arr.reverse!
       end
       arr.each_with_index do |obj, index|
