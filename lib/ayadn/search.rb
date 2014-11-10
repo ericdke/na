@@ -7,13 +7,14 @@ module Ayadn
       @api = api
       @view = view
       @workers = workers
+      @check = Check.new
     end
 
     def hashtag(hashtag, options)
       Settings.options[:force] = true if options[:force]
       @view.downloading(options)
       stream = @api.get_hashtag(hashtag)
-      Check.no_data(stream, 'hashtag')
+      @check.no_data(stream, 'hashtag')
       if options[:extract]
         @view.all_hashtag_links(stream, hashtag)
       else
@@ -25,7 +26,7 @@ module Ayadn
       Settings.options[:force] = true if options[:force]
       @view.downloading(options)
       stream = get_stream(words, options)
-      Check.no_data(stream, 'search')
+      @check.no_data(stream, 'search')
       if options[:users]
         get_users(stream, options)
       elsif options[:channels]

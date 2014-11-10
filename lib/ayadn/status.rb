@@ -483,7 +483,8 @@ module Ayadn
     end
 
     def unread_from_channel(channel_id)
-      info("info", "unread message(s) from channel #{channel_id}", "cyan")
+      @thor.say_status :info, "unread message(s) from channel #{channel_id}", :cyan
+      puts "\n\n"
     end
 
     def version
