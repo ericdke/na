@@ -11,51 +11,55 @@ module Ayadn
 
     def self.create_tables(user)
       # config is not loaded here, have to specify absolute path
-      sql = Amalgalite::Database.new("#{user.user_path}/db/ayadn.sqlite")
-      sql.execute_batch <<-SQL
-        CREATE TABLE Bookmarks (
-          post_id INTEGER,
-          bookmark TEXT
-        );
-      SQL
-      sql.reload_schema!
-      sql.execute_batch <<-SQL
-        CREATE TABLE Aliases (
-          channel_id INTEGER,
-          alias VARCHAR(255)
-        );
-      SQL
-      sql.reload_schema!
-      sql.execute_batch <<-SQL
-        CREATE TABLE Blacklist (
-          type VARCHAR(255),
-          content TEXT
-        );
-      SQL
-      sql.reload_schema!
-      sql.execute_batch <<-SQL
-        CREATE TABLE Users (
-          user_id INTEGER,
-          username VARCHAR(20),
-          name TEXT
-        );
-      SQL
-      sql.reload_schema!
-      sql.execute_batch <<-SQL
-        CREATE TABLE Pagination (
-          name TEXT,
-          post_id INTEGER
-        );
-      SQL
-      sql.reload_schema!
-      sql.execute_batch <<-SQL
-        CREATE TABLE TLIndex (
-          count INTEGER,
-          post_id INTEGER,
-          content TEXT
-        );
-      SQL
-      sql.reload_schema!
+      begin
+        sql = Amalgalite::Database.new("#{user.user_path}/db/ayadn.sqlite")
+        sql.execute_batch <<-SQL
+          CREATE TABLE Bookmarks (
+            post_id INTEGER,
+            bookmark TEXT
+          );
+        SQL
+        sql.reload_schema!
+        sql.execute_batch <<-SQL
+          CREATE TABLE Aliases (
+            channel_id INTEGER,
+            alias VARCHAR(255)
+          );
+        SQL
+        sql.reload_schema!
+        sql.execute_batch <<-SQL
+          CREATE TABLE Blacklist (
+            type VARCHAR(255),
+            content TEXT
+          );
+        SQL
+        sql.reload_schema!
+        sql.execute_batch <<-SQL
+          CREATE TABLE Users (
+            user_id INTEGER,
+            username VARCHAR(20),
+            name TEXT
+          );
+        SQL
+        sql.reload_schema!
+        sql.execute_batch <<-SQL
+          CREATE TABLE Pagination (
+            name TEXT,
+            post_id INTEGER
+          );
+        SQL
+        sql.reload_schema!
+        sql.execute_batch <<-SQL
+          CREATE TABLE TLIndex (
+            count INTEGER,
+            post_id INTEGER,
+            content TEXT
+          );
+        SQL
+        sql.reload_schema!
+      rescue Amalgalite::SQLite3::Error => e
+        Errors.global_error({error: e, caller: caller, data: ['create_tables', user]})
+      end
     end
 
     # def self.add_niceranks niceranks
@@ -101,40 +105,100 @@ module Ayadn
 
 
     def self.add_to_blacklist(type, target)
-      remove_from_blacklist(target)
-      @sql.transaction do |db_in_transaction|
-        target.each do |element|
-          insert_data = {}
-          insert_data[":type"] = type
-          insert_data[":content"] = element.downcase
-          db_in_transaction.prepare("INSERT INTO Blacklist(type, content) VALUES(:type, :content);") do |insert|
-            insert.execute(insert_data)
+      crashes = 0
+      begin
+        remove_from_blacklist(target)
+        @sql.transaction do |db_in_transaction|
+          target.each do |element|
+            insert_data = {}
+            insert_data[":type"] = type
+            insert_data[":content"] = element.downcase
+            db_in_transaction.prepare("INSERT INTO Blacklist(type, content) VALUES(:type, :content);") do |insert|
+              insert.execute(insert_data)
+            end
           end
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['add_to_blacklist', type, target]})
         end
       end
     end
 
     def self.is_in_blacklist?(type, target)
-      res = @sql.execute("SELECT * FROM Blacklist WHERE type=\"#{type}\" AND content=\"#{target.downcase}\"").flatten
-      if res.empty?
-        return false
-      else
-        return true
+      crashes = 0
+      begin
+        res = @sql.execute("SELECT * FROM Blacklist WHERE type=\"#{type}\" AND content=\"#{target.downcase}\"").flatten
+        if res.empty?
+          return false
+        else
+          return true
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['is_in_blacklist?', type, target]})
+        end
       end
     end
 
     def self.remove_from_blacklist(target)
-      target.each do |el|
-        @sql.execute("DELETE FROM Blacklist WHERE content=\"#{el.downcase}\"")
+      crashes = 0
+      begin
+        target.each do |el|
+          @sql.execute("DELETE FROM Blacklist WHERE content=\"#{el.downcase}\"")
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['remove_from_blacklist', target]})
+        end
       end
     end
 
     def self.all_blacklist
-      @sql.execute("SELECT * FROM Blacklist")
+      crashes = 0
+      begin
+        @sql.execute("SELECT * FROM Blacklist")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['all_blacklist']})
+        end
+      end
     end
 
     def self.remove_from_accounts(db, username)
-      db.execute("DELETE FROM Accounts WHERE username=\"#{username.downcase}\"")
+      crashes = 0
+      begin
+        db.execute("DELETE FROM Accounts WHERE username=\"#{username.downcase}\"")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['remove_from_accounts', db, username]})
+        end
+      end
     end
 
     # def self.import_blacklist(blacklist)
@@ -152,248 +216,671 @@ module Ayadn
 
 
     def self.active_account(acc)
-      acc.execute("SELECT * FROM Accounts WHERE active=1")[0]
+      crashes = 0
+      begin
+        acc.execute("SELECT * FROM Accounts WHERE active=1")[0]
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['active_account', acc]})
+        end
+      end
     end
 
     def self.all_accounts(acc)
-      acc.execute("SELECT * FROM Accounts")
+      crashes = 0
+      begin
+        acc.execute("SELECT * FROM Accounts")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['all_accounts', acc]})
+        end
+      end
     end
 
     def self.set_active_account(acc_db, new_user)
-      acc_db.execute("UPDATE Accounts SET active=0")
-      acc_db.execute("UPDATE Accounts SET active=1 WHERE username=\"#{new_user}\"")
+      crashes = 0
+      begin
+        acc_db.execute("UPDATE Accounts SET active=0")
+        acc_db.execute("UPDATE Accounts SET active=1 WHERE username=\"#{new_user}\"")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['set_active_account', acc_db, new_user]})
+        end
+      end
     end
 
     def self.create_account_table(acc_db)
-      acc_db.execute_batch <<-SQL
-        CREATE TABLE Accounts (
-          username VARCHAR(20),
-          user_id INTEGER,
-          handle VARCHAR(21),
-          account_path TEXT,
-          active INTEGER,
-          token TEXT
-        );
-      SQL
-      acc_db.reload_schema!
+      begin
+        acc_db.execute_batch <<-SQL
+          CREATE TABLE Accounts (
+            username VARCHAR(20),
+            user_id INTEGER,
+            handle VARCHAR(21),
+            account_path TEXT,
+            active INTEGER,
+            token TEXT
+          );
+        SQL
+        acc_db.reload_schema!
+      rescue Amalgalite::SQLite3::Error => e
+        Errors.global_error({error: e, caller: caller, data: ['create_account_table', acc_db]})
+      end
     end
 
     def self.create_account(acc_db, user)
-      acc_db.execute("DELETE FROM Accounts WHERE username=\"#{user.username}\"")
-      acc_db.transaction do |db|
-        insert_data = {}
-          insert_data[":username"] = user.username
-          insert_data[":user_id"] = user.id
-          insert_data[":handle"] = user.handle
-          insert_data[":account_path"] = user.user_path
-          insert_data[":active"] = 0
-          insert_data[":token"] = user.token
-          db.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active, token) VALUES(:username, :user_id, :handle, :account_path, :active, :token);") do |insert|
-            insert.execute(insert_data)
-          end
+      crashes = 0
+      begin
+        acc_db.execute("DELETE FROM Accounts WHERE username=\"#{user.username}\"")
+        acc_db.transaction do |db|
+          insert_data = {}
+            insert_data[":username"] = user.username
+            insert_data[":user_id"] = user.id
+            insert_data[":handle"] = user.handle
+            insert_data[":account_path"] = user.user_path
+            insert_data[":active"] = 0
+            insert_data[":token"] = user.token
+            db.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active, token) VALUES(:username, :user_id, :handle, :account_path, :active, :token);") do |insert|
+              insert.execute(insert_data)
+            end
+        end
+        set_active_account(acc_db, user.username)
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['create_account', acc_db, user]})
+        end
       end
-      set_active_account(acc_db, user.username)
     end
 
     def self.create_alias(channel_id, channel_alias)
-      delete_alias(channel_alias)
-      @sql.transaction do |db_in_transaction|
-        insert_data = {}
-        insert_data[":k"] = channel_id.to_i
-        insert_data[":v"] = channel_alias
-        db_in_transaction.prepare("INSERT INTO Aliases(channel_id, alias) VALUES(:k, :v);") do |insert|
-          insert.execute(insert_data)
+      crashes = 0
+      begin
+        delete_alias(channel_alias)
+        @sql.transaction do |db_in_transaction|
+          insert_data = {}
+          insert_data[":k"] = channel_id.to_i
+          insert_data[":v"] = channel_alias
+          db_in_transaction.prepare("INSERT INTO Aliases(channel_id, alias) VALUES(:k, :v);") do |insert|
+            insert.execute(insert_data)
+          end
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['create_alias', channel_id, channel_alias]})
         end
       end
     end
 
     def self.delete_alias(channel_alias)
-      @sql.execute("DELETE FROM Aliases WHERE alias=\"#{channel_alias}\"")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Aliases WHERE alias=\"#{channel_alias}\"")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['delete_alias', channel_alias]})
+        end
+      end
     end
 
     def self.clear_aliases
-      @sql.execute("DELETE FROM Aliases")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Aliases")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['clear_aliases']})
+        end
+      end
     end
 
     def self.get_alias_from_id(channel_id)
-      res = @sql.execute("SELECT alias FROM Aliases WHERE channel_id=#{channel_id.to_i}")
-      if res.empty?
-        return nil
-      else
-        return res[0][0]
+      crashes = 0
+      begin
+        res = @sql.execute("SELECT alias FROM Aliases WHERE channel_id=#{channel_id.to_i}")
+        if res.empty?
+          return nil
+        else
+          return res[0][0]
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['get_alias_from_id', channel_id]})
+        end
       end
     end
 
     def self.get_channel_id(channel_alias)
-      res = @sql.execute("SELECT channel_id FROM Aliases WHERE alias=\"#{channel_alias}\"")
-      if res.empty?
-        return nil
-      else
-        return res[0][0]
+      crashes = 0
+      begin
+        res = @sql.execute("SELECT channel_id FROM Aliases WHERE alias=\"#{channel_alias}\"")
+        if res.empty?
+          return nil
+        else
+          return res[0][0]
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['get_channel_id', channel_alias]})
+        end
       end
     end
 
     def self.all_aliases
-      @sql.execute("SELECT * FROM Aliases")
+      crashes = 0
+      begin
+        @sql.execute("SELECT * FROM Aliases")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['all_aliases']})
+        end
+      end
     end
 
-
     def self.clear_bookmarks
-      @sql.execute("DELETE FROM Bookmarks")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Bookmarks")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['clear_bookmarks']})
+        end
+      end
     end
 
     def self.clear_pagination
-      @sql.execute("DELETE FROM Pagination")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Pagination")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['clear_pagination']})
+        end
+      end
     end
 
     def self.clear_index
-      @sql.execute("DELETE FROM TLIndex")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM TLIndex")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['clear_index']})
+        end
+      end
     end
 
     def self.clear_users
-      @sql.execute("DELETE FROM Users")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Users")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['clear_users']})
+        end
+      end
     end
 
     def self.clear_blacklist
-      @sql.execute("DELETE FROM Blacklist")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Blacklist")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['clear_blacklist']})
+        end
+      end
     end
 
     def self.add_bookmark bookmark
-      delete_bookmark(bookmark['id'])
-      @sql.transaction do |db_in_transaction|
-        insert_data = {}
-        insert_data[":k"] = bookmark['id'].to_i
-        insert_data[":v"] = bookmark.to_json.to_s
-        db_in_transaction.prepare("INSERT INTO Bookmarks(post_id, bookmark) VALUES(:k, :v);") do |insert|
-          insert.execute(insert_data)
+      crashes = 0
+      begin
+        delete_bookmark(bookmark['id'])
+        @sql.transaction do |db_in_transaction|
+          insert_data = {}
+          insert_data[":k"] = bookmark['id'].to_i
+          insert_data[":v"] = bookmark.to_json.to_s
+          db_in_transaction.prepare("INSERT INTO Bookmarks(post_id, bookmark) VALUES(:k, :v);") do |insert|
+            insert.execute(insert_data)
+          end
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['add_bookmark', bookmark]})
         end
       end
     end
 
     def self.delete_bookmark post_id
-      @sql.execute("DELETE FROM Bookmarks WHERE post_id=#{post_id.to_i}")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Bookmarks WHERE post_id=#{post_id.to_i}")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['delete_bookmark', post_id]})
+        end
+      end
     end
 
     def self.all_bookmarks
-      @sql.execute("SELECT * FROM Bookmarks")
+      crashes = 0
+      begin
+        @sql.execute("SELECT * FROM Bookmarks")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['all_bookmarks']})
+        end
+      end
     end
 
     def self.rename_bookmark post_id, new_title
-      req = @sql.execute("SELECT bookmark FROM Bookmarks WHERE post_id=#{post_id.to_i}")
-      if req.empty?
-        Errors.global_error({error: "Post doesn't exist", caller: caller, data: [post_id, new_title]})
-      else
-        bm = JSON.parse(req[0][0])
-        bm['title'] = new_title
-        @sql.execute("UPDATE Bookmarks SET bookmark=\"#{bm.to_json}\" WHERE post_id=#{post_id.to_i}")
+      crashes = 0
+      begin
+        req = @sql.execute("SELECT bookmark FROM Bookmarks WHERE post_id=#{post_id.to_i}")
+        if req.empty?
+          Errors.global_error({error: "Post doesn't exist", caller: caller, data: [post_id, new_title]})
+        else
+          bm = JSON.parse(req[0][0])
+          bm['title'] = new_title
+          @sql.execute("UPDATE Bookmarks SET bookmark=\"#{bm.to_json}\" WHERE post_id=#{post_id.to_i}")
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['rename_bookmark', post_id, new_title]})
+        end
       end
     end
 
     def self.save_indexed_posts(posts)
-      @sql.execute("DELETE FROM TLIndex")
-      @sql.transaction do |db_in_transaction|
-        posts.each do |k, v|
-          insert_data = {}
-          insert_data[":post_id"] = v[:id]
-          insert_data[":count"] = v[:count]
-          insert_data[":content"] = v.to_json.to_s
-          db_in_transaction.prepare("INSERT INTO TLIndex(count, post_id, content) VALUES(:count, :post_id, :content);") do |insert|
-            insert.execute(insert_data)
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM TLIndex")
+        @sql.transaction do |db_in_transaction|
+          posts.each do |k, v|
+            insert_data = {}
+            insert_data[":post_id"] = v[:id]
+            insert_data[":count"] = v[:count]
+            insert_data[":content"] = v.to_json.to_s
+            db_in_transaction.prepare("INSERT INTO TLIndex(count, post_id, content) VALUES(:count, :post_id, :content);") do |insert|
+              insert.execute(insert_data)
+            end
           end
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['save_indexed_posts', posts]})
         end
       end
     end
 
     def self.get_index_length
-      @sql.execute("SELECT Count(*) FROM TLIndex").flatten[0]
+      crashes = 0
+      begin
+        @sql.execute("SELECT Count(*) FROM TLIndex").flatten[0]
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['get_index_length']})
+        end
+      end
     end
 
     def self.get_post_from_index(arg)
-      number = arg.to_i
-      unless number > 200
-        res = @sql.execute("SELECT content FROM TLIndex WHERE count=#{number}").flatten[0]
-        JSON.parse(res)
-      else
-        Status.new.must_be_in_index
-        Errors.global_error({error: "Out of range", caller: caller, data: [number]})
+      crashes = 0
+      begin
+        number = arg.to_i
+        unless number > 200
+          res = @sql.execute("SELECT content FROM TLIndex WHERE count=#{number}").flatten[0]
+          JSON.parse(res)
+        else
+          Status.new.must_be_in_index
+          Errors.global_error({error: "Out of range", caller: caller, data: [number]})
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['get_post_from_index', arg]})
+        end
       end
     end
 
     def self.add_to_users_db_from_list(list)
-      delete_users_from_list(list)
-      @sql.transaction do |db_in_transaction|
-        list.each do |id, content_array|
-          insert_data = {}
-          insert_data[":id"] = id.to_i
-          insert_data[":username"] = content_array[0]
-          insert_data[":name"] = content_array[1]
-          db_in_transaction.prepare("INSERT INTO Users(user_id, username, name) VALUES(:id, :username, :name);") do |insert|
-            insert.execute(insert_data)
+      crashes = 0
+      begin
+        delete_users_from_list(list)
+        @sql.transaction do |db_in_transaction|
+          list.each do |id, content_array|
+            insert_data = {}
+            insert_data[":id"] = id.to_i
+            insert_data[":username"] = content_array[0]
+            insert_data[":name"] = content_array[1]
+            db_in_transaction.prepare("INSERT INTO Users(user_id, username, name) VALUES(:id, :username, :name);") do |insert|
+              insert.execute(insert_data)
+            end
           end
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['add_to_users_db_from_list', list]})
         end
       end
     end
 
     def self.delete_users_from_list(list)
-      list.each {|id, _| @sql.execute("DELETE FROM Users WHERE user_id=#{id.to_i}")}
+      crashes = 0
+      begin
+        list.each {|id, _| @sql.execute("DELETE FROM Users WHERE user_id=#{id.to_i}")}
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['delete_users_from_list', list]})
+        end
+      end
     end
 
     def self.add_to_users_db(id, username, name)
-      @sql.execute("DELETE FROM Users WHERE user_id=#{id.to_i}")
-      @sql.execute("INSERT INTO Users VALUES(#{id.to_i}, \"#{username}\", \"#{name}\")")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Users WHERE user_id=#{id.to_i}")
+        @sql.execute("INSERT INTO Users VALUES(#{id.to_i}, \"#{username}\", \"#{name}\")")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['add_to_users_db', id, username, name]})
+        end
+      end
     end
 
     def self.find_user_by_id(user_id)
-      res = @sql.execute("SELECT username FROM Users WHERE user_id=#{user_id}").flatten
-      if res.empty?
-        return nil
-      else
-        return res[0]
+      crashes = 0
+      begin
+        res = @sql.execute("SELECT username FROM Users WHERE user_id=#{user_id}").flatten
+        if res.empty?
+          return nil
+        else
+          return res[0]
+        end
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['find_user_by_id', user_id]})
+        end
       end
     end
 
     def self.find_user_object_by_id(user_id)
-      @sql.execute("SELECT * FROM Users WHERE user_id=#{user_id}").flatten
+      crashes = 0
+      begin
+        @sql.execute("SELECT * FROM Users WHERE user_id=#{user_id}").flatten
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['find_user_object_by_id', user_id]})
+        end
+      end
     end
 
     def self.all_users
-      @sql.execute("SELECT * FROM Users").flatten
+      crashes = 0
+      begin
+        @sql.execute("SELECT * FROM Users").flatten
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['all_users']})
+        end
+      end
     end
 
     def self.all_users_ids
-      @sql.execute("SELECT user_id FROM Users").flatten
+      crashes = 0
+      begin
+        @sql.execute("SELECT user_id FROM Users").flatten
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['all_users_ids']})
+        end
+      end
     end
 
     def self.all_pagination
-      @sql.execute("SELECT * FROM Pagination").flatten
+      crashes = 0
+      begin
+        @sql.execute("SELECT * FROM Pagination").flatten
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['all_pagination']})
+        end
+      end
     end
 
     def self.has_new?(stream, title)
-      res = @sql.execute("SELECT post_id FROM Pagination WHERE name=\"#{title}\"").flatten[0]
-      stream['meta']['max_id'].to_i > res.to_i
+      crashes = 0
+      begin
+        res = @sql.execute("SELECT post_id FROM Pagination WHERE name=\"#{title}\"").flatten[0]
+        stream['meta']['max_id'].to_i > res.to_i
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['has_new?', stream, title]})
+        end
+      end
     end
 
     def self.save_max_id(stream, name = 'unknown')
-      if stream['meta']['marker'].nil?
-        key = name
-      else
-        key = stream['meta']['marker']['name']
+      crashes = 0
+      begin
+        if stream['meta']['marker'].nil?
+          key = name
+        else
+          key = stream['meta']['marker']['name']
+        end
+        @sql.execute("DELETE FROM Pagination WHERE name=\"#{key}\"")
+        @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(\"#{key}\", #{stream['meta']['max_id'].to_i});")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['save_max_id', stream, name]})
+        end
       end
-      @sql.execute("DELETE FROM Pagination WHERE name=\"#{key}\"")
-      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(\"#{key}\", #{stream['meta']['max_id'].to_i});")
     end
 
     def self.find_last_id_from(name)
-      @sql.execute("SELECT post_id FROM Pagination WHERE name=\"#{name}\"").flatten[0]
+      crashes = 0
+      begin
+        @sql.execute("SELECT post_id FROM Pagination WHERE name=\"#{name}\"").flatten[0]
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['find_last_id_from', name]})
+        end
+      end
     end
 
     def self.pagination_delete(name)
-      @sql.execute("DELETE FROM Pagination WHERE name=\"#{name}\"")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Pagination WHERE name=\"#{name}\"")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['pagination_delete', name]})
+        end
+      end
     end
 
     def self.pagination_insert(name, val)
-      @sql.execute("DELETE FROM Pagination WHERE name=\"#{name}\"")
-      @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(\"#{name}\", #{val.to_i});")
+      crashes = 0
+      begin
+        @sql.execute("DELETE FROM Pagination WHERE name=\"#{name}\"")
+        @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(\"#{name}\", #{val.to_i});")
+      rescue Amalgalite::SQLite3::Error => e
+        if crashes < 2
+          crashes += 1
+          Errors.warn "SQLite ERROR: #{e}"
+          sleep(0.01)
+          retry
+        else
+          Errors.global_error({error: e, caller: caller, data: ['pagination_insert', name, val]})
+        end
+      end
     end
 
   end

@@ -11,6 +11,7 @@
 - Userinfos accepts several users in arguments
 - NiceRank filter for Global is cached in-memory
 - NowPlaying has been improved
+- Better display for the spinner when scrolling
 - Code has been optimized. Bugs have been squashed.
 
 # 1.8.2 - 2014-10-31 - 'Asylum'
