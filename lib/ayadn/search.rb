@@ -38,26 +38,6 @@ module Ayadn
 
     private
 
-    def get_generic stream, words, options
-      if options[:extract]
-        @view.all_search_links(stream, words)
-      else
-        @view.render(stream, options)
-      end
-    end
-
-    def get_channels stream, options
-      @view.show_channels(stream, options)
-    end
-
-    def get_users stream, options
-      sorted = stream['data'].sort_by {|obj| obj['counts']['followers']}
-      sorted.each do |obj|
-        puts @view.big_separator
-        @view.show_userinfos(obj, nil, false)
-      end
-    end
-
     def get_stream words, options
       if options[:users]
         @api.search_users words, options
@@ -73,6 +53,27 @@ module Ayadn
       else
         @api.get_search words, options
       end
+    end
+
+    def get_generic stream, words, options
+      if options[:extract]
+        @view.all_search_links(stream, words)
+      else
+        @view.render(stream, options)
+      end
+    end
+
+    def get_channels stream, options
+      @view.show_channels(stream, options)
+    end
+
+    def get_users stream, options
+      sorted = stream['data'].sort_by {|obj| obj['counts']['followers']}
+      sorted.each do |obj|
+        puts @view.big_separator unless Settings.options[:timeline][:compact] == true
+        @view.show_userinfos(obj, nil, false)
+      end
+      puts "\n" if Settings.options[:timeline][:compact] == true
     end
 
   end
