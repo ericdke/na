@@ -199,14 +199,16 @@ module Ayadn
 # exit
           if by_exact_track.empty?
             splitted = track.split(" ").first.downcase
-            by_artist.select! do |obj|
+            results = by_artist.select do |obj|
               next if obj['trackName'].nil?
               obj['trackName'].split(" ").first.downcase == splitted
             end
+          else
+            results = by_exact_track
           end
 # puts by_artist
 # exit
-          results = by_artist
+
 
         else
           results = one
