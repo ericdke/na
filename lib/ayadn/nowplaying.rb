@@ -165,52 +165,38 @@ module Ayadn
     end
 
     def itunes_istore_request itunes
-      # infos = itunes_reg([itunes.artist, itunes.track, itunes.album])
-      # itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&term=#{infos[2]}&media=music&entity=musicTrack"
       itunes_url = "https://itunes.apple.com/search?term=#{itunes.artist}&term=#{itunes.track}&term=#{itunes.album}&media=music&entity=musicTrack"
       get_itunes_store(itunes_url, itunes.artist, itunes.track)
     end
 
     def lastfm_istore_request artist, track
-      # infos = itunes_reg([artist, track])
-      # itunes_url = "https://itunes.apple.com/search?term=#{infos[0]}&term=#{infos[1]}&media=music&entity=musicTrack"
       itunes_url = "https://itunes.apple.com/search?term=#{artist}&term=#{track}&media=music&entity=musicTrack"
       get_itunes_store(itunes_url, artist, track)
     end
 
     def get_itunes_store url, artist, track
       results = JSON.load(CNX.download(URI.escape(url)))['results']
-# puts results.inspect
-# exit
+      # puts results.inspect
       unless results.empty? || results.nil?
-
-        # results.delete_if {|obj| obj['trackName'].nil?}
-        # results.delete_if {|obj| obj['collectionArtistName'].nil?}
-
-# results.each {|obj| puts obj['trackName']}
-# puts "-"
-# puts track
-# exit
-
+        # results.each {|obj| puts obj['trackName']}
+        # puts "-"
+        # puts track
         one = results.select do |obj|
           next if obj['trackName'].nil?
           obj['trackName'].downcase == track.downcase
         end
-# puts one.inspect
-# exit
+        # puts one.inspect
         if one.empty?
           by_artist = results.select do |obj|
             next if obj['artistName'].nil?
             obj['artistName'].downcase == artist.downcase
           end
-# puts by_artist
-# exit
+          # puts by_artist
           by_exact_track = by_artist.select do |obj|
             next if obj['trackName'].nil?
             obj['trackName'].downcase == track.downcase
           end
-# puts by_exact_track
-# exit
+          # puts by_exact_track
           if by_exact_track.empty?
             splitted = track.split(" ").first.downcase
             results = by_artist.select do |obj|
@@ -220,9 +206,6 @@ module Ayadn
           else
             results = by_exact_track
           end
-# puts by_artist
-# exit
-
 
         else
           results = one
@@ -253,13 +236,6 @@ module Ayadn
           'code' => 404,
           'request' => url
         }
-      end
-    end
-
-    def itunes_reg arr_of_itunes
-      regex_exotics = /[~:-;,?!\'&`^=+<>()*%\/"“”’°£$€.…]/
-      arr_of_itunes.map do |itune|
-        itune.gsub(regex_exotics, ' ').split(' ').join('+')
       end
     end
 

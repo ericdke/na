@@ -85,11 +85,32 @@ describe Ayadn::Post do
     it "checks excessive post length" do
       expect(post.post_size_ok?(["1" * 257].join())).to eq false
     end
+    it "checks excessive post length with markdown" do
+      expect(post.post_size_ok?(["1" * 251, "[aya.io](http://aya.io)"].join())).to eq false
+    end
     it "checks empty post length" do
       expect(post.post_size_ok?("")).to eq false
     end
-    it "checks normal post length" do
+    it "checks full post length" do
       expect(post.post_size_ok?(["1" * 256].join())).to eq true
+    end
+    it "checks full post length" do
+      expect(post.post_size_ok?(["Y😈" * 128].join())).to eq true
+    end
+    it "checks excessive post length" do
+      expect(post.post_size_ok?(["😈" * 257].join())).to eq false
+    end
+    it "checks post length" do
+      expect(post.post_size_ok?(["."].join())).to eq true
+    end
+    it "checks full post length" do
+      expect(post.post_size_ok?(["1\n" * 128].join())).to eq true
+    end
+    it "checks excessive post length" do
+      expect(post.post_size_ok?(["1\n" * 128, "\n"].join())).to eq false
+    end
+    it "checks full post length with markdown" do
+      expect(post.post_size_ok?(["1" * 250, "[aya.io](http://aya.io)"].join())).to eq true
     end
   end
 
@@ -97,11 +118,17 @@ describe Ayadn::Post do
     it "checks normal message length" do
       expect(post.message_size_ok?(["1" * 2048].join())).to eq true
     end
+    it "checks normal message length with markdown" do
+      expect(post.message_size_ok?(["1" * 2042, "[aya.io](http://aya.io)"].join())).to eq true
+    end
     it "checks empty message length" do
       expect(post.message_size_ok?("")).to eq false
     end
     it "checks excessive message length" do
       expect(post.message_size_ok?(["1" * 2049].join())).to eq false
+    end
+    it "checks excessive message length with markdown" do
+      expect(post.message_size_ok?(["1" * 2043, "[aya.io](http://aya.io)"].join())).to eq false
     end
   end
 end
