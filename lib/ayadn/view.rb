@@ -641,7 +641,15 @@ module Ayadn
       end
       if Settings.options[:timeline][:date]
         header << " "
-        header << content[:date].color(Settings.options[:colors][:date])
+        if Settings.options[:scrolling].nil?
+          header << content[:date].color(Settings.options[:colors][:date])
+        else
+          if Settings.options[:scroll][:short_date] == true
+            header << content[:date_short].color(Settings.options[:colors][:date])
+          else
+            header << content[:date].color(Settings.options[:colors][:date])
+          end
+        end
       end
       if Settings.options[:timeline][:source]
         header << " "

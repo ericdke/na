@@ -11,6 +11,7 @@
 - Unauthorize an Ayadn user account
 - Better display for the spinner when scrolling
 - Setting: show tables borders (default: true)
+- Setting: short date in timeline when scrolling (default: true)
 - Simplified, shorter settings options names
 - NiceRank filter for Global is cached in-memory
 - Code has been optimized. Bugs have been squashed.

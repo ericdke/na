@@ -7,6 +7,7 @@ module Ayadn
       @view = view
       @view.hide_cursor
       @chars = %w{ | / - \\ }
+      Settings.options[:scrolling] = true
       at_exit { @view.show_cursor }
     end
 

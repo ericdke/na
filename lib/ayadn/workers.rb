@@ -233,6 +233,7 @@ module Ayadn
           handle: "@#{post['user']['username']}",
           type: post['user']['type'],
           date: parsed_time(post['created_at']),
+          date_short: parsed_time_short(post['created_at']),
           you_starred: post['you_starred'],
           source_name: source,
           source_link: post['source']['link'],
@@ -395,6 +396,10 @@ module Ayadn
 
     def parsed_time(string)
       "#{string[0...10]} #{string[11...19]}"
+    end
+
+    def parsed_time_short(string)
+      "#{string[11...19]}"
     end
 
     def get_original_id(post_id, resp)

@@ -157,6 +157,7 @@ module Ayadn
           conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
           conf[:colors][:unread] = :cyan if conf[:colors][:unread].nil?
           conf[:colors][:excerpt] = :green if conf[:colors][:excerpt].nil?
+          conf[:scroll][:short_date] = true if conf[:scroll][:short_date].nil?
           conf[:nowplaying] = {} if conf[:nowplaying].nil?
           conf[:movie] = {hashtag: 'nowwatching'} if conf[:movie].nil?
           conf[:tvshow] = {hashtag: 'nowwatching'} if conf[:tvshow].nil?
@@ -294,7 +295,8 @@ module Ayadn
           lists: false
         },
         scroll: {
-          timer: 3
+          timer: 3,
+          short_date: true
         },
         nicerank: @default_nr,
         nowplaying: {},
