@@ -91,20 +91,15 @@ module Ayadn
 
     def post_nowplaying text_to_post, store, options
       begin
-        before = nil
+        before = text_to_post
         unless options[:no_url] || store.nil?
-          before = text_to_post
           text_to_post += "\n \n[iTunes Store](#{store['link']})"
         end
         poster = Post.new
         poster.post_size_error(text_to_post) if poster.post_size_ok?(text_to_post) == false
         @view.clear_screen
         @status.writing
-        if before.nil?
-          show_nowplaying("\n#{text_to_post}", options, store)
-        else
-          show_nowplaying("\n#{before}", options, store)
-        end
+        show_nowplaying("\n#{before}", options, store)
         unless STDIN.getch == ("y" || "Y")
           @status.canceled
           exit
@@ -282,17 +277,16 @@ module Ayadn
     end
 
     def show_nowplaying(text, options, store)
-      @status.to_be_posted
+      # @status.to_be_posted
       thor = Thor::Shell::Basic.new
       text.split("\n").each do |line|
         thor.say_status(nil, line.color(Settings.options[:colors][:excerpt]))
       end
       puts "\n"
       unless options['no_url'] || store['code'] != 200
-        # lcol = Settings.options[:colors][:link]
         thor.say_status(nil, "[iTunes link](#1)")
         thor.say_status(nil, "[album art](#2)")
-        puts "\n"
+        puts "\n\n"
         thor.say_status(:'#1', store['link'])
         thor.say_status(:'#2', store['artwork'])
         puts "\n"

@@ -636,7 +636,7 @@ module Ayadn
     		@status.message
     		lines_array = writer.compose
         text = lines_array.join("\n")
-        writer.bad_message_size(text) if writer.message_size_ok?(text) == false
+        writer.message_size_error(text) if writer.message_size_ok?(text) == false
     		@view.clear_screen
         @status.posting
         if options[:poster]
@@ -718,7 +718,7 @@ module Ayadn
         @status.message
         lines_array = writer.compose
         text = lines_array.join("\n")
-        writer.bad_message_size(text) if writer.message_size_ok?(text) == false
+        writer.message_size_error(text) if writer.message_size_ok?(text) == false
         @view.clear_screen
         @status.posting
         if options[:poster]

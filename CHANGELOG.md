@@ -2,10 +2,10 @@
 
 - SQLite database. Means FAST!
 - Unified style for statuses, questions and alerts
+- NowPlaying: better results, custom hashtag, custom text
 - Channels: option to show only broadcasts/PMs/patter/other
 - Users lists: sort by username, name, total posts or posting frequency
 - Userinfos accepts several users in arguments
-- NowPlaying has been improved
 - Setting: blacklist active (default: true)
 - Ayadn instances share access to the blacklist
 - Unauthorize an Ayadn user account

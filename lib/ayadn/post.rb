@@ -125,12 +125,14 @@ module Ayadn
     end
 
     def post_size_error(post)
-      size, max_size = post.length, Settings.config[:post_max_length]
+      text = keep_text_from_markdown_links(post)
+      size, max_size = text.length, Settings.config[:post_max_length]
       bad_text_size(post, size, max_size)
     end
 
-    def bad_message_size(message)
-      size, max_size = message.length, Settings.config[:message_max_length]
+    def message_size_error(message)
+      text = keep_text_from_markdown_links(message)
+      size, max_size = text.length, Settings.config[:message_max_length]
       bad_text_size(message, size, max_size)
     end
 
