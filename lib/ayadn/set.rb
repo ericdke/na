@@ -342,6 +342,12 @@ module Ayadn
       Settings.options[:scroll][:timer] = @output
     end
 
+    def short_date(value)
+      @input = 'short date'
+      @output = Validators.boolean(value)
+      Settings.options[:scroll][:short_date] = @output
+    end
+
   end
 
   class SetMovie < SetBase

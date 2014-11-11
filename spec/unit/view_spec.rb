@@ -40,6 +40,9 @@ describe Ayadn::View do
           username: 'test'
         }
       })
+    Ayadn::Settings.stub(:global).and_return({
+        scrolling: false
+      })
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
     Ayadn::Databases.stub(:save_indexed_posts).and_return("indexed")

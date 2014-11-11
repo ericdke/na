@@ -5,7 +5,7 @@ module Ayadn
     AYADN_CLIENT_ID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
 
     class << self
-      attr_accessor :options, :config
+      attr_accessor :options, :config, :global
       attr_reader :user_token, :default_nr
     end
 
@@ -36,6 +36,7 @@ module Ayadn
         unranked: false
       }
       @options = self.defaults
+      @global = {scrolling: false, force: false}
     end
 
     def self.check_for_accounts

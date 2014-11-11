@@ -45,7 +45,7 @@ describe Ayadn::Workers do
   let(:users_list) { JSON.parse(File.read("spec/mock/fwr_@ayadn.json")) }
   #let(:rest) {Ayadn::CNX = double} #verbose in RSpec output, but useful
   let(:rest) {Ayadn::CNX}
-  let(:list) { {"007"=>["bond", "James Bond", true, true], "666"=>["mrtest", "Mr Test", false, false]} }
+  let(:list) { {"007"=>["bond", "James Bond", true, true, 7], "666"=>["mrtest", "Mr Test", false, false, 33012]} }
 
   describe "#build_posts" do
     it "builds posts hash from stream" do
@@ -65,7 +65,6 @@ describe Ayadn::Workers do
       expect(posts[23187443][:has_checkins]).to be false
       expect(posts[23187443][:mentions]).to eq []
       expect(posts[23187443][:checkins]).to be_empty
-      expect(posts[23187443].length).to eq 33
     end
     it "gets oembed link from checkins post" do
       posts = @workers.build_posts(checkins['data'])
@@ -139,6 +138,8 @@ describe Ayadn::Workers do
       expect(printed).to include "@test"
       expect(printed).to include "@bond"
       expect(printed).to include "Mr Test"
+      expect(printed).to include "33012"
+      expect(printed).to include "7"
     end
   end
 
@@ -153,6 +154,8 @@ describe Ayadn::Workers do
       expect(printed).to include "@test"
       expect(printed).to include "@bond"
       expect(printed).to include "Mr Test"
+      expect(printed).to include "33012"
+      expect(printed).to include "7"
     end
   end
 
@@ -166,6 +169,7 @@ describe Ayadn::Workers do
       end
       expect(printed).to include "@bond"
       expect(printed).to include "Mr Test"
+      expect(printed).to include "33012"
     end
   end
 
@@ -179,6 +183,7 @@ describe Ayadn::Workers do
       end
       expect(printed).to include "@bond"
       expect(printed).to include "Mr Test"
+      expect(printed).to include "33012"
     end
   end
 
