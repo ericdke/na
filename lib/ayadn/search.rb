@@ -11,7 +11,7 @@ module Ayadn
     end
 
     def hashtag(hashtag, options)
-      Settings.options[:force] = true if options[:force]
+      Settings.global[:force] = true if options[:force]
       @view.downloading(options)
       stream = @api.get_hashtag(hashtag)
       @check.no_data(stream, 'hashtag')
@@ -23,7 +23,7 @@ module Ayadn
     end
 
     def find(words, options)
-      Settings.options[:force] = true if options[:force]
+      Settings.global[:force] = true if options[:force]
       @view.downloading(options)
       stream = get_stream(words, options)
       @check.no_data(stream, 'search')

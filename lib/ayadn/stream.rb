@@ -12,13 +12,13 @@ module Ayadn
     end
 
     def global settings
-      Settings.options[:force] = true if settings[:force]
+      Settings.global[:force] = true if settings[:force]
       options = settings.dup
       options[:filter] = nicerank_true()
       @view.downloading(options)
       unless options[:scroll]
         stream = @api.get_global(options)
-        Settings.options[:force] == true ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream)
+        Settings.global[:force] == true ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream)
         @check.no_new_posts(stream, options, 'global')
         Databases.save_max_id(stream, 'global') unless stream['meta']['max_id'].nil?
         @view.render(stream, options, niceranks)
@@ -45,7 +45,7 @@ module Ayadn
     end
 
     def stream meth, options, target
-      Settings.options[:force] = true if options[:force]
+      Settings.global[:force] = true if options[:force]
       @view.downloading(options)
       unless options[:scroll]
         stream = @api.send("get_#{meth}".to_sym, options)
@@ -62,7 +62,7 @@ module Ayadn
 
 
     def mentions username, options
-      Settings.options[:force] = true if options[:force]
+      Settings.global[:force] = true if options[:force]
       @check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options)
@@ -83,7 +83,7 @@ module Ayadn
     end
 
     def posts username, options
-      Settings.options[:force] = true if options[:force]
+      Settings.global[:force] = true if options[:force]
       @check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options)
@@ -91,7 +91,7 @@ module Ayadn
       @check.no_user(stream, username)
       Databases.save_max_id(stream) unless stream['meta']['marker'].nil?
       @check.no_data(stream, 'mentions')
-      unless options[:raw] || Settings.options[:force]
+      unless options[:raw] || Settings.global[:force]
         # this is just to show a message rather than an empty screen
         if Settings.options[:blacklist][:active] == true
           if Databases.is_in_blacklist?('mention', username)
@@ -101,7 +101,7 @@ module Ayadn
         end
       end
       if stream['data'][0]['user']['you_muted'] || stream['data'][0]['user']['you_blocked']
-        unless options[:raw] || Settings.options[:force]
+        unless options[:raw] || Settings.global[:force]
           @status.no_force("#{username.downcase}")
           exit
         end
@@ -203,7 +203,7 @@ module Ayadn
     end
 
     def convo(post_id, options)
-      Settings.options[:force] = true if options[:force]
+      Settings.global[:force] = true if options[:force]
       @check.bad_post_id(post_id)
       @view.downloading(options)
       details = @api.get_details(post_id, options)
@@ -247,7 +247,7 @@ module Ayadn
     end
 
     def random_posts(options)
-      Settings.options[:force] = true
+      Settings.global[:force] = true
       #_, cols = @view.winsize
       #max_posts = cols / 16
       max_posts = 6

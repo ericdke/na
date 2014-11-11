@@ -29,6 +29,10 @@ describe Ayadn::Workers do
         log: 'spec/mock'
       }
     })
+    Ayadn::Settings.stub(:global).and_return({
+      scrolling: false,
+      force: false
+    })
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
     Ayadn::Databases.stub(:users).and_return("users")

@@ -15,6 +15,10 @@ describe Ayadn::Endpoints do
           annotations: 1
         }
       })
+    Ayadn::Settings.stub(:global).and_return({
+      scrolling: false,
+      force: false
+    })
   end
   describe '#token_info' do
     it "returns the Token url" do

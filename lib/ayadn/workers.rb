@@ -156,7 +156,7 @@ module Ayadn
       # skip objects in blacklist unless force
       posts = {}
       data.each.with_index(1) do |post, index|
-        unless Settings.options[:force]
+        unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
             if Databases.is_in_blacklist?('client', post['source']['name'].downcase)
               Debug.skipped({source: post['source']['name']})
@@ -164,7 +164,7 @@ module Ayadn
             end
           end
         end
-        unless Settings.options[:force]
+        unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
             if Databases.is_in_blacklist?('user', post['user']['username'].downcase)
               Debug.skipped({user: post['user']['username']})
@@ -174,7 +174,7 @@ module Ayadn
         end
         hashtags = extract_hashtags(post)
         @skip = false
-        unless Settings.options[:force]
+        unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
             hashtags.each do |h|
               if Databases.is_in_blacklist?('hashtag', h.downcase)
@@ -188,7 +188,7 @@ module Ayadn
         next if @skip
         mentions= []
         post['entities']['mentions'].each { |m| mentions << m['name'] }
-        unless Settings.options[:force]
+        unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
             mentions.each do |m|
               if Databases.is_in_blacklist?('mention', m.downcase)

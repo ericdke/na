@@ -386,7 +386,7 @@ module Ayadn
 
     def postinfo(post_id, options)
       begin
-        Settings.options[:force] = true
+        Settings.global[:force] = true
         @check.bad_post_id(post_id)
         details = lambda { @api.get_details(post_id, options) }
         if options[:raw]

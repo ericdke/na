@@ -56,7 +56,7 @@ module Ayadn
       else
         API.build_query({count: Settings.options[:counts][:global]})
       end
-      if Settings.options[:force]
+      if Settings.global[:force] == true
         "#{@posts_url}stream/global?#{@options_list}"
       else
         "#{@posts_url}stream/global?access_token=#{Settings.user_token}#{@options_list}"
@@ -105,7 +105,7 @@ module Ayadn
       else
         API.build_query({count: Settings.options[:counts][:posts]})
       end
-      if Settings.options[:force]
+      if Settings.global[:force] == true
         "#{@users_url}#{username}/posts/?#{@options_list}"
       else
         "#{@users_url}#{username}/posts/?access_token=#{Settings.user_token}#{@options_list}"
