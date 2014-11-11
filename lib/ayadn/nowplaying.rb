@@ -5,11 +5,21 @@ module Ayadn
 
     require 'rss'
 
-    def initialize api, view, workers
+    def initialize api, view, workers, options = {}
       @api = api
       @view = view
       @workers = workers
       @status = Status.new
+      unless options[:hashtag]
+        @hashtag = "#nowplaying"
+      else
+        @hashtag = "##{options[:hashtag].join()}"
+      end
+      unless options[:text]
+        @custom_text = nil
+      else
+        @custom_text = "\n \n#{options[:text].join(' ')}"
+      end
     end
 
     def lastfm options
@@ -26,7 +36,7 @@ module Ayadn
             store = lastfm_istore_request(artist, track)
           end
         end
-        text_to_post = "#nowplaying\n \nTitle: ‘#{track}’\nArtist: #{artist}"
+        text_to_post = "#{@hashtag}\n \nTitle: ‘#{track}’\nArtist: #{artist}#{@custom_text}"
         post_nowplaying(text_to_post, store, options)
       rescue => e
         @status.wtf
@@ -57,7 +67,7 @@ module Ayadn
             store = itunes_istore_request(itunes)
           end
         end
-        text_to_post = "#nowplaying\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’"
+        text_to_post = "#{@hashtag}\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’#{@custom_text}"
         post_nowplaying(text_to_post, store, options)
       rescue => e
         @status.wtf
@@ -81,11 +91,19 @@ module Ayadn
 
     def post_nowplaying text_to_post, store, options
       begin
+        before = nil
+        unless options[:no_url] || store.nil?
+          before = text_to_post
+          text_to_post += "\n \n[iTunes Store](#{store['link']})"
+        end
+        poster = Post.new
+        poster.post_size_error(text_to_post) if poster.post_size_ok?(text_to_post) == false
         @view.clear_screen
         @status.writing
-        show_nowplaying("\n#{text_to_post}", options, store)
-        unless options[:no_url] || store.nil?
-          text_to_post += "\n \n[iTunes Store](#{store['link']})"
+        if before.nil?
+          show_nowplaying("\n#{text_to_post}", options, store)
+        else
+          show_nowplaying("\n#{before}", options, store)
         end
         unless STDIN.getch == ("y" || "Y")
           @status.canceled
@@ -99,8 +117,9 @@ module Ayadn
         else
           if store['link'].nil?
             visible, track, artwork, artwork_thumb, link, artist = false
+          else
+            visible, track, artwork, artwork_thumb, link, artist = true, store['track'], store['artwork'], store['artwork_thumb'], store['link'], store['artist']
           end
-          visible, track, artwork, artwork_thumb, link, artist = true, store['track'], store['artwork'], store['artwork_thumb'], store['link'], store['artist']
         end
         options = options.dup
         options[:nowplaying] = true
@@ -124,7 +143,7 @@ module Ayadn
           source: source,
           visible: visible
         }
-        resp = Post.new.post(dic)
+        resp = poster.post(dic)
         FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
         @view.show_posted(resp)
       rescue => e

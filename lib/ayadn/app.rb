@@ -505,6 +505,8 @@ module Ayadn
     long_desc Descriptions.nowplaying
     option :no_url, aliases: "-n", type: :boolean, desc: "Don't append preview or album art at the end of the post"
     option :lastfm, aliases: "-l", type: :boolean, desc: "Get current track from Last.fm instead of iTunes"
+    option :hashtag, aliases: "-h", type: :array, desc: "Specify a custom hashtag"
+    option :text, aliases: "-t", type: :array, desc: "Add custom text"
     def nowplaying
       Action.new.nowplaying(options)
     end

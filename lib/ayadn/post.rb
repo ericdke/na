@@ -20,7 +20,7 @@ module Ayadn
         next if m == Settings.config[:identity][:username]
         reply << " @#{m}"
       end
-      bad_post_size(reply) if post_size_ok?(reply) == false
+      post_size_error(reply) if post_size_ok?(reply) == false
       dic[:text] = reply
       dic[:reply_to] = dic[:id]
       send_content(Endpoints.new.posts_url, payload_reply(dic))
@@ -113,18 +113,18 @@ module Ayadn
     end
 
     def post_size_ok?(post) # works on a string, returns boolean
-      text = post.split(" ").map {|word| get_markdown_text(word)}.join(" ")
+      text = keep_text_from_markdown_links(post)
       size, max_size = text.length, Settings.config[:post_max_length]
       (size >= 1 && size <= max_size)
     end
 
     def message_size_ok?(message) # works on a string, returns boolean
-      text = message.split(" ").map {|word| get_markdown_text(word)}.join(" ")
+      text = keep_text_from_markdown_links(message)
       size, max_size = text.length, Settings.config[:message_max_length]
       (size >= 1 && size <= max_size)
     end
 
-    def bad_post_size(post)
+    def post_size_error(post)
       size, max_size = post.length, Settings.config[:post_max_length]
       bad_text_size(post, size, max_size)
     end
@@ -146,7 +146,7 @@ module Ayadn
       end
     end
 
-    def get_markdown_text(str)
+    def keep_text_from_markdown_links(str)
       str.gsub(/\[([^\]]+)\]\(([^)]+)\)/, '\1')
     end
 

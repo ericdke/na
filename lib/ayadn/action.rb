@@ -593,7 +593,7 @@ module Ayadn
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
         text = args.join(" ")
-        writer.bad_post_size(text) if writer.post_size_ok?(text) == false
+        writer.post_size_error(text) if writer.post_size_ok?(text) == false
         @view.clear_screen
         @status.posting
         resp = writer.post({options: options, text: text})
@@ -610,7 +610,7 @@ module Ayadn
         @status.post
         lines_array = writer.compose
         text = lines_array.join("\n")
-        writer.bad_post_size(text) if writer.post_size_ok?(text) == false
+        writer.post_size_error(text) if writer.post_size_ok?(text) == false
         @view.clear_screen
         @status.posting
         if options[:poster]
@@ -748,7 +748,7 @@ module Ayadn
     end
 
     def nowplaying(options = {})
-      np = NowPlaying.new(@api, @view, @workers)
+      np = NowPlaying.new(@api, @view, @workers, options)
       options[:lastfm] ? np.lastfm(options) : np.itunes(options)
     end
 

@@ -27,7 +27,7 @@ module Ayadn
         writer = Post.new
         input = writer.compose()
         @text = input.join("\n")
-        writer.bad_post_size(@text) if writer.post_size_ok?(@text) == false
+        writer.post_size_error(@text) if writer.post_size_ok?(@text) == false
       end
     end
 

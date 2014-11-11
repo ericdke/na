@@ -75,9 +75,9 @@ describe Ayadn::Post do
     end
   end
 
-  describe "#get_markdown_text" do
+  describe "#keep_text_from_markdown_links" do
     it "extracts markdown text" do
-      expect(post.get_markdown_text("[ayadn](http://ayadn-app.net)")).to eq "ayadn"
+      expect(post.keep_text_from_markdown_links("[ayadn](http://ayadn-app.net)")).to eq "ayadn"
     end
   end
 
