@@ -550,6 +550,7 @@ module Ayadn
     map "-unauth" => :unauthorize
     map "-UA" => :unauthorize
     option :delete, aliases: "-D", type: :boolean, desc: "Deletes user folders (default: false)"
+    long_desc Descriptions.unauthorize
     def unauthorize(*user)
       Authorize.new.unauthorize(user, options)
     end

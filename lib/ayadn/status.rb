@@ -487,20 +487,6 @@ module Ayadn
       puts "\n\n"
     end
 
-#     def ayadn
-#       <<-AYADN
-# \n
-# \t    :::   :::   :::   :::     :::::::::  ::::    :::
-# \t  :+: :+: :+:   :+: :+: :+:   :+:    :+: :+:+:   :+:
-# \t +:+   +:+ +:+ +:+ +:+   +:+  +:+    +:+ :+:+:+  +:+
-# \t+#++:++#++: +#++: +#++:++#++: +#+    +:+ +#+ +:+ +#+
-# \t+#+     +#+  +#+  +#+     +#+ +#+    +#+ +#+  +#+#+#
-# \t#+#     #+#  #+#  #+#     #+# #+#    #+# #+#   #+#+#
-# \t###     ###  ###  ###     ### #########  ###    ####
-# \n
-#       AYADN
-#     end
-
     def ayadn
       <<-AYADN
 
@@ -514,12 +500,9 @@ module Ayadn
     end
     def version
       puts ayadn()
-      # say do
-        # @thor.say_status :AYADN, "", :red
-        @thor.say_status :version, "#{VERSION}", :green
-        @thor.say_status :changelog, "https://github.com/ericdke/na/blob/master/CHANGELOG.md", :yellow
-        @thor.say_status :docs, "https://github.com/ericdke/na/tree/master/doc", :yellow
-      # end
+      @thor.say_status :version, "#{VERSION}", :green
+      @thor.say_status :changelog, "https://github.com/ericdke/na/blob/master/CHANGELOG.md", :yellow
+      @thor.say_status :docs, "https://github.com/ericdke/na/tree/master/doc", :yellow
       puts "\n\n"
     end
 
