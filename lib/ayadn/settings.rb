@@ -161,7 +161,7 @@ module Ayadn
     def self.defaults
       {
         timeline: {
-          directed: 1,
+          directed: true,
           source: true,
           symbols: true,
           name: true,

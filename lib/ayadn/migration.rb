@@ -307,10 +307,10 @@ module Ayadn
     end
 
     def config
-      @thor.say_status :loading, "config file", :blue
+      @thor.say_status :load, "config file", :blue
       old_conf = YAML.load(File.read(@config_path_old))
       conf = Settings.defaults
-      @thor.say_status :converting, "settings", :cyan
+      @thor.say_status :convert, "settings", :cyan
       conf[:timeline][:source] = old_conf[:timeline][:show_source] || true
       conf[:timeline][:symbols] = old_conf[:timeline][:show_symbols] || true
       conf[:timeline][:name] = old_conf[:timeline][:show_real_name] || true
@@ -364,7 +364,7 @@ module Ayadn
       conf[:counts][:whostarred] = old_conf[:counts][:whostarred] || 20
       conf[:counts][:whatstarred] = old_conf[:counts][:whatstarred] || 100
       conf[:counts][:files] = old_conf[:counts][:files] || 50
-      @thor.say_status :saving, "config file", :yellow
+      @thor.say_status :save, "config file", :green
       File.write(@config_path_old, conf.to_yaml)
     end
 

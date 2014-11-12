@@ -12,7 +12,7 @@
 - Setting: short date in timeline when scrolling (default: true)
 - Setting: blacklist active (default: true)
 - Spinner: better display when scrolling
-- Simplified, shorter settings options names
+- Simplified, shorter settings names
 - NiceRank filter for Global is cached in-memory
 - Inline help and online docs have been updated
 - Code has been optimized. Bugs have been squashed.
