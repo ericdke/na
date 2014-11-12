@@ -1,10 +1,10 @@
 # BLACKLIST
 
-The blacklist is a list of users, clients and hashtags that you don't want to ever be displayed.
+The blacklist is a list of users, clients and hashtags that you don't want to be displayed anywhere in Ayadn.
 
 Available subcommands: add, remove, list.
 
-This is different from the 'mute a user' feature of the App.net API: blacklist works locally and is specific to each account.
+This is different from the 'mute a user' feature of the App.net API: blacklist works locally and is specific to each Ayadn account.
 
 Blacklist a client (example: IFTTT) and posts that are posted with this client won't appear in the streams.
 
@@ -12,9 +12,11 @@ This is a way of creating "bot-free" streams: the more bots you add to this list
 
 Blacklist a hashtag and you will free yourself from this annoying trend you can't stand.
 
-Blacklist a user and you won't even see posts by other users mentioning the user you blacklisted!
+Blacklist a user and, well, never see this user again.
 
-*Since Ayadn 2.0, adding and removing to/from the blacklist takes immediately effect and is shared with other Ayadn instances.*
+Blacklist a mention and you won't even see posts by other users mentioning the user you blacklisted!
+
+*Since Ayadn 2.0, adding and removing to/from the blacklist takes immediately effect and is shared with other Ayadn instances launched by the same user.*
 
 ## ADD
 

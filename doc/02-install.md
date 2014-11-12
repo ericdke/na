@@ -20,4 +20,10 @@ You can of course use the Ruby shipped with your system but it will require root
 
 ## WINDOWS
 
-Ayadn 1.x isn't compatible with Windows: there's too many issues due to external Gems and POSIX-dependant tools.  
+Ayadn 1.x isn't compatible with Windows: there's too many issues due to POSIX-dependent tools.  
+
+## MIGRATE
+
+The database format has changed between 1.x and 2.x: if you already have one or several accounts, Ayadn will ask you to run the `migrate` command *once* per account.
+
+You can also, if you wish, start anew and delete your `~/ayadn` folder before authorizing a new user with Ayadn 2.x.

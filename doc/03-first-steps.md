@@ -6,11 +6,11 @@ You have to give Ayadn the authorization to use your App.net account.
 
 Just run 
 
-`ayadn authorize` 
+`ayadn -auth` 
 
 or 
 
-`ayadn -auth` 
+`ayadn -AU` 
 
 to register a new user.  
 
@@ -20,7 +20,7 @@ Ayadn supports multiple accounts.
 
 Register a new user with 
 
-`ayadn -auth` 
+`ayadn -AU` 
 
 at any moment.
 
@@ -32,6 +32,12 @@ or
 
 `ayadn -@ ericd`  
 
+You can also unauthorize a user with or without deleting its folders:
+
+`ayadn unauthorize @ericd`
+
+`ayadn -UA -D @ericd`
+
 ## DATA
 
 All Ayadn files and folders are created in your 'home' folder. 
@@ -39,9 +45,9 @@ All Ayadn files and folders are created in your 'home' folder.
 On Mac OS X, it looks like this:
 
 ```
-  /Users/ericdke/ayadn/
+  /Users/user/ayadn/
   ├── accounts.sqlite
-  /Users/ericdke/ayadn/ericd
+  /Users/user/ayadn/ericd
   ├── auth
   │   └── token
   ├── backup
@@ -56,19 +62,10 @@ On Mac OS X, it looks like this:
   ├── log
   │   └── ayadn.log
   ├── messages
-  ├── pagination
-  │   ├── index.db
-  │   └── pagination.db
   └── posts
 ```
 
 Each authorized account has its set of folders and databases.
-
-This is also the repository of the configuration file: 
-
-`config.yml`
-
-Although there's the `set` command in Ayadn to configure most parameters, you can of course edit the file manually.
 
 If you're not sure if your config file is up to date or properly filled and you want to benefit from the new options in Ayadn, run 
 
@@ -96,9 +93,19 @@ Examples:
 
 And for the subcommands:
 
-`ayadn blacklist help import`
+`ayadn blacklist help delete`
 
 `ayadn alias help create`  
+
+It also works with the shortcuts:
+
+`ayadn help -tl`  
+
+`ayadn help -K` 
+
+`ayadn -K help delete`
+
+`ayadn -A help create`  
 
 
 ## SHORTCUTS

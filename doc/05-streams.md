@@ -8,7 +8,6 @@ This is also called the 'Unified stream': it regroups the posts of people you fo
 
 `ayadn -tl`
 
-
 ## AVAILABLE OPTIONS
 
 ### SCROLL
@@ -17,11 +16,11 @@ Scroll your timeline with:
 
 `ayadn timeline --scroll`
 
-`ayadn -tl -s`
+`ayadn -tl -s`  
 
 #### SCROLL REFRESH
 
-*Read this if you want to launch several scroll streams at once*
+*Read this only if you want to launch several scroll streams at once*
 
 Ayadn pulls the stream every 3 seconds by default. It means you can launch up to 3 scroll streams at a time _per account_ if you want. 
 
@@ -128,6 +127,8 @@ You may want to change colors to create visual marks between posts if you choose
 You can activate or deactivate the blacklist filter in the stream view with:
 
 `ayadn set blacklist active false`
+
+(default: true)  
 
 
 # GLOBAL

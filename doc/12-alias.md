@@ -1,6 +1,6 @@
 # ALIAS
 
-Aliases are names you give to channels for an easier access.
+Aliases are names you give to channels to access them more easily in Ayadn.
 
 Available subcommands: create, delete, list, import.
 
@@ -13,10 +13,6 @@ Instead of getting this channel's messages with
 you can create an alias:
 
 `ayadn alias create 46216 pasteapp`
-
-or
-
-`ayadn -A create 46216 pasteapp`
 
 Then you can access this channel with 
 

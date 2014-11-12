@@ -10,6 +10,28 @@ You can see your own list by using *me* instead of *@username*:
 
 `ayadn -fwr me`
 
+Sort the list by username:
+
+`ayadn -fwr -u me`
+
+Sort the list by name:
+
+`ayadn -fwr -n me`
+
+Sort the list by posts/day:
+
+`ayadn -fwr -d me`
+
+Sort the list by total posts:
+
+`ayadn -fwr -p me`
+
+Reverse the list order:
+
+`ayadn -fwr -r me`
+
+`ayadn -fwr -u -r me`
+
 # FOLLOWINGS
 
 List the users a user is following.
@@ -21,6 +43,28 @@ List the users a user is following.
 You can see your own list by using *me* instead of *@username*:
 
 `ayadn -fwg me`
+
+Sort the list by username:
+
+`ayadn -fwg -u me`
+
+Sort the list by name:
+
+`ayadn -fwg -n me`
+
+Sort the list by posts/day:
+
+`ayadn -fwg -d me`
+
+Sort the list by total posts:
+
+`ayadn -fwg -p me`
+
+Reverse the list order:
+
+`ayadn -fwg -r me`
+
+`ayadn -fwg -u -r me`
 
 # CHANNELS
 
@@ -36,11 +80,21 @@ Retrieve a unique channel, or specific channel(s), with option `--id`:
 
 `ayadn -ch --id 55123 34678 988776`
 
-Display raw response with option `-x`:
+Retrieve only your broadcast channel(s):
 
-`ayadn -ch -x`
+`ayadn -ch --broadcasts`
 
-`ayadn -ch -x --id 55123`  
+Retrieve only your private messages channel(s):
+
+`ayadn -ch --messages`
+
+Retrieve only your patter room channel(s):
+
+`ayadn -ch --patter`
+
+Retrieve all channel(s) except broadcasts, messages or patter:
+
+`ayadn -ch --other`  
 
 # INTERACTIONS
 
@@ -66,6 +120,28 @@ List the users you muted.
 
 `ayadn -mtd`
 
+Sort the list by username:
+
+`ayadn -mtd -u`
+
+Sort the list by name:
+
+`ayadn -mtd -n`
+
+Sort the list by posts/day:
+
+`ayadn -mtd -d`
+
+Sort the list by total posts:
+
+`ayadn -mtd -p`
+
+Reverse the list order:
+
+`ayadn -mtd -r`
+
+`ayadn -mtd -u -r`
+
 # BLOCKED
 
 List the users you blocked.
@@ -73,6 +149,28 @@ List the users you blocked.
 `ayadn blocked`
 
 `ayadn -bkd`
+
+Sort the list by username:
+
+`ayadn -bkd -u`
+
+Sort the list by name:
+
+`ayadn -bkd -n`
+
+Sort the list by posts/day:
+
+`ayadn -bkd -d`
+
+Sort the list by total posts:
+
+`ayadn -bkd -p`
+
+Reverse the list order:
+
+`ayadn -bkd -r`
+
+`ayadn -bkd -u -r`
 
 # SETTINGS
 
@@ -100,7 +198,7 @@ List them all:
 
 ### LIST
 
-You can reverse the default lists order with a `set` command:
+You can permanently reverse the ADN default list order with a `set` command:
 
 `ayadn set formats list reverse false`
 
@@ -113,3 +211,9 @@ You can change the width of the lists table if the default size doesn't fit well
 `ayadn set formats table width 80`
 
 (min: 60, max: 90, default: 75)
+
+And also enable/disable the tables borders:
+
+`ayadn set formats table borders false`
+
+(default: true)

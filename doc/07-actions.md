@@ -6,6 +6,10 @@ Delete a post.
 
 `ayadn -D 23365251`
 
+Accepts several post ids:
+
+`ayadn -D 23365251 23365252 23365253`  
+
 # DELETE_M
 
 Delete a private message. 
@@ -18,6 +22,10 @@ You have to specify channel id (or alias) then message number.
 
 `ayadn -DM my_alias 3365251`
 
+Accepts several message ids:
+
+`ayadn -DM my_alias 23365251 23365252 23365253`  
+
 # REPOST
 
 Repost a post.
@@ -25,6 +33,10 @@ Repost a post.
 `ayadn repost 23365251`
 
 `ayadn -O 23365251`
+
+Accepts several post ids:
+
+`ayadn -O 23365251 23365252 23365253`
 
 # UNREPOST
 
@@ -34,6 +46,10 @@ Unrepost a post.
 
 `ayadn -UR 23365251`
 
+Accepts several post ids:
+
+`ayadn -UR 23365251 23365252 23365253`
+
 # STAR
 
 Star a post.
@@ -41,6 +57,10 @@ Star a post.
 `ayadn star 23365251`
 
 `ayadn -ST 23365251`
+
+Accepts several post ids:
+
+`ayadn -ST 23365251 23365252 23365253`
 
 # UNSTAR
 
@@ -50,6 +70,10 @@ Unstar a post.
 
 `ayadn -US 23365251`
 
+Accepts several post ids:
+
+`ayadn -US 23365251 23365252 23365253`
+
 # FOLLOW
 
 Follow a user.
@@ -57,6 +81,10 @@ Follow a user.
 `ayadn follow @ericd`
 
 `ayadn -FO @ericd`
+
+Accepts several users:
+
+`ayadn -FO @ericd @ayadn @adnapi`
 
 # UNFOLLOW
 
@@ -66,6 +94,10 @@ Unfollow a user.
 
 `ayadn -UF @ericd`
 
+Accepts several users:
+
+`ayadn -UF @ericd @ayadn @adnapi`
+
 # MUTE
 
 Mute a user.
@@ -73,6 +105,10 @@ Mute a user.
 `ayadn mute @spammer`
 
 `ayadn -MU @spammer`
+
+Accepts several users:
+
+`ayadn -MU @spammer @thickhead`
 
 # UNMUTE
 
@@ -82,6 +118,10 @@ Unmute a user.
 
 `ayadn -UM @spammer`
 
+Accepts several users:
+
+`ayadn -UM @spammer @thickhead`
+
 # BLOCK
 
 Block a user (same as mute but also prevents the blocked user to follow you).
@@ -89,6 +129,10 @@ Block a user (same as mute but also prevents the blocked user to follow you).
 `ayadn block @spammer`
 
 `ayadn -BL @spammer`
+
+Accepts several users:
+
+`ayadn -BL @spammer @thickhead`
 
 # UNBLOCK
 
@@ -98,9 +142,13 @@ Unblock a user.
 
 `ayadn -UB @spammer`
 
+Accepts several users:
+
+`ayadn -UB @spammer @thickhead`
+
 # DOWNLOAD
 
-Download a file from your App.net storage (any file posted with other ADN clients).
+Download a file from your App.net storage (any file posted with any ADN client).
 
 `ayadn download 23344556`
 

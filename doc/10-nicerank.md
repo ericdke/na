@@ -30,7 +30,7 @@ An idea of the scale:
 
 *Again, this is not a popularity ratio: far from it. It only serves as a filter for bots and spam.*
 
-In addition to this manual rank filter, NiceRank and Ayadn have other automatic filtering based upon the information available about the user.
+In addition to this manual rank filter, NiceRank and Ayadn have other automatic filtering based upon the information publicly available about the users.
 
 ## Threshold
 

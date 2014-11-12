@@ -14,7 +14,7 @@ You have to put your text between single quotes if you're using punctuation:
 
 *But remember you can't use any quote character inside the quotes...*
 
-**So you should rather use either the _write_ or the _auto_ method for posting.**
+**So you should rather use the _write_ method for posting.**
 
 # WRITE
 
