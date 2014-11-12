@@ -102,7 +102,7 @@ module Ayadn
           @check.has_been_deleted(post_id, resp)
         end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id]})
+        Errors.global_error({error: e, caller: caller, data: [post_ids]})
       end
     end
 
@@ -127,7 +127,7 @@ module Ayadn
           @check.message_has_been_deleted(message_id, resp)
         end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [message_id]})
+        Errors.global_error({error: e, caller: caller, data: [args]})
       end
     end
 
@@ -233,7 +233,7 @@ module Ayadn
           @check.has_been_reposted(id, @api.repost(id))
         end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id, id]})
+        Errors.global_error({error: e, caller: caller, data: [post_ids, id]})
       end
     end
 
@@ -244,13 +244,13 @@ module Ayadn
         post_ids.each do |post_id|
           @status.unreposting(post_id)
           if @api.get_details(post_id)['data']['you_reposted']
-            @check.has_been_unreposted(post_id, @api.unrepost(post_id))
+            @check.has_been_unreposted(post_id, @api.unrepost(post_ids))
           else
             @status.not_your_repost
           end
         end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id]})
+        Errors.global_error({error: e, caller: caller, data: [post_ids]})
       end
     end
 
@@ -270,7 +270,7 @@ module Ayadn
           end
         end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id]})
+        Errors.global_error({error: e, caller: caller, data: [post_ids]})
       end
     end
 
@@ -286,7 +286,7 @@ module Ayadn
           @check.has_been_starred(id, @api.star(id))
         end
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id]})
+        Errors.global_error({error: e, caller: caller, data: [post_ids]})
       end
     end
 
@@ -365,7 +365,7 @@ module Ayadn
         @status.updating_profile
         profile.update
         @status.done
-        userinfo('me')
+        userinfo(['me'])
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end

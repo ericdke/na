@@ -161,7 +161,7 @@ module Ayadn
     end
 
     def nowplaying(dic)
-      return nowplaying_silent(dic) if dic[:options][:no_url]
+      return nowplaying_silent(dic) if dic[:options][:no_url] == true || dic[:visible] == false
       [{
         "type" => "com.ayadn.nowplaying",
           "value" => {

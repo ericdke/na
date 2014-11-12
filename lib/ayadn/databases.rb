@@ -528,7 +528,7 @@ module Ayadn
         else
           bm = JSON.parse(req[0][0])
           bm['title'] = new_title
-          @sql.execute("UPDATE Bookmarks SET bookmark=\"#{bm.to_json}\" WHERE post_id=#{post_id.to_i}")
+          @sql.execute("UPDATE Bookmarks SET bookmark=(?) WHERE post_id=#{post_id.to_i}", bm.to_json)
         end
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2

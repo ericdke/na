@@ -108,9 +108,11 @@ module Ayadn
         @status.yourpost
         puts "\n\n"
         if store.nil? || options[:no_url]
+          text_to_post = before
           visible, track, artwork, artwork_thumb, link, artist = false
         else
-          if store['link'].nil?
+          if store['link'].nil? || store['code'] == 404
+            text_to_post = before
             visible, track, artwork, artwork_thumb, link, artist = false
           else
             visible, track, artwork, artwork_thumb, link, artist = true, store['track'], store['artwork'], store['artwork_thumb'], store['link'], store['artist']
