@@ -91,7 +91,7 @@ module Ayadn
     def self.is_in_blacklist?(type, target)
       crashes = 0
       begin
-        res = @sql.execute("SELECT * FROM Blacklist WHERE type=\"#{type}\" AND content=\"#{target.downcase}\"").flatten
+        res = @sql.execute("SELECT * FROM Blacklist WHERE type=(?) AND content=(?)", [type, target.downcase]).flatten
         if res.empty?
           return false
         else
@@ -113,7 +113,7 @@ module Ayadn
       crashes = 0
       begin
         target.each do |el|
-          @sql.execute("DELETE FROM Blacklist WHERE content=\"#{el.downcase}\"")
+          @sql.execute("DELETE FROM Blacklist WHERE content=(?)", [el.downcase])
         end
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
@@ -146,7 +146,7 @@ module Ayadn
     def self.remove_from_accounts(db, username)
       crashes = 0
       begin
-        db.execute("DELETE FROM Accounts WHERE username=\"#{username.downcase}\"")
+        db.execute("DELETE FROM Accounts WHERE username=(?)", [username.downcase])
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
@@ -209,7 +209,7 @@ module Ayadn
       crashes = 0
       begin
         acc_db.execute("UPDATE Accounts SET active=0")
-        acc_db.execute("UPDATE Accounts SET active=1 WHERE username=\"#{new_user}\"")
+        acc_db.execute("UPDATE Accounts SET active=1 WHERE username=(?)", [new_user])
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
@@ -243,7 +243,7 @@ module Ayadn
     def self.create_account(acc_db, user)
       crashes = 0
       begin
-        acc_db.execute("DELETE FROM Accounts WHERE username=\"#{user.username}\"")
+        acc_db.execute("DELETE FROM Accounts WHERE username=(?)", [user.username])
         acc_db.transaction do |db|
           insert_data = {}
             insert_data[":username"] = user.username
@@ -296,7 +296,7 @@ module Ayadn
     def self.delete_alias(channel_alias)
       crashes = 0
       begin
-        @sql.execute("DELETE FROM Aliases WHERE alias=\"#{channel_alias}\"")
+        @sql.execute("DELETE FROM Aliases WHERE alias=(?)", [channel_alias])
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
@@ -349,7 +349,7 @@ module Ayadn
     def self.get_channel_id(channel_alias)
       crashes = 0
       begin
-        res = @sql.execute("SELECT channel_id FROM Aliases WHERE alias=\"#{channel_alias}\"")
+        res = @sql.execute("SELECT channel_id FROM Aliases WHERE alias=(?)", [channel_alias])
         if res.empty?
           return nil
         else
@@ -655,7 +655,7 @@ module Ayadn
       crashes = 0
       begin
         @sql.execute("DELETE FROM Users WHERE user_id=#{id.to_i}")
-        @sql.execute("INSERT INTO Users VALUES(#{id.to_i}, \"#{username}\", \"#{name}\")")
+        @sql.execute("INSERT INTO Users VALUES(?, ?, ?)", [id.to_i, username, name])
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
@@ -756,7 +756,7 @@ module Ayadn
     def self.has_new?(stream, title)
       crashes = 0
       begin
-        res = @sql.execute("SELECT post_id FROM Pagination WHERE name=\"#{title}\"").flatten[0]
+        res = @sql.execute("SELECT post_id FROM Pagination WHERE name=(?)", [title]).flatten[0]
         stream['meta']['max_id'].to_i > res.to_i
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
@@ -778,8 +778,8 @@ module Ayadn
         else
           key = stream['meta']['marker']['name']
         end
-        @sql.execute("DELETE FROM Pagination WHERE name=\"#{key}\"")
-        @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(\"#{key}\", #{stream['meta']['max_id'].to_i});")
+        @sql.execute("DELETE FROM Pagination WHERE name=(?)", [key])
+        @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(?, ?);", [key, stream['meta']['max_id'].to_i])
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
@@ -795,7 +795,7 @@ module Ayadn
     def self.find_last_id_from(name)
       crashes = 0
       begin
-        @sql.execute("SELECT post_id FROM Pagination WHERE name=\"#{name}\"").flatten[0]
+        @sql.execute("SELECT post_id FROM Pagination WHERE name=(?)", [name]).flatten[0]
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
@@ -811,7 +811,7 @@ module Ayadn
     def self.pagination_delete(name)
       crashes = 0
       begin
-        @sql.execute("DELETE FROM Pagination WHERE name=\"#{name}\"")
+        @sql.execute("DELETE FROM Pagination WHERE name=(?)", [name])
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
@@ -827,8 +827,8 @@ module Ayadn
     def self.pagination_insert(name, val)
       crashes = 0
       begin
-        @sql.execute("DELETE FROM Pagination WHERE name=\"#{name}\"")
-        @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(\"#{name}\", #{val.to_i});")
+        @sql.execute("DELETE FROM Pagination WHERE name=(?)", [name])
+        @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(?, ?);", [name, val.to_i])
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
