@@ -128,8 +128,7 @@ module Ayadn
             conf[:timeline][:date] = v
           end
           unless conf[:timeline][:show_spinner].nil?
-            v = conf[:timeline][:show_spinner]
-            conf[:timeline][:spinner] = v
+            new_spinner = conf[:timeline][:show_spinner]
           end
           unless conf[:timeline][:show_debug].nil?
             v = conf[:timeline][:show_debug]
@@ -154,7 +153,9 @@ module Ayadn
           [:show_source, :show_symbols, :show_real_name, :show_date, :show_spinner, :show_debug, :show_channel_oembed].each { |k| conf[:timeline].delete(k) }
           [:auto_save_sent_posts, :auto_save_sent_messages, :auto_save_lists].each { |k| conf[:backup].delete(k) }
           conf[:timeline][:debug] = false if conf[:timeline][:debug].nil?
-          conf[:timeline][:spinner] = true if conf[:timeline][:spinner].nil?
+          if conf[:scroll][:spinner].nil?
+            conf[:scroll][:spinner] = new_spinner || true
+          end
           conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
           conf[:colors][:unread] = :cyan if conf[:colors][:unread].nil?
           conf[:colors][:excerpt] = :green if conf[:colors][:excerpt].nil?
@@ -239,7 +240,6 @@ module Ayadn
           symbols: true,
           real_name: true,
           date: true,
-          spinner: true,
           debug: false,
           channel_oembed: true,
           compact: false
@@ -296,6 +296,7 @@ module Ayadn
           lists: false
         },
         scroll: {
+          spinner: true,
           timer: 3,
           short_date: true
         },

@@ -30,12 +30,12 @@ module Ayadn
           stream['data'].empty? ? niceranks = {} : niceranks = @nr.get_ranks(stream)
           Debug.stream stream, options, target
           target = "explore:#{target}" if explore?(target) # explore but not global
-          clear() if Settings.options[:timeline][:spinner] == true
+          clear() if Settings.options[:scroll][:spinner] == true
           show_if_new(stream, options, target, niceranks)
           target = orig_target if target =~ /explore/
           options = save_then_return(stream, options, target)
           countdown
-          print "..." if Settings.options[:timeline][:spinner] == true
+          print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
           canceled
         end
@@ -50,11 +50,11 @@ module Ayadn
         begin
           stream = @api.get_mentions(username, options)
           Debug.stream stream, options, username
-          clear() if Settings.options[:timeline][:spinner] == true
+          clear() if Settings.options[:scroll][:spinner] == true
           show_if_new(stream, options, "mentions:#{id}")
           options = save_then_return(stream, options, "mentions:#{id}")
           countdown
-          print "..." if Settings.options[:timeline][:spinner] == true
+          print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
           canceled
         end
@@ -69,11 +69,11 @@ module Ayadn
         begin
           stream = @api.get_posts(username, options)
           Debug.stream stream, options, username
-          clear() if Settings.options[:timeline][:spinner] == true
+          clear() if Settings.options[:scroll][:spinner] == true
           show_if_new(stream, options, "posts:#{id}")
           options = save_then_return(stream, options, "posts:#{id}")
           countdown
-          print "..." if Settings.options[:timeline][:spinner] == true
+          print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
           canceled
         end
@@ -87,11 +87,11 @@ module Ayadn
         begin
           stream = @api.get_convo(post_id, options)
           Debug.stream stream, options, post_id
-          clear() if Settings.options[:timeline][:spinner] == true
+          clear() if Settings.options[:scroll][:spinner] == true
           show_if_new(stream, options, "replies:#{post_id}")
           options = save_then_return(stream, options, "replies:#{post_id}")
           countdown
-          print "..." if Settings.options[:timeline][:spinner] == true
+          print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
           canceled
         end
@@ -105,7 +105,7 @@ module Ayadn
         begin
           stream = @api.get_messages(channel_id, options)
           Debug.stream stream, options, channel_id
-          clear() if Settings.options[:timeline][:spinner] == true
+          clear() if Settings.options[:scroll][:spinner] == true
           show_if_new(stream, options, "channel:#{channel_id}")
           if Settings.options[:marker][:messages] == true
             unless resp['meta']['max_id'].nil?
@@ -118,7 +118,7 @@ module Ayadn
           end
           options = save_then_return(stream, options, "channel:#{channel_id}")
           countdown
-          print "..." if Settings.options[:timeline][:spinner] == true
+          print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
           canceled
         end
@@ -128,7 +128,7 @@ module Ayadn
     private
 
     def countdown
-      Settings.options[:timeline][:spinner] == true ? waiting : pause
+      Settings.options[:scroll][:spinner] == true ? waiting : pause
     end
 
     def clear
