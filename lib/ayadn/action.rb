@@ -244,7 +244,7 @@ module Ayadn
         post_ids.each do |post_id|
           @status.unreposting(post_id)
           if @api.get_details(post_id)['data']['you_reposted']
-            @check.has_been_unreposted(post_id, @api.unrepost(post_ids))
+            @check.has_been_unreposted(post_id, @api.unrepost(post_id))
           else
             @status.not_your_repost
           end
@@ -256,7 +256,7 @@ module Ayadn
 
     def unstar(post_ids)
       begin
-        @check.bad_post_ids(post_id)
+        @check.bad_post_ids(post_ids)
         puts "\n"
         post_ids.each do |post_id|
           @status.unstarring(post_id)
@@ -276,7 +276,7 @@ module Ayadn
 
     def star(post_ids)
       begin
-        @check.bad_post_id(post_ids)
+        @check.bad_post_ids(post_ids)
         puts "\n"
         post_ids.each do |post_id|
           @status.starring(post_id)
