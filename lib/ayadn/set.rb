@@ -348,6 +348,12 @@ module Ayadn
       Settings.options[:scroll][:short_date] = @output
     end
 
+    def spinner(value)
+      @input = 'spinner'
+      @output = Validators.boolean(value)
+      Settings.options[:scroll][:spinner] = @output
+    end
+
   end
 
   class SetMovie < SetBase
@@ -522,7 +528,7 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'directed', 'source', 'symbols', 'real_name', 'date', 'spinner', 'debug', 'compact', 'channel_oembed'
+      when 'directed', 'source', 'symbols', 'real_name', 'date', 'debug', 'compact', 'channel_oembed'
         Settings.options[:timeline][meth.to_sym] = @output
       else
         super
@@ -546,7 +552,7 @@ module Ayadn
       @input = meth.to_s.capitalize
       @output = validate(options)
       case meth.to_s
-      when 'id', 'index', 'username', 'name', 'date', 'link', 'dots', 'hashtags', 'mentions', 'source', 'symbols', 'unread', 'debug'
+      when 'id', 'index', 'username', 'name', 'date', 'link', 'dots', 'hashtags', 'mentions', 'source', 'symbols', 'unread', 'debug', 'excerpt'
         Settings.options[:colors][meth.to_sym] = @output
       when 'hashtag', 'mention', 'symbol'
         Settings.options[:colors]["#{meth}s".to_sym] = @output
