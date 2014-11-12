@@ -54,6 +54,7 @@ module Ayadn
 
     def all
       # DON'T MODIFY THE ORDER!
+      puts "\n"
       @thor.say_status :start, "migration", :yellow
       old_backup = "#{@home}/backup"
       if Dir.exist?(old_backup)
@@ -84,6 +85,7 @@ module Ayadn
       config
       @thor.say_status :done, "Ready to go!", :green
       @thor.say_status :thanks, "Please launch Ayadn again.", :cyan
+      puts "\n"
     end
 
     def bookmarks
