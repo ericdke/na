@@ -487,13 +487,40 @@ module Ayadn
       puts "\n\n"
     end
 
+#     def ayadn
+#       <<-AYADN
+# \n
+# \t    :::   :::   :::   :::     :::::::::  ::::    :::
+# \t  :+: :+: :+:   :+: :+: :+:   :+:    :+: :+:+:   :+:
+# \t +:+   +:+ +:+ +:+ +:+   +:+  +:+    +:+ :+:+:+  +:+
+# \t+#++:++#++: +#++: +#++:++#++: +#+    +:+ +#+ +:+ +#+
+# \t+#+     +#+  +#+  +#+     +#+ +#+    +#+ +#+  +#+#+#
+# \t#+#     #+#  #+#  #+#     #+# #+#    #+# #+#   #+#+#
+# \t###     ###  ###  ###     ### #########  ###    ####
+# \n
+#       AYADN
+#     end
+
+    def ayadn
+      <<-AYADN
+
+\t\t     _____ __ __ _____ ____  _____
+\t\t    |  _  |  |  |  _  |    \\|   | |
+\t\t    |     |_   _|     |  |  | | | |
+\t\t    |__|__| |_| |__|__|____/|_|___|
+
+
+      AYADN
+    end
     def version
-      say do
-        @thor.say_status :AYADN, "", :red
+      puts ayadn()
+      # say do
+        # @thor.say_status :AYADN, "", :red
         @thor.say_status :version, "#{VERSION}", :green
         @thor.say_status :changelog, "https://github.com/ericdke/na/blob/master/CHANGELOG.md", :yellow
         @thor.say_status :docs, "https://github.com/ericdke/na/tree/master/doc", :yellow
-      end
+      # end
+      puts "\n\n"
     end
 
     def ask_clear_databases
