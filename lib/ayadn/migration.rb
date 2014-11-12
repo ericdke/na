@@ -20,7 +20,6 @@ module Ayadn
         puts "\n"
         exit
       end
-      @thor.say_status :initialize, "migration", :yellow
       begin
         @accounts = Daybreak::DB.new(accounts_old)
         @active_old = @accounts['ACTIVE']
@@ -54,6 +53,7 @@ module Ayadn
 
     def all
       # DON'T MODIFY THE ORDER!
+      puts banner()
       puts "\n"
       @thor.say_status :start, "migration", :yellow
       old_backup = "#{@home}/backup"
@@ -74,15 +74,15 @@ module Ayadn
         @thor.say_status :move, "pinboard credentials", :green
         FileUtils.mv("#{@home}/db/ayadn_pinboard.db", "#{@home}/auth/pinboard.data")
       end
-      bookmarks
-      aliases
-      blacklist
-      niceranks
-      users
-      pagination
-      index
-      accounts
-      config
+      bookmarks()
+      aliases()
+      blacklist()
+      niceranks()
+      users()
+      pagination()
+      index()
+      accounts()
+      config()
       @thor.say_status :done, "Ready to go!", :green
       @thor.say_status :thanks, "Please launch Ayadn again.", :cyan
       puts "\n"
@@ -368,6 +368,19 @@ module Ayadn
       conf[:counts][:files] = old_conf[:counts][:files] || 50
       @thor.say_status :save, "config file", :green
       File.write(@config_path_old, conf.to_yaml)
+    end
+
+    def banner
+      <<-BANNER
+
+\t\t
+\t\t     _____ __ __ _____ ____  _____    ___   ___
+\t\t    |  _  |  |  |  _  |    \\|   | |  |_  | |   |
+\t\t    |     |_   _|     |  |  | | | |  |  _|_| | |
+\t\t    |__|__| |_| |__|__|____/|_|___|  |___|_|___|
+\t\t
+
+      BANNER
     end
 
   end

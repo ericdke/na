@@ -61,7 +61,8 @@ module Ayadn
         puts "ERROR in Databases"
         puts caller
         puts e
-        puts ['create_tables', user]
+        puts ['create_tables', user].inspect
+        exit
       end
     end
 
@@ -88,7 +89,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['add_to_blacklist', type, target]
+          puts ['add_to_blacklist', type, target].inspect
+          exit
         end
       end
     end
@@ -111,7 +113,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['is_in_blacklist?', type, target]
+          puts ['is_in_blacklist?', type, target].inspect
+          exit
         end
       end
     end
@@ -131,7 +134,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['remove_from_blacklist', target]
+          puts ['remove_from_blacklist', target].inspect
+          exit
         end
       end
     end
@@ -149,7 +153,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['all_blacklist']
+          puts ['all_blacklist'].inspect
+          exit
         end
       end
     end
@@ -167,7 +172,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['remove_from_accounts', db, username]
+          puts ['remove_from_accounts', db, username].inspect
+          exit
         end
       end
     end
@@ -199,7 +205,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['active_account', acc]
+          puts ['active_account', acc].inspect
+          exit
         end
       end
     end
@@ -217,7 +224,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['all_accounts', acc]
+          puts ['all_accounts', acc].inspect
+          exit
         end
       end
     end
@@ -236,7 +244,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['set_active_account', acc_db, new_user]
+          puts ['set_active_account', acc_db, new_user].inspect
+          exit
         end
       end
     end
@@ -258,7 +267,8 @@ module Ayadn
         puts "ERROR in Databases"
         puts caller
         puts e
-        puts ['create_account_table', acc_db]
+        puts ['create_account_table', acc_db].inspect
+        exit
       end
     end
 
@@ -288,7 +298,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['create_account', acc_db, user]
+          puts ['create_account', acc_db, user].inspect
+          exit
         end
       end
     end
@@ -314,7 +325,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['create_alias', channel_id, channel_alias]
+          puts ['create_alias', channel_id, channel_alias].inspect
+          exit
         end
       end
     end
@@ -332,7 +344,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['delete_alias', channel_alias]
+          puts ['delete_alias', channel_alias].inspect
+          exit
         end
       end
     end
@@ -350,7 +363,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['clear_aliases']
+          puts ['clear_aliases'].inspect
+          exit
         end
       end
     end
@@ -373,7 +387,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['get_alias_from_id', channel_id]
+          puts ['get_alias_from_id', channel_id].inspect
+          exit
         end
       end
     end
@@ -396,7 +411,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['get_channel_id', channel_alias]
+          puts ['get_channel_id', channel_alias].inspect
+          exit
         end
       end
     end
@@ -414,7 +430,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['all_aliases']
+          puts ['all_aliases'].inspect
+          exit
         end
       end
     end
@@ -432,7 +449,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['clear_bookmarks']
+          puts ['clear_bookmarks'].inspect
+          exit
         end
       end
     end
@@ -450,7 +468,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['clear_pagination']
+          puts ['clear_pagination'].inspect
+          exit
         end
       end
     end
@@ -468,7 +487,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['clear_index']
+          puts ['clear_index'].inspect
+          exit
         end
       end
     end
@@ -486,7 +506,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['clear_users']
+          puts ['clear_users'].inspect
+          exit
         end
       end
     end
@@ -504,7 +525,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['clear_blacklist']
+          puts ['clear_blacklist'].inspect
+          exit
         end
       end
     end
@@ -530,7 +552,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['add_bookmark', bookmark]
+          puts ['add_bookmark', bookmark].inspect
+          exit
         end
       end
     end
@@ -548,7 +571,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['delete_bookmark', post_id]
+          puts ['delete_bookmark', post_id].inspect
+          exit
         end
       end
     end
@@ -566,7 +590,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['all_bookmarks']
+          puts ['all_bookmarks'].inspect
+          exit
         end
       end
     end
@@ -591,7 +616,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['rename_bookmark', post_id, new_title]
+          puts ['rename_bookmark', post_id, new_title].inspect
+          exit
         end
       end
     end
@@ -620,7 +646,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['save_indexed_posts', posts]
+          puts ['save_indexed_posts', posts].inspect
+          exit
         end
       end
     end
@@ -638,7 +665,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['get_index_length']
+          puts ['get_index_length'].inspect
+          exit
         end
       end
     end
@@ -663,7 +691,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['get_post_from_index', arg]
+          puts ['get_post_from_index', arg].inspect
+          exit
         end
       end
     end
@@ -692,7 +721,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['add_to_users_db_from_list', list]
+          puts ['add_to_users_db_from_list', list].inspect
+          exit
         end
       end
     end
@@ -710,7 +740,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['delete_users_from_list', list]
+          puts ['delete_users_from_list', list].inspect
+          exit
         end
       end
     end
@@ -729,7 +760,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['add_to_users_db', id, username, name]
+          puts ['add_to_users_db', id, username, name].inspect
+          exit
         end
       end
     end
@@ -752,7 +784,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['find_user_by_id', user_id]
+          puts ['find_user_by_id', user_id].inspect
+          exit
         end
       end
     end
@@ -770,7 +803,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['find_user_object_by_id', user_id]
+          puts ['find_user_object_by_id', user_id].inspect
+          exit
         end
       end
     end
@@ -788,7 +822,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['all_users']
+          puts ['all_users'].inspect
+          exit
         end
       end
     end
@@ -806,7 +841,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['all_users_ids']
+          puts ['all_users_ids'].inspect
+          exit
         end
       end
     end
@@ -824,7 +860,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['all_pagination']
+          puts ['all_pagination'].inspect
+          exit
         end
       end
     end
@@ -843,7 +880,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['has_new?', stream, title]
+          puts ['has_new?', stream, title].inspect
+          exit
         end
       end
     end
@@ -867,7 +905,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['save_max_id', stream, name]
+          puts ['save_max_id', stream, name].inspect
+          exit
         end
       end
     end
@@ -885,7 +924,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['find_last_id_from', name]
+          puts ['find_last_id_from', name].inspect
+          exit
         end
       end
     end
@@ -903,7 +943,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['pagination_delete', name]
+          puts ['pagination_delete', name].inspect
+          exit
         end
       end
     end
@@ -922,7 +963,8 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['pagination_insert', name, val]
+          puts ['pagination_insert', name, val].inspect
+          exit
         end
       end
     end
