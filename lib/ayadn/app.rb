@@ -323,28 +323,28 @@ module Ayadn
     desc "unrepost POST", "Unrepost a post (-UR)"
     map "-UR" => :unrepost
     long_desc Descriptions.unrepost
-    def unrepost(post_id)
+    def unrepost(*post_id)
       Action.new.unrepost(post_id)
     end
 
     desc "unstar POST", "Unstar a post (-US)"
     map "-US" => :unstar
     long_desc Descriptions.unstar
-    def unstar(post_id)
+    def unstar(*post_id)
       Action.new.unstar(post_id)
     end
 
     desc "star POST", "Star a post (-ST)"
     map "-ST" => :star
     long_desc Descriptions.star
-    def star(post_id)
+    def star(*post_id)
       Action.new.star(post_id)
     end
 
     desc "repost POST", "Repost a post (-O)"
     map "-O" => :repost
     long_desc Descriptions.repost
-    def repost(post_id)
+    def repost(*post_id)
       Action.new.repost(post_id)
     end
 

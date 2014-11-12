@@ -5,13 +5,13 @@
 - NowPlaying: better results, custom hashtag, custom text
 - Channels: option to show only broadcasts/PMs/patter/other
 - Users lists: sort by username, name, total posts or posting frequency
-- Userinfos accepts several users in arguments
-- Setting: blacklist active (default: true)
+- Star/unstar/repost/unrepost/userinfos accept several targets
 - Ayadn instances share access to the blacklist
 - Unauthorize an Ayadn user account
-- Better display for the spinner when scrolling
 - Setting: show tables borders (default: true)
 - Setting: short date in timeline when scrolling (default: true)
+- Setting: blacklist active (default: true)
+- Spinner: better display when scrolling
 - Simplified, shorter settings options names
 - NiceRank filter for Global is cached in-memory
 - Code has been optimized. Bugs have been squashed.

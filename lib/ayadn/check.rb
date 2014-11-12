@@ -62,6 +62,15 @@ module Ayadn
       end
     end
 
+    def bad_post_ids(post_ids)
+      post_ids.each do |id|
+        unless id.is_integer?
+          @status.error_missing_post_id
+          exit
+        end
+      end
+    end
+
     def no_user stream, username
       if stream['meta']['code'] == 404
         @status.user_404(username)

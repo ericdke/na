@@ -62,48 +62,6 @@ module Ayadn
       end
     end
 
-    # def self.add_niceranks niceranks
-    #   niceranks.each {|k,v| @sql.execute("DELETE FROM Niceranks WHERE user_id=#{k.to_i}")}
-    #   @sql.transaction do |db_in_transaction|
-    #     niceranks.each do |k,v|
-    #       insert_data = {}
-    #       insert_data[":k"] = k.to_i
-    #       insert_data[":username"] = v[:username]
-    #       insert_data[":rank"] = v[:rank]
-    #       human = v[:is_human]
-    #       human == true ? insert_data[":is_human"] = 1 : insert_data[":is_human"] = 0
-    #       real_person = v[:real_person]
-    #       real_person == true ? insert_data[":real_person"] = 1 : insert_data[":real_person"] = 0
-    #       insert_data[":cached"] = v[:cached]
-    #       db_in_transaction.prepare("INSERT INTO Niceranks(user_id, username, rank, is_human, real_person, cached) VALUES(:k, :username, :rank, :is_human, :real_person, :cached);") do |insert|
-    #         insert.execute(insert_data)
-    #       end
-    #     end
-    #   end
-    # end
-
-    # def self.get_niceranks user_ids
-    #   ids = {}
-    #   user_ids.each do |id|
-    #     u = @sql.execute("SELECT * FROM Niceranks WHERE user_id=#{id.to_i}").flatten
-    #     next if u.empty?
-    #     obj = {
-    #         username: u[1],
-    #         rank: u[2],
-    #         is_human: u[3],
-    #         real_person: u[4],
-    #         cached: Time.now.to_i
-    #       }
-    #     ids[id.to_s] = obj
-    #   end
-    #   ids
-    # end
-
-    # def self.niceranks_size
-    #   @sql.execute("SELECT Count(*) FROM Niceranks").flatten[0]
-    # end
-
-
     def self.add_to_blacklist(type, target)
       crashes = 0
       begin

@@ -221,62 +221,70 @@ module Ayadn
       end
     end
 
-    def repost(post_id)
+    def repost(post_ids)
       begin
-        @check.bad_post_id(post_id)
+        @check.bad_post_ids(post_ids)
         puts "\n"
-        @status.reposting(post_id)
-        resp = @api.get_details(post_id)
-        @check.already_reposted(resp)
-        id = @workers.get_original_id(post_id, resp)
-        @check.has_been_reposted(id, @api.repost(id))
+        post_ids.each do |post_id|
+          @status.reposting(post_id)
+          resp = @api.get_details(post_id)
+          @check.already_reposted(resp)
+          id = @workers.get_original_id(post_id, resp)
+          @check.has_been_reposted(id, @api.repost(id))
+        end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, id]})
       end
     end
 
-    def unrepost(post_id)
+    def unrepost(post_ids)
       begin
-        @check.bad_post_id(post_id)
+        @check.bad_post_ids(post_ids)
         puts "\n"
-        @status.unreposting(post_id)
-        if @api.get_details(post_id)['data']['you_reposted']
-          @check.has_been_unreposted(post_id, @api.unrepost(post_id))
-        else
-          @status.not_your_repost
+        post_ids.each do |post_id|
+          @status.unreposting(post_id)
+          if @api.get_details(post_id)['data']['you_reposted']
+            @check.has_been_unreposted(post_id, @api.unrepost(post_id))
+          else
+            @status.not_your_repost
+          end
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
       end
     end
 
-    def unstar(post_id)
+    def unstar(post_ids)
       begin
-        @check.bad_post_id(post_id)
+        @check.bad_post_ids(post_id)
         puts "\n"
-        @status.unstarring(post_id)
-        resp = @api.get_details(post_id)
-        id = @workers.get_original_id(post_id, resp)
-        resp = @api.get_details(id)
-        if resp['data']['you_starred']
-          @check.has_been_unstarred(id, @api.unstar(id))
-        else
-          @status.not_your_starred
+        post_ids.each do |post_id|
+          @status.unstarring(post_id)
+          resp = @api.get_details(post_id)
+          id = @workers.get_original_id(post_id, resp)
+          resp = @api.get_details(id)
+          if resp['data']['you_starred']
+            @check.has_been_unstarred(id, @api.unstar(id))
+          else
+            @status.not_your_starred
+          end
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
       end
     end
 
-    def star(post_id)
+    def star(post_ids)
       begin
-        @check.bad_post_id(post_id)
+        @check.bad_post_id(post_ids)
         puts "\n"
-        @status.starring(post_id)
-        resp = @api.get_details(post_id)
-        @check.already_starred(resp)
-        id = @workers.get_original_id(post_id, resp)
-        @check.has_been_starred(id, @api.star(id))
+        post_ids.each do |post_id|
+          @status.starring(post_id)
+          resp = @api.get_details(post_id)
+          @check.already_starred(resp)
+          id = @workers.get_original_id(post_id, resp)
+          @check.has_been_starred(id, @api.star(id))
+        end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id]})
       end
