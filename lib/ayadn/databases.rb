@@ -58,7 +58,10 @@ module Ayadn
         SQL
         sql.reload_schema!
       rescue Amalgalite::SQLite3::Error => e
-        Errors.global_error({error: e, caller: caller, data: ['create_tables', user]})
+        puts "ERROR in Databases"
+        puts caller
+        puts e
+        puts ['create_tables', user]
       end
     end
 
@@ -79,11 +82,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['add_to_blacklist', type, target]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['add_to_blacklist', type, target]
         end
       end
     end
@@ -100,11 +105,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['is_in_blacklist?', type, target]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['is_in_blacklist?', type, target]
         end
       end
     end
@@ -118,11 +125,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['remove_from_blacklist', target]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['remove_from_blacklist', target]
         end
       end
     end
@@ -134,11 +143,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['all_blacklist']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['all_blacklist']
         end
       end
     end
@@ -150,11 +161,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['remove_from_accounts', db, username]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['remove_from_accounts', db, username]
         end
       end
     end
@@ -180,11 +193,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['active_account', acc]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['active_account', acc]
         end
       end
     end
@@ -196,11 +211,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['all_accounts', acc]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['all_accounts', acc]
         end
       end
     end
@@ -213,11 +230,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['set_active_account', acc_db, new_user]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['set_active_account', acc_db, new_user]
         end
       end
     end
@@ -236,7 +255,10 @@ module Ayadn
         SQL
         acc_db.reload_schema!
       rescue Amalgalite::SQLite3::Error => e
-        Errors.global_error({error: e, caller: caller, data: ['create_account_table', acc_db]})
+        puts "ERROR in Databases"
+        puts caller
+        puts e
+        puts ['create_account_table', acc_db]
       end
     end
 
@@ -260,11 +282,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['create_account', acc_db, user]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['create_account', acc_db, user]
         end
       end
     end
@@ -284,11 +308,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['create_alias', channel_id, channel_alias]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['create_alias', channel_id, channel_alias]
         end
       end
     end
@@ -300,11 +326,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['delete_alias', channel_alias]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['delete_alias', channel_alias]
         end
       end
     end
@@ -316,11 +344,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['clear_aliases']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['clear_aliases']
         end
       end
     end
@@ -337,11 +367,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['get_alias_from_id', channel_id]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['get_alias_from_id', channel_id]
         end
       end
     end
@@ -358,11 +390,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['get_channel_id', channel_alias]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['get_channel_id', channel_alias]
         end
       end
     end
@@ -374,11 +408,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['all_aliases']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['all_aliases']
         end
       end
     end
@@ -390,11 +426,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['clear_bookmarks']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['clear_bookmarks']
         end
       end
     end
@@ -406,11 +444,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['clear_pagination']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['clear_pagination']
         end
       end
     end
@@ -422,11 +462,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['clear_index']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['clear_index']
         end
       end
     end
@@ -438,11 +480,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['clear_users']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['clear_users']
         end
       end
     end
@@ -454,11 +498,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['clear_blacklist']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['clear_blacklist']
         end
       end
     end
@@ -478,11 +524,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['add_bookmark', bookmark]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['add_bookmark', bookmark]
         end
       end
     end
@@ -494,11 +542,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['delete_bookmark', post_id]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['delete_bookmark', post_id]
         end
       end
     end
@@ -510,11 +560,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['all_bookmarks']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['all_bookmarks']
         end
       end
     end
@@ -533,11 +585,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['rename_bookmark', post_id, new_title]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['rename_bookmark', post_id, new_title]
         end
       end
     end
@@ -560,11 +614,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['save_indexed_posts', posts]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['save_indexed_posts', posts]
         end
       end
     end
@@ -576,11 +632,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['get_index_length']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['get_index_length']
         end
       end
     end
@@ -599,11 +657,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['get_post_from_index', arg]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['get_post_from_index', arg]
         end
       end
     end
@@ -626,11 +686,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['add_to_users_db_from_list', list]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['add_to_users_db_from_list', list]
         end
       end
     end
@@ -642,11 +704,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['delete_users_from_list', list]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['delete_users_from_list', list]
         end
       end
     end
@@ -659,11 +723,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['add_to_users_db', id, username, name]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['add_to_users_db', id, username, name]
         end
       end
     end
@@ -680,11 +746,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['find_user_by_id', user_id]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['find_user_by_id', user_id]
         end
       end
     end
@@ -696,11 +764,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['find_user_object_by_id', user_id]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['find_user_object_by_id', user_id]
         end
       end
     end
@@ -712,11 +782,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['all_users']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['all_users']
         end
       end
     end
@@ -728,11 +800,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['all_users_ids']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['all_users_ids']
         end
       end
     end
@@ -744,11 +818,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['all_pagination']})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['all_pagination']
         end
       end
     end
@@ -761,11 +837,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['has_new?', stream, title]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['has_new?', stream, title]
         end
       end
     end
@@ -783,11 +861,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['save_max_id', stream, name]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['save_max_id', stream, name]
         end
       end
     end
@@ -799,11 +879,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['find_last_id_from', name]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['find_last_id_from', name]
         end
       end
     end
@@ -815,11 +897,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['pagination_delete', name]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['pagination_delete', name]
         end
       end
     end
@@ -832,11 +916,13 @@ module Ayadn
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
-          Errors.warn "SQLite ERROR: #{e}"
           sleep(0.01)
           retry
         else
-          Errors.global_error({error: e, caller: caller, data: ['pagination_insert', name, val]})
+          puts "ERROR in Databases"
+          puts caller
+          puts e
+          puts ['pagination_insert', name, val]
         end
       end
     end

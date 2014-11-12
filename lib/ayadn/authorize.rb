@@ -74,8 +74,9 @@ module Ayadn
       create_token_file(user)
       @thor.say_status :create, "Ayadn account", :yellow
       acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+      Databases.create_tables(user) # TODO: check if tables already exist
+      Databases.create_account_table(acc_db) # TODO: check if tables already exist
       Databases.create_account(acc_db, user)
-      Databases.create_tables(user) unless File.exist?("#{user.user_path}/db/ayadn.sqlite")
     end
 
     def install
