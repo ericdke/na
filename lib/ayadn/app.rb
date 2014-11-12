@@ -576,6 +576,7 @@ module Ayadn
 
     desc "migrate", "Migrate databases (upgrade accounts)", :hide => true
     map "upgrade" => :migrate
+    long_desc Descriptions.migrate
     def migrate
       Migration.new.all
     end

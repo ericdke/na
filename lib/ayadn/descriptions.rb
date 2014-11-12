@@ -1742,5 +1742,17 @@ module Ayadn
       \n\n
       USAGE
     end
+    def self.migrate
+      <<-USAGE
+      This command migrates an Ayadn 1.x account to the new 2.x format.
+
+      This is an hidden command (doesn't show in the commands menu).
+
+      You should only use this command once, when asked by Ayadn.
+
+      `ayadn migrate`
+      \n\n
+      USAGE
+    end
   end
 end
