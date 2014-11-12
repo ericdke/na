@@ -26,7 +26,7 @@ These are just a few examples.
 
 `ayadn set scroll spinner true`
 
-`ayadn set scroll short_date false`
+`ayadn set scroll date false`
 
 `ayadn set backup posts true`
 

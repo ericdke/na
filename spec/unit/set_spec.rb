@@ -112,6 +112,28 @@ describe Ayadn::SetScroll do
     end
   end
 
+  describe "#spinner" do
+    it "creates a default value" do
+      Ayadn::SetScroll.new.spinner('true')
+      expect(Ayadn::Settings.options[:scroll][:spinner]).to eq true
+      Ayadn::SetScroll.new.spinner('false')
+      expect(Ayadn::Settings.options[:scroll][:spinner]).to eq false
+      Ayadn::SetScroll.new.spinner('0')
+      expect(Ayadn::Settings.options[:scroll][:spinner]).to eq false
+    end
+  end
+
+  describe "#date" do
+    it "creates a default value" do
+      Ayadn::SetScroll.new.date('true')
+      expect(Ayadn::Settings.options[:scroll][:date]).to eq true
+      Ayadn::SetScroll.new.date('false')
+      expect(Ayadn::Settings.options[:scroll][:date]).to eq false
+      Ayadn::SetScroll.new.date('0')
+      expect(Ayadn::Settings.options[:scroll][:date]).to eq false
+    end
+  end
+
   after do
     File.delete('spec/mock/ayadn.log')
   end
@@ -183,7 +205,7 @@ describe Ayadn::SetTimeline do
 
   describe "#" do
     it "creates a default value" do
-      %w{directed source symbols real_name date spinner debug compact}.each do |meth|
+      %w{directed source symbols name date debug compact}.each do |meth|
         command = meth.to_sym
         Ayadn::SetTimeline.new.send(command, 'true')
         expect(Ayadn::Settings.options[:timeline][command]).to eq true

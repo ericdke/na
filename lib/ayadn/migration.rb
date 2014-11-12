@@ -317,17 +317,55 @@ module Ayadn
       conf[:timeline][:date] = old_conf[:timeline][:show_date] || true
       conf[:timeline][:debug] = old_conf[:timeline][:show_debug] || false
       conf[:timeline][:compact] = old_conf[:timeline][:show_debug] || false
+      conf[:timeline][:directed] = old_conf[:timeline][:directed] || 1
       conf[:marker][:messages] = old_conf[:marker][:update_messages] || true
       conf[:backup][:posts] = old_conf[:backup][:auto_save_sent_posts] || false
       conf[:backup][:messages] = old_conf[:backup][:auto_save_sent_messages] || false
       conf[:backup][:lists] = old_conf[:backup][:auto_save_lists] || false
+      conf[:colors][:id] = old_conf[:colors][:id] || :blue
+      conf[:colors][:index] = old_conf[:colors][:index] || :red
+      conf[:colors][:username] = old_conf[:colors][:username] || :green
+      conf[:colors][:name] = old_conf[:colors][:name] || :magenta
       conf[:colors][:debug] = old_conf[:colors][:debug] || :red
+      conf[:colors][:date] = old_conf[:colors][:date] || :cyan
+      conf[:colors][:link] = old_conf[:colors][:link] || :yellow
+      conf[:colors][:dots] = old_conf[:colors][:dots] || :blue
+      conf[:colors][:hashtags] = old_conf[:colors][:hashtags] || :cyan
+      conf[:colors][:debug] = old_conf[:colors][:debug] || :red
+      conf[:colors][:mentions] = old_conf[:colors][:mentions] || :red
+      conf[:colors][:source] = old_conf[:colors][:source] || :cyan
+      conf[:colors][:symbols] = old_conf[:colors][:symbols] || :green
       conf[:colors][:unread] = old_conf[:colors][:unread] || :cyan
+      conf[:formats][:list] = old_conf[:formats][:list] || {}
       conf[:formats][:list][:reverse] = old_conf[:formats][:list][:reverse] || true
+      conf[:formats][:table] = old_conf[:formats][:table] || {}
+      conf[:formats][:table][:width] = old_conf[:formats][:table][:width] || 75
+      conf[:formats][:table][:borders] = old_conf[:formats][:table][:borders] || true
       conf[:scroll][:spinner] = old_conf[:timeline][:show_spinner] || true
+      conf[:scroll][:timer] = old_conf[:scroll][:timer] || 3
       conf[:movie][:hashtag] = old_conf[:movie][:hashtag] || 'nowwatching'
       conf[:tvshow][:hashtag] = old_conf[:tvshow][:hashtag] || 'nowwatching'
       conf[:channels][:links] = old_conf[:timeline][:show_channel_oembed] || true
+      conf[:nicerank][:threshold] = old_conf[:nicerank][:threshold] || 2.1
+      conf[:nicerank][:filter] = old_conf[:nicerank][:filter] || true
+      conf[:counts][:defaults] = old_conf[:counts][:defaults] || 50
+      conf[:counts][:unified] = old_conf[:counts][:unified] || 50
+      conf[:counts][:global] = old_conf[:counts][:global] || 50
+      conf[:counts][:checkins] = old_conf[:counts][:checkins] || 50
+      conf[:counts][:conversations] = old_conf[:counts][:conversations] || 50
+      conf[:counts][:photos] = old_conf[:counts][:photos] || 50
+      conf[:counts][:trending] = old_conf[:counts][:trending] || 50
+      conf[:counts][:mentions] = old_conf[:counts][:mentions] || 50
+      conf[:counts][:convo] = old_conf[:counts][:convo] || 50
+      conf[:counts][:posts] = old_conf[:counts][:posts] || 50
+      conf[:counts][:messages] = old_conf[:counts][:messages] || 50
+      conf[:counts][:search] = old_conf[:counts][:search] || 200
+      conf[:counts][:whoreposted] = old_conf[:counts][:whoreposted] || 20
+      conf[:counts][:whostarred] = old_conf[:counts][:whostarred] || 20
+      conf[:counts][:whatstarred] = old_conf[:counts][:whatstarred] || 100
+      conf[:counts][:files] = old_conf[:counts][:files] || 50
+      @thor.say_status :saving, "config file", :yellow
+      File.write(@config_path_old, conf.to_yaml)
     end
 
   end

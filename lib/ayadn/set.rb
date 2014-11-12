@@ -355,10 +355,10 @@ module Ayadn
       Settings.options[:scroll][:timer] = @output
     end
 
-    def short_date(value)
-      @input = 'short date'
+    def date(value)
+      @input = 'date'
       @output = Validators.boolean(value)
-      Settings.options[:scroll][:short_date] = @output
+      Settings.options[:scroll][:date] = @output
     end
 
     def spinner(value)
@@ -565,7 +565,7 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'directed', 'source', 'symbols', 'real_name', 'date', 'debug', 'compact'
+      when 'directed', 'source', 'symbols', 'name', 'date', 'debug', 'compact'
         Settings.options[:timeline][meth.to_sym] = @output
       else
         super

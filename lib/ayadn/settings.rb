@@ -6,7 +6,7 @@ module Ayadn
 
     class << self
       attr_accessor :options, :config, :global
-      attr_reader :user_token, :default_nr
+      attr_reader :user_token
     end
 
     def self.load_config
@@ -29,11 +29,6 @@ module Ayadn
           username: active[0],
           handle: active[2]
         }
-      }
-      @default_nr = {
-        threshold: 2.1,
-        filter: true,
-        unranked: false
       }
       @options = self.defaults
       @global = {scrolling: false, force: false}
@@ -97,18 +92,10 @@ module Ayadn
       config_file = @config[:paths][:config] + "/config.yml"
       if File.exist?(config_file)
         begin
-          conf = YAML.load(File.read(config_file))
-
-          # force create mandatory keys (idem)
-          conf[:nicerank] = @default_nr if conf[:nicerank].nil?
-          conf[:nicerank].delete(:cache)
-          if conf[:nicerank][:unranked].nil?
-            conf[:nicerank].delete(:filter_unranked)
-            conf[:nicerank][:unranked] = false
-          end
-
-          @options = conf
-          self.write_config_file(config_file, @options)
+          # conf = YAML.load(File.read(config_file))
+          # @options = conf
+          @options = YAML.load(File.read(config_file))
+          # self.write_config_file(config_file, @options)
         rescue => e
           Errors.global_error({error: e, caller: caller, data: []})
         end
@@ -186,7 +173,7 @@ module Ayadn
         counts: {
           default: 50,
           unified: 50,
-          global: 100,
+          global: 50,
           checkins: 50,
           conversations: 50,
           photos: 50,
@@ -237,9 +224,13 @@ module Ayadn
         scroll: {
           spinner: true,
           timer: 3,
-          short_date: true
+          date: false
         },
-        nicerank: @default_nr,
+        nicerank: {
+          threshold: 2.1,
+          filter: true,
+          unranked: false
+        },
         nowplaying: {},
         movie: {
           hashtag: 'nowwatching'
