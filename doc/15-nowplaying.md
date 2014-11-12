@@ -8,18 +8,30 @@ OS X only.
 
 `ayadn nowplaying`
 
-`ayadn -np`
+`ayadn -NP`
 
 Ayadn will grab information from your running iTunes, format it, insert the *#nowplaying* hashtag then ask for your confirmation before posting it.
 
-It will also grab a 30 seconds preview and the album art from the iTunes Store. You can prevent this behavior by adding the `--no-url` option (short: `-n`).
+It will also grab a link to the album and the album artwork from the iTunes Store (you can prevent this behavior by adding the `--no_url` option (short: `-n`).
 
 ## Last.fm
 
 `ayadn nowplaying --last-fm`
 
-`ayadn -np -l`
+`ayadn -NP -l`
 
 Ayadn will grab information from your Last.fm account, format it, insert the *#nowplaying* hashtag then ask for your confirmation before posting it.
 
-It will also grab a 30 seconds preview and the album art from the iTunes Store. You can prevent this behavior by adding the `--no-url` option (short: `-n`).
+It will also grab a link to the album and the album artwork from the iTunes Store (you can prevent this behavior by adding the `--no_url` option (short: `-n`).
+
+## Options
+
+Specify a custom hashtag:
+
+`ayadn -NP -h listeningto`
+
+Specify a custom text:
+
+`ayadn -NP -t "I loved this song so much when I was young."`
+
+Works with iTunes and Last.fm.

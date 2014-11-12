@@ -14,6 +14,7 @@
 - Spinner: better display when scrolling
 - Simplified, shorter settings options names
 - NiceRank filter for Global is cached in-memory
+- Inline help and online docs have been updated
 - Code has been optimized. Bugs have been squashed.
 
 # 1.8.2 - 2014-10-31 - 'Asylum'

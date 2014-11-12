@@ -10,26 +10,29 @@
 
 ## THANK YOU
 
-This is a list of the first people who helped me when I started developing Ayadn.
+This is a list of people who helped me developing Ayadn by giving me awesome feedback and support.
 
 I can't keep up and update the list, of course, there's too many of you awesome geeks. ;)
 
 [@matigo](http://app.net/matigo)
-[@ksniod](http://app.net/ksniod)
 [@donnywdavis](http://app.net/donnywdavis)
 [@manx](http://app.net/manx)
 [@bcallah](http://app.net/bcallah)
 [@0xmf](http://app.net/0xmf)
-[@sr_rolando](http://app.net/sr_rolando)
 [@charl](http://app.net/charl)
 [@jws](http://app.net/jws)
 [@joeltimmins](http://app.net/joeltimmins)
-[@berklee](http://app.net/berklee)
 [@nguarracino](http://app.net/nguarracino)
 [@matthewlang](http://app.net/matthewlang)
 [@schmidt_fu](http://app.net/schmidt_fu)
 [@jextxadore](http://app.net/jextxadore)
 [@jvimedia](http://app.net/jvimedia)
-[@fredvd](http://app.net/fredvd)
+[@cirrusuk](http://app.net/cirrusuk)
+[@bazbt3](http://app.net/bazbt3)
+[@hutattedonmyarm](http://app.net/hutattedonmyarm)
+[@blumenkraft](http://app.net/blumenkraft)
+[@isaacjw](http://app.net/isaacjw)
+[@ksniod](http://app.net/ksniod)
+[@ludolphus](http://app.net/ludolphus)
 
 See also the Ayadn CHANGELOG file...

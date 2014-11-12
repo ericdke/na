@@ -14,13 +14,11 @@ These are just a few examples.
 
 `ayadn set color username green`
 
-`ayadn set color mentions yellow`
+`ayadn set color date yellow`
 
 `ayadn set counts default 30`
 
 `ayadn set counts global 100`
-
-`ayadn set timeline directed false`
 
 `ayadn set timeline real_name false`
 
@@ -34,7 +32,7 @@ These are just a few examples.
 
 `ayadn set formats table width 80`
 
-`ayadn set formats list reverse false`
+`ayadn set formats table borders false`
 
 ## RESET
 
