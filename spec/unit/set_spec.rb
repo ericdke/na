@@ -65,8 +65,8 @@ def init_stubs
         unranked: false
       },
       backup: {
-        sent_posts: false,
-        sent_messages: false,
+        posts: false,
+        messages: false,
         lists: false
       },
       marker: {
@@ -241,18 +241,18 @@ describe Ayadn::SetBackup do
     init_stubs
   end
 
-  describe "#sent_posts" do
+  describe "#posts" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:backup][:sent_posts]).to eq false
-      Ayadn::SetBackup.new.sent_posts('1')
-      expect(Ayadn::Settings.options[:backup][:sent_posts]).to eq true
+      expect(Ayadn::Settings.options[:backup][:posts]).to eq false
+      Ayadn::SetBackup.new.posts('1')
+      expect(Ayadn::Settings.options[:backup][:posts]).to eq true
     end
   end
-  describe "#sent_messages" do
+  describe "#messages" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:backup][:sent_messages]).to eq false
-      Ayadn::SetBackup.new.sent_messages('True')
-      expect(Ayadn::Settings.options[:backup][:sent_messages]).to eq true
+      expect(Ayadn::Settings.options[:backup][:messages]).to eq false
+      Ayadn::SetBackup.new.messages('True')
+      expect(Ayadn::Settings.options[:backup][:messages]).to eq true
     end
   end
   describe "#lists" do

@@ -60,7 +60,7 @@ module Ayadn
         source: 'IMDb'
       }
       resp = Post.new.post(dic)
-      FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
+      FileOps.save_post(resp) if Settings.options[:backup][:posts]
       @view.clear_screen
       @status.yourpost
       puts "\n\n"

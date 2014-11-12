@@ -635,7 +635,7 @@ module Ayadn
     def build_header(content)
       header = ""
       header << content[:handle].color(Settings.options[:colors][:username])
-      if Settings.options[:timeline][:real_name]
+      if Settings.options[:timeline][:name]
         header << " "
         header << content[:name].color(Settings.options[:colors][:name])
       end

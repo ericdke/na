@@ -53,6 +53,19 @@ module Ayadn
       marker_config.save
     end
 
+    desc "channels ITEM TRUE/FALSE", "Set values for stream markers"
+    map "channel" => :channels
+    def channels(*args)
+      channels_config = SetChannels.new
+      unless args.length != 2
+        channels_config.send(args[0], args[1])
+      else
+        Status.new.error_missing_parameters
+        exit
+      end
+      channels_config.save
+    end
+
     desc "blacklist ITEM TRUE/FALSE", "Set values for the blacklist"
     def blacklist(*args)
       blacklist_config = SetBlacklist.new
@@ -432,7 +445,7 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'sent_posts', 'sent_messages', 'lists'
+      when 'posts', 'messages', 'lists'
         Settings.options[:backup][meth.to_sym] = @output
       else
         super
@@ -458,6 +471,30 @@ module Ayadn
       case @input
       when 'messages'
         Settings.options[:marker][meth.to_sym] = @output
+      else
+        super
+      end
+    end
+
+  end
+
+  class SetChannels < SetBase
+
+    def initialize
+      super
+      @category = 'channels'
+    end
+
+    def validate(value)
+      Validators.boolean(value)
+    end
+
+    def method_missing(meth, options)
+      @input = meth.to_s
+      @output = validate(options)
+      case @input
+      when 'links'
+        Settings.options[:channels][meth.to_sym] = @output
       else
         super
       end
@@ -528,7 +565,7 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'directed', 'source', 'symbols', 'real_name', 'date', 'debug', 'compact', 'channel_oembed'
+      when 'directed', 'source', 'symbols', 'real_name', 'date', 'debug', 'compact'
         Settings.options[:timeline][meth.to_sym] = @output
       else
         super

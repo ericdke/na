@@ -236,7 +236,7 @@ Or you can set it off permanently:
 
 `ayadn set marker messages false`
 
-Since version 1.7.7, Ayadn shows the full oembed links in messages if any. As these links can be quite long and complex, you can remove them from the view if you want with `ayadn set timeline channel_oembed false`.  
+Since version 1.7.7, Ayadn shows the full oembed links in messages if any. As these links can be quite long and complex, you can remove them from the view if you want with `ayadn set channels links false`.  
 
 # UNREAD MESSAGES
 

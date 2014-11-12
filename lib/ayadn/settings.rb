@@ -99,76 +99,13 @@ module Ayadn
         begin
           conf = YAML.load(File.read(config_file))
 
-          # force delete obsolete keys (because legacy versions of the config file)
-          [:show_nicerank, :deleted, :annotations, :html].each { |k| conf[:timeline].delete(k) }
-          conf[:colors].delete(:nicerank)
-          conf[:nicerank].delete(:cache)
-          conf[:marker].delete(:update_messages) unless conf[:marker].nil?
           # force create mandatory keys (idem)
           conf[:nicerank] = @default_nr if conf[:nicerank].nil?
+          conf[:nicerank].delete(:cache)
           if conf[:nicerank][:unranked].nil?
             conf[:nicerank].delete(:filter_unranked)
             conf[:nicerank][:unranked] = false
           end
-          # force convert mandatory keys (idem)
-          unless conf[:timeline][:show_source].nil?
-            v = conf[:timeline][:show_source]
-            conf[:timeline][:source] = v
-          end
-          unless conf[:timeline][:show_symbols].nil?
-            v = conf[:timeline][:show_symbols]
-            conf[:timeline][:symbols] = v
-          end
-          unless conf[:timeline][:show_real_name].nil?
-            v = conf[:timeline][:show_real_name]
-            conf[:timeline][:real_name] = v
-          end
-          unless conf[:timeline][:show_date].nil?
-            v = conf[:timeline][:show_date]
-            conf[:timeline][:date] = v
-          end
-          unless conf[:timeline][:show_spinner].nil?
-            new_spinner = conf[:timeline][:show_spinner]
-          end
-          unless conf[:timeline][:show_debug].nil?
-            v = conf[:timeline][:show_debug]
-            conf[:timeline][:debug] = v
-          end
-          unless conf[:timeline][:show_channel_oembed].nil?
-            v = conf[:timeline][:show_channel_oembed]
-            conf[:timeline][:channel_oembed] = v
-          end
-          unless conf[:backup][:auto_save_sent_posts].nil?
-            v = conf[:backup][:auto_save_sent_posts]
-            conf[:backup][:sent_posts] = v
-          end
-          unless conf[:backup][:auto_save_sent_messages].nil?
-            v = conf[:backup][:auto_save_sent_messages]
-            conf[:backup][:sent_messages] = v
-          end
-          unless conf[:backup][:auto_save_lists].nil?
-            v = conf[:backup][:auto_save_lists]
-            conf[:backup][:lists] = v
-          end
-          [:show_source, :show_symbols, :show_real_name, :show_date, :show_spinner, :show_debug, :show_channel_oembed].each { |k| conf[:timeline].delete(k) }
-          [:auto_save_sent_posts, :auto_save_sent_messages, :auto_save_lists].each { |k| conf[:backup].delete(k) }
-          conf[:timeline][:debug] = false if conf[:timeline][:debug].nil?
-          if conf[:scroll][:spinner].nil?
-            conf[:scroll][:spinner] = new_spinner || true
-          end
-          conf[:colors][:debug] = :red if conf[:colors][:debug].nil?
-          conf[:colors][:unread] = :cyan if conf[:colors][:unread].nil?
-          conf[:colors][:excerpt] = :green if conf[:colors][:excerpt].nil?
-          conf[:scroll][:short_date] = true if conf[:scroll][:short_date].nil?
-          conf[:nowplaying] = {} if conf[:nowplaying].nil?
-          conf[:movie] = {hashtag: 'nowwatching'} if conf[:movie].nil?
-          conf[:tvshow] = {hashtag: 'nowwatching'} if conf[:tvshow].nil?
-          conf[:formats][:list] = {reverse: true} if conf[:formats][:list].nil?
-          conf[:formats][:table][:borders] = true if conf[:formats][:table][:borders].nil?
-          conf[:timeline][:compact] = false if conf[:timeline][:compact].nil?
-          conf[:timeline][:channel_oembed] = true if conf[:timeline][:channel_oembed].nil?
-          conf[:marker] = {messages: true} if conf[:marker].nil? || conf[:marker].empty?
-          conf[:blacklist] = {active: true} if conf[:blacklist].nil?
 
           @options = conf
           self.write_config_file(config_file, @options)
@@ -238,10 +175,9 @@ module Ayadn
           directed: 1,
           source: true,
           symbols: true,
-          real_name: true,
+          name: true,
           date: true,
           debug: false,
-          channel_oembed: true,
           compact: false
         },
         marker: {
@@ -274,6 +210,9 @@ module Ayadn
             reverse: true
           }
         },
+        channels: {
+          links: true
+        },
         colors: {
           id: :blue,
           index: :red,
@@ -291,8 +230,8 @@ module Ayadn
           excerpt: :green
         },
         backup: {
-          sent_posts: false,
-          sent_messages: false,
+          posts: false,
+          messages: false,
           lists: false
         },
         scroll: {

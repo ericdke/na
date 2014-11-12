@@ -56,8 +56,8 @@ describe Ayadn::Annotations do
           excerpt: :green
         },
         backup: {
-          sent_posts: false,
-          sent_messages: false,
+          posts: false,
+          messages: false,
           lists: false
         },
         scroll: {

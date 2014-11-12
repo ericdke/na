@@ -28,7 +28,7 @@ These are just a few examples.
 
 `ayadn set scroll short_date false`
 
-`ayadn set backup sent_posts true`
+`ayadn set backup posts true`
 
 `ayadn set formats table width 80`
 

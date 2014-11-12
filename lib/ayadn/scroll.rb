@@ -6,7 +6,7 @@ module Ayadn
       @api = api
       @view = view
       @view.hide_cursor
-      @chars = %w{ | / - \\ }
+      @chars = %w{ - \\ | / }
       at_exit { @view.show_cursor }
     end
 

@@ -139,7 +139,7 @@ module Ayadn
           visible: visible
         }
         resp = poster.post(dic)
-        FileOps.save_post(resp) if Settings.options[:backup][:sent_posts]
+        FileOps.save_post(resp) if Settings.options[:backup][:posts]
         @view.show_posted(resp)
       rescue => e
         @status.wtf

@@ -32,6 +32,8 @@ module Ayadn
         @pagination_old = "#{@home}/pagination/pagination.db"
         @index_old = "#{@home}/pagination/index.db"
 
+        @config_path_old = "#{@home}/config/config.yml"
+
         @bookmarks = Daybreak::DB.new(bookmarks_old) if File.exist?(bookmarks_old)
         @aliases = Daybreak::DB.new(aliases_old) if File.exist?(aliases_old)
         @blacklist = Daybreak::DB.new(blacklist_old) if File.exist?(blacklist_old)
@@ -79,6 +81,7 @@ module Ayadn
       pagination
       index
       accounts
+      config
       @thor.say_status :done, "Ready to go!", :green
       @thor.say_status :thanks, "Please launch Ayadn again.", :cyan
     end
@@ -301,6 +304,30 @@ module Ayadn
       @accounts.close
       File.delete(Dir.home + "/ayadn/accounts.db")
       @thor.say_status :delete, Dir.home + "/ayadn/accounts.db", :green
+    end
+
+    def config
+      @thor.say_status :loading, "config file", :blue
+      old_conf = YAML.load(File.read(@config_path_old))
+      conf = Settings.defaults
+      @thor.say_status :converting, "settings", :cyan
+      conf[:timeline][:source] = old_conf[:timeline][:show_source] || true
+      conf[:timeline][:symbols] = old_conf[:timeline][:show_symbols] || true
+      conf[:timeline][:name] = old_conf[:timeline][:show_real_name] || true
+      conf[:timeline][:date] = old_conf[:timeline][:show_date] || true
+      conf[:timeline][:debug] = old_conf[:timeline][:show_debug] || false
+      conf[:timeline][:compact] = old_conf[:timeline][:show_debug] || false
+      conf[:marker][:messages] = old_conf[:marker][:update_messages] || true
+      conf[:backup][:posts] = old_conf[:backup][:auto_save_sent_posts] || false
+      conf[:backup][:messages] = old_conf[:backup][:auto_save_sent_messages] || false
+      conf[:backup][:lists] = old_conf[:backup][:auto_save_lists] || false
+      conf[:colors][:debug] = old_conf[:colors][:debug] || :red
+      conf[:colors][:unread] = old_conf[:colors][:unread] || :cyan
+      conf[:formats][:list][:reverse] = old_conf[:formats][:list][:reverse] || true
+      conf[:scroll][:spinner] = old_conf[:timeline][:show_spinner] || true
+      conf[:movie][:hashtag] = old_conf[:movie][:hashtag] || 'nowwatching'
+      conf[:tvshow][:hashtag] = old_conf[:tvshow][:hashtag] || 'nowwatching'
+      conf[:channels][:links] = old_conf[:timeline][:show_channel_oembed] || true
     end
 
   end

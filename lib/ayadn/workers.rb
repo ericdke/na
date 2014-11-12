@@ -305,7 +305,7 @@ module Ayadn
           if ann['type'] == "net.app.core.oembed"
             if ann['value']['embeddable_url']
               links << ann['value']['embeddable_url']
-            elsif ann['value']['url'] && Settings.options[:timeline][:channel_oembed] == true
+            elsif ann['value']['url'] && Settings.options[:channels][:links] == true
               links << ann['value']['url']
             end
           end
