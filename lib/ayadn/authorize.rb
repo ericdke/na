@@ -8,6 +8,11 @@ module Ayadn
     end
 
     def authorize
+      puts "\n"
+      if File.exist?(Dir.home + "/ayadn/accounts.db")
+        @status.has_to_migrate
+        exit
+      end
       puts "\e[H\e[2J"
       show_link
       token = get_token
@@ -68,14 +73,9 @@ module Ayadn
       @thor.say_status :save, "user token", :yellow
       create_token_file(user)
       @thor.say_status :create, "Ayadn account", :yellow
-      if File.exist?(Dir.home + "/ayadn/accounts.sqlite")
-        acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
-        Databases.create_account(acc_db, user)
-        Databases.create_tables(user) unless File.exist?("#{user.user_path}/db/ayadn.sqlite")
-      else
-        @status.has_to_migrate
-        exit
-      end
+      acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+      Databases.create_account(acc_db, user)
+      Databases.create_tables(user) unless File.exist?("#{user.user_path}/db/ayadn.sqlite")
     end
 
     def install
