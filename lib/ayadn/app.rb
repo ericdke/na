@@ -578,7 +578,8 @@ module Ayadn
     map "upgrade" => :migrate
     long_desc Descriptions.migrate
     def migrate
-      Migration.new.all
+      mig = Migration.new
+      mig.all
     end
 
   end

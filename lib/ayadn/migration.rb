@@ -11,6 +11,7 @@ module Ayadn
     end
 
     def initialize
+      @still = false
       @thor = Thor::Shell::Color.new
       accounts_old = Dir.home + "/ayadn/accounts.db"
       unless File.exist?(accounts_old)
@@ -22,6 +23,15 @@ module Ayadn
       end
       begin
         @accounts = Daybreak::DB.new(accounts_old)
+        # just in case of a previous canceled migration
+        # which could have left the accounts.db in place
+        if @accounts.size == 1 || @accounts.size == 0
+          @accounts.close
+          File.delete(Dir.home + "/ayadn/accounts.db")
+          @thor.say_status :delete, Dir.home + "/ayadn/accounts.db", :yellow
+          @thor.say_status :stopped, "no more accounts to migrate", :green
+          exit
+        end
         @active_old = @accounts['ACTIVE']
         @home = @accounts[@active_old][:path]
         bookmarks_old = "#{@home}/db/bookmarks.db"
@@ -45,6 +55,7 @@ module Ayadn
       rescue Exception => e
         puts "\n"
         @thor.say_status :error, "#{e}", :red
+        @thor.say_status :stack, "#{caller}", :red
         @thor.say_status :canceled, "migration canceled", :red
         puts "\n"
         exit
@@ -83,9 +94,17 @@ module Ayadn
       index()
       accounts()
       config()
-      @thor.say_status :done, "Ready to go!", :green
-      @thor.say_status :thanks, "Please launch Ayadn again.", :cyan
+      @thor.say_status :done, "migration", :yellow
       puts "\n"
+      if @still != false
+        @thor.say_status :WARNING, "another user, @#{@still}, is still in the old database", :red
+        @thor.say_status :PLEASE, "you should run `ayadn migrate` again right now", :yellow
+        puts "\n"
+      else
+        @thor.say_status :ok, "ready to go!", :green
+        @thor.say_status :thanks, "you can use Ayadn now", :cyan
+        puts "\n"
+      end
     end
 
     def bookmarks
@@ -269,43 +288,61 @@ module Ayadn
     def accounts
       @thor.say_status :create, Dir.home + "/ayadn/accounts.sqlite", :blue
       sql = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
-      @thor.say_status :import, "Accounts database", :cyan
-      sql.execute_batch <<-SQL
-        CREATE TABLE Accounts (
-          username VARCHAR(20),
-          user_id INTEGER,
-          handle VARCHAR(21),
-          account_path TEXT,
-          active INTEGER,
-          token TEXT
-        );
-      SQL
-      sql.reload_schema!
-      active_account = ""
+      @thor.say_status :import, "account informations", :cyan
+      if sql.schema.tables.empty?
+        sql.execute_batch <<-SQL
+          CREATE TABLE Accounts (
+            username VARCHAR(20),
+            user_id INTEGER,
+            handle VARCHAR(21),
+            account_path TEXT,
+            active INTEGER,
+            token TEXT
+          );
+        SQL
+        sql.reload_schema!
+      end
+      active, active_account = ""
+      @accounts.each do |k,v|
+        if k == "ACTIVE"
+          active_account = v
+          next
+        end
+      end
+      actives = sql.execute("SELECT user_id FROM Accounts WHERE active=1")
+      sql.execute("UPDATE Accounts SET active=0") unless actives.empty?
       sql.transaction do |db_in_transaction|
-        @accounts.each do |k,v|
-          if k == "ACTIVE"
-            active_account = v
-            next
+        active = [@accounts[active_account]]
+        @thor.say_status :delete, "old @#{active_account} account", :green
+        @accounts.delete(active_account)
+        if @accounts.size == 1 # only the 'ACTIVE' label, so it's like 0
+          @accounts.close
+          File.delete(Dir.home + "/ayadn/accounts.db")
+          @thor.say_status :delete, Dir.home + "/ayadn/accounts.db", :green
+        else
+          @accounts.each do |k,v|
+            next if k == "ACTIVE"
+            @accounts['ACTIVE'] = v[:username]
+            @still = v[:username]
+            break
           end
+          @accounts.close
+        end
+        active.each do |obj|
           insert_data = {}
-          insert_data[":username"] = k
-          insert_data[":user_id"] = v[:id].to_i
-          insert_data[":handle"] = "@#{k}"
-          insert_data[":account_path"] = v[:path]
-          insert_data[":active"] = 0
-          template = Dir.home + "/ayadn/#{k}/auth/token"
+          insert_data[":username"] = obj[:username]
+          insert_data[":user_id"] = obj[:id].to_i
+          insert_data[":handle"] = obj[:handle]
+          insert_data[":account_path"] = obj[:path]
+          insert_data[":active"] = 1
+          template = Dir.home + "/ayadn/#{obj[:username]}/auth/token"
           insert_data[":token"] = File.read(template)
           db_in_transaction.prepare("INSERT INTO Accounts(username, user_id, handle, account_path, active, token) VALUES(:username, :user_id, :handle, :account_path, :active, :token);") do |insert|
             insert.execute(insert_data)
           end
         end
       end
-      sql.execute("UPDATE Accounts SET active=1 WHERE username='#{active_account}'")
-      @thor.say_status :done, "#{@accounts.size - 1} objects", :green
-      @accounts.close
-      File.delete(Dir.home + "/ayadn/accounts.db")
-      @thor.say_status :delete, Dir.home + "/ayadn/accounts.db", :green
+      @thor.say_status :imported, "@#{active_account} account", :green
     end
 
     def config
