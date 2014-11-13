@@ -13,23 +13,24 @@ module Ayadn
         deb = "\n"
         deb << "+ HTTP\n"
         deb << "* t#{Time.now.to_i}\n"
-        # deb << "Url:\t\t#{url}\n"
-        deb << "#{response.headers}\n"
+        deb << "Url: #{url}\n"
+        deb << "Code: #{response.code}\n"
         deb << "\n"
         puts deb.color(:green)
-        # Logs.rec.debug "HTTP/URL: #{url}"
+        Logs.rec.debug "HTTP/URL: #{url}"
         Logs.rec.debug "HTTP/HEADERS: #{response.headers}"
       end
     end
 
     def self.err error, stack
-      Logs.rec.debug "+DEBUG STACK: #{stack}"
+      # Logs.rec.debug "+DEBUG STACK: #{stack}"
       if Settings.options[:timeline][:debug] == true
-        puts "\n--*--\nERROR:\n"
+        puts "\nDEBUG:\n"
+        puts error.inspect
         raise error
-        puts "\n--*--\nSTACK:\n"
-        puts stack
-        puts "\n--*--\n\n"
+        # puts "\nSTACK:\n"
+        # puts stack
+        # puts "\n--*--\n\n"
       end
     end
 
