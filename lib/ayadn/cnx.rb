@@ -106,36 +106,40 @@ module Ayadn
     end
 
     def self.check response
-      res = JSON.parse(response) if response.code != 200
-      message = res['meta']['error_message']
+      if response.code != 200
+        res = JSON.parse(response)
+        message = res['meta']['error_message']
+        thor = Thor::Shell::Color.new
+        puts "\n"
+      end
       case response.code
       when 200
         response
       when 204
-        puts "\n#{message}".color(:red)
-        Errors.global_error({error: "NO CONTENT", caller: caller, data: [res]})
+        thor.say_status :error, message.upcase, :red
+        Errors.global_error({error: message, caller: caller, data: [res]})
       when 400
-        puts "\n#{message}".color(:red)
-        Errors.global_error({error: "BAD REQUEST", caller: caller, data: [res]})
+        thor.say_status :error, message.upcase, :red
+        Errors.global_error({error: message, caller: caller, data: [res]})
       when 401
-        puts "\n#{message}".color(:red)
-        Errors.global_error({error: "UNAUTHORIZED", caller: caller, data: [res]})
+        thor.say_status :error, message.upcase, :red
+        Errors.global_error({error: message, caller: caller, data: [res]})
       when 403
-        puts "\n#{message}".color(:red)
-        Errors.global_error({error: "FORBIDDEN", caller: caller, data: [res]})
+        thor.say_status :error, message.upcase, :red
+        Errors.global_error({error: message, caller: caller, data: [res]})
       when 405
-        puts "\n#{message}".color(:red)
-        Errors.global_error({error: "METHOD NOT ALLOWED", caller: caller, data: [res]})
+        thor.say_status :error, message.upcase, :red
+        Errors.global_error({error: message, caller: caller, data: [res]})
       when 429
-        puts "\n#{message}".color(:red)
+        thor.say_status :error, message.upcase, :red
         puts "\n\nAyadn made too many requests to the App.net API. You should wait at least ".color(:cyan) + "#{response.headers[:retry_after]} ".color(:red) + "seconds before trying again. Maybe you launched a lot of Ayadn instances at the same time? That's no problem, but in this case you should increase the value of the scroll timer (with `ayadn set scroll timer 5` for example). App.net allows 5000 requests per hour per account maximum.".color(:cyan)
-        Errors.global_error({error: "TOO MANY REQUESTS", caller: caller, data: [res]})
+        Errors.global_error({error: message, caller: caller, data: [res]})
       when 500
-        puts "\n#{message}".color(:red)
-        Errors.global_error({error: "APP.NET SERVER ERROR", caller: caller, data: [res]})
+        thor.say_status :error, message.upcase, :red
+        Errors.global_error({error: message, caller: caller, data: [res]})
       when 507
-        puts "\n#{message}".color(:red)
-        Errors.global_error({error: "INSUFFICIENT STORAGE", caller: caller, data: [res]})
+        thor.say_status :error, message.upcase, :red
+        Errors.global_error({error: message, caller: caller, data: [res]})
       else
         response
       end

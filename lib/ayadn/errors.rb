@@ -7,6 +7,7 @@ module Ayadn
         Status.new.wtf
         exit
       end
+      thor = Thor::Shell::Color.new
       Logs.rec.error "--BEGIN--"
       Logs.rec.error "CAUSE: #{args[:error]}"
       Logs.rec.debug "DATA: #{args[:data]}"
@@ -17,9 +18,9 @@ module Ayadn
         "#{dir}/#{file}"
       end
       Logs.rec.debug "STACK: #{stack}"
-      #Logs.rec.debug "STACK: #{args[:caller]}"
       Logs.rec.error "--END--"
-      puts "\nError logged in #{Settings.config[:paths][:log]}/ayadn.log\n".color(:blue)
+      thor.say_status :log, "#{Settings.config[:paths][:log]}/ayadn.log", :red
+      puts "\n"
       Debug.err(args[:error], stack)
       exit
     end
