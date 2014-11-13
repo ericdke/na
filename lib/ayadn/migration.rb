@@ -318,7 +318,7 @@ module Ayadn
       conf[:timeline][:name] = old_conf[:timeline][:show_real_name] || true
       conf[:timeline][:date] = old_conf[:timeline][:show_date] || true
       conf[:timeline][:debug] = old_conf[:timeline][:show_debug] || false
-      conf[:timeline][:compact] = old_conf[:timeline][:show_debug] || false
+      conf[:timeline][:compact] = old_conf[:timeline][:show_compact] || false
       conf[:timeline][:directed] = old_conf[:timeline][:directed] || 1
       conf[:marker][:messages] = old_conf[:marker][:update_messages] || true
       conf[:backup][:posts] = old_conf[:backup][:auto_save_sent_posts] || false
