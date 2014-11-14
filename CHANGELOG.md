@@ -1,4 +1,4 @@
-# 2.0.0 - WIP - 'The Piper At The Gates Of Dawn'
+# 2.0.0 - 2014-11-13 - 'The Piper At The Gates Of Dawn'
 
 - SQLite database. Means FAST!
 - Unified style for statuses, questions and alerts

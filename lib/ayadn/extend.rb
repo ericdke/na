@@ -1,7 +1,12 @@
 # encoding: utf-8
 class String
   def is_integer?
-    self.to_i.to_s == self
+    begin
+      _ = Integer(self)
+      return true
+    rescue ArgumentError
+      return false
+    end
   end
 end
 class Integer
