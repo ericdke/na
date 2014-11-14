@@ -17,11 +17,11 @@ module Ayadn
           status.wrong_arguments
           exit
         end
-        @check.bad_post_id(post_id)
+        Check.new.bad_post_id(post_id)
         if options[:force]
           Settings.global[:force] = true
         else
-          post_id = @workers.get_real_post_id(post_id)
+          post_id = Workers.new.get_real_post_id(post_id)
         end
         convo_title = post_id if convo_title == ''
         api, workers, view = API.new, Workers.new, View.new
@@ -116,11 +116,11 @@ module Ayadn
         else
           post_id = args[0]
         end
-        @check.bad_post_id(post_id)
+        Check.new.bad_post_id(post_id)
         if options[:force]
           Settings.global[:force] = true
         else
-          post_id = @workers.get_real_post_id(post_id)
+          post_id = Workers.new.get_real_post_id(post_id)
         end
         Databases.delete_bookmark post_id
         status.done
@@ -142,11 +142,11 @@ module Ayadn
         else
           abort Status.wrong_arguments
         end
-        @check.bad_post_id(post_id)
+        Check.new.bad_post_id(post_id)
         if options[:force]
           Settings.global[:force] = true
         else
-          post_id = @workers.get_real_post_id(post_id)
+          post_id = Workers.new.get_real_post_id(post_id)
         end
         Databases.rename_bookmark post_id, arguments.join(" ")
         status.done

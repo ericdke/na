@@ -2,7 +2,9 @@
 class String
   def is_integer?
     begin
-      _ = Integer(self)
+      temp = self.to_i.to_s
+      return false if temp == "0"
+      Integer(temp)
       return true
     rescue ArgumentError
       return false
