@@ -49,9 +49,11 @@ module Ayadn
     desc "list", "List previously created aliases"
     long_desc Descriptions.alias_list
     option :raw, aliases: "-x", type: :boolean, desc: "Outputs the raw list in JSON"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def list
       begin
         init
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         list = Databases.all_aliases
         unless list.empty? || list.nil?
           if options[:raw]

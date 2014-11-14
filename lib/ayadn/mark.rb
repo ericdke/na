@@ -75,6 +75,10 @@ module Ayadn
           jj JSON.parse(list.to_json)
           exit
         end
+        if list.empty?
+          Status.new.empty_list
+          exit
+        end
         puts "\n"
         list.each {|marked| puts make_entry(JSON.parse(marked[1])); puts "\n"}
       rescue => e

@@ -24,6 +24,7 @@ module Ayadn
       case meth.to_s
       when 'unified', 'checkins', 'global', 'trending', 'photos', 'conversations', 'interactions'
         begin
+          Settings.options[:timeline][:compact] = true if options[:compact] == true
           stream = Stream.new(@api, @view, @workers)
           stream.send(meth.to_sym, options)
         rescue => e
@@ -36,6 +37,7 @@ module Ayadn
 
     def mentions(username, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.mentions(username, options)
       rescue => e
@@ -45,6 +47,7 @@ module Ayadn
 
     def posts(username, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.posts(username, options)
       rescue => e
@@ -54,6 +57,7 @@ module Ayadn
 
     def whatstarred(username, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.whatstarred(username, options)
       rescue => e
@@ -63,6 +67,7 @@ module Ayadn
 
     def whoreposted(post_id, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.whoreposted(post_id, options)
       rescue => e
@@ -72,6 +77,7 @@ module Ayadn
 
     def whostarred(post_id, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.whostarred(post_id, options)
       rescue => e
@@ -81,6 +87,7 @@ module Ayadn
 
     def convo(post_id, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.convo(post_id, options)
       rescue => e
@@ -333,6 +340,7 @@ module Ayadn
 
     def hashtag(hashtag, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         search = Search.new(@api, @view, @workers)
         search.hashtag(hashtag, options)
       rescue => e
@@ -342,6 +350,7 @@ module Ayadn
 
     def search(words, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         search = Search.new(@api, @view, @workers)
         search.find(words, options)
       rescue => e
@@ -351,6 +360,7 @@ module Ayadn
 
     def followings(username, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.followings(username, options)
       rescue => e
@@ -360,6 +370,7 @@ module Ayadn
 
     def followers(username, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.followers(username, options)
       rescue => e
@@ -369,6 +380,7 @@ module Ayadn
 
     def muted(options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.muted(options)
       rescue => e
@@ -378,6 +390,7 @@ module Ayadn
 
     def blocked(options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.blocked(options)
       rescue => e
@@ -391,6 +404,7 @@ module Ayadn
           jj JSON.parse(Settings.config.to_json)
           jj JSON.parse(Settings.options.to_json)
         else
+          Settings.options[:timeline][:compact] = true if options[:compact] == true
           @view.show_settings
         end
       rescue => e
@@ -406,7 +420,7 @@ module Ayadn
         @status.updating_profile
         profile.update
         @status.done
-        userinfo(['me'])
+        userinfo(['me'], options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -414,6 +428,7 @@ module Ayadn
 
     def userinfo(username, options = {})
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         @check.no_username(username)
         usernames = @workers.add_arobases_to_usernames(username)
         usernames.each.with_index do |username, index|
@@ -436,6 +451,7 @@ module Ayadn
     def postinfo(post_id, options)
       begin
         @check.bad_post_id(post_id)
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         if options[:force]
           Settings.global[:force] = true
         else
@@ -525,6 +541,7 @@ module Ayadn
 
     def messages(channel_id, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.messages(channel_id, options)
       rescue => e
@@ -534,6 +551,7 @@ module Ayadn
 
     def messages_unread(options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         if options[:silent]
           Settings.options[:marker][:messages] = false
         end
@@ -603,6 +621,7 @@ module Ayadn
       end
       begin
         @check.bad_post_id(post_id)
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         if options[:force]
           Settings.global[:force] = true
         else
@@ -645,6 +664,7 @@ module Ayadn
 
     def post(args, options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         writer = Post.new
         if options[:poster] # Returns the same options hash + poster embed
           settings = options.dup
@@ -663,6 +683,7 @@ module Ayadn
 
     def write(options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         writer = Post.new
         @status.writing
         @status.post
@@ -684,6 +705,7 @@ module Ayadn
 
     def pmess(username, options = {})
     	begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         if options[:silent]
           Settings.options[:marker][:messages] = false
         end
@@ -725,6 +747,7 @@ module Ayadn
 
     def reply(post_id, options = {})
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         @check.bad_post_id(post_id)
         if options[:force]
           Settings.global[:force] = true
@@ -765,6 +788,7 @@ module Ayadn
         end
         options[:post_id] = resp['data']['id'].to_i
         @view.render(@api.get_convo(post_id), options)
+        puts "\n" if Settings.options[:timeline][:compact] == true && !options[:raw]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})
       end
@@ -772,6 +796,7 @@ module Ayadn
 
     def send_to_channel(channel_id, options = {})
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         if options[:silent]
           Settings.options[:marker][:messages] = false
         end
@@ -811,12 +836,14 @@ module Ayadn
     end
 
     def nowplaying(options = {})
+      Settings.options[:timeline][:compact] = true if options[:compact] == true
       np = NowPlaying.new(@api, @view, @workers, options)
       options[:lastfm] ? np.lastfm(options) : np.itunes(options)
     end
 
     def nowwatching(args, options = {})
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         if args.empty?
           @status.error_missing_title
           exit
@@ -833,6 +860,7 @@ module Ayadn
 
     def tvshow(args, options = {})
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         if args.empty?
           @status.error_missing_title
           exit
@@ -853,6 +881,7 @@ module Ayadn
 
     def random_posts(options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         stream = Stream.new(@api, @view, @workers)
         stream.random_posts(options)
       rescue => e

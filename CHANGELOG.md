@@ -8,9 +8,10 @@
 - Star/unstar/repost/unrepost/userinfos accept several targets
 - Ayadn instances share access to the blacklist
 - Unauthorize an Ayadn user account
-- Posts index resolution is activated by default for ids <= 200, add option `force` to ignore index and retrieve the actual post
+- Posts index resolution is active by default
 - Setting: show tables borders (default: true)
 - Setting: short date in timeline when scrolling (default: true)
+- Setting: force view to be temporarily "compact"
 - Setting: blacklist active (default: true)
 - Spinner: better display when scrolling
 - Simplified, shorter settings names

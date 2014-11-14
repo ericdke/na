@@ -28,6 +28,7 @@ module Ayadn
     desc "list", "List the content of your blacklist"
     long_desc Descriptions.blacklist_list
     option :raw, aliases: "-x", type: :boolean, desc: "Outputs the raw list in CSV"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def list
       BlacklistWorkers.new.list(options)
     end
@@ -127,6 +128,7 @@ module Ayadn
     end
     def list(options)
       begin
+        Settings.options[:timeline][:compact] = true if options[:compact] == true
         show_list(options)
       end
     end
@@ -140,7 +142,9 @@ module Ayadn
           xx = list.map {|obj| [obj[0], obj[1].to_s.force_encoding("UTF-8")] }
           puts xx.to_json
         else
+          puts "\n"
           puts Workers.new.build_blacklist_list(list)
+          puts "\n"
         end
       else
         Status.new.empty_list

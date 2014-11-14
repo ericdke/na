@@ -353,7 +353,8 @@ module Ayadn
     end
 
     def page msg
-      clear_screen
+      # clear_screen
+      puts "\n"
       puts msg
       puts "\n"
     end
@@ -556,7 +557,11 @@ module Ayadn
             inter << "welcomed ".color(:green)
             inter << "you!".color(:yellow)
         end
-        inter << "\n\n"
+        if Settings.options[:timeline][:compact] == true
+          inter << "\n"
+        else  
+          inter << "\n\n"
+        end
       end
       inter
     end

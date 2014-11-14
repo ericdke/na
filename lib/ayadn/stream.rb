@@ -119,6 +119,7 @@ module Ayadn
       @check.no_user(stream, username)
       @check.no_data(stream, 'whatstarred')
       options[:extract] ? @view.all_stars_links(stream) : @view.render(stream, options)
+      puts "\n" if Settings.options[:timeline][:compact] == true
     end
 
     def followings(username, options)
@@ -170,6 +171,7 @@ module Ayadn
       @view.if_raw(stream, options)
       @view.clear_screen
       @view.show_interactions(stream['data'])
+      puts "\n" if Settings.options[:timeline][:compact] == true
     end
 
     def whoreposted(post_id, options)

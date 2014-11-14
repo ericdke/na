@@ -19,6 +19,9 @@ module Ayadn
         @view.all_hashtag_links(stream, hashtag)
       else
         @view.render(stream, options)
+        if Settings.options[:timeline][:compact] == true && !options[:raw]
+          puts "\n" 
+        end
       end
     end
 
@@ -33,6 +36,9 @@ module Ayadn
         get_channels(stream, options)
       else
         get_generic(stream, words, options)
+      end
+      if Settings.options[:timeline][:compact] == true && !options[:raw]
+        puts "\n" 
       end
     end
 

@@ -19,7 +19,13 @@ module Ayadn
       table = init_table
       table.title = "List of your channel aliases".color(:cyan) + "".color(:white)
       table.style = table_borders()
-      list.each {|obj| table << [obj[0].to_s.color(:green), obj[1].color(:red)]}
+      table.headings = [ 'Channel', 'Alias' ]
+      list.each_with_index do |obj, index|
+        table << [obj[0].to_s.color(:green), obj[1].color(:red)]
+        if index + 1 != list.length && Settings.options[:timeline][:compact] == false
+          table << :separator
+        end
+      end
       table
     end
 
@@ -29,7 +35,12 @@ module Ayadn
       table.style = table_borders()
       table.headings = [ 'Name', 'Type' ]
       list.sort!
-      list.each {|obj| table << ["#{obj[1].capitalize}".color(:green), "#{obj[0]}".color(:red)]}
+      list.each_with_index do |obj, index|
+        table << ["#{obj[1].capitalize}".color(:green), "#{obj[0]}".color(:red)]
+        if index + 1 != list.length && Settings.options[:timeline][:compact] == false
+          table << :separator
+        end
+      end
       table
     end
 

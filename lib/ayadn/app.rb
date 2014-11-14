@@ -18,6 +18,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def timeline
       Action.new.unified(options)
     end
@@ -31,6 +32,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def checkins
       Action.new.checkins(options)
     end
@@ -44,6 +46,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def global
       Action.new.global(options)
     end
@@ -57,6 +60,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def trending
       Action.new.trending(options)
     end
@@ -70,6 +74,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def photos
       Action.new.photos(options)
     end
@@ -83,6 +88,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def conversations
       Action.new.conversations(options)
     end
@@ -95,6 +101,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def mentions(*username)
       Action.new.mentions(username, options)
     end
@@ -107,6 +114,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def userposts(*username)
       Action.new.posts(username, options)
     end
@@ -115,6 +123,7 @@ module Ayadn
     map "-int" => :interactions
     long_desc Descriptions.interactions
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def interactions
       Action.new.interactions(options)
     end
@@ -126,6 +135,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def whatstarred(*username)
       Action.new.whatstarred(username, options)
     end
@@ -135,6 +145,7 @@ module Ayadn
     long_desc Descriptions.whoreposted
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: "Force retrieve the actual post id (ignores index)"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def whoreposted(post_id)
       Action.new.whoreposted(post_id, options)
     end
@@ -144,6 +155,7 @@ module Ayadn
     long_desc Descriptions.whostarred
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: "Force retrieve the actual post id (ignores index)"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def whostarred(post_id)
       Action.new.whostarred(post_id, options)
     end
@@ -155,6 +167,7 @@ module Ayadn
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     long_desc Descriptions.convo
     def convo(post_id)
       Action.new.convo(post_id, options)
@@ -169,6 +182,7 @@ module Ayadn
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
     option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
     option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def followings(*username)
       Action.new.followings(username, options)
     end
@@ -182,6 +196,7 @@ module Ayadn
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
     option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
     option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def followers(*username)
       Action.new.followers(username, options)
     end
@@ -195,6 +210,7 @@ module Ayadn
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
     option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
     option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def muted
       Action.new.muted(options)
     end
@@ -208,6 +224,7 @@ module Ayadn
     option :name, aliases: "-n", type: :boolean, desc: "Sort the list by: name"
     option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
     option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def blocked
       Action.new.blocked(options)
     end
@@ -218,6 +235,7 @@ module Ayadn
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def hashtag(hashtag)
       Action.new.hashtag(hashtag, options)
     end
@@ -228,6 +246,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: Descriptions.options_count
     option :index, aliases: "-i", type: :boolean, desc: Descriptions.options_index
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     option :messages, type: :boolean, desc: 'Search for WORD(S) in messages, including PMs.'
@@ -242,6 +261,7 @@ module Ayadn
     map "-sg" => :settings
     long_desc Descriptions.settings
     option :raw, aliases: "-x", type: :boolean, desc: "Outputs the raw list in JSON"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def settings
       Action.new.view_settings(options)
     end
@@ -250,6 +270,7 @@ module Ayadn
     map "-ui" => :userinfo
     long_desc Descriptions.userinfo
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def userinfo(*username)
       Action.new.userinfo(username, options)
     end
@@ -274,6 +295,7 @@ module Ayadn
     long_desc Descriptions.postinfo
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def postinfo(post_id)
       Action.new.postinfo(post_id, options)
     end
@@ -398,6 +420,7 @@ module Ayadn
     option :count, aliases: "-c", type: :numeric, desc: "Specify the number of messages to retrieve"
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channel as read"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def messages(channel_id)
       Action.new.messages(channel_id, options)
     end
@@ -405,6 +428,7 @@ module Ayadn
     desc "messages_unread", "Show your unread private messages (-pmu)"
     map "-pmu" => :messages_unread
     option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channels as read"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     long_desc Descriptions.messages_unread
     def messages_unread
         Action.new.messages_unread(options)
@@ -424,6 +448,7 @@ module Ayadn
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
     option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def post(*args)
       Action.new.post(args, options)
     end
@@ -436,6 +461,7 @@ module Ayadn
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
     option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def write
       Action.new.write(options)
     end
@@ -447,6 +473,7 @@ module Ayadn
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new message"
     option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new message"
     option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channel as read"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def pm(*username)
       Action.new.pmess(username, options)
     end
@@ -459,6 +486,7 @@ module Ayadn
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new message"
     option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new message"
     option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channel as read"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def send_to_channel(channel_id)
       Action.new.send_to_channel(channel_id, options)
     end
@@ -472,6 +500,7 @@ module Ayadn
     option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
     option :noredirect, aliases: "-n", type: :boolean, desc: "Do not respond to the original post but to the reposted one if possible"
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def reply(id)
       ayadn = Action.new
       ayadn.reply(id, options)
@@ -517,6 +546,7 @@ module Ayadn
     option :lastfm, aliases: "-l", type: :boolean, desc: "Get current track from Last.fm instead of iTunes"
     option :hashtag, aliases: "-h", type: :array, desc: "Specify a custom hashtag"
     option :text, aliases: "-t", type: :array, desc: "Add custom text"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def nowplaying
       Action.new.nowplaying(options)
     end
@@ -527,6 +557,7 @@ module Ayadn
     map "-NW" => :movie
     long_desc Descriptions.nowwatching
     option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def movie(*title)
       Action.new.nowwatching(title, options)
     end
@@ -536,6 +567,7 @@ module Ayadn
     long_desc Descriptions.tvshow
     option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
     option :banner, aliases: "-b", type: :boolean, desc: "Inserts the show banner instead of the show poster"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def tvshow(*title)
       Action.new.tvshow(title, options)
     end
@@ -543,6 +575,7 @@ module Ayadn
     desc "random", "Show random posts from App.net (-rnd)"
     map "-rnd" => :random
     option :wait, aliases: "-w", type: :numeric, desc: "In seconds, time to wait before next page"
+    option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     long_desc Descriptions.random_posts
     def random
       Action.new.random_posts(options)
