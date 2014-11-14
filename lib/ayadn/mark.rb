@@ -5,6 +5,7 @@ module Ayadn
     desc "add POST_ID (TITLE)", "Create a bookmark for this conversation"
     long_desc Descriptions.mark_add
     map "create" => :add
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def add(*args)
       begin
         init
@@ -16,9 +17,11 @@ module Ayadn
           status.wrong_arguments
           exit
         end
-        unless post_id.is_integer?
-          status.error_missing_post_id
-          exit
+        @check.bad_post_id(post_id)
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          post_id = @workers.get_real_post_id(post_id)
         end
         convo_title = post_id if convo_title == ''
         api, workers, view = API.new, Workers.new, View.new
@@ -102,7 +105,8 @@ module Ayadn
     desc "delete POST_ID", "Delete entry POST_ID from your bookmarked conversations"
     map "remove" => :delete
     long_desc Descriptions.mark_delete
-    def delete *args
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    def delete(*args)
       begin
         init
         status = Status.new
@@ -112,9 +116,11 @@ module Ayadn
         else
           post_id = args[0]
         end
-        unless post_id.is_integer?
-          status.error_missing_post_id
-          exit
+        @check.bad_post_id(post_id)
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          post_id = @workers.get_real_post_id(post_id)
         end
         Databases.delete_bookmark post_id
         status.done
@@ -125,7 +131,8 @@ module Ayadn
 
     desc "rename POST_ID NEW_TITLE", "Rename bookmark POST_ID"
     long_desc Descriptions.mark_rename
-    def rename *args
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
+    def rename(*args)
       begin
         init
         status = Status.new
@@ -135,9 +142,11 @@ module Ayadn
         else
           abort Status.wrong_arguments
         end
-        unless post_id.is_integer?
-          status.error_missing_post_id
-          exit
+        @check.bad_post_id(post_id)
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          post_id = @workers.get_real_post_id(post_id)
         end
         Databases.rename_bookmark post_id, arguments.join(" ")
         status.done

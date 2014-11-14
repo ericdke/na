@@ -8,6 +8,7 @@
 - Star/unstar/repost/unrepost/userinfos accept several targets
 - Ayadn instances share access to the blacklist
 - Unauthorize an Ayadn user account
+- Posts index is activated by default if the id is <= 200, add option `force` to ignore index and retrieve the actual post
 - Setting: show tables borders (default: true)
 - Setting: short date in timeline when scrolling (default: true)
 - Setting: blacklist active (default: true)
