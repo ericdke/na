@@ -37,6 +37,7 @@ describe Ayadn::Workers do
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
     Ayadn::Databases.stub(:users).and_return("users")
     Ayadn::Databases.stub(:get_index_length).and_return(50)
+    Ayadn::Databases.stub(:get_post_from_index).and_return(30000)
     Ayadn::Databases.stub(:is_in_blacklist?).and_return(false)
     Dir.stub(:home).and_return("spec/mock")
     @workers = Ayadn::Workers.new
@@ -82,6 +83,12 @@ describe Ayadn::Workers do
     it "gets rid of 'me' and adds arobase if needed to other usernames" do
       names = @workers.all_but_me(['yolo', '@james', 'me'])
       expect(names).to eq ['@yolo', '@james']
+    end
+  end
+
+  describe "#get_post_from_index" do
+    it "returns the true post id if number is not in index" do
+      expect(@workers.get_post_from_index("30000")).to eq 30000
     end
   end
 
