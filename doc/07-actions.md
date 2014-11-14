@@ -10,6 +10,12 @@ Accepts several post ids:
 
 `ayadn -D 23365251 23365252 23365253`  
 
+Note: since Ayadn 2.0, posts index resolution is activated by default for posts ids from 1 to 200. Add option `--force` to ignore index and retrieve the actual old post if needed.
+
+This absolute range from 1 to 200 for indexed posts exists because indexed posts aren't available in scroll views, so an index will never be greater than 200 (which is the ADN number of posts per request limit).
+
+*Note: this "indexed" concept is also active by default for all posts commands (repost, star, reply, etc).*
+
 # DELETE_M
 
 Delete a private message. 

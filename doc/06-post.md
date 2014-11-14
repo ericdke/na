@@ -52,6 +52,8 @@ Hit CTRL+C to exit this mode at any moment.
 
 # REPLY
 
+## CLASSIC
+
 Reply to a specific post.
 
 - You can reply by specifying the post id:
@@ -64,9 +66,17 @@ Ayadn will then show you the *write* prompt.
 
 If you reply to a post containing multiple mentions, your text will be inserted between the leading mention and the other ones.
 
+## INDEXED
+
 - You can also reply to the *index* of the post instead of its *id* _if you used the '--index' or '-i' option_ when previously viewing a stream:
 
 `ayadn -R 3`  
+
+Note: since Ayadn 2.0, posts index resolution is activated by default for posts ids from 1 to 200. Add option `--force` to ignore index and retrieve the actual old post if needed.
+
+This absolute range from 1 to 200 for indexed posts exists because indexed posts aren't available in scroll views, so an index will never be greater than 200 (which is the ADN number of posts per request limit).
+
+## REDIRECT
 
 If you reply to a reposted post, Ayadn will reply to the original post, complying with the ADN guidelines.
 
@@ -75,6 +85,8 @@ However, if needed, you can reply to the reposted post with the `--noredirect` o
 `ayadn -R --noredirect 23344556`
 
 `ayadn -R -n 23344556`  
+
+*Note: these two last concepts, "indexed" and "redirect" are also activated by default for all posts commands (repost, star, delete, etc).*
 
 
 # PM (PRIVATE MESSAGE)
