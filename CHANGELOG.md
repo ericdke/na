@@ -1,4 +1,4 @@
-# 2.0.0 - 2014-11-13 - 'The Piper At The Gates Of Dawn'
+# 2.0.0 - 2014-11-14 - 'The Piper At The Gates Of Dawn'
 
 - SQLite database. Means FAST!
 - Unified style for statuses, questions and alerts
@@ -9,9 +9,9 @@
 - Ayadn instances share access to the blacklist
 - Unauthorize an Ayadn user account
 - Posts index resolution is active by default
+- Option: force view to be temporarily "compact"
 - Setting: show tables borders (default: true)
 - Setting: short date in timeline when scrolling (default: true)
-- Setting: force view to be temporarily "compact"
 - Setting: blacklist active (default: true)
 - Spinner: better display when scrolling
 - Simplified, shorter settings names
