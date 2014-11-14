@@ -4,6 +4,7 @@
 .config
 .yardoc
 .tags*
+tags
 Gemfile.lock
 InstalledFiles
 _yardoc
