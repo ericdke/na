@@ -134,6 +134,7 @@ module Ayadn
     map "-wor" => :whoreposted
     long_desc Descriptions.whoreposted
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: "Force retrieve the actual post id (ignores index)"
     def whoreposted(post_id)
       Action.new.whoreposted(post_id, options)
     end
@@ -142,6 +143,7 @@ module Ayadn
     map "-wos" => :whostarred
     long_desc Descriptions.whostarred
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: "Force retrieve the actual post id (ignores index)"
     def whostarred(post_id)
       Action.new.whostarred(post_id, options)
     end
@@ -271,6 +273,7 @@ module Ayadn
     map "-pi" => :postinfo
     long_desc Descriptions.postinfo
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def postinfo(post_id)
       Action.new.postinfo(post_id, options)
     end
@@ -288,8 +291,9 @@ module Ayadn
     desc "delete POST", "Delete a post (-D)"
     map "-D" => :delete
     long_desc Descriptions.delete
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def delete(*post_id)
-      Action.new.delete(post_id)
+      Action.new.delete(post_id, options)
     end
 
     desc "delete_m CHANNEL MESSAGE", "Delete a message (-DM)"
@@ -323,29 +327,33 @@ module Ayadn
     desc "unrepost POST", "Unrepost a post (-UR)"
     map "-UR" => :unrepost
     long_desc Descriptions.unrepost
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def unrepost(*post_id)
-      Action.new.unrepost(post_id)
+      Action.new.unrepost(post_id, options)
     end
 
     desc "unstar POST", "Unstar a post (-US)"
     map "-US" => :unstar
     long_desc Descriptions.unstar
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def unstar(*post_id)
-      Action.new.unstar(post_id)
+      Action.new.unstar(post_id, options)
     end
 
     desc "star POST", "Star a post (-ST)"
     map "-ST" => :star
     long_desc Descriptions.star
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def star(*post_id)
-      Action.new.star(post_id)
+      Action.new.star(post_id, options)
     end
 
     desc "repost POST", "Repost a post (-O)"
     map "-O" => :repost
     long_desc Descriptions.repost
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def repost(*post_id)
-      Action.new.repost(post_id)
+      Action.new.repost(post_id, options)
     end
 
     desc "follow @USERNAME", "Follow @username (-FO)"
@@ -404,8 +412,9 @@ module Ayadn
 
     desc "pin POST TAG(S)", "Export a post's link and text with tags to Pinboard"
     long_desc Descriptions.pin
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def pin(post_id, *tags)
-      Action.new.pin(post_id, tags)
+      Action.new.pin(post_id, tags, options)
     end
 
     desc "post Your text", "Simple post to App.net (-P)"
@@ -462,6 +471,7 @@ module Ayadn
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
     option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
     option :noredirect, aliases: "-n", type: :boolean, desc: "Do not respond to the original post but to the reposted one if possible"
+    option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def reply(id)
       ayadn = Action.new
       ayadn.reply(id, options)

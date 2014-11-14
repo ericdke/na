@@ -679,8 +679,9 @@ module Ayadn
           res = @sql.execute("SELECT content FROM TLIndex WHERE count=#{number}").flatten[0]
           JSON.parse(res)
         else
-          Status.new.must_be_in_index
-          Errors.global_error({error: "Out of range", caller: caller, data: [number]})
+          {'id' => number}
+          # Status.new.must_be_in_index
+          # Errors.global_error({error: "Out of range", caller: caller, data: [number]})
         end
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2

@@ -17,7 +17,7 @@ module Ayadn
       "Extract links from each object"
     end
     def self.options_force
-      "Force retrieve posts if the user is muted/blocked"
+      "Force retrieve posts if the user is muted/blocked and ignores posts index"
     end
     def self.unified
       <<-USAGE

@@ -19,3 +19,4 @@ tmp
 token
 fake.db
 .ruby-version
+*.zip

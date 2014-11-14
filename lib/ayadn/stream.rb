@@ -174,6 +174,9 @@ module Ayadn
 
     def whoreposted(post_id, options)
       @check.bad_post_id(post_id)
+      unless options[:force]
+        post_id = @workers.get_real_post_id(post_id)
+      end
       @view.downloading(options)
       details = @api.get_details(post_id, options)
       @check.no_post(details, post_id)
@@ -189,6 +192,9 @@ module Ayadn
 
     def whostarred(post_id, options)
       @check.bad_post_id(post_id)
+      unless options[:force]
+        post_id = @workers.get_real_post_id(post_id)
+      end
       @view.downloading(options)
       details = @api.get_details(post_id, options)
       @check.no_post(details, post_id)
@@ -203,8 +209,12 @@ module Ayadn
     end
 
     def convo(post_id, options)
-      Settings.global[:force] = true if options[:force]
       @check.bad_post_id(post_id)
+      if options[:force]
+        Settings.global[:force] = true
+      else
+        post_id = @workers.get_real_post_id(post_id)
+      end
       @view.downloading(options)
       details = @api.get_details(post_id, options)
       @check.no_post(details, post_id)

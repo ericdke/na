@@ -88,12 +88,17 @@ module Ayadn
       end
     end
 
-    def delete(post_ids)
+    def delete(post_ids, options = {})
       begin
         ids = post_ids.select { |post_id| post_id.is_integer? }
         if ids.empty?
           @status.error_missing_post_id
           exit
+        end
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          ids.map! { |post_id| @workers.get_real_post_id(post_id) }
         end
         puts "\n"
         ids.each do |post_id|
@@ -221,11 +226,20 @@ module Ayadn
       end
     end
 
-    def repost(post_ids)
+    def repost(post_ids, options = {})
       begin
-        @check.bad_post_ids(post_ids)
+        ids = post_ids.select { |post_id| post_id.is_integer? }
+        if ids.empty?
+          @status.error_missing_post_id
+          exit
+        end
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          ids.map! { |post_id| @workers.get_real_post_id(post_id) }
+        end
         puts "\n"
-        post_ids.each do |post_id|
+        ids.each do |post_id|
           @status.reposting(post_id)
           resp = @api.get_details(post_id)
           @check.already_reposted(resp)
@@ -237,11 +251,20 @@ module Ayadn
       end
     end
 
-    def unrepost(post_ids)
+    def unrepost(post_ids, options = {})
       begin
-        @check.bad_post_ids(post_ids)
+        ids = post_ids.select { |post_id| post_id.is_integer? }
+        if ids.empty?
+          @status.error_missing_post_id
+          exit
+        end
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          ids.map! { |post_id| @workers.get_real_post_id(post_id) }
+        end
         puts "\n"
-        post_ids.each do |post_id|
+        ids.each do |post_id|
           @status.unreposting(post_id)
           if @api.get_details(post_id)['data']['you_reposted']
             @check.has_been_unreposted(post_id, @api.unrepost(post_id))
@@ -254,11 +277,20 @@ module Ayadn
       end
     end
 
-    def unstar(post_ids)
+    def unstar(post_ids, options = {})
       begin
-        @check.bad_post_ids(post_ids)
+        ids = post_ids.select { |post_id| post_id.is_integer? }
+        if ids.empty?
+          @status.error_missing_post_id
+          exit
+        end
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          ids.map! { |post_id| @workers.get_real_post_id(post_id) }
+        end
         puts "\n"
-        post_ids.each do |post_id|
+        ids.each do |post_id|
           @status.unstarring(post_id)
           resp = @api.get_details(post_id)
           id = @workers.get_original_id(post_id, resp)
@@ -274,11 +306,20 @@ module Ayadn
       end
     end
 
-    def star(post_ids)
+    def star(post_ids, options = {})
       begin
-        @check.bad_post_ids(post_ids)
+        ids = post_ids.select { |post_id| post_id.is_integer? }
+        if ids.empty?
+          @status.error_missing_post_id
+          exit
+        end
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          ids.map! { |post_id| @workers.get_real_post_id(post_id) }
+        end
         puts "\n"
-        post_ids.each do |post_id|
+        ids.each do |post_id|
           @status.starring(post_id)
           resp = @api.get_details(post_id)
           @check.already_starred(resp)
@@ -394,8 +435,12 @@ module Ayadn
 
     def postinfo(post_id, options)
       begin
-        Settings.global[:force] = true
         @check.bad_post_id(post_id)
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          post_id = @workers.get_real_post_id(post_id)
+        end
         details = lambda { @api.get_details(post_id, options) }
         if options[:raw]
           @view.show_raw(details.call, options)
@@ -547,7 +592,7 @@ module Ayadn
       end
     end
 
-    def pin(post_id, usertags)
+    def pin(post_id, usertags, options = {})
       begin
         require 'pinboard'
         require 'base64'
@@ -558,6 +603,11 @@ module Ayadn
       end
       begin
         @check.bad_post_id(post_id)
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          post_id = @workers.get_real_post_id(post_id)
+        end
         @view.downloading
         resp = @api.get_details(post_id)['data']
         @view.clear_screen
@@ -675,7 +725,12 @@ module Ayadn
 
     def reply(post_id, options = {})
       begin
-        post_id = @workers.get_real_post_id(post_id)
+        @check.bad_post_id(post_id)
+        if options[:force]
+          Settings.global[:force] = true
+        else
+          post_id = @workers.get_real_post_id(post_id)
+        end
       	@status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
         @check.no_post(replied_to, post_id)
