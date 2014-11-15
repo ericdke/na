@@ -7,7 +7,7 @@ AYADN
 
 [App.net](http://app.net) command-line client.
 
-The purpose of Ayadn is to let you use all the features of App.net from the console without any headaches... and then more: power, freedom and fun!
+With Ayadn, you can use all the features of App.net from the console without any headaches... and then more: power, freedom and fun!
 
 - view/scroll all streams 
 - view/scroll conversations
@@ -20,7 +20,7 @@ The purpose of Ayadn is to let you use all the features of App.net from the cons
 - view/scroll posts from specific users or posts mentioning a user
 - follow/unfollow users, star/repost/mute/block/unstar/etc 
 - create local bookmarks for conversations
-- get information about users and their followers/followings
+- get detailed information about users and their followers/followings
 - search for words, hashtags, post annotations, channels, etc
 - extract links from conversations, streams, posts, etc
 - list and download your files
@@ -30,7 +30,7 @@ The purpose of Ayadn is to let you use all the features of App.net from the cons
 - 'tvshow' creates a post from a TV show title with poster, plot, and link
 - view/send private messages
 - view geolocation data in streams
-- create silent black lists of users, mentions or hashtags
+- create silent black lists of users, mentions, clients or hashtags
 - create aliases for easier use of channels ids
 - update your user profile
 - export links and text from a post to Pinboard

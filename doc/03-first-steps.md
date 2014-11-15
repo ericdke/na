@@ -8,10 +8,6 @@ Just run
 
 `ayadn -auth` 
 
-or 
-
-`ayadn -AU` 
-
 to register a new user.  
 
 ## ACCOUNTS
@@ -20,7 +16,7 @@ Ayadn supports multiple accounts.
 
 Register a new user with 
 
-`ayadn -AU` 
+`ayadn -auth` 
 
 at any moment.
 
@@ -36,13 +32,13 @@ You can also unauthorize a user with or without deleting its folders:
 
 `ayadn unauthorize @ericd`
 
+or
+
 `ayadn -UA -D @ericd`
 
 ## DATA
 
 All Ayadn files and folders are created in your 'home' folder. 
-
-On Mac OS X, it looks like this:
 
 ```
   /Users/user/ayadn/
@@ -50,7 +46,6 @@ On Mac OS X, it looks like this:
   /Users/user/ayadn/ericd
   ├── auth
   │   └── token
-  ├── backup
   ├── config
   │   ├── api.json
   │   ├── config.yml
@@ -65,13 +60,13 @@ On Mac OS X, it looks like this:
   └── posts
 ```
 
-Each authorized account has its set of folders and databases.
+Each authorized account has its set of folders, a config file and a database.
 
 If you're not sure if your config file is up to date or properly filled and you want to benefit from the new options in Ayadn, run 
 
 `ayadn set defaults` 
 
-and it will create a brand new file with optimal values.  
+and it will create a brand new file with default values.  
 
 ## HELP
 
@@ -103,23 +98,17 @@ It also works with the shortcuts:
 
 `ayadn help -K` 
 
-`ayadn -K help delete`
-
-`ayadn -A help create`  
-
-
 ## SHORTCUTS
 
-Most examples in the documentation include the 'complete' command followed by the 'shortcut' command. 
+Examples in the documentation include the complete command followed by its shortcut version. 
 
 Of course, using Ayadn is much faster with the shortcut commands.
 
 If you're like me, you'll even want to create aliases in bash/zsh or TextExpander snippets for the combinations of Ayadn commands and options you use the most...  
 
-
 ## EXAMPLES
 
-Just a few examples to give you a hint at the flexible syntax.
+Just a few examples of commands to give you a hint at the flexible syntax.
 
 Complete:    
 

@@ -120,20 +120,29 @@ Differences will occur due to ADN policy:
 
 Removes the line-breaks when possible, and forces the view to be "compact".
 
-Set it with:
+Option is `-k` (or `--compact`):
+
+`ayadn global --scroll --compact`
+
+`ayadn timeline --index --count=200 --compact`
+
+`ayadn userposts me --name --compact`
+
+or
+
+`ayadn -gl -s -k`
+
+`ayadn -tl -i -c200 -k`
+
+`ayadn -up me -n -k`
+
+*Works with all compatible views, streams and lists.*
+
+Set it permanently with:
 
 `ayadn set timeline compact true`
 
 You may want to change colors to create visual marks between posts if you choose the compact view, i.e. putting the all header in the same color (post id, username, name, etc).
-
-### BLACKLIST
-
-You can activate or deactivate the blacklist filter in the stream view with:
-
-`ayadn set blacklist active false`
-
-(default: true)  
-
 
 # GLOBAL
 

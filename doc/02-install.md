@@ -24,6 +24,22 @@ Ayadn 1.x isn't compatible with Windows: there's too many issues due to POSIX-de
 
 ## MIGRATE
 
-The database format has changed between 1.x and 2.x: if you already have one or several accounts, Ayadn will ask you to run the `migrate` command *once* per account.
+The database format has changed between 1.x and 2.x: if you already have one or several authorized accounts, Ayadn will ask you to run the `migrate` command once per account. You only have to do this once.
 
 You can also, if you wish, start anew and delete your `~/ayadn` folder before authorizing a new user with Ayadn 2.x.
+
+## DEPENDENCIES
+
+Ayadn depends on these Gems:
+
+        amalgalite
+        daybreak
+        fast_cache
+        pinboard
+        rainbow
+        rest-client
+        spotlite
+        terminal-table
+        thor
+        tvdb_party
+        unicode_utils

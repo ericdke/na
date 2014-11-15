@@ -33,6 +33,8 @@ module Ayadn
 
       `ayadn -tl -s`
 
+      # -----
+
       Retrieves only 5 posts:
 
       `ayadn -tl -c5`
@@ -48,6 +50,10 @@ module Ayadn
       Show only new posts:
 
       `ayadn -tl -n`
+
+      Force compact view:
+
+      `ayadn -tl -k`
 
       Force display blocked/muted/blacklisted:
 
@@ -73,6 +79,8 @@ module Ayadn
 
       `ayadn -ck -s`
 
+      # -----
+
       Retrieves only 5 posts:
 
       `ayadn -ck -c5`
@@ -88,6 +96,10 @@ module Ayadn
       Show only new posts:
 
       `ayadn -ck -n`
+
+      Force compact view:
+
+      `ayadn -ck -k`
 
       Force display blocked/muted/blacklisted:
 
@@ -113,6 +125,8 @@ module Ayadn
 
       `ayadn -gl -s`
 
+      # -----
+
       Retrieves only 5 posts:
 
       `ayadn -gl -c5`
@@ -128,6 +142,10 @@ module Ayadn
       Show only new posts:
 
       `ayadn -gl -n`
+
+      Force compact view:
+
+      `ayadn -gl -k`
 
       Force display blocked/muted/blacklisted:
 
@@ -153,6 +171,8 @@ module Ayadn
 
       `ayadn -tr -s`
 
+      # -----
+
       Retrieves only 5 posts:
 
       `ayadn -tr -c5`
@@ -168,6 +188,10 @@ module Ayadn
       Show only new posts:
 
       `ayadn -tr -n`
+
+      Force compact view:
+
+      `ayadn -tr -k`
 
       Force display blocked/muted/blacklisted:
 
@@ -193,6 +217,8 @@ module Ayadn
 
       `ayadn -ph -s`
 
+      # -----
+
       Retrieves only 5 posts:
 
       `ayadn -ph -c5`
@@ -208,6 +234,10 @@ module Ayadn
       Show only new posts:
 
       `ayadn -ph -n`
+
+      Force compact view:
+
+      `ayadn -ph -k`
 
       Force display blocked/muted/blacklisted:
 
@@ -233,6 +263,8 @@ module Ayadn
 
       `ayadn -cq -s`
 
+      # -----
+
       Retrieves only 5 posts:
 
       `ayadn -cq -c5`
@@ -248,6 +280,10 @@ module Ayadn
       Show only new posts:
 
       `ayadn -cq -n`
+
+      Force compact view:
+
+      `ayadn -cq -k`
 
       Force display blocked/muted/blacklisted:
 
@@ -267,13 +303,17 @@ module Ayadn
 
       `ayadn mentions @ericd`
 
-      `ayadn -m @ericd`
+      `ayadn -m ericd`
+
+      ("@" is optional)
 
       You can use "me" instead of your username for your own mentions.
 
       Scroll mentions:
 
       `ayadn -m -s me`
+
+      # -----
 
       Retrieves only 5 posts:
 
@@ -286,6 +326,10 @@ module Ayadn
       Shows index and retrieves 30 posts:
 
       `ayadn -m -i -c30 me`
+
+      Force compact view:
+
+      `ayadn -m -i -k me`
 
       Force display blocked/muted/blacklisted:
 
@@ -309,9 +353,13 @@ module Ayadn
 
       Scroll posts:
 
-      `ayadn -up -s @ericd`
+      `ayadn -up -s ericd`
+
+      ("@" is optional)
 
       You can use "me" instead of your username for your own posts.
+
+      # -----
 
       Retrieves only 5 posts:
 
@@ -324,6 +372,10 @@ module Ayadn
       Shows index and retrieves 30 posts:
 
       `ayadn -up -i -c30 me`
+
+      Force compact view:
+
+      `ayadn -up me -i -c30 -k`
 
       Force display blocked/muted/blacklisted:
 
@@ -343,7 +395,13 @@ module Ayadn
 
       `ayadn whatstarred @ericd`
 
-      `ayadn -was @ericd`
+      `ayadn -was ericd`
+
+      ("@" is optional)
+
+      You can use "me" instead of your username for your own stars.
+
+      # -----
 
       Retrieves only 5 posts:
 
@@ -357,6 +415,10 @@ module Ayadn
 
       `ayadn -was -i -c30 @ericd`
 
+      Force compact view:
+
+      `ayadn -was -i -c30 @ericd -k`
+
       Show result as JSON:
 
       `ayadn -was -x @ericd`
@@ -364,8 +426,6 @@ module Ayadn
       Extracts all links contained in the starred posts:
 
       `ayadn -was -e @ericd`
-
-      You can use "me" instead of your username for your own stars.
       \n\n
       USAGE
     end
@@ -378,6 +438,12 @@ module Ayadn
       `ayadn interactions`
 
       `ayadn -int`
+
+      # -----
+
+      Force compact view:
+
+      `ayadn -int -k`
 
       Show result as JSON:
 
@@ -395,6 +461,12 @@ module Ayadn
 
       `ayadn -wor 22790201`
 
+      # -----
+
+      Force compact view:
+
+      `ayadn -wor -k 22790201`
+
       Show result as JSON:
 
       `ayadn -wor -x 22790201`
@@ -410,6 +482,12 @@ module Ayadn
       `ayadn whostarred 22790201`
 
       `ayadn -wos 22790201`
+
+      # -----
+
+      Force compact view:
+
+      `ayadn -was -k 22790201`
 
       Show result as JSON:
 
@@ -431,9 +509,15 @@ module Ayadn
 
       `ayadn -co -s 23362788`
 
+      # -----
+
       Show index instead of post numbers:
 
       `ayadn -co -i 23362788`
+
+      Force compact view:
+
+      `ayadn -co -i -k 23362788`
 
       Force display blocked/muted/blacklisted:
 
@@ -453,9 +537,13 @@ module Ayadn
 
       `ayadn followings @ericd`
 
-      `ayadn -fwg @ericd`
+      `ayadn -fwg ericd`
+
+      ("@" is optional)
 
       You can use "me" instead of your username for your own account.
+
+      # -----
 
       Sort the list by username:
 
@@ -479,6 +567,10 @@ module Ayadn
 
       `ayadn -fwg -u -r me`
 
+      Force compact view:
+
+      `ayadn -fwg -k me`
+
       Show as JSON:
 
       `ayadn -fwg me`
@@ -493,9 +585,13 @@ module Ayadn
 
       `ayadn followers @ericd`
 
-      `ayadn -fwr @ericd`
+      `ayadn -fwr ericd`
+
+      ("@" is optional)
 
       You can use "me" instead of your username for your own account.
+
+      # -----
 
       Sort the list by username:
 
@@ -519,6 +615,10 @@ module Ayadn
 
       `ayadn -fwr -u -r me`
 
+      Force compact view:
+
+      `ayadn -fwr -k me`
+
       Show as JSON:
 
       `ayadn -fwr me`
@@ -534,6 +634,8 @@ module Ayadn
       `ayadn muted`
 
       `ayadn -mtd`
+
+      # -----
 
       Sort the list by username:
 
@@ -557,6 +659,10 @@ module Ayadn
 
       `ayadn -mtd -u -r`
 
+      Force compact view:
+
+      `ayadn -mtd -k`
+
       Show as JSON:
 
       `ayadn -mtd`
@@ -573,6 +679,8 @@ module Ayadn
       `ayadn blocked`
 
       `ayadn -bkd`
+
+      # -----
 
       Sort the list by username:
 
@@ -596,6 +704,10 @@ module Ayadn
 
       `ayadn -bkd -u -r`
 
+      Force compact view:
+
+      `ayadn -bkd -k`
+
       Show as JSON:
 
       `ayadn -bkd`
@@ -612,6 +724,8 @@ module Ayadn
 
       `ayadn -t thememonday`
 
+      # -----
+
       Extracts all links contained in the posts:
 
       `ayadn -t -e thememonday`
@@ -619,6 +733,10 @@ module Ayadn
       Ignore the blocked/muted/blacklisted filters:
 
       `ayadn -t -f thememonday`
+
+      Force compact view:
+
+      `ayadn -t thememonday -k`
 
       Show as JSON:
 
@@ -632,9 +750,11 @@ module Ayadn
 
       # Basic usage
 
-      `ayadn search screenshot iterm`
+      `ayadn search oneword anotherone`
 
-      `ayadn -s screenshot iterm`
+      `ayadn -s oneword anotherone`
+
+      # -----
 
       Retrieves only 5 posts:
 
@@ -656,9 +776,15 @@ module Ayadn
 
       `ayadn -s -f screenshot iterm`
 
+      Force compact view:
+
+      `ayadn -s screenshot -k`
+
       Show as JSON:
 
       `ayadn -s -x screenshot iterm`
+
+      # -----
 
       # Advanced usage
 
@@ -710,6 +836,12 @@ module Ayadn
 
       `ayadn -sg`
 
+      # -----
+
+      Force compact view:
+
+      `ayadn -sg -k`
+
       Show as JSON:
 
       `ayadn -sg -x`
@@ -726,13 +858,21 @@ module Ayadn
 
       `ayadn -ui @ericd`
 
+      ("@" is optional)
+
       You can use "me" instead of your username for your own account.
 
       `ayadn -ui me`
 
+      # -----
+
       Get infos about several users:
 
-      `ayadn -ui @ericd @adnapi`
+      `ayadn -ui ericd adnapi`
+
+      Force compact view:
+
+      `ayadn -ui ericd -k`
 
       Show as JSON:
 
@@ -774,6 +914,12 @@ module Ayadn
 
       `ayadn -pi 23365251`
 
+      # -----
+
+      Force compact view:
+
+      `ayadn -pi 23365251 -k`
+
       Show as JSON:
 
       `ayadn -pi -x 23365251`
@@ -789,6 +935,8 @@ module Ayadn
       `ayadn files`
 
       `ayadn -fl`
+
+      # -----
 
       Retrieves only 5 files:
 
@@ -1008,6 +1156,8 @@ module Ayadn
 
       `ayadn -ch`
 
+      # -----
+
       Retrieve only the specified channel(s):
 
       `ayadn -ch --id 42133 42134`
@@ -1048,6 +1198,8 @@ module Ayadn
 
       `ayadn -ms -s 46217`
 
+      # -----
+
       Retrieves only 5 messages:
 
       `ayadn -ms -c5 46217`
@@ -1055,6 +1207,10 @@ module Ayadn
       Retrieves only new messages:
 
       `ayadn -ms -n 46217`
+
+      Force compact view:
+
+      `ayadn -ms -n 46217 -k`
 
       Ayadn will mark this PM channel as read after running this command.
 
@@ -1086,6 +1242,8 @@ module Ayadn
 
       `ayadn -pmu`
 
+      # -----
+
       Ayadn will mark all your PM channels as read after running this command.
 
       You can pass an option, `-z`, to avoid this for the time of the command:
@@ -1095,6 +1253,10 @@ module Ayadn
       Or you can set it off permanently:
 
       `ayadn set marker messages false`
+
+      Force compact view:
+
+      `ayadn -pmu -k`
       \n\n
       USAGE
     end
@@ -1119,6 +1281,8 @@ module Ayadn
       `ayadn -P 'Hello from Ayadn!'`
 
       `ayadn -P Watching a movie with friends`
+
+      # -----
 
       Embed a picture:
 
@@ -1152,6 +1316,8 @@ module Ayadn
 
       `ayadn -W`
 
+      # -----
+
       Embed a picture:
 
       `ayadn -W -E ~/Pics/lolcat.jpg`
@@ -1179,6 +1345,8 @@ module Ayadn
       Usage:
 
       `ayadn pm @ericd`
+
+      # -----
 
       Embed a picture:
 
@@ -1219,6 +1387,8 @@ module Ayadn
       ayadn -C 46217
 
       It enters the writing mode where you will type your message.
+
+      # -----
 
       If you've set an alias for the channel, you can post to it with 'ayadn -C my_alias'
 
@@ -1263,6 +1433,8 @@ module Ayadn
       It enters the writing mode where you will type your reply.
 
       Mentions and/or username will be detected and your text will be inserted appropriately.
+
+      # -----
 
       If you reply to a repost, Ayadn will automatically replace it by the original post, following the App.net guidelines. But you can force respond to the reposted one by passing the 'noredirect' option:
 
@@ -1405,6 +1577,10 @@ module Ayadn
       `ayadn alias list`
 
       `ayadn -A list`
+
+      Force compact view :
+
+      `ayadn -A list -k`
       \n\n
       USAGE
     end
@@ -1459,6 +1635,10 @@ module Ayadn
       Usage:
 
       `ayadn mark list`
+
+      Force compact view :
+
+      `ayadn mark list -k`
       \n\n
       USAGE
     end
@@ -1555,6 +1735,10 @@ module Ayadn
       `ayadn blacklist list`
 
       `ayadn -K list`
+
+      Force compact view :
+
+      `ayadn -K list -k`
       \n\n
       USAGE
     end
