@@ -3,21 +3,37 @@ require 'helpers'
 
 describe Ayadn::Databases do
   before do
-    Ayadn::Settings.stub(:config).and_return({
-        paths: {
-          db: 'spec/mock/'
-        }
+    Ayadn::Settings.stub(:options).and_return({
+        colors: {
+          hashtags: :cyan,
+          mentions: :red,
+          username: :green,
+          excerpt: :green
+        },
+        timeline: {compact: false},
+        formats: {table: {width: 75}, list: {reverse: true}},
+        blacklist: {active: true}
       })
-    Ayadn::Settings.stub(:options).and_return(
-        {
-          timeline: {
-            debug: false
-          }
-        }
-      )
-    # Ayadn::Databases.stub(:open_databases)
-    Ayadn::Databases.any_instance.stub(sql: Amalgalite::Database.new("spec/mock/ayadn.sqlite"))
-    Ayadn::Databases.any_instance.stub(accounts: Amalgalite::Database.new("spec/mock/ayadn/accounts.sqlite"))
+    Ayadn::Settings.stub(:config).and_return({
+      identity: {
+        username: 'test',
+        handle: '@test'
+      },
+      post_max_length: 256,
+      message_max_length: 2048,
+      version: 'wee',
+      paths: {
+        db: 'spec/mock/',
+        log: 'spec/mock'
+      }
+    })
+    Ayadn::Settings.stub(:global).and_return({
+      scrolling: false,
+      force: false
+    })
+    Ayadn::Logs.stub(:rec).and_return("logged")
+    Dir.stub(:home).and_return("spec/mock")
+    Ayadn::Databases.open_databases
   end
   describe ".add_to_users_db" do
     it "adds a user" do
