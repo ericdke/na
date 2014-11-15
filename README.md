@@ -79,3 +79,10 @@ ADN Directory: [Ayadn](https://directory.app.net/app/345/ayadn/)
 # FEEDBACK
 
 Feedback and/or contributions are very welcomed!
+
+# SCREENSHOTS
+
+Examples on Mac OS X, with iTerm2 + Solarized theme.
+
+![followers list compact](https://www.dropbox.com/s/es0o4sq7w05y2ps/ayadn200followerslistsmall.png?dl=1)
+

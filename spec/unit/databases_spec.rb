@@ -15,7 +15,9 @@ describe Ayadn::Databases do
           }
         }
       )
-    Ayadn::Databases.open_databases
+    # Ayadn::Databases.stub(:open_databases)
+    Ayadn::Databases.any_instance.stub(sql: Amalgalite::Database.new("spec/mock/ayadn.sqlite"))
+    Ayadn::Databases.any_instance.stub(accounts: Amalgalite::Database.new("spec/mock/ayadn/accounts.sqlite"))
   end
   describe ".add_to_users_db" do
     it "adds a user" do
