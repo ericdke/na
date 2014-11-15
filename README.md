@@ -84,5 +84,14 @@ Feedback and/or contributions are very welcomed!
 
 Examples on Mac OS X, with iTerm2 + Solarized theme.
 
-![followers list compact](https://www.dropbox.com/s/es0o4sq7w05y2ps/ayadn200followerslistsmall.png?dl=1)
+![followers list](https://www.dropbox.com/s/es0o4sq7w05y2ps/ayadn200followerslistsmall.png?dl=1)
 
+![mentions stream in classic view](http://dl.dropboxusercontent.com/s/16d7u5wjsd3un1j/ayadn200mentions.png)
+
+![conversation in compact view](http://dl.dropboxusercontent.com/s/3nl5fhguhzr61x9/ayadn200convocompact.png)
+
+![posting to App.net](http://dl.dropboxusercontent.com/s/74ehkepj9u1ffbz/ayadn200posting.png)
+
+![list of commands](https://dl.dropboxusercontent.com/s/4cuprxyc2xtjm1w/ayadncommands.png)
+
+![#nowplaying post made by Ayadn](http://dl.dropboxusercontent.com/s/keeox7a3w3051hm/ayadnnowplaying.png)
