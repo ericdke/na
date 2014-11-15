@@ -21,7 +21,7 @@ describe Ayadn::View do
           excerpt: :green
         },
         timeline: {
-          real_name: true,
+          name: true,
           date: true,
           symbols: true,
           source: true

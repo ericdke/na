@@ -32,6 +32,10 @@ Reverse the list order:
 
 `ayadn -fwr -u -r me`
 
+Force compact view (works with all compatible listing views):
+
+`ayadn -fwr -k me`
+
 # FOLLOWINGS
 
 List the users a user is following.

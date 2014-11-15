@@ -13,7 +13,7 @@ describe Ayadn::NiceRank do
           annotations: 1,
           source: true,
           symbols: true,
-          real_name: true,
+          name: true,
           date: true,
           spinner: true,
           debug: false

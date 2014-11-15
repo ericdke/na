@@ -20,7 +20,7 @@ These are just a few examples.
 
 `ayadn set counts global 100`
 
-`ayadn set timeline real_name false`
+`ayadn set timeline name false`
 
 `ayadn set timeline compact true`
 

@@ -4,9 +4,9 @@ Authorize Ayadn for a specific user account.
 
 `ayadn authorize`
 
-`ayadn -auth`
+or 
 
-`ayadn -AU`
+`ayadn -auth`
 
 Ayadn will give you a link leading to the official App.net registration page.
 
@@ -22,13 +22,11 @@ Switch between your authorized accounts.
 
 `ayadn switch @ericd`
 
-`ayadn switch @myotheraccount`
+`ayadn switch ericd`
 
 Alternative syntax:
 
 `ayadn -@ ericd`
-
-`ayadn -@ myotheraccount`
 
 List your authorized accounts:
 
@@ -42,7 +40,7 @@ Unauthorize an Ayadn user account.
 
 `ayadn unauthorize @ericd`
 
-`ayadn -UA @ericd`
+`ayadn -UA ericd`
 
 You can specify the `--delete` (`-D`) option to force delete the account folders:
 

@@ -40,8 +40,6 @@ Just type a @username at the beginning of your post if you want to mention a spe
 
 Auto post every line of input.
 
-The is the funniest way to post to ADN! :)  
-
 `ayadn auto`
 
 In this mode, each line you type (each time you hit ENTER!) is automatically posted to ADN.
@@ -73,8 +71,6 @@ If you reply to a post containing multiple mentions, your text will be inserted 
 `ayadn -R 3`  
 
 Note: since Ayadn 2.0, posts index resolution is activated by default for posts ids from 1 to 200. Add option `--force` to ignore index and retrieve the actual old post if needed.
-
-This absolute range from 1 to 200 for indexed posts exists because indexed posts aren't available in scroll views, so an index will never be greater than 200 (which is the ADN number of posts per request limit).
 
 ## REDIRECT
 

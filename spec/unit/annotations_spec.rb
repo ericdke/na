@@ -12,7 +12,7 @@ describe Ayadn::Annotations do
           html: 0,
           source: true,
           symbols: true,
-          real_name: true,
+          name: true,
           date: true,
           spinner: true,
           debug: false
