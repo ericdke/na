@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{App.net command-line client: toolbox to access and manage your ADN data, show your streams, post, manage conversations, star/follow/repost... and many, many more.}
   spec.homepage      = "http://ayadn-app.net"
   spec.license       = "MIT"
-  spec.metadata      = { "documentation" => "http://ayadn-app.net/doc/" }
+  spec.metadata      = { "documentation" => "https://github.com/ericdke/na/tree/master/doc" }
 
   spec.bindir        = 'bin'
   spec.files         = `git ls-files`.split("\n")
