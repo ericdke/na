@@ -1,4 +1,4 @@
-# 2.0 - 2014-11-15 - 'The Piper At The Gates Of Dawn'
+## 2.0 - 2014-11-15 - 'The Piper At The Gates Of Dawn'
 
 - SQLite database. Means FAST!
 - Unified style for statuses, questions and alerts
@@ -19,15 +19,15 @@
 - Inline help and online docs have been updated
 - Code has been optimized. Bugs have been squashed.
 
-# 1.8.2 - 2014-10-31 - 'Asylum'
+## 1.8.2 - 2014-10-31 - 'Asylum'
 
 - Fix: directed posts in timeline, bis
 
-# 1.8.1 - 2014-10-31 - 'Stockholm'
+## 1.8.1 - 2014-10-31 - 'Stockholm'
 
 - Fix: directed posts in timeline
 
-# 1.8.0 - 2014-10-29 - 'Cascadeur'
+## 1.8.0 - 2014-10-29 - 'Cascadeur'
 
 - New: command to view all unread PMs
 - New: channel commands can update unread status (default: true)
@@ -39,7 +39,7 @@
 - Update: debug info included in posts annotations
 - Update: gem dependencies
 
-# 1.7.7 - 2014-10-26 - 'The Twins'
+## 1.7.7 - 2014-10-26 - 'The Twins'
 
 - Fix: max characters information when sending to a channel
 - Fix: line break at the end of stream if compact view
@@ -51,43 +51,43 @@
 - New: option to show OEmbed links from channels/messages
 - New: extracted links are exported to a json file
 
-# 1.7.6 - 2014-10-25 - 'Barrie'
+## 1.7.6 - 2014-10-25 - 'Barrie'
 
 - Fix: channels parser (response != 200, working status)
 - Fix: settings list with compact view
 
-# 1.7.5 - 2014-10-20 - 'Cirrus'
+## 1.7.5 - 2014-10-20 - 'Cirrus'
 
 - New: option to display a compact view for the timeline
 - Fix: character count in reply with Markdown links
 
-# 1.7.4 - 2014-09-21 - 'Elton'
+## 1.7.4 - 2014-09-21 - 'Elton'
 
 - Fix: nowplaying (show artwork)
 - Fix: nowwatching (show posting account)
 - Fix: tvshow (show posting account)
 
-# 1.7.3 - 2014-09-08 - 'Scanners'
+## 1.7.3 - 2014-09-08 - 'Scanners'
 
 - New: option to reply to a reposted post
 - New: you can change the users lists order with `set`
 - New: you can change the table width with `set`
 - Docs: the documentation has been fixed and updated
 
-# 1.7.2 - 2014-09-04 - 'Fortress'
+## 1.7.2 - 2014-09-04 - 'Fortress'
 
 - Fixed: option to retrieve only specified channels in Channels
 - Fixed: validators for Set
 - New: better tests suite
 
-# 1.7.1 - 2014-09-02 - 'Poltergeist'
+## 1.7.1 - 2014-09-02 - 'Poltergeist'
 
 - New: update your user profile (full name, bio (user description), avatar, cover, Twitter username, blog url, web url)
 - Update profile: option to delete the field instead of updating
 - New: option to retrieve only specified channels in Channels
 - New: option to display raw response in Channels
 
-# 1.7.0 - 2014-08-21 - 'Private Investigations'
+## 1.7.0 - 2014-08-21 - 'Private Investigations'
 
 - New: embed a Youtube video in a normal post with option `-Y`
 - New: embed a Vimeo video in a normal post with option `-V`
@@ -99,7 +99,7 @@
 - Fixed: value displayed when setting NiceRank
 - Refactored a few classes and methods
 
-# 1.6.0 - 2014-08-04 - 'Beetlejuice'
+## 1.6.0 - 2014-08-04 - 'Beetlejuice'
 
 - New command: 'movie'. Create a post from a movie title (with link + movie poster). Customisable hashtag (default: '#nowwatching').
 - New command: 'tvshow'. Create a post from a TV show title (with link + show poster). Customisable hashtag (default: '#nowwatching'). Option to display a banner instead of a poster.
@@ -110,11 +110,11 @@
 - Fixed: bookmark convos.
 - General code cleaning and refactoring.
 
-# 1.5.1 - 2014-07-27 - 'Holograms'
+## 1.5.1 - 2014-07-27 - 'Holograms'
 
 - Improved accuracy of iTunes Store requests for NowPlaying
 
-# 1.5.0 - 2014-07-25 - 'Nozomi'
+## 1.5.0 - 2014-07-25 - 'Nozomi'
 
 - In 'convo', both the post id you've requested and the post it replies to are marked with arrows
 - Same feature in the view after a reply
@@ -127,19 +127,19 @@
 - Skipped objects are logged if debug is enabled
 - Force delete obsolete config keys / force create mandatory ones (less checks in the code, more stability)
 
-# 1.4.6 - 'Roman'
+## 1.4.6 - 'Roman'
 
 - Temporary fix for filepaths instability when uploading pictures
 
-# 1.4.5 - 2014-07-19 - 'Sébastien'
+## 1.4.5 - 2014-07-19 - 'Sébastien'
 
 - Fixed a crash when iTunes Store URL contained exotic characters
 
-# 1.4.4 - 'Randolph'
+## 1.4.4 - 'Randolph'
 
 - Fixed a database problem in PM and SEND
 
-# 1.4.3 - 2014-07-17 - 'Sergent Stretch'
+## 1.4.3 - 2014-07-17 - 'Sergent Stretch'
 
 - NowPlaying is compatible with iTunes and Last.fm. Default: iTunes. Add `--last-fm` or `-l` to get Last.fm last played track instead
 - NowPlaying audio link has been replaced with an iTunes Store link
@@ -149,29 +149,29 @@
 - Automatically fixes the arguments order for 'post' if needed when uploading a picture
 - General code cleaning
 
-# 1.4.2 - 2014-07-15 - 'Caligula'
+## 1.4.2 - 2014-07-15 - 'Caligula'
 
 - Ayadn is more resilient to connectivity errors
 - Better handling of filenames when uploading
 
-# 1.4.1 - 'Oh boy'
+## 1.4.1 - 'Oh boy'
 
 - A few fixes in the NowPlaying section
 
-# 1.4.0 - 2014-07-14 - 'Florian'
+## 1.4.0 - 2014-07-14 - 'Florian'
 
 - New feature: embed one or several pictures within a post (in write, post, reply, and pm)
 - Nowplaying inserts preview URL and album art from iTunes Store (you can prevent this with: `--no-url`)
 
-# 1.3.2 - 'Max'
+## 1.3.2 - 'Max'
 
 - Fixed: Global stream crashed if NiceRank was enabled but unreachable
 
-# 1.3.1 - 2014-06-16 - 'Nico'
+## 1.3.1 - 2014-06-16 - 'Nico'
 
 - NiceRank threshold is a float again. Default value is 2.1
 
-# 1.3.0 - 2014-06-09 - 'K'
+## 1.3.0 - 2014-06-09 - 'K'
 
 - Updated the NiceRank API url
 - NiceRank filter is more efficient (checks is_human + real_person)
@@ -184,18 +184,18 @@ Features:
 - Clear the contents of the blacklist database (ayadn -K clear)
 - Clear the contents of the bookmarks database (ayadn mark clear)
 
-# 1.2.10 - 'Anders'
+## 1.2.10 - 'Anders'
 
 - Fixed the non-installing unicode_utils Gem
 
-# 1.2.9 - 2014-05-29 - 'Kirschen'
+## 1.2.9 - 2014-05-29 - 'Kirschen'
 
 - NiceRank database auto-limits to 10000 users
 - Better handling of connection errors
 - Better display of emojis
 - General code cleaning
 
-# 1.2.8 - 2014-05-27 - 'Hans'
+## 1.2.8 - 2014-05-27 - 'Hans'
 
 - No more Ruby 1.9.3
 - Search for users: returns a detailed view of users containing word(s) in their bio/description
@@ -204,11 +204,11 @@ Features:
 - Search for words in messages (PMs)
 - Better display of the starred and replied_to symbols
 
-# 1.2.7 - 'Roman'
+## 1.2.7 - 'Roman'
 
 - Conform remove_arobase in Switch
 
-# 1.2.6 - 'Saket'
+## 1.2.6 - 'Saket'
 
 - NiceRank enabled by default on new installs
 - NiceRank cache expires after 48h by default
@@ -217,15 +217,15 @@ Features:
 - More debug info
 - Misc fixes related to recent features
 
-# 1.2.5 - 'Bis repetita'
+## 1.2.5 - 'Bis repetita'
 
 - Fix the NiceRank filter staying on true
 
-# 1.2.4 - 2014-05-25 - 'Stoopid me'
+## 1.2.4 - 2014-05-25 - 'Stoopid me'
 
 - Fix the copy/paste error in Settings
 
-# 1.2.3 - 'Taylor'
+## 1.2.3 - 'Taylor'
 
 - Text containing '#' but not an hashtag: not colorized
 - Add/remove several elements to/from blacklist at once
@@ -235,37 +235,37 @@ Features:
 - Option for showing debug messages
 - Show spinner = true
 
-# 1.2.2 - 2014-05-21 - 'Chris'
+## 1.2.2 - 2014-05-21 - 'Chris'
 
 - No more empty lines in the scroll
 - Spinner while waiting for posts (false by default)
 - Hashtags support accented characters
 
-# 1.2.1 - 2014-05-20 - 'Vinz'
+## 1.2.1 - 2014-05-20 - 'Vinz'
 
 - Fixed the exclusion bug in NiceRank filters
 - Improved the truncation in Mark list
 - Changes to match changes in NiceRank API
 
-# 1.2.0 - 2014-05-19 - 'Jason'
+## 1.2.0 - 2014-05-19 - 'Jason'
 
 - @matigo's NiceRank filter for the Global stream
 
-# 1.1.3 - 2014-05-17 - 'Kevin'
+## 1.1.3 - 2014-05-17 - 'Kevin'
 
 - Bookmark a conversation
 - List, delete, rename bookmarks
 
-# 1.1.2 - 'Craig'
+## 1.1.2 - 'Craig'
 
 - URL for the docs
 
-# 1.1.1 - 2014-05-07 - 'State Of The Onion'
+## 1.1.1 - 2014-05-07 - 'State Of The Onion'
 
 - Star and unstar a reposted post
 - Nowplaying shows an error message if iTunes is closed or not currently playing any track
 
-# 1.1.0 - 2014-04-28 - 'Leviathan'
+## 1.1.0 - 2014-04-28 - 'Leviathan'
 
 - Show who's writing, and who's the recipient
 - Less help text when writing, more concise
@@ -277,38 +277,38 @@ Features:
 - New command: photos stream
 - New command: delete message (private or in a channel)
 
-# 1.0.13 - 2014-04-25 - 'Charlotte'
+## 1.0.13 - 2014-04-25 - 'Charlotte'
 
 - New layout for '#nowplaying'
 - Compact index.db and pagination.db if necessary
 - New api urls
 - Fix 'download file'
 
-# 1.0.12 - 'Rolando'
+## 1.0.12 - 'Rolando'
 
 - Fixed an error in: authorizing an account if its folders already exists
 
-# 1.0.11 - 'Chris'
+## 1.0.11 - 'Chris'
 
 - There was a typo in the last version that caused a bug in the PM command
 
-# 1.0.10 - 'Johannes'
+## 1.0.10 - 'Johannes'
 
 - Fixes the help bug (doubled commands)
 - Auto adds the @ if missing in pm
 
-# 1.0.9 - 'Brian'
+## 1.0.9 - 'Brian'
 
 - Fixes the stubborn 'nowplaying' database bug
 
-# 1.0.8 - 2014-04-16 - 'Laurent'
+## 1.0.8 - 2014-04-16 - 'Laurent'
 
 - Better error messages/logs (specifically when HTTP errors)
 - Token is anonymized if in error logs
 - No more database error when canceling a 'nowplaying' post
 - Better mentions colorization
 
-# 1.0.7 - 2014-04-13 - 'Hugo'
+## 1.0.7 - 2014-04-13 - 'Hugo'
 
 - Machine-only messages in channels are now viewable
 - Don't output "Downloading" if options = raw in messages view
@@ -316,28 +316,28 @@ Features:
 - Removed username in front of ">>" in Auto (in case the authd user changed)
 - Compatibility with Windows is broken
 
-# 1.0.6 - 2014-04-12 - 'Matthew'
+## 1.0.6 - 2014-04-12 - 'Matthew'
 
 - Fixed a bug where post_max_chars was displayed instead of message_max_chars
 - Show raw JSON in messages even if no data
 
-# 1.0.5 - 'Joel'
+## 1.0.5 - 'Joel'
 
 - Fixed the colorization for mentions
 - Added tests for colorization
 
-# 1.0.4 - 2014-04-06 - 'Jeremy'
+## 1.0.4 - 2014-04-06 - 'Jeremy'
 
 - Fixed 'reply to an indexed stream' for Ruby < 2.1
 - More tests for Databases
 - Tests for Blacklist
 - Tests for Set
 
-# 1.0.3 - 'Donny'
+## 1.0.3 - 'Donny'
 
 - Fixed the bug introduced by the last bugfix (yes, I know... sigh...)
 
-# 1.0.2 - 'Mark'
+## 1.0.2 - 'Mark'
 
 - Fixed a critical bug in Reply (when the original post was a repost)
 - Tests for Databases
@@ -345,7 +345,7 @@ Features:
 - Better layout for checkins
 - Better alert message if error 429
 
-# 1.0.1 - 2014-04-04 - 'Phoenix'
+## 1.0.1 - 2014-04-04 - 'Phoenix'
 
 Release!
 

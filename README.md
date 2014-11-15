@@ -93,5 +93,3 @@ Examples on Mac OS X, with iTerm2 + Solarized theme.
 ![posting to App.net](http://dl.dropboxusercontent.com/s/74ehkepj9u1ffbz/ayadn200posting.png)
 
 ![list of commands](https://dl.dropboxusercontent.com/s/4cuprxyc2xtjm1w/ayadncommands.png)
-
-![#nowplaying post made by Ayadn](http://dl.dropboxusercontent.com/s/keeox7a3w3051hm/ayadnnowplaying.png)
