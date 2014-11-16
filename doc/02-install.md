@@ -20,7 +20,7 @@ You can of course use the Ruby shipped with your system but it will require root
 
 ## WINDOWS
 
-Ayadn 1.x isn't compatible with Windows: there's too many issues due to POSIX-dependent tools.  
+Ayadn isn't compatible with Windows: there's too many issues due to POSIX-dependent tools.  
 
 ## MIGRATE
 
