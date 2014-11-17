@@ -20,6 +20,7 @@ module Ayadn
       else
         @custom_text = "\n \n#{options[:text].join(' ')}"
       end
+      @affiliate_suffix = "&at=1l3vtb8&ct=ayadn"
     end
 
     def lastfm options
@@ -227,7 +228,7 @@ module Ayadn
           'artist' => candidate['artistName'],
           'track' => candidate['trackName'],
           'preview' => candidate['previewUrl'],
-          'link' => candidate['collectionViewUrl'],
+          'link' => "#{candidate['collectionViewUrl']}#{@affiliate_suffix}",
           'artwork' => candidate['artworkUrl100'].gsub('100x100', '1200x1200'),
           'artwork_thumb' => candidate['artworkUrl100'].gsub('100x100', '600x600'),
           'request' => url,
