@@ -1,8 +1,9 @@
-## 2.0.1 - 2014-11-17 - 'Developers, Developers, Developers'
+## 2.0.1 - 2014-11-17 - 'Nessie'
 
 - Windows compatible (under conditions)
+- NowPlaying posts affiliate links
 
-## 2.0 - 2014-11-15 - 'The Piper At The Gates Of Dawn'
+## 2.0.0 - 2014-11-15 - 'The Piper At The Gates Of Dawn'
 
 - SQLite database. Means FAST!
 - Unified style for statuses, questions and alerts

@@ -14,13 +14,13 @@ Uninstall:
 
 ## OS X, LINUX, BSD
 
-Install the Gem, authorize, done.
+Install the Gem, authorize your account: done.
 
 If you need to install Ruby it's better to use something like RVM or RBENV. You can of course use the Ruby shipped with your system but it will require root privileges and is not recommended.
 
 ## WINDOWS
 
-The console *has* to be fully ANSI compatible (example: ConEmu). Windows support is not 100% stable yet. Don't hesitate to fork and pull request!
+Requirements: fully ANSI compatible console (example: ConEmu) + Ruby 2.0.0 32bits via RubyInstaller (you may also need the DevKit). Windows support is not 100% stable.
 
 ## MIGRATE
 
