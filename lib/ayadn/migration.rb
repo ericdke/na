@@ -361,7 +361,11 @@ module Ayadn
       else
         conf[:timeline][:directed] = false
       end
-      conf[:marker][:messages] = old_conf[:marker][:update_messages] || true
+      if old_conf[:marker].nil?
+        conf[:marker] = { messages: true }
+      else
+        conf[:marker][:messages] = old_conf[:marker][:update_messages] || true  
+      end
       conf[:backup][:posts] = old_conf[:backup][:auto_save_sent_posts] || false
       conf[:backup][:messages] = old_conf[:backup][:auto_save_sent_messages] || false
       conf[:backup][:lists] = old_conf[:backup][:auto_save_lists] || false
