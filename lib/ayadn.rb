@@ -9,4 +9,6 @@ rescue LoadError => e
   exit
 end
 
+Rainbow.enabled = true
+
 require_relative 'ayadn/app'

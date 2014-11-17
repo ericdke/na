@@ -1,3 +1,7 @@
+## 2.0.1 - 2014-11-17 - 'Developers, Developers, Developers'
+
+- Windows compatible (under conditions)
+
 ## 2.0 - 2014-11-15 - 'The Piper At The Gates Of Dawn'
 
 - SQLite database. Means FAST!

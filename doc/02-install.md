@@ -14,13 +14,13 @@ Uninstall:
 
 ## OS X, LINUX, BSD
 
-If you need to install Ruby it's better to use something like RVM or RBENV.
+Install the Gem, authorize, done.
 
-You can of course use the Ruby shipped with your system but it will require root privileges and is not recommended.
+If you need to install Ruby it's better to use something like RVM or RBENV. You can of course use the Ruby shipped with your system but it will require root privileges and is not recommended.
 
 ## WINDOWS
 
-Ayadn isn't compatible with Windows: there's too many issues due to POSIX-dependent tools.  
+The console *has* to be fully ANSI compatible (example: ConEmu). Windows support is not 100% stable yet. Don't hesitate to fork and pull request!
 
 ## MIGRATE
 
