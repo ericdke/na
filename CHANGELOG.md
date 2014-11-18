@@ -1,3 +1,11 @@
+## 2.0.3 - 2014-11-18 - 'Dexter'
+
+- Fix: title of a pinned post
+
+## 2.0.2 - 2014-11-18 - 'To beat the devil'
+
+- Fix: config import in 'migrate'
+
 ## 2.0.1 - 2014-11-17 - 'Nessie'
 
 - Windows compatible (under conditions)

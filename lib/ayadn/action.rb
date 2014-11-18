@@ -643,7 +643,7 @@ module Ayadn
         end
         credentials = pinner.load_credentials
         maker = Struct.new(:username, :password, :url, :tags, :text, :description)
-        bookmark = maker.new(credentials[0], credentials[1], resp['canonical_url'], usertags.join(","), post_text, links[0])
+        bookmark = maker.new(credentials[0], credentials[1], resp['canonical_url'], usertags.join(","), post_text, resp['canonical_url'])
         @status.saving_pin
         pinner.pin(bookmark)
         @status.done
