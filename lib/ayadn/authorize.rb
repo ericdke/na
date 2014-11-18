@@ -58,6 +58,14 @@ module Ayadn
           FileUtils.remove_dir(Dir.home + "/ayadn/#{user}")
         end
         @thor.say_status :done, "user @#{user} has been unauthorized", :green
+        remaining = Databases.all_accounts(db)
+        if remaining.empty?
+          @thor.say_status :info, "accounts database is now empty", :cyan
+        else
+          username = remaining[0][0]
+          Databases.set_active_account(db, username)
+          @thor.say_status :info, "user @#{username} is now the active user", :cyan
+        end
         puts "\n"
       rescue Interrupt
         Status.new.canceled

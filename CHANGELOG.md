@@ -1,6 +1,7 @@
 ## 2.0.3 - 2014-11-18 - 'Dexter'
 
 - Fix: title of a pinned post
+- Fix: unauthorize sets another user active if possible
 
 ## 2.0.2 - 2014-11-18 - 'To beat the devil'
 
