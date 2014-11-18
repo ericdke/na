@@ -59,7 +59,7 @@ module Ayadn
         end
         @thor.say_status :done, "user @#{user} has been unauthorized", :green
         remaining = Databases.all_accounts(db)
-        if remaining.empty?
+        if remaining.flatten.empty?
           @thor.say_status :info, "accounts database is now empty", :cyan
         else
           username = remaining[0][0]
