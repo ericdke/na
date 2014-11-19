@@ -66,7 +66,6 @@ describe Ayadn::NiceRank do
         },
         nicerank: {
           threshold: 2.1,
-          cache: 48,
           filter: true,
           unranked: false
         },

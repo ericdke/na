@@ -65,7 +65,6 @@ describe Ayadn::Annotations do
         },
         nicerank: {
           threshold: 2.1,
-          cache: 48,
           filter: true,
           unranked: false
         },
@@ -159,6 +158,5 @@ describe Ayadn::Annotations do
       expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>'shoes', "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"net.app.core.oembed", "value"=>{"+net.app.core.file"=>{"file_id"=>3312, "file_token"=>"0x3312-YOLO", "format"=>"oembed"}}}, {"type"=>"net.app.core.oembed", "value"=>{"+net.app.core.file"=>{"file_id"=>5550, "file_token"=>"0x5550-WOOT", "format"=>"oembed"}}}]
     end
   end
-
 
 end
