@@ -1,3 +1,7 @@
+## 2.0.4 - 2014-11-25 - 'The Penguin'
+
+- Fix: unread messages displayed from oldest to newest
+
 ## 2.0.3 - 2014-11-18 - 'Dexter'
 
 - Fix: title of a pinned post

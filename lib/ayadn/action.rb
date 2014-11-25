@@ -569,7 +569,7 @@ module Ayadn
           exit
         end
         unread_messages = {}
-        unread_channels.each do |id|
+        unread_channels.reverse.each do |id|
           @thor.say_status :downloading, "messages from channel #{id}"
           since = Databases.find_last_id_from("channel:#{id}")
           unless since.nil?
