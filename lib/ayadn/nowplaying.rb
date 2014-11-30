@@ -179,40 +179,9 @@ module Ayadn
 
     def get_itunes_store url, artist, track
       results = JSON.load(CNX.download(URI.escape(url)))['results']
-      # puts results.inspect
-      unless results.empty? || results.nil?
-        # results.each {|obj| puts obj['trackName']}
-        # puts "-"
-        # puts track
-        one = results.select do |obj|
-          next if obj['trackName'].nil?
-          obj['trackName'].downcase == track.downcase
-        end
-        # puts one.inspect
-        if one.empty?
-          by_artist = results.select do |obj|
-            next if obj['artistName'].nil?
-            obj['artistName'].downcase == artist.downcase
-          end
-          # puts by_artist
-          by_exact_track = by_artist.select do |obj|
-            next if obj['trackName'].nil?
-            obj['trackName'].downcase == track.downcase
-          end
-          # puts by_exact_track
-          if by_exact_track.empty?
-            splitted = track.split(" ").first.downcase
-            results = by_artist.select do |obj|
-              next if obj['trackName'].nil?
-              obj['trackName'].split(" ").first.downcase == splitted
-            end
-          else
-            results = by_exact_track
-          end
 
-        else
-          results = one
-        end
+      # puts results.inspect
+      unless results.nil?
 
         if results.empty?
           return {
@@ -221,7 +190,19 @@ module Ayadn
           }
         end
 
-        candidate = results[0]
+        candidates = []
+        candidates_track = results.map { |e| e if e['trackName'].downcase == track.downcase }.compact
+        candidates_track.each do |e|
+          next if e['artistName'].nil?
+          candidates << e if e['artistName'].downcase == artist.downcase
+        end
+        # require "pp";pp candidates; exit
+
+        candidate = if candidates.empty?
+          results[0]
+        else
+          candidates[0]
+        end
 
         return {
           'code' => 200,
