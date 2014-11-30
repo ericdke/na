@@ -1,4 +1,4 @@
-## 2.0.4 - 2014-11-25 - 'The Penguin'
+## 2.0.4 - 2014-11-30 - 'The Penguin'
 
 - Fix: nowplaying iTunes Store requests
 - Fix: unread messages displayed from oldest to newest
