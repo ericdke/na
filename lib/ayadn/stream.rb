@@ -130,8 +130,24 @@ module Ayadn
       list = @api.get_followings(username)
       @check.auto_save_followings(list)
       Errors.no_data('followings') if list.empty?
-      @view.list(:followings, list, username, options)
-      Databases.add_to_users_db_from_list(list)
+      if options["lastpost"]
+        new_list = {}
+        count = list.size
+        idx = 0
+        list.each do |str_id,obj|
+          idx += 1
+          tmp_username = "@#{obj[0]}"
+          @workers.thor.say_status :info, "Downloading user #{idx}/#{count}", :yellow
+          resp = @api.get_posts(tmp_username, {count: 1})
+          obj << resp["data"][0]
+          new_list[str_id] = obj
+        end
+        @view.list(:followings, new_list, username, options)
+        # Databases.add_to_users_db_from_list(new_list)
+      else
+        @view.list(:followings, list, username, options)
+        Databases.add_to_users_db_from_list(list)
+      end
     end
 
     def followers(username, options)

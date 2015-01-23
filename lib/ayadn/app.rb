@@ -183,6 +183,7 @@ module Ayadn
     option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
     option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
+    option :lastpost, aliases: "-l", type: :boolean, desc: "Displays the last post of each user"
     def followings(*username)
       Action.new.followings(username, options)
     end

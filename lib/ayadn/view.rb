@@ -61,8 +61,52 @@ module Ayadn
     end
 
     def show_list_followings(list, target, options = {})
-      puts @workers.build_followings_list(list, target, options)
-      puts "\n"
+      if options["lastpost"]
+        clear_screen()
+
+        bucket = []
+        list.each do |k,v|
+          bucket << [k, v[0], v[1], v[2], v[3], v[4], v[5]]
+        end
+
+        if options[:username]
+          bucket.sort_by! { |obj| obj[1] }
+        elsif options[:name]
+          bucket.sort_by! { |obj| obj[2].downcase }
+        elsif options[:posts]
+          bucket.sort_by! { |obj| [obj[5], obj[1]] }.reverse!
+        end
+
+        title = if target == "me"
+                  "List of users you're following".color(:cyan) + "".color(:white)
+                else
+                  "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
+                end
+
+        puts "\t#{title}\n\n"
+        count = bucket.size
+
+        bucket.each.with_index(1) do |obj,index|
+          date = @workers.parsed_time(obj[6]["created_at"])
+          mentions = []
+          obj[6]["entities"]["mentions"].each { |m| mentions << m['name'] }
+          hashtags = @workers.extract_hashtags(obj[6])
+          text = @workers.colorize_text(obj[6]["text"], mentions, hashtags)
+          username = "@#{obj[1]}"
+          total = "(#{obj[5]} posts)".color(Settings.options[:colors][:link])
+          puts "#{username.color(Settings.options[:colors][:username])} #{obj[2].color(Settings.options[:colors][:name])} #{@workers.parsed_time(date).color(Settings.options[:colors][:date])} #{total}\n\n"
+          puts text
+          unless index == count
+            puts "\n----------\n\n"
+          else
+            puts "\n\n"
+          end
+        end
+
+      else
+        puts @workers.build_followings_list(list, target, options)
+        puts "\n"
+      end
     end
 
     def show_list_followers(list, target, options = {})
