@@ -87,21 +87,29 @@ module Ayadn
         count = bucket.size
 
         bucket.each.with_index(1) do |obj,index|
-          next if obj[6].nil?
+          username = "@#{obj[1]}"
+          if obj[6].nil?
+            @workers.thor.say_status :warning, "user #{username} has no posts, ignored", :red
+            puts "\n" unless Settings.options[:timeline][:compact] == true 
+            next
+          end
           date = @workers.parsed_time(obj[6]["created_at"])
           mentions = []
           obj[6]["entities"]["mentions"].each { |m| mentions << m['name'] }
           hashtags = @workers.extract_hashtags(obj[6])
           text = @workers.colorize_text(obj[6]["text"], mentions, hashtags)
-          username = "@#{obj[1]}"
           total = "(#{obj[5]} posts)".color(Settings.options[:colors][:link])
           name = obj[2].nil? ? "(no name)" : obj[2]
-          puts "#{username.color(Settings.options[:colors][:username])} #{name.color(Settings.options[:colors][:name])} #{@workers.parsed_time(date).color(Settings.options[:colors][:date])} #{total}\n\n"
+          puts "#{username.color(Settings.options[:colors][:username])} #{name.color(Settings.options[:colors][:name])} #{@workers.parsed_time(date).color(Settings.options[:colors][:date])} #{total}\n"
+          puts "\n" unless Settings.options[:timeline][:compact] == true
           puts text
           unless index == count
-            puts "\n----------\n\n"
+            puts "\n" unless Settings.options[:timeline][:compact] == true
+            puts "----------\n"
+            puts "\n" unless Settings.options[:timeline][:compact] == true
           else
-            puts "\n\n"
+            puts "\n"
+            puts "\n" unless Settings.options[:timeline][:compact] == true
           end
         end
 

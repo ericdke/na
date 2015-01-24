@@ -139,7 +139,8 @@ module Ayadn
         list.each do |str_id,obj|
           idx += 1
           tmp_username = "@#{obj[0]}"
-          @workers.thor.say_status ("#{idx}/#{count}").to_sym, "downloading last post from #{tmp_username}", :yellow
+          colored_username = tmp_username.color(Settings.options[:colors][:username])
+          @workers.thor.say_status ("#{idx}/#{count}").to_sym, "last post from #{colored_username}", :yellow
           resp = @api.get_posts(tmp_username, {count: 1})
           obj << resp["data"][0]
           new_list[str_id] = obj
