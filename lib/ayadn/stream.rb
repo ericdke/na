@@ -131,7 +131,6 @@ module Ayadn
       @check.auto_save_followings(list)
       Errors.no_data('followings') if list.empty?
       if options["lastpost"]
-        new_list = {}
         count = list.size
         @workers.thor.say_status :downloading, "please wait, it may take a while...", :red
         puts "\n"
@@ -140,15 +139,13 @@ module Ayadn
           idx += 1
           tmp_username = "@#{obj[0]}"
           colored_username = tmp_username.color(Settings.options[:colors][:username])
-          @workers.thor.say_status ("#{idx}/#{count}").to_sym, "last post from #{colored_username}", :yellow
+          iter = "#{idx}/#{count}"
+          @workers.thor.say_status iter.to_sym, "last post from #{colored_username}", :cyan
           resp = @api.get_posts(tmp_username, {count: 1})
           obj << resp["data"][0]
-          new_list[str_id] = obj
         end
-        @view.list(:followings, new_list, username, options)
-      else
-        @view.list(:followings, list, username, options)
       end
+      @view.list(:followings, list, username, options)
       Databases.add_to_users_db_from_list(list)
     end
 

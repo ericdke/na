@@ -81,9 +81,9 @@ module Ayadn
         end
 
         title = if target == "me"
-                  "List of users you're following".color(:cyan) + "".color(:white)
+                  "Last post of users you're following".color(:cyan) + "".color(:white)
                 else
-                  "List of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
+                  "Last post of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
                 end
 
         puts "\t#{title}\n\n"
@@ -94,7 +94,7 @@ module Ayadn
           colored_username = username.color(Settings.options[:colors][:username])
           if obj[6].nil?
             @workers.thor.say_status :warning, "user #{colored_username} has no posts, ignored", :red
-            puts "\n" unless Settings.options[:timeline][:compact] == true 
+            newline() 
             next
           end
           date = @workers.parsed_time(obj[6]["created_at"])
@@ -104,16 +104,16 @@ module Ayadn
           text = @workers.colorize_text(obj[6]["text"], mentions, hashtags)
           total = "(#{obj[5]} posts)".color(Settings.options[:colors][:link])
           name = obj[2].nil? ? "(no name)" : obj[2]
-          puts "#{colored_username} #{name.color(Settings.options[:colors][:name])} #{@workers.parsed_time(date).color(Settings.options[:colors][:date])} #{total}\n"
-          puts "\n" unless Settings.options[:timeline][:compact] == true
+          puts "#{colored_username} #{name.color(Settings.options[:colors][:name])} #{date.color(Settings.options[:colors][:date])} #{total}\n"
+          newline()
           puts text
           unless index == count
-            puts "\n" unless Settings.options[:timeline][:compact] == true
+            newline()
             puts "----------\n"
-            puts "\n" unless Settings.options[:timeline][:compact] == true
+            newline()
           else
             puts "\n"
-            puts "\n" unless Settings.options[:timeline][:compact] == true
+            newline()
           end
         end
 
@@ -486,6 +486,10 @@ module Ayadn
     end
 
     private
+
+    def newline
+      puts "\n" unless Settings.options[:timeline][:compact] == true 
+    end
 
     def get_broadcast_alias_from_id(event_id)
       al = Databases.get_alias_from_id(event_id)
