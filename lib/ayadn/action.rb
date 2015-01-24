@@ -838,7 +838,13 @@ module Ayadn
     def nowplaying(options = {})
       Settings.options[:timeline][:compact] = true if options[:compact] == true
       np = NowPlaying.new(@api, @view, @workers, options)
-      options[:lastfm] ? np.lastfm(options) : np.itunes(options)
+      if options[:lastfm]
+        np.lastfm(options)
+      elsif options[:deezer]
+        np.deezer(options)
+      else
+        np.itunes(options)
+      end
     end
 
     def nowwatching(args, options = {})

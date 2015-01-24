@@ -545,12 +545,13 @@ module Ayadn
     long_desc Descriptions.blacklist
     subcommand "blacklist", Blacklist
 
-    desc "nowplaying", "Post the current playing track from iTunes or Last.fm (-NP)"
+    desc "nowplaying", "Post the current playing track from iTunes, Deezer or Last.fm (-NP)"
     map "-np" => :nowplaying
     map "-NP" => :nowplaying
     long_desc Descriptions.nowplaying
     option :no_url, aliases: "-n", type: :boolean, desc: "Don't append preview or album art at the end of the post"
     option :lastfm, aliases: "-l", type: :boolean, desc: "Get current track from Last.fm instead of iTunes"
+    option :deezer, aliases: "-d", type: :boolean, desc: "Get current track from Deezer instead of iTunes"
     option :hashtag, aliases: "-h", type: :array, desc: "Specify a custom hashtag"
     option :text, aliases: "-t", type: :array, desc: "Add custom text"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"

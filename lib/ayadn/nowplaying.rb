@@ -27,6 +27,31 @@ module Ayadn
         @custom_text = "\n \n#{options[:text].join(' ')}"
       end
       @affiliate_suffix = "&at=1l3vtb8&ct=ayadn"
+      @deezer_auth_url = "https://connect.deezer.com/oauth/auth.php?app_id=150971&redirect_uri=http://aya.io/ayadn/deezer.html&response_type=token&perms=basic_access,listening_history,offline_access"
+    end
+
+    def deezer options
+      begin
+        if Settings.options[:nowplaying][:deezer].nil?
+          @deezer_code = create_deezer_user()
+        else
+          if Settings.options[:nowplaying][:deezer][:code].nil?
+            @deezer_code = create_deezer_user()
+          else
+            @deezer_code = Settings.options[:nowplaying][:deezer][:code]
+          end
+        end
+        @deezer_user_url = "http://api.deezer.com/user/me"
+        @deezer_token_suffix = "?access_token=#{@deezer_code}"
+        @status.fetching_from('Deezer')
+        req = "#{@deezer_user_url}/history#{@deezer_token_suffix}"
+        res = JSON.parse(CNX.download(req))
+        require 'pp'; pp res; exit
+
+      rescue => e
+        @status.wtf
+        Errors.global_error({error: e, caller: caller, data: [options]})
+      end
     end
 
     def lastfm options
@@ -90,6 +115,16 @@ module Ayadn
         feed = RSS::Parser.parse(CNX.download(url))
         lfm = feed.items[0].title.split(' – ')
         return lfm[0], lfm[1]
+      rescue Interrupt
+        @status.canceled
+        exit
+      end
+    end
+
+    def get_deezer_track_infos code
+      begin
+        url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
+        
       rescue Interrupt
         @status.canceled
         exit
@@ -167,10 +202,29 @@ module Ayadn
       end
     end
 
+    def ask_deezer_user
+      @status.info("please", "open this link to authorize Deezer", "yellow")
+      @status.say { @workers.thor.say_status :link, @deezer_auth_url, :green }
+      @status.info("next", "paste the authorization code here", "cyan")
+      print "> "
+      begin
+        STDIN.gets.chomp!
+      rescue Interrupt
+        @status.canceled
+        exit
+      end
+    end
+
     def create_lastfm_user
       Settings.options[:nowplaying][:lastfm] = ask_lastfm_user()
       Settings.save_config
       return Settings.options[:nowplaying][:lastfm]
+    end
+
+    def create_deezer_user
+      Settings.options[:nowplaying][:deezer] = {code: ask_deezer_user()}
+      Settings.save_config
+      return Settings.options[:nowplaying][:deezer][:code]
     end
 
     def itunes_istore_request itunes
