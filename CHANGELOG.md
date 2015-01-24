@@ -1,3 +1,8 @@
+## 2.0.5 - 2015-01-24 - 'Charlie'
+
+- New: 'lastposts' in Followings (show every user last post)
+- New: in Followings, sort by last post date (only with 'lastposts')
+
 ## 2.0.4 - 2014-11-30 - 'The Penguin'
 
 - Fix: nowplaying iTunes Store requests
