@@ -32,25 +32,28 @@ module Ayadn
 
     def deezer options
       begin
-        if Settings.options[:nowplaying][:deezer].nil?
-          @deezer_code = create_deezer_user()
-        else
-          if Settings.options[:nowplaying][:deezer][:code].nil?
-            @deezer_code = create_deezer_user()
+        @deezer_code = if Settings.options[:nowplaying][:deezer].nil?
+            create_deezer_user()
           else
-            @deezer_code = Settings.options[:nowplaying][:deezer][:code]
+            if Settings.options[:nowplaying][:deezer][:code].nil?
+              create_deezer_user()
+            else
+              Settings.options[:nowplaying][:deezer][:code]
+            end
           end
-        end
         @deezer_user_url = "http://api.deezer.com/user/me"
         @deezer_token_suffix = "?access_token=#{@deezer_code}"
         @status.fetching_from('Deezer')
         req = "#{@deezer_user_url}/history#{@deezer_token_suffix}"
         res = JSON.parse(CNX.download(req))
-        require 'pp'; pp res; exit
-
+        res["data"].sort_by! { |obj| obj["timestamp"] }
+        candidate = res["data"].last
+        maker = Struct.new(:artist, :album, :track)
+        itunes = maker.new(candidate["artist"]["name"], candidate["album"]["title"], candidate["title"])
+        post_itunes(options, itunes)
       rescue => e
         @status.wtf
-        Errors.global_error({error: e, caller: caller, data: [options]})
+        Errors.global_error({error: e, caller: caller, data: [store, options]})
       end
     end
 
@@ -90,17 +93,7 @@ module Ayadn
             exit
           end
         end
-        @status.itunes_store
-        store = []
-        unless options['no_url']
-          store = itunes_istore_request(itunes)
-          if store['code'] == 404 && itunes.artist =~ /(and)/
-            itunes.artist.gsub!('and', '&')
-            store = itunes_istore_request(itunes)
-          end
-        end
-        text_to_post = "#{@hashtag}\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’#{@custom_text}"
-        post_nowplaying(text_to_post, store, options)
+        post_itunes(options, itunes)
       rescue => e
         @status.wtf
         Errors.global_error({error: e, caller: caller, data: [itunes, store, options]})
@@ -109,22 +102,26 @@ module Ayadn
 
     private
 
+    def post_itunes options, itunes
+      @status.itunes_store
+      store = []
+      unless options['no_url']
+        store = itunes_istore_request(itunes)
+        if store['code'] == 404 && itunes.artist =~ /(and)/
+          itunes.artist.gsub!('and', '&')
+          store = itunes_istore_request(itunes)
+        end
+      end
+      text_to_post = "#{@hashtag}\n \nTitle: ‘#{itunes.track}’\nArtist: #{itunes.artist}\nfrom ‘#{itunes.album}’#{@custom_text}"
+      post_nowplaying(text_to_post, store, options)
+    end
+
     def get_lastfm_track_infos user
       begin
         url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
         feed = RSS::Parser.parse(CNX.download(url))
         lfm = feed.items[0].title.split(' – ')
         return lfm[0], lfm[1]
-      rescue Interrupt
-        @status.canceled
-        exit
-      end
-    end
-
-    def get_deezer_track_infos code
-      begin
-        url = "http://ws.audioscrobbler.com/2.0/user/#{user}/recenttracks.rss"
-        
       rescue Interrupt
         @status.canceled
         exit
