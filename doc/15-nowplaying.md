@@ -24,6 +24,8 @@ Ayadn will grab information from your Last.fm account, format it, insert the *#n
 
 It will also grab a link to the album and the album artwork from the iTunes Store (you can prevent this behavior by adding the `--no_url` option (short: `-n`).
 
+*Note: the Last.fm feed may take some time to be updated. If it doesn't reflect your recent history, please wait a few minutes.*
+
 ## Deezer
 
 `ayadn nowplaying --deezer`
@@ -33,6 +35,8 @@ It will also grab a link to the album and the album artwork from the iTunes Stor
 Ayadn will grab information from your Deezer account (you will be prompted to authorize Ayadn for Deezer the first time you launch this command), format it, insert the *#nowplaying* hashtag then ask for your confirmation before posting it.
 
 It will also grab a link to the album and the album artwork from the iTunes Store (you can prevent this behavior by adding the `--no_url` option (short: `-n`).
+
+*Note: Deezer will update the recent history list only after a song has been played to its end.*
 
 ## Options
 
