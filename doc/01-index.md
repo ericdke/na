@@ -21,7 +21,7 @@ With Ayadn, you can use all the features of App.net from the console without any
 - extract links from conversations, streams, posts, etc
 - list and download your files
 - view (and write to) all your channels including Broadcasts, Patter, Ohai, etc
-- 'nowplaying' from iTunes or Last.fm, with album art and store link
+- 'nowplaying' from iTunes, Deezer or Last.fm, with album art and store link
 - 'movie' creates a post from a movie title with poster, plot, and link
 - 'tvshow' creates a post from a TV show title with poster, plot, and link
 - view/send private messages

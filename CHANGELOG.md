@@ -1,5 +1,6 @@
 ## 2.0.5 - 2015-01-24 - 'Charlie'
 
+- New: NowPlaying with Deezer
 - New: 'lastposts' in Followings (show every user last post)
 - New: in Followings, sort by last post date (only with 'lastposts')
 - Fix: do not crash if interrupted by user while loading Gems
