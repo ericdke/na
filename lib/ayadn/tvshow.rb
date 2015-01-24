@@ -6,7 +6,7 @@ module Ayadn
     begin
       require 'tvdb_party'
     rescue LoadError => e
-      puts "\nAYADN: Error while loading Gems\n\n"
+      puts "\nAYADN: Error while loading an external resource\n\n"
       puts "RUBY: #{e}\n\n"
       exit
     end

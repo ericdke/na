@@ -3,7 +3,13 @@ module Ayadn
 
   class NowPlaying
 
-    require 'rss'
+    begin
+      require 'rss'
+    rescue LoadError => e
+      puts "\nAYADN: Error while loading an external resource\n\n"
+      puts "RUBY: #{e}\n\n"
+      exit
+    end
 
     def initialize api, view, workers, options = {}
       @api = api

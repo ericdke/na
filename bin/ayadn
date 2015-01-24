@@ -1,9 +1,15 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 # App.net command-line client
-# Author: Eric DEJONCKHEERE (http://app.net/ericd)
+# Author: Eric DEJONCKHEERE
+# http://app.net/ericd
+# eric@aya.io
 
-$PROGRAM_NAME = 'ayadn'
-require_relative '../lib/ayadn'
-
-Ayadn::App.start ARGV
+begin
+  $PROGRAM_NAME = 'ayadn'
+  require_relative '../lib/ayadn'
+  Ayadn::App.start ARGV
+rescue Interrupt
+  puts "\nExit: stopped by user while launching\n\n"
+  exit
+end

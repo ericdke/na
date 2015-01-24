@@ -2,6 +2,7 @@
 
 - New: 'lastposts' in Followings (show every user last post)
 - New: in Followings, sort by last post date (only with 'lastposts')
+- Fix: do not crash if interrupted by user while loading Gems
 
 ## 2.0.4 - 2014-11-30 - 'The Penguin'
 
