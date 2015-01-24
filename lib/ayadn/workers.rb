@@ -348,6 +348,10 @@ module Ayadn
       post['entities']['hashtags'].map { |h| h['name'] }
     end
 
+    def extract_mentions(post)
+      post['entities']['mentions'].map { |m| m['name'] }
+    end
+
     def build_channels(data, options = {})
       bucket = []
       data = [data] unless data.is_a?(Array)

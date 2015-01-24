@@ -63,12 +63,11 @@ module Ayadn
     def show_list_followings(list, target, options = {})
       if options["lastpost"]
         clear_screen()
-
         bucket = []
         list.each do |k,v|
           bucket << [k, v[0], v[1], v[2], v[3], v[4], v[5]]
         end
-
+        count = bucket.size
         if options[:username]
           bucket.sort_by! { |obj| obj[1] }
         elsif options[:name]
@@ -79,16 +78,12 @@ module Ayadn
           bucket.keep_if { |obj| !obj[6].nil? }
           bucket.sort_by! { |obj| obj[6]["created_at"] }.reverse!
         end
-
         title = if target == "me"
-                  "Last post of users you're following".color(:cyan) + "".color(:white)
-                else
-                  "Last post of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan) + "".color(:white)
-                end
-
+            "Last post of users you're following".color(:cyan)
+          else
+            "Last post of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan)
+          end
         puts "\t#{title}\n\n"
-        count = bucket.size
-
         bucket.each.with_index(1) do |obj,index|
           username = "@#{obj[1]}"
           colored_username = username.color(Settings.options[:colors][:username])
@@ -98,13 +93,15 @@ module Ayadn
             next
           end
           date = @workers.parsed_time(obj[6]["created_at"])
-          mentions = []
-          obj[6]["entities"]["mentions"].each { |m| mentions << m['name'] }
+          mentions = @workers.extract_mentions(obj[6])
           hashtags = @workers.extract_hashtags(obj[6])
           text = @workers.colorize_text(obj[6]["text"], mentions, hashtags)
-          total = "(#{obj[5]} posts)".color(Settings.options[:colors][:link])
+          total = "(#{obj[5]} posts)"
           name = obj[2].nil? ? "(no name)" : obj[2]
-          puts "#{colored_username} #{name.color(Settings.options[:colors][:name])} #{date.color(Settings.options[:colors][:date])} #{total}\n"
+          colored_total = total.color(Settings.options[:colors][:link])
+          colored_name = name.color(Settings.options[:colors][:name])
+          colored_date = date.color(Settings.options[:colors][:date])
+          puts "#{colored_username} #{colored_name} #{colored_date} #{colored_total}\n"
           newline()
           puts text
           unless index == count
@@ -116,7 +113,6 @@ module Ayadn
             newline()
           end
         end
-
       else
         puts @workers.build_followings_list(list, target, options)
         puts "\n"
