@@ -72,6 +72,7 @@ Ayadn	lib/ayadn/tvshow.rb	/^module Ayadn$/;"	m
 Ayadn	lib/ayadn/version.rb	/^module Ayadn$/;"	m
 Ayadn	lib/ayadn/view.rb	/^module Ayadn$/;"	m
 Ayadn	lib/ayadn/workers.rb	/^module Ayadn$/;"	m
+Ayadn	spec/integration/action_spec.rb	/^module Ayadn$/;"	m
 Blacklist	lib/ayadn/blacklist.rb	/^  class Blacklist < Thor$/;"	c	class:Ayadn
 BlacklistWorkers	lib/ayadn/blacklist.rb	/^  class BlacklistWorkers$/;"	c	class:Ayadn
 CNX	lib/ayadn/cnx.rb	/^  class CNX$/;"	c	class:Ayadn
@@ -103,6 +104,7 @@ Debug	lib/ayadn/debug.rb	/^  class Debug$/;"	c	class:Ayadn
 Descriptions	lib/ayadn/descriptions.rb	/^  class Descriptions$/;"	c	class:Ayadn
 Endpoints	lib/ayadn/endpoints.rb	/^  class Endpoints$/;"	c	class:Ayadn
 Errors	lib/ayadn/errors.rb	/^  class Errors$/;"	c	class:Ayadn
+Errors	spec/integration/action_spec.rb	/^  class Errors$/;"	c	class:Ayadn
 FLOW_CONTROL_KEYWORDS	tmp/rubycritic/assets/javascripts/prettify-4-Mar-2013.js	/^  var FLOW_CONTROL_KEYWORDS = ["break,continue,do,else,for,if,return,while"];$/;"	v
 FileOps	lib/ayadn/fileops.rb	/^  class FileOps$/;"	c	class:Ayadn
 IN_GLOBAL_SCOPE	tmp/rubycritic/assets/javascripts/prettify-4-Mar-2013.js	/^var IN_GLOBAL_SCOPE = true;$/;"	v
@@ -250,10 +252,10 @@ all_aliases	lib/ayadn/databases.rb	/^    def self.all_aliases$/;"	F
 all_blacklist	lib/ayadn/databases.rb	/^    def self.all_blacklist$/;"	F	class:Ayadn
 all_bookmarks	lib/ayadn/databases.rb	/^    def self.all_bookmarks$/;"	F
 all_but_me	lib/ayadn/workers.rb	/^    def all_but_me usernames$/;"	f
-all_hashtag_links	lib/ayadn/view.rb	/^    def all_hashtag_links(stream, hashtag)$/;"	f	class:Ayadn.View
+all_hashtag_links	lib/ayadn/view.rb	/^    def all_hashtag_links(stream, hashtag)$/;"	f	class:Ayadn
 all_pagination	lib/ayadn/databases.rb	/^    def self.all_pagination$/;"	F
-all_search_links	lib/ayadn/view.rb	/^    def all_search_links(stream, words)$/;"	f	class:Ayadn.View
-all_stars_links	lib/ayadn/view.rb	/^    def all_stars_links(stream)$/;"	f	class:Ayadn.View
+all_search_links	lib/ayadn/view.rb	/^    def all_search_links(stream, words)$/;"	f	class:Ayadn
+all_stars_links	lib/ayadn/view.rb	/^    def all_stars_links(stream)$/;"	f	class:Ayadn
 all_users	lib/ayadn/databases.rb	/^    def self.all_users$/;"	F
 all_users_ids	lib/ayadn/databases.rb	/^    def self.all_users_ids$/;"	F
 already_reposted	lib/ayadn/check.rb	/^    def already_reposted(resp)$/;"	f	class:Ayadn.Check
@@ -265,13 +267,14 @@ appendDecorations.job.basePos	tmp/rubycritic/assets/javascripts/prettify-4-Mar-2
 appendDecorations.job.sourceCode	tmp/rubycritic/assets/javascripts/prettify-4-Mar-2013.js	/^      sourceCode: sourceCode,$/;"	p
 arrayMax	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function arrayMax(data) {$/;"	f
 arrayMin	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function arrayMin(data) {$/;"	f
-arrow_count	lib/ayadn/view.rb	/^    def arrow_count options, content$/;"	f	class:Ayadn.View
-arrow_id	lib/ayadn/view.rb	/^    def arrow_id options, content$/;"	f	class:Ayadn.View
+arrow_count	lib/ayadn/view.rb	/^    def arrow_count options, content$/;"	f	class:Ayadn
+arrow_id	lib/ayadn/view.rb	/^    def arrow_id options, content$/;"	f	class:Ayadn
 ask_clear_blacklist	lib/ayadn/status.rb	/^    def ask_clear_blacklist$/;"	f	class:Ayadn.Status
 ask_clear_bookmarks	lib/ayadn/status.rb	/^    def ask_clear_bookmarks$/;"	f	class:Ayadn.Status
 ask_clear_databases	lib/ayadn/status.rb	/^    def ask_clear_databases$/;"	f	class:Ayadn.Status
 ask_credentials	lib/ayadn/pinboard.rb	/^    def ask_credentials$/;"	f	class:Ayadn.PinBoard
-ask_lastfm_user	lib/ayadn/nowplaying.rb	/^    def ask_lastfm_user$/;"	f	class:Ayadn.NowPlaying
+ask_deezer_user	lib/ayadn/nowplaying.rb	/^    def ask_deezer_user$/;"	f	class:Ayadn
+ask_lastfm_user	lib/ayadn/nowplaying.rb	/^    def ask_lastfm_user$/;"	f	class:Ayadn
 at	lib/ayadn/workers.rb	/^    def at usernames$/;"	f
 attr	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function attr(elem, prop, value) {$/;"	f
 augmentWidthOrHeight	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function augmentWidthOrHeight( elem, name, extra, isBorderBox, styles ) {$/;"	f
@@ -298,7 +301,7 @@ bad_post_ids	lib/ayadn/check.rb	/^    def bad_post_ids(post_ids)$/;"	f	class:Aya
 bad_text_size	lib/ayadn/post.rb	/^    def bad_text_size(post, size, max_size)$/;"	f	class:Ayadn.Post
 banner	lib/ayadn/migration.rb	/^    def banner$/;"	f
 base	lib/ayadn/annotations.rb	/^    def base$/;"	f	class:Ayadn.Annotations
-big_separator	lib/ayadn/view.rb	/^    def big_separator$/;"	f	class:Ayadn.View
+big_separator	lib/ayadn/view.rb	/^    def big_separator$/;"	f	class:Ayadn
 blacklist	lib/ayadn/descriptions.rb	/^    def self.blacklist$/;"	F	class:Ayadn.Descriptions.post
 blacklist	lib/ayadn/migration.rb	/^    def blacklist$/;"	f
 blacklist	lib/ayadn/set.rb	/^    def blacklist(*args)$/;"	f	class:Ayadn.Set
@@ -326,21 +329,21 @@ build_aliases_list	lib/ayadn/workers.rb	/^    def build_aliases_list(list)$/;"	f
 build_blacklist_list	lib/ayadn/workers.rb	/^    def build_blacklist_list(list)$/;"	f	class:Ayadn.Workers
 build_blocked_list	lib/ayadn/workers.rb	/^    def build_blocked_list(list, options = {})$/;"	f
 build_channels	lib/ayadn/workers.rb	/^    def build_channels(data, options = {})$/;"	f
-build_checkins	lib/ayadn/view.rb	/^    def build_checkins(content)$/;"	f	class:Ayadn.View
-build_content	lib/ayadn/view.rb	/^    def build_content(content)$/;"	f	class:Ayadn.View
-build_files_list	lib/ayadn/view.rb	/^    def build_files_list(list)$/;"	f	class:Ayadn.View
+build_checkins	lib/ayadn/view.rb	/^    def build_checkins(content)$/;"	f	class:Ayadn
+build_content	lib/ayadn/view.rb	/^    def build_content(content)$/;"	f	class:Ayadn
+build_files_list	lib/ayadn/view.rb	/^    def build_files_list(list)$/;"	f	class:Ayadn
 build_followers_list	lib/ayadn/workers.rb	/^    def build_followers_list(list, target, options = {})$/;"	f	class:Ayadn
 build_followings_list	lib/ayadn/workers.rb	/^    def build_followings_list(list, target, options = {}) #takes a hash of users with ayadn format$/;"	f	class:Ayadn.Workers
-build_header	lib/ayadn/view.rb	/^    def build_header(content)$/;"	f	class:Ayadn.View
-build_interactions_stream	lib/ayadn/view.rb	/^    def build_interactions_stream(data)$/;"	f	class:Ayadn.View
+build_header	lib/ayadn/view.rb	/^    def build_header(content)$/;"	f	class:Ayadn
+build_interactions_stream	lib/ayadn/view.rb	/^    def build_interactions_stream(data)$/;"	f	class:Ayadn
 build_list	lib/ayadn/api.rb	/^    def build_list(username, target)$/;"	f	class:Ayadn.API
 build_muted_list	lib/ayadn/workers.rb	/^    def build_muted_list(list, options = {})$/;"	f
 build_posts	lib/ayadn/workers.rb	/^    def build_posts(data, niceranks = {})$/;"	f
 build_query	lib/ayadn/api.rb	/^    def self.build_query(arg)$/;"	F	class:Ayadn.API
 build_reposted_list	lib/ayadn/workers.rb	/^    def build_reposted_list(list, target)$/;"	f	class:Ayadn.Workers
 build_starred_list	lib/ayadn/workers.rb	/^    def build_starred_list(list, target)$/;"	f	class:Ayadn.Workers
-build_stream_with_index	lib/ayadn/view.rb	/^    def build_stream_with_index(data, options, niceranks) #expects an array$/;"	f	class:Ayadn.View
-build_stream_without_index	lib/ayadn/view.rb	/^    def build_stream_without_index(data, options, niceranks) #expects an array$/;"	f	class:Ayadn.View
+build_stream_with_index	lib/ayadn/view.rb	/^    def build_stream_with_index(data, options, niceranks) #expects an array$/;"	f	class:Ayadn
+build_stream_without_index	lib/ayadn/view.rb	/^    def build_stream_without_index(data, options, niceranks) #expects an array$/;"	f	class:Ayadn
 build_users_array	lib/ayadn/workers.rb	/^    def build_users_array(list)$/;"	f
 build_users_list	lib/ayadn/workers.rb	/^    def build_users_list(list, table, options = {})$/;"	f
 cancel	lib/ayadn/tvshow.rb	/^    def cancel$/;"	f	class:Ayadn
@@ -374,7 +377,7 @@ clear_blacklist	lib/ayadn/databases.rb	/^    def self.clear_blacklist$/;"	F
 clear_bookmarks	lib/ayadn/databases.rb	/^    def self.clear_bookmarks$/;"	F
 clear_index	lib/ayadn/databases.rb	/^    def self.clear_index$/;"	F
 clear_pagination	lib/ayadn/databases.rb	/^    def self.clear_pagination$/;"	F
-clear_screen	lib/ayadn/view.rb	/^    def clear_screen$/;"	f	class:Ayadn.View
+clear_screen	lib/ayadn/view.rb	/^    def clear_screen$/;"	f	class:Ayadn
 clear_users	lib/ayadn/databases.rb	/^    def self.clear_users$/;"	F
 cloneCopyEvent	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function cloneCopyEvent( src, dest ) {$/;"	f
 color	lib/ayadn/set.rb	/^    def color(*args)$/;"	f	class:Ayadn.Set
@@ -420,9 +423,10 @@ create_account_table	lib/ayadn/databases.rb	/^    def self.create_account_table(
 create_alias	lib/ayadn/databases.rb	/^    def self.create_alias(channel_id, channel_alias)$/;"	F
 create_api_file	lib/ayadn/settings.rb	/^    def self.create_api_file$/;"	F	class:Ayadn
 create_config_folders	lib/ayadn/authorize.rb	/^    def create_config_folders(user)$/;"	f	class:Ayadn.Authorize
+create_deezer_user	lib/ayadn/nowplaying.rb	/^    def create_deezer_user$/;"	f	class:Ayadn
 create_details	lib/ayadn/tvshow.rb	/^    def create_details show_obj$/;"	f	class:Ayadn.TvShow
 create_filename	lib/ayadn/nowwatching.rb	/^    def create_filename response$/;"	f	class:Ayadn.NowWatching
-create_lastfm_user	lib/ayadn/nowplaying.rb	/^    def create_lastfm_user$/;"	f	class:Ayadn.NowPlaying
+create_lastfm_user	lib/ayadn/nowplaying.rb	/^    def create_lastfm_user$/;"	f	class:Ayadn
 create_logger	lib/ayadn/logs.rb	/^    def self.create_logger$/;"	F	class:Ayadn
 create_tables	lib/ayadn/databases.rb	/^    def self.create_tables(user)$/;"	F	class:Ayadn.Databases
 create_text	lib/ayadn/tvshow.rb	/^    def create_text$/;"	f	class:Ayadn.TvShow
@@ -439,6 +443,7 @@ dateFormat	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^dateForma
 debug	tmp/rubycritic/assets/javascripts/jquery.floatThead-v1.2.7.js	/^  function debug(str){$/;"	f
 decode	lib/ayadn/pinboard.rb	/^    def decode(encoded_pinboard_credentials)$/;"	f	class:Ayadn.PinBoard
 decorate	tmp/rubycritic/assets/javascripts/prettify-4-Mar-2013.js	/^    var decorate = function (job) {$/;"	f
+deezer	lib/ayadn/nowplaying.rb	/^    def deezer options$/;"	f	class:Ayadn.NowPlaying
 def_str	lib/ayadn/workers.rb	/^    def def_str(word, reg_split)$/;"	f
 defaultDisplay	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function defaultDisplay( nodeName ) {$/;"	f
 defaultLabelOptions.enabled	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^	enabled: true,$/;"	p
@@ -485,7 +490,7 @@ download	lib/ayadn/descriptions.rb	/^    def self.download$/;"	F	class:Ayadn.Des
 download_url	lib/ayadn/fileops.rb	/^    def self.download_url(name, url)$/;"	F	class:Ayadn.FileOps
 downloaded	lib/ayadn/status.rb	/^    def downloaded(name)$/;"	f	class:Ayadn.Status
 downloading	lib/ayadn/status.rb	/^    def downloading$/;"	f	class:Ayadn.Status
-downloading	lib/ayadn/view.rb	/^    def downloading(options = {})$/;"	f	class:Ayadn.View
+downloading	lib/ayadn/view.rb	/^    def downloading(options = {})$/;"	f	class:Ayadn
 element.onclick	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^			element.onclick = function (e) {												$/;"	f
 element.ontouchstart	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^			element.ontouchstart = function (e) {			$/;"	f
 emphasizeLine	tmp/rubycritic/assets/javascripts/application.js	/^function emphasizeLine(lineReference) {$/;"	f
@@ -517,6 +522,7 @@ extractSourceSpans.walk	tmp/rubycritic/assets/javascripts/prettify-4-Mar-2013.js
 extract_checkins	lib/ayadn/workers.rb	/^    def extract_checkins(post)$/;"	f
 extract_hashtags	lib/ayadn/workers.rb	/^    def extract_hashtags(post)$/;"	f
 extract_links	lib/ayadn/workers.rb	/^    def extract_links(post)$/;"	f
+extract_mentions	lib/ayadn/workers.rb	/^    def extract_mentions(post)$/;"	f
 extract_users	lib/ayadn/workers.rb	/^    def extract_users(resp)$/;"	f
 fetching_from	lib/ayadn/status.rb	/^    def fetching_from(source)$/;"	f	class:Ayadn.Status
 file	lib/ayadn/endpoints.rb	/^    def file(file_id)$/;"	f	class:Ayadn.Endpoints
@@ -527,7 +533,7 @@ files	lib/ayadn/descriptions.rb	/^    def self.files$/;"	F	class:Ayadn.Descripti
 files	lib/ayadn/endpoints.rb	/^    def files$/;"	f	class:Ayadn.Endpoints
 files_list	lib/ayadn/endpoints.rb	/^    def files_list(options)$/;"	f
 filter	lib/ayadn/set.rb	/^    def filter value$/;"	f	class:Ayadn.SetNiceRank
-filter_nicerank	lib/ayadn/view.rb	/^    def filter_nicerank posts, options$/;"	f	class:Ayadn.View
+filter_nicerank	lib/ayadn/view.rb	/^    def filter_nicerank posts, options$/;"	f	class:Ayadn
 find	lib/ayadn/search.rb	/^    def find(words, options)$/;"	f	class:Ayadn.Search
 find	lib/ayadn/tvshow.rb	/^    def find title$/;"	f	class:Ayadn.TvShow
 find_all	lib/ayadn/tvshow.rb	/^    def find_all title$/;"	f	class:Ayadn
@@ -573,7 +579,7 @@ functions.updateFromDOM	tmp/rubycritic/assets/javascripts/jquery.timeago-v1.4.1.
 genFx	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function genFx( type, includeWidth ) {$/;"	f
 get	lib/ayadn/cnx.rb	/^    def self.get url$/;"	F	class:Ayadn.CNX
 get	lib/ayadn/scroll.rb	/^    def get(target, options)$/;"	f	class:Ayadn.Scroll
-get	lib/ayadn/view.rb	/^    def get(stream, options = {}, niceranks = {})$/;"	f	class:Ayadn.View
+get	lib/ayadn/view.rb	/^    def get(stream, options = {}, niceranks = {})$/;"	f	class:Ayadn
 getAll	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function getAll( context, tag ) {$/;"	f
 getMagnitude	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function getMagnitude(num) {$/;"	f
 getOptions	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function getOptions() {$/;"	f
@@ -582,7 +588,7 @@ getWidthOrHeight	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function ge
 getWindow	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function getWindow( elem ) {$/;"	f
 get_alias_from_id	lib/ayadn/databases.rb	/^    def self.get_alias_from_id(channel_id)$/;"	F
 get_blocked	lib/ayadn/api.rb	/^    def get_blocked$/;"	f	class:Ayadn.API
-get_broadcast_alias_from_id	lib/ayadn/view.rb	/^    def get_broadcast_alias_from_id(event_id)$/;"	f	class:Ayadn.View
+get_broadcast_alias_from_id	lib/ayadn/view.rb	/^    def get_broadcast_alias_from_id(event_id)$/;"	f	class:Ayadn
 get_channel	lib/ayadn/api.rb	/^    def get_channel channel_id, options = {}$/;"	f	class:Ayadn.API
 get_channel_id	lib/ayadn/databases.rb	/^    def self.get_channel_id(channel_alias)$/;"	F
 get_channel_id_from_alias	lib/ayadn/workers.rb	/^    def get_channel_id_from_alias(channel_id)$/;"	f
@@ -603,9 +609,9 @@ get_global	lib/ayadn/api.rb	/^    def get_global(options)$/;"	f	class:Ayadn.API
 get_hashtag	lib/ayadn/api.rb	/^    def get_hashtag(hashtag)$/;"	f	class:Ayadn.API
 get_index_length	lib/ayadn/databases.rb	/^    def self.get_index_length$/;"	F
 get_interactions	lib/ayadn/api.rb	/^    def get_interactions$/;"	f	class:Ayadn.API
-get_itunes_store	lib/ayadn/nowplaying.rb	/^    def get_itunes_store url, artist, track$/;"	f	class:Ayadn.NowPlaying
-get_itunes_track_infos	lib/ayadn/nowplaying.rb	/^    def get_itunes_track_infos$/;"	f	class:Ayadn.NowPlaying
-get_lastfm_track_infos	lib/ayadn/nowplaying.rb	/^    def get_lastfm_track_infos user$/;"	f	class:Ayadn.NowPlaying
+get_itunes_store	lib/ayadn/nowplaying.rb	/^    def get_itunes_store url, artist, track$/;"	f	class:Ayadn
+get_itunes_track_infos	lib/ayadn/nowplaying.rb	/^    def get_itunes_track_infos$/;"	f
+get_lastfm_track_infos	lib/ayadn/nowplaying.rb	/^    def get_lastfm_track_infos user$/;"	f	class:Ayadn
 get_list_url	lib/ayadn/api.rb	/^    def get_list_url(username, target, options)$/;"	f	class:Ayadn.API
 get_mentions	lib/ayadn/api.rb	/^    def get_mentions(username, options)$/;"	f	class:Ayadn.API
 get_messages	lib/ayadn/api.rb	/^    def get_messages(channel_id, options)$/;"	f	class:Ayadn.API
@@ -645,6 +651,7 @@ global	lib/ayadn/descriptions.rb	/^    def self.global$/;"	F	class:Ayadn.Descrip
 global	lib/ayadn/endpoints.rb	/^    def global(options)$/;"	f
 global	lib/ayadn/stream.rb	/^    def global settings$/;"	f	class:Ayadn.Stream
 global_error	lib/ayadn/errors.rb	/^    def self.global_error(args)$/;"	F	class:Ayadn.Errors
+global_error	spec/integration/action_spec.rb	/^    def self.global_error(args)$/;"	F	class:Ayadn.Errors
 has_been_blocked	lib/ayadn/check.rb	/^    def has_been_blocked(username, resp)$/;"	f	class:Ayadn.Check
 has_been_deleted	lib/ayadn/check.rb	/^    def has_been_deleted(post_id, resp)$/;"	f	class:Ayadn.Check
 has_been_followed	lib/ayadn/check.rb	/^    def has_been_followed(username, resp)$/;"	f	class:Ayadn.Check
@@ -683,7 +690,7 @@ index	lib/ayadn/migration.rb	/^    def index$/;"	f
 index_range	lib/ayadn/set.rb	/^    def self.index_range(min, max, value)$/;"	F	class:Ayadn.Validators
 info	lib/ayadn/errors.rb	/^    def self.info(msg)$/;"	F	class:Ayadn.Errors
 info	lib/ayadn/status.rb	/^    def info(status, message, color = nil)$/;"	f	class:Ayadn.Status
-infos	lib/ayadn/view.rb	/^    def infos(stream, token)$/;"	f	class:Ayadn.View
+infos	lib/ayadn/view.rb	/^    def infos(stream, token)$/;"	f	class:Ayadn
 init	lib/ayadn/alias.rb	/^    def init$/;"	f	class:Ayadn.Alias
 init	lib/ayadn/mark.rb	/^    def init$/;"	f	class:Ayadn.Mark
 init	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^init.prototype = jQuery.fn;$/;"	c
@@ -744,8 +751,8 @@ isObject	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function is
 isString	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function isString(s) {$/;"	f
 is_in_blacklist	lib/ayadn/databases.rb	/^    def self.is_in_blacklist?(type, target)$/;"	F	class:Ayadn
 is_integer?	lib/ayadn/extend.rb	/^  def is_integer?$/;"	f	class:String
-itunes	lib/ayadn/nowplaying.rb	/^    def itunes options$/;"	f	class:Ayadn.NowPlaying
-itunes_istore_request	lib/ayadn/nowplaying.rb	/^    def itunes_istore_request itunes$/;"	f	class:Ayadn.NowPlaying
+itunes	lib/ayadn/nowplaying.rb	/^    def itunes options$/;"	f	class:Ayadn
+itunes_istore_request	lib/ayadn/nowplaying.rb	/^    def itunes_istore_request itunes$/;"	f	class:Ayadn
 itunes_store	lib/ayadn/status.rb	/^    def itunes_store$/;"	f	class:Ayadn.Status
 itunes_store_track	lib/ayadn/status.rb	/^    def itunes_store_track(store)$/;"	f	class:Ayadn.Status
 jQuery.Callbacks	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^jQuery.Callbacks = function( options ) {$/;"	f
@@ -791,8 +798,8 @@ jQuery.swap	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^jQuery.swap = fu
 keep_text_from_markdown_links	lib/ayadn/post.rb	/^    def keep_text_from_markdown_links(str)$/;"	f	class:Ayadn.Post
 key.x	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^			key = { x: 'cx', y: 'cy' }[key] || key;$/;"	p
 key.y	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^			key = { x: 'cx', y: 'cy' }[key] || key;$/;"	p
-lastfm	lib/ayadn/nowplaying.rb	/^    def lastfm options$/;"	f	class:Ayadn.NowPlaying
-lastfm_istore_request	lib/ayadn/nowplaying.rb	/^    def lastfm_istore_request artist, track$/;"	f	class:Ayadn.NowPlaying
+lastfm	lib/ayadn/nowplaying.rb	/^    def lastfm options$/;"	f	class:Ayadn
+lastfm_istore_request	lib/ayadn/nowplaying.rb	/^    def lastfm_istore_request artist, track$/;"	f	class:Ayadn
 length_of_index	lib/ayadn/workers.rb	/^    def length_of_index$/;"	f
 letterSpacing	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^        letterSpacing: 0,$/;"	p
 lin2log	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function lin2log(num) {$/;"	f
@@ -804,7 +811,7 @@ list	lib/ayadn/blacklist.rb	/^    def list(options)$/;"	f	class:Ayadn.BlacklistW
 list	lib/ayadn/mark.rb	/^    def list$/;"	f	class:Ayadn.Mark
 list	lib/ayadn/set.rb	/^    def list(args)$/;"	f	class:Ayadn.SetFormats
 list	lib/ayadn/switch.rb	/^    def list$/;"	f	class:Ayadn.Switch
-list	lib/ayadn/view.rb	/^    def list(what, list, target, options = {})$/;"	f	class:Ayadn.View
+list	lib/ayadn/view.rb	/^    def list(what, list, target, options = {})$/;"	f	class:Ayadn
 lists	lib/ayadn/set.rb	/^    def lists(args)$/;"	f	class:Ayadn.SetFormats
 load_config	lib/ayadn/settings.rb	/^    def self.load_config$/;"	F	class:Ayadn
 load_credentials	lib/ayadn/pinboard.rb	/^    def load_credentials$/;"	f	class:Ayadn.PinBoard
@@ -873,6 +880,7 @@ muted	lib/ayadn/stream.rb	/^    def muted(options)$/;"	f	class:Ayadn.Stream
 muting	lib/ayadn/status.rb	/^    def muting(username)$/;"	f	class:Ayadn.Status
 nPatterns	tmp/rubycritic/assets/javascripts/prettify-4-Mar-2013.js	/^    var nPatterns = fallthroughStylePatterns.length;$/;"	v
 new_api_file	lib/ayadn/settings.rb	/^    def self.new_api_file(api_file)$/;"	F	class:Ayadn
+newline	lib/ayadn/view.rb	/^    def newline$/;"	f	class:Ayadn
 nicerank	lib/ayadn/set.rb	/^    def nicerank *args$/;"	f	class:Ayadn.Set
 nicerank_true	lib/ayadn/stream.rb	/^    def nicerank_true$/;"	f	class:Ayadn.Stream
 niceranks	lib/ayadn/migration.rb	/^    def niceranks$/;"	f
@@ -941,7 +949,7 @@ options_new	lib/ayadn/descriptions.rb	/^    def self.options_new$/;"	F	class:Aya
 options_raw	lib/ayadn/descriptions.rb	/^    def self.options_raw$/;"	F	class:Ayadn.Descriptions
 pInt	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function pInt(s, mag) {$/;"	f
 pad	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function pad(number, length) {$/;"	f
-page	lib/ayadn/view.rb	/^    def page msg$/;"	f	class:Ayadn.View
+page	lib/ayadn/view.rb	/^    def page msg$/;"	f	class:Ayadn
 paginate	lib/ayadn/api.rb	/^    def paginate options, target$/;"	f	class:Ayadn.API
 pagination	lib/ayadn/migration.rb	/^    def pagination$/;"	f
 pagination_delete	lib/ayadn/databases.rb	/^    def self.pagination_delete(name)$/;"	F
@@ -981,7 +989,8 @@ post	lib/ayadn/status.rb	/^    def post$/;"	f	class:Ayadn.Status
 post	lib/ayadn/tvshow.rb	/^    def post options = {}$/;"	f	class:Ayadn
 post_404	lib/ayadn/status.rb	/^    def post_404(post_id)$/;"	f	class:Ayadn.Status
 post_info	lib/ayadn/status.rb	/^    def post_info$/;"	f	class:Ayadn.Status
-post_nowplaying	lib/ayadn/nowplaying.rb	/^    def post_nowplaying text_to_post, store, options$/;"	f	class:Ayadn.NowPlaying
+post_itunes	lib/ayadn/nowplaying.rb	/^    def post_itunes options, itunes$/;"	f	class:Ayadn
+post_nowplaying	lib/ayadn/nowplaying.rb	/^    def post_nowplaying text_to_post, store, options$/;"	f	class:Ayadn
 post_size_error	lib/ayadn/post.rb	/^    def post_size_error(post)$/;"	f	class:Ayadn.Post
 post_size_ok?	lib/ayadn/post.rb	/^    def post_size_ok?(post) # works on a string, returns boolean$/;"	f	class:Ayadn.Post
 postinfo	lib/ayadn/action.rb	/^    def postinfo(post_id, options)$/;"	f	class:Ayadn.Action
@@ -1023,7 +1032,7 @@ remove_from_accounts	lib/ayadn/databases.rb	/^    def self.remove_from_accounts(
 remove_from_blacklist	lib/ayadn/databases.rb	/^    def self.remove_from_blacklist(target)$/;"	F	class:Ayadn
 rename	lib/ayadn/mark.rb	/^    def rename(*args)$/;"	f	class:Ayadn.Mark
 rename_bookmark	lib/ayadn/databases.rb	/^    def self.rename_bookmark post_id, new_title$/;"	F
-render	lib/ayadn/view.rb	/^    def render(stream, options = {}, niceranks = {})$/;"	f	class:Ayadn.View
+render	lib/ayadn/view.rb	/^    def render(stream, options = {}, niceranks = {})$/;"	f	class:Ayadn
 reply	lib/ayadn/action.rb	/^    def reply(post_id, options = {})$/;"	f	class:Ayadn
 reply	lib/ayadn/app.rb	/^    def reply(id)$/;"	f	class:Ayadn.App
 reply	lib/ayadn/descriptions.rb	/^    def self.reply$/;"	F	class:Ayadn.Descriptions.post
@@ -1109,30 +1118,30 @@ settings	lib/ayadn/app.rb	/^    def settings$/;"	f	class:Ayadn.App
 settings	lib/ayadn/descriptions.rb	/^    def self.settings$/;"	F	class:Ayadn.Descriptions
 show	lib/ayadn/scroll.rb	/^    def show(stream, options, niceranks)$/;"	f	class:Ayadn.Scroll
 showHide	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function showHide( elements, show ) {$/;"	f
-show_channels	lib/ayadn/view.rb	/^    def show_channels(resp, options = {})$/;"	f	class:Ayadn.View
+show_channels	lib/ayadn/view.rb	/^    def show_channels(resp, options = {})$/;"	f	class:Ayadn
 show_cursor	lib/ayadn/view.rb	/^    def show_cursor$/;"	f	class:Ayadn.View
-show_files_list	lib/ayadn/view.rb	/^    def show_files_list(list)$/;"	f	class:Ayadn.View
+show_files_list	lib/ayadn/view.rb	/^    def show_files_list(list)$/;"	f	class:Ayadn
 show_if_new	lib/ayadn/scroll.rb	/^    def show_if_new(stream, options, target, niceranks = {})$/;"	f	class:Ayadn.Scroll
-show_interactions	lib/ayadn/view.rb	/^    def show_interactions(stream)$/;"	f	class:Ayadn.View
+show_interactions	lib/ayadn/view.rb	/^    def show_interactions(stream)$/;"	f	class:Ayadn
 show_link	lib/ayadn/authorize.rb	/^    def show_link$/;"	f	class:Ayadn.Authorize
-show_links	lib/ayadn/view.rb	/^    def show_links(links)$/;"	f	class:Ayadn.View
+show_links	lib/ayadn/view.rb	/^    def show_links(links)$/;"	f	class:Ayadn
 show_list	lib/ayadn/blacklist.rb	/^    def show_list(options)$/;"	f	class:Ayadn.BlacklistWorkers
-show_list_blocked	lib/ayadn/view.rb	/^    def show_list_blocked(list, options = {})$/;"	f	class:Ayadn.View
-show_list_followers	lib/ayadn/view.rb	/^    def show_list_followers(list, target, options = {})$/;"	f	class:Ayadn.View
+show_list_blocked	lib/ayadn/view.rb	/^    def show_list_blocked(list, options = {})$/;"	f	class:Ayadn
+show_list_followers	lib/ayadn/view.rb	/^    def show_list_followers(list, target, options = {})$/;"	f	class:Ayadn
 show_list_followings	lib/ayadn/view.rb	/^    def show_list_followings(list, target, options = {})$/;"	f	class:Ayadn.View
-show_list_muted	lib/ayadn/view.rb	/^    def show_list_muted(list, options = {})$/;"	f	class:Ayadn.View
+show_list_muted	lib/ayadn/view.rb	/^    def show_list_muted(list, options = {})$/;"	f	class:Ayadn
 show_list_reposted	lib/ayadn/view.rb	/^    def show_list_reposted(list, target)$/;"	f	class:Ayadn.View
 show_list_starred	lib/ayadn/view.rb	/^    def show_list_starred(list, target)$/;"	f	class:Ayadn.View
-show_nowplaying	lib/ayadn/nowplaying.rb	/^    def show_nowplaying(text, options, store)$/;"	f	class:Ayadn.NowPlaying
+show_nowplaying	lib/ayadn/nowplaying.rb	/^    def show_nowplaying(text, options, store)$/;"	f
 show_post	lib/ayadn/nowwatching.rb	/^    def show_post text$/;"	f	class:Ayadn.NowWatching
 show_posted	lib/ayadn/view.rb	/^    def show_posted(resp)$/;"	f	class:Ayadn.View
 show_posts	lib/ayadn/view.rb	/^    def show_posts(data, options = {}, niceranks = {})$/;"	f	class:Ayadn.View
 show_posts_with_index	lib/ayadn/view.rb	/^    def show_posts_with_index(data, options = {}, niceranks = {})$/;"	f	class:Ayadn.View
 show_raw	lib/ayadn/view.rb	/^    def show_raw(stream, options = {})$/;"	f	class:Ayadn.View
 show_raw_list	lib/ayadn/stream.rb	/^    def show_raw_list username, what, options$/;"	f	class:Ayadn.Stream
-show_settings	lib/ayadn/view.rb	/^    def show_settings$/;"	f	class:Ayadn.View
+show_settings	lib/ayadn/view.rb	/^    def show_settings$/;"	f	class:Ayadn
 show_simple_post	lib/ayadn/view.rb	/^    def show_simple_post(post, options = {})$/;"	f	class:Ayadn.View
-show_userinfos	lib/ayadn/view.rb	/^    def show_userinfos(content, token, show_ranks = false)$/;"	f	class:Ayadn.View
+show_userinfos	lib/ayadn/view.rb	/^    def show_userinfos(content, token, show_ranks = false)$/;"	f	class:Ayadn
 sibling	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function sibling( cur, dir ) {$/;"	f
 single_post	lib/ayadn/endpoints.rb	/^    def single_post(post_id, options)$/;"	f
 skipped	lib/ayadn/debug.rb	/^    def self.skipped dic$/;"	F	class:Ayadn.Debug
@@ -1271,7 +1280,7 @@ whostarred	lib/ayadn/stream.rb	/^    def whostarred(post_id, options)$/;"	f	clas
 width_range	lib/ayadn/set.rb	/^    def self.width_range value$/;"	F	class:Ayadn.Validators
 windowResize	tmp/rubycritic/assets/javascripts/jquery.floatThead-v1.2.7.js	/^  function windowResize(debounceMs, eventName, cb){$/;"	f
 winnow	tmp/rubycritic/assets/javascripts/jquery-2.1.0.js	/^function winnow( elements, qualifier, not ) {$/;"	f
-winsize	lib/ayadn/view.rb	/^    def winsize$/;"	f	class:Ayadn.View
+winsize	lib/ayadn/view.rb	/^    def winsize$/;"	f	class:Ayadn
 wrap	tmp/rubycritic/assets/javascripts/highcharts.src-4.0.1.js	/^function wrap(obj, method, func) {$/;"	f
 write	lib/ayadn/action.rb	/^    def write(options)$/;"	f	class:Ayadn
 write	lib/ayadn/app.rb	/^    def write$/;"	f	class:Ayadn.App
