@@ -159,10 +159,12 @@ module Ayadn
         end
         options = options.dup
         options[:nowplaying] = true
-        if options[:lastfm]
-          source = 'Last.fm'
+        source = if options[:lastfm]
+          'Last.fm'
+        elsif options[:deezer]
+          'Deezer'
         else
-          source = 'iTunes'
+          'iTunes'
         end
         dic = {
           options: options,
