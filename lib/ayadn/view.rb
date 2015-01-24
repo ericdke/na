@@ -75,6 +75,9 @@ module Ayadn
           bucket.sort_by! { |obj| obj[2].downcase }
         elsif options[:posts]
           bucket.sort_by! { |obj| [obj[5], obj[1]] }.reverse!
+        elsif options[:date]
+          bucket.keep_if { |obj| !obj[6].nil? }
+          bucket.sort_by! { |obj| obj[6]["created_at"] }.reverse!
         end
 
         title = if target == "me"
@@ -88,8 +91,9 @@ module Ayadn
 
         bucket.each.with_index(1) do |obj,index|
           username = "@#{obj[1]}"
+          colored_username = username.color(Settings.options[:colors][:username])
           if obj[6].nil?
-            @workers.thor.say_status :warning, "user #{username} has no posts, ignored", :red
+            @workers.thor.say_status :warning, "user #{colored_username} has no posts, ignored", :red
             puts "\n" unless Settings.options[:timeline][:compact] == true 
             next
           end
@@ -100,7 +104,7 @@ module Ayadn
           text = @workers.colorize_text(obj[6]["text"], mentions, hashtags)
           total = "(#{obj[5]} posts)".color(Settings.options[:colors][:link])
           name = obj[2].nil? ? "(no name)" : obj[2]
-          puts "#{username.color(Settings.options[:colors][:username])} #{name.color(Settings.options[:colors][:name])} #{@workers.parsed_time(date).color(Settings.options[:colors][:date])} #{total}\n"
+          puts "#{colored_username} #{name.color(Settings.options[:colors][:name])} #{@workers.parsed_time(date).color(Settings.options[:colors][:date])} #{total}\n"
           puts "\n" unless Settings.options[:timeline][:compact] == true
           puts text
           unless index == count
