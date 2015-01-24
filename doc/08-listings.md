@@ -70,6 +70,16 @@ Reverse the list order:
 
 `ayadn -fwg -u -r me`
 
+Show the last post of each user you're following:
+
+`ayadn -fwg -l me`
+
+Sort it by last post date:
+
+`ayadn -fwg -l -t me`
+
+*Note: `-t` is ignored outside of 'last posts'. Other options are compatible with 'last posts' except `-r`.*
+
 # CHANNELS
 
 List all your active App.net channels.

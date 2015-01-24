@@ -84,6 +84,8 @@ Displays the raw response from the App.net API instead of the formatted Ayadn ou
 
 `ayadn -tl -x`
 
+*Note: when `-x` is used, visual layout options are ignored. This allows redirecting the output to a file, for example.*
+
 ### EXTRACT
 
 Extracts all links from posts.
