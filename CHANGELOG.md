@@ -1,3 +1,8 @@
+## 2.0.6 - 2015-01-25 - 'Gibson'
+
+- Fix: nowplaying post annotation
+- Fix: bug in display settings
+
 ## 2.0.5 - 2015-01-24 - 'Charlie'
 
 - New: NowPlaying with Deezer

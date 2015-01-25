@@ -161,7 +161,14 @@ module Ayadn
               t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), y.to_s.color(:green) ]
             else
               y.each do |c|
-                t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), "#{c[0]} = #{c[1]}".color(:green) ]
+                yk = c[0]
+                tempv = c[1].to_s
+                if tempv.size > 10
+                  yv = "#{tempv[0..7]}..."
+                else
+                  yv = tempv
+                end
+                t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), "#{yk} = #{yv}".color(:green) ]
               end
             end
             @iter += 1
