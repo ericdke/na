@@ -1,3 +1,7 @@
+## 2.0.7 - 2015-02-04 - 'Diacritics'
+
+- Fix: users list if an element isn't in UTF8
+
 ## 2.0.6 - 2015-01-25 - 'Gibson'
 
 - Fix: nowplaying post annotation
