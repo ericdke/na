@@ -38,7 +38,7 @@ module Ayadn
       table.headings = [ 'Name', 'Type' ]
       list.sort!
       list.each_with_index do |obj, index|
-        table << ["#{obj[1].capitalize}".color(:green), "#{obj[0]}".color(:red)]
+        table << ["#{obj[1].capitalize}".to_s.force_encoding("UTF-8").color(:green), "#{obj[0]}".to_s.force_encoding("UTF-8").color(:red)]
         if index + 1 != list.length && Settings.options[:timeline][:compact] == false
           table << :separator
         end
