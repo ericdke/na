@@ -51,7 +51,7 @@ module Ayadn
       table.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
       users_list = []
       list.each do |obj|
-        obj['name'].nil? ? name = "" : name = obj['name']
+        obj['name'].nil? ? name = "" : name = obj['name'].to_s.force_encoding("UTF-8")
         users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id'], :posts => obj['counts']['posts']}
       end
       table.style = table_borders()
@@ -63,7 +63,7 @@ module Ayadn
       table.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
       users_list = []
       list.each do |obj|
-        obj['name'].nil? ? name = "" : name = obj['name']
+        obj['name'].nil? ? name = "" : name = obj['name'].to_s.force_encoding("UTF-8")
         users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id'], :posts => obj['counts']['posts']}
       end
       table.style = table_borders()
@@ -144,7 +144,7 @@ module Ayadn
         end
         obj[:username].length > 23 ? username = "#{obj[:username][0..20]}..." : username = obj[:username]
         obj[:name].length > 23 ? name = "#{obj[:name][0..20]}..." : name = obj[:name]
-        arr << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name}", obj[:posts], posts_day ]
+        arr << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name.to_s.force_encoding('UTF-8')}", obj[:posts], posts_day ]
       end
       if options[:posts_day]
         arr.sort_by! { |obj| obj[3].to_f }
