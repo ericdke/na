@@ -1,6 +1,10 @@
-## 2.0.8 - 2015-02-11 - 'Russel'
+## 2.0.9 - 2015-02-11 - 'Russel'
 
 - Fix: bug in add/remove user/mention to the blacklist
+
+## 2.0.8 - 2015-02-11
+
+*ignored*
 
 ## 2.0.7 - 2015-02-04 - 'Diacritics'
 

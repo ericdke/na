@@ -111,15 +111,18 @@ module Ayadn
         type = args.shift
         case type
         when 'user', 'username', 'account'
-          Databases.remove_from_blacklist(type, args)
+          Databases.remove_from_blacklist('user', args)
           target = @workers.add_arobases_to_usernames(args)
-          Logs.rec.info "Removed '#{target}' from blacklist of users."
+          Logs.rec.info "Removed '#{type}:#{target}' from blacklist of users."
         when 'mention', 'mentions'
-          Databases.remove_from_blacklist(type, args)
+          Databases.remove_from_blacklist('mention', args)
           target = @workers.add_arobases_to_usernames(args)
           Logs.rec.info "Removed '#{target}' from blacklist of mentions."
-        when 'client', 'source', 'hashtag', 'tag'
-          Databases.remove_from_blacklist(type, args)
+        when 'client', 'source'
+          Databases.remove_from_blacklist('client', args)
+          Logs.rec.info "Removed '#{type}:#{args}' from blacklist."
+        when 'hashtag', 'tag'
+          Databases.remove_from_blacklist('hashtag', args)
           Logs.rec.info "Removed '#{type}:#{args}' from blacklist."
         else
           Status.new.wrong_arguments
