@@ -69,7 +69,7 @@ module Ayadn
     def self.add_to_blacklist(type, target)
       crashes = 0
       begin
-        remove_from_blacklist(target)
+        remove_from_blacklist(type, target)
         @sql.transaction do |db_in_transaction|
           target.each do |element|
             insert_data = {}
@@ -119,11 +119,11 @@ module Ayadn
       end
     end
 
-    def self.remove_from_blacklist(target)
+    def self.remove_from_blacklist(type, target)
       crashes = 0
       begin
         target.each do |el|
-          @sql.execute("DELETE FROM Blacklist WHERE content=(?)", [el.downcase])
+          @sql.execute("DELETE FROM Blacklist WHERE type=(?) AND content=(?)", [type, el.downcase])
         end
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
