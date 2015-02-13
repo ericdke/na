@@ -115,30 +115,12 @@ module Ayadn
       case response.code
       when 200
         response
-      when 204
-        thor.say_status :error, message.upcase, :red
-        Errors.global_error({error: message, caller: caller, data: [res]})
-      when 400
-        thor.say_status :error, message.upcase, :red
-        Errors.global_error({error: message, caller: caller, data: [res]})
-      when 401
-        thor.say_status :error, message.upcase, :red
-        Errors.global_error({error: message, caller: caller, data: [res]})
-      when 403
-        thor.say_status :error, message.upcase, :red
-        Errors.global_error({error: message, caller: caller, data: [res]})
-      when 405
+      when 204, 400, 401, 403, 405, 500, 502, 504
         thor.say_status :error, message.upcase, :red
         Errors.global_error({error: message, caller: caller, data: [res]})
       when 429
         thor.say_status :error, message.upcase, :red
         puts "\n\nAyadn made too many requests to the App.net API. You should wait at least ".color(:cyan) + "#{response.headers[:retry_after]} ".color(:red) + "seconds before trying again. Maybe you launched a lot of Ayadn instances at the same time? That's no problem, but in this case you should increase the value of the scroll timer (with `ayadn set scroll timer 5` for example). App.net allows 5000 requests per hour per account maximum.".color(:cyan)
-        Errors.global_error({error: message, caller: caller, data: [res]})
-      when 500
-        thor.say_status :error, message.upcase, :red
-        Errors.global_error({error: message, caller: caller, data: [res]})
-      when 507
-        thor.say_status :error, message.upcase, :red
         Errors.global_error({error: message, caller: caller, data: [res]})
       else
         response

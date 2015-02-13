@@ -527,6 +527,20 @@ module Ayadn
       @thor.say_status "next", "Ayadn will use these elements to insert album artwork and a link", :cyan
     end
 
+    def server_error(bool)
+      if bool == true
+        say do
+          @thor.say_status :error, "Ayadn couldn't get the JSON reponse", :red
+          @thor.say_status :next, "trying again in 10 seconds", :yellow
+        end
+      else
+        say do
+          @thor.say_status :error, "Ayadn couldn't get the JSON reponse", :red
+          @thor.say_status :status, "Current command canceled after one retry", :yellow
+        end
+      end
+    end
+
     ##---
 
     def info(status, message, color = nil)

@@ -289,7 +289,27 @@ module Ayadn
     end
 
     def get_parsed_response(url)
-      JSON.parse(CNX.get_response_from(url))
+      working = true
+      begin
+        resp = JSON.parse(CNX.get_response_from(url))
+        return resp
+      rescue JSON::ParserError => e
+        if working == true
+          working = false
+          @status.server_error(true)
+          begin
+            sleep 10
+          rescue Interrupt
+            @status.canceled
+            exit
+          end
+          puts "\e[H\e[2J"
+          retry
+        else
+          @status.server_error(false)
+          Errors.global_error({error: e, caller: caller, data: [resp]})
+        end
+      end
     end
 
     def get_original_if_repost(resp)
