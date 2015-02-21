@@ -141,6 +141,8 @@ module Ayadn
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :extract, aliases: "-e", type: :boolean, desc: Descriptions.options_extract
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
+    option :cache, type: :boolean, desc: "Cache the results"
+    option :again, type: :boolean, desc: "Run the last request from cache"
     def whatstarred(*username)
       Action.new.whatstarred(username, options)
     end

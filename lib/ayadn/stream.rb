@@ -114,11 +114,27 @@ module Ayadn
     def whatstarred(username, options)
       @check.no_username(username)
       username = @workers.add_arobase(username)
-      @view.downloading(options)
-      stream = @api.get_whatstarred(username, options)
+      @view.downloading(options) unless options["again"]
+
+      if options["again"]
+        stream = FileOps.cached_list("whatstarred")
+        Errors.no_data('cached whatstarred') if stream.nil?
+      else
+        stream = @api.get_whatstarred(username, options)
+      end
+
       @check.no_user(stream, username)
       @check.no_data(stream, 'whatstarred')
-      options[:extract] ? @view.all_stars_links(stream) : @view.render(stream, options)
+
+      if options["cache"] && options["again"].nil?
+        FileOps.cache_list(stream, "whatstarred")
+      end
+
+      if options[:extract]
+        @view.all_stars_links(stream)
+      else
+        @view.render(stream, options)
+      end
       puts "\n" if Settings.options[:timeline][:compact] == true
     end
 
