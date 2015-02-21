@@ -223,9 +223,18 @@ module Ayadn
     end
 
     def blocked(options)
-      @view.downloading(options)
+      @view.downloading(options) unless options["again"]
+      # TODO: cache for raw
       show_raw_list(nil, :blocked, options)
-      list = @api.get_blocked
+      if options["again"]
+        list = FileOps.cached_list("blocked")
+        Errors.no_data('cached blocked') if list.nil?
+      else
+        list = @api.get_blocked
+      end
+      if options["cache"] && options["again"].nil?
+        FileOps.cache_list(list, "blocked")
+      end
       Errors.no_data('blocked') if list.empty?
       @view.list(:blocked, list, nil, options)
       Databases.add_to_users_db_from_list(list)
