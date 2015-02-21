@@ -283,6 +283,14 @@ You can get your own stars by using *me* instead of *@username*:
 
 `ayadn -was me`
 
+You can cache the results if you want to replay the same request again later and obtain the same results instantly:
+
+`ayadn -was --cache me`
+
+`ayadn -was --again me`
+
+*Note: `--cache` and `--again` don't have shortcuts.*
+
 # CONVO
 
 Show the conversation thread around a specific post.

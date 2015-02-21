@@ -36,6 +36,14 @@ Force compact view (works with all compatible listing views):
 
 `ayadn -fwr -k me`
 
+You can cache the results if you want to replay the same request again later and obtain the same results instantly:
+
+`ayadn -fwr --cache me`
+
+`ayadn -fwr --again me`
+
+*Note: `--cache` and `--again` don't have shortcuts.*
+
 # FOLLOWINGS
 
 List the users a user is following.
@@ -79,6 +87,14 @@ Sort it by last post date:
 `ayadn -fwg -l -t me`
 
 *Note: `-t` is ignored outside of 'last posts'. Other options are compatible with 'last posts' except `-r`.*
+
+You can cache the results if you want to replay the same request again later and obtain the same results instantly:
+
+`ayadn -fwg --cache me`
+
+`ayadn -fwg --again me`
+
+*Note: `--cache` and `--again` don't have shortcuts.*
 
 # CHANNELS
 
@@ -126,6 +142,30 @@ List users who reposted a post.
 
 `ayadn -wor 22790201`
 
+You can cache the results if you want to replay the same request again later and obtain the same results instantly:
+
+`ayadn -wor --cache 22790201`
+
+`ayadn -wor --again 22790201`
+
+*Note: `--cache` and `--again` don't have shortcuts.*
+
+# WHOSTARRED
+
+List users who starred a post.
+
+`ayadn whostarred 22790201`
+
+`ayadn -wos 22790201`
+
+You can cache the results if you want to replay the same request again later and obtain the same results instantly:
+
+`ayadn -wos --cache 22790201`
+
+`ayadn -wos --again 22790201`
+
+*Note: `--cache` and `--again` don't have shortcuts.*
+
 # MUTED
 
 List the users you muted.
@@ -156,6 +196,14 @@ Reverse the list order:
 
 `ayadn -mtd -u -r`
 
+You can cache the results if you want to replay the same request again later and obtain the same results instantly:
+
+`ayadn -mtd --cache`
+
+`ayadn -mtd --again`
+
+*Note: `--cache` and `--again` don't have shortcuts.*
+
 # BLOCKED
 
 List the users you blocked.
@@ -185,6 +233,14 @@ Reverse the list order:
 `ayadn -bkd -r`
 
 `ayadn -bkd -u -r`
+
+You can cache the results if you want to replay the same request again later and obtain the same results instantly:
+
+`ayadn -bkd --cache`
+
+`ayadn -bkd --again`
+
+*Note: `--cache` and `--again` don't have shortcuts.*
 
 # SETTINGS
 

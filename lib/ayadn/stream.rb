@@ -142,7 +142,6 @@ module Ayadn
       @check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options) unless options["again"]
-      # TODO: cache for raw
       show_raw_list(username, :followings, options)
       if options["again"]
         list = FileOps.cached_list("followings")
@@ -178,7 +177,6 @@ module Ayadn
       @check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options) unless options["again"]
-      # TODO: cache for raw
       show_raw_list(username, :followers, options)
 
       if options["again"]
@@ -201,7 +199,6 @@ module Ayadn
 
     def muted(options)
       @view.downloading(options) unless options["again"]
-      # TODO: cache for raw
       show_raw_list(nil, :muted, options)
 
       if options["again"]
@@ -224,7 +221,6 @@ module Ayadn
 
     def blocked(options)
       @view.downloading(options) unless options["again"]
-      # TODO: cache for raw
       show_raw_list(nil, :blocked, options)
       if options["again"]
         list = FileOps.cached_list("blocked")
@@ -414,7 +410,18 @@ module Ayadn
 
     def show_raw_list username, what, options
       if options[:raw]
-        list = @api.get_raw_list(username, what)
+
+        if options["again"]
+          list = FileOps.cached_list("#{username}_#{what}")
+          Errors.no_data("#{username}_#{what}") if list.nil?
+        else
+          list = @api.get_raw_list(username, what)
+        end
+
+        if options["cache"] && options["again"].nil?
+          FileOps.cache_list(list, "#{username}_#{what}")
+        end
+        
         @view.show_raw(list, options)
         exit
       end

@@ -1,3 +1,7 @@
+## 2.0.10 - 2015-02-21 - 'Haneke'
+
+- New: cache results in Lists (and replay requests instantly)
+
 ## 2.0.9 - 2015-02-11 - 'Russel'
 
 - Fix: bug in add/remove user/mention to the blacklist
