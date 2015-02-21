@@ -200,10 +200,23 @@ module Ayadn
     end
 
     def muted(options)
-      @view.downloading(options)
+      @view.downloading(options) unless options["again"]
+      # TODO: cache for raw
       show_raw_list(nil, :muted, options)
-      list = @api.get_muted
+
+      if options["again"]
+        list = FileOps.cached_list("muted")
+        Errors.no_data('cached muted') if list.nil?
+      else
+        list = @api.get_muted
+      end
+
       @check.auto_save_muted(list)
+
+      if options["cache"] && options["again"].nil?
+        FileOps.cache_list(list, "muted")
+      end
+
       Errors.no_data('muted') if list.empty?
       @view.list(:muted, list, nil, options)
       Databases.add_to_users_db_from_list(list)
