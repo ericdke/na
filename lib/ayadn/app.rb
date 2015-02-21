@@ -153,6 +153,8 @@ module Ayadn
     option :raw, aliases: "-x", type: :boolean, desc: Descriptions.options_raw
     option :force, aliases: "-f", type: :boolean, desc: "Force retrieve the actual post id (ignores index)"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
+    option :cache, type: :boolean, desc: "Cache the results"
+    option :again, type: :boolean, desc: "Run the last request from cache"
     def whoreposted(post_id)
       Action.new.whoreposted(post_id, options)
     end

@@ -232,11 +232,34 @@ module Ayadn
       unless options[:force]
         post_id = @workers.get_real_post_id(post_id)
       end
-      @view.downloading(options)
-      details = @api.get_details(post_id, options)
+      @view.downloading(options) unless options["again"]
+
+      if options["again"]
+        details = FileOps.cached_list("whoreposted_details")
+        Errors.no_data('cached whoreposted details') if details.nil?
+      else
+        details = @api.get_details(post_id, options)
+      end
+      
       @check.no_post(details, post_id)
       id = @workers.get_original_id(post_id, details)
-      list = @api.get_whoreposted(id)
+      # TODO: cache list
+      
+      if options["cache"] && options["again"].nil?
+        FileOps.cache_list(details, "whoreposted_details")
+      end
+
+      if options["again"]
+        list = FileOps.cached_list("whoreposted")
+        Errors.no_data('cached whoreposted') if list.nil?
+      else
+        list = @api.get_whoreposted(id)
+      end
+
+      if options["cache"] && options["again"].nil?
+        FileOps.cache_list(list, "whoreposted")
+      end
+      
       @view.if_raw(list, options)
       if list['data'].empty?
         @status.nobody_reposted
