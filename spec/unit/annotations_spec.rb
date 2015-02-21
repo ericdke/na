@@ -147,7 +147,7 @@ describe Ayadn::Annotations do
 
   describe "#nowplaying" do
     it "creates nowplaying annotations" do
-      ann = Ayadn::Annotations.new({source: 'rspec', title: 'ibelieveicanfly', artist: 'big jim', artwork: 'http://ahah', link: 'http://ohoh', source: 'fake', width: 9000, height: 30000, artwork_thumb: 'http://hihi', width_thumb: 9, height_thumb: 3, options: {nowplaying: true}})
+      ann = Ayadn::Annotations.new({title: 'ibelieveicanfly', artist: 'big jim', artwork: 'http://ahah', link: 'http://ohoh', source: 'fake', width: 9000, height: 30000, artwork_thumb: 'http://hihi', width_thumb: 9, height_thumb: 3, options: {nowplaying: true}})
       expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>'shoes', "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.nowplaying", "value"=>{"title"=>"ibelieveicanfly", "artist"=>"big jim", "artwork"=>"http://ahah", "link"=>"http://ohoh", "source"=>"fake"}}, {"type"=>"net.app.core.oembed", "value"=>{"version"=>"1.0", "type"=>"photo", "width"=>9000, "height"=>30000, "title"=>"ibelieveicanfly", "url"=>"http://ahah", "embeddable_url"=>"http://ahah", "provider_url"=>"https://itunes.apple.com", "provider_name"=>"iTunes", "thumbnail_url"=>"http://hihi", "thumbnail_width"=>9, "thumbnail_height"=>3}}]
     end
   end
