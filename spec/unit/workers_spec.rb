@@ -116,9 +116,9 @@ describe Ayadn::Workers do
   describe "#extract_users" do
     it "extracts users" do
       usr = @workers.extract_users(users_list[0])
-      expect(usr["52985"]).to eq ["schmidt_fu", "Florian Schmidt", false, false, 5370]
-      expect(usr["185581"]).to eq ["aya_tests", "@ericd's tests account", nil, nil, 662]
-      expect(usr["69904"]).to eq ["ericd", "Eric Dejonckheere", true, true, 4513]
+      expect(usr["52985"]).to eq ["schmidt_fu", "Florian Schmidt", true, true, 11087]
+      expect(usr["185581"]).to eq ["aya_tests", "Big Jim", true, true, 1414]
+      expect(usr["69904"]).to eq ["ericd", "Eric Dejonckheere", nil, nil, 7030]
     end
   end
 

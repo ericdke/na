@@ -2,6 +2,20 @@
 module Ayadn
   class FileOps
 
+    def self.cache_list(list, name)
+      File.write(Settings.config[:paths][:lists] + "/.#{name}", list.to_json)
+    end
+
+    def self.cached_list(name)
+      file_path = Settings.config[:paths][:lists] + "/.#{name}"
+      if File.exist?(file_path)
+        data = File.read(file_path)
+        JSON.load(data)
+      else
+        nil
+      end
+    end
+
     def self.save_links(obj, name)
       File.write(Settings.config[:paths][:lists] + "/#{name}", obj.to_json)
     end

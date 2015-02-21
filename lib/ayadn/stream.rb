@@ -125,12 +125,18 @@ module Ayadn
     def followings(username, options)
       @check.no_username(username)
       username = @workers.add_arobase(username)
-      @view.downloading(options)
+      @view.downloading(options) unless options["again"]
+      # TODO: cache for raw
       show_raw_list(username, :followings, options)
-      list = @api.get_followings(username)
+      if options["again"]
+        list = FileOps.cached_list("followings")
+        Errors.no_data('cached followings') if list.nil?
+      else
+        list = @api.get_followings(username)
+      end
       @check.auto_save_followings(list)
       Errors.no_data('followings') if list.empty?
-      if options["lastpost"]
+      if options["lastpost"] && options["again"].nil?
         count = list.size
         @workers.thor.say_status :downloading, "please wait, it may take a while...", :red
         puts "\n"
@@ -145,6 +151,9 @@ module Ayadn
           obj << resp["data"][0]
         end
       end
+      if options["cache"] && options["again"].nil?
+        FileOps.cache_list(list, "followings")
+      end
       @view.list(:followings, list, username, options)
       Databases.add_to_users_db_from_list(list)
     end
@@ -152,10 +161,23 @@ module Ayadn
     def followers(username, options)
       @check.no_username(username)
       username = @workers.add_arobase(username)
-      @view.downloading(options)
+      @view.downloading(options) unless options["again"]
+      # TODO: cache for raw
       show_raw_list(username, :followers, options)
-      list = @api.get_followers(username)
+
+      if options["again"]
+        list = FileOps.cached_list("followers")
+        Errors.no_data('cached followers') if list.nil?
+      else
+        list = @api.get_followers(username)
+      end
+
       @check.auto_save_followers(list)
+
+      if options["cache"] && options["again"].nil?
+        FileOps.cache_list(list, "followers")
+      end
+
       Errors.no_data('followers') if list.empty?
       @view.list(:followers, list, username, options)
       Databases.add_to_users_db_from_list(list)
@@ -310,7 +332,8 @@ module Ayadn
 
     def show_raw_list username, what, options
       if options[:raw]
-        @view.show_raw(@api.get_raw_list(username, what), options)
+        list = @api.get_raw_list(username, what)
+        @view.show_raw(list, options)
         exit
       end
     end

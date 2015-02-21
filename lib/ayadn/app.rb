@@ -190,6 +190,8 @@ module Ayadn
     option :date, aliases: "-t", type: :boolean, desc: "Sort the list by: date (only with 'lastposts' option)"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     option :lastpost, aliases: "-l", type: :boolean, desc: "Displays the last post of each user"
+    option :cache, type: :boolean, desc: "Cache the results"
+    option :again, type: :boolean, desc: "Run the last request from cache"
     def followings(*username)
       Action.new.followings(username, options)
     end
@@ -204,6 +206,8 @@ module Ayadn
     option :posts_day, aliases: "-d", type: :boolean, desc: "Sort the list by: posts/day"
     option :posts, aliases: "-p", type: :boolean, desc: "Sort the list by: total posts"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
+    option :cache, type: :boolean, desc: "Cache the results"
+    option :again, type: :boolean, desc: "Run the last request from cache"
     def followers(*username)
       Action.new.followers(username, options)
     end

@@ -76,7 +76,7 @@ describe Ayadn::View do
       printed = capture_stdout do
         Ayadn::View.new.show_list_reposted(list[0]['data'], 123456)
       end
-      expect(printed).to include *['Joel Timmins', 'Donny Davis', 'Nicolas Maumont', 'reposted post', '123456']
+      expect(printed).to include *['Joel Timmins', 'Donny Davis', 'reposted post', '123456']
     end
   end
 
@@ -89,7 +89,7 @@ describe Ayadn::View do
       printed = capture_stdout do
         Ayadn::View.new.show_list_starred(list[0]['data'], 123456)
       end
-      expect(printed).to include *['Joel Timmins', 'Donny Davis', 'Nicolas Maumont', 'starred post', '123456']
+      expect(printed).to include *['Joel Timmins', 'Donny Davis', 'starred post', '123456']
     end
   end
 
