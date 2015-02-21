@@ -243,7 +243,6 @@ module Ayadn
       
       @check.no_post(details, post_id)
       id = @workers.get_original_id(post_id, details)
-      # TODO: cache list
       
       if options["cache"] && options["again"].nil?
         FileOps.cache_list(details, "whoreposted_details")
@@ -273,11 +272,33 @@ module Ayadn
       unless options[:force]
         post_id = @workers.get_real_post_id(post_id)
       end
-      @view.downloading(options)
-      details = @api.get_details(post_id, options)
+      @view.downloading(options) unless options["again"]
+
+      if options["again"]
+        details = FileOps.cached_list("whostarred_details")
+        Errors.no_data('cached whostarred details') if details.nil?
+      else
+        details = @api.get_details(post_id, options)
+      end
+
       @check.no_post(details, post_id)
       id = @workers.get_original_id(post_id, details)
-      list = @api.get_whostarred(id)
+
+      if options["cache"] && options["again"].nil?
+        FileOps.cache_list(details, "whostarred_details")
+      end
+
+      if options["again"]
+        list = FileOps.cached_list("whostarred")
+        Errors.no_data('cached whostarred') if list.nil?
+      else
+        list = @api.get_whostarred(id)
+      end
+
+      if options["cache"] && options["again"].nil?
+        FileOps.cache_list(list, "whostarred")
+      end
+
       @view.if_raw(list, options)
       if list['data'].empty?
         @status.nobody_starred
