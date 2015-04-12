@@ -239,7 +239,10 @@ module Ayadn
     def get_itunes_store url, artist, track
       results = JSON.load(CNX.download(URI.escape(url)))['results']
 
-      # puts results.inspect
+      #
+      # require 'pp'; pp results; exit
+      # 
+      
       unless results.nil?
 
         if results.empty?
@@ -255,7 +258,10 @@ module Ayadn
           next if e['artistName'].nil?
           candidates << e if e['artistName'].downcase == artist.downcase
         end
+
+        #
         # require "pp";pp candidates; exit
+        #
 
         candidate = if candidates.empty?
           results[0]
