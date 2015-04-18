@@ -1,3 +1,8 @@
+## 2.0.11 - 2015-04-12 - 'Pink'
+
+- New: add single words to the blacklist
+- Fix: ignore unknown emoji modifiers (temporary)
+
 ## 2.0.10 - 2015-02-21 - 'Haneke'
 
 - New: cache results in Lists (and replay requests instantly)

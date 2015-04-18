@@ -1680,17 +1680,21 @@ module Ayadn
 
       `ayadn -K add client 'Spammy Unknown Client'`
 
+      `ayadn -K add word poo`
+
       `ayadn -K remove mention @shmuck`
 
       `ayadn -K remove hashtag sports`
 
       `ayadn -K remove client IFTTT`
+
+      `ayadn -K remove word poo`
       \n\n
       USAGE
     end
     def self.blacklist_add
       <<-USAGE
-      Adds a mention, hashtag or client to your blacklist.
+      Adds a mention, hashtag, client or keyword to your blacklist.
 
       You don't have to respect the case as all data is recorded downcase.
 
@@ -1705,12 +1709,14 @@ module Ayadn
       `ayadn -K add client IFTTT`
 
       `ayadn -K add client 'Spammy Unknown Client'`
+
+      `ayadn -K add word poo`
       \n\n
       USAGE
     end
     def self.blacklist_remove
       <<-USAGE
-      Removes a mention, hashtag or client from your blacklist.
+      Removes a mention, hashtag, client or keyword from your blacklist.
 
       You don't have to respect the case as all data is recorded downcase.
 
@@ -1723,6 +1729,8 @@ module Ayadn
       `ayadn -K remove hashtag sports`
 
       `ayadn -K remove client IFTTT`
+
+      `ayadn -K remove word poo`
       \n\n
       USAGE
     end

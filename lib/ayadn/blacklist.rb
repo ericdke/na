@@ -1,7 +1,7 @@
 # encoding: utf-8
 module Ayadn
   class Blacklist < Thor
-    desc "add TYPE TARGET", "Adds a mention, hashtag, client or username to your blacklist"
+    desc "add TYPE TARGET", "Adds a mention, hashtag, client, username or keyword to your blacklist"
     map "create" => :add
     long_desc Descriptions.blacklist_add
     def add(*args)
@@ -13,7 +13,7 @@ module Ayadn
       Status.new.done
     end
 
-    desc "remove TYPE TARGET", "Removes a mention, hashtag, client or username from your blacklist"
+    desc "remove TYPE TARGET", "Removes a mention, hashtag, client, username or keyword from your blacklist"
     map "delete" => :remove
     long_desc Descriptions.blacklist_remove
     def remove(*args)
@@ -101,6 +101,10 @@ module Ayadn
         when 'hashtag', 'tag'
           Databases.add_to_blacklist('hashtag', args)
           Logs.rec.info "Added '#{args}' to blacklist of hashtags."
+        when 'word', 'keyword'
+          args = args.map { |w| w.gsub(/[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/, "") }
+          Databases.add_to_blacklist('word', args)
+          Logs.rec.info "Added '#{args}' to blacklist of words."
         else
           Status.new.wrong_arguments
         end
@@ -123,6 +127,10 @@ module Ayadn
           Logs.rec.info "Removed '#{type}:#{args}' from blacklist."
         when 'hashtag', 'tag'
           Databases.remove_from_blacklist('hashtag', args)
+          Logs.rec.info "Removed '#{type}:#{args}' from blacklist."
+        when 'word', 'keyword'
+          args = args.map { |w| w.gsub(/[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/, "") }
+          Databases.remove_from_blacklist('word', args)
           Logs.rec.info "Removed '#{type}:#{args}' from blacklist."
         else
           Status.new.wrong_arguments

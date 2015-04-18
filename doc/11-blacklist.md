@@ -16,13 +16,15 @@ Blacklist a user and, well, never see this user again.
 
 Blacklist a mention and you won't even see posts by other users mentioning the user you blacklisted!
 
+You can even blacklist a single keyword if you *really* don't want to see something.
+
 *Since Ayadn 2.0, adding and removing to/from the blacklist takes immediately effect and is shared with other Ayadn instances launched by the same user.*
 
 ## ADD
 
 Adds an item to your blacklist.
 
-Available items: client, hashtag, user, mention.
+Available items: client, hashtag, user, mention, word.
 
 `ayadn blacklist add mention @shmuck`
 
@@ -42,11 +44,15 @@ Add a hashtag:
 
 `ayadn -K add hashtag twitter`
 
+Add a keyword:
+
+`ayadn -K add word poo`
+
 ## REMOVE
 
 Removes an item from your blacklist.
 
-Available items: client, hashtag, user, mention.
+Available items: client, hashtag, user, mention, word.
 
 `ayadn blacklist remove mention @shmuck`
 
@@ -65,6 +71,10 @@ Remove a client:
 Remove a hashtag:
 
 `ayadn -K remove hashtag twitter`
+
+Remove a keyword:
+
+`ayadn -K remove word poo`
 
 ## LIST
 

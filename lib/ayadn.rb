@@ -2,7 +2,7 @@
 
 begin
   require_relative 'ayadn/version'
-  %w{rest_client json thor rainbow/ext/string terminal-table yaml logger fileutils io/console unicode_utils/char_type readline amalgalite fast_cache}.each { |r| require "#{r}" }
+  %w{rest_client json thor rainbow/ext/string terminal-table yaml logger fileutils io/console unicode_utils readline amalgalite fast_cache}.each { |r| require "#{r}" }
   Rainbow.enabled = true
   require_relative 'ayadn/app'
 rescue LoadError => e

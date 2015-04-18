@@ -65,6 +65,11 @@ describe Ayadn::BlacklistWorkers do
       k.add(['mentions', 'yolo'])
       expect(Ayadn::Databases.is_in_blacklist?('mention', 'yolo')).to eq true
     end
+    it "adds a word to the blacklist" do
+      k = Ayadn::BlacklistWorkers.new
+      k.add(['word', 'Instagram'])
+      expect(Ayadn::Databases.is_in_blacklist?('word', 'instagram')).to eq true
+    end
   end
 
   describe "remove" do
@@ -103,6 +108,15 @@ describe Ayadn::BlacklistWorkers do
       k = Ayadn::BlacklistWorkers.new
       k.remove(['account', 'mrTest'])
       expect(Ayadn::Databases.is_in_blacklist?('user', 'mrtest')).to eq false
+    end
+    it "removes a word from the blacklist" do
+      k = Ayadn::BlacklistWorkers.new
+      k.add(['word', 'Instagram'])
+      expect(Ayadn::Databases.is_in_blacklist?('word', 'instagram')).to eq true
+
+      k = Ayadn::BlacklistWorkers.new
+      k.remove(['word', 'Instagram'])
+      expect(Ayadn::Databases.is_in_blacklist?('word', 'instagram')).to eq false
     end
   end
 

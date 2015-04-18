@@ -213,7 +213,20 @@ module Ayadn
           end
         end
         next if @skip
-
+        unless Settings.global[:force] == true
+          if Settings.options[:blacklist][:active] == true
+            post['text'].split(" ").each do |word|
+              target_word = word.gsub(/[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/, "")
+              if Databases.is_in_blacklist?('word', target_word.downcase)
+                Debug.skipped({word: target_word})
+                @skip = true
+                break
+              end
+            end
+          end
+        end
+        next if @skip
+        
         # create custom objects from ADN response
         if niceranks[post['user']['id'].to_i]
           rank = niceranks[post['user']['id'].to_i][:rank]
@@ -536,6 +549,8 @@ module Ayadn
           word_chars.each do |ch|
             if UnicodeUtils.general_category(ch) == :Other_Symbol
               sanitized << "#{ch} "
+            elsif UnicodeUtils.char_name(ch).nil?
+              next
             else
               sanitized << ch
             end
