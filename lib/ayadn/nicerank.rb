@@ -29,7 +29,13 @@ module Ayadn
       if got.nil? || got == ""
         parsed = {'meta' => {'code' => 404}, 'data' => []}
       else
-        parsed = JSON.parse(got)
+
+        begin
+          parsed = JSON.parse(got)
+        rescue JSON::ParserError => e
+          parsed = {'meta' => {'code' => 404}, 'data' => []}
+        end
+
       end
       parsed['data'].each do |obj|
         res = @store[obj['user_id']]

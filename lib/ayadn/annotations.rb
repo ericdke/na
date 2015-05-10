@@ -69,7 +69,22 @@ module Ayadn
     def youtube(dic)
       dic['link'] = dic[:options][:youtube][0]
       req_url = "http://www.youtube.com/oembed?url=#{dic['link']}&format=json"
-      dic.merge!(JSON.parse(CNX.download(req_url)))
+      resp = CNX.download(req_url)
+
+      begin
+        decoded = JSON.parse(resp)
+      rescue => e      
+        if resp == "Not Found"       
+          Status.new.info("error", "video doesn't exist", "red")
+        elsif resp == "Unauthorized"
+          Status.new.info("error", "unauthorized", "red")
+        else
+          Status.new.info("error", resp, "red")
+        end
+        Errors.global_error({error: e, caller: caller, data: [resp, dic]})
+      end
+      
+      dic.merge!(decoded)
       [{
         "type" => "net.app.core.oembed",
         "value" => {
@@ -101,7 +116,14 @@ module Ayadn
     def vimeo(dic)
       dic[:link] = dic[:options][:vimeo][0]
       req_url = "http://vimeo.com/api/oembed.json?url=#{dic[:link]}"
-      dic.merge!(JSON.parse(CNX.download(req_url)))
+      resp = CNX.download(req_url)
+      begin
+        decoded = JSON.parse(resp)
+      rescue => e
+        Status.new.info("error", resp, "red")
+        Errors.global_error({error: e, caller: caller, data: [resp, dic]})
+      end
+      dic.merge!(decoded)
       [{
         "type" => "net.app.core.oembed",
         "value" => {

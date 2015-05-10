@@ -69,7 +69,8 @@ module Ayadn
     def self.get_response_from(url)
       try_cnx = 1
       begin
-        RestClient.get(url) do |response, request, result| #, :verify_ssl => OpenSSL::SSL::VERIFY_NONE
+        RestClient::Request.execute(:method => :get, :url => url, :timeout => 20) do |response, request, result|
+        #RestClient.get(url) do |response, request, result| #, :verify_ssl => OpenSSL::SSL::VERIFY_NONE
           Debug.http response, url
           check response
         end

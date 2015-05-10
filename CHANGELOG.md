@@ -1,3 +1,9 @@
+## 2.0.12 - 2015-05-08 - 'Agent Carter'
+
+- Fix: Youtube/Vimeo integration if video not found or unauthorized
+- Fix: failsafe for NR API failures
+- Fix: connexion timeout before retry
+
 ## 2.0.11 - 2015-04-12 - 'Pink'
 
 - New: add single words to the blacklist
