@@ -563,7 +563,7 @@ module Ayadn
 
       Sort the list by post date:
 
-      `ayadn -fwg -t me`
+      `ayadn -fwg -t -l me`
 
       Reverse the list order:
 
@@ -615,7 +615,7 @@ module Ayadn
 
       Sort the list by post date:
 
-      `ayadn -fwr -t me`
+      `ayadn -fwr -t -l me`
 
       Reverse the list order:
 
