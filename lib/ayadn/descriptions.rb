@@ -573,7 +573,7 @@ module Ayadn
 
       Show as JSON:
 
-      `ayadn -fwg me`
+      `ayadn -fwg -x me`
       \n\n
       USAGE
     end
@@ -621,7 +621,7 @@ module Ayadn
 
       Show as JSON:
 
-      `ayadn -fwr me`
+      `ayadn -fwr -x me`
       \n\n
       USAGE
     end
@@ -665,7 +665,7 @@ module Ayadn
 
       Show as JSON:
 
-      `ayadn -mtd`
+      `ayadn -mtd -x`
 
       \n\n
       USAGE
@@ -710,7 +710,7 @@ module Ayadn
 
       Show as JSON:
 
-      `ayadn -bkd`
+      `ayadn -bkd -x`
       \n\n
       USAGE
     end

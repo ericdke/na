@@ -3,6 +3,7 @@
 - Fix: Youtube/Vimeo integration if video not found or unauthorized
 - Fix: failsafe for NR API failures
 - Fix: connexion timeout before retry
+- Fix: list command description
 
 ## 2.0.11 - 2015-04-12 - 'Pink'
 
