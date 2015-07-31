@@ -46,4 +46,4 @@ Ayadn depends upon these Gems:
         unicode_utils (text utilities)
         daybreak (Ruby data store)
 
-*Note: the "daybreak" dependency is only needed for 1.x to 2.x migrations. As this migration is optional and Ayadn 1.x is deprecated, this dependency is only loaded if a migration is launched.*
+*Note: the "daybreak" dependency is only needed for 1.x to 2.x migrations. As this migration is optional and Ayadn 1.x is deprecated, this dependency will be removed in future versions.*
