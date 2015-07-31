@@ -6,13 +6,13 @@ Usage:
 
 `ayadn mark add 30594331`
 
-`ayadn mark add 30594331 convo title`
+`ayadn mark add 30594331 interesting convo`
 
 `ayadn mark list`
 
 `ayadn mark delete 30594331`
 
-`ayadn mark rename 30594331 'other name'`
+`ayadn mark rename 30594331 'interesting convo about stuff'`
 
 ## ADD
 

@@ -12,7 +12,9 @@ OS X only.
 
 Ayadn will grab information from your running iTunes, format it, insert the *#nowplaying* hashtag then ask for your confirmation before posting it.
 
-It will also grab a link to the album and the album artwork from the iTunes Store (you can prevent this behavior by adding the `--no_url` option (short: `-n`).
+It will also grab a link to the album and the album artwork from the iTunes Store (you can prevent this behavior by adding the `--no_url` option (short: `-n`)).
+
+*Note: __nowplaying__ doesn't work with the curated Apple Music playlists such as 'For You', 'New' and 'Radio'.*
 
 ## Last.fm
 
@@ -20,11 +22,11 @@ It will also grab a link to the album and the album artwork from the iTunes Stor
 
 `ayadn -NP -l`
 
-Ayadn will grab information from your Last.fm account, format it, insert the *#nowplaying* hashtag then ask for your confirmation before posting it.
+Ayadn will grab information from your Last.fm account (you will be prompted for your Last.fm username), format the information, insert the *#nowplaying* hashtag then ask for your confirmation before posting it.
 
 It will also grab a link to the album and the album artwork from the iTunes Store (you can prevent this behavior by adding the `--no_url` option (short: `-n`).
 
-*Note: the Last.fm feed may take some time to be updated. If it doesn't reflect your recent history, please wait a few minutes.*
+*Note: Last.fm does not always update their feed immediately. If __nowplaying__ doesn't reflect your recent history, please wait for a few minutes.*
 
 ## Deezer
 
@@ -32,11 +34,11 @@ It will also grab a link to the album and the album artwork from the iTunes Stor
 
 `ayadn -NP -d`
 
-Ayadn will grab information from your Deezer account (you will be prompted to authorize Ayadn for Deezer the first time you launch this command), format it, insert the *#nowplaying* hashtag then ask for your confirmation before posting it.
+Ayadn will grab information from your Deezer account (you will be prompted to authorize Ayadn for Deezer the first time you launch this command), format the information, insert the *#nowplaying* hashtag then ask for your confirmation before posting it.
 
 It will also grab a link to the album and the album artwork from the iTunes Store (you can prevent this behavior by adding the `--no_url` option (short: `-n`).
 
-*Note: Deezer will update the recent history list only after a song has been played to its end.*
+*Note: Deezer only updates the recent history list if a song has been played to its end.*
 
 ## Options
 

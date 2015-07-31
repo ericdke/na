@@ -14,7 +14,7 @@ After your successful login, you will be redirected to the Ayadn authorization p
 
 Copy the code (token) you will find there and paste it into Ayadn: a new user will be created and automatically logged in.  
 
-*Note: authorizing an already authorized user updates the old content with the new content: token, name, etc.*
+*Note that authorizing an already authorized user updates the meta informations: token, name, etc.*
 
 # SWITCH
 
@@ -24,7 +24,7 @@ Switch between your authorized accounts.
 
 `ayadn switch ericd`
 
-Alternative syntax:
+Shortcut:
 
 `ayadn -@ ericd`
 
@@ -40,8 +40,10 @@ Unauthorize an Ayadn user account.
 
 `ayadn unauthorize @ericd`
 
+Shortcut:
+
 `ayadn -UA ericd`
 
-You can specify the `--delete` (`-D`) option to force delete the account folders:
+You can specify the `--delete` (`-D`) option to force delete the account folders (recommended):
 
 `ayadn -UA -D @ericd`
