@@ -2,7 +2,7 @@
 
 [@ericd](http://app.net/ericd)
 
-[email](eric@aya.io)
+[email](mailto:eric@aya.io)
 
 [@ayadn](http://app.net/ayadn)
 
@@ -33,4 +33,4 @@ I can't keep up and update the list, of course, there's too many of you awesome 
 [@nguarracino](http://app.net/nguarracino)
 [@schmidt_fu](http://app.net/schmidt_fu)
 
-See also the Ayadn CHANGELOG file...
+See also the Ayadn CHANGELOG file for specific contributions.

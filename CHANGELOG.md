@@ -1,4 +1,4 @@
-## 2.0.12 - 2015-05-08 - 'Agent Carter'
+## 2.0.12 - 2015-05-10 - 'Agent Carter'
 
 - Fix: Youtube/Vimeo integration if video not found or unauthorized
 - Fix: failsafe for NR API failures
