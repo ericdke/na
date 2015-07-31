@@ -10,11 +10,11 @@ Simple and fast way to post a short sentence/word to App.net.
 
 You have to put your text between single quotes if you're using punctuation:
 
-`ayadn -P 'Hello from Ayadn, guys!'`
+`ayadn -P 'Hello from Ayadn!'`
 
 *But remember you can't use any quote character inside the quotes...*
 
-**So you should rather use the _write_ method for posting.**
+**So you should rather use the _WRITE_ method for posting.**
 
 # WRITE
 
@@ -28,13 +28,13 @@ Multi-line post to App.net.
 
 It will show you a prompt where you can type anything, including special characters and Markdown links.
 
-Hit ENTER to create line breaks. 
+Hit `ENTER` to create line breaks. 
 
-Hit ENTER, SPACE, ENTER to create paragraphs compatible with all clients.
-
-Cancel your post with CTRC-C or send it with CTRL-D.
+Send your post with `CTRL-D`, or cancel with `CTRC-C`.
 
 Just type a @username at the beginning of your post if you want to mention a specific user, as you would in any other App.net client.  
+
+*Tip: hit `ENTER`, `SPACE`, `ENTER` to create paragraphs compatible with all App.net clients.*
 
 # AUTO POST
 
@@ -42,11 +42,11 @@ Auto post every line of input.
 
 `ayadn auto`
 
-In this mode, each line you type (each time you hit ENTER!) is automatically posted to ADN.
+In this mode, each line you type (each time you hit `ENTER`!) is automatically posted to ADN.
 
 You can type anything, including special characters and Markdown links, and of course mention anyone: the only thing you can't do from this mode is _replying_ to a post in a thread.
 
-Hit CTRL+C to exit this mode at any moment.  
+Hit `CTRL+C` to exit this mode at any moment.  
 
 # REPLY
 
@@ -60,7 +60,7 @@ Reply to a specific post.
 
 `ayadn -R 23362460`
 
-Ayadn will then show you the *write* prompt.
+Ayadn will then show you the *WRITE* prompt.
 
 If you reply to a post containing multiple mentions, your text will be inserted between the leading mention and the other ones.
 
@@ -91,7 +91,7 @@ Send a private message to a specific user.
 
 `ayadn pm @ericd`
 
-Ayadn will then show you the *write* prompt.
+Ayadn will then show you the *WRITE* prompt.
 
 By default, Ayadn will mark this private messages channel as read once the message has been sent.
 
@@ -111,7 +111,7 @@ Send a message to an App.net CHANNEL.
 
 `ayadn -C 46217`
 
-Ayadn will then show you the *write* prompt.
+Ayadn will then show you the *WRITE* prompt.
 
 By default, Ayadn will mark this channel as read once the message has been sent.
 
@@ -163,7 +163,7 @@ ayadn -R 23362460 -Y https://www.youtube.com/watch?v=Ei8CFin00PY
 ayadn pm @ericd -Y https://www.youtube.com/watch?v=Ei8CFin00PY
 ```
 
-Unfortunately, very few App.net clients treat video embedding properly. So I would advise to include the video URL in the text body anyway, for better compatibility.
+*Note: unfortunately, very few App.net clients treat video embedding properly. So I would advise to include the video URL in the text body anyway, for better compatibility.*
 
 # EMBED MOVIE POSTER
 

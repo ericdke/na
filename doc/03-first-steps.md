@@ -24,7 +24,7 @@ You can then switch between accounts:
 
 `ayadn switch @ericd` 
 
-or 
+Shortcut: 
 
 `ayadn -@ ericd`  
 
@@ -32,7 +32,7 @@ You can also unauthorize a user with or without deleting its folders:
 
 `ayadn unauthorize @ericd`
 
-or
+Shortcut: 
 
 `ayadn -UA -D @ericd`
 

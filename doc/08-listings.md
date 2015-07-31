@@ -278,7 +278,7 @@ You can permanently reverse the ADN default list order with a `set` command:
 
 You can change the width of the lists table if the default size doesn't fit well in your terminal:
 
-`ayadn set formats table width 80`
+`ayadn set formats table width 70`
 
 (min: 60, max: 90, default: 75)
 

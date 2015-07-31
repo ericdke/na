@@ -144,7 +144,7 @@ Set it permanently with:
 
 `ayadn set timeline compact true`
 
-You may want to change colors to create visual marks between posts if you choose the compact view, i.e. putting the all header in the same color (post id, username, name, etc).
+*Tip: you may want to change colors to create visual marks between posts if you choose the compact view by default, i.e. setting the whole header to the same color (post id, username, name, etc).*
 
 # GLOBAL
 
@@ -215,7 +215,7 @@ You can get your own mentions stream by using *me* instead of *@username*:
 
 `ayadn -m me`
 
-Don't forget that like most streams, Mentions is *scrollable*: very convenient to know at a glance if we got something new from our friends!
+Like most streams, Mentions is *scrollable*: very convenient to know at a glance if we got something new from our friends!
 
 # POSTS
 

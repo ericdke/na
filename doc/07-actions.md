@@ -172,7 +172,7 @@ Download a file from your App.net storage (any file posted with any ADN client).
 
 Export a post's url, text and link(s) to your Pinboard account and add optional tags.
 
-`ayadn pin 22790201 Ayadn Ruby dev`
+`ayadn pin 22790201`
 
 `ayadn pin 26874913 duel swords france history`
 
