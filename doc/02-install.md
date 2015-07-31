@@ -20,30 +20,30 @@ Install Ayadn, authorize your account: done.
 
 If you need to install Ruby it's better to use something like RVM or RBENV. You can of course use the Ruby shipped with your system but it will require root privileges and is not recommended.
 
-## MIGRATE
-
-The database format has changed between 1.x and 2.x: if you already have one or several authorized accounts, Ayadn will ask you to run the `migrate` command once per account. You only have to do this once.
-
-You can also start with a fresh configuration: just delete your `~/ayadn` folder before authorizing a new user with Ayadn 2.x.
-
 ## WINDOWS
 
-Ayadn also works on Windows because it's pure Ruby, but some Gems it depends upon require some effort to be installed with some Windows versions ("amalgalite", notably). And you will need an ANSI compatible console (ConEmu, Console2, etc) + Ruby 2.0.0 32bits via RubyInstaller and its DevKit (or a cygwin equivalent). 
+Ayadn also works on Windows because it's pure Ruby, but some Gems it depends upon require some effort to be installed with some Windows versions ("amalgalite", notably). And you will need an ANSI compatible console (ConEmu, Console2, etc) and Ruby 2.0.0+ 32bits via RubyInstaller and its DevKit (or a cygwin equivalent). 
+
+## MIGRATE
+
+If you have an old Ayadn 1.x install that you want to keep using with Ayadn 2.x, Ayadn 2.x will ask you to run the `migrate` command (once) for this account.
+
+Otherwise it's better to start with a fresh configuration: just delete your old 1.0 `~/ayadn` folder before authorizing the user again with Ayadn 2.x.
 
 ## DEPENDENCIES
 
 Ayadn depends upon these Gems:
 
-        amalgalite
-        fast_cache
-        pinboard
-        rainbow
-        rest-client
-        spotlite
-        terminal-table
-        thor
-        tvdb_party
-        unicode_utils
-        daybreak
+        amalgalite (SQLite)
+        fast_cache (in-memory caching)
+        pinboard (export to Pinboard)
+        rainbow (text UI utilities)
+        rest-client (networking)
+        spotlite (IMDb access)
+        terminal-table (text UI utilities)
+        thor (commands and options parsing)
+        tvdb_party (TVDb access)
+        unicode_utils (text utilities)
+        daybreak (Ruby data store)
 
-The "daybreak" dependency is only needed for 1.x to 2.x migrations. As this migration is optional and Ayadn 1.x is deprecated, this dependency will be removed in future versions.
+*Note: the "daybreak" dependency is only needed for 1.x to 2.x migrations. As this migration is optional and Ayadn 1.x is deprecated, this dependency is only loaded if a migration is launched.*
