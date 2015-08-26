@@ -88,7 +88,7 @@ module Ayadn
         @status.fetching_from('iTunes')
         itunes = get_itunes_track_infos()
         itunes.each do |el|
-          if el.length == 0
+          if el.nil? || el.length == 0
             @status.empty_fields
             exit
           end
@@ -96,7 +96,7 @@ module Ayadn
         post_itunes(options, itunes)
       rescue => e
         @status.wtf
-        Errors.global_error({error: e, caller: caller, data: [itunes, store, options]})
+        Errors.global_error({error: e, caller: caller, data: [itunes, options]})
       end
     end
 
