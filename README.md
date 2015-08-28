@@ -84,7 +84,7 @@ Feedback and/or contributions are very welcomed!
 
 Examples on Mac OS X, with iTerm2 + Solarized theme.
 
-![followers list](https://www.dropbox.com/s/es0o4sq7w05y2ps/ayadn200followerslistsmall.png?dl=1)
+![followers list](https://www.evernote.com/shard/s89/sh/fddc2f8e-78f0-4dde-974b-bf724f643d7f/419854929e27b5b3/res/522b6cd4-2e0f-4528-bc94-ea4a61de54a7/skitch.png)
 
 ![mentions stream in classic view](http://dl.dropboxusercontent.com/s/16d7u5wjsd3un1j/ayadn200mentions.png)
 
