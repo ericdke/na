@@ -1,3 +1,10 @@
+## 2.1 - 2015-08-29 - 'Electric Boogaloo'
+
+- Fix: crash when scrolling Global with NiceRank
+- Fix: crash when using list sort option posts/day
+- Fix: rare crash if user has no name
+- Deprecated: sort lists using posts/day
+
 ## 2.0.12 - 2015-05-10 - 'Agent Carter'
 
 - Fix: Youtube/Vimeo integration if video not found or unauthorized
