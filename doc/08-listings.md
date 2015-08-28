@@ -18,10 +18,6 @@ Sort the list by name:
 
 `ayadn -fwr -n me`
 
-Sort the list by posts/day:
-
-`ayadn -fwr -d me`
-
 Sort the list by total posts:
 
 `ayadn -fwr -p me`
@@ -63,10 +59,6 @@ Sort the list by username:
 Sort the list by name:
 
 `ayadn -fwg -n me`
-
-Sort the list by posts/day:
-
-`ayadn -fwg -d me`
 
 Sort the list by total posts:
 
@@ -182,10 +174,6 @@ Sort the list by name:
 
 `ayadn -mtd -n`
 
-Sort the list by posts/day:
-
-`ayadn -mtd -d`
-
 Sort the list by total posts:
 
 `ayadn -mtd -p`
@@ -219,10 +207,6 @@ Sort the list by username:
 Sort the list by name:
 
 `ayadn -bkd -n`
-
-Sort the list by posts/day:
-
-`ayadn -bkd -d`
 
 Sort the list by total posts:
 

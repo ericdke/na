@@ -71,7 +71,7 @@ module Ayadn
         if options[:username]
           bucket.sort_by! { |obj| obj[1] }
         elsif options[:name]
-          bucket.sort_by! { |obj| obj[2].downcase }
+          bucket.sort_by! { |obj| obj[2] }
         elsif options[:posts]
           bucket.sort_by! { |obj| [obj[5], obj[1]] }.reverse!
         elsif options[:date]
@@ -97,7 +97,7 @@ module Ayadn
           hashtags = @workers.extract_hashtags(obj[6])
           text = @workers.colorize_text(obj[6]["text"], mentions, hashtags)
           total = "(#{obj[5]} posts)"
-          name = obj[2].nil? ? "(no name)" : obj[2]
+          name = obj[2] == "" ? "(no name)" : obj[2]
           colored_total = total.color(Settings.options[:colors][:link])
           colored_name = name.color(Settings.options[:colors][:name])
           colored_date = date.color(Settings.options[:colors][:date])
@@ -218,14 +218,14 @@ module Ayadn
       view << "#{padding}Posts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(Settings.options[:colors][:excerpt])
 
 
-      unless show_ranks == false
-        # this is ok for one user, but do not call this in a loop
-        # do call them all at once instead if many
-        ranks = NiceRank.new.get_posts_day([content['id'].to_i])
-        unless ranks.empty?
-          view << "#{padding}Posts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(Settings.options[:colors][:excerpt])
-        end
-      end
+      # unless show_ranks == false
+      #   # this is ok for one user, but do not call this in a loop
+      #   # do call them all at once instead if many
+      #   ranks = NiceRank.new.get_posts_day([content['id'].to_i])
+      #   unless ranks.empty?
+      #     view << "#{padding}Posts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(Settings.options[:colors][:excerpt])
+      #   end
+      # end
 
       view << "#{padding}Following\t\t".color(:cyan) + content['counts']['following'].to_s.color(Settings.options[:colors][:excerpt])
       view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(Settings.options[:colors][:excerpt])
@@ -514,7 +514,6 @@ module Ayadn
             unless content[:nicerank] == false
               next if content[:nicerank] < Settings.options[:nicerank][:threshold]
               next if content[:is_human] == 0
-              next if content[:real_person] == 0
             end
             filtered[id] = content
           end

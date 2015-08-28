@@ -120,34 +120,21 @@ module Ayadn
           indexed_ranks[r['user_id']] = r
         end
       end
-      table << ['USERNAME'.color(:red), 'NAME'.color(:red), 'POSTS'.color(:red), 'POSTS/DAY'.color(:red)]
+      table << ['USERNAME'.color(:red), 'NAME'.color(:red), 'POSTS'.color(:red)]
       table << :separator
       arr = []
       if options[:username]
         list.sort_by! { |obj| obj[:username] }
       elsif options[:name]
-        list.sort_by! { |obj| obj[:name].downcase }
+        list.sort_by! { |obj| obj[:name].nil? ? "(no name)" : obj[:name].downcase }
       elsif options[:posts]
         list.sort_by! { |obj| [obj[:posts], obj[:username]] }
       end
       list.each do |obj|
         obj[:name] = "" if obj[:name].nil?
-        unless indexed_ranks == false
-          details = indexed_ranks[obj[:id].to_i]
-          if details['user']['posts_day'] == -1
-            posts_day = 'ignored'
-          else
-            posts_day = details['user']['posts_day'].round(2).to_s
-          end
-        else
-          posts_day = 'unknown'
-        end
         obj[:username].length > 23 ? username = "#{obj[:username][0..20]}..." : username = obj[:username]
         obj[:name].length > 23 ? name = "#{obj[:name][0..20]}..." : name = obj[:name]
-        arr << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name.to_s.force_encoding('UTF-8')}", obj[:posts], posts_day ]
-      end
-      if options[:posts_day]
-        arr.sort_by! { |obj| obj[3].to_f }
+        arr << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name.to_s.force_encoding('UTF-8')}", obj[:posts] ]
       end
       if options[:reverse]
         arr.reverse!
@@ -231,11 +218,9 @@ module Ayadn
         if niceranks[post['user']['id'].to_i]
           rank = niceranks[post['user']['id'].to_i][:rank]
           is_human = niceranks[post['user']['id'].to_i][:is_human]
-          real_person = niceranks[post['user']['id'].to_i][:real_person]
         else
           rank = false
           is_human = 'unknown'
-          real_person = 'unknown'
         end
 
         if post['user'].has_key?('name')
@@ -255,7 +240,6 @@ module Ayadn
           user_id: post['user']['id'].to_i,
           nicerank: rank,
           is_human: is_human,
-          real_person: real_person,
           handle: "@#{post['user']['username']}",
           type: post['user']['type'],
           date: parsed_time(post['created_at']),

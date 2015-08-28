@@ -25,7 +25,7 @@ module Ayadn
         user_ids << id if @store[id].nil?
       end
       user_ids.uniq!
-      got = CNX.get "#{@url}#{user_ids.join(',')}&show_details=Y" unless user_ids.empty?
+      got = CNX.get "#{@url}#{user_ids.join(',')}" unless user_ids.empty?
       if got.nil? || got == ""
         parsed = {'meta' => {'code' => 404}, 'data' => []}
       else
@@ -40,13 +40,10 @@ module Ayadn
       parsed['data'].each do |obj|
         res = @store[obj['user_id']]
         if res.nil?
-          obj['account']['is_human'] == true ? is_human = 1 : is_human = 0
-          obj['account']['real_person'] == true ? real_person = 1 : real_person = 0
+          obj['is_human'] == true ? is_human = 1 : is_human = 0
           content = {
-            username: obj['user']['username'],
             rank: obj['rank'],
-            is_human: is_human,
-            real_person: real_person
+            is_human: is_human
           }
           @store[obj['user_id']] = content
           niceranks[obj['user_id']] = content
@@ -82,22 +79,6 @@ module Ayadn
       return niceranks
     end
 
-    # This is for user info, no scrolling: no need to cache
-    def get_posts_day ids
-      resp = JSON.parse(CNX.get("#{@url}#{ids.join(',')}&show_details=Y"))
-      if resp.nil? || resp['meta']['code'] != 200
-        []
-      else
-        resp['data'].map do |obj|
-          pday = obj['user']['posts_day'] == -1 ? 0 : obj['user']['posts_day']
-          {
-            id: obj['user_id'],
-            posts_day:pday.round(2)
-          }
-        end
-      end
-    end
-
     # This is for user lists, no scrolling: no need to cache
     # Even with a lot of requests, it's within the NR limits
     # because of the slicing (upto 200 objects / call)
@@ -108,7 +89,7 @@ module Ayadn
         blocs << ids.shift(200)
       end
       blocs.each do |bloc|
-        got = CNX.get("#{@url}#{bloc.join(',')}&show_details=Y")
+        got = CNX.get("#{@url}#{bloc.join(',')}")
         if got.nil? || got.empty?
           ranks << [{}]
         else

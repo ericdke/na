@@ -97,24 +97,14 @@ describe Ayadn::NiceRank do
   let(:rest) {Ayadn::CNX}
   # let(:nicerank) { JSON.parse(File.read("spec/mock/nicerank.json")) }
 
-  describe "#get_posts_day" do
-    before do
-      rest.stub(:get).and_return(File.read("spec/mock/nicerank.json"))
-    end
-    it "get posts/day for a user" do
-      expect(rest).to receive(:get).with("http://api.nice.social/user/nicerank?ids=69904&show_details=Y")
-      x = Ayadn::NiceRank.new.get_posts_day(['69904'])
-      expect(x).to eq [{:id=>69904, :posts_day=>11.57}]
-    end
-  end
   describe "#from_ids" do
     before do
       rest.stub(:get).and_return(File.read("spec/mock/nicerank.json"))
     end
     it "get niceranks from user ids" do
-      expect(rest).to receive(:get).with("http://api.nice.social/user/nicerank?ids=69904&show_details=Y")
+      expect(rest).to receive(:get).with("http://api.nice.social/user/nicerank?ids=69904")
       x = Ayadn::NiceRank.new.from_ids(['69904'])
-      expect(x).to eq [{"user_id"=>69904,"rank"=>3.816259,"is_human"=>true,"user"=> {"username"=>"ericd","account_age"=>513,"following"=>277,"followers"=>261,"posts"=>5933,"stars"=>345,"posts_day"=>11.5653,"days_idle"=>0},"account"=> {"has_avatar"=>true,"has_bio"=>true,"has_cover"=>true,"is_verified"=>true,"is_human"=>true,"real_person"=>true},"stats"=>{"robo_posts"=>6,"post_count"=>294,"conversations"=>229,"links"=>36,"mentions"=>232,"questions"=>25}}]
+      expect(x).to eq [{"user_id"=>69904,"rank"=>3.816259,"is_human"=>true}]
     end
   end
 end

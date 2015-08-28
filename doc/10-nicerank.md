@@ -46,7 +46,7 @@ Any user with a NiceRank smaller than this value will be ignored in the Global s
 
 (default: 2.1)
 
-## Desactivate NiceRank
+## Deactivate NiceRank
 
 NiceRank is enabled by default on new Ayadn installations, but can be disabled if needed:
 
