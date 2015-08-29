@@ -17,66 +17,73 @@ module Ayadn
     # Get NR response
     # Fetch IDs from store
     # if absent, decode + save to dic + cache in store
-    # if present, save to dic from store (and count hits for debug)
+    # if present, save to dic from store (and count hits for debug) 
     def get_ranks stream
-      user_ids, niceranks = [], {}
-      stream['data'].each do |post|
-        id = post['user']['id']
-        user_ids << id if @store[id].nil?
-      end
-      user_ids.uniq!
-      got = CNX.get "#{@url}#{user_ids.join(',')}" unless user_ids.empty?
-      if got.nil? || got == ""
-        parsed = {'meta' => {'code' => 404}, 'data' => []}
-      else
-
-        begin
-          parsed = JSON.parse(got)
-        rescue JSON::ParserError => e
+      begin
+        user_ids, niceranks = [], {}
+        stream['data'].each do |post|
+          id = post['user']['id']
+          user_ids << id if @store[id].nil?
+        end
+        user_ids.uniq!
+        got = CNX.get "#{@url}#{user_ids.join(',')}" unless user_ids.empty?
+        if got.nil? || got == ""
           parsed = {'meta' => {'code' => 404}, 'data' => []}
-        end
-
-      end
-      parsed['data'].each do |obj|
-        res = @store[obj['user_id']]
-        if res.nil?
-          obj['is_human'] == true ? is_human = 1 : is_human = 0
-          content = {
-            rank: obj['rank'],
-            is_human: is_human
-          }
-          @store[obj['user_id']] = content
-          niceranks[obj['user_id']] = content
         else
-          @hits += 1
-          niceranks[obj['user_id']] = res
+
+          begin
+            parsed = JSON.parse(got)
+          rescue
+            parsed = {'meta' => {'code' => 404}, 'data' => []}
+          end
+
+          unless parsed['data'].is_a?(Array)
+            parsed = {'meta' => {'code' => 404}, 'data' => []}
+          end
+
+        end
+        parsed['data'].each do |obj|
+          res = @store[obj['user_id']]
+          if res.nil?
+            obj['is_human'] == true ? is_human = 1 : is_human = 0
+            content = {
+              rank: obj['rank'],
+              is_human: is_human
+            }
+            @store[obj['user_id']] = content
+            niceranks[obj['user_id']] = content
+          else
+            @hits += 1
+            niceranks[obj['user_id']] = res
+          end
         end
 
+
+        @posts += stream['data'].size
+        @ids += user_ids.size
+
+        if Settings.options[:timeline][:debug] == true
+          deb = "\n"
+          deb << "+ NICERANK\n"
+          deb << "* t#{Time.now.to_i}\n"
+          deb << "Posts:\t\t#{stream['data'].size}\n"
+          deb << "Requested NR:\t#{user_ids.size}\n"
+          deb << "* TOTALS\n"
+          deb << "Posts:\t\t#{@posts}\n"
+          deb << "Fetched ranks:\t#{@ids}\n"
+          deb << "DB hits:\t#{@hits}\n"
+          deb << "Uniques:\t#{@store.count}\n"
+          deb << "\n"
+          puts deb.color(Settings.options[:colors][:debug])
+          Logs.rec.debug "NICERANK/POSTS: #{@posts}"
+          Logs.rec.debug "NICERANK/NR CALLS: #{@ids}"
+          Logs.rec.debug "NICERANK/CACHE HITS: #{@hits}"
+          Logs.rec.debug "NICERANK/CACHED IDS: #{@store.count}"
+        end
+        return niceranks
+      rescue => e
+        Errors.global_error({error: e, caller: caller, data: [user_ids, niceranks, parsed]})
       end
-
-      @posts += stream['data'].size
-      @ids += user_ids.size
-
-      if Settings.options[:timeline][:debug] == true
-        deb = "\n"
-        deb << "+ NICERANK\n"
-        deb << "* t#{Time.now.to_i}\n"
-        deb << "Posts:\t\t#{stream['data'].size}\n"
-        deb << "Requested NR:\t#{user_ids.size}\n"
-        deb << "* TOTALS\n"
-        deb << "Posts:\t\t#{@posts}\n"
-        deb << "Fetched ranks:\t#{@ids}\n"
-        deb << "DB hits:\t#{@hits}\n"
-        deb << "Uniques:\t#{@store.count}\n"
-        deb << "\n"
-        puts deb.color(Settings.options[:colors][:debug])
-        Logs.rec.debug "NICERANK/POSTS: #{@posts}"
-        Logs.rec.debug "NICERANK/NR CALLS: #{@ids}"
-        Logs.rec.debug "NICERANK/CACHE HITS: #{@hits}"
-        Logs.rec.debug "NICERANK/CACHED IDS: #{@store.count}"
-      end
-
-      return niceranks
     end
 
     # This is for user lists, no scrolling: no need to cache

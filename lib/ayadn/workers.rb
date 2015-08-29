@@ -111,15 +111,6 @@ module Ayadn
       users = at(list.map {|obj| obj[:username]})
       ids = list.map {|obj| obj[:id].to_i}
       ranks = NiceRank.new.from_ids(ids)
-      indexed_ranks = {}
-      ranks.each do |r|
-        if r.empty?
-          indexed_ranks = false
-          break
-        else
-          indexed_ranks[r['user_id']] = r
-        end
-      end
       table << ['USERNAME'.color(:red), 'NAME'.color(:red), 'POSTS'.color(:red)]
       table << :separator
       arr = []
@@ -159,8 +150,8 @@ module Ayadn
         unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
             if Databases.is_in_blacklist?('client', post['source']['name'].downcase)
-              Debug.skipped({source: post['source']['name']})
-              next
+                Debug.skipped({source: post['source']['name']})
+                next
             end
           end
         end
