@@ -144,7 +144,7 @@
         {
           "type": "com.ayadn.client",
           "value": {
-            "url": "http://ayadn-app.net",
+            "url": "https://github.com/ericdke/na",
             "version": "2.0.beta",
             "author": {
               "username": "ericd",
@@ -159,7 +159,7 @@
       "num_reposts": 0,
       "num_replies": 0,
       "source": {
-        "link": "http://www.ayadn-app.net",
+        "link": "https://github.com/ericdke/na",
         "name": "Ayadn",
         "client_id": "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
       },
@@ -280,7 +280,7 @@
         {
           "type": "com.ayadn.client",
           "value": {
-            "url": "http://ayadn-app.net",
+            "url": "https://github.com/ericdke/na",
             "version": "2.0.beta",
             "author": {
               "username": "ericd",
@@ -295,7 +295,7 @@
       "num_reposts": 0,
       "num_replies": 0,
       "source": {
-        "link": "http://www.ayadn-app.net",
+        "link": "https://github.com/ericdke/na",
         "name": "Ayadn",
         "client_id": "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
       },

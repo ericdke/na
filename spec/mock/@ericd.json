@@ -101,8 +101,8 @@
       "height": 1079
     },
     "description": {
-      "text": "Sound engineer (rec, edit, mix) by day, coder by night. \r\nBlogs: http://aya.io \r\nCode: http://github.com/ericdke\r\n@Ayadn - App.net command-line client. http://ayadn-app.net",
-      "html": "<span itemscope=\"https://app.net/schemas/Post\">Sound engineer (rec, edit, mix) by day, coder by night. &#13;<br>Blogs: <a href=\"http://aya.io\">http://aya.io</a> &#13;<br>Code: <a href=\"http://github.com/ericdke\">http://github.com/ericdke</a>&#13;<br><span data-mention-id=\"188367\" data-mention-name=\"ayadn\" itemprop=\"mention\">@Ayadn</span> - <a href=\"http://App.net\">App.net</a> command-line client. <a href=\"http://ayadn-app.net\">http://ayadn-app.net</a></span>",
+      "text": "Sound engineer (rec, edit, mix) by day, coder by night. \r\nBlogs: http://aya.io \r\nCode: http://github.com/ericdke\r\n@Ayadn - App.net command-line client. https://github.com/ericdke/na",
+      "html": "<span itemscope=\"https://app.net/schemas/Post\">Sound engineer (rec, edit, mix) by day, coder by night. &#13;<br>Blogs: <a href=\"http://aya.io\">http://aya.io</a> &#13;<br>Code: <a href=\"http://github.com/ericdke\">http://github.com/ericdke</a>&#13;<br><span data-mention-id=\"188367\" data-mention-name=\"ayadn\" itemprop=\"mention\">@Ayadn</span> - <a href=\"http://App.net\">App.net</a> command-line client. <a href=\"https://github.com/ericdke/na\">https://github.com/ericdke/na</a></span>",
       "entities": {
         "mentions": [
           {
@@ -135,8 +135,8 @@
             "len": 7
           },
           {
-            "url": "http://ayadn-app.net",
-            "text": "http://ayadn-app.net",
+            "url": "https://github.com/ericdke/na",
+            "text": "https://github.com/ericdke/na",
             "pos": 152,
             "len": 20
           }

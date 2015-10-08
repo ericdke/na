@@ -2887,8 +2887,8 @@
           "height": 1079
         },
         "description": {
-          "text": "Sound engineer by day, coder by night.\n \nBlogs: http://aya.io\n\nCode: http://github.com/ericdke\n\nAyadn: http://ayadn-app.net\n\nADNPing: https://directory.app.net/app/366/adnping/\n \n#devADN 🔨  #coffee #tea #space #art #nerd #ruby #swift #music #movies #stuff",
-          "html": "<span itemscope=\"https://app.net/schemas/Post\">Sound engineer by day, coder by night.<br> <br>Blogs: <a href=\"http://aya.io\">http://aya.io</a><br><br>Code: <a href=\"http://github.com/ericdke\">http://github.com/ericdke</a><br><br>Ayadn: <a href=\"http://ayadn-app.net\">http://ayadn-app.net</a><br><br>ADNPing: <a href=\"https://directory.app.net/app/366/adnping/\">https://directory.app.net/app/366/adnping/</a><br> <br><span data-hashtag-name=\"devadn\" itemprop=\"hashtag\">#devADN</span> &#128296;  <span data-hashtag-name=\"coffee\" itemprop=\"hashtag\">#coffee</span> <span data-hashtag-name=\"tea\" itemprop=\"hashtag\">#tea</span> <span data-hashtag-name=\"space\" itemprop=\"hashtag\">#space</span> <span data-hashtag-name=\"art\" itemprop=\"hashtag\">#art</span> <span data-hashtag-name=\"nerd\" itemprop=\"hashtag\">#nerd</span> <span data-hashtag-name=\"ruby\" itemprop=\"hashtag\">#ruby</span> <span data-hashtag-name=\"swift\" itemprop=\"hashtag\">#swift</span> <span data-hashtag-name=\"music\" itemprop=\"hashtag\">#music</span> <span data-hashtag-name=\"movies\" itemprop=\"hashtag\">#movies</span> <span data-hashtag-name=\"stuff\" itemprop=\"hashtag\">#stuff</span></span>",
+          "text": "Sound engineer by day, coder by night.\n \nBlogs: http://aya.io\n\nCode: http://github.com/ericdke\n\nAyadn: https://github.com/ericdke/na\n\nADNPing: https://directory.app.net/app/366/adnping/\n \n#devADN 🔨  #coffee #tea #space #art #nerd #ruby #swift #music #movies #stuff",
+          "html": "<span itemscope=\"https://app.net/schemas/Post\">Sound engineer by day, coder by night.<br> <br>Blogs: <a href=\"http://aya.io\">http://aya.io</a><br><br>Code: <a href=\"http://github.com/ericdke\">http://github.com/ericdke</a><br><br>Ayadn: <a href=\"https://github.com/ericdke/na\">https://github.com/ericdke/na</a><br><br>ADNPing: <a href=\"https://directory.app.net/app/366/adnping/\">https://directory.app.net/app/366/adnping/</a><br> <br><span data-hashtag-name=\"devadn\" itemprop=\"hashtag\">#devADN</span> &#128296;  <span data-hashtag-name=\"coffee\" itemprop=\"hashtag\">#coffee</span> <span data-hashtag-name=\"tea\" itemprop=\"hashtag\">#tea</span> <span data-hashtag-name=\"space\" itemprop=\"hashtag\">#space</span> <span data-hashtag-name=\"art\" itemprop=\"hashtag\">#art</span> <span data-hashtag-name=\"nerd\" itemprop=\"hashtag\">#nerd</span> <span data-hashtag-name=\"ruby\" itemprop=\"hashtag\">#ruby</span> <span data-hashtag-name=\"swift\" itemprop=\"hashtag\">#swift</span> <span data-hashtag-name=\"music\" itemprop=\"hashtag\">#music</span> <span data-hashtag-name=\"movies\" itemprop=\"hashtag\">#movies</span> <span data-hashtag-name=\"stuff\" itemprop=\"hashtag\">#stuff</span></span>",
           "entities": {
             "mentions": [
 
@@ -2964,8 +2964,8 @@
                 "len": 25
               },
               {
-                "url": "http://ayadn-app.net",
-                "text": "http://ayadn-app.net",
+                "url": "https://github.com/ericdke/na",
+                "text": "https://github.com/ericdke/na",
                 "pos": 103,
                 "len": 20
               },

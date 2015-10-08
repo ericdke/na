@@ -65,8 +65,8 @@
             "height": 256
           },
           "description": {
-            "text": "Ayadn is an App.net command-line client, written in Ruby.\r\n#Ayadn is open source (MIT license).\r\nIt's a Rubygem: `gem install ayadn`\r\nRepo: https://github.com/ericdke/na\r\nDocs: http://ayadn-app.net/doc\r\nMade by @ericd",
-            "html": "<span itemscope=\"https://app.net/schemas/Post\">Ayadn is an <a href=\"http://App.net\">App.net</a> command-line client, written in Ruby.&#13;<br><span data-hashtag-name=\"ayadn\" itemprop=\"hashtag\">#Ayadn</span> is open source (MIT license).&#13;<br>It's a Rubygem: `gem install ayadn`&#13;<br>Repo: <a href=\"https://github.com/ericdke/na\">https://github.com/ericdke/na</a>&#13;<br>Docs: <a href=\"http://ayadn-app.net/doc\">http://ayadn-app.net/doc</a>&#13;<br>Made by <span data-mention-id=\"69904\" data-mention-name=\"ericd\" itemprop=\"mention\">@ericd</span></span>",
+            "text": "Ayadn is an App.net command-line client, written in Ruby.\r\n#Ayadn is open source (MIT license).\r\nIt's a Rubygem: `gem install ayadn`\r\nRepo: https://github.com/ericdke/na\r\nDocs: https://github.com/ericdke/na\r\nMade by @ericd",
+            "html": "<span itemscope=\"https://app.net/schemas/Post\">Ayadn is an <a href=\"http://App.net\">App.net</a> command-line client, written in Ruby.&#13;<br><span data-hashtag-name=\"ayadn\" itemprop=\"hashtag\">#Ayadn</span> is open source (MIT license).&#13;<br>It's a Rubygem: `gem install ayadn`&#13;<br>Repo: <a href=\"https://github.com/ericdke/na\">https://github.com/ericdke/na</a>&#13;<br>Docs: <a href=\"https://github.com/ericdke/na\">https://github.com/ericdke/na</a>&#13;<br>Made by <span data-mention-id=\"69904\" data-mention-name=\"ericd\" itemprop=\"mention\">@ericd</span></span>",
             "entities": {
               "mentions": [
                 {
@@ -97,8 +97,8 @@
                   "len": 29
                 },
                 {
-                  "url": "http://ayadn-app.net/doc",
-                  "text": "http://ayadn-app.net/doc",
+                  "url": "https://github.com/ericdke/na",
+                  "text": "https://github.com/ericdke/na",
                   "pos": 177,
                   "len": 24
                 }
@@ -145,7 +145,7 @@
           "num_stars": 0,
           "num_replies": 2,
           "source": {
-            "link": "http://www.ayadn-app.net",
+            "link": "https://github.com/ericdke/na",
             "name": "Ayadn",
             "client_id": "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
           },
@@ -225,8 +225,8 @@
             "height": 256
           },
           "description": {
-            "text": "Ayadn is an App.net command-line client, written in Ruby.\r\n#Ayadn is open source (MIT license).\r\nIt's a Rubygem: `gem install ayadn`\r\nRepo: https://github.com/ericdke/na\r\nDocs: http://ayadn-app.net/doc\r\nMade by @ericd",
-            "html": "<span itemscope=\"https://app.net/schemas/Post\">Ayadn is an <a href=\"http://App.net\">App.net</a> command-line client, written in Ruby.&#13;<br><span data-hashtag-name=\"ayadn\" itemprop=\"hashtag\">#Ayadn</span> is open source (MIT license).&#13;<br>It's a Rubygem: `gem install ayadn`&#13;<br>Repo: <a href=\"https://github.com/ericdke/na\">https://github.com/ericdke/na</a>&#13;<br>Docs: <a href=\"http://ayadn-app.net/doc\">http://ayadn-app.net/doc</a>&#13;<br>Made by <span data-mention-id=\"69904\" data-mention-name=\"ericd\" itemprop=\"mention\">@ericd</span></span>",
+            "text": "Ayadn is an App.net command-line client, written in Ruby.\r\n#Ayadn is open source (MIT license).\r\nIt's a Rubygem: `gem install ayadn`\r\nRepo: https://github.com/ericdke/na\r\nDocs: https://github.com/ericdke/na\r\nMade by @ericd",
+            "html": "<span itemscope=\"https://app.net/schemas/Post\">Ayadn is an <a href=\"http://App.net\">App.net</a> command-line client, written in Ruby.&#13;<br><span data-hashtag-name=\"ayadn\" itemprop=\"hashtag\">#Ayadn</span> is open source (MIT license).&#13;<br>It's a Rubygem: `gem install ayadn`&#13;<br>Repo: <a href=\"https://github.com/ericdke/na\">https://github.com/ericdke/na</a>&#13;<br>Docs: <a href=\"https://github.com/ericdke/na\">https://github.com/ericdke/na</a>&#13;<br>Made by <span data-mention-id=\"69904\" data-mention-name=\"ericd\" itemprop=\"mention\">@ericd</span></span>",
             "entities": {
               "mentions": [
                 {
@@ -257,8 +257,8 @@
                   "len": 29
                 },
                 {
-                  "url": "http://ayadn-app.net/doc",
-                  "text": "http://ayadn-app.net/doc",
+                  "url": "https://github.com/ericdke/na",
+                  "text": "https://github.com/ericdke/na",
                   "pos": 177,
                   "len": 24
                 }
@@ -609,8 +609,8 @@
             "height": 1079
           },
           "description": {
-            "text": "Sound engineer by day (rec, edit, mix), coder by night. \n\r\nBlogs: http://aya.io \r\nCode: http://github.com/ericdke\r\n@ayadn ADN command-line client. http://ayadn-app.net\r\n\r\n#devADN 🔨  #coffee #tea #space #art #stuff",
-            "html": "<span itemscope=\"https://app.net/schemas/Post\">Sound engineer by day (rec, edit, mix), coder by night. <br>&#13;<br>Blogs: <a href=\"http://aya.io\">http://aya.io</a> &#13;<br>Code: <a href=\"http://github.com/ericdke\">http://github.com/ericdke</a>&#13;<br><span data-mention-id=\"188367\" data-mention-name=\"ayadn\" itemprop=\"mention\">@ayadn</span> ADN command-line client. <a href=\"http://ayadn-app.net\">http://ayadn-app.net</a>&#13;<br>&#13;<br><span data-hashtag-name=\"devadn\" itemprop=\"hashtag\">#devADN</span> &#128296;  <span data-hashtag-name=\"coffee\" itemprop=\"hashtag\">#coffee</span> <span data-hashtag-name=\"tea\" itemprop=\"hashtag\">#tea</span> <span data-hashtag-name=\"space\" itemprop=\"hashtag\">#space</span> <span data-hashtag-name=\"art\" itemprop=\"hashtag\">#art</span> <span data-hashtag-name=\"stuff\" itemprop=\"hashtag\">#stuff</span></span>",
+            "text": "Sound engineer by day (rec, edit, mix), coder by night. \n\r\nBlogs: http://aya.io \r\nCode: http://github.com/ericdke\r\n@ayadn ADN command-line client. https://github.com/ericdke/na\r\n\r\n#devADN 🔨  #coffee #tea #space #art #stuff",
+            "html": "<span itemscope=\"https://app.net/schemas/Post\">Sound engineer by day (rec, edit, mix), coder by night. <br>&#13;<br>Blogs: <a href=\"http://aya.io\">http://aya.io</a> &#13;<br>Code: <a href=\"http://github.com/ericdke\">http://github.com/ericdke</a>&#13;<br><span data-mention-id=\"188367\" data-mention-name=\"ayadn\" itemprop=\"mention\">@ayadn</span> ADN command-line client. <a href=\"https://github.com/ericdke/na\">https://github.com/ericdke/na</a>&#13;<br>&#13;<br><span data-hashtag-name=\"devadn\" itemprop=\"hashtag\">#devADN</span> &#128296;  <span data-hashtag-name=\"coffee\" itemprop=\"hashtag\">#coffee</span> <span data-hashtag-name=\"tea\" itemprop=\"hashtag\">#tea</span> <span data-hashtag-name=\"space\" itemprop=\"hashtag\">#space</span> <span data-hashtag-name=\"art\" itemprop=\"hashtag\">#art</span> <span data-hashtag-name=\"stuff\" itemprop=\"hashtag\">#stuff</span></span>",
             "entities": {
               "mentions": [
                 {
@@ -666,8 +666,8 @@
                   "len": 25
                 },
                 {
-                  "url": "http://ayadn-app.net",
-                  "text": "http://ayadn-app.net",
+                  "url": "https://github.com/ericdke/na",
+                  "text": "https://github.com/ericdke/na",
                   "pos": 147,
                   "len": 20
                 }

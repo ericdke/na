@@ -57,7 +57,7 @@ describe Ayadn::Post do
       rest.stub(:post).and_return(File.read("spec/mock/posted.json"))
     end
     it "posts a post" do
-      expect(rest).to receive(:post).with("https://api.app.net/posts/?include_annotations=1&access_token=XYZ", {"text"=>"YOLO", "entities"=>{"parse_markdown_links"=>true, "parse_links"=>true}, "annotations"=>[{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>"shoes", "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"http://ayadn-app.net", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]})
+      expect(rest).to receive(:post).with("https://api.app.net/posts/?include_annotations=1&access_token=XYZ", {"text"=>"YOLO", "entities"=>{"parse_markdown_links"=>true, "parse_links"=>true}, "annotations"=>[{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>"shoes", "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"https://github.com/ericdke/na", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}]})
       x = post.post({text: 'YOLO'})
     end
     it "posts a post" do
@@ -71,13 +71,13 @@ describe Ayadn::Post do
 
   describe "#markdown_extract" do
     it "splits markdown" do
-      expect(post.markdown_extract("[ayadn](http://ayadn-app.net)")).to eq ["ayadn", "http://ayadn-app.net"]
+      expect(post.markdown_extract("[ayadn](https://github.com/ericdke/na)")).to eq ["ayadn", "https://github.com/ericdke/na"]
     end
   end
 
   describe "#keep_text_from_markdown_links" do
     it "extracts markdown text" do
-      expect(post.keep_text_from_markdown_links("[ayadn](http://ayadn-app.net)")).to eq "ayadn"
+      expect(post.keep_text_from_markdown_links("[ayadn](https://github.com/ericdke/na)")).to eq "ayadn"
     end
   end
 
