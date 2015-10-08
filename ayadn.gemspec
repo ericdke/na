@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = "eric@aya.io"
   spec.summary       = %q{App.net command-line client.}
   spec.description   = %q{App.net command-line client: toolbox to access and manage your ADN data, show your streams, post, manage conversations, star/follow/repost... and many, many more.}
-  spec.homepage      = "http://ayadn-app.net"
+  spec.homepage      = "https://github.com/ericdke/na"
   spec.license       = "MIT"
   spec.metadata      = { "documentation" => "https://github.com/ericdke/na/tree/master/doc" }
 

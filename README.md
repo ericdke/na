@@ -72,8 +72,6 @@ Author: [@ericd](http://app.net/ericd)
 
 App account: [@ayadn](http://app.net/ayadn)
 
-Website: [ayadn-app.net](http://ayadn-app.net)
-
 ADN Directory: [Ayadn](https://directory.app.net/app/345/ayadn/)
 
 # FEEDBACK

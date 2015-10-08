@@ -36,7 +36,7 @@ module Ayadn
         {
         "type" => "com.ayadn.client",
         "value" => {
-          "url" => "http://ayadn-app.net",
+          "url" => "https://github.com/ericdke/na",
           "author" => {
               "name" => "Eric Dejonckheere",
               "username" => "ericd",

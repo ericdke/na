@@ -59,7 +59,7 @@ module Ayadn
       when 200
         response
       when 204
-        puts "\nError: the NiceRank filter made too many requests to the server. You may either wait for a little while before scrolling the filtered Global again, or set the scroll timer to a greater value (example: `ayadn set scroll timer 5`). (see http://ayadn-app.net/doc).\n".color(:red)
+        puts "\nError: the NiceRank filter made too many requests to the server. You may either wait for a little while before scrolling the filtered Global again, or set the scroll timer to a greater value (example: `ayadn set scroll timer 5`). (see https://github.com/ericdke/na/tree/master/doc).\n".color(:red)
         Errors.global_error({error: "NiceRank: TOO MANY REQUESTS", caller: caller, data: [url, response.inspect, response.headers]})
       else
         response

@@ -6,8 +6,6 @@
 
 [@ayadn](http://app.net/ayadn)
 
-[ayadn-app.net](http://ayadn-app.net)
-
 ## THANK YOU
 
 This is a list of people who helped me developing Ayadn by giving me awesome feedback and support.
