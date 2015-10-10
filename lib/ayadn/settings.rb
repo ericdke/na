@@ -12,6 +12,12 @@ module Ayadn
     def self.load_config
       active = self.check_for_accounts
       home = active[3]
+      api_file = Dir.home + "/ayadn/.api.yml"
+      baseURL = if File.exist?(api_file)
+        YAML.load(File.read(api_file))[:root]
+      else
+        "https://api.app.net"
+      end
       @config = {
         paths: {
           home: home,
@@ -28,6 +34,9 @@ module Ayadn
           id: active[1],
           username: active[0],
           handle: active[2]
+        },
+        api: {
+          baseURL: baseURL
         }
       }
       @options = self.defaults

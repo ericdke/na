@@ -6,7 +6,12 @@ module Ayadn
 
     def initialize
       @ayadn_callback_url = "http://aya.io/ayadn/auth.html"
-      @base_url = "https://api.app.net/"
+      api_file = Dir.home + "/ayadn/.api.yml"
+      @base_url = if File.exist?(api_file)
+        YAML.load(File.read(api_file))[:root] + "/"
+      else
+        "https://api.app.net/"
+      end
       @config_api_url = @base_url + "config"
       @posts_url = @base_url + "posts/"
       @users_url = @base_url + "users/"

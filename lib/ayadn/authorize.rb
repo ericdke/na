@@ -5,13 +5,23 @@ module Ayadn
     def initialize
       @thor = Thor::Shell::Color.new # local statuses
       @status = Status.new # global statuses + utils
+      @baseURL = "https://api.app.net"
     end
 
-    def authorize
+    def authorize(options)
       puts "\n"
       if File.exist?(Dir.home + "/ayadn/accounts.db")
         @status.has_to_migrate
         exit
+      end
+      api_file = Dir.home + "/ayadn/.api.yml"
+      # overrides the default value
+      if File.exist?(api_file)
+        @baseURL = YAML.load(File.read(api_file))[:root]
+      end
+      # overrides the config file
+      if options["api"]
+        @baseURL = options["api"]
       end
       puts "\e[H\e[2J"
       show_link
@@ -133,7 +143,7 @@ module Ayadn
 
     def get_user(token)
       begin
-        JSON.parse(RestClient.get("https://api.app.net/users/me?access_token=#{token}", :verify_ssl => OpenSSL::SSL::VERIFY_NONE) {|response, request, result| response })
+        JSON.parse(RestClient.get("#{@baseURL}/users/me?access_token=#{token}", :verify_ssl => OpenSSL::SSL::VERIFY_NONE) {|response, request, result| response })
       rescue Exception => e
         @status.say do
           @thor.say_status :error, "connection problem", :red

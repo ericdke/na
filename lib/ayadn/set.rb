@@ -202,6 +202,45 @@ module Ayadn
       formats_config.save
     end
 
+    desc "api URL", "Set an alternative base URL for the API calls."
+    def api(*args)
+      if args[0]
+        begin
+          SetAPI.new.setURL(args[0])
+        rescue NoMethodError, ArgumentError
+          Status.new.error_missing_parameters
+          exit
+        rescue => e
+          raise e
+        end
+      else
+        Status.new.error_missing_parameters
+        exit
+      end
+    end
+
+  end
+
+  class SetAPI
+
+    def initialize
+      @category = 'api'
+      @thor = Thor::Shell::Color.new
+      @status = Status.new
+    end
+
+    def setURL(url)
+      File.write(Dir.home + "/ayadn/.api.yml", {root: url}.to_yaml)
+      log(url)
+    end
+
+    def log(url)
+      @status.say do
+        @thor.say_status(:updated, "API base URL", :cyan)
+        @thor.say_status(:content, url, :green)
+      end
+    end
+
   end
 
   class Validators

@@ -602,9 +602,10 @@ module Ayadn
     desc "authorize", "Authorize Ayadn (-AU)"
     map "-auth" => :authorize
     map "-AU" => :authorize
+    option :api, aliases: "-a", type: :array, desc: "Provide an alternative root URL for the API call."
     long_desc Descriptions.authorize
     def authorize
-      Authorize.new.authorize
+      Authorize.new.authorize(options)
     end
 
     desc "unauthorize @USERNAME", "Unauthorize an Ayadn user account (-UA)"
