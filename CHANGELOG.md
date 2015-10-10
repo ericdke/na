@@ -1,3 +1,8 @@
+## 2.2 - 2015-10-10 - 'Edge Of Tomorrow'
+
+- New: option to set an alternative base URL for the API calls (undocumented)
+- Deprecated: "ayadn-app.net" domain name (use GitHub repository)
+
 ## 2.1 - 2015-08-29 - 'Electric Boogaloo'
 
 - Fix: crash when scrolling Global with NiceRank
