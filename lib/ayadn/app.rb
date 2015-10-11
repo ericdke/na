@@ -4,7 +4,7 @@ module Ayadn
     package_name "Ayadn"
 
     begin
-      %w{action stream api search descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowplaying nowwatching tvshow annotations profile migration}.each { |r| require_relative "#{r}" }
+      %w{action stream api search descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowplaying nowwatching tvshow annotations profile migration diagnostics}.each { |r| require_relative "#{r}" }
     rescue Interrupt
       puts "\nExit: stopped by user while launching\n\n"
       exit
@@ -643,6 +643,11 @@ module Ayadn
       mig = Migration.new
       mig.all
     end
+
+    desc "check", "Run diagnostics (-dg)"
+    map "diagnostics" => :check
+    map "test" => :check
+    subcommand "check", Diagnostics
 
   end
 end
