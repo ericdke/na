@@ -1,5 +1,6 @@
 # encoding: utf-8
 module Ayadn
+
   class Diagnostics < Thor
 
     desc "nicerank", "Tests the NiceRank API"
@@ -16,16 +17,24 @@ module Ayadn
       obj.say_end
     end
 
+    desc "accounts", "Tests Ayadn accounts"
+    def accounts
+      obj = CheckAccounts.new
+      obj.check
+      obj.say_end
+    end
+
     desc "all", "Run all tests"
     def all
       obj = CheckNiceRank.new
       obj.check
       obj = CheckADN.new
       obj.check
-      
+      obj = CheckAccounts.new
+      obj.check
+
       obj.say_end
     end
-
   end
 
   class CheckBase
@@ -70,7 +79,7 @@ module Ayadn
     end
 
     def get_response(url)
-      RestClient.get(url) {|response, request, result| response}
+      @response = RestClient.get(url) {|response, request, result| response}
     end
 
     def check_response_code
@@ -79,8 +88,6 @@ module Ayadn
         say_green :status, "OK"
       else
         say_red :status, "#{code}"
-        say_end
-        exit
       end
     end
 
@@ -93,12 +100,14 @@ module Ayadn
       rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError => e
         say_error "connection problem"
         say_trace e
+      rescue Interrupt
+        say_error "operation canceled"
+        exit
       rescue => e
         say_error "unknown error"
         say_trace e
       end
     end
-
   end
 
   class CheckNiceRank < CheckBase
@@ -106,38 +115,138 @@ module Ayadn
     def check
       begin
         say_header "checking NiceRank server response"
-        @response = get_response "http://api.nice.social/user/nicerank?ids=1"
+        get_response "http://api.nice.social/user/nicerank?ids=1"
         check_response_code
         ratelimit = @response.headers[:x_ratelimit_remaining]
-        Integer(ratelimit) > 120 ? say_green(:ratelimit, "OK") : say_red(:ratelimit, ratelimit)
-      rescue Interrupt
-        say_error "operation canceled"
+        if ratelimit.nil?
+          raise "invalid server response"
+        else
+          Integer(ratelimit) > 120 ? say_green(:ratelimit, "OK") : say_red(:ratelimit, ratelimit)
+        end
       rescue => e
         rescue_network(e)
       end
     end
-
   end
 
   class CheckADN < CheckBase
 
     def check
       begin
+        check_root_api
         say_header "checking ADN server response"
-        @response = get_response "https://api.app.net/config"
+        get_response "https://api.app.net/config"
         check_response_code
-        if !JSON.parse(@response.body)["data"].nil?
-          say_green :config, "OK"
+        body = JSON.parse(@response.body)
+        if body.blank? || body["data"].blank?
+          say_red(:config, "no data")
         else
-          say_red :config, "no data"
+          say_green(:config, "OK")
         end
-      rescue Interrupt
-        say_error "operation canceled"
       rescue => e
         rescue_network(e)
       end
     end
 
+    def check_root_api
+      say_header("default root API endpoint")
+      api_file = Dir.home + "/ayadn/.api.yml"
+      baseURL = if File.exist?(api_file)
+        YAML.load(File.read(api_file))[:root]
+      else
+        "https://api.app.net"
+      end
+      say_green(:url, baseURL)
+    end
+  end
+
+  class CheckAccounts < CheckBase
+
+    attr_accessor :sql_path, :active_account, :db
+
+    def initialize
+      super
+      @sql_path = Dir.home + "/ayadn/accounts.sqlite"
+    end
+
+    def check
+      begin
+        say_header("checking accounts database")
+        find_active_account
+        users = @db.execute("SELECT * FROM Accounts")
+        if users.blank?
+          say_red(:abort, "no registered Ayadn users")
+        else
+          say_green(:accounts, users.map { |user| user[2] }.join(", "))
+          if @active_account.blank?
+            say_red(:warning, "no active account")
+          else
+            say_header("checking active account")
+            check_id_handle
+            token = @active_account[5]
+            if token.blank?
+              say_red(:missing, "authorization token")
+            else
+              say_green(:auth_token, token[0..20] + "...")
+            end
+            check_paths
+          end
+        end
+      rescue Interrupt
+        say_error "operation canceled"
+        exit
+      rescue Amalgalite::SQLite3::Error => e
+        say_error "database error"
+        say_trace e
+      rescue => e
+        say_error "unknown error"
+        say_trace e
+      end
+    end
+
+    def check_id_handle
+      id = @active_account[1]
+      say_green(:id, id)
+      # username = @active_account[0]
+      handle = @active_account[2]
+      say_green(:username, handle)
+    end
+
+    def check_paths
+      home = @active_account[3]
+      say_green(:path, home)
+      paths = {
+        log: "#{home}/log",
+        db: "#{home}/db",
+        config: "#{home}/config",
+        auth: "#{home}/auth",
+        downloads: "#{home}/downloads",
+        posts: "#{home}/posts",
+        messages: "#{home}/messages",
+        lists: "#{home}/lists"
+      }
+      paths.each do |key, value|
+        if Dir.exist?(value)
+          say_green(key, value)
+        else
+          say_red(:missing, value)
+        end
+      end
+    end
+
+    def find_active_account
+      if File.exist?(@sql_path)
+        say_green(:found, "database accounts file")
+        @db = Amalgalite::Database.new(@sql_path)
+        if @db.nil?
+          raise "accounts database is not readable"
+        else
+          @active_account = Databases.active_account(@db)
+        end
+      else
+        raise "accounts database is missing"
+      end
+    end
   end
 
 

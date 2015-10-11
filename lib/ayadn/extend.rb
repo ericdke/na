@@ -22,3 +22,8 @@ class Integer
     }.each_pair { |e, s| return "#{(self.to_f / (s / 1024)).round(2)} #{e}" if self < s }
   end
 end
+class Object
+  def blank?
+    respond_to?(:empty?) ? !!empty? : !self
+  end
+end
