@@ -162,7 +162,9 @@ module Ayadn
 
   class CheckAccounts < CheckBase
 
-    attr_accessor :sql_path, :active_account, :db
+    # require "pp"
+
+    attr_accessor :sql_path, :active_account, :db, :paths
 
     def initialize
       super
@@ -190,6 +192,7 @@ module Ayadn
               say_green(:auth_token, token[0..20] + "...")
             end
             check_paths
+            check_config
           end
         end
       rescue Interrupt
@@ -204,6 +207,43 @@ module Ayadn
       end
     end
 
+    def check_config
+      say_header("checking active account settings")
+      config_path = @paths[:config] + "/config.yml"
+      config = YAML.load(File.read(config_path))
+      if config.blank?
+        say_error("active user has no config file")
+      else
+        say_green(:found, "active user config file")
+        say_header("difference default/current")
+        diff = Settings.defaults.deep_diff(config)
+        if diff.blank?
+          say_green(:pass, "current user is using default values")
+        else
+          diff.each do |key, value|
+            if value.is_a?(Hash)
+              value.each do |inner_key, inner_value|
+                default = inner_value[0].nil? ? "none" : inner_value[0]
+                current = if inner_key == :deezer
+                  inner_value[1].nil? ? "none" : inner_value[1][:code][0..10] + "..."
+                else
+                  inner_value[1].nil? ? "none" : inner_value[1]
+                end
+                say_green(:changed, "#{key}/#{inner_key} - Default: #{default}, Current: #{current}")
+              end
+            else
+              default = value[0].nil? ? "none" : value[0]
+              if value[1].nil?
+                say_red(:missing, "#{key} - Default: #{default}, Current: none")
+              else
+                say_green(:changed, "#{key} - Default: #{default}, Current: #{value[1]}")
+              end
+            end
+          end
+        end
+      end
+    end
+
     def check_id_handle
       id = @active_account[1]
       say_green(:id, id)
@@ -215,17 +255,16 @@ module Ayadn
     def check_paths
       home = @active_account[3]
       say_green(:path, home)
-      paths = {
+      @paths = {
         log: "#{home}/log",
         db: "#{home}/db",
         config: "#{home}/config",
-        auth: "#{home}/auth",
         downloads: "#{home}/downloads",
         posts: "#{home}/posts",
         messages: "#{home}/messages",
         lists: "#{home}/lists"
       }
-      paths.each do |key, value|
+      @paths.each do |key, value|
         if Dir.exist?(value)
           say_green(key, value)
         else
