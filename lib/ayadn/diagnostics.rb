@@ -118,7 +118,7 @@ module Ayadn
         get_response "http://api.nice.social/user/nicerank?ids=1"
         check_response_code
         ratelimit = @response.headers[:x_ratelimit_remaining]
-        if ratelimit.nil?
+        if ratelimit.blank?
           raise "invalid server response"
         else
           Integer(ratelimit) > 120 ? say_green(:ratelimit, "OK") : say_red(:ratelimit, ratelimit)
@@ -147,6 +147,8 @@ module Ayadn
         rescue_network(e)
       end
     end
+
+    private
 
     def check_root_api
       say_header("default root API endpoint")
@@ -206,6 +208,8 @@ module Ayadn
         say_trace e
       end
     end
+
+    private
 
     def check_config
       say_header("checking active account settings")

@@ -26,9 +26,19 @@ Ayadn also works on Windows because it's pure Ruby, but some Gems it depends upo
 
 ## MIGRATE
 
+### From Ayadn 2.x to 3.x
+
+There's nothing to do, just update the Gem.
+
+### From Ayadn 1.x to 2.x
+
 If you have an old Ayadn 1.x install that you want to keep using with Ayadn 2.x, Ayadn 2.x will ask you to run the `migrate` command (once) for this account.
 
 Otherwise it's better to start with a fresh configuration: just delete your old 1.0 `~/ayadn` folder before authorizing the user again with Ayadn 2.x.
+
+### From Ayadn 1.x to 3.x
+
+Ayadn 3.x is not compatible at all with Ayadn 1.x. Delete your `~/ayadn` folder before authorizing the user again with Ayadn 3.x.
 
 ## DEPENDENCIES
 
@@ -46,4 +56,4 @@ Ayadn depends upon these Gems:
         unicode_utils (text utilities)
         daybreak (Ruby data store)
 
-*Note: the "daybreak" dependency is only needed for 1.x to 2.x migrations. As this migration is optional and Ayadn 1.x is deprecated, this dependency will be removed in future versions.*
+*Note: the "daybreak" dependency is only needed for 1.x to 2.x migrations. Deprecated since Ayadn 3.0.*

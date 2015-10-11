@@ -456,8 +456,8 @@ module Ayadn
 
     def has_to_migrate
       say do
-        @thor.say_status :upgrade, "Ayadn 1.x user data detected", :red
-        @thor.say_status :migrate,  "please run `ayadn migrate` to upgrade your account", :yellow
+        @thor.say_status :deprecated, "Ayadn 1.x user data detected", :red
+        @thor.say_status :warning,  "please delete your old ayadn folder then try again", :yellow
       end
     end
 

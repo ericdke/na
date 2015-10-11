@@ -4,7 +4,7 @@ module Ayadn
     package_name "Ayadn"
 
     begin
-      %w{action stream api search descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowplaying nowwatching tvshow annotations profile migration diagnostics}.each { |r| require_relative "#{r}" }
+      %w{action stream api search descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowplaying nowwatching tvshow annotations profile diagnostics}.each { |r| require_relative "#{r}" }
     rescue Interrupt
       puts "\nExit: stopped by user while launching\n\n"
       exit
@@ -634,14 +634,6 @@ module Ayadn
     map "-v" => :version
     def version
       Action.new.version
-    end
-
-    desc "migrate", "Migrate databases (upgrade accounts)", :hide => true
-    map "upgrade" => :migrate
-    long_desc Descriptions.migrate
-    def migrate
-      mig = Migration.new
-      mig.all
     end
 
     desc "diagnostics", "Run diagnostics (-dg)"

@@ -55,7 +55,7 @@ module Ayadn
           status.has_to_migrate
           exit
         else
-          # Ayadn 1.x without any authorized account (gem installed but no ~/ayadn folder)
+          # Ayadn without any authorized account (gem installed but no ~/ayadn folder)
           status.not_authorized
           exit
         end

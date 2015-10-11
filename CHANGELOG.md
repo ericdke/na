@@ -1,8 +1,9 @@
-## 2.2 - 2015-10-11 - 'Edge Of Tomorrow'
+## 3.0 - 2015-10-11 - 'Edge Of Tomorrow'
 
 - New: run diagnostics (network, accounts, settings)
 - New: option to set an alternative base URL for the API calls (undocumented)
 - Deprecated: "ayadn-app.net" domain name (use GitHub repository)
+- Deprecated: Ayadn 1.x migration tools
 
 ## 2.1 - 2015-08-29 - 'Electric Boogaloo'
 

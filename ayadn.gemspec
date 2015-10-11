@@ -26,7 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rest-client", "~> 1.7"
   spec.add_dependency "rainbow", "~> 2.0"
   spec.add_dependency "terminal-table", "~> 1.4"
-  spec.add_dependency "daybreak", "~> 0.3"
   spec.add_dependency "pinboard", "~> 0.1"
   spec.add_dependency "unicode_utils", "~> 1.4"
   spec.add_dependency "spotlite", "~> 0.8"
