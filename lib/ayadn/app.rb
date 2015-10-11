@@ -644,10 +644,11 @@ module Ayadn
       mig.all
     end
 
-    desc "check", "Run diagnostics (-dg)"
-    map "diagnostics" => :check
-    map "test" => :check
-    subcommand "check", Diagnostics
+    desc "diagnostics", "Run diagnostics (-dg)"
+    map "-dg" => :diagnostics
+    map "check" => :diagnostics
+    map "test" => :diagnostics
+    subcommand "diagnostics", Diagnostics
 
   end
 end

@@ -17,7 +17,7 @@ module Ayadn
       obj.say_end
     end
 
-    desc "accounts", "Tests Ayadn accounts"
+    desc "accounts", "Tests registered Ayadn accounts"
     def accounts
       obj = CheckAccounts.new
       obj.check
@@ -26,9 +26,9 @@ module Ayadn
 
     desc "all", "Run all tests"
     def all
-      obj = CheckNiceRank.new
-      obj.check
       obj = CheckADN.new
+      obj.check
+      obj = CheckNiceRank.new
       obj.check
       obj = CheckAccounts.new
       obj.check
