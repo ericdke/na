@@ -4,12 +4,26 @@ module Ayadn
 
     desc "nicerank", "Tests the NiceRank API"
     def nicerank
-      CheckNiceRank.new.check
+      obj = CheckNiceRank.new
+      obj.check
+      obj.say_end
     end
 
     desc "adn", "Tests the App.net API"
     def adn
-      CheckADN.new.check
+      obj = CheckADN.new
+      obj.check
+      obj.say_end
+    end
+
+    desc "all", "Run all tests"
+    def all
+      obj = CheckNiceRank.new
+      obj.check
+      obj = CheckADN.new
+      obj.check
+      
+      obj.say_end
     end
 
   end
@@ -51,6 +65,10 @@ module Ayadn
       @status.say { puts text }
     end
 
+    def say_trace(message)
+      @status.say { @thor.say_status :message, message, :yellow }
+    end
+
     def get_response(url)
       RestClient.get(url) {|response, request, result| response}
     end
@@ -66,8 +84,22 @@ module Ayadn
       end
     end
 
-  end
+    def rescue_network(error)
+      begin
+        raise error
+      rescue RestClient::RequestTimeout => e
+        say_error "connection timeout"
+        say_trace e
+      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError => e
+        say_error "connection problem"
+        say_trace e
+      rescue => e
+        say_error "unknown error"
+        say_trace e
+      end
+    end
 
+  end
 
   class CheckNiceRank < CheckBase
 
@@ -78,18 +110,10 @@ module Ayadn
         check_response_code
         ratelimit = @response.headers[:x_ratelimit_remaining]
         Integer(ratelimit) > 120 ? say_green(:ratelimit, "OK") : say_red(:ratelimit, ratelimit)
-        say_end
-      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError => e
-        say_error "connection problem"
-        say_text e
-      rescue RestClient::RequestTimeout => e
-        say_error "connection timeout"
-        say_text e
       rescue Interrupt
         say_error "operation canceled"
       rescue => e
-        say_error "unknown error"
-        say_text e
+        rescue_network(e)
       end
     end
 
@@ -106,21 +130,11 @@ module Ayadn
           say_green :config, "OK"
         else
           say_red :config, "no data"
-          say_end
-          exit
         end
-        say_end
-      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError => e
-        say_error "connection problem"
-        say_text e
-      rescue RestClient::RequestTimeout => e
-        say_error "connection timeout"
-        say_text e
       rescue Interrupt
         say_error "operation canceled"
       rescue => e
-        say_error "unknown error"
-        say_text e
+        rescue_network(e)
       end
     end
 
