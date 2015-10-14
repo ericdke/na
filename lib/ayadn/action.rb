@@ -895,14 +895,6 @@ module Ayadn
       end
     end
 
-    def version
-      begin
-        @status.version
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: []})
-      end
-    end
-
     private
 
     def save_and_view(resp)

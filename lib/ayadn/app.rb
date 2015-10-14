@@ -633,7 +633,7 @@ module Ayadn
     desc "version", "Show the current Ayadn version (-v)"
     map "-v" => :version
     def version
-      Action.new.version
+      Status.new.version
     end
 
     desc "diagnostics", "Run diagnostics (-dg)"
