@@ -313,7 +313,7 @@ module Ayadn
     def not_authorized
       say do
         @thor.say_status :error, "no user authorized", :red
-        @thor.say_status :auth, "please run `ayadn -auth` to authorize an account", :yellow
+        @thor.say_status :info, "please run `ayadn -auth` to authorize an account", :cyan
       end
     end
 
