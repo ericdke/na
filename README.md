@@ -66,7 +66,7 @@ Uninstall:
 
 [In the /doc folder of the repo](https://github.com/ericdke/na/tree/master/doc)
 
-## FORK
+# FORK
 
 If you're using Ayadn's source to make your own client or embedded in an application, don't forget to change the client ID in "settings.rb" (see inside the file for details).
 
