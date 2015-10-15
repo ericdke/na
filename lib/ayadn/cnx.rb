@@ -6,7 +6,16 @@ module Ayadn
       working = true
       begin
         RestClient.get(url) {|response, request, result| response}
-      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError, RestClient::RequestTimeout => e
+      rescue RestClient::RequestTimeout => e
+        thor = Thor::Shell::Color.new
+        thor.say_status :error, "connection timeout", :red
+        if working == true
+          working = false
+          thor.say_status :info, "trying again", :yellow
+          retry
+        end
+        Errors.global_error({error: e, caller: caller, data: [url]})
+      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError => e
         thor = Thor::Shell::Color.new
         if working == true
           working = false
@@ -74,7 +83,15 @@ module Ayadn
           Debug.http response, url
           check response
         end
-      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError, RestClient::RequestTimeout => e
+      rescue RestClient::RequestTimeout => e
+        thor = Thor::Shell::Color.new
+        thor.say_status :error, "connection timeout", :red
+        if try_cnx < 4
+          try_cnx = retry_adn 5, try_cnx
+          retry
+        end
+        Errors.global_error({error: e, caller: caller, data: [url]})
+      rescue SocketError, SystemCallError, OpenSSL::SSL::SSLError => e
         if try_cnx < 4
           try_cnx = retry_adn 10, try_cnx
           retry

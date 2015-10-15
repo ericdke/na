@@ -1,7 +1,7 @@
 ## 3.0 - [WIP] - 'Edge Of Tomorrow'
 
 - New: option to set an alternative base URL for the API calls
-- New: run diagnostics (network, accounts and settings)
+- New: run diagnostics (network, accounts, settings, gem)
 - Fixed: --version if no user authorized
 - Deprecated: Ayadn 1.x migration tools
 - Deprecated: "ayadn-app.net" domain name (use GitHub repository)

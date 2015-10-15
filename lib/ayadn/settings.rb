@@ -52,7 +52,7 @@ module Ayadn
       else
         if File.exist?(Dir.home + "/ayadn/accounts.db")
           # Ayadn 1.x with already authorized account(s)
-          status.has_to_migrate
+          status.deprecated_ayadn
           exit
         else
           # Ayadn without any authorized account (gem installed but no ~/ayadn folder)

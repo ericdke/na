@@ -24,15 +24,23 @@ module Ayadn
       obj.say_end
     end
 
+    desc "ayadn", "Tests the Ayadn Gem"
+    def ayadn
+      obj = CheckAyadn.new
+      obj.check
+      obj.say_end
+    end
+
     desc "all", "Run all tests"
     def all
       obj = CheckADN.new
       obj.check
-      obj = CheckNiceRank.new
+      obj = CheckAyadn.new
       obj.check
       obj = CheckAccounts.new
       obj.check
-
+      obj = CheckNiceRank.new
+      obj.check
       obj.say_end
     end
   end
@@ -292,5 +300,36 @@ module Ayadn
     end
   end
 
+  class CheckAyadn < CheckBase
+
+    attr_accessor :response
+
+    def check
+      begin
+        say_header "checking RubyGems server response"
+        get_response "https://rubygems.org/api/v1/gems/ayadn.json"
+        check_response_code
+        say_header "checking Ayadn version"
+        info = JSON.parse(@response.body)
+        live = info["version"]
+        say_green(:live, "version #{live}")
+        if live != VERSION
+          say_red(:local, "version #{VERSION}")
+          @status.say { @thor.say_status :update, "run 'gem update ayadn' to get the last version", :yellow }
+        else
+          say_green(:local, "version #{VERSION}")
+        end
+      rescue JSON::ParserError => e
+        say_error "JSON error"
+        say_trace e
+      rescue Interrupt
+        say_error "operation canceled"
+        exit
+      rescue => e
+        rescue_network(e)
+      end
+    end
+
+  end
 
 end

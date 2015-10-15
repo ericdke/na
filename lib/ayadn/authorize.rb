@@ -5,13 +5,13 @@ module Ayadn
     def initialize
       @thor = Thor::Shell::Color.new # local statuses
       @status = Status.new # global statuses + utils
-      @baseURL = "https://api.app.net"
+      @baseURL = "https://api.app.net" # may be overriden
     end
 
     def authorize(options)
       puts "\n"
       if File.exist?(Dir.home + "/ayadn/accounts.db")
-        @status.has_to_migrate
+        @status.deprecated_ayadn
         exit
       end
       api_file = Dir.home + "/ayadn/.api.yml"

@@ -36,9 +36,14 @@ module Ayadn
     end
 
     def get_explore(explore, options)
-      url = Endpoints.new.trending(options) if explore == :trending
-      url = Endpoints.new.photos(options) if explore == :photos
-      url = Endpoints.new.conversations(options) if explore == :conversations
+      url = case explore
+      when :trending
+        Endpoints.new.trending(options)
+      when :photos
+        Endpoints.new.photos(options)
+      when :conversations
+        Endpoints.new.conversations(options)
+      end
       get_parsed_response(url)
     end
 
