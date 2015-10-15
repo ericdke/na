@@ -224,7 +224,7 @@ module Ayadn
   class SetAPI
 
     def initialize
-      @category = 'api'
+      @category = 'API'
       @thor = Thor::Shell::Color.new
       @status = Status.new
     end
@@ -239,6 +239,7 @@ module Ayadn
         @thor.say_status(:updated, "API base URL", :cyan)
         @thor.say_status(:content, url, :green)
       end
+      Logs.rec.info "new value for 'set URL' in '#{@category}' => '#{url}'"
     end
 
   end

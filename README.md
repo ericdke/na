@@ -66,6 +66,16 @@ Uninstall:
 
 [In the /doc folder of the repo](https://github.com/ericdke/na/tree/master/doc)
 
+## FORK
+
+If you're using Ayadn's source to make your own client or embedded in an application, don't forget to change the client ID in "settings.rb" (see inside the file for details).
+
+This is the only mandatory action. Ayadn's code is MIT licenced and free to use and modify as long as you follow the licence terms.  
+
+# FEEDBACK
+
+Feedback and/or contributions are very welcomed!
+
 # CONTACT
 
 Author: [@ericd](http://app.net/ericd)
@@ -73,10 +83,6 @@ Author: [@ericd](http://app.net/ericd)
 App account: [@ayadn](http://app.net/ayadn)
 
 ADN Directory: [Ayadn](https://directory.app.net/app/345/ayadn/)
-
-# FEEDBACK
-
-Feedback and/or contributions are very welcomed!
 
 # SCREENSHOTS
 

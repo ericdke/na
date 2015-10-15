@@ -2,6 +2,11 @@
 module Ayadn
   class Settings
 
+    # Replace with your own client ID if you forked this code
+    # 
+    # Otherwise your posts will be annotated with Ayadn's informations
+    # instead of yours and App.net could ban your account
+    # 
     AYADN_CLIENT_ID = "hFsCGArAjgJkYBHTHbZnUvzTmL4vaLHL"
 
     class << self
