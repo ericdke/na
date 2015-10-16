@@ -4,7 +4,7 @@ module Ayadn
     package_name "Ayadn"
 
     begin
-      %w{action stream api search descriptions endpoints cnx view workers settings post status extend databases fileops logs pinboard set alias errors blacklist scroll authorize switch mark nicerank debug check nowplaying nowwatching tvshow annotations profile diagnostics}.each { |r| require_relative "#{r}" }
+      %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs set alias errors blacklist mark nicerank debug check diagnostics}.each { |r| require_relative "#{r}" }
     rescue Interrupt
       puts "\nExit: stopped by user while launching\n\n"
       exit
@@ -254,6 +254,7 @@ module Ayadn
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already"
     def hashtag(hashtag)
+      require_relative("search")
       Action.new.hashtag(hashtag, options)
     end
 
@@ -271,6 +272,7 @@ module Ayadn
     option :channels, type: :boolean, desc: 'Search for App.net channels by searching WORD(S) in their description.'
     option :annotations, type: :boolean, desc: 'Search for posts containing a specific App.net annotation.'
     def search(*words)
+      require_relative("search")
       Action.new.search(words.join(","), options)
     end
 
@@ -304,6 +306,7 @@ module Ayadn
     option :avatar, type: :array, desc: "Update your avatar picture"
     option :cover, type: :array, desc: "Update your cover picture"
     def userupdate
+      require_relative("profile")
       Action.new.userupdate(options)
     end
 
@@ -455,6 +458,7 @@ module Ayadn
     long_desc Descriptions.pin
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     def pin(post_id, *tags)
+      require_relative("pinboard")
       Action.new.pin(post_id, tags, options)
     end
 
@@ -566,6 +570,7 @@ module Ayadn
     option :text, aliases: "-t", type: :array, desc: "Add custom text"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def nowplaying
+      require_relative("nowplaying")
       Action.new.nowplaying(options)
     end
 
@@ -577,6 +582,7 @@ module Ayadn
     option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def movie(*title)
+      require_relative("nowwatching")
       Action.new.nowwatching(title, options)
     end
 
@@ -587,6 +593,7 @@ module Ayadn
     option :banner, aliases: "-b", type: :boolean, desc: "Inserts the show banner instead of the show poster"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def tvshow(*title)
+      require_relative("tvshow")
       Action.new.tvshow(title, options)
     end
 
@@ -605,6 +612,8 @@ module Ayadn
     option :api, aliases: "-a", type: :array, desc: "Provide an alternative root URL for the API call."
     long_desc Descriptions.authorize
     def authorize
+      require_relative("authorize")
+      require_relative("switch")
       Authorize.new.authorize(options)
     end
 
@@ -614,6 +623,8 @@ module Ayadn
     option :delete, aliases: "-D", type: :boolean, desc: "Deletes user folders (default: false)"
     long_desc Descriptions.unauthorize
     def unauthorize(*user)
+      require_relative("authorize")
+      require_relative("switch")
       Authorize.new.unauthorize(user, options)
     end
 
@@ -623,6 +634,7 @@ module Ayadn
     option :list, aliases: "-l", type: :boolean, desc: "List authorized accounts"
     long_desc Descriptions.switch
     def switch(*username)
+      require_relative("switch")
       unless options[:list]
         Switch.new.switch(username)
       else

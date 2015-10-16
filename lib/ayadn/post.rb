@@ -2,6 +2,8 @@
 module Ayadn
   class Post
 
+    require_relative "annotations"
+
     def initialize
       @status = Status.new
     end

@@ -2,6 +2,8 @@
 module Ayadn
   class NiceRank
 
+    require "fast_cache"
+
     attr_reader :store
 
     def initialize

@@ -6,6 +6,8 @@ module Ayadn
     # This class is the main initializer + dispatcher
     # It responds to the CLI commands dispatcher, app.rb
 
+    require_relative "stream"
+
     def initialize
       @api = API.new
       @view = View.new
@@ -466,6 +468,12 @@ module Ayadn
         response = details.call
         @check.no_post(response, post_id)
         resp = response['data']
+
+        if resp["is_deleted"] == true
+          @status.user_404(resp["id"])
+          Errors.global_error({error: "user 404", caller: caller, data: [post_id, options]})
+        end
+
         response = @api.get_user("@#{resp['user']['username']}")
         @check.no_user(response, response['data']['username'])
         stream = response['data']

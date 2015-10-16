@@ -3,6 +3,8 @@ module Ayadn
 
   class Stream
 
+    require_relative("scroll")
+
     def initialize api, view, workers
       @api = api
       @view = view
