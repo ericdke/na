@@ -172,9 +172,7 @@ module Ayadn
 
   class CheckAccounts < CheckBase
 
-    # require "pp"
-
-    attr_accessor :sql_path, :active_account, :db, :paths
+    attr_accessor :sql_path, :active_account, :db, :paths, :handle, :userDB
 
     def initialize
       super
@@ -203,6 +201,103 @@ module Ayadn
             end
             check_paths
             check_config
+          end
+        end
+
+        say_header("checking #{@handle}'s account database")
+        find_active_tables
+
+        say_header("checking tables schemas")
+        if @userDB.schema.tables.count != 6
+          raise "#{@handle}'s account database is corrupted"
+        end
+
+        @userDB.schema.tables.each do |a|
+          # say_green a[0].to_sym, a[1].columns.map { |name, data| "#{name}: #{data.declared_data_type}" }.join(", ")
+          say_info "checking table #{a[0]}"
+          case a[0]
+          when "Bookmarks"
+            if a[1].columns.count != 2
+              raise "#{a[0]} table is corrupted"
+            end
+            a[1].columns.each do |name, data|
+              if name == "post_id" && data.declared_data_type == "INTEGER"
+                say_green(name.to_sym, "OK")
+              elsif name == "bookmark" && data.declared_data_type == "TEXT"
+                say_green(name.to_sym, "OK")
+              else
+                raise "#{a[0]} table is corrupted"
+              end
+            end
+          when "Aliases"
+            if a[1].columns.count != 2
+              raise "#{a[0]} table is corrupted"
+            end
+            a[1].columns.each do |name, data|
+              if name == "channel_id" && data.declared_data_type == "INTEGER"
+                say_green(name.to_sym, "OK")
+              elsif name == "alias" && data.declared_data_type == "VARCHAR(255)"
+                say_green(name.to_sym, "OK")
+              else
+                raise "#{a[0]} table is corrupted"
+              end
+            end
+          when "Blacklist"
+            if a[1].columns.count != 2
+              raise "#{a[0]} table is corrupted"
+            end
+            a[1].columns.each do |name, data|
+              if name == "type" && data.declared_data_type == "VARCHAR(255)"
+                say_green(name.to_sym, "OK")
+              elsif name == "content" && data.declared_data_type == "TEXT"
+                say_green(name.to_sym, "OK")
+              else
+                raise "#{a[0]} table is corrupted"
+              end
+            end
+          when "Users"
+            if a[1].columns.count != 3
+              raise "#{a[0]} table is corrupted"
+            end
+            a[1].columns.each do |name, data|
+              if name == "user_id" && data.declared_data_type == "INTEGER"
+                say_green(name.to_sym, "OK")
+              elsif name == "username" && data.declared_data_type == "VARCHAR(20)"
+                say_green(name.to_sym, "OK")
+              elsif name == "name" && data.declared_data_type == "TEXT"
+                say_green(name.to_sym, "OK")
+              else
+                raise "#{a[0]} table is corrupted"
+              end
+            end
+          when "Pagination"
+            if a[1].columns.count != 2
+              raise "#{a[0]} table is corrupted"
+            end
+            a[1].columns.each do |name, data|
+              if name == "name" && data.declared_data_type == "TEXT"
+                say_green(name.to_sym, "OK")
+              elsif name == "post_id" && data.declared_data_type == "INTEGER"
+                say_green(name.to_sym, "OK")
+              else
+                raise "#{a[0]} table is corrupted"
+              end
+            end
+          when "TLIndex"
+            if a[1].columns.count != 3
+              raise "#{a[0]} table is corrupted"
+            end
+            a[1].columns.each do |name, data|
+              if name == "count" && data.declared_data_type == "INTEGER"
+                say_green(name.to_sym, "OK")
+              elsif name == "post_id" && data.declared_data_type == "INTEGER"
+                say_green(name.to_sym, "OK")
+              elsif name == "content" && data.declared_data_type == "TEXT"
+                say_green(name.to_sym, "OK")
+              else
+                raise "#{a[0]} table is corrupted"
+              end
+            end
           end
         end
       rescue Interrupt
@@ -260,8 +355,8 @@ module Ayadn
       id = @active_account[1]
       say_green(:id, id)
       # username = @active_account[0]
-      handle = @active_account[2]
-      say_green(:username, handle)
+      @handle = @active_account[2]
+      say_green(:username, @handle)
     end
 
     def check_paths
@@ -296,6 +391,19 @@ module Ayadn
         end
       else
         raise "accounts database is missing"
+      end
+    end
+
+    def find_active_tables
+      tables_path = @paths[:db] + "/ayadn.sqlite"
+      if File.exist?(tables_path)
+        say_green(:found, "#{@handle}'s database file")
+        @userDB = Amalgalite::Database.new(tables_path)
+        if @userDB.nil?
+          raise "#{@handle}'s database is not readable"
+        end
+      else
+        raise "#{@handle}'s database is missing"
       end
     end
   end
