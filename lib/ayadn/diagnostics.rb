@@ -193,120 +193,12 @@ module Ayadn
             else
               say_header("checking active account")
               check_id_handle
-              token = @active_account[5]
-              if token.blank?
-                say_red(:missing, "authorization token")
-              else
-                say_green(:auth_token, token[0..20] + "...")
-              end
+              check_token
               check_paths
               check_config
               say_header("checking #{@handle}'s account database")
               if find_active_tables == true
-                say_header("checking tables schemas")
-                if @userDB.schema.tables.count != 6
-                  say_red :error, "#{@handle}'s account database is corrupted"
-                else
-                  @userDB.schema.tables.each do |a|
-                    say_info "checking table #{a[0]}"
-                    case a[0]
-                    when "Bookmarks"
-                      if a[1].columns.count != 2
-                        say_red :error, "#{a[0]} table is corrupted"
-                      else
-                        a[1].columns.each do |name, data|
-                          if name == "post_id" && data.declared_data_type == "INTEGER"
-                            say_green(name.to_sym, "OK")
-                          elsif name == "bookmark" && data.declared_data_type == "TEXT"
-                            say_green(name.to_sym, "OK")
-                          else
-                            say_red :error, "#{a[0]} table is corrupted"
-                            break
-                          end
-                        end
-                      end
-                    when "Aliases"
-                      if a[1].columns.count != 2
-                        say_red :error, "#{a[0]} table is corrupted"
-                      else
-                        a[1].columns.each do |name, data|
-                          if name == "channel_id" && data.declared_data_type == "INTEGER"
-                            say_green(name.to_sym, "OK")
-                          elsif name == "alias" && data.declared_data_type == "VARCHAR(255)"
-                            say_green(name.to_sym, "OK")
-                          else
-                            say_red :error, "#{a[0]} table is corrupted"
-                            break
-                          end
-                        end
-                      end
-                    when "Blacklist"
-                      if a[1].columns.count != 2
-                        say_red :error, "#{a[0]} table is corrupted"
-                      else
-                        a[1].columns.each do |name, data|
-                          if name == "type" && data.declared_data_type == "VARCHAR(255)"
-                            say_green(name.to_sym, "OK")
-                          elsif name == "content" && data.declared_data_type == "TEXT"
-                            say_green(name.to_sym, "OK")
-                          else
-                            say_red :error, "#{a[0]} table is corrupted"
-                            break
-                          end
-                        end
-                      end
-                    when "Users"
-                      if a[1].columns.count != 3
-                        say_red :error, "#{a[0]} table is corrupted"
-                      else
-                        a[1].columns.each do |name, data|
-                          if name == "user_id" && data.declared_data_type == "INTEGER"
-                            say_green(name.to_sym, "OK")
-                          elsif name == "username" && data.declared_data_type == "VARCHAR(20)"
-                            say_green(name.to_sym, "OK")
-                          elsif name == "name" && data.declared_data_type == "TEXT"
-                            say_green(name.to_sym, "OK")
-                          else
-                            say_red :error, "#{a[0]} table is corrupted"
-                            break
-                          end
-                        end
-                      end
-                    when "Pagination"
-                      if a[1].columns.count != 2
-                        say_red :error, "#{a[0]} table is corrupted"
-                      else
-                        a[1].columns.each do |name, data|
-                          if name == "name" && data.declared_data_type == "TEXT"
-                            say_green(name.to_sym, "OK")
-                          elsif name == "post_id" && data.declared_data_type == "INTEGER"
-                            say_green(name.to_sym, "OK")
-                          else
-                            say_red :error, "#{a[0]} table is corrupted"
-                            break
-                          end
-                        end
-                      end
-                    when "TLIndex"
-                      if a[1].columns.count != 3
-                        say_red :error, "#{a[0]} table is corrupted"
-                      else
-                        a[1].columns.each do |name, data|
-                          if name == "count" && data.declared_data_type == "INTEGER"
-                            say_green(name.to_sym, "OK")
-                          elsif name == "post_id" && data.declared_data_type == "INTEGER"
-                            say_green(name.to_sym, "OK")
-                          elsif name == "content" && data.declared_data_type == "TEXT"
-                            say_green(name.to_sym, "OK")
-                          else
-                            say_red :error, "#{a[0]} table is corrupted"
-                            break
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
+                check_tables_schemas
               end
             end
           end
@@ -324,6 +216,158 @@ module Ayadn
     end
 
     private
+
+    def check_token
+      token = @active_account[5]
+      if token.blank?
+        say_red(:missing, "authorization token")
+      else
+        say_green(:auth_token, token[0..20] + "...")
+      end
+    end
+
+    def check_tables_schemas
+      say_header("checking tables schemas")
+      if @userDB.schema.tables.count != 6
+        say_red :error, "#{@handle}'s account database is corrupted"
+      else
+        @userDB.schema.tables.each do |table|
+          say_info "checking table #{table[0]}"
+          case table[0]
+          when "Bookmarks"
+            break if check_bookmarks(table) == false
+          when "Aliases"
+            break if check_aliases(table) == false
+          when "Blacklist"
+            break if check_blacklist(table) == false
+          when "Users"
+            break if check_users(table) == false
+          when "Pagination"
+            break if check_pagination(table) == false
+          when "TLIndex"
+            break if check_TLIndex(table) == false
+          end
+        end
+      end
+    end
+
+    def check_bookmarks(table)
+      if table[1].columns.count != 2
+        say_red :error, "#{table[0]} table is corrupted"
+        return false
+      else
+        table[1].columns.each do |name, data|
+          if name == "post_id" && data.declared_data_type == "INTEGER"
+            say_green(name.to_sym, "OK")
+          elsif name == "bookmark" && data.declared_data_type == "TEXT"
+            say_green(name.to_sym, "OK")
+          else
+            say_red :error, "#{table[0]} table is corrupted"
+            return false
+          end
+        end
+      end
+      return true
+    end
+
+    def check_aliases(table)
+      if table[1].columns.count != 2
+        say_red :error, "#{table[0]} table is corrupted"
+        return false
+      else
+        table[1].columns.each do |name, data|
+          if name == "channel_id" && data.declared_data_type == "INTEGER"
+            say_green(name.to_sym, "OK")
+          elsif name == "alias" && data.declared_data_type == "VARCHAR(255)"
+            say_green(name.to_sym, "OK")
+          else
+            say_red :error, "#{table[0]} table is corrupted"
+            return false
+          end
+        end
+      end
+      return true
+    end
+
+    def check_blacklist(table)
+      if table[1].columns.count != 2
+        say_red :error, "#{table[0]} table is corrupted"
+        return false
+      else
+        table[1].columns.each do |name, data|
+          if name == "type" && data.declared_data_type == "VARCHAR(255)"
+            say_green(name.to_sym, "OK")
+          elsif name == "content" && data.declared_data_type == "TEXT"
+            say_green(name.to_sym, "OK")
+          else
+            say_red :error, "#{table[0]} table is corrupted"
+            return false
+          end
+        end
+      end
+      return true
+    end
+
+    def check_users(table)
+      if table[1].columns.count != 3
+        say_red :error, "#{table[0]} table is corrupted"
+        return false
+      else
+        table[1].columns.each do |name, data|
+          if name == "user_id" && data.declared_data_type == "INTEGER"
+            say_green(name.to_sym, "OK")
+          elsif name == "username" && data.declared_data_type == "VARCHAR(20)"
+            say_green(name.to_sym, "OK")
+          elsif name == "name" && data.declared_data_type == "TEXT"
+            say_green(name.to_sym, "OK")
+          else
+            say_red :error, "#{table[0]} table is corrupted"
+            return false
+          end
+        end
+      end
+      return true
+    end
+
+    def check_pagination(table)
+      if table[1].columns.count != 2
+        say_red :error, "#{table[0]} table is corrupted"
+        return false
+      else
+        table[1].columns.each do |name, data|
+          if name == "name" && data.declared_data_type == "TEXT"
+            say_green(name.to_sym, "OK")
+          elsif name == "post_id" && data.declared_data_type == "INTEGER"
+            say_green(name.to_sym, "OK")
+          else
+            say_red :error, "#{table[0]} table is corrupted"
+            return false
+          end
+        end
+      end
+      return true
+    end
+
+    def check_TLIndex(table)
+      if table[1].columns.count != 3
+        say_red :error, "#{table[0]} table is corrupted"
+        return false
+      else
+        table[1].columns.each do |name, data|
+          if name == "count" && data.declared_data_type == "INTEGER"
+            say_green(name.to_sym, "OK")
+          elsif name == "post_id" && data.declared_data_type == "INTEGER"
+            say_green(name.to_sym, "OK")
+          elsif name == "content" && data.declared_data_type == "TEXT"
+            say_green(name.to_sym, "OK")
+          else
+            say_red :error, "#{table[0]} table is corrupted"
+            return false
+          end
+        end
+      end
+      return true
+    end
 
     def check_config
       say_header("checking active account settings")
