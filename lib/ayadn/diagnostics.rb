@@ -274,7 +274,7 @@ module Ayadn
                       end
                     when "Pagination"
                       if a[1].columns.count != 2
-                        say_red "#{a[0]} table is corrupted"
+                        say_red :error, "#{a[0]} table is corrupted"
                       else
                         a[1].columns.each do |name, data|
                           if name == "name" && data.declared_data_type == "TEXT"
@@ -289,7 +289,7 @@ module Ayadn
                       end
                     when "TLIndex"
                       if a[1].columns.count != 3
-                        say_red "#{a[0]} table is corrupted"
+                        say_red :error, "#{a[0]} table is corrupted"
                       else
                         a[1].columns.each do |name, data|
                           if name == "count" && data.declared_data_type == "INTEGER"
