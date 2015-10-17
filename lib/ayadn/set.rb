@@ -225,7 +225,6 @@ module Ayadn
 
     def initialize
       @category = 'API'
-      @thor = Thor::Shell::Color.new
       @status = Status.new
     end
 
@@ -236,8 +235,8 @@ module Ayadn
 
     def log(url)
       @status.say do
-        @thor.say_status(:updated, "API base URL", :cyan)
-        @thor.say_status(:content, url, :green)
+        @status.say_cyan :updated, "API base URL"
+        @status.say_green :content, url
       end
       Logs.rec.info "new value for 'set URL' in '#{@category}' => '#{url}'"
     end
@@ -311,7 +310,6 @@ module Ayadn
       Settings.get_token()
       Settings.init_config()
       Logs.create_logger()
-      @thor = Thor::Shell::Color.new
       @status = Status.new
     end
 
@@ -322,8 +320,8 @@ module Ayadn
 
     def log
       @status.say do
-        @thor.say_status(:updated, "'#{@input}' in '#{@category}'", :cyan)
-        @thor.say_status(:content, "'#{@output}'", :green)
+        @status.say_cyan :updated, "'#{@input}' in '#{@category}'"
+        @status.say_green :content, "'#{@output}'"
       end
       Logs.rec.info "new value for '#{@input}' in '#{@category}' => '#{@output}'"
     end

@@ -13,7 +13,7 @@ module Ayadn
     def canceled
       say do
         puts "\n"
-        @thor.say_status :canceled, "", :red
+        say_red :canceled, ""
       end
     end
 
@@ -34,51 +34,51 @@ module Ayadn
     end
 
     def deleting_post(post_id)
-      @thor.say_status :deleting, "post #{post_id}", :yellow
+      say_yellow :deleting, "post #{post_id}"
     end
 
     def deleting_message(message_id)
-      @thor.say_status :deleting, "message #{message_id}", :yellow
+      say_yellow :deleting, "message #{message_id}"
     end
 
     def unfollowing(username)
-      @thor.say_status :unfollowing, username, :yellow
+      say_yellow :unfollowing, username
     end
 
     def following(username)
-      @thor.say_status :following, username, :yellow
+      say_yellow :following, username
     end
 
     def unmuting(username)
-      @thor.say_status :unmuting, username, :yellow
+      say_yellow :unmuting, username
     end
 
     def muting(username)
-      @thor.say_status :muting, username, :yellow
+      say_yellow :muting, username
     end
 
     def unblocking(username)
-      @thor.say_status :unblocking, username, :yellow
+      say_yellow :unblocking, username
     end
 
     def blocking(username)
-      @thor.say_status :blocking, username, :yellow
+      say_yellow :blocking, username
     end
 
     def unreposting(post_id)
-      @thor.say_status :unreposting, "post #{post_id}", :yellow
+      say_yellow :unreposting, "post #{post_id}"
     end
 
     def reposting(post_id)
-      @thor.say_status :reposting, "post #{post_id}", :yellow
+      say_yellow :reposting, "post #{post_id}"
     end
 
     def unstarring(post_id)
-      @thor.say_status :unstarring, "post #{post_id}", :yellow
+      say_yellow :unstarring, "post #{post_id}"
     end
 
     def starring(post_id)
-      @thor.say_status :starring, "post #{post_id}", :yellow
+      say_yellow :starring, "post #{post_id}"
     end
 
     def not_deleted(post_id)
@@ -207,8 +207,8 @@ module Ayadn
 
     def error_missing_parameters
       say do
-        @thor.say_status :error, "please submit valid items", :red
-        @thor.say_status :info, "see `ayadn -sg` for a list of valid parameters and values", :cyan
+        say_error "please submit valid items"
+        say_info "see `ayadn -sg` for a list of valid parameters and values"
       end
     end
 
@@ -218,52 +218,52 @@ module Ayadn
 
     def writing
       puts "\n"
-      @thor.say_status "author", "#{Settings.config[:identity][:handle]}", "cyan"
+      say_cyan :author, "#{Settings.config[:identity][:handle]}"
       puts "\n"
     end
 
     def yourmessage username = nil
         if username.nil?
-          @thor.say_status "", "Your message:"
+          say_center "Your message:"
         else
-          @thor.say_status "", "Your message to #{username}:"
+          say_center "Your message to #{username}:"
         end
         puts "\n\n"
     end
 
     def message_from(username)
       puts "\n"
-      @thor.say_status "from", "#{Settings.config[:identity][:handle]}", "yellow"
-      @thor.say_status "to", "#{username[0]}", "yellow"
+      say_yellow :from, "#{Settings.config[:identity][:handle]}"
+      say_yellow :to, "#{username[0]}"
     end
 
     def replying_to(post_id)
       puts "\n"
-      @thor.say_status "replying", "to post #{post_id}", "yellow"
+      say_yellow :replying, "to post #{post_id}"
     end
 
     def readline
       say do
-        @thor.say_status :next, "type your text", :cyan
-        @thor.say_status :ok, "[CTRL+D] to validate", :cyan
-        @thor.say_status :cancel, "[CTRL+C] to cancel", :cyan
+        say_cyan :next, "type your text"
+        say_cyan :ok, "[CTRL+D] to validate"
+        say_cyan :cancel, "[CTRL+C] to cancel"
       end
     end
 
     def reply
-      @thor.say_status "max", "#{Settings.config[:post_max_length]} characters", "cyan"
+      say_cyan :max, "#{Settings.config[:post_max_length]} characters"
     end
 
     def post
-      @thor.say_status "max", "#{Settings.config[:post_max_length]} characters", "cyan"
+      say_cyan :max, "#{Settings.config[:post_max_length]} characters"
     end
 
     def message
-      @thor.say_status "max", "#{Settings.config[:message_max_length]} characters", "cyan"
+      say_cyan :max, "#{Settings.config[:message_max_length]} characters"
     end
 
     def valid_colors(colors_list)
-      @thor.say_status "info", "valid colors:", "cyan"
+      say_cyan :info, "valid colors:"
       say { puts colors_list }
     end
 
@@ -301,8 +301,8 @@ module Ayadn
 
     def error_only_osx
       say do
-        @thor.say_status :error, "this feature only works with iTunes by default", :red
-        @thor.say_status :info, "if you've got a Last.fm account, use `ayadn -NP --lastfm` (short: `-l`)", :cyan
+        say_error "this feature only works with iTunes by default"
+        say_info "if you've got a Last.fm account, use `ayadn -NP --lastfm` (short: `-l`)"
       end
     end
 
@@ -312,8 +312,8 @@ module Ayadn
 
     def not_authorized
       say do
-        @thor.say_status :error, "no user authorized", :red
-        @thor.say_status :info, "please run `ayadn -auth` to authorize an account", :cyan
+        say_error "no user authorized"
+        say_info "please run `ayadn -auth` to authorize an account"
       end
     end
 
@@ -323,8 +323,8 @@ module Ayadn
 
     def redirecting
       say do
-        @thor.say_status :info, "post is a repost", :cyan
-        @thor.say_status :action, "redirecting", :yellow
+        say_info "post is a repost"
+        say_yellow :action, "redirecting"
       end
     end
 
@@ -346,17 +346,17 @@ module Ayadn
 
     def auto
       say do
-        @thor.say_status :info, "entering the auto posting mode", :cyan
-        @thor.say_status :info, "each line you type (each time you hit ENTER) is automatically posted to ADN", :cyan
-        @thor.say_status :info, "at any moment, starting now, hit CTRL+C to exit", :cyan
-        @thor.say_status :info, "AUTO POSTING MODE ACTIVATED", :yellow
+        say_info "entering the auto posting mode"
+        say_info "each line you type (each time you hit ENTER) is automatically posted to ADN"
+        say_info "at any moment, starting now, hit CTRL+C to exit"
+        say_yellow :info, "AUTO POSTING MODE ACTIVATED"
       end
     end
 
     def threshold
       say do
-        @thor.say_status :error, "please enter a value between 0.1 and 3.5", :red
-        @thor.say_status :info, "example: 2.1", :green
+        say_error "please enter a value between 0.1 and 3.5"
+        say_green :info, "example: 2.1"
       end
     end
 
@@ -392,8 +392,8 @@ module Ayadn
       diff = size - max_size
       diff > 1 ? pl = "s" : pl = ""
       say do
-        @thor.say_status :error, "text too long", :red
-        @thor.say_status :info, "#{max_size} max: #{diff} character#{pl} to remove", :green
+        say_error "text too long"
+        say_green :info, "#{max_size} max: #{diff} character#{pl} to remove"
       end
     end
 
@@ -407,8 +407,8 @@ module Ayadn
 
     def no_curl
       say do
-        @thor.say_status :error, "Ayadn needs 'curl' to upload files", :red
-        @thor.say_status :next, "please install 'curl' (or check that it's properly declared in your $PATH)", :yellow
+        say_error "Ayadn needs 'curl' to upload files"
+        say_yellow :next, "please install 'curl' (or check that it's properly declared in your $PATH)"
       end
     end
 
@@ -434,8 +434,8 @@ module Ayadn
 
     def no_force(target)
       say do
-        @thor.say_status :error, "'#{target}' can't be displayed (could be muted, blocked, in the Blacklist, etc)", :red
-        @thor.say_status :info, "please use option '--force' ('-f') to try and display this content anyway", :cyan
+        say_error "'#{target}' can't be displayed (could be muted, blocked, in the Blacklist, etc)"
+        say_info "please use option '--force' ('-f') to try and display this content anyway"
       end
     end
 
@@ -449,15 +449,15 @@ module Ayadn
 
     def no_username
       say do
-        @thor.say_status :error, "Ayadn couldn't get your username", :red
-        @thor.say_status :next, "please try again", :yellow
+        say_error "Ayadn couldn't get your username"
+        say_yellow :next, "please try again"
       end
     end
 
     def deprecated_ayadn
       say do
-        @thor.say_status :deprecated, "Ayadn 1.x user data detected", :red
-        @thor.say_status :warning,  "please delete your old ayadn folder then try again", :yellow
+        say_red :deprecated, "Ayadn 1.x user data detected"
+        say_yellow :warning,  "please delete your old ayadn folder then try again"
       end
     end
 
@@ -471,7 +471,7 @@ module Ayadn
 
     def yourpost
       # info("", "Your post:")
-      @thor.say_status nil, "Your post:"
+      say_center "Your post:"
     end
 
     def post_info
@@ -483,7 +483,7 @@ module Ayadn
     end
 
     def unread_from_channel(channel_id)
-      @thor.say_status :info, "unread message(s) from channel #{channel_id}", :cyan
+      say_info "unread message(s) from channel #{channel_id}"
       puts "\n\n"
     end
 
@@ -500,9 +500,9 @@ module Ayadn
     end
     def version
       puts ayadn()
-      @thor.say_status :version, "#{VERSION}", :green
-      @thor.say_status :changelog, "https://github.com/ericdke/na/blob/master/CHANGELOG.md", :yellow
-      @thor.say_status :docs, "https://github.com/ericdke/na/tree/master/doc", :yellow
+      say_green :version, "#{VERSION}"
+      say_yellow :changelog, "https://github.com/ericdke/na/blob/master/CHANGELOG.md"
+      say_yellow :docs, "https://github.com/ericdke/na/tree/master/doc"
       puts "\n\n"
     end
 
@@ -524,19 +524,19 @@ module Ayadn
 
     def itunes_store_track(store)
       puts "\n"
-      @thor.say_status "next", "Ayadn will use these elements to insert album artwork and a link", :cyan
+      say_cyan :next, "Ayadn will use these elements to insert album artwork and a link"
     end
 
     def server_error(bool)
       if bool == true
         say do
-          @thor.say_status :error, "Ayadn couldn't get the JSON reponse", :red
-          @thor.say_status :next, "trying again in 10 seconds", :yellow
+          say_error "Ayadn couldn't get the JSON reponse"
+          say_yellow :next, "trying again in 10 seconds"
         end
       else
         say do
-          @thor.say_status :error, "Ayadn couldn't get the JSON reponse", :red
-          @thor.say_status :status, "Current command canceled after one retry", :yellow
+          say_error "Ayadn couldn't get the JSON reponse"
+          say_yellow :status, "Current command canceled after one retry"
         end
       end
     end
@@ -545,7 +545,7 @@ module Ayadn
 
     def info(status, message, color = nil)
       if color.nil?
-        lamb = lambda { @thor.say_status(status.to_sym, message.to_s) }
+        lamb = lambda { say_nocolor(status.to_sym, message.to_s) }
       else
         lamb = lambda { @thor.say_status(status.to_sym, message.to_s, color.to_sym) }
       end
@@ -560,6 +560,14 @@ module Ayadn
       puts "\n"
     end
 
+    def say_center(message)
+      @thor.say_status nil, message
+    end
+
+    def say_nocolor(tag, message)
+      @thor.say_status tag, message
+    end
+
     def say_error(message)
       @thor.say_status :error, message, :red
     end
@@ -572,8 +580,20 @@ module Ayadn
       @thor.say_status tag, message, :green
     end
 
+    def say_blue(tag, message)
+      @thor.say_status tag, message, :blue
+    end
+
+    def say_cyan(tag, message)
+      @thor.say_status tag, message, :cyan
+    end
+
     def say_red(tag, message)
       @thor.say_status tag, message, :red
+    end
+
+    def say_yellow(tag, message)
+      @thor.say_status tag, message, :yellow
     end
 
     def say_end
@@ -589,7 +609,7 @@ module Ayadn
     end
 
     def say_trace(message)
-      say { @thor.say_status :message, message, :yellow }
+      @thor.say_status :message, message, :yell
     end
 
   end

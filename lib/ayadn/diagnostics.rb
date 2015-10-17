@@ -50,7 +50,6 @@ module Ayadn
     attr_accessor :response, :status
 
     def initialize
-      @thor = Thor::Shell::Color.new
       @status = Status.new
     end
 
@@ -452,7 +451,7 @@ module Ayadn
         @status.say_green(:live, "version #{live}")
         if live != VERSION
           @status.say_red(:local, "version #{VERSION}")
-          @status.say { @thor.say_status :update, "run 'gem update ayadn' to get the last version", :yellow }
+          @status.say { @status.say_yellow :update, "run 'gem update ayadn' to get the last version" }
         else
           @status.say_green(:local, "version #{VERSION}")
         end

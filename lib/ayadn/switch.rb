@@ -3,8 +3,7 @@ module Ayadn
   class Switch
 
     def initialize
-      @thor = Thor::Shell::Color.new # local statuses
-      @status = Status.new # global statuses + utils
+      @status = Status.new
       @acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
     end
 
@@ -45,22 +44,22 @@ module Ayadn
       active_user = active[0]
       if username == active_user
         @status.say do
-          @thor.say_status :done, "already authorized with username @#{username}", :green
+          @status.say_green :done, "already authorized with username @#{username}"
         end
         exit
       end
       flag = accounts.select { |acc| acc[0] == username }.flatten
       if flag.empty?
         @status.say do
-          @thor.say_status :error, "@#{username} isn't in the database", :red
-          @thor.say_status :next, "please run `ayadn -auth` to authorize this account", :yellow
+          @status.say_error "@#{username} isn't in the database"
+          @status.say_yellow :next, "please run `ayadn -auth` to authorize this account"
         end
         exit
       else
         @status.say do
-          @thor.say_status :switching, "from @#{active_user} to @#{username}", :cyan
+          @status.say_cyan :switching, "from @#{active_user} to @#{username}"
           Databases.set_active_account(@acc_db, username)
-          @thor.say_status :done, "@#{username} is now the active account", :green
+          @status.say_green :done, "@#{username} is now the active account"
         end
         exit
       end
@@ -70,7 +69,7 @@ module Ayadn
 
     def please
       @status.say do
-        @thor.say_status :error, "please run `ayadn -auth` to authorize an account", :red
+        @status.say_error "please run `ayadn -auth` to authorize an account"
       end
       exit
     end

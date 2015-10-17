@@ -12,7 +12,6 @@ module Ayadn
       @api = API.new
       @view = View.new
       @workers = Workers.new
-      @thor = Thor::Shell::Color.new
       @status = Status.new
       @check = Check.new
       Settings.load_config
@@ -480,7 +479,7 @@ module Ayadn
         @status.post_info
         @view.show_simple_post([resp], options)
         puts "\n" if Settings.options[:timeline][:compact] == true
-        @thor.say_status "info", "author", "cyan"
+        @status.say_info "author"
         puts "\n" unless Settings.options[:timeline][:compact] == true
         if response['data']['username'] == Settings.config[:identity][:username]
           @view.show_userinfos(stream, @api.get_token_info['data'], true)
@@ -564,7 +563,7 @@ module Ayadn
           Settings.options[:marker][:messages] = false
         end
         puts "\n"
-        @thor.say_status :searching, "channels with unread PMs"
+        @status.say_nocolor :searching, "channels with unread PMs"
         response = @api.get_channels
         unread_channels = []
         response['data'].map do |ch|
@@ -578,7 +577,7 @@ module Ayadn
         end
         unread_messages = {}
         unread_channels.reverse.each do |id|
-          @thor.say_status :downloading, "messages from channel #{id}"
+          @status.say_nocolor :downloading, "messages from channel #{id}"
           since = Databases.find_last_id_from("channel:#{id}")
           unless since.nil?
             api_options = {count: 20, since_id: since}
@@ -601,9 +600,9 @@ module Ayadn
             resp = @api.update_marker(name, v[1])
             res = JSON.parse(resp)
             if res['meta']['code'] != 200
-              @thor.say_status :error, "couldn't update channel #{k} as read", :red
+              @status.say_error "couldn't update channel #{k} as read"
             else
-              @thor.say_status :updated, "channel #{k} as read", :green
+              @status.say_green :updated, "channel #{k} as read"
             end
           end
         end

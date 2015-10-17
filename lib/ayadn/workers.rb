@@ -5,7 +5,6 @@ module Ayadn
     attr_reader :thor
 
     def initialize
-      @thor = Thor::Shell::Color.new
       @status = Status.new
     end
 
@@ -344,41 +343,41 @@ module Ayadn
       bucket = []
       data = [data] unless data.is_a?(Array)
       if options[:channels]
-        @thor.say_status :downloading, "list of channels and their users credentials", :yellow
-        @thor.say_status :info, "it could take a while if there are many results and users", :cyan
+        @status.say_yellow :downloading, "list of channels and their users credentials"
+        @status.say_info "it could take a while if there are many results and users"
       else
-        @thor.say_status :downloading, "the channels and their users attributes (owners, writers, editors and readers)", :yellow
-        @thor.say_status :info, "users are recorded in a database for later filtering and analyzing", :cyan
-        @thor.say_status :info, "it could take a while if there are many results", :cyan
+        @status.say_yellow :downloading, "the channels and their users attributes (owners, writers, editors and readers)"
+        @status.say_info "users are recorded in a database for later filtering and analyzing"
+        @status.say_info "it could take a while if there are many results"
       end
       chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
       no_user = {}
       @api = API.new
       data.each do |ch|
         unless ch['writers']['user_ids'].empty?
-          @thor.say_status :parsing, "channel #{ch['id']}", :cyan
+          @status.say_cyan :parsing, "channel #{ch['id']}"
           usernames = []
           ch['writers']['user_ids'].each do |id|
             next if no_user[id]
             db = Databases.find_user_by_id(id)
             if db.nil?
-              @thor.say_status :downloading, "user #{id}", :yellow
+              @status.say_yellow :downloading, "user #{id}"
               resp = @api.get_user(id)
 
               if resp['meta']['code'] != 200
-                @thor.say_status :error, "can't get user #{id}'s data, skipping", :red
+                @status.say_error "can't get user #{id}'s data, skipping"
                 no_user[id] = true
                 next
               end
 
               the_username = resp['data']['username']
-              @thor.say_status :recording, "@#{the_username}", :yellow
+              @status.say_yellow :recording, "@#{the_username}"
 
               usernames << "@" + the_username
               Databases.add_to_users_db(id, the_username, resp['data']['name'])
             else
               the_username = "@#{db}"
-              @thor.say_status :match, "#{the_username} is already in the database", :blue
+              @status.say_blue :match, "#{the_username} is already in the database"
 
               usernames << the_username
             end

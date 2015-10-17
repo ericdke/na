@@ -4,7 +4,6 @@ module Ayadn
 
     def initialize
       @workers = Workers.new
-      @thor = Thor::Shell::Basic.new
       @status = Status.new
     end
 

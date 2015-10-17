@@ -203,7 +203,7 @@ module Ayadn
 
     def ask_deezer_user
       @status.info("please", "open this link to authorize Deezer", "yellow")
-      @status.say { @workers.thor.say_status :link, @deezer_auth_url, :green }
+      @status.say { @status.say_green :link, @deezer_auth_url }
       @status.info("next", "paste the authorization code here", "cyan")
       print "> "
       begin

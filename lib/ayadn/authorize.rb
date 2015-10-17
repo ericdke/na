@@ -28,16 +28,16 @@ module Ayadn
       token = get_token
       check_token(token)
       puts "\e[H\e[2J"
-      @thor.say_status :connexion, "downloading user info", :yellow
+      @status.say_yellow :connexion, "downloading user info"
       user = create_user_data(token, Dir.home + "/ayadn")
       prepare(user)
-      @thor.say_status :create, "configuration", :yellow
+      @status.say_yellow :create, "configuration"
       Settings.load_config
       Logs.create_logger
       install
-      @thor.say_status :done, "user #{user.handle} is authorized", :green
+      @status.say_green :done, "user #{user.handle} is authorized"
       Errors.info "#{user.handle} authorized."
-      @status.say { @thor.say_status :end, "Thank you for using Ayadn. Enjoy!", :green }
+      @status.say { @status.say_green :end, "Thank you for using Ayadn. Enjoy!" }
       Switch.new.list
     end
 
@@ -60,21 +60,21 @@ module Ayadn
           exit
         end
         puts "\e[H\e[2J"
-        @thor.say_status :delete, "database entry for @#{user}", :yellow
+        @status.say_yellow :delete, "database entry for @#{user}"
         db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
         Databases.remove_from_accounts(db, user)
         if options[:delete]
-          @thor.say_status :delete, "@#{user} user folders", :yellow
+          @status.say_yellow :delete, "@#{user} user folders"
           FileUtils.remove_dir(Dir.home + "/ayadn/#{user}")
         end
-        @thor.say_status :done, "user @#{user} has been unauthorized", :green
+        @status.say_green :done, "user @#{user} has been unauthorized"
         remaining = Databases.all_accounts(db)
         if remaining.flatten.empty?
-          @thor.say_status :info, "accounts database is now empty", :cyan
+          @status.say_info "accounts database is now empty"
         else
           username = remaining[0][0]
           Databases.set_active_account(db, username)
-          @thor.say_status :info, "user @#{username} is now the active user", :cyan
+          @status.say_info "user @#{username} is now the active user"
         end
         puts "\n"
       rescue Interrupt
@@ -86,11 +86,11 @@ module Ayadn
     private
 
     def prepare(user)
-      @thor.say_status :create, "user folders", :yellow
+      @status.say_yellow :create, "user folders"
       create_config_folders(user)
-      @thor.say_status :save, "user token", :yellow
+      @status.say_yellow :save, "user token"
       create_token_file(user)
-      @thor.say_status :create, "Ayadn account", :yellow
+      @status.say_yellow :create, "Ayadn account"
       acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
       user_db = Amalgalite::Database.new("#{user.user_path}/db/ayadn.sqlite")
       if user_db.schema.tables.empty?
@@ -103,7 +103,7 @@ module Ayadn
     end
 
     def install
-      @thor.say_status :create, "api and config files", :yellow
+      @status.say_yellow :create, "api and config files"
       Errors.info "Creating api and config files..."
       Errors.info "Creating version file..."
       Settings.init_config
@@ -121,7 +121,7 @@ module Ayadn
         end
       rescue => e
         @status.say do
-          @thor.say_status :error, "can't create #{user.handle} account folders", :red
+          @status.say_error "can't create #{user.handle} account folders"
         end
         @status.say { puts "\nError: #{e}" }
         exit
@@ -130,13 +130,13 @@ module Ayadn
 
     def show_link
       @status.say do
-        @thor.say_status :please, "click or copy/paste this URL in a browser", :yellow
+        @status.say_yellow :please, "click or copy/paste this URL in a browser"
         puts "\n"
         puts "\t#{Endpoints.new.authorize_url}"
         puts "\n"
-        @thor.say_status :next, "log in to authorize Ayadn", :cyan
-        @thor.say_status nil, "you will be redirected to your 'user token'"
-        @thor.say_status :please, "copy/paste the token here:", :yellow
+        @status.say_cyan :next, "log in to authorize Ayadn"
+        @status.say_center "you will be redirected to your 'user token'"
+        @status.say_yellow :please, "copy/paste the token here:"
       end
       print "\t> "
     end
@@ -146,7 +146,7 @@ module Ayadn
         JSON.parse(RestClient.get("#{@baseURL}/users/me?access_token=#{token}", :verify_ssl => OpenSSL::SSL::VERIFY_NONE) {|response, request, result| response })
       rescue Exception => e
         @status.say do
-          @thor.say_status :error, "connection problem", :red
+          @status.say_error "connection problem"
         end
         puts "#{e}"
       end
@@ -164,7 +164,7 @@ module Ayadn
     def check_token(token)
       if token.empty? || token.nil?
         @status.say do
-          @thor.say_status :error, "couldn't get the token", :red
+          @status.say_error "couldn't get the token"
         end
         exit
       end
