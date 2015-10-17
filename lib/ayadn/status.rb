@@ -560,5 +560,37 @@ module Ayadn
       puts "\n"
     end
 
+    def say_error(message)
+      @thor.say_status :error, message, :red
+    end
+
+    def say_info(message)
+      @thor.say_status :info, message, :cyan
+    end
+
+    def say_green(tag, message)
+      @thor.say_status tag, message, :green
+    end
+
+    def say_red(tag, message)
+      @thor.say_status tag, message, :red
+    end
+
+    def say_end
+      say { say_green :done, "end of diagnostics" }
+    end
+
+    def say_header(message)
+      say { say_info message }
+    end
+
+    def say_text(text)
+      say { puts text }
+    end
+
+    def say_trace(message)
+      say { @thor.say_status :message, message, :yellow }
+    end
+
   end
 end
