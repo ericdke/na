@@ -127,7 +127,7 @@ module Ayadn
         check_response_code
         ratelimit = @response.headers[:x_ratelimit_remaining]
         if ratelimit.blank?
-          raise "invalid server response"
+          say_red :ratelimit, "invalid server response"
         else
           Integer(ratelimit) > 120 ? say_green(:ratelimit, "OK") : say_red(:ratelimit, ratelimit)
         end
@@ -182,125 +182,127 @@ module Ayadn
     def check
       begin
         say_header("checking accounts database")
-        find_active_account
-        users = @db.execute("SELECT * FROM Accounts")
-        if users.blank?
-          say_red(:abort, "no registered Ayadn users")
-        else
-          say_green(:accounts, users.map { |user| user[2] }.join(", "))
-          if @active_account.blank?
-            say_red(:warning, "no active account")
+        if find_active_account == true
+          users = @db.execute("SELECT * FROM Accounts")
+          if users.blank?
+            say_red(:abort, "no registered Ayadn users")
           else
-            say_header("checking active account")
-            check_id_handle
-            token = @active_account[5]
-            if token.blank?
-              say_red(:missing, "authorization token")
+            say_green(:accounts, users.map { |user| user[2] }.join(", "))
+            if @active_account.blank?
+              say_red(:warning, "no active account")
             else
-              say_green(:auth_token, token[0..20] + "...")
-            end
-            check_paths
-            check_config
-            say_header("checking #{@handle}'s account database")
-            find_active_tables
-            say_header("checking tables schemas")
-            if @userDB.schema.tables.count != 6
-              say_red "#{@handle}'s account database is corrupted"
-            else
-              @userDB.schema.tables.each do |a|
-                say_info "checking table #{a[0]}"
-                case a[0]
-                when "Bookmarks"
-                  if a[1].columns.count != 2
-                    say_red "#{a[0]} table is corrupted"
-                  else
-                    a[1].columns.each do |name, data|
-                      if name == "post_id" && data.declared_data_type == "INTEGER"
-                        say_green(name.to_sym, "OK")
-                      elsif name == "bookmark" && data.declared_data_type == "TEXT"
-                        say_green(name.to_sym, "OK")
+              say_header("checking active account")
+              check_id_handle
+              token = @active_account[5]
+              if token.blank?
+                say_red(:missing, "authorization token")
+              else
+                say_green(:auth_token, token[0..20] + "...")
+              end
+              check_paths
+              check_config
+              say_header("checking #{@handle}'s account database")
+              if find_active_tables == true
+                say_header("checking tables schemas")
+                if @userDB.schema.tables.count != 6
+                  say_red :error, "#{@handle}'s account database is corrupted"
+                else
+                  @userDB.schema.tables.each do |a|
+                    say_info "checking table #{a[0]}"
+                    case a[0]
+                    when "Bookmarks"
+                      if a[1].columns.count != 2
+                        say_red :error, "#{a[0]} table is corrupted"
                       else
-                        say_red "#{a[0]} table is corrupted"
-                        break
+                        a[1].columns.each do |name, data|
+                          if name == "post_id" && data.declared_data_type == "INTEGER"
+                            say_green(name.to_sym, "OK")
+                          elsif name == "bookmark" && data.declared_data_type == "TEXT"
+                            say_green(name.to_sym, "OK")
+                          else
+                            say_red :error, "#{a[0]} table is corrupted"
+                            break
+                          end
+                        end
                       end
-                    end
-                  end
-                when "Aliases"
-                  if a[1].columns.count != 2
-                    say_red "#{a[0]} table is corrupted"
-                  else
-                    a[1].columns.each do |name, data|
-                      if name == "channel_id" && data.declared_data_type == "INTEGER"
-                        say_green(name.to_sym, "OK")
-                      elsif name == "alias" && data.declared_data_type == "VARCHAR(255)"
-                        say_green(name.to_sym, "OK")
+                    when "Aliases"
+                      if a[1].columns.count != 2
+                        say_red :error, "#{a[0]} table is corrupted"
                       else
-                        say_red "#{a[0]} table is corrupted"
-                        break
+                        a[1].columns.each do |name, data|
+                          if name == "channel_id" && data.declared_data_type == "INTEGER"
+                            say_green(name.to_sym, "OK")
+                          elsif name == "alias" && data.declared_data_type == "VARCHAR(255)"
+                            say_green(name.to_sym, "OK")
+                          else
+                            say_red :error, "#{a[0]} table is corrupted"
+                            break
+                          end
+                        end
                       end
-                    end
-                  end
-                when "Blacklist"
-                  if a[1].columns.count != 2
-                    say_red "#{a[0]} table is corrupted"
-                  else
-                    a[1].columns.each do |name, data|
-                      if name == "type" && data.declared_data_type == "VARCHAR(255)"
-                        say_green(name.to_sym, "OK")
-                      elsif name == "content" && data.declared_data_type == "TEXT"
-                        say_green(name.to_sym, "OK")
+                    when "Blacklist"
+                      if a[1].columns.count != 2
+                        say_red :error, "#{a[0]} table is corrupted"
                       else
-                        say_red "#{a[0]} table is corrupted"
-                        break
+                        a[1].columns.each do |name, data|
+                          if name == "type" && data.declared_data_type == "VARCHAR(255)"
+                            say_green(name.to_sym, "OK")
+                          elsif name == "content" && data.declared_data_type == "TEXT"
+                            say_green(name.to_sym, "OK")
+                          else
+                            say_red :error, "#{a[0]} table is corrupted"
+                            break
+                          end
+                        end
                       end
-                    end
-                  end
-                when "Users"
-                  if a[1].columns.count != 3
-                    say_red "#{a[0]} table is corrupted"
-                  else
-                    a[1].columns.each do |name, data|
-                      if name == "user_id" && data.declared_data_type == "INTEGER"
-                        say_green(name.to_sym, "OK")
-                      elsif name == "username" && data.declared_data_type == "VARCHAR(20)"
-                        say_green(name.to_sym, "OK")
-                      elsif name == "name" && data.declared_data_type == "TEXT"
-                        say_green(name.to_sym, "OK")
+                    when "Users"
+                      if a[1].columns.count != 3
+                        say_red :error, "#{a[0]} table is corrupted"
                       else
-                        say_red "#{a[0]} table is corrupted"
-                        break
+                        a[1].columns.each do |name, data|
+                          if name == "user_id" && data.declared_data_type == "INTEGER"
+                            say_green(name.to_sym, "OK")
+                          elsif name == "username" && data.declared_data_type == "VARCHAR(20)"
+                            say_green(name.to_sym, "OK")
+                          elsif name == "name" && data.declared_data_type == "TEXT"
+                            say_green(name.to_sym, "OK")
+                          else
+                            say_red :error, "#{a[0]} table is corrupted"
+                            break
+                          end
+                        end
                       end
-                    end
-                  end
-                when "Pagination"
-                  if a[1].columns.count != 2
-                    say_red "#{a[0]} table is corrupted"
-                  else
-                    a[1].columns.each do |name, data|
-                      if name == "name" && data.declared_data_type == "TEXT"
-                        say_green(name.to_sym, "OK")
-                      elsif name == "post_id" && data.declared_data_type == "INTEGER"
-                        say_green(name.to_sym, "OK")
-                      else
+                    when "Pagination"
+                      if a[1].columns.count != 2
                         say_red "#{a[0]} table is corrupted"
-                        break
+                      else
+                        a[1].columns.each do |name, data|
+                          if name == "name" && data.declared_data_type == "TEXT"
+                            say_green(name.to_sym, "OK")
+                          elsif name == "post_id" && data.declared_data_type == "INTEGER"
+                            say_green(name.to_sym, "OK")
+                          else
+                            say_red :error, "#{a[0]} table is corrupted"
+                            break
+                          end
+                        end
                       end
-                    end
-                  end
-                when "TLIndex"
-                  if a[1].columns.count != 3
-                    say_red "#{a[0]} table is corrupted"
-                  else
-                    a[1].columns.each do |name, data|
-                      if name == "count" && data.declared_data_type == "INTEGER"
-                        say_green(name.to_sym, "OK")
-                      elsif name == "post_id" && data.declared_data_type == "INTEGER"
-                        say_green(name.to_sym, "OK")
-                      elsif name == "content" && data.declared_data_type == "TEXT"
-                        say_green(name.to_sym, "OK")
-                      else
+                    when "TLIndex"
+                      if a[1].columns.count != 3
                         say_red "#{a[0]} table is corrupted"
-                        break
+                      else
+                        a[1].columns.each do |name, data|
+                          if name == "count" && data.declared_data_type == "INTEGER"
+                            say_green(name.to_sym, "OK")
+                          elsif name == "post_id" && data.declared_data_type == "INTEGER"
+                            say_green(name.to_sym, "OK")
+                          elsif name == "content" && data.declared_data_type == "TEXT"
+                            say_green(name.to_sym, "OK")
+                          else
+                            say_red :error, "#{a[0]} table is corrupted"
+                            break
+                          end
+                        end
                       end
                     end
                   end
@@ -394,13 +396,16 @@ module Ayadn
         say_green(:found, "database accounts file")
         @db = Amalgalite::Database.new(@sql_path)
         if @db.nil?
-          raise "accounts database is not readable"
+          say_red :error, "accounts database is not readable"
+          return false
         else
           @active_account = Databases.active_account(@db)
         end
       else
-        raise "accounts database is missing"
+        say_red :error, "accounts database is missing"
+        return false
       end
+      return true
     end
 
     def find_active_tables
@@ -409,11 +414,14 @@ module Ayadn
         say_green(:found, "#{@handle}'s database file")
         @userDB = Amalgalite::Database.new(tables_path)
         if @userDB.nil?
-          raise "#{@handle}'s database is not readable"
+          say_red :error, "#{@handle}'s database is not readable"
+          return false
         end
       else
-        raise "#{@handle}'s database is missing"
+        say_red :error, "#{@handle}'s database is missing"
+        return false
       end
+      return true
     end
   end
 
