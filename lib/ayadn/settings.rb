@@ -16,6 +16,10 @@ module Ayadn
 
     def self.load_config
       active = self.check_for_accounts
+      if active.empty?
+        Status.new.not_authorized
+        exit
+      end
       home = active[3]
       api_file = Dir.home + "/ayadn/.api.yml"
       baseURL = if File.exist?(api_file)
