@@ -3,6 +3,12 @@ module Ayadn
 
   class TvShow
 
+    # Warning
+    # comment next line
+    require_relative "ids"
+    # uncomment and insert your own id
+    # TVDB_API_KEY = ""
+
     begin
       require 'tvdb_party'
     rescue LoadError => e
@@ -11,14 +17,12 @@ module Ayadn
       exit
     end
 
-    AYADN_TVDB_API_KEY = 'E874ACBC542CAA53'
-
     attr_accessor :language, :name, :poster_url, :banner_url, :plot, :text, :imdb_link, :tag, :link, :date
 
     def initialize
       @language = 'en'
       @view = View.new
-      @tvdb = TvdbParty::Search.new(AYADN_TVDB_API_KEY)
+      @tvdb = TvdbParty::Search.new(TVDB_API_KEY)
       @status = Status.new
     end
 

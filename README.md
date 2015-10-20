@@ -66,18 +66,6 @@ Uninstall:
 
 [In the /doc folder of the repo](https://github.com/ericdke/na/tree/master/doc)
 
-## FORK
-
-If you're using Ayadn's source to make your own client, you have to replace these values with yours:
-
-- "AYADN_CLIENT_ID" in "settings.rb"
-- "@ayadn_callback_url" in "endpoints.rb"
-- "AYADN_TVDB_API_KEY" in "tvshow.rb"
-- "@affiliate_suffix" in "nowplaying.rb"
-- "@deezer_auth_url" in "nowplaying.rb"
-
-These are the only mandatory actions. Ayadn's code is MIT licenced and free to use and modify as long as you follow the licence terms.  
-
 ## FEEDBACK
 
 Feedback and/or contributions are very welcomed!

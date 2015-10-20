@@ -3,6 +3,14 @@ module Ayadn
 
   class NowPlaying
 
+    # Warning
+    # comment next line
+    require_relative "ids"
+    # uncomment next line and insert your own codes
+    # AFFILIATE_SUFFIX = ""
+    # DEEZER_APP_ID = ""
+    # DEEZER_AUTH_URL = ""
+
     begin
       require 'rss'
     rescue LoadError => e
@@ -25,9 +33,8 @@ module Ayadn
         @custom_text = nil
       else
         @custom_text = "\n \n#{options[:text].join(' ')}"
-      end
-      @affiliate_suffix = "&at=1l3vtb8&ct=ayadn"
-      @deezer_auth_url = "https://connect.deezer.com/oauth/auth.php?app_id=150971&redirect_uri=http://aya.io/ayadn/deezer.html&response_type=token&perms=basic_access,listening_history,offline_access"
+      end 
+      @auth_url = "https://connect.deezer.com/oauth/auth.php?app_id=#{DEEZER_APP_ID}&redirect_uri=#{DEEZER_AUTH_URL}&response_type=token&perms=basic_access,listening_history,offline_access"
     end
 
     def deezer options
@@ -203,7 +210,7 @@ module Ayadn
 
     def ask_deezer_user
       @status.info("please", "open this link to authorize Deezer", "yellow")
-      @status.say { @status.say_green :link, @deezer_auth_url }
+      @status.say { @status.say_green :link, @auth_url }
       @status.info("next", "paste the authorization code here", "cyan")
       print "> "
       begin
@@ -274,7 +281,7 @@ module Ayadn
           'artist' => candidate['artistName'],
           'track' => candidate['trackName'],
           'preview' => candidate['previewUrl'],
-          'link' => "#{candidate['collectionViewUrl']}#{@affiliate_suffix}",
+          'link' => "#{candidate['collectionViewUrl']}#{AFFILIATE_SUFFIX}",
           'artwork' => candidate['artworkUrl100'].gsub('100x100', '1200x1200'),
           'artwork_thumb' => candidate['artworkUrl100'].gsub('100x100', '600x600'),
           'request' => url,

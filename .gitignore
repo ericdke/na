@@ -22,3 +22,5 @@ token
 fake.db
 .ruby-version
 *.zip
+lib/ayadn/ids.rb
+.gitignore

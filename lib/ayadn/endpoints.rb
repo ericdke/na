@@ -4,8 +4,14 @@ module Ayadn
 
     attr_accessor :ayadn_callback_url, :base_url, :config_api_url, :posts_url, :users_url, :files_url, :token_url, :channels_url, :pm_url
 
+    # Warning
+    # comment next line
+    require_relative "ids"
+    # uncomment and insert your own URL
+    # CALLBACK_URL = ""
+
     def initialize
-      @ayadn_callback_url = "http://aya.io/ayadn/auth.html"
+      @ayadn_callback_url = CALLBACK_URL
       api_file = Dir.home + "/ayadn/.api.yml"
       @base_url = if File.exist?(api_file)
         YAML.load(File.read(api_file))[:root] + "/"
@@ -22,7 +28,7 @@ module Ayadn
     end
 
     def authorize_url
-      "https://account.app.net/oauth/authenticate?client_id=#{Settings::AYADN_CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic,stream,write_post,follow,public_messages,messages,files,update_profile&include_marker=1"
+      "https://account.app.net/oauth/authenticate?client_id=#{Settings::CLIENT_ID}&response_type=token&redirect_uri=#{@ayadn_callback_url}&scope=basic,stream,write_post,follow,public_messages,messages,files,update_profile&include_marker=1"
     end
 
     def token_info
