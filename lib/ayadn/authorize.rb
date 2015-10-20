@@ -44,7 +44,7 @@ module Ayadn
     def unauthorize(user, options)
       begin
         @workers = Workers.new
-        if user.size > 1
+        if user.size != 1
           @status.one_username
           exit
         end
