@@ -16,7 +16,7 @@ module Ayadn
 
     def self.load_config
       active = self.check_for_accounts
-      if active.empty?
+      if active.blank?
         Status.new.not_authorized
         exit
       end
