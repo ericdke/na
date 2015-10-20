@@ -610,8 +610,9 @@ module Ayadn
     map "-auth" => :authorize
     map "-AU" => :authorize
     option :api, aliases: "-a", type: :array, desc: "Provide an alternative root URL for the API call."
+    option :token, aliases: "-t", type: :array, desc: "Provide the token directly (bypass the webpage)"
     long_desc Descriptions.authorize
-    def authorize
+    def authorize()
       require_relative("authorize")
       require_relative("switch")
       Authorize.new.authorize(options)

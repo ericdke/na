@@ -25,7 +25,12 @@ module Ayadn
       end
       puts "\e[H\e[2J"
       show_link
-      token = get_token
+      token = if options["token"]
+        options["token"][0]
+      else
+        get_token
+      end
+      # token = get_token
       check_token(token)
       puts "\e[H\e[2J"
       @status.say_yellow :connexion, "downloading user info"
