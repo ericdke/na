@@ -51,9 +51,9 @@ module Ayadn
         user = @workers.remove_arobase_if_present(user)[0]
         puts "\e[H\e[2J"
         if options[:delete]
-          sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} and delete its folders?\n\n> ", :red)
+          sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} and delete its folders? [y/N]\n\n> ", :red)
         else
-          sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} ?\n\n> ", :red)
+          sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} ? [y/N]\n\n> ", :red)
         end
         unless sure == true
           Status.new.canceled

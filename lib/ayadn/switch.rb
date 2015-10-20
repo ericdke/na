@@ -68,9 +68,8 @@ module Ayadn
     private
 
     def please
-      @status.say do
-        @status.say_error "please run `ayadn -auth` to authorize an account"
-      end
+      @status.say_info "please run `ayadn -auth` to authorize an account"
+      puts
       exit
     end
   end
