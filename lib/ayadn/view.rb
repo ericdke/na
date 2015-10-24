@@ -44,7 +44,7 @@ module Ayadn
 
     def show_posted(resp)
       show_simple_post([resp['data']], {})
-      puts "\n" if Settings.options[:timeline][:compact]
+      puts "\n" if timeline_is_compact
     end
 
     def show_list_reposted(list, target)
@@ -155,7 +155,7 @@ module Ayadn
         opts = Settings.options.dup
         opts.each do |k,v|
           v.each do |x,y|
-            t << :separator if @iter >= 1 && Settings.options[:timeline][:compact] == false
+            t << :separator if @iter >= 1 && timeline_is_compact == false
             unless y.is_a?(Hash)
               t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), y.to_s.color(:green) ]
             else
@@ -180,7 +180,7 @@ module Ayadn
     end
 
     def show_userinfos(content, token, show_ranks = false)
-      if Settings.options[:timeline][:compact] == true
+      if timeline_is_compact == true
         padding = "\n"
         view = "\n"
       else
@@ -256,7 +256,7 @@ module Ayadn
       end
 
       unless content['annotations'].empty?
-        view << "\n" unless Settings.options[:timeline][:compact] == true
+        view << "\n" unless timeline_is_compact == true
       end
       content['annotations'].each do |anno|
         case anno['type']
@@ -276,10 +276,10 @@ module Ayadn
         mentions = content['description']['entities']['mentions'].map {|m| "@#{m['name']}"}
         hashtags = content['description']['entities']['hashtags'].map {|m| m['name']}
         view << "#{padding}#{@workers.colorize_text(content['description']['text'], mentions, hashtags)}\n"
-        view << "\n" unless Settings.options[:timeline][:compact] == true
+        view << "\n" unless timeline_is_compact == true
       end
 
-      view << "\n" if Settings.options[:timeline][:compact] == true
+      view << "\n" if timeline_is_compact == true
 
       puts view
 
@@ -490,7 +490,7 @@ module Ayadn
     private
 
     def newline
-      puts "\n" unless Settings.options[:timeline][:compact] == true 
+      puts "\n" unless timeline_is_compact == true 
     end
 
     def get_broadcast_alias_from_id(event_id)
@@ -620,7 +620,7 @@ module Ayadn
             inter << "welcomed ".color(:green)
             inter << "you!".color(:yellow)
         end
-        if Settings.options[:timeline][:compact] == true
+        if timeline_is_compact == true
           inter << "\n"
         else  
           inter << "\n\n"
@@ -675,12 +675,12 @@ module Ayadn
     def build_content(content)
       view = ""
       view << build_header(content)
-      view << "\n" unless Settings.options[:timeline][:compact] == true
+      view << "\n" unless timeline_is_compact == true
       view << content[:text]
-      view << "\n" unless Settings.options[:timeline][:compact] == true
+      view << "\n" unless timeline_is_compact == true
       if content[:has_checkins]
         view << build_checkins(content)
-        view << "\n" unless Settings.options[:timeline][:compact] == true
+        view << "\n" unless timeline_is_compact == true
       end
       unless content[:links].empty?
         view << "\n"
@@ -689,7 +689,7 @@ module Ayadn
           view << "\n"
         end
       end
-      if Settings.options[:timeline][:compact] == true
+      if timeline_is_compact == true
         if content[:links].empty?
           view << "\n"
         else
@@ -738,7 +738,7 @@ module Ayadn
       else
         num_dots = 10
       end
-      if Settings.options[:timeline][:compact] == true
+      if timeline_is_compact == true
         hd = "\n"
       else
         hd = (".".color(color_dots)) * num_dots
