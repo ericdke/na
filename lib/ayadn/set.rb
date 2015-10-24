@@ -207,7 +207,7 @@ module Ayadn
       if args[0]
         begin
           SetAPI.new.setURL(args[0])
-        rescue NoMethodError, ArgumentError
+        rescue NoMethodError, ArgumentError => e
           Status.new.error_missing_parameters
           exit
         rescue => e
@@ -221,29 +221,24 @@ module Ayadn
 
   end
 
-  class SetAPI
-
-    def initialize
-      @category = 'API'
-      @status = Status.new
-    end
-
-    def setURL(url)
-      File.write(Dir.home + "/ayadn/.api.yml", {root: url}.to_yaml)
-      log(url)
-    end
-
-    def log(url)
-      @status.say do
-        @status.say_cyan :updated, "API base URL"
-        @status.say_green :content, url
-      end
-      Logs.rec.info "new value for 'set URL' in '#{@category}' => '#{url}'"
-    end
-
-  end
-
   class Validators
+
+    def self.URL(str)
+      require 'net/http'
+      if(str.to_s.empty?)
+        Status.new.error_missing_parameters
+        exit
+      end
+      begin
+        URI.parse(str)
+        # if url.host.nil? || (url.scheme != 'http' && url.scheme != 'https')
+            # ask: are you sure about this url?
+        # end
+        # url
+      rescue URI::Error => e
+        return nil
+      end
+    end
 
     def self.boolean(value)
       case value.downcase
@@ -324,6 +319,31 @@ module Ayadn
         @status.say_green :content, "'#{@output}'"
       end
       Logs.rec.info "new value for '#{@input}' in '#{@category}' => '#{@output}'"
+    end
+
+  end
+
+  class SetAPI < SetBase
+
+    def initialize
+      super
+      @category = 'API'
+      @status = Status.new
+    end
+
+    def setURL(url)
+      @input = url
+      # @status.say_header "checking URL validity"
+      url = Validators.URL(url)
+      if url != nil
+        @output = url.to_s
+        @status.say_info "setting up configuration"
+        File.write(Dir.home + "/ayadn/.api.yml", {root: @output}.to_yaml)
+        log()
+      else
+        @status.say_red :canceled, "URL is invalid"
+        exit
+      end
     end
 
   end

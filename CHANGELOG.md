@@ -2,8 +2,8 @@
 
 - New: option to set an alternative base URL for the API calls
 - New: run diagnostics (network, accounts, settings, gem)
-- New: bypass authorization webpage by providing the token inline
-- Fixed: situations when no user authorized
+- New: --auth bypass authorization webpage by providing the token inline
+- Fixed: commands when no user authorized
 - Fixed: --unauthorize if no valid username
 - Deprecated: Ayadn 1.x migration tools
 - Deprecated: "ayadn-app.net" domain name (use GitHub repository)
