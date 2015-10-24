@@ -85,7 +85,7 @@ module Ayadn
         puts "\t#{title}\n\n"
         bucket.each.with_index(1) do |obj,index|
           username = "@#{obj[1]}"
-          colored_username = username.color(Settings.options[:colors][:username])
+          colored_username = username.color(color_username)
           if obj[6].nil?
             @workers.thor.say_status :warning, "user #{colored_username} has no posts, ignored", :red
             newline() 
@@ -97,9 +97,9 @@ module Ayadn
           text = @workers.colorize_text(obj[6]["text"], mentions, hashtags)
           total = "(#{obj[5]} posts)"
           name = obj[2] == "" ? "(no name)" : obj[2]
-          colored_total = total.color(Settings.options[:colors][:link])
-          colored_name = name.color(Settings.options[:colors][:name])
-          colored_date = date.color(Settings.options[:colors][:date])
+          colored_total = total.color(color_link)
+          colored_name = name.color(color_name)
+          colored_date = date.color(color_date)
           puts "#{colored_username} #{colored_name} #{colored_date} #{colored_total}\n"
           newline()
           puts text
@@ -189,16 +189,16 @@ module Ayadn
       end
 
       if content['name']
-        view << "Name\t\t\t".color(:cyan) + content['name'].color(Settings.options[:colors][:name])
+        view << "Name\t\t\t".color(:cyan) + content['name'].color(color_name)
       else
         view << "Name\t\t\t".color(:cyan) + "(no name)".color(:red)
       end
 
-      view << "#{padding}Username\t\t".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
+      view << "#{padding}Username\t\t".color(:cyan) + "@#{content['username']}".color(color_username)
 
-      view << "#{padding}ID\t\t\t".color(:cyan) + content['id'].color(Settings.options[:colors][:id])
+      view << "#{padding}ID\t\t\t".color(:cyan) + content['id'].color(color_id)
 
-      view << "#{padding}URL\t\t\t".color(:cyan) + content['canonical_url'].color(Settings.options[:colors][:link])
+      view << "#{padding}URL\t\t\t".color(:cyan) + content['canonical_url'].color(color_link)
 
       unless content['verified_domain'].nil?
         if content['verified_domain'] =~ (/http/ || /https/)
@@ -206,15 +206,15 @@ module Ayadn
         else
           domain = "http://#{content['verified_domain']}"
         end
-        view << "\nVerified domain\t\t".color(:cyan) + domain.color(Settings.options[:colors][:link])
+        view << "\nVerified domain\t\t".color(:cyan) + domain.color(color_link)
       end
 
 
-      view << "#{padding}Account creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(Settings.options[:colors][:excerpt])
-      view << "#{padding}TimeZone\t\t".color(:cyan) + content['timezone'].color(Settings.options[:colors][:excerpt])
-      view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(Settings.options[:colors][:excerpt])
+      view << "#{padding}Account creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(color_excerpt)
+      view << "#{padding}TimeZone\t\t".color(:cyan) + content['timezone'].color(color_excerpt)
+      view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(color_excerpt)
 
-      view << "#{padding}Posts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(Settings.options[:colors][:excerpt])
+      view << "#{padding}Posts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(color_excerpt)
 
 
       # unless show_ranks == false
@@ -222,36 +222,36 @@ module Ayadn
       #   # do call them all at once instead if many
       #   ranks = NiceRank.new.get_posts_day([content['id'].to_i])
       #   unless ranks.empty?
-      #     view << "#{padding}Posts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(Settings.options[:colors][:excerpt])
+      #     view << "#{padding}Posts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(color_excerpt)
       #   end
       # end
 
-      view << "#{padding}Following\t\t".color(:cyan) + content['counts']['following'].to_s.color(Settings.options[:colors][:excerpt])
-      view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(Settings.options[:colors][:excerpt])
+      view << "#{padding}Following\t\t".color(:cyan) + content['counts']['following'].to_s.color(color_excerpt)
+      view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(color_excerpt)
 
       if content['username'] == Settings.config[:identity][:username] && !token.nil?
-        view << "#{padding}Storage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(Settings.options[:colors][:excerpt])
-        view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(Settings.options[:colors][:excerpt])
+        view << "#{padding}Storage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(color_excerpt)
+        view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(color_excerpt)
       end
 
       #view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)
 
       unless content['username'] == Settings.config[:identity][:username]
         if content['you_follow']
-          view << "#{padding}You follow ".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
+          view << "#{padding}You follow ".color(:cyan) + "@#{content['username']}".color(color_username)
         else
-          view << "#{padding}You don't follow ".color(:cyan) + "@#{content['username']}".color(Settings.options[:colors][:username])
+          view << "#{padding}You don't follow ".color(:cyan) + "@#{content['username']}".color(color_username)
         end
         if content['follows_you']
-          view << "\n" + "@#{content['username']}".color(Settings.options[:colors][:username]) + " follows you".color(:cyan)
+          view << "\n" + "@#{content['username']}".color(color_username) + " follows you".color(:cyan)
         else
-          view << "\n" + "@#{content['username']}".color(Settings.options[:colors][:username]) + " doesn't follow you".color(:cyan)
+          view << "\n" + "@#{content['username']}".color(color_username) + " doesn't follow you".color(:cyan)
         end
         if content['you_muted']
-          view << "\nYou muted " + "@#{content['username']}".color(Settings.options[:colors][:username])
+          view << "\nYou muted " + "@#{content['username']}".color(color_username)
         end
         if content['you_blocked']
-          view << "\nYou blocked " + "@#{content['username']}".color(Settings.options[:colors][:username])
+          view << "\nYou blocked " + "@#{content['username']}".color(color_username)
         end
       end
 
@@ -261,7 +261,7 @@ module Ayadn
       content['annotations'].each do |anno|
         case anno['type']
         when "net.app.core.directory.blog"
-          view << "\nBlog\t\t\t".color(:cyan) + "#{anno['value']['url']}".color(Settings.options[:colors][:link])
+          view << "\nBlog\t\t\t".color(:cyan) + "#{anno['value']['url']}".color(color_link)
         when "net.app.core.directory.twitter"
           view << "\nTwitter\t\t\t".color(:cyan) + "#{anno['value']['username']}".color(:green)
         when "com.appnetizens.userinput.birthday"
@@ -318,55 +318,55 @@ module Ayadn
         end
         view << "\n"
         view << "ID: ".color(:cyan)
-        view << "#{ch.id}".color(Settings.options[:colors][:id])
+        view << "#{ch.id}".color(color_id)
         view << "\n"
         ch_alias = Databases.get_alias_from_id(ch.id)
         unless ch_alias.nil?
           view << "Alias: ".color(:cyan)
-          view << "#{ch_alias}".color(Settings.options[:colors][:username])
+          view << "#{ch_alias}".color(color_username)
           view << "\n"
         end
         view << "Messages: ".color(:cyan)
-        view << "#{ch.num_messages}".color(Settings.options[:colors][:symbols])
+        view << "#{ch.num_messages}".color(color_symbols)
         view << "\n"
         if ch.owner
           view << "Owner: ".color(:cyan)
-          view << "@#{ch.owner['username']}".color(Settings.options[:colors][:username])
+          view << "@#{ch.owner['username']}".color(color_username)
           # + (#{ch.owner['name']}) if ch.owner['name']
           view << "\n"
         end
         unless options[:channels] # unless the request comes from Search
           view << "Writers: ".color(:cyan)
-          view << "#{ch.writers}".color(Settings.options[:colors][:name])
+          view << "#{ch.writers}".color(color_name)
           view << "\n"
         end
         view << "Type: ".color(:cyan)
-        view << "#{ch.type}".color(Settings.options[:colors][:index])
+        view << "#{ch.type}".color(color_index)
         view << "\n"
         if ch.type == "net.patter-app.room"
           ann = ch.annotations.select {|a| a['type'] == "net.patter-app.settings"}
           view << "Name: ".color(:cyan)
-          view << "#{ann[0]['value']['name']}".color(Settings.options[:colors][:link])
+          view << "#{ann[0]['value']['name']}".color(color_link)
           view << "\n"
           view << "Description: ".color(:cyan)
-          view << "#{ann[0]['value']['blurb']}".color(Settings.options[:colors][:username])
+          view << "#{ann[0]['value']['blurb']}".color(color_username)
           view << "\n"
           ann = ch.annotations.select {|a| a['type'] == "net.app.core.fallback_url"}
           view << "URL: ".color(:cyan)
-          view << "#{ann[0]['value']['url']}".color(Settings.options[:colors][:link])
+          view << "#{ann[0]['value']['url']}".color(color_link)
           view << "\n"
         end
         if ch.type == "net.app.core.broadcast"
           ann = ch.annotations.select {|a| a['type'] == "net.app.core.broadcast.metadata"}
           view << "Title: ".color(:cyan)
-          view << "#{ann[0]['value']['title']}".color(Settings.options[:colors][:link])
+          view << "#{ann[0]['value']['title']}".color(color_link)
           view << "\n"
           view << "Description: ".color(:cyan)
-          view << "#{ann[0]['value']['description']}".color(Settings.options[:colors][:username])
+          view << "#{ann[0]['value']['description']}".color(color_username)
           view << "\n"
           ann = ch.annotations.select {|a| a['type'] == "net.app.core.fallback_url"}
           view << "URL: ".color(:cyan)
-          view << "#{ann[0]['value']['url']}".color(Settings.options[:colors][:link])
+          view << "#{ann[0]['value']['url']}".color(color_link)
           view << "\n"
         end
         unless ch.recent_message.nil?
@@ -424,7 +424,7 @@ module Ayadn
     end
 
     def show_links(links)
-      links.each {|l| puts "#{l}".color(Settings.options[:colors][:link])}
+      links.each {|l| puts "#{l}".color(color_link)}
     end
 
     def all_hashtag_links(stream, hashtag)
@@ -530,13 +530,13 @@ module Ayadn
         arrow = arrow_count(options, content)
         count = "#{arrow}#{format}"
         if content[:username] == Settings.config[:identity][:username]
-          @view << count.color(Settings.options[:colors][:index]).inverse
+          @view << count.color(color_index).inverse
         elsif content[:mentions].include?(Settings.config[:identity][:username]) && options[:in_mentions].nil?
-          @view << count.color(Settings.options[:colors][:mentions]).inverse
+          @view << count.color(color_mention).inverse
         else
-          @view << count.color(Settings.options[:colors][:index])
+          @view << count.color(color_index)
         end
-        @view << ": ".color(Settings.options[:colors][:index])
+        @view << ": ".color(color_index)
         @view << build_content(content)
       end
       return posts, @view
@@ -548,11 +548,11 @@ module Ayadn
       posts.each do |id,content|
         content[:id] = arrow_id(options, content)
         if content[:username] == Settings.config[:identity][:username]
-          @view << content[:id].color(Settings.options[:colors][:id]).inverse + " "
+          @view << content[:id].color(color_id).inverse + " "
         elsif content[:mentions].include?(Settings.config[:identity][:username]) && options[:in_mentions].nil?
-          @view << content[:id].color(Settings.options[:colors][:mentions]).inverse + " "
+          @view << content[:id].color(color_mention).inverse + " "
         else
-          @view << content[:id].color(Settings.options[:colors][:id]) + " "
+          @view << content[:id].color(color_id) + " "
         end
         @view << build_content(content)
       end
@@ -581,7 +581,7 @@ module Ayadn
       inter = ""
       data.reverse.each do |event|
         users_array = []
-        inter << "#{@workers.parsed_time(event['event_date'])}".color(Settings.options[:colors][:date])
+        inter << "#{@workers.parsed_time(event['event_date'])}".color(color_date)
         inter << " => "
         event['users'].each do |u|
           users_array << "@" + u['username']
@@ -634,18 +634,18 @@ module Ayadn
       view = "\n"
       data.each do |file|
         view << "ID\t\t".color(:cyan)
-        view << file['id'].color(Settings.options[:colors][:id])
+        view << file['id'].color(color_id)
         view << "\n"
         view << "Name\t\t".color(:cyan)
-        view << file['name'].color(Settings.options[:colors][:name])
+        view << file['name'].color(color_name)
         view << "\n"
         view << "Kind\t\t".color(:cyan)
-        view << file['kind'].color(Settings.options[:colors][:username])
-        view << " (#{file['mime_type']})".color(Settings.options[:colors][:username]) if file['mime_type']
+        view << file['kind'].color(color_username)
+        view << " (#{file['mime_type']})".color(color_username) if file['mime_type']
         if file['image_info']
           view << "\n"
           view << "Dimensions\t".color(:cyan)
-          view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color(Settings.options[:colors][:username])
+          view << "#{file['image_info']['width']} x #{file['image_info']['height']}".color(color_username)
         end
         view << "\n"
         view << "Size\t\t".color(:cyan)
@@ -655,16 +655,16 @@ module Ayadn
         view << @workers.parsed_time(file['created_at']).color(:green)
         view << "\n"
         view << "Source\t\t".color(:cyan)
-        view << file['source']['name'].color(Settings.options[:colors][:source])
+        view << file['source']['name'].color(color_source)
         view << "\n"
         view << "State\t\t".color(:cyan)
         if file['public']
-          view << "Public".color(Settings.options[:colors][:id])
+          view << "Public".color(color_id)
           view << "\n"
           view << "Link\t\t".color(:cyan)
-          view << file['url_short'].color(Settings.options[:colors][:link])
+          view << file['url_short'].color(color_link)
         else
-          view << "Private".color(Settings.options[:colors][:id])
+          view << "Private".color(color_id)
         end
 
         view << "\n\n"
@@ -685,7 +685,7 @@ module Ayadn
       unless content[:links].empty?
         view << "\n"
         content[:links].each do |link|
-          view << link.color(Settings.options[:colors][:link])
+          view << link.color(color_link)
           view << "\n"
         end
       end
@@ -702,32 +702,32 @@ module Ayadn
 
     def build_header(content)
       header = ""
-      header << content[:handle].color(Settings.options[:colors][:username])
+      header << content[:handle].color(color_username)
       if Settings.options[:timeline][:name]
         header << " "
-        header << content[:name].color(Settings.options[:colors][:name])
+        header << content[:name].color(color_name)
       end
       if Settings.options[:timeline][:date]
         header << " "
         if Settings.global[:scrolling] == false
-          header << content[:date].color(Settings.options[:colors][:date])
+          header << content[:date].color(color_date)
         else
           if Settings.options[:scroll][:date] == false
-            header << content[:date_short].color(Settings.options[:colors][:date])
+            header << content[:date_short].color(color_date)
           else
-            header << content[:date].color(Settings.options[:colors][:date])
+            header << content[:date].color(color_date)
           end
         end
       end
       if Settings.options[:timeline][:source]
         header << " "
-        header << "[#{content[:source_name]}]".color(Settings.options[:colors][:source])
+        header << "[#{content[:source_name]}]".color(color_source)
       end
       if Settings.options[:timeline][:symbols]
-        header << " <".color(Settings.options[:colors][:symbols]) if content[:is_reply]
-        header << " #{content[:num_stars]}*".color(Settings.options[:colors][:symbols]) if content[:is_starred]
-        header << " #{content[:num_reposts]}x".color(Settings.options[:colors][:symbols]) if content[:num_reposts] > 0
-        header << " >".color(Settings.options[:colors][:symbols]) if content[:num_replies] > 0
+        header << " <".color(color_symbols) if content[:is_reply]
+        header << " #{content[:num_stars]}*".color(color_symbols) if content[:is_starred]
+        header << " #{content[:num_reposts]}x".color(color_symbols) if content[:num_reposts] > 0
+        header << " >".color(color_symbols) if content[:num_replies] > 0
       end
       header << "\n"
     end
@@ -741,7 +741,7 @@ module Ayadn
       if Settings.options[:timeline][:compact] == true
         hd = "\n"
       else
-        hd = (".".color(Settings.options[:colors][:dots])) * num_dots
+        hd = (".".color(color_dots)) * num_dots
         hd << "\n"
       end
       formatted = { header: hd }
@@ -752,7 +752,7 @@ module Ayadn
       formatted[:name] = "" if formatted[:name].nil?
       chk = formatted[:header]
       unless formatted[:name] == ""
-        chk << formatted[:name].color(Settings.options[:colors][:dots])
+        chk << formatted[:name].color(color_dots)
         chk << "\n"
       end
       unless formatted[:title].nil? || formatted[:title] == formatted[:name]
@@ -812,6 +812,56 @@ module Ayadn
       end
 
       chk.chomp
+    end
+
+    private
+
+    def color_username
+      Settings.options[:colors][:username]
+    end
+
+    def color_name
+      Settings.options[:colors][:name]
+    end
+
+    def color_link
+      Settings.options[:colors][:link]
+    end
+
+    def color_date
+      Settings.options[:colors][:date]
+    end
+
+    def color_id
+      Settings.options[:colors][:id]
+    end
+
+    def color_excerpt
+      Settings.options[:colors][:excerpt]
+    end
+
+    def color_symbols
+      Settings.options[:colors][:symbols]
+    end
+
+    def color_index
+      Settings.options[:colors][:index]
+    end
+
+    def color_mention
+      Settings.options[:colors][:mentions]
+    end
+
+    def color_source
+      Settings.options[:colors][:source]
+    end
+
+    def color_dots
+      Settings.options[:colors][:dots]
+    end
+
+    def timeline_is_compact
+      Settings.options[:timeline][:compact]
     end
 
   end
