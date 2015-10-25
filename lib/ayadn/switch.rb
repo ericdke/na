@@ -4,11 +4,19 @@ module Ayadn
 
     def initialize
       @status = Status.new
-      @acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+      begin
+        @acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+      rescue Amalgalite::SQLite3::Error => e
+        @status.not_authorized
+        exit
+      rescue => e
+        raise e
+      end
     end
 
     def list
       puts "\n"
+      please if @acc_db.blank?
       accounts = Databases.all_accounts(@acc_db)
       please if accounts.empty?
       accounts.sort_by! { |acc| acc[0] }
@@ -38,6 +46,7 @@ module Ayadn
         exit
       end
       username = Workers.new.remove_arobase_if_present([user.first])[0]
+      please if @acc_db.blank?
       accounts = Databases.all_accounts(@acc_db)
       please if accounts.empty?
       active = accounts.select { |acc| acc[4] == 1 }[0]

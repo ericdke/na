@@ -132,6 +132,23 @@ module Ayadn
       counts_config.save
     end
 
+    desc "edit", "Edit settings in $EDITOR"
+    def edit
+      Settings.load_config()
+      sets = Settings.config[:paths][:config] + "/config.yml"
+      if sets.blank?
+        Status.new.not_authorized
+        exit
+      end
+      ed = `echo $EDITOR`
+      if ed.blank?
+        Status.new.info "No predefined EDITOR, opening in VIM"
+        `vim #{sets}`
+        exit
+      end
+      `$EDITOR #{sets}`
+    end
+
     desc "color ITEM COLOR", "Set ITEM to COLOR"
     long_desc Descriptions.set_color
     map "colors" => :color

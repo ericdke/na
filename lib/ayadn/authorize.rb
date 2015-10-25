@@ -66,7 +66,9 @@ module Ayadn
         end
         puts "\e[H\e[2J"
         @status.say_yellow :delete, "database entry for @#{user}"
+
         db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+
         Databases.remove_from_accounts(db, user)
         if options[:delete]
           @status.say_yellow :delete, "@#{user} user folders"
@@ -82,6 +84,9 @@ module Ayadn
           @status.say_info "user @#{username} is now the active user"
         end
         puts "\n"
+      rescue Amalgalite::SQLite3::Error => e
+          @status.not_authorized
+          exit
       rescue Interrupt
         Status.new.canceled
         exit

@@ -3,6 +3,7 @@
 - New: option to set an alternative base URL for the API calls
 - New: run diagnostics (network, accounts, settings, gem)
 - New: --auth bypass authorization webpage by providing the token inline
+- New: edit settings with your $EDITOR
 - Fixed: commands when no user authorized
 - Fixed: --unauthorize if no valid username
 - Deprecated: Ayadn 1.x migration tools
