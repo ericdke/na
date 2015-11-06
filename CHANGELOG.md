@@ -1,4 +1,4 @@
-## 3.0 - [WIP] - 'Edge Of Tomorrow'
+## 3.0 - 2015-11-07 - 'Edge Of Tomorrow'
 
 - New: option to set an alternative base URL for the API calls
 - New: run diagnostics (network, accounts, settings, gem)
