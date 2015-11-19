@@ -390,6 +390,8 @@ module Ayadn
         begin
           @random_post_id = rand(@max_id)
           @resp = @api.get_details(@random_post_id, {})
+          next if @resp.nil?
+          next if @resp['data'].nil? || @resp['data'].empty?
           next if @resp['data']['is_deleted']
           @view.show_simple_post([@resp['data']], {})
           counter += 1
