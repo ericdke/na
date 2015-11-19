@@ -1,3 +1,7 @@
+## 3.1 - (WIP) - 'Mr. Robot'
+
+- Fixed: crashes in the Random (-rnd) stream
+
 ## 3.0 - 2015-11-07 - 'Edge Of Tomorrow'
 
 - New: option to set an alternative base URL for the API calls
