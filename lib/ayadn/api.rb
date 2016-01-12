@@ -8,8 +8,12 @@ module Ayadn
     end
 
     def get_unified(options)
+      # "paginate" fetches last post ID we've seen if the user asks for scrolling or asks to see new posts only
       options = paginate options, 'unified'
-      get_parsed_response(Endpoints.new.unified(options))
+      # Create the API endpoint URL
+      endpoint = Endpoints.new.unified(options)
+      # Fetch the response from the ADN servers
+      get_parsed_response(endpoint)
     end
 
     def get_checkins(options)
@@ -111,6 +115,7 @@ module Ayadn
       build_list(username, :followers)
     end
 
+    # "nil" as a first argument? the other method should be refactored
     def get_muted
       build_list(nil, :muted)
     end
@@ -121,14 +126,16 @@ module Ayadn
 
     def get_raw_list(username, target)
       options = {:count => 200, :before_id => nil}
-      big = []
+      bucket = []
+      # Fetch new items until the API says no more
+      # This is chronologically reversed: start with current id, get 200 posts, get the post id we're at, then 200 again, etc
       loop do
         resp = get_parsed_response(get_list_url(username, target, options))
-        big << resp
+        bucket << resp
         break if resp['meta']['min_id'] == nil || resp['meta']['more'] == false
         options = {:count => 200, :before_id => resp['meta']['min_id']}
       end
-      big
+      bucket
     end
 
     def get_user(username)
@@ -263,22 +270,33 @@ module Ayadn
     end
 
     def self.build_query(arg)
+      # Number of posts/messages to fetch.
+      # Either from CLI and integer
+      # or from the settings
       if arg[:count].to_s.is_integer?
         count = arg[:count]
       else
         count = Settings.options[:counts][:default]
       end
+      # Do we want the "directed posts"?
+      # Either from CLI (optional)
+      # or from the settings
       directed = arg[:directed] || Settings.options[:timeline][:directed]
+      # because I was not always consistent in the legacy code base, let's be cautious
       if directed == true || directed == 1
         directed = 1
       else
         directed = 0
       end
+      # We *never* want the HTML in the response, we are a CLI client
       html = 0
+      # If the user asks to see posts starting with a specific post ID
       if arg[:since_id]
         "&count=#{count}&include_html=#{html}&include_directed_posts=#{directed}&include_deleted=0&include_annotations=1&since_id=#{arg[:since_id]}"
+      # Or asks to see their recent messages
       elsif arg[:recent_message]
         "&count=#{count}&include_html=#{html}&include_directed_posts=#{directed}&include_deleted=0&include_annotations=1&include_recent_message=#{arg[:recent_message]}"
+      # Else we create a normal request URL
       else
         "&count=#{count}&include_html=#{html}&include_directed_posts=#{directed}&include_deleted=0&include_annotations=1"
       end
@@ -294,11 +312,14 @@ module Ayadn
     end
 
     def get_parsed_response(url)
+      # Bool for retry if failure
       working = true
       begin
+        # Get the response from the API and decode the JSON
         resp = JSON.parse(CNX.get_response_from(url))
         return resp
       rescue JSON::ParserError => e
+        # Retry once after 10 seconds if the response wasn't valid
         if working == true
           working = false
           @status.server_error(true)
@@ -326,6 +347,7 @@ module Ayadn
     end
 
     def build_list(username, target)
+      # Fetch data for each user (and verify the user isn't deleted)
       options = {:count => 200, :before_id => nil}
       big_hash = {}
       loop do

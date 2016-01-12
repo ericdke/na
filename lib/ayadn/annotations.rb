@@ -4,8 +4,12 @@ module Ayadn
 
   class Annotations
 
+    ###
+    # This class contains the "annotations" (metadata) templates for posting to ADN
+
     attr_accessor :content
 
+    # Creates basic annotations and optionally adds necessary ones
     def initialize(dic)
       dic[:options] = {} if dic[:options].nil?
       @content = base()
@@ -18,6 +22,8 @@ module Ayadn
     end
 
     def base
+      # Creates basic post metadata
+      # Both types are custom types for Ayadn (all types beginning with "com.ayadn" are custom types)
       [
         {
         "type" => "com.ayadn.user",
@@ -50,6 +56,7 @@ module Ayadn
     end
 
     def files(dic)
+      # Creates "oembed" metadata for uploaded files
       files = FileOps.make_paths(dic[:options][:embed])
       data = FileOps.upload_files(files)
       data.map do |obj|
@@ -67,6 +74,7 @@ module Ayadn
     end
 
     def youtube(dic)
+      # Fetch Youtube metadata for a video
       dic['link'] = dic[:options][:youtube][0]
       req_url = "http://www.youtube.com/oembed?url=#{dic['link']}&format=json"
       resp = CNX.download(req_url)
@@ -84,6 +92,8 @@ module Ayadn
         Errors.global_error({error: e, caller: caller, data: [resp, dic]})
       end
       
+      # Adds Youtube oembed metadata to the existing metadata
+      # Also adds a custom type for Ayadn
       dic.merge!(decoded)
       [{
         "type" => "net.app.core.oembed",

@@ -21,6 +21,7 @@ module Ayadn
       Databases.open_databases
     end
 
+    # Uses method_missing to template a single method for several streams
     def method_missing(meth, options)
       case meth.to_s
       when 'unified', 'checkins', 'global', 'trending', 'photos', 'conversations', 'interactions'
@@ -36,12 +37,17 @@ module Ayadn
       end
     end
 
+    # Retrieves the "Mentions" stream for a given user
+    # Params: username, options from CLI
     def mentions(username, options)
       begin
+        # We temporary modify the global settings (should be refactored) if the user asks for a compact view
         Settings.options[:timeline][:compact] = true if options[:compact] == true
+        # The Stream class holds the actual methods for this work
         stream = Stream.new(@api, @view, @workers)
         stream.mentions(username, options)
       rescue => e
+        # No specific error handling, just deferring
         Errors.global_error({error: e, caller: caller, data: [username, options]})
       end
     end
@@ -98,20 +104,28 @@ module Ayadn
 
     def delete(post_ids, options = {})
       begin
+        # Checks that each post ID received from CLI is an integer
         ids = post_ids.select { |post_id| post_id.is_integer? }
         if ids.empty?
           @status.error_missing_post_id
           exit
         end
+        # We temporary modify the global settings (should be refactored) if the user asks for an unfiltered result
         if options[:force]
           Settings.global[:force] = true
         else
+          # Creates a new set of IDs, filtered
           ids.map! { |post_id| @workers.get_real_post_id(post_id) }
         end
+        # Most part should be refactored to go in View
         puts "\n"
+        # Delete each post
         ids.each do |post_id|
+          # Say it
           @status.deleting_post(post_id)
+          # Do it
           resp = @api.delete_post(post_id)
+          # Verify it was done
           @check.has_been_deleted(post_id, resp)
         end
       rescue => e
@@ -146,7 +160,9 @@ module Ayadn
 
     def unfollow(usernames)
       begin
+        # Verify CLI input
         @check.no_username(usernames)
+        # Remove current user from list (you never know) to avoid API error
         users = @workers.all_but_me(usernames)
         puts "\n"
         @status.unfollowing(users.join(','))
@@ -249,9 +265,13 @@ module Ayadn
         puts "\n"
         ids.each do |post_id|
           @status.reposting(post_id)
+          # Retrieve the post we want to repost
           resp = @api.get_details(post_id)
+          # Verify it hasn't been already reposted by us
           @check.already_reposted(resp)
+          # Maybe the post is already a repost by someone else?
           id = @workers.get_original_id(post_id, resp)
+          # Repost then verify it has been done
           @check.has_been_reposted(id, @api.repost(id))
         end
       rescue => e
@@ -431,6 +451,7 @@ module Ayadn
       begin
         Settings.options[:timeline][:compact] = true if options[:compact] == true
         @check.no_username(username)
+        # Adds @ if necessary
         usernames = @workers.add_arobases_to_usernames(username)
         usernames.each.with_index do |username, index|
           if options[:raw]
@@ -438,7 +459,9 @@ module Ayadn
           else
             @view.downloading if index == 0
             stream = @api.get_user(username)
+            # Verify the user exists
             @check.no_user(stream, username)
+            # Is it us? If yes, get *our* info
             @check.same_username(stream) ? token = @api.get_token_info['data'] : token = nil
             @view.clear_screen if index == 0
             @view.infos(stream['data'], token)
@@ -481,6 +504,7 @@ module Ayadn
         puts "\n" if Settings.options[:timeline][:compact] == true
         @status.say_info "author"
         puts "\n" unless Settings.options[:timeline][:compact] == true
+        # Is it us? ...
         if response['data']['username'] == Settings.config[:identity][:username]
           @view.show_userinfos(stream, @api.get_token_info['data'], true)
         else
@@ -488,6 +512,7 @@ module Ayadn
         end
         if resp['repost_of']
           @status.repost_info
+          # If we ask infos for a reposted post, fetch the original instead
           Errors.repost(post_id, resp['repost_of']['id'])
           @view.show_simple_post([resp['repost_of']], options)
           puts "\n" if Settings.options[:timeline][:compact] == true
@@ -526,6 +551,7 @@ module Ayadn
 
     def channels options
       begin
+        # Input could be channel IDs or channel aliases
         channels = if options[:id]
           channel_id = options[:id].map {|id| @workers.get_channel_id_from_alias(id)}
           lambda { @api.get_channel(channel_id, options) }
@@ -559,6 +585,7 @@ module Ayadn
     def messages_unread(options)
       begin
         Settings.options[:timeline][:compact] = true if options[:compact] == true
+        # Option to not mark the messages as read
         if options[:silent]
           Settings.options[:marker][:messages] = false
         end
@@ -567,6 +594,7 @@ module Ayadn
         response = @api.get_channels
         unread_channels = []
         response['data'].map do |ch|
+          # Channels can be of many types, PMs are only one type
           if ch['type'] == "net.app.core.pm" && ch['has_unread'] == true
             unread_channels << ch['id']
           end
@@ -578,6 +606,7 @@ module Ayadn
         unread_messages = {}
         unread_channels.reverse.each do |id|
           @status.say_nocolor :downloading, "messages from channel #{id}"
+          # Find the last time we've done this
           since = Databases.find_last_id_from("channel:#{id}")
           unless since.nil?
             api_options = {count: 20, since_id: since}
@@ -585,18 +614,23 @@ module Ayadn
             api_options = {count: 20}
           end
           ch = @api.get_messages(id, api_options)
+          # Find the last message seen and the last message in the channel
           last_read_id = ch['meta']['marker']['last_read_id'].to_i
           last_message_id = ch['meta']['max_id']
           messages = []
           ch['data'].each do |msg|
+            # Fetch the message if it's more recent than the last we got
             messages << msg if msg['id'].to_i > last_read_id
           end
           unread_messages[id] = [messages, last_message_id]
         end
+        # If we want to mark the messages as read
         if Settings.options[:marker][:messages] == true
           unread_messages.each do |k,v|
             name = "channel:#{k}"
+            # Save the reading position locally
             Databases.pagination_insert(name, v[1])
+            # Mark as read
             resp = @api.update_marker(name, v[1])
             res = JSON.parse(resp)
             if res['meta']['code'] != 200
@@ -635,19 +669,25 @@ module Ayadn
           post_id = @workers.get_real_post_id(post_id)
         end
         @view.downloading
+        # Get the details from the post we want to send to Pinboard
         resp = @api.get_details(post_id)['data']
         @view.clear_screen
+        # Extract links from the post
         links = @workers.extract_links(resp)
+        # In case the post has no text, to prevent an error
         resp['text'].nil? ? text = "" : text = resp['text']
+        # The first tag is always "ADN"
         usertags << "ADN"
         handle = "@" + resp['user']['username']
         post_text = "From: #{handle} -- Text: #{text} -- Links: #{links.join(" ")}"
         pinner = Ayadn::PinBoard.new
         unless pinner.has_credentials_file?
+          # No Pinboard account registered? Ask for one.
           @status.no_pin_creds
           pinner.ask_credentials
           @status.pin_creds_saved
         end
+        # Get stored credentials
         credentials = pinner.load_credentials
         maker = Struct.new(:username, :password, :url, :tags, :text, :description)
         bookmark = maker.new(credentials[0], credentials[1], resp['canonical_url'], usertags.join(","), post_text, resp['canonical_url'])
@@ -678,6 +718,7 @@ module Ayadn
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
         text = args.join(" ")
+        # Should be refactored to positive logic
         writer.post_size_error(text) if writer.post_size_ok?(text) == false
         @view.clear_screen
         @status.posting
@@ -764,6 +805,7 @@ module Ayadn
       	@status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
         @check.no_post(replied_to, post_id)
+        # API specifies to always reply to the original post of a reposted post. We offer the user an option to not.
         unless options[:noredirect]
           post_id = @workers.get_original_id(post_id, replied_to)
         end
@@ -779,7 +821,7 @@ module Ayadn
         @status.reply
         lines_array = writer.compose
         text = lines_array.join("\n")
-        # text length is tested in Post class for the reply command
+        # Text length is tested in Post class for the reply command
         @view.clear_screen
         replied_to = @workers.build_posts([replied_to['data']])
         if options[:poster]
@@ -789,6 +831,7 @@ module Ayadn
         resp = writer.reply({options: options, text: text, id: post_id, reply_to: replied_to})
         FileOps.save_post(resp) if Settings.options[:backup][:posts]
         # ----
+        # "options" from CLI is immutable, we have to make a copy to add items
         options = options.dup
         unless resp['data']['reply_to'].nil?
           options[:reply_to] = resp['data']['reply_to'].to_i
