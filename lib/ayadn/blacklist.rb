@@ -1,6 +1,7 @@
 # encoding: utf-8
 module Ayadn
   class Blacklist < Thor
+
     desc "add TYPE TARGET", "Adds a mention, hashtag, client, username or keyword to your blacklist"
     map "create" => :add
     long_desc Descriptions.blacklist_add
@@ -33,12 +34,6 @@ module Ayadn
       BlacklistWorkers.new.list(options)
     end
 
-    # desc "import DATABASE", "Imports a blacklist database from another Ayadn account"
-    # long_desc Descriptions.blacklist_import
-    # def import(database)
-    #   BlacklistWorkers.new.import(database)
-    # end
-
     desc "clear", "Clear your blacklist database"
     def clear
       BlacklistWorkers.new.clear
@@ -56,18 +51,7 @@ module Ayadn
       Databases.open_databases
       @workers = Workers.new
     end
-    # def import(database)
-    #   begin
-    #     new_db = File.realpath(database)
-    #     if File.exist?(new_db)
-    #       Databases.import_blacklist(new_db)
-    #       Logs.rec.info "Imported '#{new_db}' values in blacklist database."
-    #     else
-    #       puts "\nFile '#{new_db}' doesn't exist.\n\n".color(:red)
-    #       Logs.rec.warn "File '#{new_db}' doesn't exist."
-    #     end
-    #   end
-    # end
+
     def clear
       begin
         Status.new.ask_clear_blacklist
@@ -81,6 +65,7 @@ module Ayadn
         end
       end
     end
+
     def add(args)
       begin
         type = args.shift
@@ -110,6 +95,7 @@ module Ayadn
         end
       end
     end
+
     def remove(args)
       begin
         type = args.shift
@@ -137,6 +123,7 @@ module Ayadn
         end
       end
     end
+    
     def list(options)
       begin
         Settings.options[:timeline][:compact] = true if options[:compact] == true

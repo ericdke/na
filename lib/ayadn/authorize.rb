@@ -10,10 +10,12 @@ module Ayadn
 
     def authorize(options)
       puts "\n"
+      # /ayadn/accounts.db is the Ayadn 1.x deprecated database
       if File.exist?(Dir.home + "/ayadn/accounts.db")
         @status.deprecated_ayadn
         exit
       end
+      # default config for ADN API
       api_file = Dir.home + "/ayadn/.api.yml"
       # overrides the default value
       if File.exist?(api_file)
@@ -25,12 +27,12 @@ module Ayadn
       end
       puts "\e[H\e[2J"
       show_link
+      # get the auth token from CLI or ask user
       token = if options["token"]
         options["token"][0]
       else
         get_token
       end
-      # token = get_token
       check_token(token)
       puts "\e[H\e[2J"
       @status.say_yellow :connexion, "downloading user info"
@@ -66,9 +68,9 @@ module Ayadn
         end
         puts "\e[H\e[2J"
         @status.say_yellow :delete, "database entry for @#{user}"
-
+        # load the current accounts DB
         db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
-
+        # remove this user from DB
         Databases.remove_from_accounts(db, user)
         if options[:delete]
           @status.say_yellow :delete, "@#{user} user folders"
@@ -79,6 +81,7 @@ module Ayadn
         if remaining.flatten.empty?
           @status.say_info "accounts database is now empty"
         else
+          # just to avoid having Ayadn without any user logged in
           username = remaining[0][0]
           Databases.set_active_account(db, username)
           @status.say_info "user @#{username} is now the active user"
