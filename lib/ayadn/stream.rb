@@ -25,8 +25,6 @@ module Ayadn
         Databases.save_max_id(stream_object, 'global') unless stream_object.meta.max_id.nil?
         @view.render(stream_object, options, niceranks)
       end
-
-
       if options[:scroll]
         @view.clear_screen()
         Scroll.new(@api, @view).global(options)

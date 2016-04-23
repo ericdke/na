@@ -525,8 +525,6 @@ module Ayadn
     def build_stream_with_index(posts, options, niceranks)
       @view = ""
       posts = filter_nicerank(@workers.build_posts(posts.reverse, niceranks), options)
-
-
       posts.each do |id,content|
         format = "%03d" % content[:count]
         arrow = arrow_count(options, content)

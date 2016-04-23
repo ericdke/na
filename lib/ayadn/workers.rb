@@ -246,52 +246,52 @@ module Ayadn
 
         values[:checkins], values[:has_checkins] = extract_checkins(post)
 
-        if post['repost_of']
+        if !post.repost_of.nil?
           values[:is_repost] = true
-          values[:repost_of] = post['repost_of']['id']
-          values[:original_poster] = post['repost_of']['user']['username']
+          values[:repost_of] = post.repost_of.id
+          values[:original_poster] = post.repost_of.user.username
         else
           values[:is_repost] = false
           values[:repost_of] = nil
-          values[:original_poster] = post['user']['username']
+          values[:original_poster] = post.user.username
         end
 
-        unless post['text'].nil?
-          values[:raw_text] = post['text']
-          values[:text] = colorize_text(post['text'], mentions, hashtags)
+        unless post.text.blank?
+          values[:raw_text] = post.text
+          values[:text] = colorize_text(post.text, mentions, hashtags)
         else
           values[:raw_text] = ""
           values[:text] = "(no text)"
         end
 
-        unless post['num_stars'].nil? || post['num_stars'] == 0
+        unless post.num_stars.nil? || post.num_stars == 0
           values[:is_starred] = true
-          values[:num_stars] = post['num_stars']
+          values[:num_stars] = post.num_stars
         else
           values[:is_starred] = false
           values[:num_stars] = 0
         end
 
-        if post['num_replies']
-          values[:num_replies] = post['num_replies']
+        if !post.num_replies.nil?
+          values[:num_replies] = post.num_replies
         else
           values[:num_replies] = 0
         end
 
-        if post['reply_to']
+        if !post.reply_to.nil?
           values[:is_reply] = true
-          values[:reply_to] = post['reply_to']
+          values[:reply_to] = post.reply_to
         else
           values[:is_reply] = false
           values[:reply_to] = nil
         end
-        if post['num_reposts']
-          values[:num_reposts] = post['num_reposts']
+        if !post.num_reposts.nil?
+          values[:num_reposts] = post.num_reposts
         else
           values[:num_reposts] = 0
         end
 
-        result[post['id'].to_i] = values
+        result[post.id.to_i] = values
 
       end
 
@@ -625,36 +625,37 @@ module Ayadn
       checkins = {}
       unless post.annotations.blank?
         post.annotations.each do |anno|
-          case anno['type']
+          anno_value = anno.value
+          case anno.type
           when "net.app.core.checkin", "net.app.ohai.location"
             has_checkins = true
             checkins = {
-              name: anno['value']['name'],
-              address: anno['value']['address'],
-              address_extended: anno['value']['address_extended'],
-              locality: anno['value']['locality'],
-              postcode: anno['value']['postcode'],
-              country_code: anno['value']['country_code'],
-              website: anno['value']['website'],
-              telephone: anno['value']['telephone']
+              name: anno_value['name'],
+              address: anno_value['address'],
+              address_extended: anno_value['address_extended'],
+              locality: anno_value['locality'],
+              postcode: anno_value['postcode'],
+              country_code: anno_value['country_code'],
+              website: anno_value['website'],
+              telephone: anno_value['telephone']
             }
-            unless anno['value']['categories'].nil?
-              unless anno['value']['categories'][0].nil?
-                checkins[:categories] = anno['value']['categories'][0]['labels'].join(", ")
+            unless anno_value['categories'].nil?
+              unless anno_value['categories'][0].nil?
+                checkins[:categories] = anno_value['categories'][0]['labels'].join(", ")
               end
             end
-            unless anno['value']['factual_id'].nil?
-              checkins[:factual_id] = anno['value']['factual_id']
+            unless anno_value['factual_id'].nil?
+              checkins[:factual_id] = anno_value['factual_id']
             end
-            unless anno['value']['longitude'].nil?
-              checkins[:longitude] = anno['value']['longitude']
-              checkins[:latitude] = anno['value']['latitude']
+            unless anno_value['longitude'].nil?
+              checkins[:longitude] = anno_value['longitude']
+              checkins[:latitude] = anno_value['latitude']
             end
-            unless anno['value']['title'].nil?
-              checkins[:title] = anno['value']['title']
+            unless anno_value['title'].nil?
+              checkins[:title] = anno_value['title']
             end
-            unless anno['value']['region'].nil?
-              checkins[:region] = anno['value']['region']
+            unless anno_value['region'].nil?
+              checkins[:region] = anno_value['region']
             end
           end
         end

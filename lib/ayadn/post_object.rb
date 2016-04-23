@@ -60,10 +60,13 @@ module Ayadn
     attr_reader :input, :mentions, :hashtags, :links
 
     def initialize hash
-      @input = hash["entities"]
-      @mentions = @input["mentions"].map { |hash| PostMentionObject.new(hash) }
-      @hashtags = @input["hashtags"].map { |hash| PostHashtagObject.new(hash) }
-      @links = @input["links"].map { |hash| PostLinkObject.new(hash) }
+      @input = hash["entities"].nil? ? {} : hash["entities"]
+      mentions = @input["mentions"].nil? ? [] : @input["mentions"]
+      @mentions = mentions.map { |hash| PostMentionObject.new(hash) }
+      hashtags = @input["hashtags"].nil? ? [] : @input["hashtags"]
+      @hashtags = hashtags.map { |hash| PostHashtagObject.new(hash) }
+      links = @input["links"].nil? ? [] : @input["links"]
+      @links = links.map { |hash| PostLinkObject.new(hash) }
     end
   end
 
@@ -80,7 +83,7 @@ module Ayadn
 
 	class PostObject
 
-    attr_reader :input, :num_stars, :num_reposts, :num_replies, :text, :created_at, :id, :canonical_url, :machine_only, :you_reposted, :you_starred, :thread_id, :pagination_id, :source, :user, :annotations, :entities
+    attr_reader :input, :num_stars, :num_reposts, :num_replies, :text, :created_at, :id, :canonical_url, :machine_only, :you_reposted, :you_starred, :thread_id, :pagination_id, :source, :user, :annotations, :entities, :repost_of, :reply_to
     attr_accessor :view
 
     def initialize hash
@@ -101,6 +104,8 @@ module Ayadn
       @entities = EntitiesObject.new(@input)
       @user = UserObject.new(@input)
       @annotations = @input["annotations"].map { |hash| PostAnnotationObject.new(hash) }
+      @repost_of = PostObject.new(@input["repost_of"]) if !@input["repost_of"].blank?
+      @reply_to = @input["reply_to"]
     end
 	end
 

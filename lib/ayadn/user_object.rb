@@ -56,8 +56,8 @@ module Ayadn
     attr_reader :input, :text, :entities
 
     def initialize hash
-      @input = hash["description"]
-      @text = @input["text"]
+      @input = hash["description"].nil? ? {} : hash["description"]
+      @text = @input["text"].nil? ? "" : @input["text"]
       @entities = EntitiesObject.new(@input)
     end
   end
