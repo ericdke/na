@@ -26,14 +26,14 @@ module Ayadn
       @nr = NiceRank.new
       loop do
         begin
-          stream = get(target, options)
-          stream['data'].empty? ? niceranks = {} : niceranks = @nr.get_ranks(stream)
-          Debug.stream stream, options, target
+          stream_object = StreamObject.new(get(target, options))
+          stream_object.posts.empty? ? niceranks = {} : niceranks = @nr.get_ranks(stream_object)
+          Debug.stream stream_object, options, target          
           target = "explore:#{target}" if explore?(target) # explore but not global
           clear() if Settings.options[:scroll][:spinner] == true
-          show_if_new(stream, options, target, niceranks)
+          show_if_new(stream_object, options, target, niceranks)          
           target = orig_target if target =~ /explore/
-          options = save_then_return(stream, options, target)
+          options = save_then_return(stream_object, options, target)
           countdown
           print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
@@ -183,7 +183,7 @@ module Ayadn
     end
 
     def save_then_return(stream, options, name = 'unknown')
-      unless stream['meta']['max_id'].nil?
+      unless stream.meta.max_id.nil?
         Databases.save_max_id(stream, name)
         return options_hash(stream, options)
       end
@@ -208,17 +208,17 @@ module Ayadn
 
     def options_hash(stream, options)
       if options[:filter] == true
-        {:count => 50, :since_id => stream['meta']['max_id'], scroll: true, filter: true}
+        {:count => 50, :since_id => stream.meta.max_id, scroll: true, filter: true}
       else
-        {:count => 50, :since_id => stream['meta']['max_id'], scroll: true}
+        {:count => 50, :since_id => stream.meta.max_id, scroll: true}
       end
     end
 
     def show(stream, options, niceranks)
       if options[:raw]
-        jj stream
+        jj stream.input
       else
-        @view.show_posts(stream['data'], options, niceranks)
+        @view.show_posts(stream, options, niceranks)
       end
     end
 

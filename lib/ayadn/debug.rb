@@ -41,14 +41,14 @@ module Ayadn
         deb << "* t#{Time.now.to_i}\n"
         deb << "Options:\t#{options.inspect}\n"
         deb << "Target:\t\t#{target.inspect}\n"
-        deb << "Posts:\t\t#{stream['data'].length}\n"
-        deb << "Meta:\t\t#{stream['meta']}\n"
+        deb << "Posts:\t\t#{stream.posts.length}\n"
+        deb << "Meta:\t\t#{stream.meta.input.inspect}\n"
         deb << "\n"
         puts deb.color(Settings.options[:colors][:debug])
-        Logs.rec.debug "STREAM/META: #{stream['meta']}"
+        Logs.rec.debug "STREAM/META: #{stream.meta.input.inspect}"
         Logs.rec.debug "STREAM/OPTIONS: #{options.inspect}"
         Logs.rec.debug "STREAM/TARGET: #{target.inspect}"
-        Logs.rec.debug "STREAM/POSTS: #{stream['data'].length}"
+        Logs.rec.debug "STREAM/POSTS: #{stream.posts.length}"
       end
     end
 
