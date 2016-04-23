@@ -19,12 +19,14 @@ module Ayadn
       options[:filter] = nicerank_true()
       @view.downloading(options)
       unless options[:scroll]
-        stream = @api.get_global(options)
-        Settings.global[:force] == true ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream)
-        @check.no_new_posts(stream, options, 'global')
-        Databases.save_max_id(stream, 'global') unless stream['meta']['max_id'].nil?
-        @view.render(stream, options, niceranks)
+        stream_object = StreamObject.new(@api.get_global(options))
+        Settings.global[:force] == true ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream_object)
+        @check.no_new_posts(stream_object, options, 'global')
+        Databases.save_max_id(stream_object, 'global') unless stream_object.meta.max_id.nil?
+        @view.render(stream_object, options, niceranks)
       end
+
+
       if options[:scroll]
         @view.clear_screen()
         Scroll.new(@api, @view).global(options)

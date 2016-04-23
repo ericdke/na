@@ -23,8 +23,8 @@ module Ayadn
     def get_ranks stream
       begin
         user_ids, niceranks = [], {}
-        stream['data'].each do |post|
-          id = post['user']['id']
+        stream.posts.each do |post|
+          id = post.user.id
           user_ids << id if @store[id].nil?
         end
         user_ids.uniq!
@@ -61,14 +61,14 @@ module Ayadn
         end
 
 
-        @posts += stream['data'].size
+        @posts += stream.posts.size
         @ids += user_ids.size
 
         if Settings.options[:timeline][:debug] == true
           deb = "\n"
           deb << "+ NICERANK\n"
           deb << "* t#{Time.now.to_i}\n"
-          deb << "Posts:\t\t#{stream['data'].size}\n"
+          deb << "Posts:\t\t#{stream.posts.size}\n"
           deb << "Requested NR:\t#{user_ids.size}\n"
           deb << "* TOTALS\n"
           deb << "Posts:\t\t#{@posts}\n"

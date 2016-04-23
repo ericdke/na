@@ -871,7 +871,7 @@ module Ayadn
       crashes = 0
       begin
         res = @sql.execute("SELECT post_id FROM Pagination WHERE name=(?)", [title]).flatten[0]
-        stream['meta']['max_id'].to_i > res.to_i
+        stream.meta.max_id.to_i > res.to_i
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
@@ -881,7 +881,7 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['has_new?', stream, title].inspect
+          puts ['has_new?', stream.inspect, title].inspect
           exit
         end
       end
@@ -890,13 +890,13 @@ module Ayadn
     def self.save_max_id(stream, name = 'unknown')
       crashes = 0
       begin
-        if stream['meta']['marker'].nil?
+        if stream.meta.marker.nil?
           key = name
         else
-          key = stream['meta']['marker']['name']
+          key = stream.meta.marker.name
         end
         @sql.execute("DELETE FROM Pagination WHERE name=(?)", [key])
-        @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(?, ?);", [key, stream['meta']['max_id'].to_i])
+        @sql.execute("INSERT INTO Pagination(name, post_id) VALUES(?, ?);", [key, stream.meta.max_id.to_i])
       rescue Amalgalite::SQLite3::Error => e
         if crashes < 2
           crashes += 1
@@ -906,7 +906,7 @@ module Ayadn
           puts "ERROR in Databases"
           puts caller
           puts e
-          puts ['save_max_id', stream, name].inspect
+          puts ['save_max_id', stream.inspect, name].inspect
           exit
         end
       end

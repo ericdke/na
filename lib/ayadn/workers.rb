@@ -142,22 +142,22 @@ module Ayadn
     end
 
     # builds a hash of hashes, each hash is a normalized post with post id as a key
-    def build_posts(data, niceranks = {})
+    def build_posts(posts, niceranks = {})
       # skip objects in blacklist unless force
-      posts = {}
-      data.each.with_index(1) do |post, index|
+      result = {}
+      posts.each.with_index(1) do |post, index|
         unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
-            if Databases.is_in_blacklist?('client', post['source']['name'].downcase)
-                Debug.skipped({source: post['source']['name']})
+            if Databases.is_in_blacklist?('client', post.source.name.downcase)
+                Debug.skipped({source: post.source.name})
                 next
             end
           end
         end
         unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
-            if Databases.is_in_blacklist?('user', post['user']['username'].downcase)
-              Debug.skipped({user: post['user']['username']})
+            if Databases.is_in_blacklist?('user', post.user.username.downcase)
+              Debug.skipped({user: post.user.username})
               next
             end
           end
@@ -166,18 +166,17 @@ module Ayadn
         @skip = false
         unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
-            hashtags.each do |h|
-              if Databases.is_in_blacklist?('hashtag', h.downcase)
+            hashtags.each do |tag|
+              if Databases.is_in_blacklist?('hashtag', tag.downcase)
                 @skip = true
-                Debug.skipped({hashtag: h})
+                Debug.skipped({hashtag: tag})
                 break
               end
             end
           end
         end
         next if @skip
-        mentions= []
-        post['entities']['mentions'].each { |m| mentions << m['name'] }
+        mentions = extract_mentions(post)
         unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
             mentions.each do |m|
@@ -192,7 +191,7 @@ module Ayadn
         next if @skip
         unless Settings.global[:force] == true
           if Settings.options[:blacklist][:active] == true
-            post['text'].split(" ").each do |word|
+            post.text.split(" ").each do |word|
               target_word = word.gsub(/[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/, "")
               if Databases.is_in_blacklist?('word', target_word.downcase)
                 Debug.skipped({word: target_word})
@@ -205,39 +204,40 @@ module Ayadn
         next if @skip
         
         # create custom objects from ADN response
-        if niceranks[post['user']['id'].to_i]
-          rank = niceranks[post['user']['id'].to_i][:rank]
-          is_human = niceranks[post['user']['id'].to_i][:is_human]
+        user_id_int = post.user.id.to_i
+        if niceranks[user_id_int]
+          rank = niceranks[user_id_int][:rank]
+          is_human = niceranks[user_id_int][:is_human]
         else
           rank = false
           is_human = 'unknown'
         end
 
-        if post['user'].has_key?('name')
-          name = post['user']['name'].to_s.force_encoding("UTF-8")
+        if !post.user.name.blank?
+          name = post.user.name.force_encoding("UTF-8")
         else
           name = "(no name)"
         end
 
-        source = post['source']['name'].to_s.force_encoding("UTF-8")
+        source = post.source.name.force_encoding("UTF-8")
 
         values = {
           count: index,
-          id: post['id'].to_i,
+          id: post.id.to_i,
           name: name,
-          thread_id: post['thread_id'],
-          username: post['user']['username'],
-          user_id: post['user']['id'].to_i,
+          thread_id: post.thread_id,
+          username: post.user.username,
+          user_id: post.user.id.to_i,
           nicerank: rank,
           is_human: is_human,
-          handle: "@#{post['user']['username']}",
-          type: post['user']['type'],
-          date: parsed_time(post['created_at']),
-          date_short: parsed_time_short(post['created_at']),
-          you_starred: post['you_starred'],
+          handle: "@#{post.user.username}",
+          type: post.user.type,
+          date: parsed_time(post.created_at),
+          date_short: parsed_time_short(post.created_at),
+          you_starred: post.you_starred,
           source_name: source,
-          source_link: post['source']['link'],
-          canonical_url: post['canonical_url'],
+          source_link: post.source.link,
+          canonical_url: post.canonical_url,
           tags: hashtags,
           links: extract_links(post),
           mentions: mentions,
@@ -291,22 +291,22 @@ module Ayadn
           values[:num_reposts] = 0
         end
 
-        posts[post['id'].to_i] = values
+        result[post['id'].to_i] = values
 
       end
 
-      posts
+      result
     end
 
     def extract_links(post)
-      links = post['entities']['links'].map { |l| l['url'] }
-      unless post['annotations'].nil? || post['annotations'].empty?
-        post['annotations'].each do |ann|
-          if ann['type'] == "net.app.core.oembed"
-            if ann['value']['embeddable_url']
-              links << ann['value']['embeddable_url']
-            elsif ann['value']['url'] && Settings.options[:channels][:links] == true
-              links << ann['value']['url']
+      links = post.entities.links.map { |l| l.url }
+      unless post.annotations.blank?
+        post.annotations.each do |ann|
+          if ann.type == "net.app.core.oembed"
+            if ann.value['embeddable_url']
+              links << ann.value['embeddable_url']
+            elsif ann.value['url'] && Settings.options[:channels][:links] == true
+              links << ann.value['url']
             end
           end
         end
@@ -332,11 +332,11 @@ module Ayadn
     end
 
     def extract_hashtags(post)
-      post['entities']['hashtags'].map { |h| h['name'] }
+      post.entities.hashtags.map { |h| h.name }
     end
 
     def extract_mentions(post)
-      post['entities']['mentions'].map { |m| m['name'] }
+      post.entities.mentions.map { |m| m.name }
     end
 
     def build_channels(data, options = {})
@@ -623,38 +623,38 @@ module Ayadn
     def extract_checkins(post)
       has_checkins = false
       checkins = {}
-      unless post['annotations'].nil? || post['annotations'].empty?
-        post['annotations'].each do |obj|
-          case obj['type']
+      unless post.annotations.blank?
+        post.annotations.each do |anno|
+          case anno['type']
           when "net.app.core.checkin", "net.app.ohai.location"
             has_checkins = true
             checkins = {
-              name: obj['value']['name'],
-              address: obj['value']['address'],
-              address_extended: obj['value']['address_extended'],
-              locality: obj['value']['locality'],
-              postcode: obj['value']['postcode'],
-              country_code: obj['value']['country_code'],
-              website: obj['value']['website'],
-              telephone: obj['value']['telephone']
+              name: anno['value']['name'],
+              address: anno['value']['address'],
+              address_extended: anno['value']['address_extended'],
+              locality: anno['value']['locality'],
+              postcode: anno['value']['postcode'],
+              country_code: anno['value']['country_code'],
+              website: anno['value']['website'],
+              telephone: anno['value']['telephone']
             }
-            unless obj['value']['categories'].nil?
-              unless obj['value']['categories'][0].nil?
-                checkins[:categories] = obj['value']['categories'][0]['labels'].join(", ")
+            unless anno['value']['categories'].nil?
+              unless anno['value']['categories'][0].nil?
+                checkins[:categories] = anno['value']['categories'][0]['labels'].join(", ")
               end
             end
-            unless obj['value']['factual_id'].nil?
-              checkins[:factual_id] = obj['value']['factual_id']
+            unless anno['value']['factual_id'].nil?
+              checkins[:factual_id] = anno['value']['factual_id']
             end
-            unless obj['value']['longitude'].nil?
-              checkins[:longitude] = obj['value']['longitude']
-              checkins[:latitude] = obj['value']['latitude']
+            unless anno['value']['longitude'].nil?
+              checkins[:longitude] = anno['value']['longitude']
+              checkins[:latitude] = anno['value']['latitude']
             end
-            unless obj['value']['title'].nil?
-              checkins[:title] = obj['value']['title']
+            unless anno['value']['title'].nil?
+              checkins[:title] = anno['value']['title']
             end
-            unless obj['value']['region'].nil?
-              checkins[:region] = obj['value']['region']
+            unless anno['value']['region'].nil?
+              checkins[:region] = anno['value']['region']
             end
           end
         end

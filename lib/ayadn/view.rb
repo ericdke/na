@@ -16,13 +16,13 @@ module Ayadn
     end
 
     def show_posts_with_index(data, options = {}, niceranks = {})
-      posts, view = build_stream_with_index(data, options, niceranks)
+      posts, view = build_stream_with_index(data.posts, options, niceranks)
       puts view unless view == ""
       Databases.save_indexed_posts(posts)
     end
 
     def show_posts(data, options = {}, niceranks = {})
-      resp = build_stream_without_index(data, options, niceranks)
+      resp = build_stream_without_index(data.posts, options, niceranks)
       puts resp unless resp == ""
     end
 
@@ -35,7 +35,7 @@ module Ayadn
 
     def show_raw(stream, options = {})
       #puts stream.to_json
-      jj stream
+      jj stream.input
     end
 
     def show_simple_post(post, options = {})
@@ -393,18 +393,18 @@ module Ayadn
 
     def render(stream, options = {}, niceranks = {})
       unless options[:raw]
-        get(stream['data'], options, niceranks)
+        get(stream, options, niceranks)
       else
         show_raw(stream)
       end
     end
 
-    def get(stream, options = {}, niceranks = {})
+    def get(data, options = {}, niceranks = {})
       clear_screen()
       if options[:index]
-        show_posts_with_index(stream, options, niceranks)
+        show_posts_with_index(data, options, niceranks)
       else
-        show_posts(stream, options, niceranks)
+        show_posts(data, options, niceranks)
       end
     end
 
@@ -522,9 +522,11 @@ module Ayadn
       return posts
     end
 
-    def build_stream_with_index(data, options, niceranks) #expects an array
+    def build_stream_with_index(posts, options, niceranks)
       @view = ""
-      posts = filter_nicerank(@workers.build_posts(data.reverse, niceranks), options)
+      posts = filter_nicerank(@workers.build_posts(posts.reverse, niceranks), options)
+
+
       posts.each do |id,content|
         format = "%03d" % content[:count]
         arrow = arrow_count(options, content)
@@ -542,9 +544,9 @@ module Ayadn
       return posts, @view
     end
 
-    def build_stream_without_index(data, options, niceranks) #expects an array
+    def build_stream_without_index(posts, options, niceranks)
       @view = ""
-      posts = filter_nicerank(@workers.build_posts(data.reverse, niceranks), options)
+      posts = filter_nicerank(@workers.build_posts(posts.reverse, niceranks), options)
       posts.each do |id,content|
         content[:id] = arrow_id(options, content)
         if content[:username] == Settings.config[:identity][:username]
