@@ -22,7 +22,7 @@ module Ayadn
         next if m == Settings.config.identity.username
         reply << " @#{m}"
       end
-      post_size_error(reply) if post_size_ok?(reply) == false
+      post_size_error(reply) if !post_size_ok?(reply)
       dic[:text] = reply
       dic[:reply_to] = dic[:id]
       send_content(Endpoints.new.posts_url, payload_reply(dic))

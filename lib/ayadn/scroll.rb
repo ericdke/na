@@ -132,7 +132,7 @@ module Ayadn
     private
 
     def countdown
-      Settings.options.scroll.spinner == true ? waiting : pause
+      Settings.options.scroll.spinner ? waiting : pause
     end
 
     def clear
@@ -196,13 +196,13 @@ module Ayadn
 
     def check_raw(options)
       if options[:raw]
-        if options[:filter] == true
+        if options[:filter]
           {count: 200, since_id: nil, raw: true, scroll: true, filter: true}
         else
           {count: 200, since_id: nil, raw: true, scroll: true}
         end
       else
-        if options[:filter] == true
+        if options[:filter]
           {count: 200, since_id: nil, scroll: true, filter: true}
         else
           {count: 200, since_id: nil, scroll: true}
@@ -211,7 +211,7 @@ module Ayadn
     end
 
     def options_hash(stream, options)
-      if options[:filter] == true
+      if options[:filter]
         {:count => 50, :since_id => stream.meta.max_id, scroll: true, filter: true}
       else
         {:count => 50, :since_id => stream.meta.max_id, scroll: true}

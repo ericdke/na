@@ -149,7 +149,7 @@ module Ayadn
     def check
       begin
         @status.say_header("checking accounts database")
-        if find_active_account == true
+        if find_active_account
           users = @db.execute("SELECT * FROM Accounts")
           if users.blank?
             @status.say_red(:abort, "no registered Ayadn users")
@@ -164,7 +164,7 @@ module Ayadn
               check_paths
               check_config
               @status.say_header("checking #{@handle}'s account database")
-              if find_active_tables == true
+              if find_active_tables
                 check_tables_schemas
               end
             end
@@ -202,17 +202,17 @@ module Ayadn
           @status.say_info "checking table #{table[0]}"
           case table[0]
           when "Bookmarks"
-            break if check_bookmarks(table) == false
+            break if !check_bookmarks(table)
           when "Aliases"
-            break if check_aliases(table) == false
+            break if !check_aliases(table)
           when "Blacklist"
-            break if check_blacklist(table) == false
+            break if !check_blacklist(table)
           when "Users"
-            break if check_users(table) == false
+            break if !check_users(table)
           when "Pagination"
-            break if check_pagination(table) == false
+            break if !check_pagination(table)
           when "TLIndex"
-            break if check_TLIndex(table) == false
+            break if !check_TLIndex(table)
           end
         end
       end

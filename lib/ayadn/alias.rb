@@ -53,7 +53,7 @@ module Ayadn
     def list
       begin
         init
-        Settings.options.timeline.compact = true if options[:compact] == true
+        Settings.options.timeline.compact = true if options[:compact]
         list = Databases.all_aliases
         unless list.empty? || list.nil?
           if options[:raw]

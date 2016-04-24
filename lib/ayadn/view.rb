@@ -153,7 +153,7 @@ module Ayadn
 
     def show_settings
       table = Terminal::Table.new do |t|
-        if Settings.options.formats.table.borders == true
+        if Settings.options.formats.table.borders
           t.style = { :width => Settings.options.formats.table.width, border_x: '—', border_i: '+', border_y: '|' }
         else
           t.style = { :width => Settings.options.formats.table.width, border_x: ' ', border_i: ' ', border_y: ' ' }
@@ -164,7 +164,7 @@ module Ayadn
         opts = Settings.options.to_h
         opts.each do |k,v|
           v.each do |x,y|
-            t << :separator if @iter >= 1 && timeline_is_compact == false
+            t << :separator if @iter >= 1 && !timeline_is_compact
             unless y.is_a?(Hash)
               t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), y.to_s.color(:green) ]
             else
@@ -189,7 +189,7 @@ module Ayadn
     end
 
     def show_userinfos(user, token, show_ranks = false)
-      if timeline_is_compact == true
+      if timeline_is_compact
         padding = "\n"
         view = "\n"
       else
@@ -253,7 +253,7 @@ module Ayadn
       end
 
       unless user.annotations.empty?
-        view << "\n" unless timeline_is_compact == true
+        view << "\n" unless timeline_is_compact
       end
       user.annotations.each do |anno|
         case anno.type
@@ -270,10 +270,10 @@ module Ayadn
         mentions = user.description.entities.mentions.map {|m| "@#{m.name}"}
         hashtags = user.description.entities.hashtags.map {|m| m.name}
         view << "#{padding}#{@workers.colorize_text(user.description.text, mentions, hashtags)}\n"
-        view << "\n" unless timeline_is_compact == true
+        view << "\n" unless timeline_is_compact
       end
 
-      view << "\n" if timeline_is_compact == true
+      view << "\n" if timeline_is_compact
 
       puts view
 
@@ -484,7 +484,7 @@ module Ayadn
     private
 
     def newline
-      puts "\n" unless timeline_is_compact == true 
+      puts "\n" unless timeline_is_compact 
     end
 
     def get_broadcast_alias_from_id(event_id)
@@ -497,14 +497,14 @@ module Ayadn
     end
 
     def filter_nicerank posts, options
-      if options[:filter] == true # if this option is true in Action (it's only for global, actually)
-        if Settings.options.nicerank.filter == true
+      if options[:filter] # if this option is true in Action (it's only for global, actually)
+        if Settings.options.nicerank.filter
           filtered = {}
           posts.each do |id,content|
-            if Settings.options.nicerank.unranked == true
-              next if content[:nicerank] == false
+            if Settings.options.nicerank.unranked
+              next if !content[:nicerank]
             end
-            unless content[:nicerank] == false
+            unless !content[:nicerank]
               next if content[:nicerank] < Settings.options.nicerank.threshold
               next if content[:is_human] == 0
             end
@@ -614,7 +614,7 @@ module Ayadn
             inter << "welcomed ".color(:green)
             inter << "you!".color(:yellow)
         end
-        if timeline_is_compact == true
+        if timeline_is_compact
           inter << "\n"
         else  
           inter << "\n\n"
@@ -669,12 +669,12 @@ module Ayadn
     def build_content(content)
       view = ""
       view << build_header(content)
-      view << "\n" unless timeline_is_compact == true
+      view << "\n" unless timeline_is_compact
       view << content[:text]
-      view << "\n" unless timeline_is_compact == true
+      view << "\n" unless timeline_is_compact
       if content[:has_checkins]
         view << build_checkins(content)
-        view << "\n" unless timeline_is_compact == true
+        view << "\n" unless timeline_is_compact
       end
       unless content[:links].empty?
         view << "\n"
@@ -683,7 +683,7 @@ module Ayadn
           view << "\n"
         end
       end
-      if timeline_is_compact == true
+      if timeline_is_compact
         if content[:links].empty?
           view << "\n"
         else
@@ -703,10 +703,10 @@ module Ayadn
       end
       if Settings.options.timeline.date
         header << " "
-        if Settings.global[:scrolling] == false
+        if !Settings.global[:scrolling]
           header << content[:date].color(color_date)
         else
-          if Settings.options.scroll.date == false
+          if !Settings.options.scroll.date
             header << content[:date_short].color(color_date)
           else
             header << content[:date].color(color_date)
@@ -732,7 +732,7 @@ module Ayadn
       else
         num_dots = 10
       end
-      if timeline_is_compact == true
+      if timeline_is_compact
         hd = "\n"
       else
         hd = (".".color(color_dots)) * num_dots

@@ -142,7 +142,7 @@ module Ayadn
           text_to_post += "\n \n[iTunes Store](#{store['link']})"
         end
         poster = Post.new
-        poster.post_size_error(text_to_post) if poster.post_size_ok?(text_to_post) == false
+        poster.post_size_error(text_to_post) if !poster.post_size_ok?(text_to_post)
         @view.clear_screen
         @status.writing
         show_nowplaying("\n#{before}", options, store)

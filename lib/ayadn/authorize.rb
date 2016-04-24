@@ -62,7 +62,7 @@ module Ayadn
         else
           sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} ? [y/N]\n\n> ", :red)
         end
-        unless sure == true
+        unless sure
           Status.new.canceled
           exit
         end

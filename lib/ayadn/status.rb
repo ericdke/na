@@ -528,7 +528,7 @@ module Ayadn
     end
 
     def server_error(bool)
-      if bool == true
+      if bool
         say do
           say_error "Ayadn couldn't get the JSON reponse"
           say_yellow :next, "trying again in 10 seconds"

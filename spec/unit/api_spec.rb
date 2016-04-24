@@ -6,7 +6,7 @@ describe Ayadn::API do
       Ayadn::Preferences.new(
         {
         timeline: {
-          directed: true,
+          directed: false,
           source: true,
           symbols: true,
           name: true,

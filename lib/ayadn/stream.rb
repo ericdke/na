@@ -20,7 +20,7 @@ module Ayadn
       @view.downloading(options)
       unless options[:scroll]
         stream_object = StreamObject.new(@api.get_global(options))
-        Settings.global[:force] == true ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream_object)
+        Settings.global[:force] ? niceranks = {} : niceranks = NiceRank.new.get_ranks(stream_object)
         @check.no_new_posts(stream_object, options, 'global')
         Databases.save_max_id(stream_object, 'global') unless stream_object.meta.max_id.nil?
         @view.render(stream_object, options, niceranks)
@@ -98,7 +98,7 @@ module Ayadn
       @check.no_data(stream_object, 'mentions')
       unless options[:raw] || Settings.global[:force]
         # this is just to show a message rather than an empty screen
-        if Settings.options.blacklist.active == true
+        if Settings.options.blacklist.active
           if Databases.is_in_blacklist?('mention', username)
             @status.no_force("#{username.downcase}")
             exit

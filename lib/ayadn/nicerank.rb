@@ -47,7 +47,7 @@ module Ayadn
         parsed['data'].each do |obj|
           res = @store[obj['user_id']]
           if res.nil?
-            obj['is_human'] == true ? is_human = 1 : is_human = 0
+            obj['is_human'] ? is_human = 1 : is_human = 0
             content = {
               rank: obj['rank'],
               is_human: is_human

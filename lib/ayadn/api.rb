@@ -227,15 +227,6 @@ module Ayadn
     def get_channels
       options = {:count => 200, :recent_message => 1, :annotations => 1, :before_id => nil}
       get_parsed_response(Endpoints.new.channels(options))
-      # big = []
-      # loop do
-      #   resp = get_parsed_response(Endpoints.new.channels(options))
-      #   #check_response_meta_code(resp)
-      #   big << resp
-      #   break if resp['meta']['more'] == false
-      #   options = {:count => 200, :before_id => resp['meta']['min_id']}
-      # end
-      # big
     end
 
     def get_channel channel_id, options = {}
@@ -320,7 +311,7 @@ module Ayadn
         return resp
       rescue JSON::ParserError => e
         # Retry once after 10 seconds if the response wasn't valid
-        if working == true
+        if working
           working = false
           @status.server_error(true)
           begin

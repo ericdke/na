@@ -9,7 +9,7 @@ module Ayadn
     end
 
     def table_borders
-      if Settings.options.formats.table.borders == true
+      if Settings.options.formats.table.borders
         { :width => Settings.options.formats.table.width, border_x: '—', border_i: '+', border_y: '|' }
       else
         { :width => Settings.options.formats.table.width, border_x: ' ', border_i: ' ', border_y: ' ' }
@@ -23,7 +23,7 @@ module Ayadn
       table.headings = [ 'Channel', 'Alias' ]
       list.each_with_index do |obj, index|
         table << [obj[0].to_s.color(:green), obj[1].color(:red)]
-        if index + 1 != list.length && Settings.options.timeline.compact == false
+        if index + 1 != list.length && !Settings.options.timeline.compact
           table << :separator
         end
       end
@@ -38,7 +38,7 @@ module Ayadn
       list.sort!
       list.each_with_index do |obj, index|
         table << ["#{obj[1].capitalize}".to_s.force_encoding("UTF-8").color(:green), "#{obj[0]}".to_s.force_encoding("UTF-8").color(:red)]
-        if index + 1 != list.length && Settings.options.timeline.compact == false
+        if index + 1 != list.length && !Settings.options.timeline.compact
           table << :separator
         end
       end
@@ -129,12 +129,12 @@ module Ayadn
       if options[:reverse]
         arr.reverse!
       end
-      if Settings.options.formats.list.reverse == true
+      if Settings.options.formats.list.reverse
         arr.reverse!
       end
       arr.each_with_index do |obj, index|
         table << arr[index]
-        if index + 1 != arr.length && Settings.options.timeline.compact == false
+        if index + 1 != arr.length && !Settings.options.timeline.compact
           table << :separator
         end
       end
@@ -539,7 +539,7 @@ module Ayadn
             slices.each do |tag|
               has_h = true if hashtags.include?(tag.downcase.scan(/[[:alpha:]0-9_]/).join(''))
             end
-            if has_h == true
+            if has_h
               if slices.length > 1
                 words << slices.join('#').gsub(/#{reg_tag}/, '#\1'.color(hashtag_color))
               else
