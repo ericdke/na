@@ -751,24 +751,25 @@ module Ayadn
 
       formatted[:name] = "" if formatted[:name].nil?
       chk = formatted[:header]
+
       unless formatted[:name] == ""
         chk << formatted[:name].color(color_dots)
         chk << "\n"
       end
-      unless formatted[:title].nil? || formatted[:title] == formatted[:name]
+      unless formatted[:title].blank? || formatted[:title] == formatted[:name]
         chk << formatted[:title]
         chk << "\n"
       end
-      unless formatted[:address].nil?
+      unless formatted[:address].blank?
         chk << formatted[:address]
         chk << "\n"
       end
+
       unless formatted[:address_extended].nil?
         chk << formatted[:address_extended]
         chk << "\n"
       end
-
-      unless formatted[:postcode].nil?
+      unless formatted[:postcode].blank?
         unless formatted[:locality].nil?
           chk << "#{formatted[:postcode]}, #{formatted[:locality]}"
         else
