@@ -51,9 +51,10 @@ module Ayadn
       @view.downloading(options)
       unless options[:scroll]
         stream = @api.send("get_#{meth}".to_sym, options)
-        @check.no_new_posts(stream, options, target)
-        Databases.save_max_id(stream)
-        @view.render(stream, options)
+        stream_object = StreamObject.new(stream)
+        @check.no_new_posts(stream_object, options, target)
+        Databases.save_max_id(stream_object)
+        @view.render(stream_object, options)
       end
       if options[:scroll]
         @view.clear_screen()
@@ -70,12 +71,13 @@ module Ayadn
       @view.downloading(options)
       unless options[:scroll]
         stream = @api.get_mentions(username, options)
-        @check.no_user(stream, username)
-        Databases.save_max_id(stream)
-        @check.no_data(stream, 'mentions')
+        stream_object = StreamObject.new(stream)
+        @check.no_user(stream_object, username)
+        Databases.save_max_id(stream_object)
+        @check.no_data(stream_object, 'mentions')
         options = options.dup
         options[:in_mentions] = true
-        @view.render(stream, options)
+        @view.render(stream_object, options)
       end
       if options[:scroll]
         @view.clear_screen()
@@ -90,9 +92,10 @@ module Ayadn
       username = @workers.add_arobase(username)
       @view.downloading(options)
       stream = @api.get_posts(username, options)
-      @check.no_user(stream, username)
-      Databases.save_max_id(stream) unless stream['meta']['marker'].nil?
-      @check.no_data(stream, 'mentions')
+      stream_object = StreamObject.new(stream)
+      @check.no_user(stream_object, username)
+      Databases.save_max_id(stream_object) unless stream_object.meta.marker.nil?
+      @check.no_data(stream_object, 'mentions')
       unless options[:raw] || Settings.global[:force]
         # this is just to show a message rather than an empty screen
         if Settings.options[:blacklist][:active] == true
@@ -102,13 +105,13 @@ module Ayadn
           end
         end
       end
-      if stream['data'][0]['user']['you_muted'] || stream['data'][0]['user']['you_blocked']
+      if stream_object.posts[0].user.you_muted || stream_object.posts[0].user.you_blocked
         unless options[:raw] || Settings.global[:force]
           @status.no_force("#{username.downcase}")
           exit
         end
       end
-      @view.render(stream, options)
+      @view.render(stream_object, options)
       Scroll.new(@api, @view).posts(username, options) if options[:scroll]
       puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
@@ -117,25 +120,26 @@ module Ayadn
       @check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options) unless options["again"]
-
       if options["again"]
         stream = FileOps.cached_list("whatstarred")
+        stream_object = StreamObject.new(stream)
         Errors.no_data('cached whatstarred') if stream.nil?
       else
         stream = @api.get_whatstarred(username, options)
+        stream_object = StreamObject.new(stream)
       end
 
-      @check.no_user(stream, username)
-      @check.no_data(stream, 'whatstarred')
+      @check.no_user(stream_object, username)
+      @check.no_data(stream_object, 'whatstarred')
 
       if options["cache"] && options["again"].nil?
-        FileOps.cache_list(stream, "whatstarred")
+        FileOps.cache_list(stream_object.input, "whatstarred")
       end
 
       if options[:extract]
-        @view.all_stars_links(stream)
+        @view.all_stars_links(stream_object)
       else
-        @view.render(stream, options)
+        @view.render(stream_object, options)
       end
       puts "\n" if Settings.options[:timeline][:compact] == true
     end
@@ -336,15 +340,16 @@ module Ayadn
       end
       @view.downloading(options)
       details = @api.get_details(post_id, options)
-      @check.no_post(details, post_id)
+      @check.no_details(details, post_id)
       id = @workers.get_original_id(post_id, details)
       stream = @api.get_convo(id, options)
-      @check.no_post(stream, id)
-      Databases.pagination_insert("replies:#{id}", stream['meta']['max_id'])
+      stream_object = StreamObject.new(stream)
+      @check.no_post(stream_object, id)
+      Databases.pagination_insert("replies:#{id}", stream_object.meta.max_id)
       options = options.dup
       options[:reply_to] = details['data']['reply_to'].to_i unless details['data']['reply_to'].nil?
       options[:post_id] = post_id.to_i
-      @view.render(stream, options)
+      @view.render(stream_object, options)
       Scroll.new(@api, @view).convo(id, options) if options[:scroll]
       puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
@@ -356,21 +361,22 @@ module Ayadn
       channel_id = @workers.get_channel_id_from_alias(channel_id)
       @view.downloading(options)
       resp = @api.get_messages(channel_id, options)
+      stream_object = StreamObject.new(resp)
       name = "channel:#{channel_id}"
-      @check.no_new_posts(resp, options, name)
+      @check.no_new_posts(stream_object, options, name)
       if Settings.options[:marker][:messages] == true
-        unless resp['meta']['max_id'].nil?
-          marked = @api.update_marker(name, resp['meta']['max_id'])
+        unless stream_object.meta.max_id.nil?
+          marked = @api.update_marker(name, stream_object.meta.max_id)
           updated = JSON.parse(marked)
           if updated['meta']['code'] != 200
             raise "couldn't update channel #{channel_id} as read"
           end
         end
       end
-      Databases.save_max_id(resp)
-      @view.if_raw(resp, options)
-      @check.no_data(resp, 'messages') unless options[:scroll]
-      @view.render(resp, options)
+      Databases.save_max_id(stream_object)
+      @view.if_raw(stream_object, options)
+      @check.no_data(stream_object, 'messages') unless options[:scroll]
+      @view.render(stream_object, options)
       Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
       puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
     end
@@ -393,7 +399,7 @@ module Ayadn
           next if @resp.nil?
           next if @resp['data'].nil? || @resp['data'].empty?
           next if @resp['data']['is_deleted']
-          @view.show_simple_post([@resp['data']], {})
+          @view.show_simple_post([PostObject.new(@resp['data'])], {})
           counter += 1
           if counter == max_posts
             wait.downto(1) do |i|

@@ -22,7 +22,7 @@ module Ayadn
 
 		def initialize hash
 			@input = hash["meta"].nil? ? {} : hash["meta"]
-			@marker = StreamMarkerObject.new(@input)
+			@marker = hash["meta"].nil? ? nil : StreamMarkerObject.new(@input)
 			@min_id = @input["min_id"]
 			@code = @input["code"]
 			@max_id = @input["max_id"]

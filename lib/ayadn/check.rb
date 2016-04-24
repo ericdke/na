@@ -31,7 +31,7 @@ module Ayadn
     end
 
     def no_data stream, target
-      if stream['data'].empty?
+      if stream.posts.empty?
         Errors.warn "In action/#{target}: no data"
         @status.empty_list
         exit
@@ -48,7 +48,15 @@ module Ayadn
     end
 
     def no_post stream, post_id
-      if stream['meta']['code'] == 404
+      if stream.meta.code == 404
+        @status.post_404(post_id)
+        Errors.info("Impossible to find #{post_id}")
+        exit
+      end
+    end
+
+    def no_details stream, post_id
+      if stream["meta"]["code"] == 404
         @status.post_404(post_id)
         Errors.info("Impossible to find #{post_id}")
         exit
@@ -72,7 +80,7 @@ module Ayadn
     end
 
     def no_user stream, username
-      if stream['meta']['code'] == 404
+      if stream.meta.code == 404
         @status.user_404(username)
         Errors.info("User #{username} doesn't exist")
         exit

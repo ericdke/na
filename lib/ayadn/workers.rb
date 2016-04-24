@@ -579,7 +579,7 @@ module Ayadn
 
     def links_from_posts(stream)
       links = []
-      stream['data'].each do |post|
+      stream.posts.each do |post|
         extract_links(post).each {|l| links << l}
       end
       links.uniq
