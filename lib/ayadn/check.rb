@@ -7,8 +7,8 @@ module Ayadn
       @status = Status.new
     end
 
-    def same_username(stream)
-      stream['data']['username'] == Settings.config[:identity][:username]
+    def same_username(user_object)
+      user_object.username == Settings.config[:identity][:username]
     end
 
     def auto_save_muted(list)
@@ -81,6 +81,14 @@ module Ayadn
 
     def no_user stream, username
       if stream.meta.code == 404
+        @status.user_404(username)
+        Errors.info("User #{username} doesn't exist")
+        exit
+      end
+    end
+
+    def no_usercontent stream, username
+      if stream["meta"]["code"] == 404
         @status.user_404(username)
         Errors.info("User #{username} doesn't exist")
         exit

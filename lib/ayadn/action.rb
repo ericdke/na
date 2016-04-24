@@ -459,12 +459,13 @@ module Ayadn
           else
             @view.downloading if index == 0
             stream = @api.get_user(username)
+            user_object = UserObject.new(stream["data"])
             # Verify the user exists
-            @check.no_user(stream, username)
+            @check.no_usercontent(stream, username)
             # Is it us? If yes, get *our* info
-            @check.same_username(stream) ? token = @api.get_token_info['data'] : token = nil
+            @check.same_username(user_object) ? token = @api.get_token_info['data'] : token = nil
             @view.clear_screen if index == 0
-            @view.infos(stream['data'], token)
+            @view.infos(user_object, token)
           end
         end
       rescue => e
@@ -488,33 +489,35 @@ module Ayadn
         end
         @view.clear_screen
         response = details.call
-        @check.no_post(response, post_id)
-        resp = response['data']
+        @check.no_details(response, post_id)
 
-        if resp["is_deleted"] == true
-          @status.user_404(resp["id"])
+        post_object = PostObject.new(response["data"])
+
+        if post_object.is_deleted
+          @status.user_404(post_object.id)
           Errors.global_error({error: "user 404", caller: caller, data: [post_id, options]})
         end
 
-        response = @api.get_user("@#{resp['user']['username']}")
-        @check.no_user(response, response['data']['username'])
-        stream = response['data']
+        response = @api.get_user("@#{post_object.user.username}")
+        user_object = UserObject.new(response['data'])
+
         @status.post_info
-        @view.show_simple_post([resp], options)
+        @view.show_simple_post([post_object], options)
         puts "\n" if Settings.options[:timeline][:compact] == true
         @status.say_info "author"
         puts "\n" unless Settings.options[:timeline][:compact] == true
         # Is it us? ...
-        if response['data']['username'] == Settings.config[:identity][:username]
-          @view.show_userinfos(stream, @api.get_token_info['data'], true)
+        if user_object.username == Settings.config[:identity][:username]
+          @view.show_userinfos(post_object.user, @api.get_token_info['data'], true)
         else
-          @view.show_userinfos(stream, nil, true)
+          @view.show_userinfos(post_object.user, nil, true)
         end
-        if resp['repost_of']
+
+        if !post_object.repost_of.nil?
           @status.repost_info
           # If we ask infos for a reposted post, fetch the original instead
-          Errors.repost(post_id, resp['repost_of']['id'])
-          @view.show_simple_post([resp['repost_of']], options)
+          Errors.repost(post_id, post_object.repost_of.id)
+          @view.show_simple_post([post_object.repost_of], options)
           puts "\n" if Settings.options[:timeline][:compact] == true
         end
       rescue => e
@@ -804,7 +807,7 @@ module Ayadn
         end
       	@status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
-        @check.no_post(replied_to, post_id)
+        @check.no_details(replied_to, post_id)
         # API specifies to always reply to the original post of a reposted post. We offer the user an option to not.
         unless options[:noredirect]
           post_id = @workers.get_original_id(post_id, replied_to)
@@ -812,7 +815,7 @@ module Ayadn
         if replied_to['data']['repost_of']
           if post_id == replied_to['data']['repost_of']['id']
             replied_to = @api.get_details(post_id)
-            @check.no_post(replied_to, post_id)
+            @check.no_details(replied_to, post_id)
           end
         end
         # ----
@@ -823,7 +826,7 @@ module Ayadn
         text = lines_array.join("\n")
         # Text length is tested in Post class for the reply command
         @view.clear_screen
-        replied_to = @workers.build_posts([replied_to['data']])
+        replied_to = @workers.build_posts([PostObject.new(replied_to['data'])])
         if options[:poster]
           settings = options.dup
           options = NowWatching.new.get_poster(settings[:poster], settings)
@@ -837,7 +840,9 @@ module Ayadn
           options[:reply_to] = resp['data']['reply_to'].to_i
         end
         options[:post_id] = resp['data']['id'].to_i
-        @view.render(@api.get_convo(post_id), options)
+        stream = @api.get_convo(post_id)
+        stream_object = StreamObject.new(stream)
+        @view.render(stream_object, options)
         puts "\n" if Settings.options[:timeline][:compact] == true && !options[:raw]
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, options]})

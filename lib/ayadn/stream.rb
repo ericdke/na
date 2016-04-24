@@ -265,7 +265,7 @@ module Ayadn
         details = @api.get_details(post_id, options)
       end
       
-      @check.no_post(details, post_id)
+      @check.no_details(details, post_id)
       id = @workers.get_original_id(post_id, details)
       
       if options["cache"] && options["again"].nil?
@@ -305,7 +305,7 @@ module Ayadn
         details = @api.get_details(post_id, options)
       end
 
-      @check.no_post(details, post_id)
+      @check.no_details(details, post_id)
       id = @workers.get_original_id(post_id, details)
 
       if options["cache"] && options["again"].nil?

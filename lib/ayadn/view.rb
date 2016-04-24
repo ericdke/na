@@ -43,7 +43,7 @@ module Ayadn
     end
 
     def show_posted(resp)
-      show_simple_post([resp['data']], {})
+      show_simple_post([PostObject.new(resp['data'])], {})
       puts "\n" if timeline_is_compact
     end
 
@@ -179,7 +179,7 @@ module Ayadn
       puts "\n"
     end
 
-    def show_userinfos(content, token, show_ranks = false)
+    def show_userinfos(user, token, show_ranks = false)
       if timeline_is_compact == true
         padding = "\n"
         view = "\n"
@@ -188,94 +188,79 @@ module Ayadn
         view = ""
       end
 
-      if content['name']
-        view << "Name\t\t\t".color(:cyan) + content['name'].color(color_name)
+      if !user.name.blank?
+        view << "Name\t\t\t".color(:cyan) + user.name.color(color_name)
       else
         view << "Name\t\t\t".color(:cyan) + "(no name)".color(:red)
       end
 
-      view << "#{padding}Username\t\t".color(:cyan) + "@#{content['username']}".color(color_username)
+      view << "#{padding}Username\t\t".color(:cyan) + "@#{user.username}".color(color_username)
 
-      view << "#{padding}ID\t\t\t".color(:cyan) + content['id'].color(color_id)
+      view << "#{padding}ID\t\t\t".color(:cyan) + user.id.color(color_id)
 
-      view << "#{padding}URL\t\t\t".color(:cyan) + content['canonical_url'].color(color_link)
+      view << "#{padding}URL\t\t\t".color(:cyan) + user.canonical_url.color(color_link)
 
-      unless content['verified_domain'].nil?
-        if content['verified_domain'] =~ (/http/ || /https/)
-           domain = content['verified_domain']
+      unless user.verified_domain.nil?
+        if user.verified_domain =~ (/http/ || /https/)
+           domain = user.verified_domain
         else
-          domain = "http://#{content['verified_domain']}"
+          domain = "http://#{user.verified_domain}"
         end
         view << "\nVerified domain\t\t".color(:cyan) + domain.color(color_link)
       end
 
 
-      view << "#{padding}Account creation\t".color(:cyan) + @workers.parsed_time(content['created_at']).color(color_excerpt)
-      view << "#{padding}TimeZone\t\t".color(:cyan) + content['timezone'].color(color_excerpt)
-      view << "\nLocale\t\t\t".color(:cyan) + content['locale'].color(color_excerpt)
+      view << "#{padding}Account creation\t".color(:cyan) + @workers.parsed_time(user.created_at).color(color_excerpt)
+      view << "#{padding}TimeZone\t\t".color(:cyan) + user.timezone.color(color_excerpt)
+      view << "\nLocale\t\t\t".color(:cyan) + user.locale.color(color_excerpt)
 
-      view << "#{padding}Posts\t\t\t".color(:cyan) + content['counts']['posts'].to_s.color(color_excerpt)
+      view << "#{padding}Posts\t\t\t".color(:cyan) + user.counts.posts.to_s.color(color_excerpt)
 
+      view << "#{padding}Following\t\t".color(:cyan) + user.counts.following.to_s.color(color_excerpt)
+      view << "\nFollowers\t\t".color(:cyan) + user.counts.followers.to_s.color(color_excerpt)
 
-      # unless show_ranks == false
-      #   # this is ok for one user, but do not call this in a loop
-      #   # do call them all at once instead if many
-      #   ranks = NiceRank.new.get_posts_day([content['id'].to_i])
-      #   unless ranks.empty?
-      #     view << "#{padding}Posts/day\t\t".color(:cyan) + ranks[0][:posts_day].to_s.color(color_excerpt)
-      #   end
-      # end
-
-      view << "#{padding}Following\t\t".color(:cyan) + content['counts']['following'].to_s.color(color_excerpt)
-      view << "\nFollowers\t\t".color(:cyan) + content['counts']['followers'].to_s.color(color_excerpt)
-
-      if content['username'] == Settings.config[:identity][:username] && !token.nil?
+      if user.username == Settings.config[:identity][:username] && !token.nil?
         view << "#{padding}Storage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(color_excerpt)
         view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(color_excerpt)
       end
 
-      #view << "\nStars\t\t\t".color(:cyan) + content['counts']['stars'].to_s.color(:yellow)
-
-      unless content['username'] == Settings.config[:identity][:username]
-        if content['you_follow']
-          view << "#{padding}You follow ".color(:cyan) + "@#{content['username']}".color(color_username)
+      unless user.username == Settings.config[:identity][:username]
+        if user.you_follow
+          view << "#{padding}You follow ".color(:cyan) + "@#{user.username}".color(color_username)
         else
-          view << "#{padding}You don't follow ".color(:cyan) + "@#{content['username']}".color(color_username)
+          view << "#{padding}You don't follow ".color(:cyan) + "@#{user.username}".color(color_username)
         end
-        if content['follows_you']
-          view << "\n" + "@#{content['username']}".color(color_username) + " follows you".color(:cyan)
+        if user.follows_you
+          view << "\n" + "@#{user.username}".color(color_username) + " follows you".color(:cyan)
         else
-          view << "\n" + "@#{content['username']}".color(color_username) + " doesn't follow you".color(:cyan)
+          view << "\n" + "@#{user.username}".color(color_username) + " doesn't follow you".color(:cyan)
         end
-        if content['you_muted']
-          view << "\nYou muted " + "@#{content['username']}".color(color_username)
+        if user.you_muted
+          view << "\nYou muted " + "@#{user.username}".color(color_username)
         end
-        if content['you_blocked']
-          view << "\nYou blocked " + "@#{content['username']}".color(color_username)
+        if user.you_blocked
+          view << "\nYou blocked " + "@#{user.username}".color(color_username)
         end
       end
 
-      unless content['annotations'].empty?
+      unless user.annotations.empty?
         view << "\n" unless timeline_is_compact == true
       end
-      content['annotations'].each do |anno|
-        case anno['type']
+      user.annotations.each do |anno|
+        case anno.type
         when "net.app.core.directory.blog"
-          view << "\nBlog\t\t\t".color(:cyan) + "#{anno['value']['url']}".color(color_link)
+          view << "\nBlog\t\t\t".color(:cyan) + "#{anno.value['url']}".color(color_link)
         when "net.app.core.directory.twitter"
-          view << "\nTwitter\t\t\t".color(:cyan) + "#{anno['value']['username']}".color(:green)
+          view << "\nTwitter\t\t\t".color(:cyan) + "#{anno.value['username']}".color(:green)
         when "com.appnetizens.userinput.birthday"
-          view << "\nBirthday\t\t".color(:cyan) + "#{anno['value']['birthday']}".color(:green)
+          view << "\nBirthday\t\t".color(:cyan) + "#{anno.value['birthday']}".color(:green)
         end
       end
 
-
-      #view << "#{padding}Avatar URL\t\t".color(:cyan) + content['avatar_image']['url']
-
-      if content['description']
-        mentions = content['description']['entities']['mentions'].map {|m| "@#{m['name']}"}
-        hashtags = content['description']['entities']['hashtags'].map {|m| m['name']}
-        view << "#{padding}#{@workers.colorize_text(content['description']['text'], mentions, hashtags)}\n"
+      if !user.description.blank?
+        mentions = user.description.entities.mentions.map {|m| "@#{m.name}"}
+        hashtags = user.description.entities.hashtags.map {|m| m.name}
+        view << "#{padding}#{@workers.colorize_text(user.description.text, mentions, hashtags)}\n"
         view << "\n" unless timeline_is_compact == true
       end
 

@@ -64,10 +64,10 @@ module Ayadn
 
   class UserObject
 
-    attr_reader :input, :you_muted, :you_can_subscribe, :is_following, :is_follower, :timezone, :you_follow, :counts, :canonical_url, :id, :locale, :type, :annotations, :username, :avatar_image, :description, :is_muted, :follows_you, :you_can_follow, :name, :created_at, :you_blocked, :cover_image
+    attr_reader :input, :you_muted, :you_can_subscribe, :is_following, :is_follower, :timezone, :you_follow, :counts, :canonical_url, :id, :locale, :type, :annotations, :username, :avatar_image, :description, :is_muted, :follows_you, :you_can_follow, :name, :created_at, :you_blocked, :cover_image, :verified_domain
 
     def initialize hash
-      @input = hash["user"]
+      @input = hash
       @you_muted = @input["you_muted"]
       @you_can_subscribe = @input["you_can_subscribe"]
       @is_follower = @input["is_follower"]
@@ -90,6 +90,7 @@ module Ayadn
       @created_at = @input["created_at"]
       @you_blocked = @input["you_blocked"]
       @cover_image = CoverImageObject.new(@input)
+      @verified_domain = @input["verified_domain"]
     end
   end
 end
