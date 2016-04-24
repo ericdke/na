@@ -165,25 +165,25 @@ module Ayadn
     def make_entry content
       entry = ""
       entry << "Post id:".color(:cyan)
-      entry << "\t#{content['id']}\n".color(Settings.options[:colors][:username])
+      entry << "\t#{content['id']}\n".color(Settings.options.colors.username)
       unless content['title'].is_integer?
         entry << "Title:".color(:cyan)
-        entry << "\t\t#{content['title']}\n".color(Settings.options[:colors][:id])
+        entry << "\t\t#{content['title']}\n".color(Settings.options.colors.id)
       end
       entry << "Date:".color(:cyan)
-      entry << "\t\t#{content['first_date']}\n".color(Settings.options[:colors][:date])
+      entry << "\t\t#{content['first_date']}\n".color(Settings.options.colors.date)
       # entry << "Bookmarked:".color(:cyan)
-      # entry << "\t#{content['mark_date']}\n".color(Settings.options[:colors][:date])
+      # entry << "\t#{content['mark_date']}\n".color(Settings.options.colors.date)
       entry << "Posts:".color(:cyan)
-      entry << "\t\t#{content['size']}\n".color(Settings.options[:colors][:name])
+      entry << "\t\t#{content['size']}\n".color(Settings.options.colors.name)
       entry << "Posters:".color(:cyan)
       posters = []
       content['users'].each {|mention| posters << "@#{mention}"}
-      entry << "\t#{posters.join(', ')}\n".color(Settings.options[:colors][:mentions])
+      entry << "\t#{posters.join(', ')}\n".color(Settings.options.colors.mentions)
       # entry << "First:\t\t@#{content['first_poster']}\n"
       # entry << "Last:\t\t@#{content['last_poster']}\n"
       entry << "Link:".color(:cyan)
-      entry << "\t\t#{content['url']}\n".color(Settings.options[:colors][:link])
+      entry << "\t\t#{content['url']}\n".color(Settings.options.colors.link)
       entry << "Beginning:".color(:cyan)
       text = content['root_text'].gsub(/[\r\n]/, ' ')
       if text.length <= 60

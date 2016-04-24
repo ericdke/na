@@ -9,10 +9,10 @@ module Ayadn
     end
 
     def table_borders
-      if Settings.options[:formats][:table][:borders] == true
-        { :width => Settings.options[:formats][:table][:width], border_x: '—', border_i: '+', border_y: '|' }
+      if Settings.options.formats.table.borders == true
+        { :width => Settings.options.formats.table.width, border_x: '—', border_i: '+', border_y: '|' }
       else
-        { :width => Settings.options[:formats][:table][:width], border_x: ' ', border_i: ' ', border_y: ' ' }
+        { :width => Settings.options.formats.table.width, border_x: ' ', border_i: ' ', border_y: ' ' }
       end
     end
 
@@ -23,7 +23,7 @@ module Ayadn
       table.headings = [ 'Channel', 'Alias' ]
       list.each_with_index do |obj, index|
         table << [obj[0].to_s.color(:green), obj[1].color(:red)]
-        if index + 1 != list.length && Settings.options[:timeline][:compact] == false
+        if index + 1 != list.length && Settings.options.timeline.compact == false
           table << :separator
         end
       end
@@ -38,7 +38,7 @@ module Ayadn
       list.sort!
       list.each_with_index do |obj, index|
         table << ["#{obj[1].capitalize}".to_s.force_encoding("UTF-8").color(:green), "#{obj[0]}".to_s.force_encoding("UTF-8").color(:red)]
-        if index + 1 != list.length && Settings.options[:timeline][:compact] == false
+        if index + 1 != list.length && Settings.options.timeline.compact == false
           table << :separator
         end
       end
@@ -124,17 +124,17 @@ module Ayadn
         obj[:name] = "" if obj[:name].nil?
         obj[:username].length > 23 ? username = "#{obj[:username][0..20]}..." : username = obj[:username]
         obj[:name].length > 23 ? name = "#{obj[:name][0..20]}..." : name = obj[:name]
-        arr << [ "@#{username} ".color(Settings.options[:colors][:username]), "#{name.to_s.force_encoding('UTF-8')}", obj[:posts] ]
+        arr << [ "@#{username} ".color(Settings.options.colors.username), "#{name.to_s.force_encoding('UTF-8')}", obj[:posts] ]
       end
       if options[:reverse]
         arr.reverse!
       end
-      if Settings.options[:formats][:list][:reverse] == true
+      if Settings.options.formats.list.reverse == true
         arr.reverse!
       end
       arr.each_with_index do |obj, index|
         table << arr[index]
-        if index + 1 != arr.length && Settings.options[:timeline][:compact] == false
+        if index + 1 != arr.length && Settings.options.timeline.compact == false
           table << :separator
         end
       end
@@ -146,16 +146,16 @@ module Ayadn
       # skip objects in blacklist unless force
       result = {}
       posts.each.with_index(1) do |post, index|
-        unless Settings.global[:force] == true
-          if Settings.options[:blacklist][:active] == true
+        unless Settings.global[:force]
+          if Settings.options.blacklist.active
             if Databases.is_in_blacklist?('client', post.source.name.downcase)
                 Debug.skipped({source: post.source.name})
                 next
             end
           end
         end
-        unless Settings.global[:force] == true
-          if Settings.options[:blacklist][:active] == true
+        unless Settings.global[:force]
+          if Settings.options.blacklist.active
             if Databases.is_in_blacklist?('user', post.user.username.downcase)
               Debug.skipped({user: post.user.username})
               next
@@ -164,8 +164,8 @@ module Ayadn
         end
         hashtags = extract_hashtags(post)
         @skip = false
-        unless Settings.global[:force] == true
-          if Settings.options[:blacklist][:active] == true
+        unless Settings.global[:force]
+          if Settings.options.blacklist.active
             hashtags.each do |tag|
               if Databases.is_in_blacklist?('hashtag', tag.downcase)
                 @skip = true
@@ -177,8 +177,8 @@ module Ayadn
         end
         next if @skip
         mentions = extract_mentions(post)
-        unless Settings.global[:force] == true
-          if Settings.options[:blacklist][:active] == true
+        unless Settings.global[:force]
+          if Settings.options.blacklist.active
             mentions.each do |m|
               if Databases.is_in_blacklist?('mention', m.downcase)
                 @skip = true
@@ -189,8 +189,8 @@ module Ayadn
           end
         end
         next if @skip
-        unless Settings.global[:force] == true
-          if Settings.options[:blacklist][:active] == true
+        unless Settings.global[:force]
+          if Settings.options.blacklist.active
             post.text.split(" ").each do |word|
               target_word = word.gsub(/[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/, "")
               if Databases.is_in_blacklist?('word', target_word.downcase)
@@ -305,7 +305,7 @@ module Ayadn
           if ann.type == "net.app.core.oembed"
             if ann.value['embeddable_url']
               links << ann.value['embeddable_url']
-            elsif ann.value['url'] && Settings.options[:channels][:links] == true
+            elsif ann.value['url'] && Settings.options.channels.links
               links << ann.value['url']
             end
           end
@@ -515,8 +515,8 @@ module Ayadn
       reg_sentence = '^.+[\r\n]*'
       handles, words, sentences = [], [], []
       mentions.each {|username| handles << "@#{username}"}
-      hashtag_color = Settings.options[:colors][:hashtags]
-      mention_color = Settings.options[:colors][:mentions]
+      hashtag_color = Settings.options.colors.hashtags
+      mention_color = Settings.options.colors.mentions
       text.scan(/#{reg_sentence}/) do |sentence|
         sentence.split(' ').each do |word|
 
@@ -571,7 +571,7 @@ module Ayadn
         sentences << words.join(' ')
         words = Array.new
       end
-      if Settings.options[:timeline][:compact] == true
+      if Settings.options.timeline.compact
         without_linebreaks = sentences.keep_if { |s| s != "" }
         without_linebreaks.join("\n")
       else
@@ -611,7 +611,7 @@ module Ayadn
 
     def init_table
       Terminal::Table.new do |t|
-        t.style = { :width => Settings.options[:formats][:table][:width] }
+        t.style = { :width => Settings.options.formats.table.width }
       end
     end
 

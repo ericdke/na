@@ -29,7 +29,7 @@ module Ayadn
         @view.clear_screen()
         Scroll.new(@api, @view).global(options)
       end
-      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
+      puts "\n" if Settings.options.timeline.compact && options[:raw].nil?
     end
 
 
@@ -60,7 +60,7 @@ module Ayadn
         @view.clear_screen()
         Scroll.new(@api, @view).send(meth, options)
       end
-      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
+      puts "\n" if Settings.options.timeline.compact && options[:raw].nil?
     end
 
 
@@ -83,7 +83,7 @@ module Ayadn
         @view.clear_screen()
         Scroll.new(@api, @view).mentions(username, options)
       end
-      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
+      puts "\n" if Settings.options.timeline.compact && options[:raw].nil?
     end
 
     def posts username, options
@@ -98,7 +98,7 @@ module Ayadn
       @check.no_data(stream_object, 'mentions')
       unless options[:raw] || Settings.global[:force]
         # this is just to show a message rather than an empty screen
-        if Settings.options[:blacklist][:active] == true
+        if Settings.options.blacklist.active == true
           if Databases.is_in_blacklist?('mention', username)
             @status.no_force("#{username.downcase}")
             exit
@@ -113,7 +113,7 @@ module Ayadn
       end
       @view.render(stream_object, options)
       Scroll.new(@api, @view).posts(username, options) if options[:scroll]
-      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
+      puts "\n" if Settings.options.timeline.compact && options[:raw].nil?
     end
 
     def whatstarred(username, options)
@@ -141,7 +141,7 @@ module Ayadn
       else
         @view.render(stream_object, options)
       end
-      puts "\n" if Settings.options[:timeline][:compact] == true
+      puts "\n" if Settings.options.timeline.compact
     end
 
     def followings(username, options)
@@ -165,7 +165,7 @@ module Ayadn
         list.each do |str_id,obj|
           idx += 1
           tmp_username = "@#{obj[0]}"
-          colored_username = tmp_username.color(Settings.options[:colors][:username])
+          colored_username = tmp_username.color(Settings.options.colors.username)
           iter = "#{idx}/#{count}"
           @workers.thor.say_status iter.to_sym, "last post from #{colored_username}", :cyan
           resp = @api.get_posts(tmp_username, {count: 1})
@@ -248,7 +248,7 @@ module Ayadn
       @view.if_raw(stream, options)
       @view.clear_screen
       @view.show_interactions(stream['data'])
-      puts "\n" if Settings.options[:timeline][:compact] == true
+      puts "\n" if Settings.options.timeline.compact
     end
 
     def whoreposted(post_id, options)
@@ -351,12 +351,12 @@ module Ayadn
       options[:post_id] = post_id.to_i
       @view.render(stream_object, options)
       Scroll.new(@api, @view).convo(id, options) if options[:scroll]
-      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
+      puts "\n" if Settings.options.timeline.compact && options[:raw].nil?
     end
 
     def messages(channel_id, options)
       if options[:silent]
-        Settings.options[:marker][:messages] = false
+        Settings.options.marker.messages = false
       end
       channel_id = @workers.get_channel_id_from_alias(channel_id)
       @view.downloading(options)
@@ -364,7 +364,7 @@ module Ayadn
       stream_object = StreamObject.new(resp)
       name = "channel:#{channel_id}"
       @check.no_new_posts(stream_object, options, name)
-      if Settings.options[:marker][:messages] == true
+      if Settings.options.marker.messages
         unless stream_object.meta.max_id.nil?
           marked = @api.update_marker(name, stream_object.meta.max_id)
           updated = JSON.parse(marked)
@@ -378,7 +378,7 @@ module Ayadn
       @check.no_data(stream_object, 'messages') unless options[:scroll]
       @view.render(stream_object, options)
       Scroll.new(@api, @view).messages(channel_id, options) if options[:scroll]
-      puts "\n" if Settings.options[:timeline][:compact] && options[:raw].nil?
+      puts "\n" if Settings.options.timeline.compact && options[:raw].nil?
     end
 
     def random_posts(options)
@@ -438,7 +438,7 @@ module Ayadn
     end
 
     def nicerank_true
-      return true if Settings.options[:nicerank][:filter] == true
+      return true if Settings.options.nicerank.filter
     end
 
   end

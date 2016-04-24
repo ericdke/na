@@ -65,21 +65,21 @@ module Ayadn
 
     def unified(options)
       make_options_list(options) do
-        API.build_query({count: Settings.options[:counts][:unified]})
+        API.build_query({count: Settings.options.counts.unified})
       end
       "#{@posts_url}stream/unified?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def checkins(options)
       make_options_list(options) do
-        API.build_query({count: Settings.options[:counts][:checkins]})
+        API.build_query({count: Settings.options.counts.checkins})
       end
       "#{@posts_url}stream/explore/checkins?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def global(options)
       make_options_list(options) do
-        API.build_query({count: Settings.options[:counts][:global]})
+        API.build_query({count: Settings.options.counts.global})
       end
       if Settings.global[:force] == true
         "#{@posts_url}stream/global?#{@options_list}"
@@ -90,35 +90,35 @@ module Ayadn
 
     def trending(options)
       make_options_list(options) do
-        API.build_query({count: Settings.options[:counts][:trending]})
+        API.build_query({count: Settings.options.counts.trending})
       end
       "#{@posts_url}stream/explore/trending?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def photos(options)
       make_options_list(options) do
-        API.build_query({count: Settings.options[:counts][:photos]})
+        API.build_query({count: Settings.options.counts.photos})
       end
       "#{@posts_url}stream/explore/photos?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def conversations(options)
       make_options_list(options) do
-        API.build_query({count: Settings.options[:counts][:conversations]})
+        API.build_query({count: Settings.options.counts.conversations})
       end
       "#{@posts_url}stream/explore/conversations?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def mentions(username, options)
       make_options_list_simple(options) do
-        API.build_query({count: Settings.options[:counts][:mentions]})
+        API.build_query({count: Settings.options.counts.mentions})
       end
       "#{@users_url}#{username}/mentions/?access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def posts(username, options)
       make_options_list_simple(options) do
-        API.build_query({count: Settings.options[:counts][:posts]})
+        API.build_query({count: Settings.options.counts.posts})
       end
       if Settings.global[:force] == true
         "#{@users_url}#{username}/posts/?#{@options_list}"
@@ -129,7 +129,7 @@ module Ayadn
 
     def whatstarred(username, options)
       make_options_list_simple(options) do
-        API.build_query({count: Settings.options[:counts][:default]})
+        API.build_query({count: Settings.options.counts.default})
       end
       "#{@users_url}#{username}/stars/?access_token=#{Settings.user_token}#{@options_list}"
     end
@@ -148,7 +148,7 @@ module Ayadn
 
     def convo(post_id, options)
       make_options_list_simple(options) do
-        API.build_query({count: Settings.options[:counts][:convo]})
+        API.build_query({count: Settings.options.counts.convo})
       end
       "#{@posts_url}#{post_id}/replies/?access_token=#{Settings.user_token}#{@options_list}"
     end
@@ -175,34 +175,34 @@ module Ayadn
 
     def search(words, options)
       make_options_list_simple(options) do
-        API.build_query({count: Settings.options[:counts][:search]})
+        API.build_query({count: Settings.options.counts.search})
       end
       "#{@posts_url}search?text=#{words}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def search_users words, options
       make_options_list_simple(options) do
-        API.build_query({count: Settings.options[:counts][:search]})
+        API.build_query({count: Settings.options.counts.search})
       end
       "#{@users_url}search?q=#{words}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def search_annotations anno, options
       make_options_list_simple(options) do
-        API.build_query({count: Settings.options[:counts][:search]})
+        API.build_query({count: Settings.options.counts.search})
       end
       "#{@posts_url}search?annotation_types=#{anno}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def search_messages channel_id, words, options
       make_options_list_simple(options) do
-        API.build_query({count: Settings.options[:counts][:search]})
+        API.build_query({count: Settings.options.counts.search})
       end
       "#{@channels_url}messages/search?query=#{words}&channel_ids=#{channel_id}&access_token=#{Settings.user_token}#{@options_list}"
     end
 
     def search_channels words, options
-        @options_list = API.build_query({count: Settings.options[:counts][:search]})
+        @options_list = API.build_query({count: Settings.options.counts.search})
       "#{@channels_url}search?q=#{words}&order=popularity&access_token=#{Settings.user_token}#{@options_list}"
     end
 
@@ -220,7 +220,7 @@ module Ayadn
 
     def files_list(options)
       make_options_list_simple(options) do
-        API.build_query({count: Settings.options[:counts][:files]})
+        API.build_query({count: Settings.options.counts.files})
       end
       "#{@users_url}me/files?access_token=#{Settings.user_token}#{@options_list}"
     end

@@ -276,12 +276,12 @@ module Ayadn
       if arg[:count].to_s.is_integer?
         count = arg[:count]
       else
-        count = Settings.options[:counts][:default]
+        count = Settings.options.counts.default
       end
       # Do we want the "directed posts"?
       # Either from CLI (optional)
       # or from the settings
-      directed = arg[:directed] || Settings.options[:timeline][:directed]
+      directed = arg[:directed] || Settings.options.timeline.directed
       # because I was not always consistent in the legacy code base, let's be cautious
       if directed == true || directed == 1
         directed = 1

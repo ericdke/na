@@ -128,20 +128,20 @@ module Ayadn
   class PreferencesColors
     attr_accessor :id, :index, :username, :name, :date, :link, :dots, :hashtags, :mentions, :source, :symbols, :unread, :debug, :excerpt
     def initialize hash
-      @id = hash[:id],
-      @index = hash[:index],
-      @username = hash[:username],
-      @name = hash[:name],
-      @date = hash[:date],
-      @link = hash[:link],
-      @dots = hash[:dots],
-      @hashtags = hash[:hashtags],
-      @mentions = hash[:mentions],
-      @source = hash[:source],
-      @symbols = hash[:symbols],
-      @unread = hash[:unread],
-      @debug = hash[:debug],
+      @index = hash[:index]
+      @username = hash[:username]
+      @name = hash[:name]
+      @date = hash[:date]
+      @link = hash[:link]
+      @dots = hash[:dots]
+      @hashtags = hash[:hashtags]
+      @mentions = hash[:mentions]
+      @source = hash[:source]
+      @symbols = hash[:symbols]
+      @unread = hash[:unread]
+      @debug = hash[:debug]
       @excerpt = hash[:excerpt]
+      @id = hash[:id]
     end
     def to_h
       {

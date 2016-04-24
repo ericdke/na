@@ -20,7 +20,7 @@ module Ayadn
         @view.all_hashtag_links(stream_object, hashtag)
       else
         @view.render(stream_object, options)
-        if Settings.options[:timeline][:compact] == true && !options[:raw]
+        if Settings.options.timeline.compact && !options[:raw]
           puts "\n" 
         end
       end
@@ -42,7 +42,7 @@ module Ayadn
       else
         get_generic(stream_object, words, options)
       end
-      if Settings.options[:timeline][:compact] == true && !options[:raw]
+      if Settings.options.timeline.compact && !options[:raw]
         puts "\n" 
       end
     end
@@ -82,10 +82,10 @@ module Ayadn
     def get_users stream, options
       sorted = stream.sort_by {|obj| obj.counts.followers}
       sorted.each do |obj|
-        puts @view.big_separator unless Settings.options[:timeline][:compact] == true
+        puts @view.big_separator unless Settings.options.timeline.compact
         @view.show_userinfos(obj, nil, false)
       end
-      puts "\n" if Settings.options[:timeline][:compact] == true
+      puts "\n" if Settings.options.timeline.compact
     end
 
   end

@@ -153,10 +153,10 @@ module Ayadn
 
     def show_settings
       table = Terminal::Table.new do |t|
-        if Settings.options[:formats][:table][:borders] == true
-          t.style = { :width => Settings.options[:formats][:table][:width], border_x: '—', border_i: '+', border_y: '|' }
+        if Settings.options.formats.table.borders == true
+          t.style = { :width => Settings.options.formats.table.width, border_x: '—', border_i: '+', border_y: '|' }
         else
-          t.style = { :width => Settings.options[:formats][:table][:width], border_x: ' ', border_i: ' ', border_y: ' ' }
+          t.style = { :width => Settings.options.formats.table.width, border_x: ' ', border_i: ' ', border_y: ' ' }
         end
         t.title = "Current Ayadn settings".color(:cyan)
         t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
@@ -498,14 +498,14 @@ module Ayadn
 
     def filter_nicerank posts, options
       if options[:filter] == true # if this option is true in Action (it's only for global, actually)
-        if Settings.options[:nicerank][:filter] == true
+        if Settings.options.nicerank.filter == true
           filtered = {}
           posts.each do |id,content|
-            if Settings.options[:nicerank][:unranked] == true
+            if Settings.options.nicerank.unranked == true
               next if content[:nicerank] == false
             end
             unless content[:nicerank] == false
-              next if content[:nicerank] < Settings.options[:nicerank][:threshold]
+              next if content[:nicerank] < Settings.options.nicerank.threshold
               next if content[:is_human] == 0
             end
             filtered[id] = content
@@ -542,11 +542,11 @@ module Ayadn
       posts.each do |id,content|
         content[:id] = arrow_id(options, content)
         if content[:username] == Settings.config.identity.username
-          @view << content[:id].color(color_id).inverse + " "
+          @view << content[:id].color(Settings.options.colors.id).inverse + " "
         elsif content[:mentions].include?(Settings.config.identity.username) && options[:in_mentions].nil?
           @view << content[:id].color(color_mention).inverse + " "
         else
-          @view << content[:id].color(color_id) + " "
+          @view << content[:id].color(Settings.options.colors.id) + " "
         end
         @view << build_content(content)
       end
@@ -697,27 +697,27 @@ module Ayadn
     def build_header(content)
       header = ""
       header << content[:handle].color(color_username)
-      if Settings.options[:timeline][:name]
+      if Settings.options.timeline.name
         header << " "
         header << content[:name].color(color_name)
       end
-      if Settings.options[:timeline][:date]
+      if Settings.options.timeline.date
         header << " "
         if Settings.global[:scrolling] == false
           header << content[:date].color(color_date)
         else
-          if Settings.options[:scroll][:date] == false
+          if Settings.options.scroll.date == false
             header << content[:date_short].color(color_date)
           else
             header << content[:date].color(color_date)
           end
         end
       end
-      if Settings.options[:timeline][:source]
+      if Settings.options.timeline.source
         header << " "
         header << "[#{content[:source_name]}]".color(color_source)
       end
-      if Settings.options[:timeline][:symbols]
+      if Settings.options.timeline.symbols
         header << " <".color(color_symbols) if content[:is_reply]
         header << " #{content[:num_stars]}*".color(color_symbols) if content[:is_starred]
         header << " #{content[:num_reposts]}x".color(color_symbols) if content[:num_reposts] > 0
@@ -812,51 +812,51 @@ module Ayadn
     private
 
     def color_username
-      Settings.options[:colors][:username]
+      Settings.options.colors.username
     end
 
     def color_name
-      Settings.options[:colors][:name]
+      Settings.options.colors.name
     end
 
     def color_link
-      Settings.options[:colors][:link]
+      Settings.options.colors.link
     end
 
     def color_date
-      Settings.options[:colors][:date]
+      Settings.options.colors.date
     end
 
     def color_id
-      Settings.options[:colors][:id]
+      Settings.options.colors.id
     end
 
     def color_excerpt
-      Settings.options[:colors][:excerpt]
+      Settings.options.colors.excerpt
     end
 
     def color_symbols
-      Settings.options[:colors][:symbols]
+      Settings.options.colors.symbols
     end
 
     def color_index
-      Settings.options[:colors][:index]
+      Settings.options.colors.index
     end
 
     def color_mention
-      Settings.options[:colors][:mentions]
+      Settings.options.colors.mentions
     end
 
     def color_source
-      Settings.options[:colors][:source]
+      Settings.options.colors.source
     end
 
     def color_dots
-      Settings.options[:colors][:dots]
+      Settings.options.colors.dots
     end
 
     def timeline_is_compact
-      Settings.options[:timeline][:compact]
+      Settings.options.timeline.compact
     end
 
   end

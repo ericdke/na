@@ -378,12 +378,12 @@ module Ayadn
         value = args[0].to_i
         @input = 'table width'
         @output = Validators.width_range(value)
-        Settings.options[:formats][:table][:width] = @output
+        Settings.options.formats.table.width = @output
       elsif type == 'borders' || type == 'border'
         value = args[0]
         @input = 'table borders'
         @output = Validators.boolean(value)
-        Settings.options[:formats][:table][:borders] = @output
+        Settings.options.formats.table.borders = @output
       else
         @status.error_missing_parameters
         exit
@@ -400,7 +400,7 @@ module Ayadn
       if type == 'reverse' || type == 'reversed'
         @input = 'list reverse'
         @output = Validators.boolean(value)
-        Settings.options[:formats][:list][:reverse] = @output
+        Settings.options.formats.list.reverse = @output
       else
         @status.error_missing_parameters
         exit
@@ -427,49 +427,19 @@ module Ayadn
     def timer(t)
       @input = 'timer'
       @output = validate(t)
-      Settings.options[:scroll][:timer] = @output
+      Settings.options.scroll.timer = @output
     end
 
     def date(value)
       @input = 'date'
       @output = Validators.boolean(value)
-      Settings.options[:scroll][:date] = @output
+      Settings.options.scroll.date = @output
     end
 
     def spinner(value)
       @input = 'spinner'
       @output = Validators.boolean(value)
-      Settings.options[:scroll][:spinner] = @output
-    end
-
-  end
-
-  class SetMovie < SetBase
-
-    def initialize
-      super
-      @category = 'movie'
-    end
-
-    def hashtag(tag)
-      @input = 'hashtag'
-      @output = tag
-      Settings.options[:movie][:hashtag] = @output
-    end
-
-  end
-
-  class SetTVShow < SetBase
-
-    def initialize
-      super
-      @category = 'tvshow'
-    end
-
-    def hashtag(tag)
-      @input = 'hashtag'
-      @output = tag
-      Settings.options[:tvshow][:hashtag] = @output
+      Settings.options.scroll.spinner = @output
     end
 
   end
@@ -484,7 +454,7 @@ module Ayadn
     def filter value
       @input = 'filter'
       @output = Validators.boolean(value)
-      Settings.options[:nicerank][:filter] = @output
+      Settings.options.nicerank.filter = @output
     end
 
     def active value
@@ -494,13 +464,13 @@ module Ayadn
     def unranked value
       @input = 'unranked'
       @output = Validators.boolean(value)
-      Settings.options[:nicerank][:unranked] = @output
+      Settings.options.nicerank.unranked = @output
     end
 
     def threshold value
       @input = 'threshold'
       @output = Validators.threshold(value)
-      Settings.options[:nicerank][:threshold] = @output
+      Settings.options.nicerank.threshold = @output
     end
 
   end
@@ -520,8 +490,12 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'posts', 'messages', 'lists'
-        Settings.options[:backup][meth.to_sym] = @output
+      when 'posts'
+        Settings.options.backup.posts = @output
+      when 'messages'
+        Settings.options.backup.messages = @output
+      when 'lists'
+        Settings.options.backup.lists = @output
       else
         super
       end
@@ -545,7 +519,7 @@ module Ayadn
       @output = validate(options)
       case @input
       when 'messages'
-        Settings.options[:marker][meth.to_sym] = @output
+        Settings.options.marker.messages = @output
       else
         super
       end
@@ -569,7 +543,7 @@ module Ayadn
       @output = validate(options)
       case @input
       when 'links'
-        Settings.options[:channels][meth.to_sym] = @output
+        Settings.options.channels.links = @output
       else
         super
       end
@@ -593,7 +567,7 @@ module Ayadn
       @output = validate(options)
       case @input
       when 'active', 'activated'
-        Settings.options[:blacklist][meth.to_sym] = @output
+        Settings.options.blacklist.active = @output
       else
         super
       end
@@ -616,8 +590,38 @@ module Ayadn
       @input = meth.to_s.capitalize
       @output = validate(options.to_i)
       case meth.to_s
-      when 'default', 'unified', 'checkins', 'conversations', 'global', 'photos', 'trending', 'mentions', 'convo', 'posts', 'messages', 'search', 'whoreposted', 'whostarred', 'whatstarred', 'files'
-        Settings.options[:counts][meth.to_sym] = @output
+      when 'default'
+        Settings.options.counts.default = @output
+      when 'unified'
+        Settings.options.counts.unified = @output
+      when 'checkins'
+        Settings.options.counts.checkins = @output
+      when 'conversations'
+        Settings.options.counts.conversations = @output
+      when 'global'
+        Settings.options.counts.global = @output
+      when 'photos'
+        Settings.options.counts.photos = @output
+      when 'trending'
+        Settings.options.counts.trending = @output
+      when 'mentions'
+        Settings.options.counts.mentions = @output
+      when 'convo'
+        Settings.options.counts.convo = @output
+      when 'posts'
+        Settings.options.counts.posts = @output
+      when 'messages'
+        Settings.options.counts.messages = @output
+      when 'search'
+        Settings.options.counts.search = @output
+      when 'whoreposted'
+        Settings.options.counts.whoreposted = @output
+      when 'whostarred'
+        Settings.options.counts.whostarred = @output
+      when 'whatstarred'
+        Settings.options.counts.whatstarred = @output
+      when 'files'
+        Settings.options.counts.files = @output
       else
         super
       end
@@ -640,10 +644,20 @@ module Ayadn
       @input = meth.to_s
       @output = validate(options)
       case @input
-      when 'directed', 'source', 'symbols', 'name', 'date', 'debug', 'compact'
-        Settings.options[:timeline][meth.to_sym] = @output
-      else
-        super
+      when 'directed'
+        Settings.options.timeline.directed = @output
+      when 'source'
+        Settings.options.timeline.source = @output
+      when 'symbols'
+        Settings.options.timeline.symbols = @output
+      when 'name'
+        Settings.options.timeline.name = @output
+      when 'date'
+        Settings.options.timeline.date = @output
+      when 'debug'
+        Settings.options.timeline.debug = @output
+      when 'compact'
+        Settings.options.timeline.compact = @output
       end
     end
 
@@ -664,12 +678,34 @@ module Ayadn
       @input = meth.to_s.capitalize
       @output = validate(options)
       case meth.to_s
-      when 'id', 'index', 'username', 'name', 'date', 'link', 'dots', 'hashtags', 'mentions', 'source', 'symbols', 'unread', 'debug', 'excerpt'
-        Settings.options[:colors][meth.to_sym] = @output
-      when 'hashtag', 'mention', 'symbol'
-        Settings.options[:colors]["#{meth}s".to_sym] = @output
-      when 'client'
-        Settings.options[:colors][:source] = @output
+      when 'id'
+        Settings.options.colors.id = @output
+      when 'index'
+        Settings.options.colors.index = @output
+      when 'username'
+        Settings.options.colors.username = @output
+      when 'name'
+        Settings.options.colors.name = @output
+      when 'date'
+        Settings.options.colors.date = @output
+      when 'link'
+        Settings.options.colors.link = @output
+      when 'dots'
+        Settings.options.colors.dots = @output
+      when 'mentions', 'mention'
+        Settings.options.colors.mentions = @output
+      when 'symbols', 'symbol'
+        Settings.options.colors.symbols = @output
+      when 'unread'
+        Settings.options.colors.unread = @output
+      when 'debug'
+        Settings.options.colors.debug = @output
+      when 'excerpt'
+        Settings.options.colors.excerpt = @output
+      when 'hashtag', 'tag', 'hashtags'
+        Settings.options.colors.hashtag = @output
+      when 'client', 'source'
+        Settings.options.colors.source = @output
       else
         super
       end

@@ -99,59 +99,37 @@ describe Ayadn::SetScroll do
 
   describe "#timer" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
+      expect(Ayadn::Settings.options.scroll.timer).to eq 3
       Ayadn::SetScroll.new.timer('2')
-      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 2
+      expect(Ayadn::Settings.options.scroll.timer).to eq 2
       Ayadn::SetScroll.new.timer('4.2')
-      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 4
+      expect(Ayadn::Settings.options.scroll.timer).to eq 4
       Ayadn::SetScroll.new.timer('0')
-      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
+      expect(Ayadn::Settings.options.scroll.timer).to eq 3
       Ayadn::SetScroll.new.timer('johnson')
-      expect(Ayadn::Settings.options[:scroll][:timer]).to eq 3
+      expect(Ayadn::Settings.options.scroll.timer).to eq 3
     end
   end
 
   describe "#spinner" do
     it "creates a default value" do
       Ayadn::SetScroll.new.spinner('true')
-      expect(Ayadn::Settings.options[:scroll][:spinner]).to eq true
+      expect(Ayadn::Settings.options.scroll.spinner).to eq true
       Ayadn::SetScroll.new.spinner('false')
-      expect(Ayadn::Settings.options[:scroll][:spinner]).to eq false
+      expect(Ayadn::Settings.options.scroll.spinner).to eq false
       Ayadn::SetScroll.new.spinner('0')
-      expect(Ayadn::Settings.options[:scroll][:spinner]).to eq false
+      expect(Ayadn::Settings.options.scroll.spinner).to eq false
     end
   end
 
   describe "#date" do
     it "creates a default value" do
       Ayadn::SetScroll.new.date('true')
-      expect(Ayadn::Settings.options[:scroll][:date]).to eq true
+      expect(Ayadn::Settings.options.scroll.date).to eq true
       Ayadn::SetScroll.new.date('false')
-      expect(Ayadn::Settings.options[:scroll][:date]).to eq false
+      expect(Ayadn::Settings.options.scroll.date).to eq false
       Ayadn::SetScroll.new.date('0')
-      expect(Ayadn::Settings.options[:scroll][:date]).to eq false
-    end
-  end
-
-  after do
-    File.delete('spec/mock/ayadn.log')
-  end
-end
-
-describe Ayadn::SetColor do
-  before do
-    init_stubs
-  end
-
-  describe "#" do
-    it "creates a default value" do
-      colors_list = %w{red green magenta cyan yellow blue white black}
-      %w{id index username name date link dots hashtags mentions source symbols debug}.each do |meth|
-        command = meth.to_sym
-        color = colors_list.sample
-        Ayadn::SetColor.new.send(command, color)
-        expect(Ayadn::Settings.options[:colors][command]).to eq color.to_sym
-      end
+      expect(Ayadn::Settings.options.scroll.date).to eq false
     end
   end
 
@@ -168,22 +146,22 @@ describe Ayadn::SetFormats do
   describe "#table" do
     it "creates a default table width" do
       Ayadn::SetFormats.new.send(:table, ['width', '80'])
-      expect(Ayadn::Settings.options[:formats][:table][:width]).to eq 80
+      expect(Ayadn::Settings.options.formats.table.width).to eq 80
     end
     it "creates a default table width" do
       Ayadn::SetFormats.new.send(:table, ['width', '33'])
-      expect(Ayadn::Settings.options[:formats][:table][:width]).to eq 75
+      expect(Ayadn::Settings.options.formats.table.width).to eq 75
     end
     it "creates a default table width" do
       Ayadn::SetFormats.new.send(:table, ['width', 'yolo'])
-      expect(Ayadn::Settings.options[:formats][:table][:width]).to eq 75
+      expect(Ayadn::Settings.options.formats.table.width).to eq 75
     end
   end
 
   describe "#list" do
     it "creates a default list order" do
       Ayadn::SetFormats.new.send(:list, ['reverse', 'false'])
-      expect(Ayadn::Settings.options[:formats][:list][:reverse]).to eq false
+      expect(Ayadn::Settings.options.formats.list.reverse).to eq false
     end
     it "raises an error" do
       printed = capture_stdout do
@@ -197,48 +175,6 @@ describe Ayadn::SetFormats do
   end
 end
 
-describe Ayadn::SetTimeline do
-  before do
-    init_stubs
-  end
-
-  describe "#" do
-    it "creates a default value" do
-      %w{directed source symbols name date debug compact}.each do |meth|
-        command = meth.to_sym
-        Ayadn::SetTimeline.new.send(command, 'true')
-        expect(Ayadn::Settings.options[:timeline][command]).to eq true
-        printed = capture_stdout do
-          expect(lambda {Ayadn::SetTimeline.new.send(command, 'yolo')}).to raise_error(SystemExit)
-        end
-      end
-    end
-  end
-
-  after do
-    File.delete('spec/mock/ayadn.log')
-  end
-end
-
-describe Ayadn::SetCounts do
-  before do
-    init_stubs
-  end
-
-  describe "#" do
-    it "creates a default value" do
-      %w{default unified global checkins conversations photos trending mentions convo posts messages search whoreposted whostarred whatstarred files}.each do |meth|
-        command = meth.to_sym
-        Ayadn::SetCounts.new.send(command, '199')
-        expect(Ayadn::Settings.options[:counts][command]).to eq 199
-        printed = capture_stdout do
-          Ayadn::SetCounts.new.send(command, '333')
-        end
-      end
-    end
-  end
-end
-
 describe Ayadn::SetMarker do
   before do
     init_stubs
@@ -246,9 +182,9 @@ describe Ayadn::SetMarker do
 
   describe "#messages" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:marker][:messages]).to eq true
+      expect(Ayadn::Settings.options.marker.messages).to eq true
       Ayadn::SetMarker.new.messages('0')
-      expect(Ayadn::Settings.options[:marker][:messages]).to eq false
+      expect(Ayadn::Settings.options.marker.messages).to eq false
     end
   end
 
@@ -264,23 +200,23 @@ describe Ayadn::SetBackup do
 
   describe "#posts" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:backup][:posts]).to eq false
+      expect(Ayadn::Settings.options.backup.posts).to eq false
       Ayadn::SetBackup.new.posts('1')
-      expect(Ayadn::Settings.options[:backup][:posts]).to eq true
+      expect(Ayadn::Settings.options.backup.posts).to eq true
     end
   end
   describe "#messages" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:backup][:messages]).to eq false
+      expect(Ayadn::Settings.options.backup.messages).to eq false
       Ayadn::SetBackup.new.messages('True')
-      expect(Ayadn::Settings.options[:backup][:messages]).to eq true
+      expect(Ayadn::Settings.options.backup.messages).to eq true
     end
   end
   describe "#lists" do
     it "creates a default value" do
-      expect(Ayadn::Settings.options[:backup][:lists]).to eq false
+      expect(Ayadn::Settings.options.backup.lists).to eq false
       Ayadn::SetBackup.new.lists('YES')
-      expect(Ayadn::Settings.options[:backup][:lists]).to eq true
+      expect(Ayadn::Settings.options.backup.lists).to eq true
     end
   end
 
@@ -300,58 +236,26 @@ describe Ayadn::SetBackup do
   end
 end
 
-describe Ayadn::SetMovie do
-  before do
-    init_stubs
-  end
-  describe "#hashtag" do
-    it "creates a new hashtag default" do
-      expect(Ayadn::Settings.options[:movie][:hashtag]).to eq 'nowwatching'
-      Ayadn::SetMovie.new.hashtag('yolo')
-      expect(Ayadn::Settings.options[:movie][:hashtag]).to eq 'yolo'
-    end
-  end
-  after do
-    File.delete('spec/mock/ayadn.log')
-  end
-end
-
-describe Ayadn::SetTVShow do
-  before do
-    init_stubs
-  end
-  describe "#hashtag" do
-    it "creates a new hashtag default" do
-      expect(Ayadn::Settings.options[:tvshow][:hashtag]).to eq 'nowwatching'
-      Ayadn::SetTVShow.new.hashtag('yolo')
-      expect(Ayadn::Settings.options[:tvshow][:hashtag]).to eq 'yolo'
-    end
-  end
-  after do
-    File.delete('spec/mock/ayadn.log')
-  end
-end
-
 describe Ayadn::SetNiceRank do
   before do
     init_stubs
   end
   describe "#threshold" do
     it "creates a new threshold default" do
-      expect(Ayadn::Settings.options[:nicerank][:threshold]).to eq 2.1
+      expect(Ayadn::Settings.options.nicerank.threshold).to eq 2.1
       Ayadn::SetNiceRank.new.threshold('3')
-      expect(Ayadn::Settings.options[:nicerank][:threshold]).to eq 3
+      expect(Ayadn::Settings.options.nicerank.threshold).to eq 3
       Ayadn::SetNiceRank.new.threshold('3.2')
-      expect(Ayadn::Settings.options[:nicerank][:threshold]).to eq 3.2
+      expect(Ayadn::Settings.options.nicerank.threshold).to eq 3.2
     end
   end
   describe "#filter" do
     it "creates a new filter default" do
-      expect(Ayadn::Settings.options[:nicerank][:filter]).to eq true
+      expect(Ayadn::Settings.options.nicerank.filter).to eq true
       Ayadn::SetNiceRank.new.filter('false')
-      expect(Ayadn::Settings.options[:nicerank][:filter]).to eq false
+      expect(Ayadn::Settings.options.nicerank.filter).to eq false
       Ayadn::SetNiceRank.new.filter('1')
-      expect(Ayadn::Settings.options[:nicerank][:filter]).to eq true
+      expect(Ayadn::Settings.options.nicerank.filter).to eq true
       printed = capture_stdout do
         expect(lambda {Ayadn::SetNiceRank.new.filter('6')}).to raise_error(SystemExit)
       end
@@ -359,11 +263,11 @@ describe Ayadn::SetNiceRank do
   end
   describe "#unranked" do
     it "creates a new unranked default" do
-      expect(Ayadn::Settings.options[:nicerank][:unranked]).to eq false
+      expect(Ayadn::Settings.options.nicerank.unranked).to eq false
       Ayadn::SetNiceRank.new.unranked('true')
-      expect(Ayadn::Settings.options[:nicerank][:unranked]).to eq true
+      expect(Ayadn::Settings.options.nicerank.unranked).to eq true
       Ayadn::SetNiceRank.new.unranked('0')
-      expect(Ayadn::Settings.options[:nicerank][:unranked]).to eq false
+      expect(Ayadn::Settings.options.nicerank.unranked).to eq false
       printed = capture_stdout do
         expect(lambda {Ayadn::SetNiceRank.new.unranked('yolo')}).to raise_error(SystemExit)
       end

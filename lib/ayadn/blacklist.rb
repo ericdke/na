@@ -126,7 +126,7 @@ module Ayadn
     
     def list(options)
       begin
-        Settings.options[:timeline][:compact] = true if options[:compact] == true
+        Settings.options.timeline.compact = true if options[:compact] == true
         show_list(options)
       end
     end

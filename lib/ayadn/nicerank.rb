@@ -64,7 +64,7 @@ module Ayadn
         @posts += stream.posts.size
         @ids += user_ids.size
 
-        if Settings.options[:timeline][:debug] == true
+        if Settings.options.timeline.debug
           deb = "\n"
           deb << "+ NICERANK\n"
           deb << "* t#{Time.now.to_i}\n"
@@ -76,7 +76,7 @@ module Ayadn
           deb << "DB hits:\t#{@hits}\n"
           deb << "Uniques:\t#{@store.count}\n"
           deb << "\n"
-          puts deb.color(Settings.options[:colors][:debug])
+          puts deb.color(Settings.options.colors.debug)
           Logs.rec.debug "NICERANK/POSTS: #{@posts}"
           Logs.rec.debug "NICERANK/NR CALLS: #{@ids}"
           Logs.rec.debug "NICERANK/CACHE HITS: #{@hits}"

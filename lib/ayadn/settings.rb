@@ -9,7 +9,7 @@ module Ayadn
     # CLIENT_ID = ""
 
     class << self
-      attr_accessor :options, :config, :global, :test_options
+      attr_accessor :options, :config, :global
       attr_reader :user_token
     end
 
@@ -47,9 +47,8 @@ module Ayadn
           baseURL: baseURL
         }
       }
-      @options = self.defaults
 
-      @test_options = Preferences.new(@options)
+      @options = Preferences.new(self.defaults)
 
       require 'json'
       require 'ostruct'
@@ -101,7 +100,7 @@ module Ayadn
     end
 
     def self.save_config
-      File.write(@config.paths.config + "/config.yml", @options.to_yaml)
+      File.write(@config.paths.config + "/config.yml", @options.to_h.to_yaml)
     end
 
     def self.has_token_file?
@@ -116,16 +115,13 @@ module Ayadn
       config_file = @config.paths.config + "/config.yml"
       if File.exist?(config_file)
         begin
-          # conf = YAML.load(File.read(config_file))
-          # @options = conf
-          @options = YAML.load(File.read(config_file))
-          # self.write_config_file(config_file, @options)
+          @options = Preferences.new(YAML.load(File.read(config_file)))
         rescue => e
           Errors.global_error({error: e, caller: caller, data: []})
         end
       else
         begin
-          self.write_config_file(config_file, @options)
+          self.write_config_file(config_file, @options.to_h)
         rescue => e
           Errors.global_error({error: e, caller: caller, data: []})
         end
@@ -152,7 +148,7 @@ module Ayadn
 
     def self.restore_defaults
       self.load_config
-      File.write(@config.paths.config + "/config.yml", @options.to_yaml)
+      File.write(@config.paths.config + "/config.yml", @options.to_h.to_yaml)
     end
 
     private

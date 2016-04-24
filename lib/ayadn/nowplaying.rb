@@ -189,7 +189,7 @@ module Ayadn
           visible: visible
         }
         resp = poster.post(dic)
-        FileOps.save_post(resp) if Settings.options[:backup][:posts]
+        FileOps.save_post(resp) if Settings.options.backup.posts
         @view.show_posted(resp)
       rescue => e
         @status.wtf
@@ -312,7 +312,7 @@ module Ayadn
       # @status.to_be_posted
       thor = Thor::Shell::Basic.new
       text.split("\n").each do |line|
-        thor.say_status(nil, line.color(Settings.options[:colors][:excerpt]))
+        thor.say_status(nil, line.color(Settings.options.colors.excerpt))
       end
       puts "\n"
       unless options['no_url'] || store['code'] != 200

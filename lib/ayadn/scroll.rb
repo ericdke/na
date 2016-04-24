@@ -30,12 +30,12 @@ module Ayadn
           stream_object.posts.empty? ? niceranks = {} : niceranks = @nr.get_ranks(stream_object)
           Debug.stream stream_object, options, target          
           target = "explore:#{target}" if explore?(target) # explore but not global
-          clear() if Settings.options[:scroll][:spinner] == true
+          clear() if Settings.options.scroll.spinner
           show_if_new(stream_object, options, target, niceranks)          
           target = orig_target if target =~ /explore/
           options = save_then_return(stream_object, options, target)
           countdown
-          print "..." if Settings.options[:scroll][:spinner] == true
+          print "..." if Settings.options.scroll.spinner
         rescue Interrupt
           canceled
         end
@@ -51,11 +51,11 @@ module Ayadn
           stream = @api.get_mentions(username, options)
           stream_object = StreamObject.new(stream)
           Debug.stream stream_object, options, username
-          clear() if Settings.options[:scroll][:spinner] == true
+          clear() if Settings.options.scroll.spinner
           show_if_new(stream_object, options, "mentions:#{id}")
           options = save_then_return(stream_object, options, "mentions:#{id}")
           countdown
-          print "..." if Settings.options[:scroll][:spinner] == true
+          print "..." if Settings.options.scroll.spinner
         rescue Interrupt
           canceled
         end
@@ -71,11 +71,11 @@ module Ayadn
           stream = @api.get_posts(username, options)
           stream_object = StreamObject.new(stream)
           Debug.stream stream_object, options, username
-          clear() if Settings.options[:scroll][:spinner] == true
+          clear() if Settings.options.scroll.spinner
           show_if_new(stream_object, options, "posts:#{id}")
           options = save_then_return(stream_object, options, "posts:#{id}")
           countdown
-          print "..." if Settings.options[:scroll][:spinner] == true
+          print "..." if Settings.options.scroll.spinner
         rescue Interrupt
           canceled
         end
@@ -90,11 +90,11 @@ module Ayadn
           stream = @api.get_convo(post_id, options)
           stream_object = StreamObject.new(stream)
           Debug.stream stream_object, options, post_id
-          clear() if Settings.options[:scroll][:spinner] == true
+          clear() if Settings.options.scroll.spinner
           show_if_new(stream_object, options, "replies:#{post_id}")
           options = save_then_return(stream_object, options, "replies:#{post_id}")
           countdown
-          print "..." if Settings.options[:scroll][:spinner] == true
+          print "..." if Settings.options.scroll.spinner
         rescue Interrupt
           canceled
         end
@@ -109,9 +109,9 @@ module Ayadn
           stream = @api.get_messages(channel_id, options)
           stream_object = StreamObject.new(stream)
           Debug.stream stream_object, options, channel_id
-          clear() if Settings.options[:scroll][:spinner] == true
+          clear() if Settings.options.scroll.spinner
           show_if_new(stream_object, options, "channel:#{channel_id}")
-          if Settings.options[:marker][:messages] == true
+          if Settings.options.marker.messages
             unless stream_object.meta.max_id.nil?
               marked = @api.update_marker("channel:#{channel_id}", stream_object.meta.max_id)
               updated = JSON.parse(marked)
@@ -122,7 +122,7 @@ module Ayadn
           end
           options = save_then_return(stream_object, options, "channel:#{channel_id}")
           countdown
-          print "..." if Settings.options[:scroll][:spinner] == true
+          print "..." if Settings.options.scroll.spinner
         rescue Interrupt
           canceled
         end
@@ -132,7 +132,7 @@ module Ayadn
     private
 
     def countdown
-      Settings.options[:scroll][:spinner] == true ? waiting : pause
+      Settings.options.scroll.spinner == true ? waiting : pause
     end
 
     def clear
@@ -175,11 +175,11 @@ module Ayadn
     end
 
     def waiting
-      (Settings.options[:scroll][:timer] * 10).times { spin }
+      (Settings.options.scroll.timer * 10).times { spin }
     end
 
     def pause
-      sleep Settings.options[:scroll][:timer]
+      sleep Settings.options.scroll.timer
     end
 
     def show_if_new(stream, options, target, niceranks = {})
