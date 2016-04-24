@@ -9,7 +9,7 @@ module Ayadn
     # CLIENT_ID = ""
 
     class << self
-      attr_accessor :options, :config, :global
+      attr_accessor :options, :config, :global, :test_options
       attr_reader :user_token
     end
 
@@ -48,6 +48,9 @@ module Ayadn
         }
       }
       @options = self.defaults
+
+      @test_options = Preferences.new(@options)
+
       require 'json'
       require 'ostruct'
       @config = JSON.parse(config_hash.to_json, object_class: OpenStruct)
@@ -255,12 +258,6 @@ module Ayadn
           unranked: false
         },
         nowplaying: {},
-        movie: {
-          hashtag: 'nowwatching'
-        },
-        tvshow: {
-          hashtag: 'nowwatching'
-        },
         blacklist: {
           active: true
         }
