@@ -485,7 +485,6 @@ module Ayadn
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
-    # option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def post(*args)
       Action.new.post(args, options)
@@ -498,7 +497,6 @@ module Ayadn
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
-    # option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def write
       Action.new.write(options)
@@ -509,7 +507,6 @@ module Ayadn
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new message"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new message"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new message"
-    # option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new message"
     option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channel as read"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def pm(*username)
@@ -522,7 +519,6 @@ module Ayadn
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new message"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new message"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new message"
-    # option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new message"
     option :silent, aliases: "-z", type: :boolean, desc: "Do not mark the channel as read"
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
     def send_to_channel(channel_id)
@@ -591,29 +587,6 @@ module Ayadn
       require_relative("nowplaying")
       Action.new.nowplaying(options)
     end
-
-    # desc "movie TITLE", "Create a post from a movie title (-NW)"
-    # map "nowwatching" => :movie
-    # map "imdb" => :movie
-    # map "-NW" => :movie
-    # long_desc Descriptions.nowwatching
-    # option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
-    # option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
-    # def movie(*title)
-    #   require_relative("nowwatching")
-    #   Action.new.nowwatching(title, options)
-    # end
-
-    # desc "tvshow TITLE", "Create a post from a TV show title (-TV)"
-    # map "-TV" => :tvshow
-    # long_desc Descriptions.tvshow
-    # option :alt, aliases: "-a", type: :boolean, desc: "Select an alternative response if the first didn't match"
-    # option :banner, aliases: "-b", type: :boolean, desc: "Inserts the show banner instead of the show poster"
-    # option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"
-    # def tvshow(*title)
-    #   require_relative("tvshow")
-    #   Action.new.tvshow(title, options)
-    # end
 
     desc "random", "Show random posts from App.net (-rnd)"
     map "-rnd" => :random
