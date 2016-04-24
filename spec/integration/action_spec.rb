@@ -77,12 +77,6 @@ describe Ayadn::Action do
           unranked: false
         },
         nowplaying: {},
-        movie: {
-          hashtag: 'nowwatching'
-        },
-        tvshow: {
-          hashtag: 'nowwatching'
-        },
         blacklist: {
           active: true
         }

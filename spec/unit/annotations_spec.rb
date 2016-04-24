@@ -68,13 +68,7 @@ describe Ayadn::Annotations do
           filter: true,
           unranked: false
         },
-        nowplaying: {},
-        movie: {
-          hashtag: 'nowwatching'
-        },
-        tvshow: {
-          hashtag: 'nowwatching'
-        }
+        nowplaying: {}
       }
     )
     Ayadn::Settings.stub(:config).and_return({
@@ -121,20 +115,6 @@ describe Ayadn::Annotations do
     it "creates vimeo annotations" do
       ann = Ayadn::Annotations.new({title: 'WUT', source: 'tEsT', options: {vimeo: ['http://yolo'],}})
       expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>"shoes", "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"https://github.com/ericdke/na", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"net.app.core.oembed", "value"=>{"version"=>"1.0", "type"=>"video", "provider_name"=>"Vimeo", "provider_url"=>"http://vimeo.com/", "width"=>nil, "height"=>nil, "title"=>"yolo", "author_name"=>nil, "author_url"=>nil, "embeddable_url"=>"http://yolo", "html"=>nil, "thumbnail_url"=>nil, "thumbnail_height"=>nil, "thumbnail_width"=>nil}}, {"type"=>"com.ayadn.vimeo", "value"=>{"title"=>"yolo", "link"=>"http://yolo"}}]
-    end
-  end
-
-  describe "#movie" do
-    it "creates movie annotations" do
-      ann = Ayadn::Annotations.new({title: 'WUT', source: 'tEsT', options: {movie: true}})
-      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>'shoes', "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"https://github.com/ericdke/na", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.movie", "value"=>{"title"=>"WUT", "source"=>"tEsT"}}]
-    end
-  end
-
-  describe "#tvshow" do
-    it "creates tvshow annotations" do
-      ann = Ayadn::Annotations.new({title: 'WUT', source: 'tEsT', options: {tvshow: true}})
-      expect(ann.content).to eq [{"type"=>"com.ayadn.user", "value"=>{"+net.app.core.user"=>{"user_id"=>"@test", "format"=>"basic"}, "env"=>{"platform"=>'shoes', "ruby"=>"0", "locale"=>"gibberish"}}}, {"type"=>"com.ayadn.client", "value"=>{"url"=>"https://github.com/ericdke/na", "author"=>{"name"=>"Eric Dejonckheere", "username"=>"ericd", "id"=>"69904", "email"=>"eric@aya.io"}, "version"=>"wee"}}, {"type"=>"com.ayadn.tvshow", "value"=>{"title"=>"WUT", "source"=>"tEsT"}}]
     end
   end
 

@@ -14,32 +14,6 @@ module Ayadn
       scroll_config.save
     end
 
-    desc "movie ITEM VALUE", "Set values for movie (nowwatching)"
-    map "nowwatching" => :movie
-    def movie(*args)
-      movie_config = SetMovie.new
-      unless args.length != 2
-        movie_config.send(args[0], args[1])
-      else
-        Status.new.error_missing_parameters
-        exit
-      end
-      movie_config.save
-    end
-
-    desc "tvshow ITEM VALUE", "Set values for tvshow (nowwatching)"
-    map "tv" => :tvshow
-    def tvshow(*args)
-      tvshow_config = SetTVShow.new
-      unless args.length != 2
-        tvshow_config.send(args[0], args[1])
-      else
-        Status.new.error_missing_parameters
-        exit
-      end
-      tvshow_config.save
-    end
-
     desc "marker ITEM TRUE/FALSE", "Set values for stream markers"
     map "markers" => :marker
     def marker(*args)

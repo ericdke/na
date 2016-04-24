@@ -718,10 +718,6 @@ module Ayadn
       begin
         Settings.options.timeline.compact = true if options[:compact] == true
         writer = Post.new
-        if options[:poster] # Returns the same options hash + poster embed
-          settings = options.dup
-          options = NowWatching.new.get_poster(settings[:poster], settings)
-        end
         text = args.join(" ")
         # Should be refactored to positive logic
         writer.post_size_error(text) if writer.post_size_ok?(text) == false
@@ -745,10 +741,6 @@ module Ayadn
         writer.post_size_error(text) if writer.post_size_ok?(text) == false
         @view.clear_screen
         @status.posting
-        if options[:poster]
-          settings = options.dup
-          options = NowWatching.new.get_poster(settings[:poster], settings)
-        end
         resp = writer.post({options: options, text: text})
         save_and_view(resp)
       rescue => e
@@ -772,10 +764,6 @@ module Ayadn
         writer.message_size_error(text) if writer.message_size_ok?(text) == false
     		@view.clear_screen
         @status.posting
-        if options[:poster]
-          settings = options.dup
-          options = NowWatching.new.get_poster(settings[:poster], settings)
-        end
         resp = writer.pm({options: options, text: text, username: username})
         post_object = PostObject.new(resp["data"])
         if Settings.options.marker.messages
@@ -829,10 +817,6 @@ module Ayadn
         # Text length is tested in Post class for the reply command
         @view.clear_screen
         replied_to = @workers.build_posts([PostObject.new(replied_to['data'])])
-        if options[:poster]
-          settings = options.dup
-          options = NowWatching.new.get_poster(settings[:poster], settings)
-        end
         resp = writer.reply({options: options, text: text, id: post_id, reply_to: replied_to})
         FileOps.save_post(resp) if Settings.options.backup.posts
         # ----
@@ -866,10 +850,6 @@ module Ayadn
         writer.message_size_error(text) if writer.message_size_ok?(text) == false
         @view.clear_screen
         @status.posting
-        if options[:poster]
-          settings = options.dup
-          options = NowWatching.new.get_poster(settings[:poster], settings)
-        end
         resp = writer.message({options: options, id: channel_id, text: text})
         post_object = PostObject.new(resp["data"])
         if Settings.options.marker.messages

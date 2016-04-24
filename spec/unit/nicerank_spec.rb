@@ -69,13 +69,7 @@ describe Ayadn::NiceRank do
           filter: true,
           unranked: false
         },
-        nowplaying: {},
-        movie: {
-          hashtag: 'nowwatching'
-        },
-        tvshow: {
-          hashtag: 'nowwatching'
-        }
+        nowplaying: {}
       }
     )
     Ayadn::Settings.stub(:config).and_return({

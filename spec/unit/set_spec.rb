@@ -52,12 +52,6 @@ def init_stubs
       scroll: {
         timer: 3
       },
-      movie: {
-        hashtag: 'nowwatching'
-      },
-      tvshow: {
-        hashtag: 'nowwatching'
-      },
       nicerank: {
         threshold: 2.1,
         filter: true,
