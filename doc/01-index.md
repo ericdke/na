@@ -11,7 +11,6 @@ With Ayadn, you can use all the features of App.net from the console without any
 - write fast single-line or complex multi-line posts
 - embed pictures in posts
 - embed online video in posts
-- embed movie poster in posts
 - view/scroll the Global stream with spammers filtered out
 - view/scroll posts from specific users or posts mentioning a user
 - follow/unfollow users, star/repost/mute/block/unstar/etc 
@@ -22,8 +21,6 @@ With Ayadn, you can use all the features of App.net from the console without any
 - list and download your files
 - view (and write to) all your channels including Broadcasts, Patter, Ohai, etc
 - 'nowplaying' from iTunes, Deezer or Last.fm, with album art and store link
-- 'movie' creates a post from a movie title with poster, plot, and link
-- 'tvshow' creates a post from a TV show title with poster, plot, and link
 - view/send private messages
 - view geolocation data in streams
 - create silent black lists of users, mentions, clients or hashtags
