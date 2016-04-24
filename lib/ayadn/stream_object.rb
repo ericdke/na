@@ -6,7 +6,7 @@ module Ayadn
 		attr_reader :input, :name, :updated_at, :version, :last_read_id, :percentage, :id
 
 		def initialize hash
-			@input = hash["marker"]
+			@input = hash["marker"].nil? ? {} : hash["marker"]
 			@name = @input["name"]
 			@updated_at = @input["updated_at"]
 			@version = @input["version"]
@@ -21,7 +21,7 @@ module Ayadn
 		attr_reader :input, :marker, :min_id, :code, :max_id, :more
 
 		def initialize hash
-			@input = hash["meta"]
+			@input = hash["meta"].nil? ? {} : hash["meta"]
 			@marker = StreamMarkerObject.new(@input)
 			@min_id = @input["min_id"]
 			@code = @input["code"]

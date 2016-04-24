@@ -45,14 +45,15 @@ module Ayadn
     def mentions(username, options)
       Settings.global[:scrolling] = true
       options = check_raw(options)
-      id = @api.get_user(username)['data']['id']
+      id = @api.get_user(username)['data']['id']      
       loop do
         begin
           stream = @api.get_mentions(username, options)
-          Debug.stream stream, options, username
+          stream_object = StreamObject.new(stream)
+          Debug.stream stream_object, options, username
           clear() if Settings.options[:scroll][:spinner] == true
-          show_if_new(stream, options, "mentions:#{id}")
-          options = save_then_return(stream, options, "mentions:#{id}")
+          show_if_new(stream_object, options, "mentions:#{id}")
+          options = save_then_return(stream_object, options, "mentions:#{id}")
           countdown
           print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
@@ -68,10 +69,11 @@ module Ayadn
       loop do
         begin
           stream = @api.get_posts(username, options)
-          Debug.stream stream, options, username
+          stream_object = StreamObject.new(stream)
+          Debug.stream stream_object, options, username
           clear() if Settings.options[:scroll][:spinner] == true
-          show_if_new(stream, options, "posts:#{id}")
-          options = save_then_return(stream, options, "posts:#{id}")
+          show_if_new(stream_object, options, "posts:#{id}")
+          options = save_then_return(stream_object, options, "posts:#{id}")
           countdown
           print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
@@ -86,10 +88,11 @@ module Ayadn
       loop do
         begin
           stream = @api.get_convo(post_id, options)
-          Debug.stream stream, options, post_id
+          stream_object = StreamObject.new(stream)
+          Debug.stream stream_object, options, post_id
           clear() if Settings.options[:scroll][:spinner] == true
-          show_if_new(stream, options, "replies:#{post_id}")
-          options = save_then_return(stream, options, "replies:#{post_id}")
+          show_if_new(stream_object, options, "replies:#{post_id}")
+          options = save_then_return(stream_object, options, "replies:#{post_id}")
           countdown
           print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
@@ -104,19 +107,20 @@ module Ayadn
       loop do
         begin
           stream = @api.get_messages(channel_id, options)
-          Debug.stream stream, options, channel_id
+          stream_object = StreamObject.new(stream)
+          Debug.stream stream_object, options, channel_id
           clear() if Settings.options[:scroll][:spinner] == true
-          show_if_new(stream, options, "channel:#{channel_id}")
+          show_if_new(stream_object, options, "channel:#{channel_id}")
           if Settings.options[:marker][:messages] == true
-            unless resp['meta']['max_id'].nil?
-              marked = @api.update_marker("channel:#{channel_id}", stream['meta']['max_id'])
+            unless stream_object.meta.max_id.nil?
+              marked = @api.update_marker("channel:#{channel_id}", stream_object.meta.max_id)
               updated = JSON.parse(marked)
               if updated['meta']['code'] != 200
                 Errors.warn "couldn't update channel #{channel_id} as read"
               end
             end
           end
-          options = save_then_return(stream, options, "channel:#{channel_id}")
+          options = save_then_return(stream_object, options, "channel:#{channel_id}")
           countdown
           print "..." if Settings.options[:scroll][:spinner] == true
         rescue Interrupt
