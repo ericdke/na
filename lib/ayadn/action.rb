@@ -562,13 +562,14 @@ module Ayadn
           lambda { @api.get_channels }
         end
         if options[:raw]
-          @view.show_raw(channels.call)
+          @view.show_direct_raw(channels.call)
           exit
         else
           @view.downloading
           resp = channels.call
           @view.clear_screen
-          @view.show_channels(resp, options)
+          channels = resp["data"].map { |ch| ChannelObject.new(ch) }
+          @view.show_channels(channels, options)
         end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
@@ -594,12 +595,12 @@ module Ayadn
         end
         puts "\n"
         @status.say_nocolor :searching, "channels with unread PMs"
-        response = @api.get_channels
+        channels_objects = @api.get_channels['data'].map { |obj| ChannelObject.new(obj) }
         unread_channels = []
-        response['data'].map do |ch|
+        channels_objects.map do |ch|
           # Channels can be of many types, PMs are only one type
-          if ch['type'] == "net.app.core.pm" && ch['has_unread'] == true
-            unread_channels << ch['id']
+          if ch.type == "net.app.core.pm" && ch.has_unread
+            unread_channels << ch.id
           end
         end
         if unread_channels.empty?

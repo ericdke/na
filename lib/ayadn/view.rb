@@ -43,6 +43,10 @@ module Ayadn
       jj stream.input
     end
 
+    def show_direct_raw(stream, options = {})
+      jj stream
+    end
+
     def show_simple_post(post, options = {})
       puts build_stream_without_index(post, options, {})
     end

@@ -79,7 +79,11 @@ module Ayadn
       @id = @input["id"]
       @locale = @input["locale"]
       @type = @input["type"]
-      @annotations = @input["annotations"].map { |hash| UserAnnotationObject.new(hash) }
+      if !@input["annotations"].nil?
+        @annotations = @input["annotations"].map { |hash| UserAnnotationObject.new(hash) }
+      else
+        @annotations = []
+      end
       @username = @input["username"]
       @avatar_image = AvatarImageObject.new(@input)
       @description = UserDescriptionObject.new(@input)

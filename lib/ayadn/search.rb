@@ -14,11 +14,12 @@ module Ayadn
       Settings.global[:force] = true if options[:force]
       @view.downloading(options)
       stream = @api.get_hashtag(hashtag)
-      @check.no_data(stream, 'hashtag')
+      stream_object = StreamObject.new(stream)
+      @check.no_data(stream_object, 'hashtag')
       if options[:extract]
-        @view.all_hashtag_links(stream, hashtag)
+        @view.all_hashtag_links(stream_object, hashtag)
       else
-        @view.render(stream, options)
+        @view.render(stream_object, options)
         if Settings.options[:timeline][:compact] == true && !options[:raw]
           puts "\n" 
         end

@@ -103,7 +103,11 @@ module Ayadn
       @source = PostSourceObject.new(@input)
       @entities = EntitiesObject.new(@input)
       @user = UserObject.new(@input["user"])
-      @annotations = @input["annotations"].map { |hash| PostAnnotationObject.new(hash) }
+      if !@input["annotations"].nil?
+        @annotations = @input["annotations"].map { |hash| PostAnnotationObject.new(hash) }
+      else
+        @annotations = []
+      end
       @repost_of = PostObject.new(@input["repost_of"]) if !@input["repost_of"].blank?
       @reply_to = @input["reply_to"]
       @is_deleted = @input["is_deleted"]
