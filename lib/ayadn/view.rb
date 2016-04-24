@@ -26,6 +26,11 @@ module Ayadn
       puts resp unless resp == ""
     end
 
+    def show_messages messages
+      resp = build_stream_without_index(messages, {}, {})
+      puts resp unless resp == ""
+    end
+
     def if_raw what, options
       if options[:raw]
         show_raw(what, options)
@@ -270,9 +275,10 @@ module Ayadn
 
     end
 
-    def show_channels(resp, options = {})
+    def show_channels(stream, options = {})
       view = ""
-      bucket = @workers.build_channels(resp['data'], options)
+      bucket = @workers.build_channels(stream, options)
+
       bucket.reverse.each do |ch|
         if options[:broadcasts]
           next if ch.type != "net.app.core.broadcast"
@@ -316,8 +322,7 @@ module Ayadn
         view << "\n"
         if ch.owner
           view << "Owner: ".color(:cyan)
-          view << "@#{ch.owner['username']}".color(color_username)
-          # + (#{ch.owner['name']}) if ch.owner['name']
+          view << "@#{ch.owner.username}".color(color_username)
           view << "\n"
         end
         unless options[:channels] # unless the request comes from Search
@@ -329,42 +334,42 @@ module Ayadn
         view << "#{ch.type}".color(color_index)
         view << "\n"
         if ch.type == "net.patter-app.room"
-          ann = ch.annotations.select {|a| a['type'] == "net.patter-app.settings"}
+          ann = ch.annotations.select {|a| a.type == "net.patter-app.settings"}
           view << "Name: ".color(:cyan)
-          view << "#{ann[0]['value']['name']}".color(color_link)
+          view << "#{ann[0].value['name']}".color(color_link)
           view << "\n"
           view << "Description: ".color(:cyan)
-          view << "#{ann[0]['value']['blurb']}".color(color_username)
+          view << "#{ann[0].value['blurb']}".color(color_username)
           view << "\n"
-          ann = ch.annotations.select {|a| a['type'] == "net.app.core.fallback_url"}
+          ann = ch.annotations.select {|a| a.type == "net.app.core.fallback_url"}
           view << "URL: ".color(:cyan)
-          view << "#{ann[0]['value']['url']}".color(color_link)
+          view << "#{ann[0].value['url']}".color(color_link)
           view << "\n"
         end
         if ch.type == "net.app.core.broadcast"
-          ann = ch.annotations.select {|a| a['type'] == "net.app.core.broadcast.metadata"}
+          ann = ch.annotations.select {|a| a.type == "net.app.core.broadcast.metadata"}
           view << "Title: ".color(:cyan)
-          view << "#{ann[0]['value']['title']}".color(color_link)
+          view << "#{ann[0].value['title']}".color(color_link)
           view << "\n"
           view << "Description: ".color(:cyan)
-          view << "#{ann[0]['value']['description']}".color(color_username)
+          view << "#{ann[0].value['description']}".color(color_username)
           view << "\n"
-          ann = ch.annotations.select {|a| a['type'] == "net.app.core.fallback_url"}
+          ann = ch.annotations.select {|a| a.type == "net.app.core.fallback_url"}
           view << "URL: ".color(:cyan)
-          view << "#{ann[0]['value']['url']}".color(color_link)
+          view << "#{ann[0].value['url']}".color(color_link)
           view << "\n"
         end
         unless ch.recent_message.nil?
-          unless ch.recent_message['text'].nil?
-            view << "Most recent message (#{@workers.parsed_time(ch.recent_message['created_at'])}): ".color(:cyan)
+          unless ch.recent_message.text.nil?
+            view << "Most recent message (#{@workers.parsed_time(ch.recent_message.created_at)}): ".color(:cyan)
             view << "\n"
-            view << "---\n#{ch.recent_message['text']}\n---"
+            view << "---\n#{ch.recent_message.text}\n---"
           end
         end
         if ch.type == "net.paste-app.clips"
-          ann = ch.recent_message['annotations'].select {|a| a['type'] == "net.paste-app.clip"}
+          ann = ch.recent_message.annotations.select {|a| a.type == "net.paste-app.clip"}
           view << "\n\n"
-          view << ann[0]['value']['content']
+          view << ann[0].value['content']
           view << "\n"
         end
         view << "\n\n"

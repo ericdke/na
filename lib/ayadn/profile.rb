@@ -6,7 +6,7 @@ module Ayadn
 
     def initialize options
       if options.empty?
-        @status.profile_options
+        Status.new.profile_options
         exit
       end
       @options = options

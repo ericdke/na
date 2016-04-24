@@ -45,10 +45,13 @@ module Ayadn
       options = options.dup
       @status.info("connected", "IMDb", "yellow")
       response = find_by_title(args, options)
+puts response.inspect
+exit
       text = format_post(response)
       show_post(text)
       filename = create_filename(response)
-      FileOps.download_url(filename, response.poster_url)
+      FileOps.download_url(filename, response.poster_url) # !!!
+
       @view.clear_screen
       @status.info("uploading", "movie poster", "yellow")
       options[:embed] = ["#{Settings.config[:paths][:downloads]}/#{filename}"]
@@ -60,11 +63,12 @@ module Ayadn
         source: 'IMDb'
       }
       resp = Post.new.post(dic)
+      post_object = PostObject.new(resp["data"])
       FileOps.save_post(resp) if Settings.options[:backup][:posts]
       @view.clear_screen
       @status.yourpost
       puts "\n\n"
-      @view.show_posted(resp)
+      @view.show_posted([post_object])
     end
 
     def find_by_title args, options = {}
@@ -87,7 +91,7 @@ module Ayadn
     def format_plot response, text
       max = 239 - (text.length + Settings.options[:movie][:hashtag].length)
       short = max - 3
-      plot = response.description
+      plot = response.description.nil? ? response.title : response.description
       if plot.length > max
         "#{plot[0..short]}..."
        else

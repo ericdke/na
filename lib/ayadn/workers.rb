@@ -339,9 +339,9 @@ module Ayadn
       post.entities.mentions.map { |m| m.name }
     end
 
-    def build_channels(data, options = {})
+    def build_channels(stream, options = {})
       bucket = []
-      data = [data] unless data.is_a?(Array)
+      stream = [stream] unless stream.is_a?(Array)
       if options[:channels]
         @status.say_yellow :downloading, "list of channels and their users credentials"
         @status.say_info "it could take a while if there are many results and users"
@@ -350,14 +350,16 @@ module Ayadn
         @status.say_info "users are recorded in a database for later filtering and analyzing"
         @status.say_info "it could take a while if there are many results"
       end
+
       chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
+
       no_user = {}
       @api = API.new
-      data.each do |ch|
-        unless ch['writers']['user_ids'].empty?
-          @status.say_cyan :parsing, "channel #{ch['id']}"
+      stream.each do |ch|
+        unless ch.writers.user_ids.empty?
+          @status.say_cyan :parsing, "channel #{ch.id}"
           usernames = []
-          ch['writers']['user_ids'].each do |id|
+          ch.writers.user_ids.each do |id|
             next if no_user[id]
             db = Databases.find_user_by_id(id)
             if db.nil?
@@ -387,12 +389,12 @@ module Ayadn
         else
           writers = Settings.config[:identity][:handle]
         end
-        if ch['has_unread']
+        if ch.has_unread
           unread = "This channel has unread message(s)"
         else
           unread = "No unread messages"
         end
-        bucket << chan.new(ch['id'], ch['counts']['messages'], ch['counts']['subscribers'], ch['type'], ch['owner'], ch['annotations'], ch['readers'], ch['editors'], writers, ch['you_subscribed'], unread, ch['recent_message_id'], ch['recent_message'])
+        bucket << chan.new(ch.id, ch.counts.messages, ch.counts.subscribers, ch.type, ch.owner, ch.annotations, ch.readers, ch.editors, writers, ch.you_subscribed, unread, ch.recent_message_id, ch.recent_message)
       end
       puts "\e[H\e[2J"
       bucket

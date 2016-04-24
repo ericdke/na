@@ -646,7 +646,8 @@ module Ayadn
         @view.clear_screen
         unread_messages.each do |k,v|
           @status.unread_from_channel(k)
-          @view.show_posts(v[0])
+          messages_objects = v[0].map { |post_hash| PostObject.new(post_hash) }
+          @view.show_messages(messages_objects)
         end
         puts "\n" if Settings.options[:timeline][:compact]
       rescue => e
@@ -673,15 +674,16 @@ module Ayadn
         end
         @view.downloading
         # Get the details from the post we want to send to Pinboard
-        resp = @api.get_details(post_id)['data']
+        # resp = @api.get_details(post_id)['data']
         @view.clear_screen
         # Extract links from the post
-        links = @workers.extract_links(resp)
+        post_object = PostObject.new(@api.get_details(post_id)['data'])
+        links = @workers.extract_links(post_object)
         # In case the post has no text, to prevent an error
-        resp['text'].nil? ? text = "" : text = resp['text']
+        post_object.text.nil? ? text = "" : text = post_object.text
         # The first tag is always "ADN"
         usertags << "ADN"
-        handle = "@" + resp['user']['username']
+        handle = "@" + post_object.user.username
         post_text = "From: #{handle} -- Text: #{text} -- Links: #{links.join(" ")}"
         pinner = Ayadn::PinBoard.new
         unless pinner.has_credentials_file?
@@ -693,7 +695,7 @@ module Ayadn
         # Get stored credentials
         credentials = pinner.load_credentials
         maker = Struct.new(:username, :password, :url, :tags, :text, :description)
-        bookmark = maker.new(credentials[0], credentials[1], resp['canonical_url'], usertags.join(","), post_text, resp['canonical_url'])
+        bookmark = maker.new(credentials[0], credentials[1], post_object.canonical_url, usertags.join(","), post_text, post_object.canonical_url)
         @status.saving_pin
         pinner.pin(bookmark)
         @status.done
@@ -775,22 +777,22 @@ module Ayadn
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
         resp = writer.pm({options: options, text: text, username: username})
+        post_object = PostObject.new(resp["data"])
         if Settings.options[:marker][:messages] == true
           if resp['meta']['code'] == 200
-            data = resp['data']
-            name = "channel:#{data['channel_id']}"
-            Databases.pagination_insert(name, data['id'])
-            marked = @api.update_marker(name, data['id'])
+            name = "channel:#{post_object.channel_id}"
+            Databases.pagination_insert(name, post_object.id)
+            marked = @api.update_marker(name, post_object.id)
             updated = JSON.parse(marked)
             if updated['meta']['code'] != 200
-              raise "couldn't update channel #{data['channel_id']} as read"
+              raise "couldn't update channel #{post_object.channel_id} as read"
             end
           end
         end
         FileOps.save_message(resp) if Settings.options[:backup][:messages]
     		@view.clear_screen
     		@status.yourmessage(username[0])
-    		@view.show_posted(resp)
+    		@view.show_simple_post([post_object])
     	rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
     	end
@@ -869,22 +871,22 @@ module Ayadn
           options = NowWatching.new.get_poster(settings[:poster], settings)
         end
         resp = writer.message({options: options, id: channel_id, text: text})
+        post_object = PostObject.new(resp["data"])
         if Settings.options[:marker][:messages] == true
           if resp['meta']['code'] == 200
-            data = resp['data']
-            name = "channel:#{data['channel_id']}"
-            Databases.pagination_insert(name, data['id'])
-            marked = @api.update_marker(name, data['id'])
+            name = "channel:#{post_object.channel_id}"
+            Databases.pagination_insert(name, post_object.id)
+            marked = @api.update_marker(name, post_object.id)
             updated = JSON.parse(marked)
             if updated['meta']['code'] != 200
-              raise "couldn't update channel #{data['channel_id']} as read"
+              raise "couldn't update channel #{post_object.channel_id} as read"
             end
           end
         end
         FileOps.save_message(resp) if Settings.options[:backup][:messages]
         @view.clear_screen
         @status.yourpost
-        @view.show_posted(resp)
+        @view.show_simple_post([post_object])
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id, options]})
       end
@@ -902,43 +904,43 @@ module Ayadn
       end
     end
 
-    def nowwatching(args, options = {})
-      begin
-        Settings.options[:timeline][:compact] = true if options[:compact] == true
-        if args.empty?
-          @status.error_missing_title
-          exit
-        end
-        nw = NowWatching.new(@view)
-        nw.post(args, options)
-      rescue ArgumentError => e
-        @status.no_movie
-      rescue => e
-        @status.wtf
-        Errors.global_error({error: e, caller: caller, data: [args, options]})
-      end
-    end
+    # def nowwatching(args, options = {})
+    #   begin
+    #     Settings.options[:timeline][:compact] = true if options[:compact] == true
+    #     if args.empty?
+    #       @status.error_missing_title
+    #       exit
+    #     end
+    #     nw = NowWatching.new(@view)
+    #     nw.post(args, options)
+    #   rescue ArgumentError => e
+    #     @status.no_movie
+    #   rescue => e
+    #     @status.wtf
+    #     Errors.global_error({error: e, caller: caller, data: [args, options]})
+    #   end
+    # end
 
-    def tvshow(args, options = {})
-      begin
-        Settings.options[:timeline][:compact] = true if options[:compact] == true
-        if args.empty?
-          @status.error_missing_title
-          exit
-        end
-        client = TvShow.new
-        show_obj = if options[:alt]
-          client.find_alt(args.join(' '))
-        else
-          client.find(args.join(' '))
-        end
-        candidate = client.create_details(show_obj)
-        candidate.ok ? candidate.post(options) : candidate.cancel
-      rescue => e
-        @status.wtf
-        Errors.global_error({error: e, caller: caller, data: [args, options]})
-      end
-    end
+    # def tvshow(args, options = {})
+    #   begin
+    #     Settings.options[:timeline][:compact] = true if options[:compact] == true
+    #     if args.empty?
+    #       @status.error_missing_title
+    #       exit
+    #     end
+    #     client = TvShow.new
+    #     show_obj = if options[:alt]
+    #       client.find_alt(args.join(' '))
+    #     else
+    #       client.find(args.join(' '))
+    #     end
+    #     candidate = client.create_details(show_obj)
+    #     candidate.ok ? candidate.post(options) : candidate.cancel
+    #   rescue => e
+    #     @status.wtf
+    #     Errors.global_error({error: e, caller: caller, data: [args, options]})
+    #   end
+    # end
 
     def random_posts(options)
       begin
