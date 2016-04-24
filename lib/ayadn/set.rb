@@ -135,7 +135,7 @@ module Ayadn
     desc "edit", "Edit settings in $EDITOR"
     def edit
       Settings.load_config()
-      sets = Settings.config[:paths][:config] + "/config.yml"
+      sets = Settings.config.paths.config + "/config.yml"
       if sets.blank?
         Status.new.not_authorized
         exit

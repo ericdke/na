@@ -3,11 +3,11 @@ module Ayadn
   class FileOps
 
     def self.cache_list(list, name)
-      File.write(Settings.config[:paths][:lists] + "/.#{name}", list.to_json)
+      File.write(Settings.config.paths.lists + "/.#{name}", list.to_json)
     end
 
     def self.cached_list(name)
-      file_path = Settings.config[:paths][:lists] + "/.#{name}"
+      file_path = Settings.config.paths.lists + "/.#{name}"
       if File.exist?(file_path)
         data = File.read(file_path)
         JSON.load(data)
@@ -17,35 +17,35 @@ module Ayadn
     end
 
     def self.save_links(obj, name)
-      File.write(Settings.config[:paths][:lists] + "/#{name}", obj.to_json)
+      File.write(Settings.config.paths.lists + "/#{name}", obj.to_json)
     end
 
     def self.save_post(resp)
-      File.write(Settings.config[:paths][:posts] + "/#{resp['data']['id']}.json", resp['data'].to_json)
+      File.write(Settings.config.paths.posts + "/#{resp['data']['id']}.json", resp['data'].to_json)
     end
 
     def self.save_message(resp)
-      File.write(Settings.config[:paths][:messages] + "/#{resp['data']['id']}.json", resp['data'].to_json)
+      File.write(Settings.config.paths.messages + "/#{resp['data']['id']}.json", resp['data'].to_json)
     end
 
     def self.save_followings_list(list)
       fg = get_users(list)
-      File.write(Settings.config[:paths][:lists] + "/followings.json", fg.to_json)
+      File.write(Settings.config.paths.lists + "/followings.json", fg.to_json)
     end
 
     def self.save_followers_list(list)
       fr = get_users(list)
-      File.write(Settings.config[:paths][:lists] + "/followers.json", fr.to_json)
+      File.write(Settings.config.paths.lists + "/followers.json", fr.to_json)
     end
 
     def self.save_muted_list(list)
       mt = get_users(list)
-      File.write(Settings.config[:paths][:lists] + "/muted.json", mt.to_json)
+      File.write(Settings.config.paths.lists + "/muted.json", mt.to_json)
     end
 
     def self.download_url(name, url)
       file = CNX.get_response_from(url)
-      File.write(Settings.config[:paths][:downloads] + "/#{name}", file)
+      File.write(Settings.config.paths.downloads + "/#{name}", file)
     end
 
     def self.upload_files files
@@ -59,11 +59,11 @@ module Ayadn
       begin
         case File.extname(file).downcase
         when ".png"
-          `curl -k -H 'Authorization: BEARER #{token}' #{Settings.config[:api][:baseURL]}/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -F 'public=true' -X POST`
+          `curl -k -H 'Authorization: BEARER #{token}' #{Settings.config.api.baseURL}/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/png" -F 'public=true' -X POST`
         when ".gif"
-          `curl -k -H 'Authorization: BEARER #{token}' #{Settings.config[:api][:baseURL]}/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/gif" -F 'public=true' -X POST`
+          `curl -k -H 'Authorization: BEARER #{token}' #{Settings.config.api.baseURL}/files -F 'type=com.ayadn.files' -F "content=@#{file};type=image/gif" -F 'public=true' -X POST`
         else #jpg or jpeg or JPG or JPEG, automatically recognized as such
-          `curl -k -H 'Authorization: BEARER #{token}' #{Settings.config[:api][:baseURL]}/files -F 'type=com.ayadn.files' -F "content=@#{file}" -F 'public=true' -X POST`
+          `curl -k -H 'Authorization: BEARER #{token}' #{Settings.config.api.baseURL}/files -F 'type=com.ayadn.files' -F "content=@#{file}" -F 'public=true' -X POST`
         end
       rescue Errno::ENOENT
         Status.new.no_curl

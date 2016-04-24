@@ -19,7 +19,7 @@ module Ayadn
       replied_to[:mentions].uniq!
       replied_to[:mentions].each do |m|
         next if m == replied_to[:username]
-        next if m == Settings.config[:identity][:username]
+        next if m == Settings.config.identity.username
         reply << " @#{m}"
       end
       post_size_error(reply) if post_size_ok?(reply) == false
@@ -87,7 +87,6 @@ module Ayadn
     def auto_readline
       loop do
         begin
-          #while buffer = Readline.readline("#{Settings.config[:identity][:handle]} >> ".color(:red))
           while buffer = Readline.readline(">> ".color(:red))
             resp = post({text: buffer})
             FileOps.save_post(resp) if Settings.options[:backup][:posts]
@@ -116,25 +115,25 @@ module Ayadn
 
     def post_size_ok?(post) # works on a string, returns boolean
       text = keep_text_from_markdown_links(post)
-      size, max_size = text.length, Settings.config[:post_max_length]
+      size, max_size = text.length, Settings.config.post_max_length
       (size >= 1 && size <= max_size)
     end
 
     def message_size_ok?(message) # works on a string, returns boolean
       text = keep_text_from_markdown_links(message)
-      size, max_size = text.length, Settings.config[:message_max_length]
+      size, max_size = text.length, Settings.config.message_max_length
       (size >= 1 && size <= max_size)
     end
 
     def post_size_error(post)
       text = keep_text_from_markdown_links(post)
-      size, max_size = text.length, Settings.config[:post_max_length]
+      size, max_size = text.length, Settings.config.post_max_length
       bad_text_size(post, size, max_size)
     end
 
     def message_size_error(message)
       text = keep_text_from_markdown_links(message)
-      size, max_size = text.length, Settings.config[:message_max_length]
+      size, max_size = text.length, Settings.config.message_max_length
       bad_text_size(message, size, max_size)
     end
 

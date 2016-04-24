@@ -88,7 +88,7 @@ module Ayadn
 
     def itunes options
       begin
-        unless Settings.config[:platform] =~ /darwin/
+        unless Settings.config.platform =~ /darwin/
           @status.error_only_osx
           exit
         end

@@ -8,7 +8,7 @@ module Ayadn
     end
 
     def same_username(user_object)
-      user_object.username == Settings.config[:identity][:username]
+      user_object.username == Settings.config.identity.username
     end
 
     def auto_save_muted(list)

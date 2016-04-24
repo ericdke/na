@@ -4,7 +4,7 @@ module Ayadn
   class Databases
 
     def self.open_databases
-      @sqlfile = "#{Settings.config[:paths][:db]}/ayadn.sqlite"
+      @sqlfile = "#{Settings.config.paths.db}/ayadn.sqlite"
       @sql = Amalgalite::Database.new(@sqlfile)
       @accounts = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
     end

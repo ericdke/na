@@ -19,7 +19,7 @@ module Ayadn
       end
       Logs.rec.debug "STACK: #{stack}"
       Logs.rec.error "--END--"
-      thor.say_status :error, "logged in #{Settings.config[:paths][:log]}/ayadn.log", :red
+      thor.say_status :error, "logged in #{Settings.config.paths.log}/ayadn.log", :red
       puts "\n"
       Debug.err(args[:error], stack)
       exit

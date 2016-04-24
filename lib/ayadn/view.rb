@@ -228,12 +228,12 @@ module Ayadn
       view << "#{padding}Following\t\t".color(:cyan) + user.counts.following.to_s.color(color_excerpt)
       view << "\nFollowers\t\t".color(:cyan) + user.counts.followers.to_s.color(color_excerpt)
 
-      if user.username == Settings.config[:identity][:username] && !token.nil?
+      if user.username == Settings.config.identity.username && !token.nil?
         view << "#{padding}Storage used\t\t".color(:cyan) + "#{token['storage']['used'].to_filesize}".color(color_excerpt)
         view << "\nStorage available\t".color(:cyan) + "#{token['storage']['available'].to_filesize}".color(color_excerpt)
       end
 
-      unless user.username == Settings.config[:identity][:username]
+      unless user.username == Settings.config.identity.username
         if user.you_follow
           view << "#{padding}You follow ".color(:cyan) + "@#{user.username}".color(color_username)
         else
@@ -523,9 +523,9 @@ module Ayadn
         format = "%03d" % content[:count]
         arrow = arrow_count(options, content)
         count = "#{arrow}#{format}"
-        if content[:username] == Settings.config[:identity][:username]
+        if content[:username] == Settings.config.identity.username
           @view << count.color(color_index).inverse
-        elsif content[:mentions].include?(Settings.config[:identity][:username]) && options[:in_mentions].nil?
+        elsif content[:mentions].include?(Settings.config.identity.username) && options[:in_mentions].nil?
           @view << count.color(color_mention).inverse
         else
           @view << count.color(color_index)
@@ -541,9 +541,9 @@ module Ayadn
       posts = filter_nicerank(@workers.build_posts(posts.reverse, niceranks), options)
       posts.each do |id,content|
         content[:id] = arrow_id(options, content)
-        if content[:username] == Settings.config[:identity][:username]
+        if content[:username] == Settings.config.identity.username
           @view << content[:id].color(color_id).inverse + " "
-        elsif content[:mentions].include?(Settings.config[:identity][:username]) && options[:in_mentions].nil?
+        elsif content[:mentions].include?(Settings.config.identity.username) && options[:in_mentions].nil?
           @view << content[:id].color(color_mention).inverse + " "
         else
           @view << content[:id].color(color_id) + " "

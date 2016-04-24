@@ -422,7 +422,6 @@ module Ayadn
     def view_settings(options)
       begin
         if options[:raw]
-          jj JSON.parse(Settings.config.to_json)
           jj JSON.parse(Settings.options.to_json)
         else
           Settings.options[:timeline][:compact] = true if options[:compact] == true
@@ -507,7 +506,7 @@ module Ayadn
         @status.say_info "author"
         puts "\n" unless Settings.options[:timeline][:compact] == true
         # Is it us? ...
-        if user_object.username == Settings.config[:identity][:username]
+        if user_object.username == Settings.config.identity.username
           @view.show_userinfos(post_object.user, @api.get_token_info['data'], true)
         else
           @view.show_userinfos(post_object.user, nil, true)

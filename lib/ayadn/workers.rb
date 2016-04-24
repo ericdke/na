@@ -322,11 +322,11 @@ module Ayadn
           'origin' => origin,
           'args' => args,
           'created_at' => Time.now,
-          'username' => Settings.config[:identity][:handle]
+          'username' => Settings.config.identity.handle
         },
         'data' => links
       }
-      filename = "#{Settings.config[:identity][:handle]}_#{origin}_links.json"
+      filename = "#{Settings.config.identity.handle}_#{origin}_links.json"
       FileOps.save_links(obj, filename)
       @status.links_saved(filename)
     end
@@ -384,10 +384,10 @@ module Ayadn
               usernames << the_username
             end
           end
-          usernames << Settings.config[:identity][:handle] unless usernames.length == 1 && usernames.first == Settings.config[:identity][:handle]
+          usernames << Settings.config.identity.handle unless usernames.length == 1 && usernames.first == Settings.config[:identity][:handle]
           writers = usernames.join(", ")
         else
-          writers = Settings.config[:identity][:handle]
+          writers = Settings.config.identity.handle
         end
         if ch.has_unread
           unread = "This channel has unread message(s)"

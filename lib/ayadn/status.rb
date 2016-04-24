@@ -18,11 +18,11 @@ module Ayadn
     end
 
     def downloaded(name)
-      info("downloaded", "#{Settings.config[:paths][:downloads]}/#{name}", "green")
+      info("downloaded", "#{Settings.config.paths.downloads}/#{name}", "green")
     end
 
     def links_saved(name)
-      info("done", "links exported to file #{Settings.config[:paths][:lists]}/#{name}", "green")
+      info("done", "links exported to file #{Settings.config.paths.lists}/#{name}", "green")
     end
 
     def downloading
@@ -218,7 +218,7 @@ module Ayadn
 
     def writing
       puts "\n"
-      say_cyan :author, "#{Settings.config[:identity][:handle]}"
+      say_cyan :author, "#{Settings.config.identity.handle}"
       puts "\n"
     end
 
@@ -233,7 +233,7 @@ module Ayadn
 
     def message_from(username)
       puts "\n"
-      say_yellow :from, "#{Settings.config[:identity][:handle]}"
+      say_yellow :from, "#{Settings.config.identity.handle}"
       say_yellow :to, "#{username[0]}"
     end
 
@@ -251,15 +251,15 @@ module Ayadn
     end
 
     def reply
-      say_cyan :max, "#{Settings.config[:post_max_length]} characters"
+      say_cyan :max, "#{Settings.config.post_max_length} characters"
     end
 
     def post
-      say_cyan :max, "#{Settings.config[:post_max_length]} characters"
+      say_cyan :max, "#{Settings.config.post_max_length} characters"
     end
 
     def message
-      say_cyan :max, "#{Settings.config[:message_max_length]} characters"
+      say_cyan :max, "#{Settings.config.message_max_length} characters"
     end
 
     def valid_colors(colors_list)

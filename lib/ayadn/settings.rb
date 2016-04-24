@@ -26,7 +26,7 @@ module Ayadn
       else
         "https://api.app.net"
       end
-      @config = {
+      config_hash = {
         paths: {
           home: home,
           log: "#{home}/log",
@@ -48,6 +48,10 @@ module Ayadn
         }
       }
       @options = self.defaults
+      require 'json'
+      require 'ostruct'
+      @config = JSON.parse(config_hash.to_json, object_class: OpenStruct)
+
       @global = {scrolling: false, force: false}
     end
 
@@ -84,29 +88,29 @@ module Ayadn
     end
 
     def self.init_config
-      @config[:version] = VERSION
-      @config[:platform] = RbConfig::CONFIG['host_os']
-      @config[:ruby] = RUBY_VERSION
-      @config[:locale] = ENV["LANG"]
+      @config.version = VERSION
+      @config.platform = RbConfig::CONFIG['host_os']
+      @config.ruby = RUBY_VERSION
+      @config.locale = ENV["LANG"]
       self.config_file
       self.create_api_file
       self.create_version_file
     end
 
     def self.save_config
-      File.write(@config[:paths][:config] + "/config.yml", @options.to_yaml)
+      File.write(@config.paths.config + "/config.yml", @options.to_yaml)
     end
 
     def self.has_token_file?
-      File.exist?(@config[:paths][:auth] + "/token")
+      File.exist?(@config.paths.auth + "/token")
     end
 
     def self.read_token_file
-      File.read(@config[:paths][:auth] + "/token")
+      File.read(@config.paths.auth + "/token")
     end
 
     def self.config_file
-      config_file = @config[:paths][:config] + "/config.yml"
+      config_file = @config.paths.config + "/config.yml"
       if File.exist?(config_file)
         begin
           # conf = YAML.load(File.read(config_file))
@@ -126,7 +130,7 @@ module Ayadn
     end
 
     def self.create_api_file
-      api_file = @config[:paths][:config] + "/api.json"
+      api_file = @config.paths.config + "/api.json"
       if File.exist?(api_file)
         # should be 48h in secs (172800)
         # but since ADN's API won't change any time soon...
@@ -140,12 +144,12 @@ module Ayadn
     end
 
     def self.create_version_file
-      File.write(@config[:paths][:config] + "/version.yml", {version: @config[:version]}.to_yaml)
+      File.write(@config.paths.config + "/version.yml", {version: @config.version}.to_yaml)
     end
 
     def self.restore_defaults
       self.load_config
-      File.write(@config[:paths][:config] + "/config.yml", @options.to_yaml)
+      File.write(@config.paths.config + "/config.yml", @options.to_yaml)
     end
 
     private
@@ -159,16 +163,16 @@ module Ayadn
 
     def self.read_api(api_file)
       content = JSON.parse(File.read(api_file))
-      @config[:post_max_length] = content['post']['text_max_length']
-      @config[:message_max_length] = content['message']['text_max_length']
+      @config.post_max_length = content['post']['text_max_length']
+      @config.message_max_length = content['message']['text_max_length']
     end
 
     def self.has_version_file?
-      File.exist?(@config[:paths][:config] + "/version.yml")
+      File.exist?(@config.paths.config + "/version.yml")
     end
 
     def self.read_version_file
-      YAML.load(File.read(@config[:paths][:config] + "/version.yml"))
+      YAML.load(File.read(@config.paths.config + "/version.yml"))
     end
 
     def self.write_config_file(config_file, options)
