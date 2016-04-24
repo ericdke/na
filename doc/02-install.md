@@ -49,11 +49,7 @@ Ayadn depends upon these Gems:
         pinboard (export to Pinboard)
         rainbow (text UI utilities)
         rest-client (networking)
-        spotlite (IMDb access)
         terminal-table (text UI utilities)
         thor (commands and options parsing)
-        tvdb_party (TVDb access)
         unicode_utils (text utilities)
-        daybreak (Ruby data store)
 
-*Note: the "daybreak" dependency is only needed for 1.x to 2.x migrations. Deprecated since Ayadn 3.0.*

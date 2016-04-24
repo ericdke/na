@@ -28,8 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "terminal-table", "~> 1.4"
   spec.add_dependency "pinboard", "~> 0.1"
   spec.add_dependency "unicode_utils", "~> 1.4"
-  spec.add_dependency "spotlite", "~> 0.8"
-  spec.add_dependency "tvdb_party", "~> 0.7"
   spec.add_dependency "amalgalite", "~> 1.3"
   spec.add_dependency "fast_cache", "~> 1.0"
 
