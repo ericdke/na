@@ -166,7 +166,7 @@ describe Ayadn::View do
   describe "#show_posts" do
     it 'outputs the stream' do
       printed = capture_stdout do
-        Ayadn::View.new.show_posts(stream['data'])
+        Ayadn::View.new.show_posts(Ayadn::StreamObject.new(stream))
       end
       expect(printed).to include "23184500"
       expect(printed).to include "Backer of the Day"
@@ -180,7 +180,7 @@ describe Ayadn::View do
   describe "#show_raw" do
     it 'outputs the raw stream' do
       printed = capture_stdout do
-        Ayadn::View.new.show_raw(stream['data'][0])
+        Ayadn::View.new.show_raw(Ayadn::StreamObject.new(stream))
       end
       expect(printed).to include '"created_at": "2013-05-19T22:33:57Z"'
     end
@@ -189,7 +189,7 @@ describe Ayadn::View do
   describe "#show_simple_post" do
     it 'outputs one post' do
       printed = capture_stdout do
-        Ayadn::View.new.show_simple_post([stream['data'][0]])
+        Ayadn::View.new.show_simple_post([Ayadn::StreamObject.new(stream).posts[0]])
       end
       expect(printed).to include "23187443"
       expect(printed).to include "Julia Cory"
@@ -199,7 +199,7 @@ describe Ayadn::View do
   describe "#show_posts_with_index" do
     it 'outputs the indexed stream' do
       printed = capture_stdout do
-        Ayadn::View.new.show_posts_with_index(stream['data'])
+        Ayadn::View.new.show_posts_with_index(Ayadn::StreamObject.new(stream))
       end
       expect(printed).to include "001"
       expect(printed).to include "Backer of the Day"
@@ -212,7 +212,7 @@ describe Ayadn::View do
     end
     it "outputs user info" do
       printed = capture_stdout do
-        Ayadn::View.new.show_userinfos(user_e['data'], "")
+        Ayadn::View.new.show_userinfos(Ayadn::UserObject.new(user_e['data']), "")
       end
       expect(printed).to include "Sound engineer"
       expect(printed).to include "aya.io"

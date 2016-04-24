@@ -35,6 +35,9 @@ describe Ayadn::Databases do
     Dir.stub(:home).and_return("spec/mock")
     Ayadn::Databases.open_databases
   end
+
+  let(:data) { JSON.parse(File.read("spec/mock/stream.json")) }
+
   describe ".add_to_users_db" do
     it "adds a user" do
       Ayadn::Databases.add_to_users_db(33, 'test', 'Mr Test')
@@ -58,26 +61,22 @@ describe Ayadn::Databases do
   end
   describe ".save_max_id" do
     it "saves pagination" do
-      stream = {'meta'=>{'max_id'=>'33666','marker'=>{'name'=>'test_stream'}}}
-      Ayadn::Databases.save_max_id(stream)
-      expect(Ayadn::Databases.all_pagination).to eq ['test_stream', 33666]
-      expect(Ayadn::Databases.find_last_id_from('test_stream')).to eq 33666
-
-      Ayadn::Databases.pagination_delete('test_stream')
-
-      stream = {'meta'=>{'max_id'=>'12'}}
-      Ayadn::Databases.save_max_id(stream, 'yolo')
-      expect(Ayadn::Databases.all_pagination).to eq ['yolo', 12]
-      expect(Ayadn::Databases.find_last_id_from('yolo')).to eq 12
+      stream_object = Ayadn::StreamObject.new(data)
+      Ayadn::Databases.save_max_id(stream_object)
+      expect(Ayadn::Databases.all_pagination).to eq ['unified', 23187443]
+      expect(Ayadn::Databases.find_last_id_from('unified')).to eq 23187443
+      Ayadn::Databases.pagination_delete('unified')
     end
   end
   describe ".has_new?" do
     it "check if new posts since last pagination record" do
-      stream = {'meta'=>{'max_id'=>'33666','marker'=>{'name'=>'test_stream'}}}
-      Ayadn::Databases.save_max_id(stream)
-      expect(Ayadn::Databases.has_new?(stream, 'test_stream')).to eq false
-      stream = {'meta'=>{'max_id'=>'42000000','marker'=>{'name'=>'test_stream'}}}
-      expect(Ayadn::Databases.has_new?(stream, 'test_stream')).to eq true
+      stream_object = Ayadn::StreamObject.new(data)
+      Ayadn::Databases.save_max_id(stream_object)
+      expect(Ayadn::Databases.has_new?(stream_object, 'unified')).to eq false
+      temp = stream_object.input
+      temp['meta']['max_id'] = '42000000'
+      stream_object = Ayadn::StreamObject.new(temp)
+      expect(Ayadn::Databases.has_new?(stream_object, 'unified')).to eq true
     end
   end
   describe ".save_indexed_posts" do

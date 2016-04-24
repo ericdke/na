@@ -29,7 +29,8 @@ module Ayadn
         view.clear_screen
         status.info(:connected, "analyzing conversation", :yellow)
         resp = api.get_convo(post_id, options)
-        posts = workers.build_posts(resp['data'].reverse)
+        stream_object = StreamObject.new(resp)
+        posts = workers.build_posts(stream_object.posts.reverse)
         posts.each do |id, post|
           users << "#{post[:original_poster]}"
           post[:mentions].each {|mention| users << "#{mention}"}

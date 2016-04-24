@@ -54,7 +54,7 @@ describe Ayadn::Workers do
 
   describe "#build_posts" do
     it "builds posts hash from stream" do
-      posts = @workers.build_posts(data['data'])
+      posts = @workers.build_posts(Ayadn::StreamObject.new(data).posts)
       expect(posts.length).to eq 10
       expect(posts[23187363][:name]).to eq 'App.net Staff'
       expect(posts[23184500][:username]).to eq 'wired'
@@ -72,7 +72,7 @@ describe Ayadn::Workers do
       expect(posts[23187443][:checkins]).to be_empty
     end
     it "gets oembed link from checkins post" do
-      posts = @workers.build_posts(checkins['data'])
+      posts = @workers.build_posts(Ayadn::StreamObject.new(checkins).posts)
       expect(posts[27101186][:links]).to eq ["https://photos.app.net/27101186/1"]
       expect(posts[27080492][:links]).to eq ["http://sprintr.co/27080492"]
       expect(posts[27073989][:links]).to eq ["http://pic.favd.net/27073989", "https://photos.app.net/27073989/1"]
@@ -94,21 +94,21 @@ describe Ayadn::Workers do
 
   describe "#links_from_posts" do
     it "extract links" do
-      links = @workers.links_from_posts(data)
+      links = @workers.links_from_posts(Ayadn::StreamObject.new(data))
       expect(links).to eq ["http://feed.500px.com/~r/500px-best/~3/c2tMPEJVf6I/61517259", "https://app.net/b/m6bk3", "http://bit.ly/1cr16vM", "http://feed.500px.com/~r/500px-best/~3/i4uhLN-4rd4/61484745", "http://www.newscientist.com/article/dn25068-wikipediasize-maths-proof-too-big-for-humans-to-check.html#.UwTuA3gRq8M", "http://news.ycombinator.com/item?id=7264886", "http://ift.tt/1d0TA7I", "http://feed.500px.com/~r/500px-best/~3/hFi3AUnh_u8/61493427", "http://Experiment.com", "http://priceonomics.com/how-microryza-acquired-the-domain-experimentcom/", "http://news.ycombinator.com/item?id=7265540", "http://feeds.popsci.com/c/34567/f/632419/s/374c6496/sc/38/l/0L0Spopsci0N0Carticle0Cscience0Ccat0Ebites0Eare0Elinked0Edepression/story01.htm?utm_medium=App.net&utm_source=PourOver", "http://ift.tt/1mtTrU9"]
     end
   end
 
   describe "#extract_hashtags" do
     it "extracts hashtags" do
-      tags = @workers.extract_hashtags(data['data'][0])
+      tags = @workers.extract_hashtags(Ayadn::StreamObject.new(data).posts[0])
       expect(tags).to eq ['photography']
     end
   end
 
   describe "#extract_links" do
     it "extracts links" do
-      links = @workers.extract_links(data['data'][0])
+      links = @workers.extract_links(Ayadn::StreamObject.new(data).posts[0])
       expect(links).to eq ['http://feed.500px.com/~r/500px-best/~3/c2tMPEJVf6I/61517259']
     end
   end
@@ -124,7 +124,7 @@ describe Ayadn::Workers do
 
   describe "#extract_checkins" do
     it "extracts checkins" do
-      posts = @workers.build_posts(checkins['data'])
+      posts = @workers.build_posts(Ayadn::StreamObject.new(checkins).posts)
       expect(posts.length).to eq 10
       expect(posts[27101186][:has_checkins]).to be true
       expect(posts[27101186][:checkins][:name]).to eq "Hobbs State Park"
