@@ -1,4 +1,11 @@
-## 3.1 - (WIP) - 'Mr. Robot'
+## 3.5 - 2016-04-24 - 'Chrysalis'
+
+- Deprecated: movie, tvshow (no more access to imdb)
+- Fixed: bug in settings, inconsistencies
+- Improved: speed
+- Code cleanup, ready for PRs...
+
+## 3.1 - not released - 'Mr. Robot'
 
 - Fixed: crashes in the Random (-rnd) stream
 
@@ -39,10 +46,6 @@
 ## 2.0.9 - 2015-02-11 - 'Russel'
 
 - Fix: bug in add/remove user/mention to the blacklist
-
-## 2.0.8 - 2015-02-11
-
-*ignored*
 
 ## 2.0.7 - 2015-02-04 - 'Diacritics'
 
