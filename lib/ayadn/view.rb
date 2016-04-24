@@ -161,7 +161,7 @@ module Ayadn
         t.title = "Current Ayadn settings".color(:cyan)
         t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
         @iter = 0
-        opts = Settings.options.dup
+        opts = Settings.options.to_h
         opts.each do |k,v|
           v.each do |x,y|
             t << :separator if @iter >= 1 && timeline_is_compact == false

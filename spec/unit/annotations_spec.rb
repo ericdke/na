@@ -6,39 +6,49 @@ describe Ayadn::Annotations do
 
   before do
     Ayadn::Settings.stub(:options).and_return(
+      Ayadn::Preferences.new(
       {
         timeline: {
-          directed: 1,
-          html: 0,
+          directed: true,
           source: true,
           symbols: true,
           name: true,
           date: true,
-          spinner: true,
-          debug: false
+          debug: false,
+          compact: false
+        },
+        marker: {
+          messages: true
         },
         counts: {
           default: 50,
-          unified: 100,
-          global: 100,
-          checkins: 100,
+          unified: 50,
+          global: 50,
+          checkins: 50,
           conversations: 50,
           photos: 50,
-          trending: 100,
-          mentions: 100,
-          convo: 100,
-          posts: 100,
-          messages: 50,
+          trending: 50,
+          mentions: 50,
+          convo: 50,
+          posts: 50,
+          messages: 20,
           search: 200,
-          whoreposted: 50,
-          whostarred: 50,
+          whoreposted: 20,
+          whostarred: 20,
           whatstarred: 100,
-          files: 100
+          files: 50
         },
         formats: {
           table: {
-            width: 75
+            width: 75,
+            borders: true
+          },
+          list: {
+            reverse: true
           }
+        },
+        channels: {
+          links: true
         },
         colors: {
           id: :blue,
@@ -52,6 +62,7 @@ describe Ayadn::Annotations do
           mentions: :red,
           source: :cyan,
           symbols: :green,
+          unread: :cyan,
           debug: :red,
           excerpt: :green
         },
@@ -61,17 +72,25 @@ describe Ayadn::Annotations do
           lists: false
         },
         scroll: {
-          timer: 3
+          spinner: true,
+          timer: 3,
+          date: false
         },
         nicerank: {
           threshold: 2.1,
           filter: true,
           unranked: false
         },
-        nowplaying: {}
-      }
+        nowplaying: {},
+        blacklist: {
+          active: true
+        }
+      })
     )
-    Ayadn::Settings.stub(:config).and_return({
+    require 'json'
+    require 'ostruct'
+    obj =
+      {
         identity: {
           username: 'test',
           handle: '@test'
@@ -79,10 +98,17 @@ describe Ayadn::Annotations do
         post_max_length: 256,
         message_max_length: 2048,
         version: 'wee',
+        paths: {
+          db: 'spec/mock/',
+          log: 'spec/mock'
+        },
+        platform: 'shoes',
         ruby: '0',
-        locale: 'gibberish',
-        platform: 'shoes'
-      })
+        locale: 'gibberish'
+      }
+    Ayadn::Settings.stub(:config).and_return(
+      JSON.parse(obj.to_json, object_class: OpenStruct)
+    )
     Ayadn::Errors.stub(:warn).and_return("warned")
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::FileOps.stub(:make_paths).and_return(['~/your/path/cat.jpg', '~/your/path/dog.png']) # STUB1

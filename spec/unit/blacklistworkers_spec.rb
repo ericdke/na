@@ -3,32 +3,91 @@ require 'helpers'
 
 describe Ayadn::BlacklistWorkers do
   before do
-    Ayadn::Settings.stub(:options).and_return({
-        colors: {
-          hashtags: :cyan,
-          mentions: :red,
-          username: :green,
-          id: :blue,
-          name: :yellow,
-          source: :blue,
-          symbols: :green,
-          index: :blue,
-          date: :cyan,
-          link: :magenta,
-          excerpt: :green
-        },
+    Ayadn::Settings.stub(:options).and_return(
+      Ayadn::Preferences.new(
+      {
         timeline: {
+          directed: true,
+          source: true,
+          symbols: true,
           name: true,
           date: true,
-          symbols: true,
-          source: true
+          debug: false,
+          compact: false
         },
-        formats: {table: {width: 75}},
+        marker: {
+          messages: true
+        },
         counts: {
-          default: 33
+          default: 50,
+          unified: 50,
+          global: 50,
+          checkins: 50,
+          conversations: 50,
+          photos: 50,
+          trending: 50,
+          mentions: 50,
+          convo: 50,
+          posts: 50,
+          messages: 20,
+          search: 200,
+          whoreposted: 20,
+          whostarred: 20,
+          whatstarred: 100,
+          files: 50
+        },
+        formats: {
+          table: {
+            width: 75,
+            borders: true
+          },
+          list: {
+            reverse: true
+          }
+        },
+        channels: {
+          links: true
+        },
+        colors: {
+          id: :blue,
+          index: :red,
+          username: :green,
+          name: :magenta,
+          date: :cyan,
+          link: :yellow,
+          dots: :blue,
+          hashtags: :cyan,
+          mentions: :red,
+          source: :cyan,
+          symbols: :green,
+          unread: :cyan,
+          debug: :red,
+          excerpt: :green
+        },
+        backup: {
+          posts: false,
+          messages: false,
+          lists: false
+        },
+        scroll: {
+          spinner: true,
+          timer: 3,
+          date: false
+        },
+        nicerank: {
+          threshold: 2.1,
+          filter: true,
+          unranked: false
+        },
+        nowplaying: {},
+        blacklist: {
+          active: true
         }
-      })
-    Ayadn::Settings.stub(:config).and_return({
+      }))
+    require 'json'
+    require 'ostruct'
+    obj =
+      {
         identity: {
           username: 'test',
           handle: '@test'
@@ -39,8 +98,14 @@ describe Ayadn::BlacklistWorkers do
         paths: {
           db: 'spec/mock/',
           log: 'spec/mock'
-        }
-      })
+        },
+        platform: 'shoes',
+        ruby: '0',
+        locale: 'gibberish'
+      }
+    Ayadn::Settings.stub(:config).and_return(
+      JSON.parse(obj.to_json, object_class: OpenStruct)
+    )
     Ayadn::Settings.stub(:user_token).and_return('XYZ')
     Ayadn::Settings.stub(:check_for_accounts)
     Ayadn::Settings.stub(:load_config)

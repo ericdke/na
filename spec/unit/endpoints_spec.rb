@@ -3,18 +3,87 @@ require 'spec_helper'
 describe Ayadn::Endpoints do
   before do
     Ayadn::Settings.stub(:user_token).and_return('XXX')
-    Ayadn::Settings.stub(:options).and_return({
-        counts: {
-          unified: 33,
-          default: 100,
-          conversations: 12
-        },
+    Ayadn::Settings.stub(:options).and_return(
+      Ayadn::Preferences.new(
+      {
         timeline: {
-          directed: 1,
-          html: 0,
-          annotations: 1
+          directed: true,
+          source: true,
+          symbols: true,
+          name: true,
+          date: true,
+          debug: false,
+          compact: false
+        },
+        marker: {
+          messages: true
+        },
+        counts: {
+          default: 100,
+          unified: 33,
+          global: 100,
+          checkins: 100,
+          conversations: 12,
+          photos: 100,
+          trending: 100,
+          mentions: 100,
+          convo: 100,
+          posts: 100,
+          messages: 20,
+          search: 200,
+          whoreposted: 20,
+          whostarred: 20,
+          whatstarred: 100,
+          files: 100
+        },
+        formats: {
+          table: {
+            width: 75,
+            borders: true
+          },
+          list: {
+            reverse: true
+          }
+        },
+        channels: {
+          links: true
+        },
+        colors: {
+          id: :blue,
+          index: :red,
+          username: :green,
+          name: :magenta,
+          date: :cyan,
+          link: :yellow,
+          dots: :blue,
+          hashtags: :cyan,
+          mentions: :red,
+          source: :cyan,
+          symbols: :green,
+          unread: :cyan,
+          debug: :red,
+          excerpt: :green
+        },
+        backup: {
+          posts: false,
+          messages: false,
+          lists: false
+        },
+        scroll: {
+          spinner: true,
+          timer: 3,
+          date: false
+        },
+        nicerank: {
+          threshold: 2.1,
+          filter: true,
+          unranked: false
+        },
+        nowplaying: {},
+        blacklist: {
+          active: true
         }
-      })
+      }))
     Ayadn::Settings.stub(:global).and_return({
       scrolling: false,
       force: false
