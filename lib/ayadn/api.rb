@@ -5,6 +5,7 @@ module Ayadn
     def initialize
       @workers = Workers.new
       @status = Status.new
+      @view = View.new
     end
 
     def get_unified(options)
@@ -320,7 +321,7 @@ module Ayadn
             @status.canceled
             exit
           end
-          puts "\e[H\e[2J"
+          @view.clear_screen
           retry
         else
           @status.server_error(false)

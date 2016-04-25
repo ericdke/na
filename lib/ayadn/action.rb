@@ -112,7 +112,7 @@ module Ayadn
         end
         # We temporary modify the global settings (should be refactored) if the user asks for an unfiltered result
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           # Creates a new set of IDs, filtered
           ids.map! { |post_id| @workers.get_real_post_id(post_id) }
@@ -258,7 +258,7 @@ module Ayadn
           exit
         end
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           ids.map! { |post_id| @workers.get_real_post_id(post_id) }
         end
@@ -287,7 +287,7 @@ module Ayadn
           exit
         end
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           ids.map! { |post_id| @workers.get_real_post_id(post_id) }
         end
@@ -313,7 +313,7 @@ module Ayadn
           exit
         end
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           ids.map! { |post_id| @workers.get_real_post_id(post_id) }
         end
@@ -342,7 +342,7 @@ module Ayadn
           exit
         end
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           ids.map! { |post_id| @workers.get_real_post_id(post_id) }
         end
@@ -477,7 +477,7 @@ module Ayadn
         @check.bad_post_id(post_id)
         Settings.options.timeline.compact = true if options[:compact]
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           post_id = @workers.get_real_post_id(post_id)
         end
@@ -668,7 +668,7 @@ module Ayadn
         @check.bad_post_id(post_id)
         Settings.options.timeline.compact = true if options[:compact]
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           post_id = @workers.get_real_post_id(post_id)
         end
@@ -791,7 +791,7 @@ module Ayadn
         Settings.options.timeline.compact = true if options[:compact]
         @check.bad_post_id(post_id)
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           post_id = @workers.get_real_post_id(post_id)
         end

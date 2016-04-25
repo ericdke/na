@@ -19,7 +19,7 @@ module Ayadn
         end
         Check.new.bad_post_id(post_id)
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           post_id = Workers.new.get_real_post_id(post_id)
         end
@@ -123,7 +123,7 @@ module Ayadn
         end
         Check.new.bad_post_id(post_id)
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           post_id = Workers.new.get_real_post_id(post_id)
         end
@@ -149,7 +149,7 @@ module Ayadn
         end
         Check.new.bad_post_id(post_id)
         if options[:force]
-          Settings.global[:force] = true
+          Settings.global.force = true
         else
           post_id = Workers.new.get_real_post_id(post_id)
         end

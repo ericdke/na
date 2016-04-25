@@ -70,57 +70,7 @@ module Ayadn
 
     def show_list_followings(list, target, options = {})
       if options["lastpost"]
-        clear_screen()
-        bucket = []
-        list.each do |k,v|
-          bucket << [k, v[0], v[1], v[2], v[3], v[4], v[5]]
-        end
-        count = bucket.size
-        if options[:username]
-          bucket.sort_by! { |obj| obj[1] }
-        elsif options[:name]
-          bucket.sort_by! { |obj| obj[2] }
-        elsif options[:posts]
-          bucket.sort_by! { |obj| [obj[5], obj[1]] }.reverse!
-        elsif options[:date]
-          bucket.keep_if { |obj| !obj[6].nil? }
-          bucket.sort_by! { |obj| obj[6]["created_at"] }.reverse!
-        end
-        title = if target == "me"
-            "Last post of users you're following".color(:cyan)
-          else
-            "Last post of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan)
-          end
-        puts "\t#{title}\n\n"
-        bucket.each.with_index(1) do |obj,index|
-          username = "@#{obj[1]}"
-          colored_username = username.color(color_username)
-          if obj[6].nil?
-            @workers.thor.say_status :warning, "user #{colored_username} has no posts, ignored", :red
-            newline() 
-            next
-          end
-          date = @workers.parsed_time(obj[6]["created_at"])
-          mentions = @workers.extract_mentions(obj[6])
-          hashtags = @workers.extract_hashtags(obj[6])
-          text = @workers.colorize_text(obj[6]["text"], mentions, hashtags)
-          total = "(#{obj[5]} posts)"
-          name = obj[2] == "" ? "(no name)" : obj[2]
-          colored_total = total.color(color_link)
-          colored_name = name.color(color_name)
-          colored_date = date.color(color_date)
-          puts "#{colored_username} #{colored_name} #{colored_date} #{colored_total}\n"
-          newline()
-          puts text
-          unless index == count
-            newline()
-            puts "----------\n"
-            newline()
-          else
-            puts "\n"
-            newline()
-          end
-        end
+        show_list_with_lastpost(list, target, options)
       else
         puts @workers.build_followings_list(list, target, options)
         puts "\n"
@@ -152,39 +102,8 @@ module Ayadn
     end
 
     def show_settings
-      table = Terminal::Table.new do |t|
-        if Settings.options.formats.table.borders
-          t.style = { :width => Settings.options.formats.table.width, border_x: '—', border_i: '+', border_y: '|' }
-        else
-          t.style = { :width => Settings.options.formats.table.width, border_x: ' ', border_i: ' ', border_y: ' ' }
-        end
-        t.title = "Current Ayadn settings".color(:cyan)
-        t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
-        @iter = 0
-        opts = Settings.options.to_h
-        opts.each do |k,v|
-          v.each do |x,y|
-            t << :separator if @iter >= 1 && !timeline_is_compact
-            unless y.is_a?(Hash)
-              t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), y.to_s.color(:green) ]
-            else
-              y.each do |c|
-                yk = c[0]
-                tempv = c[1].to_s
-                if tempv.size > 10
-                  yv = "#{tempv[0..7]}..."
-                else
-                  yv = tempv
-                end
-                t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), "#{yk} = #{yv}".color(:green) ]
-              end
-            end
-            @iter += 1
-          end
-        end
-      end
       clear_screen()
-      puts table
+      puts Settings.options.to_table
       puts "\n"
     end
 
@@ -483,6 +402,65 @@ module Ayadn
 
     private
 
+    ### list = id => [username, name, bool, bool, int, message]
+    def show_list_with_lastpost(list, target, options)
+      clear_screen()
+      bucket = []
+      list.each do |k,v|
+        if !v[5].nil?
+          bucket << [k, v[0], v[1], v[2], v[3], v[4], PostObject.new(v[5])]
+        else
+          bucket << [k, v[0], v[1], v[2], v[3], v[4], nil]
+        end
+      end
+      count = bucket.size
+      if options[:username]
+        bucket.sort_by! { |obj| obj[1] }
+      elsif options[:name]
+        bucket.sort_by! { |obj| obj[2] }
+      elsif options[:posts]
+        bucket.sort_by! { |obj| [obj[5], obj[1]] }.reverse!
+      elsif options[:date]
+        bucket.keep_if { |obj| !obj[6].nil? }
+        bucket.sort_by! { |obj| obj[6].created_at }.reverse!
+      end
+      title = if target == "me"
+          "Last post of users you're following".color(:cyan)
+        else
+          "Last post of users ".color(:cyan) + "#{target}".color(:red) + " is following ".color(:cyan)
+        end
+      puts "\t#{title}\n\n"
+      bucket.each.with_index(1) do |obj,index|
+        username = "@#{obj[1]}"
+        colored_username = username.color(color_username)
+        if obj[6].nil?
+          @status.thor.say_status :warning, "user #{colored_username} has no posts, ignored", :red
+          newline() 
+          next
+        end
+        date = @workers.parsed_time(obj[6].created_at)
+        mentions = @workers.extract_mentions(obj[6])
+        hashtags = @workers.extract_hashtags(obj[6])
+        text = @workers.colorize_text(obj[6].text, mentions, hashtags)
+        total = "(#{obj[5]} posts)"
+        name = obj[2].blank? ? "(no name)" : obj[2]
+        colored_total = total.color(color_link)
+        colored_name = name.color(color_name)
+        colored_date = date.color(color_date)
+        puts "#{colored_username} #{colored_name} #{colored_date} #{colored_total}\n"
+        newline()
+        puts text
+        unless index == count
+          newline()
+          puts "----------\n"
+          newline()
+        else
+          puts "\n"
+          newline()
+        end
+      end
+    end
+
     def newline
       puts "\n" unless timeline_is_compact 
     end
@@ -703,7 +681,7 @@ module Ayadn
       end
       if Settings.options.timeline.date
         header << " "
-        if !Settings.global[:scrolling]
+        if !Settings.global.scrolling
           header << content[:date].color(color_date)
         else
           if !Settings.options.scroll.date

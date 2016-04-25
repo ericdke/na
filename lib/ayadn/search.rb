@@ -11,7 +11,7 @@ module Ayadn
     end
 
     def hashtag(hashtag, options)
-      Settings.global[:force] = true if options[:force]
+      Settings.global.force = true if options[:force]
       @view.downloading(options)
       stream = @api.get_hashtag(hashtag)
       stream_object = StreamObject.new(stream)
@@ -27,7 +27,7 @@ module Ayadn
     end
 
     def find(words, options)
-      Settings.global[:force] = true if options[:force]
+      Settings.global.force = true if options[:force]
       @view.downloading(options)
       stream = get_stream(words, options)
       if options[:users]

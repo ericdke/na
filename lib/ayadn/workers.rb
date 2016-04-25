@@ -2,10 +2,11 @@
 module Ayadn
   class Workers
 
-    attr_reader :thor
+    attr_reader :status, :view
 
     def initialize
       @status = Status.new
+      @view = View.new
     end
 
     def table_borders
@@ -146,7 +147,7 @@ module Ayadn
       # skip objects in blacklist unless force
       result = {}
       posts.each.with_index(1) do |post, index|
-        unless Settings.global[:force]
+        unless Settings.global.force
           if Settings.options.blacklist.active
             if Databases.is_in_blacklist?('client', post.source.name.downcase)
                 Debug.skipped({source: post.source.name})
@@ -154,7 +155,7 @@ module Ayadn
             end
           end
         end
-        unless Settings.global[:force]
+        unless Settings.global.force
           if Settings.options.blacklist.active
             if Databases.is_in_blacklist?('user', post.user.username.downcase)
               Debug.skipped({user: post.user.username})
@@ -164,7 +165,7 @@ module Ayadn
         end
         hashtags = extract_hashtags(post)
         @skip = false
-        unless Settings.global[:force]
+        unless Settings.global.force
           if Settings.options.blacklist.active
             hashtags.each do |tag|
               if Databases.is_in_blacklist?('hashtag', tag.downcase)
@@ -177,7 +178,7 @@ module Ayadn
         end
         next if @skip
         mentions = extract_mentions(post)
-        unless Settings.global[:force]
+        unless Settings.global.force
           if Settings.options.blacklist.active
             mentions.each do |m|
               if Databases.is_in_blacklist?('mention', m.downcase)
@@ -189,7 +190,7 @@ module Ayadn
           end
         end
         next if @skip
-        unless Settings.global[:force]
+        unless Settings.global.force
           if Settings.options.blacklist.active
             post.text.split(" ").each do |word|
               target_word = word.gsub(/[~:-;,?!\'&`^=+<>*%()\/"“”’°£$€.…]/, "")
@@ -339,6 +340,14 @@ module Ayadn
       post.entities.mentions.map { |m| m.name }
     end
 
+    def mentions_from(hash)
+      hash['entities']['mentions'].map { |m| m['name'] }
+    end
+
+    def hashtags_from(hash)
+      hash['entities']['hashtags'].map { |m| m['name'] }
+    end
+
     def build_channels(stream, options = {})
       bucket = []
       stream = [stream] unless stream.is_a?(Array)
@@ -396,7 +405,7 @@ module Ayadn
         end
         bucket << chan.new(ch.id, ch.counts.messages, ch.counts.subscribers, ch.type, ch.owner, ch.annotations, ch.readers, ch.editors, writers, ch.you_subscribed, unread, ch.recent_message_id, ch.recent_message)
       end
-      puts "\e[H\e[2J"
+      @view.clear_screen
       bucket
     end
 

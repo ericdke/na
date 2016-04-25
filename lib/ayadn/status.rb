@@ -2,6 +2,8 @@
 module Ayadn
   class Status
 
+    attr_reader :thor
+
     def initialize
       @thor = Thor::Shell::Color.new
     end

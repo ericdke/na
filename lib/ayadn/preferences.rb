@@ -238,6 +238,7 @@ module Ayadn
       @nowplaying = {}
       @blacklist = PreferencesBlacklist.new(hash[:blacklist])
     end
+
     def to_h
       {
         timeline: @timeline.to_h,
@@ -249,8 +250,41 @@ module Ayadn
         backup: @backup.to_h,
         scroll: @scroll.to_h,
         nicerank: @nicerank.to_h,
-        blacklist: @blacklist.to_h
+        blacklist: @blacklist.to_h,
+        nowplaying: @nowplaying
       }
+    end
+
+    def to_table
+      table = Terminal::Table.new do |t|
+        if @formats.table.borders
+          t.style = { :width => @formats.table.width, border_x: '—', border_i: '+', border_y: '|' }
+        else
+          t.style = { :width => @formats.table.width, border_x: ' ', border_i: ' ', border_y: ' ' }
+        end
+        t.title = "Current Ayadn settings".color(:cyan)
+        t.headings = [ "Category".color(:red), "Parameter".color(:red), "Value(s)".color(:red) ]
+        self.to_h.each_with_index do |(k, v), index|
+          v.each do |x,y|
+            t << :separator if index >= 1 && !@timeline.compact
+            unless y.is_a?(Hash)
+              t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), y.to_s.color(:green) ]
+            else
+              y.each do |c|
+                yk = c[0]
+                tempv = c[1].to_s
+                if tempv.size > 10
+                  yv = "#{tempv[0..7]}..."
+                else
+                  yv = tempv
+                end
+                t << [ k.to_s.color(:cyan), x.to_s.color(:yellow), "#{yk} = #{yv}".color(:green) ]
+              end
+            end
+          end
+        end
+      end
+      table
     end
   end
 end

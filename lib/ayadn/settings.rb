@@ -5,8 +5,10 @@ module Ayadn
     # Warning
     # comment next line
     require_relative "ids"
-    # uncomment and insert your own client id
+    # instead, uncomment and insert your own client id
     # CLIENT_ID = ""
+ 
+    require 'ostruct'
 
     class << self
       attr_accessor :options, :config, :global
@@ -47,14 +49,11 @@ module Ayadn
           baseURL: baseURL
         }
       }
+      @config = JSON.parse(config_hash.to_json, object_class: OpenStruct)
+      global_hash = {scrolling: false, force: false}
+      @global = JSON.parse(global_hash.to_json, object_class: OpenStruct)
 
       @options = Preferences.new(self.defaults)
-
-      require 'json'
-      require 'ostruct'
-      @config = JSON.parse(config_hash.to_json, object_class: OpenStruct)
-
-      @global = {scrolling: false, force: false}
     end
 
     def self.check_for_accounts

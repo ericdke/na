@@ -20,7 +20,7 @@ module Ayadn
     end
 
     def scroll_it(target, options)
-      Settings.global[:scrolling] = true
+      Settings.global.scrolling = true
       options = check_raw(options)
       orig_target = target
       @nr = NiceRank.new
@@ -43,7 +43,7 @@ module Ayadn
     end
 
     def mentions(username, options)
-      Settings.global[:scrolling] = true
+      Settings.global.scrolling = true
       options = check_raw(options)
       id = @api.get_user(username)['data']['id']      
       loop do
@@ -63,7 +63,7 @@ module Ayadn
     end
 
     def posts(username, options)
-      Settings.global[:scrolling] = true
+      Settings.global.scrolling = true
       options = check_raw(options)
       id = @api.get_user(username)['data']['id']
       loop do
@@ -83,7 +83,7 @@ module Ayadn
     end
 
     def convo(post_id, options)
-      Settings.global[:scrolling] = true
+      Settings.global.scrolling = true
       options = check_raw(options)
       loop do
         begin
@@ -102,7 +102,7 @@ module Ayadn
     end
 
     def messages(channel_id, options)
-      Settings.global[:scrolling] = true
+      Settings.global.scrolling = true
       options = check_raw(options)
       loop do
         begin
