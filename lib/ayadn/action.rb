@@ -12,7 +12,7 @@ module Ayadn
       @api = API.new
       @view = View.new
       @workers = Workers.new
-      @status = Status.new
+      # @status = Status.new
       @check = Check.new
       Settings.load_config
       Settings.get_token
@@ -107,7 +107,7 @@ module Ayadn
         # Checks that each post ID received from CLI is an integer
         ids = post_ids.select { |post_id| post_id.is_integer? }
         if ids.empty?
-          @status.error_missing_post_id
+          @workers.status.error_missing_post_id
           exit
         end
         # We temporary modify the global settings (should be refactored) if the user asks for an unfiltered result
@@ -122,7 +122,7 @@ module Ayadn
         # Delete each post
         ids.each do |post_id|
           # Say it
-          @status.deleting_post(post_id)
+          @workers.status.deleting_post(post_id)
           # Do it
           resp = @api.delete_post(post_id)
           # Verify it was done
@@ -136,20 +136,20 @@ module Ayadn
     def delete_m(args)
       begin
         unless args.length >= 2
-          @status.error_missing_message_id
+          @workers.status.error_missing_message_id
           exit
         end
         channel = args[0]
         args.shift
         ids = args.select {|message_id| message_id.is_integer?}
         if ids.empty?
-          @status.error_missing_message_id
+          @workers.status.error_missing_message_id
           exit
         end
         channel_id = @workers.get_channel_id_from_alias(channel)
         puts "\n"
         ids.each do |message_id|
-          @status.deleting_message(message_id)
+          @workers.status.deleting_message(message_id)
           resp = @api.delete_message(channel_id, message_id)
           @check.message_has_been_deleted(message_id, resp)
         end
@@ -165,7 +165,7 @@ module Ayadn
         # Remove current user from list (you never know) to avoid API error
         users = @workers.all_but_me(usernames)
         puts "\n"
-        @status.unfollowing(users.join(','))
+        @workers.status.unfollowing(users.join(','))
         users.each do |user|
           resp = @api.unfollow(user)
           @check.has_been_unfollowed(user, resp)
@@ -180,7 +180,7 @@ module Ayadn
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
         puts "\n"
-        @status.following(users.join(','))
+        @workers.status.following(users.join(','))
         users.each do |user|
           resp = @api.follow(user)
           @check.has_been_followed(user, resp)
@@ -195,7 +195,7 @@ module Ayadn
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
         puts "\n"
-        @status.unmuting(users.join(','))
+        @workers.status.unmuting(users.join(','))
         users.each do |user|
           resp = @api.unmute(user)
           @check.has_been_unmuted(user, resp)
@@ -210,7 +210,7 @@ module Ayadn
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
         puts "\n"
-        @status.muting(users.join(','))
+        @workers.status.muting(users.join(','))
         users.each do |user|
           resp = @api.mute(user)
           @check.has_been_muted(user, resp)
@@ -225,7 +225,7 @@ module Ayadn
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
         puts "\n"
-        @status.unblocking(users.join(','))
+        @workers.status.unblocking(users.join(','))
         users.each do |user|
           resp = @api.unblock(user)
           @check.has_been_unblocked(user, resp)
@@ -240,7 +240,7 @@ module Ayadn
         @check.no_username(usernames)
         users = @workers.all_but_me(usernames)
         puts "\n"
-        @status.blocking(users.join(','))
+        @workers.status.blocking(users.join(','))
         users.each do |user|
           resp = @api.block(user)
           @check.has_been_blocked(user, resp)
@@ -254,7 +254,7 @@ module Ayadn
       begin
         ids = post_ids.select { |post_id| post_id.is_integer? }
         if ids.empty?
-          @status.error_missing_post_id
+          @workers.status.error_missing_post_id
           exit
         end
         if options[:force]
@@ -264,7 +264,7 @@ module Ayadn
         end
         puts "\n"
         ids.each do |post_id|
-          @status.reposting(post_id)
+          @workers.status.reposting(post_id)
           # Retrieve the post we want to repost
           resp = @api.get_details(post_id)
           # Verify it hasn't been already reposted by us
@@ -283,7 +283,7 @@ module Ayadn
       begin
         ids = post_ids.select { |post_id| post_id.is_integer? }
         if ids.empty?
-          @status.error_missing_post_id
+          @workers.status.error_missing_post_id
           exit
         end
         if options[:force]
@@ -293,11 +293,11 @@ module Ayadn
         end
         puts "\n"
         ids.each do |post_id|
-          @status.unreposting(post_id)
+          @workers.status.unreposting(post_id)
           if @api.get_details(post_id)['data']['you_reposted']
             @check.has_been_unreposted(post_id, @api.unrepost(post_id))
           else
-            @status.not_your_repost
+            @workers.status.not_your_repost
           end
         end
       rescue => e
@@ -309,7 +309,7 @@ module Ayadn
       begin
         ids = post_ids.select { |post_id| post_id.is_integer? }
         if ids.empty?
-          @status.error_missing_post_id
+          @workers.status.error_missing_post_id
           exit
         end
         if options[:force]
@@ -319,14 +319,14 @@ module Ayadn
         end
         puts "\n"
         ids.each do |post_id|
-          @status.unstarring(post_id)
+          @workers.status.unstarring(post_id)
           resp = @api.get_details(post_id)
           id = @workers.get_original_id(post_id, resp)
           resp = @api.get_details(id)
           if resp['data']['you_starred']
             @check.has_been_unstarred(id, @api.unstar(id))
           else
-            @status.not_your_starred
+            @workers.status.not_your_starred
           end
         end
       rescue => e
@@ -338,7 +338,7 @@ module Ayadn
       begin
         ids = post_ids.select { |post_id| post_id.is_integer? }
         if ids.empty?
-          @status.error_missing_post_id
+          @workers.status.error_missing_post_id
           exit
         end
         if options[:force]
@@ -348,7 +348,7 @@ module Ayadn
         end
         puts "\n"
         ids.each do |post_id|
-          @status.starring(post_id)
+          @workers.status.starring(post_id)
           resp = @api.get_details(post_id)
           @check.already_starred(resp)
           id = @workers.get_original_id(post_id, resp)
@@ -437,9 +437,9 @@ module Ayadn
         profile = Profile.new(options)
         profile.get_text_from_user
         profile.prepare_payload
-        @status.updating_profile
+        @workers.status.updating_profile
         profile.update
-        @status.done
+        @workers.status.done
         userinfo(['me'], options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
@@ -493,17 +493,17 @@ module Ayadn
         post_object = PostObject.new(response["data"])
 
         if post_object.is_deleted
-          @status.user_404(post_object.id)
+          @workers.status.user_404(post_object.id)
           Errors.global_error({error: "user 404", caller: caller, data: [post_id, options]})
         end
 
         response = @api.get_user("@#{post_object.user.username}")
         user_object = UserObject.new(response['data'])
 
-        @status.post_info
+        @workers.status.post_info
         @view.show_simple_post([post_object], options)
         puts "\n" if Settings.options.timeline.compact
-        @status.say_info "author"
+        @workers.status.say_info "author"
         puts "\n" unless Settings.options.timeline.compact
         # Is it us? ...
         if user_object.username == Settings.config.identity.username
@@ -513,7 +513,7 @@ module Ayadn
         end
 
         if !post_object.repost_of.nil?
-          @status.repost_info
+          @workers.status.repost_info
           # If we ask infos for a reposted post, fetch the original instead
           Errors.repost(post_id, post_object.repost_of.id)
           @view.show_simple_post([post_object.repost_of], options)
@@ -545,7 +545,7 @@ module Ayadn
       begin
         file = @api.get_file(file_id)['data']
         FileOps.download_url(file['name'], file['url'])
-        @status.downloaded(file['name'])
+        @workers.status.downloaded(file['name'])
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [file_id, file['url']]})
       end
@@ -593,7 +593,7 @@ module Ayadn
           Settings.options.marker.messages = false
         end
         puts "\n"
-        @status.say_nocolor :searching, "channels with unread PMs"
+        @workers.status.say_nocolor :searching, "channels with unread PMs"
         channels_objects = @api.get_channels['data'].map { |obj| ChannelObject.new(obj) }
         unread_channels = []
         channels_objects.map do |ch|
@@ -603,12 +603,12 @@ module Ayadn
           end
         end
         if unread_channels.empty?
-          @status.no_new_messages
+          @workers.status.no_new_messages
           exit
         end
         unread_messages = {}
         unread_channels.reverse.each do |id|
-          @status.say_nocolor :downloading, "messages from channel #{id}"
+          @workers.status.say_nocolor :downloading, "messages from channel #{id}"
           # Find the last time we've done this
           since = Databases.find_last_id_from("channel:#{id}")
           unless since.nil?
@@ -637,15 +637,15 @@ module Ayadn
             resp = @api.update_marker(name, v[1])
             res = JSON.parse(resp)
             if res['meta']['code'] != 200
-              @status.say_error "couldn't update channel #{k} as read"
+              @workers.status.say_error "couldn't update channel #{k} as read"
             else
-              @status.say_green :updated, "channel #{k} as read"
+              @workers.status.say_green :updated, "channel #{k} as read"
             end
           end
         end
         @view.clear_screen
         unread_messages.each do |k,v|
-          @status.unread_from_channel(k)
+          @workers.status.unread_from_channel(k)
           messages_objects = v[0].map { |post_hash| PostObject.new(post_hash) }
           @view.show_messages(messages_objects)
         end
@@ -688,17 +688,17 @@ module Ayadn
         pinner = Ayadn::PinBoard.new
         unless pinner.has_credentials_file?
           # No Pinboard account registered? Ask for one.
-          @status.no_pin_creds
+          @workers.status.no_pin_creds
           pinner.ask_credentials
-          @status.pin_creds_saved
+          @workers.status.pin_creds_saved
         end
         # Get stored credentials
         credentials = pinner.load_credentials
         maker = Struct.new(:username, :password, :url, :tags, :text, :description)
         bookmark = maker.new(credentials[0], credentials[1], post_object.canonical_url, usertags.join(","), post_text, post_object.canonical_url)
-        @status.saving_pin
+        @workers.status.saving_pin
         pinner.pin(bookmark)
-        @status.done
+        @workers.status.done
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [post_id, usertags]})
       end
@@ -707,7 +707,7 @@ module Ayadn
     def auto(options)
       begin
         @view.clear_screen
-        @status.auto
+        @workers.status.auto
         Post.new.auto_readline
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
@@ -722,7 +722,7 @@ module Ayadn
         # Should be refactored to positive logic
         writer.post_size_error(text) if !writer.post_size_ok?(text)
         @view.clear_screen
-        @status.posting
+        @workers.status.posting
         resp = writer.post({options: options, text: text})
         save_and_view(resp)
       rescue => e
@@ -734,13 +734,13 @@ module Ayadn
       begin
         Settings.options.timeline.compact = true if options[:compact]
         writer = Post.new
-        @status.writing
-        @status.post
+        @workers.status.writing
+        @workers.status.post
         lines_array = writer.compose
         text = lines_array.join("\n")
         writer.post_size_error(text) if !writer.post_size_ok?(text)
         @view.clear_screen
-        @status.posting
+        @workers.status.posting
         resp = writer.post({options: options, text: text})
         save_and_view(resp)
       rescue => e
@@ -757,13 +757,13 @@ module Ayadn
         @check.no_username(username)
         username = [@workers.add_arobase(username)]
     		writer = Post.new
-        @status.message_from(username)
-    		@status.message
+        @workers.status.message_from(username)
+    		@workers.status.message
     		lines_array = writer.compose
         text = lines_array.join("\n")
         writer.message_size_error(text) if !writer.message_size_ok?(text)
     		@view.clear_screen
-        @status.posting
+        @workers.status.posting
         resp = writer.pm({options: options, text: text, username: username})
         post_object = PostObject.new(resp["data"])
         if Settings.options.marker.messages
@@ -779,7 +779,7 @@ module Ayadn
         end
         FileOps.save_message(resp) if Settings.options.backup.messages
     		@view.clear_screen
-    		@status.yourmessage(username[0])
+    		@workers.status.yourmessage(username[0])
     		@view.show_simple_post([post_object])
     	rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
@@ -795,7 +795,7 @@ module Ayadn
         else
           post_id = @workers.get_real_post_id(post_id)
         end
-      	@status.replying_to(post_id)
+      	@workers.status.replying_to(post_id)
       	replied_to = @api.get_details(post_id)
         @check.no_details(replied_to, post_id)
         # API specifies to always reply to the original post of a reposted post. We offer the user an option to not.
@@ -810,8 +810,8 @@ module Ayadn
         end
         # ----
         writer = Post.new
-        @status.writing
-        @status.reply
+        @workers.status.writing
+        @workers.status.reply
         lines_array = writer.compose
         text = lines_array.join("\n")
         # Text length is tested in Post class for the reply command
@@ -843,13 +843,13 @@ module Ayadn
         end
         channel_id = @workers.get_channel_id_from_alias(channel_id)
         writer = Post.new
-        @status.writing
-        @status.message
+        @workers.status.writing
+        @workers.status.message
         lines_array = writer.compose
         text = lines_array.join("\n")
         writer.message_size_error(text) if !writer.message_size_ok?(text)
         @view.clear_screen
-        @status.posting
+        @workers.status.posting
         resp = writer.message({options: options, id: channel_id, text: text})
         post_object = PostObject.new(resp["data"])
         if Settings.options.marker.messages
@@ -865,7 +865,7 @@ module Ayadn
         end
         FileOps.save_message(resp) if Settings.options.backup.messages
         @view.clear_screen
-        @status.yourpost
+        @workers.status.yourpost
         @view.show_simple_post([post_object])
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [channel_id, options]})
@@ -899,7 +899,7 @@ module Ayadn
     def save_and_view(resp)
       FileOps.save_post(resp) if Settings.options.backup.posts
       @view.clear_screen
-      @status.yourpost
+      @workers.status.yourpost
       puts "\n\n"
       @view.show_posted(resp)
     end

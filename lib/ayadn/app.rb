@@ -4,7 +4,7 @@ module Ayadn
     package_name "Ayadn"
 
     begin
-      %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs set alias errors blacklist mark nicerank debug check diagnostics stream_object post_object user_object channel_object preferences}.each { |r| require_relative "#{r}" }
+      %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs set alias errors blacklist mark nicerank debug check diagnostics stream_object post_object user_object channel_object preferences filtered_post_object}.each { |r| require_relative "#{r}" }
     rescue Interrupt
       puts "\nExit: stopped by user while launching\n\n"
       exit

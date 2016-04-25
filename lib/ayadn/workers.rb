@@ -2,11 +2,11 @@
 module Ayadn
   class Workers
 
-    attr_reader :status, :view
+    # attr_reader :status, :view
 
     def initialize
       @status = Status.new
-      @view = View.new
+      # @view = View.new
     end
 
     def table_borders
@@ -142,10 +142,9 @@ module Ayadn
       table
     end
 
-    # builds a hash of hashes, each hash is a normalized post with post id as a key
     def build_posts(posts, niceranks = {})
       # skip objects in blacklist unless force
-      result = {}
+      results = []
       posts.each.with_index(1) do |post, index|
         unless Settings.global.force
           if Settings.options.blacklist.active
@@ -205,98 +204,94 @@ module Ayadn
         next if @skip
         
         # create custom objects from ADN response
+        filtered = FilteredPost.new(post) 
+        
         user_id_int = post.user.id.to_i
         if niceranks[user_id_int]
-          rank = niceranks[user_id_int][:rank]
-          is_human = niceranks[user_id_int][:is_human]
+          filtered.nicerank = niceranks[user_id_int][:rank]
+          filtered.is_human = niceranks[user_id_int][:is_human]
         else
-          rank = false
-          is_human = 'unknown'
+          filtered.nicerank = false
+          filtered.is_human = 'unknown'
         end
 
         if !post.user.name.blank?
-          name = post.user.name.force_encoding("UTF-8")
+          filtered.name = post.user.name.force_encoding("UTF-8")
         else
-          name = "(no name)"
+          filtered.name = "(no name)"
         end
 
         source = post.source.name.force_encoding("UTF-8")
 
-        values = {
-          count: index,
-          id: post.id.to_i,
-          name: name,
-          thread_id: post.thread_id,
-          username: post.user.username,
-          user_id: post.user.id.to_i,
-          nicerank: rank,
-          is_human: is_human,
-          handle: "@#{post.user.username}",
-          type: post.user.type,
-          date: parsed_time(post.created_at),
-          date_short: parsed_time_short(post.created_at),
-          you_starred: post.you_starred,
-          source_name: source,
-          source_link: post.source.link,
-          canonical_url: post.canonical_url,
-          tags: hashtags,
-          links: extract_links(post),
-          mentions: mentions,
-          directed_to: mentions.first || false
-        }
-
-        values[:checkins], values[:has_checkins] = extract_checkins(post)
+        filtered.count = index
+        filtered.id = post.id.to_i
+        filtered.thread_id = post.thread_id
+        filtered.username = post.user.username
+        filtered.user_id = post.user.id.to_i
+        filtered.handle = "@#{post.user.username}"
+        filtered.type = post.user.type
+        filtered.date = parsed_time(post.created_at)
+        filtered.date_short = parsed_time_short(post.created_at)
+        filtered.you_starred = post.you_starred
+        filtered.source_name = source
+        filtered.source_link = post.source.link
+        filtered.canonical_url = post.canonical_url
+        filtered.tags = hashtags
+        filtered.links = extract_links(post)
+        filtered.mentions = mentions
+        filtered.directed_to = mentions.first || false
+        filtered.checkins, filtered.has_checkins = extract_checkins(post)
 
         if !post.repost_of.nil?
-          values[:is_repost] = true
-          values[:repost_of] = post.repost_of.id
-          values[:original_poster] = post.repost_of.user.username
+          filtered.is_repost = true
+          filtered.repost_of = post.repost_of.id
+          filtered.original_poster = post.repost_of.user.username
         else
-          values[:is_repost] = false
-          values[:repost_of] = nil
-          values[:original_poster] = post.user.username
+          filtered.is_repost = false
+          filtered.repost_of = nil
+          filtered.original_poster = post.user.username
         end
 
         unless post.text.blank?
-          values[:raw_text] = post.text
-          values[:text] = colorize_text(post.text, mentions, hashtags)
+          filtered.raw_text = post.text
+          filtered.text = colorize_text(post.text, mentions, hashtags)
         else
-          values[:raw_text] = ""
-          values[:text] = "(no text)"
+          filtered.raw_text = ""
+          filtered.text = "(no text)"
         end
 
         unless post.num_stars.nil? || post.num_stars == 0
-          values[:is_starred] = true
-          values[:num_stars] = post.num_stars
+          filtered.is_starred = true
+          filtered.num_stars = post.num_stars
         else
-          values[:is_starred] = false
-          values[:num_stars] = 0
+          filtered.is_starred = false
+          filtered.num_stars = 0
         end
 
         if !post.num_replies.nil?
-          values[:num_replies] = post.num_replies
+          filtered.num_replies = post.num_replies
         else
-          values[:num_replies] = 0
+          filtered.num_replies = 0
         end
 
         if !post.reply_to.nil?
-          values[:is_reply] = true
-          values[:reply_to] = post.reply_to
+          filtered.is_reply = true
+          filtered.reply_to = post.reply_to
         else
-          values[:is_reply] = false
-          values[:reply_to] = nil
+          filtered.is_reply = false
+          filtered.reply_to = nil
         end
         if !post.num_reposts.nil?
-          values[:num_reposts] = post.num_reposts
+          filtered.num_reposts = post.num_reposts
         else
-          values[:num_reposts] = 0
+          filtered.num_reposts = 0
         end
 
-        result[post.id.to_i] = values
+        results << filtered
 
       end
 
-      result
+      results
     end
 
     def extract_links(post)
@@ -405,8 +400,12 @@ module Ayadn
         end
         bucket << chan.new(ch.id, ch.counts.messages, ch.counts.subscribers, ch.type, ch.owner, ch.annotations, ch.readers, ch.editors, writers, ch.you_subscribed, unread, ch.recent_message_id, ch.recent_message)
       end
-      @view.clear_screen
+      clear_screen
       bucket
+    end
+
+    def clear_screen
+      puts "\e[H\e[2J"
     end
 
     def parsed_time(string)

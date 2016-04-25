@@ -13,12 +13,12 @@ module Ayadn
     end
 
     def reply(dic)
-      replied_to = dic[:reply_to].values[0]
-      reply = replied_to[:handle].dup
+      replied_to = dic[:reply_to]
+      reply = replied_to.handle.dup
       reply << " #{dic[:text]}"
-      replied_to[:mentions].uniq!
-      replied_to[:mentions].each do |m|
-        next if m == replied_to[:username]
+      replied_to.mentions.uniq!
+      replied_to.mentions.each do |m|
+        next if m == replied_to.username
         next if m == Settings.config.identity.username
         reply << " @#{m}"
       end

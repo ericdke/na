@@ -31,28 +31,28 @@ module Ayadn
         resp = api.get_convo(post_id, options)
         stream_object = StreamObject.new(resp)
         posts = workers.build_posts(stream_object.posts.reverse)
-        posts.each do |id, post|
-          users << "#{post[:original_poster]}"
-          post[:mentions].each {|mention| users << "#{mention}"}
+        posts.each do |post|
+          users << "#{post.original_poster}"
+          post.mentions.each {|mention| users << "#{mention}"}
           bucket << post
         end
         users.uniq!
         now = Time.now.to_s
         bookmark = {
           'id' => post_id,
-          'root_id' => bucket[0][:id],
-          'last_id' => (bucket.last)[:id],
+          'root_id' => bucket[0].id,
+          'last_id' => bucket.last.id,
           'title' => convo_title,
-          'first_date' => bucket[0][:date],
-          'last_date' => (bucket.last)[:date],
+          'first_date' => bucket[0].date,
+          'last_date' => bucket.last.date,
           'mark_date' => now[0..18],
-          'first_poster' => bucket[0][:original_poster],
-          'last_poster' => (bucket.last)[:username],
+          'first_poster' => bucket[0].original_poster,
+          'last_poster' => bucket.last.username,
           'users' => users,
           'size' => bucket.length,
-          'url' => bucket[0][:canonical_url],
-          'root_text' => bucket[0][:raw_text],
-          'root_colorized_text' => bucket[0][:text]
+          'url' => bucket[0].canonical_url,
+          'root_text' => bucket[0].raw_text,
+          'root_colorized_text' => bucket[0].text
         }
         view.clear_screen
         status.info(:done, "bookmarked conversation:", :green)

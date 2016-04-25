@@ -497,19 +497,19 @@ module Ayadn
     def build_stream_with_index(posts, options, niceranks)
       @view = ""
       posts = filter_nicerank(@workers.build_posts(posts.reverse, niceranks), options)
-      posts.each do |id,content|
-        format = "%03d" % content[:count]
-        arrow = arrow_count(options, content)
+      posts.each do |post|
+        format = "%03d" % post.count
+        arrow = arrow_count(options, post)
         count = "#{arrow}#{format}"
-        if content[:username] == Settings.config.identity.username
+        if post.username == Settings.config.identity.username
           @view << count.color(color_index).inverse
-        elsif content[:mentions].include?(Settings.config.identity.username) && options[:in_mentions].nil?
+        elsif post.mentions.include?(Settings.config.identity.username) && options[:in_mentions].nil?
           @view << count.color(color_mention).inverse
         else
           @view << count.color(color_index)
         end
         @view << ": ".color(color_index)
-        @view << build_content(content)
+        @view << build_content(post)
       end
       return posts, @view
     end
@@ -517,36 +517,36 @@ module Ayadn
     def build_stream_without_index(posts, options, niceranks)
       @view = ""
       posts = filter_nicerank(@workers.build_posts(posts.reverse, niceranks), options)
-      posts.each do |id,content|
-        content[:id] = arrow_id(options, content)
-        if content[:username] == Settings.config.identity.username
-          @view << content[:id].color(Settings.options.colors.id).inverse + " "
-        elsif content[:mentions].include?(Settings.config.identity.username) && options[:in_mentions].nil?
-          @view << content[:id].color(color_mention).inverse + " "
+      posts.each do |post|
+        post.id = arrow_id(options, post)
+        if post.username == Settings.config.identity.username
+          @view << post.id.color(Settings.options.colors.id).inverse + " "
+        elsif post.mentions.include?(Settings.config.identity.username) && options[:in_mentions].nil?
+          @view << post.id.color(color_mention).inverse + " "
         else
-          @view << content[:id].color(Settings.options.colors.id) + " "
+          @view << post.id.color(Settings.options.colors.id) + " "
         end
-        @view << build_content(content)
+        @view << build_content(post)
       end
       @view
     end
 
-    def arrow_count options, content
+    def arrow_count options, post
       if options[:reply_to]
-        return '⬇︎ ' if options[:reply_to] == content[:id]
-        return '⬆︎ ' if options[:post_id] == content[:id]
+        return '⬇︎ ' if options[:reply_to] == post.id
+        return '⬆︎ ' if options[:post_id] == post.id
         return ''
       end
       ''
     end
 
-    def arrow_id options, content
+    def arrow_id options, post
       if options[:reply_to]
-        return content[:id].to_s.prepend('⬇︎ ') if options[:reply_to] == content[:id]
-        return content[:id].to_s.prepend('⬆︎ ') if options[:post_id] == content[:id]
-        return content[:id].to_s
+        return post.id.to_s.prepend('⬇︎ ') if options[:reply_to] == post.id
+        return post.id.to_s.prepend('⬆︎ ') if options[:post_id] == post.id
+        return post.id.to_s
       end
-      content[:id].to_s
+      post.id.to_s
     end
 
     def build_interactions_stream(data)
@@ -644,25 +644,25 @@ module Ayadn
       view
     end
 
-    def build_content(content)
+    def build_content(post)
       view = ""
-      view << build_header(content)
+      view << build_header(post)
       view << "\n" unless timeline_is_compact
-      view << content[:text]
+      view << post.text
       view << "\n" unless timeline_is_compact
-      if content[:has_checkins]
-        view << build_checkins(content)
+      if post.has_checkins
+        view << build_checkins(post)
         view << "\n" unless timeline_is_compact
       end
-      unless content[:links].empty?
+      unless post.links.empty?
         view << "\n"
-        content[:links].each do |link|
+        post.links.each do |link|
           view << link.color(color_link)
           view << "\n"
         end
       end
       if timeline_is_compact
-        if content[:links].empty?
+        if post.links.empty?
           view << "\n"
         else
           view
@@ -672,41 +672,41 @@ module Ayadn
       end
     end
 
-    def build_header(content)
+    def build_header(post)
       header = ""
-      header << content[:handle].color(color_username)
+      header << post.handle.color(color_username)
       if Settings.options.timeline.name
         header << " "
-        header << content[:name].color(color_name)
+        header << post.name.color(color_name)
       end
       if Settings.options.timeline.date
         header << " "
         if !Settings.global.scrolling
-          header << content[:date].color(color_date)
+          header << post.date.color(color_date)
         else
           if !Settings.options.scroll.date
-            header << content[:date_short].color(color_date)
+            header << post.date_short.color(color_date)
           else
-            header << content[:date].color(color_date)
+            header << post.date.color(color_date)
           end
         end
       end
       if Settings.options.timeline.source
         header << " "
-        header << "[#{content[:source_name]}]".color(color_source)
+        header << "[#{post.source_name}]".color(color_source)
       end
       if Settings.options.timeline.symbols
-        header << " <".color(color_symbols) if content[:is_reply]
-        header << " #{content[:num_stars]}*".color(color_symbols) if content[:is_starred]
-        header << " #{content[:num_reposts]}x".color(color_symbols) if content[:num_reposts] > 0
-        header << " >".color(color_symbols) if content[:num_replies] > 0
+        header << " <".color(color_symbols) if post.is_reply
+        header << " #{post.num_stars}*".color(color_symbols) if post.is_starred
+        header << " #{post.num_reposts}x".color(color_symbols) if post.num_reposts > 0
+        header << " >".color(color_symbols) if post.num_replies > 0
       end
       header << "\n"
     end
 
-    def build_checkins(content)
-      unless content[:checkins][:name].nil?
-        num_dots = content[:checkins][:name].length
+    def build_checkins(post)
+      unless post.checkins.name.nil?
+        num_dots = post.checkins.name.length
       else
         num_dots = 10
       end
@@ -717,7 +717,7 @@ module Ayadn
         hd << "\n"
       end
       formatted = { header: hd }
-      content[:checkins].each do |key, val|
+      content.checkins.each do |key, val|
           formatted[key] = val
       end
 

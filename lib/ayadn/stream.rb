@@ -10,7 +10,7 @@ module Ayadn
       @view = view
       @workers = workers
       @check = Check.new
-      @status = Status.new
+      # @status = Status.new
     end
 
     def global settings
@@ -100,14 +100,14 @@ module Ayadn
         # this is just to show a message rather than an empty screen
         if Settings.options.blacklist.active
           if Databases.is_in_blacklist?('mention', username)
-            @status.no_force("#{username.downcase}")
+            @workers.status.no_force("#{username.downcase}")
             exit
           end
         end
       end
       if stream_object.posts[0].user.you_muted || stream_object.posts[0].user.you_blocked
         unless options[:raw] || Settings.global.force
-          @status.no_force("#{username.downcase}")
+          @workers.status.no_force("#{username.downcase}")
           exit
         end
       end
@@ -285,7 +285,7 @@ module Ayadn
       
       @view.if_raw(list, options)
       if list['data'].empty?
-        @status.nobody_reposted
+        @workers.status.nobody_reposted
         exit
       end
       @view.list(:whoreposted, list['data'], post_id)
@@ -325,7 +325,7 @@ module Ayadn
 
       @view.if_raw(list, options)
       if list['data'].empty?
-        @status.nobody_starred
+        @workers.status.nobody_starred
         exit
       end
       @view.list(:whostarred, list['data'], id)
@@ -387,7 +387,7 @@ module Ayadn
       #max_posts = cols / 16
       max_posts = 6
       @view.clear_screen
-      @status.info("connected", "fetching random posts", "cyan")
+      @workers.status.info("connected", "fetching random posts", "cyan")
       @max_id = @api.get_global({count: 1})['meta']['max_id'].to_i
       @view.clear_screen
       counter = 1
@@ -410,7 +410,7 @@ module Ayadn
             counter = 1
           end
         rescue Interrupt
-          @status.canceled
+          @workers.status.canceled
           exit
         end
       end

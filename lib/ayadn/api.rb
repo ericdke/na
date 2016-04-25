@@ -4,7 +4,7 @@ module Ayadn
 
     def initialize
       @workers = Workers.new
-      @status = Status.new
+      # @status = Status.new
       @view = View.new
     end
 
@@ -314,17 +314,17 @@ module Ayadn
         # Retry once after 10 seconds if the response wasn't valid
         if working
           working = false
-          @status.server_error(true)
+          @workers.status.server_error(true)
           begin
             sleep 10
           rescue Interrupt
-            @status.canceled
+            @workers.status.canceled
             exit
           end
           @view.clear_screen
           retry
         else
-          @status.server_error(false)
+          @workers.status.server_error(false)
           Errors.global_error({error: e, caller: caller, data: [resp]})
         end
       end
@@ -345,7 +345,7 @@ module Ayadn
       loop do
         resp = get_parsed_response(get_list_url(username, target, options))
         if resp['meta']['code'] == 404
-          @status.user_404(username)
+          @workers.status.user_404(username)
           exit
         end
         users = @workers.extract_users(resp)

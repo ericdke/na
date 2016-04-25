@@ -23,7 +23,7 @@ module Ayadn
       @api = api
       @view = view
       @workers = workers
-      @status = Status.new
+      # @status = Status.new
       unless options[:hashtag]
         @hashtag = "#nowplaying"
       else
@@ -50,7 +50,7 @@ module Ayadn
           end
         @deezer_user_url = "http://api.deezer.com/user/me"
         @deezer_token_suffix = "?access_token=#{@deezer_code}"
-        @status.fetching_from('Deezer')
+        @workers.status.fetching_from('Deezer')
         req = "#{@deezer_user_url}/history#{@deezer_token_suffix}"
         res = JSON.parse(CNX.download(req))
         res["data"].sort_by! { |obj| obj["timestamp"] }
@@ -59,7 +59,7 @@ module Ayadn
         itunes = maker.new(candidate["artist"]["name"], candidate["album"]["title"], candidate["title"])
         post_itunes(options, itunes)
       rescue => e
-        @status.wtf
+        @workers.status.wtf
         Errors.global_error({error: e, caller: caller, data: [store, options]})
       end
     end
@@ -67,9 +67,9 @@ module Ayadn
     def lastfm options
       begin
         user = Settings.options[:nowplaying][:lastfm] || create_lastfm_user()
-        @status.fetching_from('Last.fm')
+        @workers.status.fetching_from('Last.fm')
         artist, track = get_lastfm_track_infos(user)
-        @status.itunes_store
+        @workers.status.itunes_store
         store = []
         unless options['no_url']
           store = lastfm_istore_request(artist, track)
@@ -81,7 +81,7 @@ module Ayadn
         text_to_post = "#{@hashtag}\n \nTitle: ‘#{track}’\nArtist: #{artist}#{@custom_text}"
         post_nowplaying(text_to_post, store, options)
       rescue => e
-        @status.wtf
+        @workers.status.wtf
         Errors.global_error({error: e, caller: caller, data: [store, options]})
       end
     end
@@ -89,20 +89,20 @@ module Ayadn
     def itunes options
       begin
         unless Settings.config.platform =~ /darwin/
-          @status.error_only_osx
+          @workers.status.error_only_osx
           exit
         end
-        @status.fetching_from('iTunes')
+        @workers.status.fetching_from('iTunes')
         itunes = get_itunes_track_infos()
         itunes.each do |el|
           if el.nil? || el.length == 0
-            @status.empty_fields
+            @workers.status.empty_fields
             exit
           end
         end
         post_itunes(options, itunes)
       rescue => e
-        @status.wtf
+        @workers.status.wtf
         Errors.global_error({error: e, caller: caller, data: [itunes, options]})
       end
     end
@@ -110,7 +110,7 @@ module Ayadn
     private
 
     def post_itunes options, itunes
-      @status.itunes_store
+      @workers.status.itunes_store
       store = []
       unless options['no_url']
         store = itunes_istore_request(itunes)
@@ -130,7 +130,7 @@ module Ayadn
         lfm = feed.items[0].title.split(' – ')
         return lfm[0], lfm[1]
       rescue Interrupt
-        @status.canceled
+        @workers.status.canceled
         exit
       end
     end
@@ -144,14 +144,14 @@ module Ayadn
         poster = Post.new
         poster.post_size_error(text_to_post) if !poster.post_size_ok?(text_to_post)
         @view.clear_screen
-        @status.writing
+        @workers.status.writing
         show_nowplaying("\n#{before}", options, store)
         unless STDIN.getch == ("y" || "Y")
-          @status.canceled
+          @workers.status.canceled
           exit
         end
         @view.clear_screen
-        @status.yourpost
+        @workers.status.yourpost
         puts "\n\n"
         if store.nil? || options[:no_url]
           text_to_post = before
@@ -192,31 +192,31 @@ module Ayadn
         FileOps.save_post(resp) if Settings.options.backup.posts
         @view.show_posted(resp)
       rescue => e
-        @status.wtf
+        @workers.status.wtf
         Errors.global_error({error: e, caller: caller, data: [dic, store, options]})
       end
     end
 
     def ask_lastfm_user
-      @status.info("please", "enter your Last.fm username", "yellow")
+      @workers.status.info("please", "enter your Last.fm username", "yellow")
       print "> "
       begin
         STDIN.gets.chomp!
       rescue Interrupt
-        @status.canceled
+        @workers.status.canceled
         exit
       end
     end
 
     def ask_deezer_user
-      @status.info("please", "open this link to authorize Deezer", "yellow")
-      @status.say { @status.say_green :link, @auth_url }
-      @status.info("next", "paste the authorization code here", "cyan")
+      @workers.status.info("please", "open this link to authorize Deezer", "yellow")
+      @workers.status.say { @workers.status.say_green :link, @auth_url }
+      @workers.status.info("next", "paste the authorization code here", "cyan")
       print "> "
       begin
         STDIN.gets.chomp!
       rescue Interrupt
-        @status.canceled
+        @workers.status.canceled
         exit
       end
     end
@@ -298,7 +298,7 @@ module Ayadn
     def get_itunes_track_infos
       track = `osascript -e 'tell application "iTunes"' -e 'set trackName to name of current track' -e 'return trackName' -e 'end tell'`
       if track.empty?
-        @status.no_itunes
+        @workers.status.no_itunes
         Errors.warn "Nowplaying canceled: unable to get info from iTunes."
         exit
       end
@@ -309,7 +309,7 @@ module Ayadn
     end
 
     def show_nowplaying(text, options, store)
-      # @status.to_be_posted
+      # @workers.status.to_be_posted
       thor = Thor::Shell::Basic.new
       text.split("\n").each do |line|
         thor.say_status(nil, line.color(Settings.options.colors.excerpt))
@@ -322,9 +322,9 @@ module Ayadn
         thor.say_status(:'#1', store['link'])
         thor.say_status(:'#2', store['artwork'])
         puts "\n"
-        @status.itunes_store_track(store)
+        @workers.status.itunes_store_track(store)
       end
-      @status.ok?
+      @workers.status.ok?
     end
 
   end
