@@ -109,6 +109,13 @@ describe Ayadn::NiceRank do
     Ayadn::Settings.stub(:config).and_return(
       JSON.parse(obj.to_json, object_class: OpenStruct)
     )
+    global_hash = {
+      scrolling: false,
+      force: false
+    }
+    Ayadn::Settings.stub(:global).and_return(
+      JSON.parse(global_hash.to_json, object_class: OpenStruct)
+    )
     Ayadn::Settings.stub(:user_token).and_return('XYZ')
     Ayadn::Settings.stub(:check_for_accounts)
     Ayadn::Errors.stub(:warn).and_return("warned")

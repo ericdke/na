@@ -109,6 +109,13 @@ describe Ayadn::Annotations do
     Ayadn::Settings.stub(:config).and_return(
       JSON.parse(obj.to_json, object_class: OpenStruct)
     )
+    global_hash = {
+      scrolling: false,
+      force: false
+    }
+    Ayadn::Settings.stub(:global).and_return(
+      JSON.parse(global_hash.to_json, object_class: OpenStruct)
+    )
     Ayadn::Errors.stub(:warn).and_return("warned")
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::FileOps.stub(:make_paths).and_return(['~/your/path/cat.jpg', '~/your/path/dog.png']) # STUB1

@@ -477,18 +477,18 @@ module Ayadn
     def filter_nicerank posts, options
       if options[:filter] # if this option is true in Action (it's only for global, actually)
         if Settings.options.nicerank.filter
-          filtered = {}
-          posts.each do |id,content|
+          bucket = []
+          posts.each do |post|
             if Settings.options.nicerank.unranked
-              next if !content[:nicerank]
+              next if !post.nicerank # .nicerank is False or Fixnum (yeah...)
             end
-            unless !content[:nicerank]
-              next if content[:nicerank] < Settings.options.nicerank.threshold
-              next if content[:is_human] == 0
+            unless !post.nicerank
+              next if post.nicerank < Settings.options.nicerank.threshold
+              next if post.is_human == 0
             end
-            filtered[id] = content
+            bucket << post
           end
-          return filtered
+          return bucket
         end
       end
       return posts

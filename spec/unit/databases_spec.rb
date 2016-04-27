@@ -106,10 +106,13 @@ describe Ayadn::Databases do
     Ayadn::Settings.stub(:config).and_return(
       JSON.parse(obj.to_json, object_class: OpenStruct)
     )
-    Ayadn::Settings.stub(:global).and_return({
+    global_hash = {
       scrolling: false,
       force: false
-    })
+    }
+    Ayadn::Settings.stub(:global).and_return(
+      JSON.parse(global_hash.to_json, object_class: OpenStruct)
+    )
     Ayadn::Logs.stub(:rec).and_return("logged")
     Dir.stub(:home).and_return("spec/mock")
     Ayadn::Databases.open_databases

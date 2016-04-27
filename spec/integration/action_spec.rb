@@ -11,6 +11,7 @@ module Ayadn
 end
 
 describe Ayadn::Action do
+
   before do
     Ayadn::Settings.stub(:options).and_return(
       Ayadn::Preferences.new(
@@ -115,10 +116,13 @@ describe Ayadn::Action do
     Ayadn::Settings.stub(:config).and_return(
       JSON.parse(obj.to_json, object_class: OpenStruct)
     )
-    Ayadn::Settings.stub(:global).and_return({
+    global_hash = {
       scrolling: false,
       force: false
-    })
+    }
+    Ayadn::Settings.stub(:global).and_return(
+      JSON.parse(global_hash.to_json, object_class: OpenStruct)
+    )
     Dir.stub(:home).and_return("spec/mock")
     Ayadn::Settings.stub(:get_token).and_return('XYZ')
     Ayadn::Settings.stub(:user_token).and_return('XYZ')
@@ -134,11 +138,13 @@ describe Ayadn::Action do
     Ayadn::Databases.stub(:has_new?).and_return(true)
     Ayadn::Databases.stub(:add_to_users_db_from_list)
   end
+
   let(:stream) { File.read("spec/mock/stream.json") } 
   let(:mentions) { File.read("spec/mock/mentions.json") }
   let(:list) { File.read("spec/mock/fwr_@ayadn.json") }
   let(:ranks) { JSON.parse(File.read("spec/mock/nicerank.json")) }
   let(:cnx) {Ayadn::CNX}
+
   describe "#Global" do
     before do
       cnx.stub(:get)

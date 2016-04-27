@@ -12,7 +12,6 @@ module Ayadn
       @api = API.new
       @view = View.new
       @workers = Workers.new
-      # @status = Status.new
       @check = Check.new
       Settings.load_config
       Settings.get_token

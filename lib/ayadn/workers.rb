@@ -335,14 +335,6 @@ module Ayadn
       post.entities.mentions.map { |m| m.name }
     end
 
-    def mentions_from(hash)
-      hash['entities']['mentions'].map { |m| m['name'] }
-    end
-
-    def hashtags_from(hash)
-      hash['entities']['hashtags'].map { |m| m['name'] }
-    end
-
     def build_channels(stream, options = {})
       bucket = []
       stream = [stream] unless stream.is_a?(Array)

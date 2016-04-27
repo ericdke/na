@@ -109,9 +109,13 @@ describe Ayadn::View do
     Ayadn::Settings.stub(:config).and_return(
       JSON.parse(obj.to_json, object_class: OpenStruct)
     )
-    Ayadn::Settings.stub(:global).and_return({
-        scrolling: false
-      })
+    global_hash = {
+      scrolling: false,
+      force: false
+    }
+    Ayadn::Settings.stub(:global).and_return(
+      JSON.parse(global_hash.to_json, object_class: OpenStruct)
+    )
     Ayadn::Logs.stub(:rec).and_return("logged")
     Ayadn::Databases.stub(:blacklist).and_return("blacklist")
     Ayadn::Databases.stub(:save_indexed_posts).and_return("indexed")

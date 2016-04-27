@@ -84,10 +84,13 @@ describe Ayadn::Endpoints do
           active: true
         }
       }))
-    Ayadn::Settings.stub(:global).and_return({
+    global_hash = {
       scrolling: false,
       force: false
-    })
+    }
+    Ayadn::Settings.stub(:global).and_return(
+      JSON.parse(global_hash.to_json, object_class: OpenStruct)
+    )
   end
   describe '#token_info' do
     it "returns the Token url" do
