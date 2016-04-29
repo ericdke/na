@@ -1,7 +1,17 @@
 # encoding: utf-8
 module Ayadn
 
-  class UserCountsObject
+  class UserMetaObject
+
+    attr_reader :input, :code
+
+    def initialize hash
+      @input = hash["meta"].nil? ? {} : hash["meta"]
+      @code = @input["code"]
+    end
+  end
+
+  class UserCountsObject 
 
     attr_reader :input, :following, :posts, :followers, :stars
 
@@ -64,10 +74,11 @@ module Ayadn
 
   class UserObject
 
-    attr_reader :input, :you_muted, :you_can_subscribe, :is_following, :is_follower, :timezone, :you_follow, :counts, :canonical_url, :id, :locale, :type, :annotations, :username, :avatar_image, :description, :is_muted, :follows_you, :you_can_follow, :name, :created_at, :you_blocked, :cover_image, :verified_domain
+    attr_reader :input, :you_muted, :you_can_subscribe, :is_following, :is_follower, :timezone, :you_follow, :counts, :canonical_url, :id, :locale, :type, :annotations, :username, :avatar_image, :description, :is_muted, :follows_you, :you_can_follow, :name, :created_at, :you_blocked, :cover_image, :verified_domain, :meta
 
     def initialize hash
-      @input = hash
+      @input = hash['data'].nil? ? hash : hash['data']
+      @meta = UserMetaObject.new(hash)
       @you_muted = @input["you_muted"]
       @you_can_subscribe = @input["you_can_subscribe"]
       @is_follower = @input["is_follower"]

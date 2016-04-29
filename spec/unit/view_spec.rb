@@ -285,7 +285,7 @@ describe Ayadn::View do
     end
     it "outputs user info" do
       printed = capture_stdout do
-        Ayadn::View.new.show_userinfos(Ayadn::UserObject.new(user_e['data']), "")
+        Ayadn::View.new.show_userinfos(Ayadn::UserObject.new(user_e), "")
       end
       expect(printed).to include "Sound engineer"
       expect(printed).to include "aya.io"

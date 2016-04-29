@@ -87,14 +87,6 @@ module Ayadn
       end
     end
 
-    def no_usercontent stream, username
-      if stream["meta"]["code"] == 404
-        @status.user_404(username)
-        Errors.info("User #{username} doesn't exist")
-        exit
-      end
-    end
-
     def has_been_unfollowed(username, resp)
       if resp['meta']['code'] == 200
         @status.unfollowed(username)

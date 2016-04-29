@@ -364,9 +364,9 @@ module Ayadn
           else
             @view.downloading if index == 0
             stream = @api.get_user(username)
-            user_object = UserObject.new(stream["data"])
+            user_object = UserObject.new(stream)
             # Verify the user exists
-            @check.no_usercontent(stream, username)
+            @check.no_user(user_object, username)
             # Is it us? If yes, get *our* info
             @check.same_username(user_object) ? token = @api.get_token_info['data'] : token = nil
             @view.clear_screen if index == 0
@@ -405,7 +405,7 @@ module Ayadn
         end
 
         response = @api.get_user("@#{post_object.user.username}")
-        user_object = UserObject.new(response['data'])
+        user_object = UserObject.new(response)
 
         status.post_info
         @view.show_simple_post([post_object], options)
