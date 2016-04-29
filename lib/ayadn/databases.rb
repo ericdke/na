@@ -628,12 +628,14 @@ module Ayadn
         @sql.execute("DELETE FROM TLIndex")
         @sql.transaction do |db_in_transaction|
           posts.each do |k, v|
-            insert_data = {}
-            insert_data[":post_id"] = v[:id]
-            insert_data[":count"] = v[:count]
-            insert_data[":content"] = v.to_json.to_s
-            db_in_transaction.prepare("INSERT INTO TLIndex(count, post_id, content) VALUES(:count, :post_id, :content);") do |insert|
-              insert.execute(insert_data)
+            if !v.blank?
+              insert_data = {}
+              insert_data[":post_id"] = v[:id]
+              insert_data[":count"] = v[:count]
+              insert_data[":content"] = v.to_json.to_s
+              db_in_transaction.prepare("INSERT INTO TLIndex(count, post_id, content) VALUES(:count, :post_id, :content);") do |insert|
+                insert.execute(insert_data)
+              end
             end
           end
         end
