@@ -22,12 +22,12 @@ module Ayadn
 
     # Uses method_missing to template a single method for several streams
     def method_missing(meth, options)
-      case meth.to_s
-      when 'unified', 'checkins', 'global', 'trending', 'photos', 'conversations', 'interactions'
+      case meth
+      when :unified, :checkins, :global, :trending, :photos, :conversations, :interactions
         begin
           Settings.options.timeline.compact = true if options[:compact]
           stream = Stream.new(@api, @view, @workers)
-          stream.send(meth.to_sym, options)
+          stream.send(meth, options)
         rescue => e
           Errors.global_error({error: e, caller: caller, data: [meth, options]})
         end
@@ -36,68 +36,38 @@ module Ayadn
       end
     end
 
-    # Retrieves the "Mentions" stream for a given user
-    # Params: username, options from CLI
-    def mentions(username, options)
-      begin
-        # We temporary modify the global settings (should be refactored) if the user asks for a compact view
-        Settings.options.timeline.compact = true if options[:compact]
-        # The Stream class holds the actual methods for this work
-        stream = Stream.new(@api, @view, @workers)
-        stream.mentions(username, options)
-      rescue => e
-        # No specific error handling, just deferring
-        Errors.global_error({error: e, caller: caller, data: [username, options]})
+    def method_missing(meth, argument, options)
+      case meth
+      when :mentions, :posts, :whatstarred, :whoreposted, :whostarred, :convo, :followings, :followers
+        begin
+          Settings.options.timeline.compact = true if options[:compact]
+          stream = Stream.new(@api, @view, @workers)
+          stream.send(meth, argument, options)
+        rescue => e
+          Errors.global_error({error: e, caller: caller, data: [meth, options]})
+        end
+      else
+        super
       end
     end
 
-    def posts(username, options)
+    def muted(options)
       begin
         Settings.options.timeline.compact = true if options[:compact]
         stream = Stream.new(@api, @view, @workers)
-        stream.posts(username, options)
+        stream.muted(options)
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username, options]})
+        Errors.global_error({error: e, caller: caller, data: [options]})
       end
     end
 
-    def whatstarred(username, options)
+    def blocked(options)
       begin
         Settings.options.timeline.compact = true if options[:compact]
         stream = Stream.new(@api, @view, @workers)
-        stream.whatstarred(username, options)
+        stream.blocked(options)
       rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username, options]})
-      end
-    end
-
-    def whoreposted(post_id, options)
-      begin
-        Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
-        stream.whoreposted(post_id, options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id, options]})
-      end
-    end
-
-    def whostarred(post_id, options)
-      begin
-        Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
-        stream.whostarred(post_id, options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id, options]})
-      end
-    end
-
-    def convo(post_id, options)
-      begin
-        Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
-        stream.convo(post_id, options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [post_id, options]})
+        Errors.global_error({error: e, caller: caller, data: [options]})
       end
     end
 
@@ -375,46 +345,6 @@ module Ayadn
         search.find(words, options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [words, options]})
-      end
-    end
-
-    def followings(username, options)
-      begin
-        Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
-        stream.followings(username, options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username, options]})
-      end
-    end
-
-    def followers(username, options)
-      begin
-        Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
-        stream.followers(username, options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [username, options]})
-      end
-    end
-
-    def muted(options)
-      begin
-        Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
-        stream.muted(options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [options]})
-      end
-    end
-
-    def blocked(options)
-      begin
-        Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
-        stream.blocked(options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [options]})
       end
     end
 
