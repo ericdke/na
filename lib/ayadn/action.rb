@@ -31,9 +31,9 @@ module Ayadn
         Settings.options.timeline.compact = true if options[:compact]
         stream = Stream.new(@api, @view, @workers)
         case meth
-          when :mentions, :posts, :whatstarred, :whoreposted, :whostarred, :convo, :followings, :followers
+          when :mentions, :posts, :whatstarred, :whoreposted, :whostarred, :convo, :followings, :followers, :messages
             stream.send(meth, args[0], options)
-          when :unified, :checkins, :global, :trending, :photos, :conversations, :interactions, :muted, :blocked
+          when :unified, :checkins, :global, :trending, :photos, :conversations, :interactions, :muted, :blocked, :random_posts
             stream.send(meth, options)
           end
       rescue => e
@@ -482,15 +482,7 @@ module Ayadn
       end
     end
 
-    def messages(channel_id, options)
-      begin
-        Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
-        stream.messages(channel_id, options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [channel_id, options]})
-      end
-    end
+
 
     def messages_unread(options)
       begin
@@ -790,16 +782,6 @@ module Ayadn
         np.deezer(options)
       else
         np.itunes(options)
-      end
-    end
-
-    def random_posts(options)
-      begin
-        Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
-        stream.random_posts(options)
-      rescue => e
-        Errors.global_error({error: e, caller: caller, data: [@max_id, @random_post_id, @resp, options]})
       end
     end
 

@@ -387,7 +387,8 @@ module Ayadn
       #max_posts = cols / 16
       max_posts = 6
       @view.clear_screen
-      @workers.status.info("connected", "fetching random posts", "cyan")
+      status = Status.new
+      status.info("connected", "fetching random posts", "cyan")
       @max_id = @api.get_global({count: 1})['meta']['max_id'].to_i
       @view.clear_screen
       counter = 1
@@ -410,7 +411,7 @@ module Ayadn
             counter = 1
           end
         rescue Interrupt
-          @workers.status.canceled
+          status.canceled
           exit
         end
       end
