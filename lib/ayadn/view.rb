@@ -39,8 +39,11 @@ module Ayadn
     end
 
     def show_raw(stream, options = {})
-      #puts stream.to_json
-      jj stream.input
+      if stream.is_a? Hash
+        show_direct_raw stream
+      else
+        jj stream.input
+      end
     end
 
     def show_direct_raw(stream, options = {})
