@@ -23,22 +23,19 @@ module Ayadn
     # Uses method_missing to template a single method for several streams
     def method_missing(meth, *args)
       begin
+        options = if args.size > 1
+          args[1]
+        else
+          args[0]
+        end
+        Settings.options.timeline.compact = true if options[:compact]
         stream = Stream.new(@api, @view, @workers)
-        if args.size > 1
-          options = args[1]
-          Settings.options.timeline.compact = true if options[:compact]
-          case meth
+        case meth
           when :mentions, :posts, :whatstarred, :whoreposted, :whostarred, :convo, :followings, :followers
             stream.send(meth, args[0], options)
-          end
-        else
-          options = args[0]
-          Settings.options.timeline.compact = true if options[:compact]
-          case meth
           when :unified, :checkins, :global, :trending, :photos, :conversations, :interactions, :muted, :blocked
             stream.send(meth, options)
           end
-        end
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [meth, options]})
       end
