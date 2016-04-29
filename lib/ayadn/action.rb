@@ -22,35 +22,25 @@ module Ayadn
 
     # Uses method_missing to template a single method for several streams
     def method_missing(meth, *args)
-      p meth
-      if args.size > 1
-        options = args[1]
+      begin
+        stream = Stream.new(@api, @view, @workers)
+        if args.size > 1
+          options = args[1]
+          Settings.options.timeline.compact = true if options[:compact]
           case meth
           when :mentions, :posts, :whatstarred, :whoreposted, :whostarred, :convo, :followings, :followers
-            begin
-              Settings.options.timeline.compact = true if options[:compact]
-              stream = Stream.new(@api, @view, @workers)
-              stream.send(meth, args[0], options)
-            rescue => e
-              Errors.global_error({error: e, caller: caller, data: [meth, options]})
-            end
-          else
-            super
-          end
-      else
-        options = args[0]
-        case meth
-        when :unified, :checkins, :global, :trending, :photos, :conversations, :interactions, :muted, :blocked
-          begin
-            Settings.options.timeline.compact = true if options[:compact]
-            stream = Stream.new(@api, @view, @workers)
-            stream.send(meth, options)
-          rescue => e
-            Errors.global_error({error: e, caller: caller, data: [meth, options]})
+            stream.send(meth, args[0], options)
           end
         else
-          super
+          options = args[0]
+          Settings.options.timeline.compact = true if options[:compact]
+          case meth
+          when :unified, :checkins, :global, :trending, :photos, :conversations, :interactions, :muted, :blocked
+            stream.send(meth, options)
+          end
         end
+      rescue => e
+        Errors.global_error({error: e, caller: caller, data: [meth, options]})
       end
     end
 
