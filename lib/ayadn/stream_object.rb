@@ -36,7 +36,7 @@ module Ayadn
 
 		def initialize hash
 			@input = hash["data"]
-      @posts = @input.map { |post| PostObject.new(post) }
+      		@posts = @input.blank? ? [] : @input.map { |post| PostObject.new(post) }
 		end
 	end
 
