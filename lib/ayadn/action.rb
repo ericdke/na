@@ -649,9 +649,7 @@ module Ayadn
     def pmess(username, options = {})
     	begin
         Settings.options.timeline.compact = true if options[:compact]
-        if options[:silent]
-          Settings.options.marker.messages = false
-        end
+        Settings.options.marker.messages = false if options[:silent]
         @check.no_username(username)
         username = [@workers.add_arobase(username)]
     		writer = Post.new
@@ -716,7 +714,7 @@ module Ayadn
         text = lines_array.join("\n")
         # Text length is tested in Post class for the reply command
         @view.clear_screen
-        replied_to = @workers.build_posts([PostObject.new(replied_to['data'])])
+        replied_to = @workers.build_posts([PostObject.new(replied_to['data'])])[0]
         resp = writer.reply({options: options, text: text, id: post_id, reply_to: replied_to})
         FileOps.save_post(resp) if Settings.options.backup.posts
         # ----

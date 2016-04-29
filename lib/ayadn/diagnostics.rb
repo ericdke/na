@@ -47,7 +47,7 @@ module Ayadn
 
   class CheckBase
 
-    attr_accessor :response, :status
+    attr_accessor :response, :status, :baseURL
 
     def initialize
       @status = Status.new
@@ -110,7 +110,7 @@ module Ayadn
       begin
         check_root_api
         @status.say_header "checking ADN server response"
-        get_response "https://api.app.net/config"
+        get_response "#{@baseURL}/config"
         check_response_code
         body = JSON.parse(@response.body)
         if body.blank? || body["data"].blank?
@@ -128,12 +128,12 @@ module Ayadn
     def check_root_api
       @status.say_header("default root API endpoint")
       api_file = Dir.home + "/ayadn/.api.yml"
-      baseURL = if File.exist?(api_file)
+      @baseURL = if File.exist?(api_file)
         YAML.load(File.read(api_file))[:root]
       else
         "https://api.app.net"
       end
-      @status.say_green(:url, baseURL)
+      @status.say_green(:url, @baseURL)
     end
   end
 
@@ -350,6 +350,7 @@ module Ayadn
           @status.say_green(:pass, "current user is using default values")
         else
           diff.each do |key, value|
+            skip if key == :movie || key == :tvshow # those are deprecated, not missing
             if value.is_a?(Hash)
               value.each do |inner_key, inner_value|
                 default = inner_value[0].nil? ? "none" : inner_value[0]
@@ -362,10 +363,11 @@ module Ayadn
               end
             else
               default = value[0].nil? ? "none" : value[0]
-              if value[1].nil?
+              val = value[1]
+              if val.nil?
                 @status.say_red(:missing, "#{key} - Default: #{default}, Current: none")
               else
-                @status.say_green(:changed, "#{key} - Default: #{default}, Current: #{value[1]}")
+                @status.say_green(:changed, "#{key} - Default: #{default}, Current: #{val}")
               end
             end
           end
@@ -376,7 +378,6 @@ module Ayadn
     def check_id_handle
       id = @active_account[1]
       @status.say_green(:id, id)
-      # username = @active_account[0]
       @handle = @active_account[2]
       @status.say_green(:username, @handle)
     end

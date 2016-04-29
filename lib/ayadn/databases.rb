@@ -178,20 +178,6 @@ module Ayadn
       end
     end
 
-    # def self.import_blacklist(blacklist)
-    #   new_list = self.init blacklist
-    #   new_list.each {|name,type| @blacklist[name] = type}
-    #   new_list.close
-    # end
-    # def self.convert_blacklist
-    #   dummy = {}
-    #   @blacklist.each {|v,k| dummy[v.downcase] = k}
-    #   @blacklist.clear
-    #   dummy.each {|v,k| @blacklist[v] = k}
-    # end
-
-
-
     def self.active_account(acc)
       crashes = 0
       begin
