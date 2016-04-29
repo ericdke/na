@@ -10,7 +10,7 @@ module Ayadn
       @view = view
       @workers = workers
       @check = Check.new
-      # @status = Status.new
+      @status = Status.new
     end
 
     def global settings
@@ -100,14 +100,14 @@ module Ayadn
         # this is just to show a message rather than an empty screen
         if Settings.options.blacklist.active
           if Databases.is_in_blacklist?('mention', username)
-            @workers.status.no_force("#{username.downcase}")
+            @status.no_force("#{username.downcase}")
             exit
           end
         end
       end
       if stream_object.posts[0].user.you_muted || stream_object.posts[0].user.you_blocked
         unless options[:raw] || Settings.global.force
-          @workers.status.no_force("#{username.downcase}")
+          @status.no_force("#{username.downcase}")
           exit
         end
       end
@@ -159,7 +159,7 @@ module Ayadn
       Errors.no_data('followings') if list.empty?
       if options["lastpost"] && options["again"].nil?
         count = list.size
-        @workers.status.thor.say_status :downloading, "please wait, it may take a while...", :red
+        @status.thor.say_status :downloading, "please wait, it may take a while...", :red
         puts "\n"
         idx = 0
         list.each do |str_id, obj|
@@ -167,7 +167,7 @@ module Ayadn
           tmp_username = "@#{obj[0]}"
           colored_username = tmp_username.color(Settings.options.colors.username)
           iter = "#{idx}/#{count}"
-          @workers.status.thor.say_status iter.to_sym, "last post from #{colored_username}", :cyan
+          @status.thor.say_status iter.to_sym, "last post from #{colored_username}", :cyan
           resp = @api.get_posts(tmp_username, {count: 1})
           obj << resp["data"][0]
         end
@@ -285,7 +285,7 @@ module Ayadn
       
       @view.if_raw(list, options)
       if list['data'].empty?
-        @workers.status.nobody_reposted
+        @status.nobody_reposted
         exit
       end
       @view.list(:whoreposted, list['data'], post_id)
@@ -325,7 +325,7 @@ module Ayadn
 
       @view.if_raw(list, options)
       if list['data'].empty?
-        @workers.status.nobody_starred
+        @status.nobody_starred
         exit
       end
       @view.list(:whostarred, list['data'], id)

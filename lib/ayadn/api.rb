@@ -312,19 +312,20 @@ module Ayadn
         return resp
       rescue JSON::ParserError => e
         # Retry once after 10 seconds if the response wasn't valid
+        status = Status.new
         if working
           working = false
-          @workers.status.server_error(true)
+          status.server_error(true)
           begin
             sleep 10
           rescue Interrupt
-            @workers.status.canceled
+            status.canceled
             exit
           end
           @view.clear_screen
           retry
         else
-          @workers.status.server_error(false)
+          status.server_error(false)
           Errors.global_error({error: e, caller: caller, data: [resp]})
         end
       end
@@ -345,7 +346,7 @@ module Ayadn
       loop do
         resp = get_parsed_response(get_list_url(username, target, options))
         if resp['meta']['code'] == 404
-          @workers.status.user_404(username)
+          Status.new.user_404(username)
           exit
         end
         users = @workers.extract_users(resp)
