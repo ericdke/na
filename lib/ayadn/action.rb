@@ -363,10 +363,7 @@ module Ayadn
             @view.show_raw(@api.get_user(username), options)
           else
             @view.downloading if index == 0
-            stream = @api.get_user(username)
-            user_object = UserObject.new(stream)
-            # Verify the user exists
-            @check.no_user(user_object, username)
+            user_object = UserObject.new(@api.get_user(username), username)
             # Is it us? If yes, get *our* info
             @check.same_username(user_object) ? token = @api.get_token_info['data'] : token = nil
             @view.clear_screen if index == 0
@@ -405,7 +402,7 @@ module Ayadn
         end
 
         response = @api.get_user("@#{post_object.user.username}")
-        user_object = UserObject.new(response)
+        user_object = UserObject.new(response, post_object.user.username)
 
         status.post_info
         @view.show_simple_post([post_object], options)
@@ -482,16 +479,11 @@ module Ayadn
       end
     end
 
-
-
     def messages_unread(options)
       begin
         status = Status.new
         Settings.options.timeline.compact = true if options[:compact]
-        # Option to not mark the messages as read
-        if options[:silent]
-          Settings.options.marker.messages = false
-        end
+        Settings.options.marker.messages = false if options[:silent] # Option to not mark the messages as read
         puts "\n"
         status.say_nocolor :searching, "channels with unread PMs"
         channels_objects = @api.get_channels['data'].map { |obj| ChannelObject.new(obj) }
@@ -647,19 +639,19 @@ module Ayadn
     end
 
     def pmess(username, options = {})
-    	begin
+      begin
         Settings.options.timeline.compact = true if options[:compact]
         Settings.options.marker.messages = false if options[:silent]
         @check.no_username(username)
         username = [@workers.add_arobase(username)]
-    		writer = Post.new
+        writer = Post.new
         status = Status.new
         status.message_from(username)
-    		status.message
-    		lines_array = writer.compose
+        status.message
+        lines_array = writer.compose
         text = lines_array.join("\n")
         writer.message_size_error(text) if !writer.message_size_ok?(text)
-    		@view.clear_screen
+        @view.clear_screen
         status.posting
         resp = writer.pm({options: options, text: text, username: username})
         post_object = PostObject.new(resp["data"])
@@ -675,12 +667,12 @@ module Ayadn
           end
         end
         FileOps.save_message(resp) if Settings.options.backup.messages
-    		@view.clear_screen
-    		status.yourmessage(username[0])
-    		@view.show_simple_post([post_object])
-    	rescue => e
+        @view.clear_screen
+        status.yourmessage(username[0])
+        @view.show_simple_post([post_object])
+      rescue => e
         Errors.global_error({error: e, caller: caller, data: [username, options]})
-    	end
+      end
     end
 
     def reply(post_id, options = {})
@@ -693,8 +685,8 @@ module Ayadn
           post_id = @workers.get_real_post_id(post_id)
         end
         status = Status.new
-      	status.replying_to(post_id)
-      	replied_to = @api.get_details(post_id)
+        status.replying_to(post_id)
+        replied_to = @api.get_details(post_id)
         @check.no_details(replied_to, post_id)
         # API specifies to always reply to the original post of a reposted post. We offer the user an option to not.
         unless options[:noredirect]
@@ -736,9 +728,7 @@ module Ayadn
     def send_to_channel(channel_id, options = {})
       begin
         Settings.options.timeline.compact = true if options[:compact]
-        if options[:silent]
-          Settings.options.marker.messages = false
-        end
+        Settings.options.marker.messages = false if options[:silent]
         channel_id = @workers.get_channel_id_from_alias(channel_id)
         writer = Post.new
         status = Status.new

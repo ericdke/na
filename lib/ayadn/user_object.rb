@@ -5,9 +5,14 @@ module Ayadn
 
     attr_reader :input, :code
 
-    def initialize hash
+    def initialize hash, username = nil
       @input = hash["meta"].nil? ? {} : hash["meta"]
       @code = @input["code"]
+      if code == 404
+        Status.new.user_404(username)
+        Errors.info("User #{username} doesn't exist")
+        exit
+      end
     end
   end
 
@@ -74,18 +79,18 @@ module Ayadn
 
   class UserObject
 
-    attr_reader :input, :you_muted, :you_can_subscribe, :is_following, :is_follower, :timezone, :you_follow, :counts, :canonical_url, :id, :locale, :type, :annotations, :username, :avatar_image, :description, :is_muted, :follows_you, :you_can_follow, :name, :created_at, :you_blocked, :cover_image, :verified_domain, :meta
+    attr_accessor :input, :you_muted, :you_can_subscribe, :is_following, :is_follower, :timezone, :you_follow, :counts, :canonical_url, :id, :locale, :type, :annotations, :username, :avatar_image, :description, :is_muted, :follows_you, :you_can_follow, :name, :created_at, :you_blocked, :cover_image, :verified_domain, :meta
 
-    def initialize hash
+    def initialize hash, username = nil
       @input = hash['data'].nil? ? hash : hash['data']
-      @meta = UserMetaObject.new(hash)
+      @meta = UserMetaObject.new(hash, username)
       @you_muted = @input["you_muted"]
       @you_can_subscribe = @input["you_can_subscribe"]
       @is_follower = @input["is_follower"]
       @is_following = @input["is_following"]
       @timezone = @input["timezone"]
       @you_follow = @input["you_follow"]
-      @counts = UserCountsObject.new(@input)
+      @counts = UserCountsObject.new(@input) unless @input.empty?
       @canonical_url = @input["canonical_url"]
       @id = @input["id"]
       @locale = @input["locale"]
@@ -96,15 +101,15 @@ module Ayadn
         @annotations = []
       end
       @username = @input["username"]
-      @avatar_image = AvatarImageObject.new(@input)
-      @description = UserDescriptionObject.new(@input)
+      @avatar_image = AvatarImageObject.new(@input) unless @input.empty?
+      @description = UserDescriptionObject.new(@input) unless @input.empty?
       @is_muted = @input["is_muted"]
       @follows_you = @input["follows_you"]
       @you_can_follow = @input["you_can_follow"]
-      @name = @input["name"]
+      @name = @input["name"].to_s.force_encoding("UTF-8")
       @created_at = @input["created_at"]
       @you_blocked = @input["you_blocked"]
-      @cover_image = CoverImageObject.new(@input)
+      @cover_image = CoverImageObject.new(@input) unless @input.empty?
       @verified_domain = @input["verified_domain"]
     end
   end
