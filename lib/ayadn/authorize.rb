@@ -70,6 +70,8 @@ module Ayadn
         @status.say_yellow :delete, "database entry for @#{user}"
         # load the current accounts DB
         db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
+        # remember who we are
+        active_user = Databases.all_accounts(db).select { |acc| acc[4] == 1 }[0][0]
         # remove this user from DB
         Databases.remove_from_accounts(db, user)
         if options[:delete]
@@ -81,8 +83,13 @@ module Ayadn
         if remaining.flatten.empty?
           @status.say_info "accounts database is now empty"
         else
-          # just to avoid having Ayadn without any user logged in
-          username = remaining[0][0]
+          # are we still here?
+          if !remaining.select { |arr| arr[0] == active_user }.empty?
+            username = active_user
+          else
+            # just to avoid having Ayadn without any user logged in
+            username = remaining[0][0]
+          end
           Databases.set_active_account(db, username)
           @status.say_info "user @#{username} is now the active user"
         end
