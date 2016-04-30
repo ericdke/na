@@ -1,4 +1,4 @@
 # encoding: utf-8
 module Ayadn
-  VERSION = "3.5"
+  VERSION = "4.0"
 end

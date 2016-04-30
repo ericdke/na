@@ -1,11 +1,13 @@
-## 3.5 - 2016-04-24 - 'Chrysalis'
+## 4.0- 2016-04-30 - 'Mr. Robot'
 
-- Deprecated: movie, tvshow (no more access to imdb)
-- Fixed: bug in settings, inconsistencies
-- Improved: speed
-- Code cleanup, ready for PRs...
+- Fixed: when possible, unauthorizing a user keeps the current user logged
+- Fixed: bugs in the 'set' command (inconsistencies)
+- Fixed: malformed address for checkins in some cases
+- Fixed: a case where changing the root URL was ignored
+- Fixed: typos in descriptions
+- Deprecated: 'movie' and 'tvshow' commands (we don't have access to imdb anymore)
 
-## 3.1 - not released - 'Mr. Robot'
+## 3.1 - not released
 
 - Fixed: crashes in the Random (-rnd) stream
 
