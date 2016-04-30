@@ -1150,7 +1150,7 @@ module Ayadn
 
       You can block several users at once:
 
-      `ayadn -MU @spammer @myex @thickhead`
+      `ayadn -BL @spammer @myex @thickhead`
       \n\n
       USAGE
     end

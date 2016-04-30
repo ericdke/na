@@ -708,8 +708,8 @@ module Ayadn
     end
 
     def build_checkins(post)
-      unless post.checkins.name.nil?
-        num_dots = post.checkins.name.length
+      unless post.checkins['name'].nil?
+        num_dots = post.checkins['name'].length
       else
         num_dots = 10
       end
@@ -720,7 +720,7 @@ module Ayadn
         hd << "\n"
       end
       formatted = { header: hd }
-      content.checkins.each do |key, val|
+      post.checkins.each do |key, val|
           formatted[key] = val
       end
 
