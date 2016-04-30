@@ -164,19 +164,3 @@ ayadn pm @ericd -Y https://www.youtube.com/watch?v=Ei8CFin00PY
 ```
 
 *Note: unfortunately, very few App.net clients treat video embedding properly. So I would advise to include the video URL in the text body anyway, for better compatibility.*
-
-# EMBED MOVIE POSTER
-
-You can embed a movie poster in a normal post with option `-M`.
-
-This is compatible with other options, eg embedding other images.
-
-*Warning: contrary to the `movie` command, this option doesn't check with the user if the movie is valid. The poster is retrieved from IMDb and is automatically embedded in the post.*
-
-Examples:
-
-```
-ayadn -P "I'll be back" -M terminator
-ayadn -W -M truman show -E ~/Pics/my_face.jpg
-ayadn -R 23362460 -M the dark knight
-```  

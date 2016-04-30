@@ -187,10 +187,6 @@ module Ayadn
       info("blocked", username, "green")
     end
 
-    def error_missing_title
-      info("error", "please specify (part of) a movie title", "red")
-    end
-
     def error_missing_username
       info("error", "please specify a username", "red")
     end
@@ -420,18 +416,6 @@ module Ayadn
 
     def fetching_from(source)
       info("connexion", "fetching informations from #{source}", "green")
-    end
-
-    def no_movie
-      info("error", "sorry, can't find this movie", "red")
-    end
-
-    def no_show
-      info("error", "sorry, can't find this show", "red")
-    end
-
-    def no_show_infos
-      info("error", "sorry, can't find informations about this show", "red")
     end
 
     def no_force(target)
