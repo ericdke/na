@@ -83,6 +83,18 @@ module Ayadn
       say_yellow :starring, "post #{post_id}"
     end
 
+    def all_hashtag_links hashtag
+      info("info", "links from posts containing hashtag '##{hashtag}':", "cyan")
+    end
+
+    def all_search_links words
+      info("info", "links from posts containing word(s) '#{words}':", "cyan")
+    end
+
+    def all_stars_links
+      info("info", "links from your starred posts:", "cyan")
+    end
+
     def not_deleted(post_id)
       info("error", "could not delete post #{post_id} (post isn't yours, or is already deleted)", "red")
     end
@@ -185,10 +197,6 @@ module Ayadn
 
     def blocked(username)
       info("blocked", username, "green")
-    end
-
-    def error_missing_title
-      info("error", "please specify (part of) a movie title", "red")
     end
 
     def error_missing_username
@@ -420,18 +428,6 @@ module Ayadn
 
     def fetching_from(source)
       info("connexion", "fetching informations from #{source}", "green")
-    end
-
-    def no_movie
-      info("error", "sorry, can't find this movie", "red")
-    end
-
-    def no_show
-      info("error", "sorry, can't find this show", "red")
-    end
-
-    def no_show_infos
-      info("error", "sorry, can't find informations about this show", "red")
     end
 
     def no_force(target)

@@ -10,16 +10,23 @@ module Ayadn
       at_exit { @view.show_cursor }
     end
 
-    def method_missing(meth, options)
-      case meth.to_s
-      when 'trending', 'photos', 'checkins', 'replies', 'global', 'unified'
-        scroll_it(meth.to_s, options)
+    def method_missing(meth, *args)
+      options = if args.size > 1
+        args[1]
+      else
+        args[0]
+      end
+      case meth
+      when :trending, :photos, :checkins, :replies, :global, :unified
+        scroll_explore_stream(meth.to_s, options)
+      when :mentions, :posts
+        scroll_user_stream(args[0], meth.to_s, options)
       else
         super
       end
     end
 
-    def scroll_it(target, options)
+    def scroll_explore_stream target, options
       Settings.global.scrolling = true
       options = check_raw(options)
       orig_target = target
@@ -42,38 +49,18 @@ module Ayadn
       end
     end
 
-    def mentions(username, options)
+    def scroll_user_stream username, type, options
       Settings.global.scrolling = true
       options = check_raw(options)
-      id = @api.get_user(username)['data']['id']      
+      id = @api.get_user(username)['data']['id'] 
       loop do
         begin
-          stream = @api.get_mentions(username, options)
+          stream = @api.send("get_#{type}".to_sym, username, options)
           stream_object = StreamObject.new(stream)
           Debug.stream stream_object, options, username
           clear() if Settings.options.scroll.spinner
-          show_if_new(stream_object, options, "mentions:#{id}")
-          options = save_then_return(stream_object, options, "mentions:#{id}")
-          countdown
-          print "..." if Settings.options.scroll.spinner
-        rescue Interrupt
-          canceled
-        end
-      end
-    end
-
-    def posts(username, options)
-      Settings.global.scrolling = true
-      options = check_raw(options)
-      id = @api.get_user(username)['data']['id']
-      loop do
-        begin
-          stream = @api.get_posts(username, options)
-          stream_object = StreamObject.new(stream)
-          Debug.stream stream_object, options, username
-          clear() if Settings.options.scroll.spinner
-          show_if_new(stream_object, options, "posts:#{id}")
-          options = save_then_return(stream_object, options, "posts:#{id}")
+          show_if_new(stream_object, options, "#{type}:#{id}")
+          options = save_then_return(stream_object, options, "#{type}:#{id}")
           countdown
           print "..." if Settings.options.scroll.spinner
         rescue Interrupt

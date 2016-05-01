@@ -4,7 +4,7 @@ module Ayadn
     package_name "Ayadn"
 
     begin
-      %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs set alias errors blacklist mark nicerank debug check diagnostics stream_object post_object user_object channel_object preferences filtered_post_object}.each { |r| require_relative "#{r}" }
+      %w{action api descriptions endpoints cnx view workers settings post status extend databases fileops logs set alias errors blacklist mark nicerank debug check diagnostics stream_object post_object user_object channel_object preferences_object filtered_post_object}.each { |r| require_relative "#{r}" }
     rescue Interrupt
       puts "\nExit: stopped by user while launching\n\n"
       exit
@@ -531,7 +531,6 @@ module Ayadn
     option :embed, aliases: "-E", type: :array, desc: "Embed one or several pictures in the new post"
     option :youtube, aliases: "-Y", type: :array, desc: "Embed a Youtube video in the new post"
     option :vimeo, aliases: "-V", type: :array, desc: "Embed a Vimeo video in the new post"
-    # option :poster, aliases: "-M", type: :array, desc: "Embed a movie poster, from title, in the new post"
     option :noredirect, aliases: "-n", type: :boolean, desc: "Do not respond to the original post but to the reposted one if possible"
     option :force, aliases: "-f", type: :boolean, desc: Descriptions.options_force
     option :compact, aliases: "-k", type: :boolean, desc: "Force the view to be compact if not already (after posting)"

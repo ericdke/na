@@ -2,11 +2,8 @@
 module Ayadn
   class Workers
 
-    # attr_reader :status, :view
-
     def initialize
       @status = Status.new
-      # @view = View.new
     end
 
     def table_borders
@@ -47,27 +44,13 @@ module Ayadn
     end
 
     def build_reposted_list(list, target)
-      table = init_table
-      table.title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
-      users_list = []
-      list.each do |obj|
-        obj['name'].nil? ? name = "" : name = obj['name'].to_s.force_encoding("UTF-8")
-        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id'], :posts => obj['counts']['posts']}
-      end
-      table.style = table_borders()
-      return users_list, table
+      title = "List of users who reposted post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
+      build_reposted_or_starred_list(list, title)
     end
 
     def build_starred_list(list, target)
-      table = init_table
-      table.title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
-      users_list = []
-      list.each do |obj|
-        obj['name'].nil? ? name = "" : name = obj['name'].to_s.force_encoding("UTF-8")
-        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id'], :posts => obj['counts']['posts']}
-      end
-      table.style = table_borders()
-      return users_list, table
+      title = "List of users who starred post ".color(:cyan) + "#{target}".color(:red) + "".color(:white)
+      build_reposted_or_starred_list(list, title)
     end
 
     def build_followings_list(list, target, options = {}) #takes a hash of users with ayadn format
@@ -588,7 +571,7 @@ module Ayadn
     end
 
     def all_but_me usernames
-      arr = usernames.select {|user| user != 'me'}
+      arr = usernames.select { |user| user != 'me' && user != Settings.config.identity.username }
       at(arr)
     end
 
@@ -597,6 +580,18 @@ module Ayadn
     end
 
     private
+
+    def build_reposted_or_starred_list list, title
+      table = init_table
+      table.title = title
+      users_list = []
+      list.each do |obj|
+        obj['name'].nil? ? name = "" : name = obj['name'].to_s.force_encoding("UTF-8")
+        users_list << {:username => obj['username'], :name => name, :you_follow => obj['you_follow'], :follows_you => obj['follows_you'], :id => obj['id'], :posts => obj['counts']['posts']}
+      end
+      table.style = table_borders()
+      return users_list, table
+    end
 
     def def_str(word, reg_split)
       splitted = word.split(/#{reg_split}/) if word =~ /#{reg_split}/

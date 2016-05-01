@@ -344,30 +344,15 @@ module Ayadn
     end
 
     def all_hashtag_links(stream, hashtag)
-      clear_screen()
-      @status.info("info", "links from posts containing hashtag '##{hashtag}':", "cyan")
-      links = @workers.links_from_posts(stream)
-      links.uniq!
-      show_links(links)
-      @workers.save_links(links, "hashtag", hashtag)
+      all_links(stream, "hashtag", hashtag)
     end
 
     def all_search_links(stream, words)
-      clear_screen()
-      @status.info("info", "links from posts containing word(s) '#{words}':", "cyan")
-      links = @workers.links_from_posts(stream)
-      links.uniq!
-      show_links(links)
-      @workers.save_links(links, "search", words)
+      all_links(stream, "search", hashtag)
     end
 
     def all_stars_links(stream)
-      clear_screen()
-      @status.info("info", "links from your starred posts:", "cyan")
-      links = @workers.links_from_posts(stream)
-      links.uniq!
-      show_links(links)
-      @workers.save_links(links, 'starred')
+      all_links(stream, "starred")
     end
 
     def infos(stream, token)
@@ -404,6 +389,22 @@ module Ayadn
     end
 
     private
+
+    def all_links stream, type, arg = nil
+      clear_screen()
+      case type
+      when "hashtag"
+        @status.all_hashtag_links(arg)
+      when "search"
+        @status.all_search_links(arg)
+      when "starred"
+        @status.all_stars_links
+      end
+      links = @workers.links_from_posts(stream)
+      links.uniq!
+      show_links(links)
+      arg.nil? ? @workers.save_links(links, type) : @workers.save_links(links, type, arg)
+    end
 
     ### list = id => [username, name, bool, bool, int, message]
     def show_list_with_lastpost(list, target, options)

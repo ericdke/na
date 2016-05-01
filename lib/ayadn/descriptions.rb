@@ -1305,12 +1305,6 @@ module Ayadn
       `ayadn -P wave function -Y https://www.youtube.com/watch?v=Ei8CFin00PY`
 
       `ayadn -P wargarbl -V http://vimeo.com/123234345`
-
-      Embed a movie poster:
-
-      `ayadn -P "I'll be back" -M terminator`
-
-      (This is different from the 'movie' command, check the docs.)
       \n\n
       USAGE
     end
@@ -1337,12 +1331,6 @@ module Ayadn
       `ayadn -W -Y https://www.youtube.com/watch?v=Ei8CFin00PY`
 
       `ayadn -W -V http://vimeo.com/123234345`
-
-      Embed a movie poster:
-
-      `ayadn -W -M terminator`
-
-      (This is different from the 'movie' command, check the docs.)
       \n\n
       USAGE
     end
@@ -1365,10 +1353,6 @@ module Ayadn
       `ayadn pm @ericd -Y https://www.youtube.com/watch?v=Ei8CFin00PY`
 
       `ayadn pm @ericd -V http://vimeo.com/123234345`
-
-      Embed a movie poster:
-
-      `ayadn pm @ericd -M terminator`
 
       It enters the writing mode where you will type your message.
 
@@ -1409,10 +1393,6 @@ module Ayadn
       `ayadn -C 46217 -Y https://www.youtube.com/watch?v=Ei8CFin00PY`
 
       `ayadn -C 46217 -V http://vimeo.com/123234345`
-
-      Embed a movie poster:
-
-      `ayadn -C 46217 -M terminator`
 
       It enters the writing mode where you will type your message.
 
@@ -1461,12 +1441,6 @@ module Ayadn
       `ayadn -R23365251 -Y https://www.youtube.com/watch?v=Ei8CFin00PY`
 
       `ayadn -R23365251 -V http://vimeo.com/123234345`
-
-      Embed a movie poster:
-
-      `ayadn -R23365251 -M terminator`
-
-      (This is different from the 'movie' command, check the docs.)
       \n\n
       USAGE
     end
