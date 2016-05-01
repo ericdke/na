@@ -588,7 +588,7 @@ module Ayadn
     end
 
     def all_but_me usernames
-      arr = usernames.select {|user| user != 'me'}
+      arr = usernames.select { |user| user != 'me' && user != Settings.config.identity.username }
       at(arr)
     end
 
