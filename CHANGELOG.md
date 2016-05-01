@@ -1,15 +1,13 @@
-## 4.0- 2016-04-30 - 'Mr. Robot'
+## 4.0- 2016-05-01 - 'Mr. Robot'
 
 - Fixed: when possible, unauthorizing a user keeps the current user logged
-- Fixed: bugs in the 'set' command (inconsistencies)
+- Fixed: inconsistencies in the 'set' command
 - Fixed: malformed address for checkins in some cases
 - Fixed: a case where changing the root URL was ignored
 - Fixed: typos in descriptions
+- Fixed: occasional crash in the 'random' stream
 - Deprecated: 'movie' and 'tvshow' commands (we don't have access to imdb anymore)
-
-## 3.1 - not released
-
-- Fixed: crashes in the Random (-rnd) stream
+- Code cleanup
 
 ## 3.0 - 2015-11-07 - 'Edge Of Tomorrow'
 
