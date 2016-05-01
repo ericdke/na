@@ -83,6 +83,18 @@ module Ayadn
       say_yellow :starring, "post #{post_id}"
     end
 
+    def all_hashtag_links hashtag
+      info("info", "links from posts containing hashtag '##{hashtag}':", "cyan")
+    end
+
+    def all_search_links words
+      info("info", "links from posts containing word(s) '#{words}':", "cyan")
+    end
+
+    def all_stars_links
+      info("info", "links from your starred posts:", "cyan")
+    end
+
     def not_deleted(post_id)
       info("error", "could not delete post #{post_id} (post isn't yours, or is already deleted)", "red")
     end

@@ -246,10 +246,6 @@ module Ayadn
 
     def get_itunes_store url, artist, track
       results = JSON.load(CNX.download(URI.escape(url)))['results']
-
-      #
-      # require 'pp'; pp results; exit
-      # 
       
       unless results.nil?
 
@@ -266,10 +262,6 @@ module Ayadn
           next if e['artistName'].nil?
           candidates << e if e['artistName'].downcase == artist.downcase
         end
-
-        #
-        # require "pp";pp candidates; exit
-        #
 
         candidate = if candidates.empty?
           results[0]
@@ -310,7 +302,6 @@ module Ayadn
     end
 
     def show_nowplaying(text, options, store)
-      # @status.to_be_posted
       thor = Thor::Shell::Basic.new
       text.split("\n").each do |line|
         thor.say_status(nil, line.color(Settings.options.colors.excerpt))

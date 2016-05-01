@@ -6,6 +6,7 @@ module Ayadn
 
     def initialize
       @status = Status.new
+      @markdown_link_regex = /\[([^\]]+)\]\(([^)]+)\)/
     end
 
     def post(dic)
@@ -150,12 +151,12 @@ module Ayadn
     end
 
     def keep_text_from_markdown_links(str)
-      str.gsub(/\[([^\]]+)\]\(([^)]+)\)/, '\1')
+      str.gsub(@markdown_link_regex, '\1')
     end
 
     def markdown_extract(str)
-        result = str.gsub(/\[([^\]]+)\]\(([^)]+)\)/, '\1|||\2')
-        result.split('|||') #=> [text, link]
+      result = str.gsub(@markdown_link_regex, '\1|||\2')
+      result.split('|||') #=> [text, link]
     end
 
     def error_text_empty
