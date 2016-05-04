@@ -333,7 +333,7 @@ module Ayadn
       chan = Struct.new(:id, :num_messages, :subscribers, :type, :owner, :annotations, :readers, :editors, :writers, :you_subscribed, :unread, :recent_message_id, :recent_message)
 
       no_user = {}
-      @api = API.new
+      api = API.new
       stream.each do |ch|
         unless ch.writers.user_ids.empty?
           @status.say_cyan :parsing, "channel #{ch.id}"
@@ -343,7 +343,7 @@ module Ayadn
             db = Databases.find_user_by_id(id)
             if db.nil?
               @status.say_yellow :downloading, "user #{id}"
-              resp = @api.get_user(id)
+              resp = api.get_user(id)
 
               if resp['meta']['code'] != 200
                 @status.say_error "can't get user #{id}'s data, skipping"

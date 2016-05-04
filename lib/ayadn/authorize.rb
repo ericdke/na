@@ -3,7 +3,6 @@ module Ayadn
   class Authorize
 
     def initialize
-      @thor = Thor::Shell::Color.new # local statuses
       @status = Status.new # global statuses + utils
       @baseURL = "https://api.app.net" # may be overriden
     end
@@ -50,20 +49,20 @@ module Ayadn
 
     def unauthorize(user, options)
       begin
-        @workers = Workers.new
         if user.size != 1
           @status.one_username
           exit
         end
-        user = @workers.remove_arobase_if_present(user)[0]
+        user = Workers.new.remove_arobase_if_present(user)[0]
         puts "\e[H\e[2J"
+        thor = Thor::Shell::Color.new
         if options[:delete]
-          sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} and delete its folders? [y/N]\n\n> ", :red)
+          sure = thor.yes?("Are you sure you want to unauthorize user @#{user} and delete its folders? [y/N]\n\n> ", :red)
         else
-          sure = @thor.yes?("Are you sure you want to unauthorize user @#{user} ? [y/N]\n\n> ", :red)
+          sure = thor.yes?("Are you sure you want to unauthorize user @#{user} ? [y/N]\n\n> ", :red)
         end
         unless sure
-          Status.new.canceled
+          @status.canceled
           exit
         end
         puts "\e[H\e[2J"
@@ -98,7 +97,7 @@ module Ayadn
           @status.not_authorized
           exit
       rescue Interrupt
-        Status.new.canceled
+        @status.canceled
         exit
       end
     end

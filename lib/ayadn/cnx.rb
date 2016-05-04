@@ -84,8 +84,7 @@ module Ayadn
           check response
         end
       rescue RestClient::RequestTimeout => e
-        thor = Thor::Shell::Color.new
-        thor.say_status :error, "connection timeout", :red
+        Thor::Shell::Color.new.say_status :error, "connection timeout", :red
         if try_cnx < 4
           try_cnx = retry_adn 5, try_cnx
           retry
@@ -102,9 +101,8 @@ module Ayadn
         Thor::Shell::Color.new.say_status :error, "connection or authorization problem", :red
         Errors.global_error({error: e, caller: caller, data: [url]})
       rescue Interrupt
-        thor = Thor::Shell::Color.new
         puts "\n"
-        thor.say_status :canceled, "connection canceled", :red
+        Thor::Shell::Color.new.say_status :canceled, "connection canceled", :red
         puts "\n"
         exit
       rescue => e
@@ -155,9 +153,8 @@ module Ayadn
         Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url]})
       rescue Interrupt
-        thor = Thor::Shell::Color.new
         puts "\n"
-        thor.say_status :canceled, "connection canceled", :red
+        Thor::Shell::Color.new.say_status :canceled, "connection canceled", :red
         puts "\n"
         exit
       rescue => e
@@ -175,9 +172,8 @@ module Ayadn
         Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
       rescue Interrupt
-        thor = Thor::Shell::Color.new
         puts "\n"
-        thor.say_status :canceled, "connection canceled", :red
+        Thor::Shell::Color.new.say_status :canceled, "connection canceled", :red
         puts "\n"
         exit
       rescue => e
@@ -195,9 +191,8 @@ module Ayadn
         Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
       rescue Interrupt
-        thor = Thor::Shell::Color.new
         puts "\n"
-        thor.say_status :canceled, "connection canceled", :red
+        Thor::Shell::Color.new.say_status :canceled, "connection canceled", :red
         puts "\n"
         exit
       rescue => e
@@ -215,9 +210,8 @@ module Ayadn
         Thor::Shell::Color.new.say_status :error, "connection problem", :red
         Errors.global_error({error: e, caller: caller, data: [url, payload]})
       rescue Interrupt
-        thor = Thor::Shell::Color.new
         puts "\n"
-        thor.say_status :canceled, "connection canceled", :red
+        Thor::Shell::Color.new.say_status :canceled, "connection canceled", :red
         puts "\n"
         exit
       rescue => e

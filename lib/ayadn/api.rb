@@ -2,12 +2,6 @@
 module Ayadn
   class API
 
-    def initialize
-      @workers = Workers.new
-      # @status = Status.new
-      @view = View.new
-    end
-
     def get_unified(options)
       # "paginate" fetches last post ID we've seen if the user asks for scrolling or asks to see new posts only
       options = paginate options, 'unified'
@@ -158,8 +152,9 @@ module Ayadn
         resp['data'].each { |p| array_of_hashes << p }
       else
         options = {:count => 200, :before_id => nil}
+        endpoints = Endpoints.new
         loop do
-          resp = get_parsed_response(Endpoints.new.files_list(options))
+          resp = get_parsed_response(endpoints.files_list(options))
           resp['data'].each { |p| array_of_hashes << p }
           break unless resp['meta']['more']
           options = {:count => 200, :before_id => resp['meta']['min_id']}
@@ -322,7 +317,7 @@ module Ayadn
             status.canceled
             exit
           end
-          @view.clear_screen
+          View.new.clear_screen
           retry
         else
           status.server_error(false)
@@ -343,13 +338,14 @@ module Ayadn
       # Fetch data for each user (and verify the user isn't deleted)
       options = {:count => 200, :before_id => nil}
       big_hash = {}
+      workers= Workers.new
       loop do
         resp = get_parsed_response(get_list_url(username, target, options))
         if resp['meta']['code'] == 404
           Status.new.user_404(username)
           exit
         end
-        users = @workers.extract_users(resp)
+        users = workers.extract_users(resp)
         big_hash.merge!(users)
         break if resp['meta']['min_id'] == nil
         options = {:count => 200, :before_id => resp['meta']['min_id']}
