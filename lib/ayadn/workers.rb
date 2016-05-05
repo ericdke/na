@@ -2,8 +2,8 @@
 module Ayadn
   class Workers
 
-    def initialize
-      @status = Status.new
+    def initialize status = Status.new
+      @status = status
     end
 
     def table_borders

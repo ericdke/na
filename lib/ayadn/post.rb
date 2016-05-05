@@ -4,8 +4,8 @@ module Ayadn
 
     require_relative "annotations"
 
-    def initialize
-      @status = Status.new
+    def initialize status = Status.new
+      @status = status
       @markdown_link_regex = /\[([^\]]+)\]\(([^)]+)\)/
     end
 

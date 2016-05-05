@@ -4,8 +4,8 @@ module Ayadn
 
     attr_reader :thor
 
-    def initialize
-      @thor = Thor::Shell::Color.new
+    def initialize thor = Thor::Shell::Color.new
+      @thor = thor
     end
 
     def done

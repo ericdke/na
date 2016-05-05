@@ -2,9 +2,9 @@
 module Ayadn
   class View
 
-    def initialize
-      @workers = Workers.new
-      @status = Status.new
+    def initialize status = Status.new, workers = nil
+      @status = status
+      @workers = workers.nil? ? Workers.new(status) : workers
     end
 
     def show_cursor

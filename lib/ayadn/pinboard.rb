@@ -6,8 +6,7 @@ module Ayadn
       File.exist?(Ayadn::Settings.config.paths.auth + '/pinboard.data')
     end
 
-    def ask_credentials
-      status = Status.new
+    def ask_credentials status = Status.new
       begin
         status.pin_username
         pin_username = STDIN.gets.chomp()

@@ -2,8 +2,8 @@
 module Ayadn
   class Switch
 
-    def initialize
-      @status = Status.new
+    def initialize status = Status.new
+      @status = status
       begin
         @acc_db = Amalgalite::Database.new(Dir.home + "/ayadn/accounts.sqlite")
       rescue Amalgalite::SQLite3::Error => e

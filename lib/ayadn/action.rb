@@ -10,10 +10,10 @@ module Ayadn
 
     def initialize
       @api = API.new
-      @view = View.new
-      @workers = Workers.new
-      @check = Check.new
-      @status = Status.new
+      @status = Status.new      
+      @workers = Workers.new(@status)
+      @view = View.new(@status, @workers)
+      @check = Check.new(@status)
       Settings.load_config
       Settings.get_token
       Settings.init_config
@@ -30,7 +30,7 @@ module Ayadn
           args[0]
         end
         Settings.options.timeline.compact = true if options[:compact]
-        stream = Stream.new(@api, @view, @workers)
+        stream = Stream.new(@api, @view, @workers, @check, @status)
         case meth
         when :mentions, :posts, :whatstarred, :whoreposted, :whostarred, :convo, :followings, :followers, :messages
           stream.send(meth, args[0], options)
@@ -501,7 +501,7 @@ module Ayadn
         unless pinner.has_credentials_file?
           # No Pinboard account registered? Ask for one.
           @status.no_pin_creds
-          pinner.ask_credentials
+          pinner.ask_credentials(@status)
           @status.pin_creds_saved
         end
         # Get stored credentials
@@ -520,7 +520,7 @@ module Ayadn
       begin
         @view.clear_screen
         @status.auto
-        Post.new.auto_readline
+        Post.new(@status).auto_readline
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [options]})
       end
@@ -529,7 +529,7 @@ module Ayadn
     def post(args, options)
       begin
         Settings.options.timeline.compact = true if options[:compact]
-        post_and_show(Post.new, args.join(" "), options)
+        post_and_show(Post.new(@status), args.join(" "), options)
       rescue => e
         Errors.global_error({error: e, caller: caller, data: [args, options]})
       end
@@ -538,7 +538,7 @@ module Ayadn
     def write(options)
       begin
         Settings.options.timeline.compact = true if options[:compact]
-        writer = Post.new
+        writer = Post.new(@status)
         @status.writing
         @status.post
         text = writer.compose.join("\n")
@@ -554,7 +554,7 @@ module Ayadn
         Settings.options.marker.messages = false if options[:silent]
         @check.no_username(username)
         username = [@workers.add_arobase(username)]
-        writer = Post.new
+        writer = Post.new(@status)
         @status.message_from(username)
         @status.message
         text = writer.compose.join("\n")
@@ -602,7 +602,7 @@ module Ayadn
           end
         end
         # ----
-        writer = Post.new
+        writer = Post.new(@status)
         @status.writing
         @status.reply
         text = writer.compose.join("\n")
@@ -632,7 +632,7 @@ module Ayadn
         Settings.options.timeline.compact = true if options[:compact]
         Settings.options.marker.messages = false if options[:silent]
         channel_id = @workers.get_channel_id_from_alias(channel_id)
-        writer = Post.new
+        writer = Post.new(@status)
         @status.writing
         @status.message
         text = writer.compose.join("\n")
@@ -663,7 +663,7 @@ module Ayadn
 
     def nowplaying(options = {})
       Settings.options.timeline.compact = true if options[:compact]
-      np = NowPlaying.new(@api, @view, @workers, options)
+      np = NowPlaying.new(@api, @view, @workers, @status, options)
       if options[:lastfm]
         np.lastfm(options)
       elsif options[:deezer]

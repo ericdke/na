@@ -5,12 +5,12 @@ module Ayadn
 
     require_relative("scroll")
 
-    def initialize api, view, workers
+    def initialize api, view, workers, check, status
       @api = api
       @view = view
       @workers = workers
-      @check = Check.new
-      @status = Status.new
+      @check = check
+      @status = status
     end
 
     def global settings
@@ -387,8 +387,7 @@ module Ayadn
       #max_posts = cols / 16
       max_posts = 6
       @view.clear_screen
-      status = Status.new
-      status.info("connected", "fetching random posts", "cyan")
+      @status.info("connected", "fetching random posts", "cyan")
       @max_id = @api.get_global({count: 1})['meta']['max_id'].to_i
       @view.clear_screen
       counter = 1
@@ -411,7 +410,7 @@ module Ayadn
             counter = 1
           end
         rescue Interrupt
-          status.canceled
+          @status.canceled
           exit
         end
       end

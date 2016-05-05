@@ -19,11 +19,11 @@ module Ayadn
       exit
     end
 
-    def initialize api, view, workers, options = {}
+    def initialize api, view, workers, status, options = {}
       @api = api
       @view = view
       @workers = workers
-      @status = Status.new
+      @status = status
       # @status = Status.new
       unless options[:hashtag]
         @hashtag = "#nowplaying"
@@ -142,7 +142,7 @@ module Ayadn
         unless options[:no_url] || store.nil?
           text_to_post += "\n \n[iTunes Store](#{store['link']})"
         end
-        poster = Post.new
+        poster = Post.new(@status)
         poster.post_size_error(text_to_post) if !poster.post_size_ok?(text_to_post)
         @view.clear_screen
         @status.writing

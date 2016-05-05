@@ -10,6 +10,7 @@ module Ayadn
       begin
         init
         status = Status.new
+        workers = Workers.new(status)
         unless args.empty?
           double = args.dup
           post_id, convo_title = double.shift, double.join(' ')
@@ -17,14 +18,14 @@ module Ayadn
           status.wrong_arguments
           exit
         end
-        Check.new.bad_post_id(post_id)
+        Check.new(status).bad_post_id(post_id)
         if options[:force]
           Settings.global.force = true
         else
-          post_id = Workers.new.get_real_post_id(post_id)
+          post_id = workers.get_real_post_id(post_id)
         end
         convo_title = post_id if convo_title == ''
-        api, workers, view = API.new, Workers.new, View.new
+        api, workers, view = API.new, workers, View.new(status, workers)
         users, bucket = [], []
         view.clear_screen
         status.info(:connected, "analyzing conversation", :yellow)
@@ -115,17 +116,18 @@ module Ayadn
       begin
         init
         status = Status.new
+        workers = Workers.new(status)
         if args.empty?
           status.wrong_arguments
           exit
         else
           post_id = args[0]
         end
-        Check.new.bad_post_id(post_id)
+        Check.new(status).bad_post_id(post_id)
         if options[:force]
           Settings.global.force = true
         else
-          post_id = Workers.new.get_real_post_id(post_id)
+          post_id = workers.get_real_post_id(post_id)
         end
         Databases.delete_bookmark post_id
         status.done
@@ -141,17 +143,18 @@ module Ayadn
       begin
         init
         status = Status.new
+        workers = Workers.new(status)
         unless args.empty? || args[1].nil?
           arguments = args.dup
           post_id = arguments.shift
         else
           abort Status.wrong_arguments
         end
-        Check.new.bad_post_id(post_id)
+        Check.new(status).bad_post_id(post_id)
         if options[:force]
           Settings.global.force = true
         else
-          post_id = Workers.new.get_real_post_id(post_id)
+          post_id = workers.get_real_post_id(post_id)
         end
         Databases.rename_bookmark post_id, arguments.join(" ")
         status.done

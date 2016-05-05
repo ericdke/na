@@ -3,8 +3,8 @@ module Ayadn
 
   class Check
 
-    def initialize
-      @status = Status.new
+    def initialize status = Status.new
+      @status = status
     end
 
     def same_username(user_object)

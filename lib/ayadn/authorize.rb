@@ -44,7 +44,7 @@ module Ayadn
       @status.say_green :done, "user #{user.handle} is authorized"
       Errors.info "#{user.handle} authorized."
       @status.say { @status.say_green :end, "Thank you for using Ayadn. Enjoy!" }
-      Switch.new.list
+      Switch.new(@status).list
     end
 
     def unauthorize(user, options)
