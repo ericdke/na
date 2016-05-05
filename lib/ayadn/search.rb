@@ -10,6 +10,7 @@ module Ayadn
     end
 
     def hashtag(hashtag, options)
+      Settings.options.timeline.compact = true if options[:compact]
       Settings.global.force = true if options[:force]
       @view.downloading(options)
       stream = @api.get_hashtag(hashtag)
@@ -26,6 +27,7 @@ module Ayadn
     end
 
     def find(words, options)
+      Settings.options.timeline.compact = true if options[:compact]
       Settings.global.force = true if options[:force]
       @view.downloading(options)
       stream = get_stream(words, options)

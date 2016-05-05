@@ -30,6 +30,7 @@ module Ayadn
           args[0]
         end
         Settings.options.timeline.compact = true if options[:compact]
+        Settings.global.force = true if options[:force]
         stream = Stream.new(@api, @view, @workers, @check, @status)
         case meth
         when :mentions, :posts, :whatstarred, :whoreposted, :whostarred, :convo, :followings, :followers, :messages
@@ -242,7 +243,6 @@ module Ayadn
 
     def hashtag(hashtag, options)
       begin
-        Settings.options.timeline.compact = true if options[:compact]
         search = Search.new(@api, @view, @workers)
         search.hashtag(hashtag, options)
       rescue => e
@@ -252,7 +252,6 @@ module Ayadn
 
     def search(words, options)
       begin
-        Settings.options.timeline.compact = true if options[:compact]
         search = Search.new(@api, @view, @workers)
         search.find(words, options)
       rescue => e

@@ -14,7 +14,6 @@ module Ayadn
     end
 
     def global settings
-      Settings.global.force = true if settings[:force]
       options = settings.dup
       options[:filter] = nicerank_true()
       @view.downloading(options)
@@ -47,7 +46,6 @@ module Ayadn
     end
 
     def stream meth, options, target
-      Settings.global.force = true if options[:force]
       @view.downloading(options)
       unless options[:scroll]
         stream = @api.send("get_#{meth}".to_sym, options)
@@ -65,7 +63,6 @@ module Ayadn
 
 
     def mentions username, options
-      Settings.global.force = true if options[:force]
       @check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options)
@@ -87,7 +84,6 @@ module Ayadn
     end
 
     def posts username, options
-      Settings.global.force = true if options[:force]
       @check.no_username(username)
       username = @workers.add_arobase(username)
       @view.downloading(options)
@@ -333,9 +329,7 @@ module Ayadn
 
     def convo(post_id, options)
       @check.bad_post_id(post_id)
-      if options[:force]
-        Settings.global.force = true
-      else
+      unless options[:force]
         post_id = @workers.get_real_post_id(post_id)
       end
       @view.downloading(options)
