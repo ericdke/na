@@ -2,11 +2,7 @@
 module Ayadn
   class Settings
 
-    # Warning
-    # comment next line
     require_relative "ids"
-    # instead, uncomment and insert your own client id
-    # CLIENT_ID = ""
  
     require 'ostruct'
 

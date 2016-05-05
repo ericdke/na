@@ -4,11 +4,7 @@ module Ayadn
 
     attr_accessor :ayadn_callback_url, :base_url, :config_api_url, :posts_url, :users_url, :files_url, :token_url, :channels_url, :pm_url
 
-    # Warning
-    # comment next line
     require_relative "ids"
-    # uncomment and insert your own URL
-    # CALLBACK_URL = ""
 
     def initialize
       @ayadn_callback_url = CALLBACK_URL

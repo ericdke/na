@@ -3,13 +3,7 @@ module Ayadn
 
   class NowPlaying
 
-    # Warning
-    # comment next line
     require_relative "ids"
-    # uncomment next line and insert your own codes
-    # AFFILIATE_SUFFIX = ""
-    # DEEZER_APP_ID = ""
-    # DEEZER_AUTH_URL = ""
 
     begin
       require 'rss'
