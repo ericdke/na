@@ -6,6 +6,7 @@
 - Fixed: a case where changing the root URL was ignored
 - Fixed: typos in descriptions
 - Fixed: occasional crash in the 'random' stream
+- New: documentation for developing with the Ayadn codebase
 - Deprecated: 'movie' and 'tvshow' commands (we don't have access to imdb anymore)
 - Code cleanup
 
