@@ -64,7 +64,10 @@ module Ayadn
         @type = @input["type"]
         @id = @input["id"]
         @counts = ChannelCountsObject.new(@input["counts"])
-        @recent_message = @input["recent_message"].nil? ? nil : PostObject.new(@input["recent_message"])
+        if @input["recent_message"].blank? || @input["recent_message"]["is_deleted"]
+          return
+        end
+        @recent_message = PostObject.new(@input["recent_message"])
     end
 
   end

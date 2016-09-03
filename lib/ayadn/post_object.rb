@@ -83,7 +83,7 @@ module Ayadn
 
 	class PostObject # also works for messages
 
-    attr_reader :input, :num_stars, :num_reposts, :num_replies, :text, :created_at, :id, :canonical_url, :machine_only, :you_reposted, :you_starred, :thread_id, :pagination_id, :source, :user, :annotations, :entities, :repost_of, :reply_to, :is_deleted, :channel_id
+    attr_reader :input, :num_stars, :num_reposts, :num_replies, :text, :created_at, :id, :canonical_url, :machine_only, :you_reposted, :you_starred, :thread_id, :pagination_id, :source, :user, :annotations, :entities, :repost_of, :reply_to, :channel_id
     attr_accessor :view
 
     def initialize hash
@@ -110,7 +110,6 @@ module Ayadn
       end
       @repost_of = PostObject.new(@input["repost_of"]) if !@input["repost_of"].blank?
       @reply_to = @input["reply_to"]
-      @is_deleted = @input["is_deleted"]
       @channel_id = @input["channel_id"]
     end
 	end
