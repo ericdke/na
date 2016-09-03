@@ -1,3 +1,7 @@
+## 4.0.2 - 2016-09-03 - 'Defeated Sanity'
+
+- Fixed: crash in configuration diagnostics when checking settings
+
 ## 4.0.1 - 2016-09-03 - 'Halt And Catch Fire'
 
 - Fixed: crash when attempting to access a deleted channel

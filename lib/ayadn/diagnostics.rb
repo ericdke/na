@@ -344,34 +344,6 @@ module Ayadn
         @status.say_error("active user has no config file")
       else
         @status.say_green(:found, "active user config file")
-        @status.say_header("difference default/current")
-        diff = Settings.defaults.deep_diff(config)
-        if diff.blank?
-          @status.say_green(:pass, "current user is using default values")
-        else
-          diff.each do |key, value|
-            skip if key == :movie || key == :tvshow # those are deprecated, not missing
-            if value.is_a?(Hash)
-              value.each do |inner_key, inner_value|
-                default = inner_value[0].nil? ? "none" : inner_value[0]
-                current = if inner_key == :deezer
-                  inner_value[1].nil? ? "none" : inner_value[1][:code][0..10] + "..."
-                else
-                  inner_value[1].nil? ? "none" : inner_value[1]
-                end
-                @status.say_green(:changed, "#{key}/#{inner_key} - Default: #{default}, Current: #{current}")
-              end
-            else
-              default = value[0].nil? ? "none" : value[0]
-              val = value[1]
-              if val.nil?
-                @status.say_red(:missing, "#{key} - Default: #{default}, Current: none")
-              else
-                @status.say_green(:changed, "#{key} - Default: #{default}, Current: #{val}")
-              end
-            end
-          end
-        end
       end
     end
 
