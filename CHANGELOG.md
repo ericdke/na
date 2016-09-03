@@ -1,4 +1,8 @@
-## 4.0- 2016-05-01 - 'Mr. Robot'
+## 4.0.1 - 2016-09-03 - 'Halt And Catch Fire'
+
+- Fixed: crash when attempting to access a deleted channel
+
+## 4.0 - 2016-05-01 - 'Mr. Robot'
 
 - Fixed: when possible, unauthorizing a user keeps the current user logged
 - Fixed: inconsistencies in the 'set' command

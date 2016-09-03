@@ -335,6 +335,7 @@ module Ayadn
       no_user = {}
       api = API.new
       stream.each do |ch|
+        next if ch.id.nil?
         unless ch.writers.user_ids.empty?
           @status.say_cyan :parsing, "channel #{ch.id}"
           usernames = []

@@ -399,7 +399,8 @@ module Ayadn
           @view.downloading
           resp = channels.call
           @view.clear_screen
-          channels = resp["data"].map { |ch| ChannelObject.new(ch) }
+          data = resp["data"] 
+          channels = data.map { |ch| ChannelObject.new(ch) }
           @view.show_channels(channels, options)
         end
       rescue => e
