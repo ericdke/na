@@ -1,3 +1,7 @@
+## 4.0.3 - 2016-09-03 - 'S U R V I V E'
+
+- Fixed: bug introduced by the last fix (yay for incomplete tests...)
+
 ## 4.0.2 - 2016-09-03 - 'Defeated Sanity'
 
 - Fixed: crash in configuration diagnostics when checking settings
