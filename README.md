@@ -1,11 +1,18 @@
 [![Gem Version](https://badge.fury.io/rb/ayadn.svg)](http://badge.fury.io/rb/ayadn) 
-[![Build Status](https://travis-ci.org/ericdke/na.svg?branch=master)](https://travis-ci.org/ericdke/na) 
-[![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=ericdejonckheere&url=https://github.com/ericdke/na&title=Ayadn&language=&tags=github&category=software)  
+[![Build Status](https://travis-ci.org/ericdke/na.svg?branch=master)](https://travis-ci.org/ericdke/na)  
 
 AYADN
 =====
 
 [App.net](http://app.net) command-line client.
+
+**App.net will shut down on 2017/03/14.**
+
+Ayadn *may* be refactored to work with another network some day... maybe.
+
+Thank you to all Ayadn users and supporters, it's been a blast doing this for you and with you.
+
+---
 
 With Ayadn, you can use all the features of App.net from the console without any headaches... and then more: power, freedom and fun!
 
